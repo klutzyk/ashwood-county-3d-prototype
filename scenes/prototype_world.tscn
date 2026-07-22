@@ -23,6 +23,7 @@
 [ext_resource type="Script" path="res://scripts/interactions/PlayerInteraction.cs" id="21_player_interaction"]
 [ext_resource type="Script" path="res://scripts/ui/InteractionPromptDisplay.cs" id="22_interaction_prompt"]
 [ext_resource type="Script" path="res://scripts/items/PlayerInventory.cs" id="23_inventory"]
+[ext_resource type="Script" path="res://scripts/ui/InventoryDisplay.cs" id="24_inventory_display"]
 
 [sub_resource type="BoxMesh" id="GrassMesh"]
 material = ExtResource("8_grass")
@@ -88,6 +89,18 @@ corner_radius_top_left = 3
 corner_radius_top_right = 3
 corner_radius_bottom_right = 3
 corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="InventorySlotBackground"]
+bg_color = Color(0.02, 0.03, 0.035, 0.86)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.34, 0.36, 0.32, 0.9)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
 [node name="PrototypeWorld" type="Node3D" unique_id=390521270]
 
@@ -275,9 +288,9 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -150.0
-offset_top = -82.0
+offset_top = -142.0
 offset_right = 150.0
-offset_bottom = -46.0
+offset_bottom = -106.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_colors/font_color = Color(0.94, 0.94, 0.88, 1)
@@ -296,9 +309,9 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -150.0
-offset_top = -40.0
+offset_top = -100.0
 offset_right = 150.0
-offset_bottom = -26.0
+offset_bottom = -86.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_styles/background = SubResource("StaminaBackground")
@@ -306,6 +319,61 @@ theme_override_styles/fill = SubResource("StaminaFill")
 max_value = 1.0
 step = 0.001
 show_percentage = false
+
+[node name="InventorySlots" type="HBoxContainer" parent="PerformanceUI"]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -159.0
+offset_top = -70.0
+offset_right = 159.0
+offset_bottom = -16.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 6
+script = ExtResource("24_inventory_display")
+
+[node name="Slot1" type="Label" parent="PerformanceUI/InventorySlots"]
+custom_minimum_size = Vector2(75, 54)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.92, 0.86, 1)
+theme_override_font_sizes/font_size = 13
+theme_override_styles/normal = SubResource("InventorySlotBackground")
+text = "1\nEmpty"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Slot2" type="Label" parent="PerformanceUI/InventorySlots"]
+custom_minimum_size = Vector2(75, 54)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.92, 0.86, 1)
+theme_override_font_sizes/font_size = 13
+theme_override_styles/normal = SubResource("InventorySlotBackground")
+text = "2\nEmpty"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Slot3" type="Label" parent="PerformanceUI/InventorySlots"]
+custom_minimum_size = Vector2(75, 54)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.92, 0.86, 1)
+theme_override_font_sizes/font_size = 13
+theme_override_styles/normal = SubResource("InventorySlotBackground")
+text = "3\nEmpty"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Slot4" type="Label" parent="PerformanceUI/InventorySlots"]
+custom_minimum_size = Vector2(75, 54)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.92, 0.86, 1)
+theme_override_font_sizes/font_size = 13
+theme_override_styles/normal = SubResource("InventorySlotBackground")
+text = "4\nEmpty"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="DamageFlash" type="ColorRect" parent="PerformanceUI"]
 modulate = Color(1, 1, 1, 0)

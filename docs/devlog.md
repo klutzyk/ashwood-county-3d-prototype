@@ -126,6 +126,21 @@ Completing the car search grants exactly one Bandage. Item display and item use 
 
 ---
 
+## Inventory Display
+
+Completed:
+
+- Fixed four-slot player inventory
+- Four-slot HUD display
+- Automatic slot refresh when items are added
+- Bandage name and quantity shown after searching the car
+
+Outcome:
+
+The player can see the Bandage in the first inventory slot after searching the abandoned car. Item selection and use remain unimplemented.
+
+---
+
 ## Current Milestone
 
 Working on:

@@ -44,7 +44,7 @@ Complete one vertical slice before starting the next.
 
 ## Inventory
 
-- [x] Minimal inventory
+- [x] Minimal inventory (4 slots)
 - [x] Item pickup
 - [ ] Item use
 
