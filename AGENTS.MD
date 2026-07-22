@@ -65,10 +65,19 @@ Avoid implementing multiple gameplay systems simultaneously.
 # Repository Structure
 
 assets/
+  environment/
+    buildings/
+    nature/
+    roads/
+    vehicles/
+  characters/
+    player/
+    zombies/
+  materials/
+  third_party/
 docs/
 scenes/
 scripts/
-third-party-assets/
 
 ---
 

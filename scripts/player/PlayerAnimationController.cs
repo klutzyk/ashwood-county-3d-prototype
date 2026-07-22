@@ -11,9 +11,9 @@ public partial class PlayerAnimationController : AnimationTree
 	private const string IdleAnimationName = "Idle";
 	private const string WalkAnimationName = "Walk";
 	private const string RunAnimationName = "Run";
-	private const string IdlePath = "res://Animations/Idle.fbx";
-	private const string WalkPath = "res://Animations/Walking.fbx";
-	private const string RunPath = "res://Animations/Fast Run.fbx";
+	private const string IdlePath = "res://assets/characters/player/Idle.fbx";
+	private const string WalkPath = "res://assets/characters/player/Walking.fbx";
+	private const string RunPath = "res://assets/characters/player/Fast Run.fbx";
 	private const float BlendSpeed = 8.0f;
 
 	private ThirdPersonPlayer _player = null!;

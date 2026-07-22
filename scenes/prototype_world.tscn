@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://beokyixs6j764" path="res://scripts/player/ThirdPersonPlayer.cs" id="1_player"]
 [ext_resource type="Script" uid="uid://bonxghg7ovam5" path="res://scripts/ui/PerformanceDisplay.cs" id="2_fps"]
-[ext_resource type="PackedScene" uid="uid://dfgsdm1fp1b4l" path="res://Characters/Remy.fbx" id="3_remy"]
+[ext_resource type="PackedScene" uid="uid://dfgsdm1fp1b4l" path="res://assets/characters/player/Remy.fbx" id="3_remy"]
 [ext_resource type="Script" uid="uid://yffxb2u2vsyt" path="res://scripts/player/PlayerAnimationController.cs" id="4_animation"]
 
 [sub_resource type="StandardMaterial3D" id="GroundMaterial"]
