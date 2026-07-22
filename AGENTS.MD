@@ -102,3 +102,52 @@ docs/
 
 scenes/
 scripts/
+
+---
+
+## Development Workflow
+
+Before implementation:
+
+1. Read this file.
+2. Read `docs/roadmap.md`.
+3. Read `docs/devlog.md`.
+4. Inspect only the files relevant to the requested feature.
+
+Implementation rules:
+
+- Implement one gameplay slice only.
+- Preserve existing systems unless explicitly changing them.
+- Avoid unrelated refactoring.
+- Keep changes as small as practical.
+- Stop when the requested feature is complete.
+
+Before finishing:
+
+- Build the C# project.
+- Fix compilation errors introduced by the change.
+- Update `docs/roadmap.md`.
+- Append a short entry to `docs/devlog.md`.
+- Do not continue with future roadmap items.
+
+Keep responses concise.
+
+Include:
+
+- Summary of changes
+- Required editor setup (if any)
+- Build result
+- Suggested commit message
+
+Only include additional detail when requested.
+
+---
+
+## Project Documents
+
+- `docs/vision.md` describes the long-term direction.
+- `docs/roadmap.md` defines the implementation order.
+- `docs/devlog.md` records completed milestones.
+- `docs/assets_reference.md` tracks third-party assets and licences.
+
+Follow these documents unless explicitly instructed otherwise.
