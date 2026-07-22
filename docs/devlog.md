@@ -111,6 +111,21 @@ The abandoned car can now be searched through a timed, cancellable interaction. 
 
 ---
 
+## Item Prototype
+
+Completed:
+
+- Reusable item definition resource
+- Minimal quantity-based player inventory
+- Bandage item resource
+- One-time Bandage reward from searching the abandoned car
+
+Outcome:
+
+Completing the car search grants exactly one Bandage. Item display and item use remain unimplemented.
+
+---
+
 ## Current Milestone
 
 Working on:

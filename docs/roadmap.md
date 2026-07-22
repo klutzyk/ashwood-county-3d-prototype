@@ -44,13 +44,13 @@ Complete one vertical slice before starting the next.
 
 ## Inventory
 
-- [ ] Minimal inventory
-- [ ] Item pickup
+- [x] Minimal inventory
+- [x] Item pickup
 - [ ] Item use
 
 ## Items
 
-- [ ] Bandage
+- [x] Bandage
 - [ ] Food
 - [ ] Water
 

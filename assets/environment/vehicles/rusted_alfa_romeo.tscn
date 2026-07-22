@@ -14,6 +14,7 @@
 [ext_resource type="Texture2D" path="res://assets/third_party/vehicles/alfa_romeo/textures/windows.png" id="12_windows"]
 [ext_resource type="Script" path="res://scripts/interactions/PrototypeCarInteraction.cs" id="13_car_interaction"]
 [ext_resource type="Script" path="res://scripts/interactions/Interactable.cs" id="14_interactable"]
+[ext_resource type="Resource" path="res://assets/items/bandage.tres" id="15_bandage"]
 
 [sub_resource type="StandardMaterial3D" id="Alfa1Material"]
 resource_name = "alfa1"
@@ -58,6 +59,7 @@ size = Vector3(4.3, 1.3, 1.65)
 
 [node name="RustedAlfaRomeo" type="StaticBody3D"]
 script = ExtResource("13_car_interaction")
+RewardItem = ExtResource("15_bandage")
 
 [node name="Visual" parent="." instance=ExtResource("1_car")]
 transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, 0.83, -0.023, 0.078)

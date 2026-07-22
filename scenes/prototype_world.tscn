@@ -22,6 +22,7 @@
 [ext_resource type="Script" path="res://scripts/player/PlayerStamina.cs" id="20_stamina"]
 [ext_resource type="Script" path="res://scripts/interactions/PlayerInteraction.cs" id="21_player_interaction"]
 [ext_resource type="Script" path="res://scripts/ui/InteractionPromptDisplay.cs" id="22_interaction_prompt"]
+[ext_resource type="Script" path="res://scripts/items/PlayerInventory.cs" id="23_inventory"]
 
 [sub_resource type="BoxMesh" id="GrassMesh"]
 material = ExtResource("8_grass")
@@ -188,6 +189,9 @@ script = ExtResource("20_stamina")
 
 [node name="Interaction" type="Node" parent="Player"]
 script = ExtResource("21_player_interaction")
+
+[node name="Inventory" type="Node" parent="Player"]
+script = ExtResource("23_inventory")
 
 [node name="Visual" type="Node3D" parent="Player" unique_id=517271585]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, -1, 0)
