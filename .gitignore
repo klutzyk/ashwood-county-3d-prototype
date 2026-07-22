@@ -1,3 +1,17 @@
 # Godot 4+ specific ignores
 .godot/
 /android/
+
+# Download archives
+*.zip
+*.7z
+*.rar
+
+# Optional raw authoring files
+# Remove this rule if Blender files become project source assets.
+*.blend
+
+
+# .NET output
+bin/
+obj/
