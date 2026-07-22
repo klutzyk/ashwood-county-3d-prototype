@@ -64,6 +64,24 @@ When a requested task is too large, split it into smaller tasks before implement
 
 ---
 
+## Inventory and Container Rules
+
+World containers and the player must use separate inventory state.
+
+Searching a container may generate or reveal its contents, but must not automatically transfer those contents to the player.
+
+Items move only through explicit transfer actions.
+
+Containers must retain:
+
+- Uncollected items
+- Items added by the player
+- Their searched or generated state
+
+Do not create separate inventory implementations for cars, cupboards, crates or other container types. They should reuse the same container-inventory foundation with configurable names, capacities, search durations and loot tables.
+
+---
+
 ## Coding Standards
 
 - Use C#.

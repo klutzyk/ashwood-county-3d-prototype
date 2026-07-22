@@ -156,6 +156,29 @@ Pressing 1 uses the Bandage to restore 40 health and removes it from the invento
 
 ---
 
+
+## Container Loot Design Decision
+
+Decision:
+
+World containers and the player will maintain separate inventories.
+
+Searching reveals or generates container contents but does not automatically award items.
+
+The player must explicitly transfer selected items.
+
+Items left behind or placed inside a container remain there for the duration of the loaded world state.
+
+Reason:
+
+This creates stronger resource decisions, supports revisiting locations and provides a reusable foundation for cars, cupboards, lockers, crates, corpses and safehouse storage.
+
+Next objective:
+
+Implement search progress followed by the reusable container inventory UI.
+
+--- 
+
 ## Current Milestone
 
 Working on:
