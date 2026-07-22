@@ -1,11 +1,12 @@
-[gd_scene load_steps=18 format=3]
+[gd_scene format=3 uid="uid://eyjnxdf1sb2b"]
 
-[ext_resource type="Script" path="res://scripts/player/ThirdPersonPlayer.cs" id="1_player"]
-[ext_resource type="Script" path="res://scripts/ui/PerformanceDisplay.cs" id="2_fps"]
+[ext_resource type="Script" uid="uid://beokyixs6j764" path="res://scripts/player/ThirdPersonPlayer.cs" id="1_player"]
+[ext_resource type="Script" uid="uid://bonxghg7ovam5" path="res://scripts/ui/PerformanceDisplay.cs" id="2_fps"]
+[ext_resource type="PackedScene" uid="uid://dfgsdm1fp1b4l" path="res://Characters/Remy.fbx" id="3_remy"]
+[ext_resource type="Script" uid="uid://yffxb2u2vsyt" path="res://scripts/player/PlayerAnimationController.cs" id="4_animation"]
 
 [sub_resource type="StandardMaterial3D" id="GroundMaterial"]
 albedo_color = Color(0.18, 0.28, 0.16, 1)
-roughness = 1.0
 
 [sub_resource type="BoxMesh" id="GroundMesh"]
 material = SubResource("GroundMaterial")
@@ -14,21 +15,20 @@ size = Vector3(50, 0.2, 50)
 [sub_resource type="BoxShape3D" id="GroundShape"]
 size = Vector3(50, 0.2, 50)
 
-[sub_resource type="StandardMaterial3D" id="PlayerMaterial"]
-albedo_color = Color(0.72, 0.22, 0.14, 1)
-roughness = 0.8
-
-[sub_resource type="CapsuleMesh" id="PlayerMesh"]
-material = SubResource("PlayerMaterial")
-radius = 0.45
-height = 2.0
+[sub_resource type="Environment" id="WorldEnvironment"]
+background_mode = 1
+background_color = Color(0.46, 0.62, 0.76, 1)
+background_energy_multiplier = 0.8
+ambient_light_source = 3
+ambient_light_color = Color(0.55, 0.62, 0.7, 1)
+ambient_light_energy = 0.65
+tonemap_mode = 2
 
 [sub_resource type="CapsuleShape3D" id="PlayerShape"]
 radius = 0.45
-height = 2.0
 
 [sub_resource type="StandardMaterial3D" id="ObstacleMaterial"]
-albedo_color = Color(0.33, 0.30, 0.27, 1)
+albedo_color = Color(0.33, 0.3, 0.27, 1)
 roughness = 0.9
 
 [sub_resource type="BoxMesh" id="BoxMeshLarge"]
@@ -52,15 +52,6 @@ size = Vector3(7, 2, 1.5)
 [sub_resource type="BoxShape3D" id="BoxShapeWide"]
 size = Vector3(7, 2, 1.5)
 
-[sub_resource type="Environment" id="WorldEnvironment"]
-background_mode = 1
-background_color = Color(0.46, 0.62, 0.76, 1)
-background_energy_multiplier = 0.8
-ambient_light_source = 3
-ambient_light_color = Color(0.55, 0.62, 0.7, 1)
-ambient_light_energy = 0.65
-tonemap_mode = 2
-
 [sub_resource type="StyleBoxFlat" id="FpsBackground"]
 bg_color = Color(0.02, 0.03, 0.04, 0.72)
 corner_radius_top_left = 4
@@ -68,80 +59,83 @@ corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
-[node name="PrototypeWorld" type="Node3D"]
+[node name="PrototypeWorld" type="Node3D" unique_id=390521270]
 
-[node name="Ground" type="StaticBody3D" parent="."]
-position = Vector3(0, -0.1, 0)
+[node name="Ground" type="StaticBody3D" parent="." unique_id=265849430]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground" unique_id=48643851]
 mesh = SubResource("GroundMesh")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground" unique_id=651728689]
 shape = SubResource("GroundShape")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-rotation_degrees = Vector3(-52, -28, 0)
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1750895960]
+transform = Transform3D(0.88294756, 0.36994863, -0.2890356, 0, 0.6156615, 0.7880107, 0.46947157, -0.6957722, 0.5435968, 0, 0, 0)
 light_color = Color(1, 0.94, 0.82, 1)
 light_energy = 1.15
 shadow_enabled = true
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=877615492]
 environment = SubResource("WorldEnvironment")
 
-[node name="Player" type="CharacterBody3D" parent="."]
-position = Vector3(0, 1, 6)
+[node name="Player" type="CharacterBody3D" parent="." unique_id=288953732]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 6)
 script = ExtResource("1_player")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Player"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player" unique_id=1560467523]
 shape = SubResource("PlayerShape")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Player"]
-mesh = SubResource("PlayerMesh")
+[node name="Visual" type="Node3D" parent="Player" unique_id=517271585]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, -1, 0)
 
-[node name="CameraRig" type="Node3D" parent="Player"]
-position = Vector3(0, 0.75, 0)
+[node name="Remy" parent="Player/Visual" unique_id=615219697 instance=ExtResource("3_remy")]
 
-[node name="SpringArm3D" type="SpringArm3D" parent="Player/CameraRig"]
-rotation_degrees = Vector3(-11.5, 0, 0)
+[node name="CameraRig" type="Node3D" parent="Player" unique_id=947114645]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
+
+[node name="SpringArm3D" type="SpringArm3D" parent="Player/CameraRig" unique_id=476616506]
+transform = Transform3D(1, 0, 0, 0, 0.9799247, 0.19936793, 0, -0.19936793, 0.9799247, 0, 0, 0)
 spring_length = 5.0
 margin = 0.15
-collision_mask = 1
 
-[node name="Camera3D" type="Camera3D" parent="Player/CameraRig/SpringArm3D"]
+[node name="Camera3D" type="Camera3D" parent="Player/CameraRig/SpringArm3D" unique_id=1834467021]
 current = true
 fov = 70.0
 
-[node name="ObstacleA" type="StaticBody3D" parent="."]
-position = Vector3(-5, 1.5, -3)
+[node name="AnimationTree" type="AnimationTree" parent="Player" unique_id=1211255373]
+script = ExtResource("4_animation")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="ObstacleA"]
+[node name="ObstacleA" type="StaticBody3D" parent="." unique_id=1108913811]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 1.5, -3)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="ObstacleA" unique_id=739342948]
 mesh = SubResource("BoxMeshLarge")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="ObstacleA"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ObstacleA" unique_id=764057452]
 shape = SubResource("BoxShapeLarge")
 
-[node name="ObstacleB" type="StaticBody3D" parent="."]
-position = Vector3(4, 2.5, -7)
+[node name="ObstacleB" type="StaticBody3D" parent="." unique_id=430163681]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 2.5, -7)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="ObstacleB"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="ObstacleB" unique_id=825573045]
 mesh = SubResource("BoxMeshTall")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="ObstacleB"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ObstacleB" unique_id=1647569509]
 shape = SubResource("BoxShapeTall")
 
-[node name="ObstacleC" type="StaticBody3D" parent="."]
-position = Vector3(1, 1, 0)
-rotation_degrees = Vector3(0, 32, 0)
+[node name="ObstacleC" type="StaticBody3D" parent="." unique_id=464860643]
+transform = Transform3D(0.8480481, 0, 0.52991927, 0, 1, 0, -0.52991927, 0, 0.8480481, 1, 1, 0)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="ObstacleC"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="ObstacleC" unique_id=254231008]
 mesh = SubResource("BoxMeshWide")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="ObstacleC"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ObstacleC" unique_id=532387337]
 shape = SubResource("BoxShapeWide")
 
-[node name="PerformanceUI" type="CanvasLayer" parent="."]
+[node name="PerformanceUI" type="CanvasLayer" parent="." unique_id=1832903103]
 
-[node name="FpsLabel" type="Label" parent="PerformanceUI"]
+[node name="FpsLabel" type="Label" parent="PerformanceUI" unique_id=1389187676]
 offset_left = 12.0
 offset_top = 12.0
 offset_right = 112.0
