@@ -24,6 +24,8 @@
 [ext_resource type="Script" path="res://scripts/ui/InteractionPromptDisplay.cs" id="22_interaction_prompt"]
 [ext_resource type="Script" path="res://scripts/items/PlayerInventory.cs" id="23_inventory"]
 [ext_resource type="Script" path="res://scripts/ui/InventoryDisplay.cs" id="24_inventory_display"]
+[ext_resource type="Script" path="res://scripts/ui/ContainerInventoryDisplay.cs" id="25_container_ui"]
+[ext_resource type="PackedScene" path="res://assets/environment/props/prototype_cupboard.tscn" id="26_cupboard"]
 
 [sub_resource type="BoxMesh" id="GrassMesh"]
 material = ExtResource("8_grass")
@@ -102,6 +104,22 @@ corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
+[sub_resource type="StyleBoxFlat" id="ContainerPanelBackground"]
+bg_color = Color(0.025, 0.03, 0.03, 0.97)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.38, 0.4, 0.34, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+content_margin_left = 20.0
+content_margin_top = 16.0
+content_margin_right = 20.0
+content_margin_bottom = 16.0
+
 [node name="PrototypeWorld" type="Node3D" unique_id=390521270]
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
@@ -175,6 +193,9 @@ transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -5.4
 
 [node name="BarrelCrate" parent="Props" unique_id=1518656841 instance=ExtResource("15_containers")]
 transform = Transform3D(0.90630776, 0, 0.42261827, 0, 1, 0, -0.42261827, 0, 0.90630776, 7.4, 0, -12.4)
+
+[node name="PrototypeCupboard" parent="Props" instance=ExtResource("26_cupboard")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 14.2, 0, -8)
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1750895960]
 transform = Transform3D(0.88294756, 0.36994863, -0.2890356, 0, 0.6156615, 0.7880107, 0.46947157, -0.6957722, 0.5435968, 0, 0, 0)
@@ -335,6 +356,19 @@ grow_vertical = 0
 theme_override_constants/separation = 6
 script = ExtResource("24_inventory_display")
 
+[node name="ItemFeedback" type="Label" parent="PerformanceUI"]
+visible = false
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 128.0
+offset_bottom = 162.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.94, 0.92, 0.75, 1)
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("FpsBackground")
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="Slot1" type="Label" parent="PerformanceUI/InventorySlots"]
 custom_minimum_size = Vector2(75, 54)
 layout_mode = 2
@@ -374,6 +408,127 @@ theme_override_styles/normal = SubResource("InventorySlotBackground")
 text = "4\nEmpty"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="ContainerInventoryWindow" type="Control" parent="PerformanceUI"]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+script = ExtResource("25_container_ui")
+
+[node name="Dim" type="ColorRect" parent="PerformanceUI/ContainerInventoryWindow"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.005, 0.007, 0.007, 0.72)
+
+[node name="Panel" type="PanelContainer" parent="PerformanceUI/ContainerInventoryWindow"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -360.0
+offset_top = -245.0
+offset_right = 360.0
+offset_bottom = 245.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("ContainerPanelBackground")
+
+[node name="Layout" type="VBoxContainer" parent="PerformanceUI/ContainerInventoryWindow/Panel"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="PerformanceUI/ContainerInventoryWindow/Panel/Layout"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.94, 0.93, 0.84, 1)
+theme_override_font_sizes/font_size = 24
+text = "Container"
+horizontal_alignment = 1
+
+[node name="Columns" type="HBoxContainer" parent="PerformanceUI/ContainerInventoryWindow/Panel/Layout"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 14
+
+[node name="ContainerColumn" type="VBoxContainer" parent="PerformanceUI/ContainerInventoryWindow/Panel/Layout/Columns"]
+custom_minimum_size = Vector2(275, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ContainerLabel" type="Label" parent="PerformanceUI/ContainerInventoryWindow/Panel/Layout/Columns/ContainerColumn"]
+layout_mode = 2
+text = "Container Items"
+horizontal_alignment = 1
+
+[node name="ContainerItems" type="ItemList" parent="PerformanceUI/ContainerInventoryWindow/Panel/Layout/Columns/ContainerColumn"]
+custom_minimum_size = Vector2(275, 285)
+layout_mode = 2
+size_flags_vertical = 3
+select_mode = 0
+
+[node name="Actions" type="VBoxContainer" parent="PerformanceUI/ContainerInventoryWindow/Panel/Layout/Columns"]
+custom_minimum_size = Vector2(115, 0)
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 10
+
+[node name="Take" type="Button" parent="PerformanceUI/ContainerInventoryWindow/Panel/Layout/Columns/Actions"]
+layout_mode = 2
+disabled = true
+text = "Take >"
+
+[node name="Store" type="Button" parent="PerformanceUI/ContainerInventoryWindow/Panel/Layout/Columns/Actions"]
+layout_mode = 2
+disabled = true
+text = "< Store"
+
+[node name="Use" type="Button" parent="PerformanceUI/ContainerInventoryWindow/Panel/Layout/Columns/Actions"]
+layout_mode = 2
+disabled = true
+text = "Use"
+
+[node name="PlayerColumn" type="VBoxContainer" parent="PerformanceUI/ContainerInventoryWindow/Panel/Layout/Columns"]
+custom_minimum_size = Vector2(275, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PlayerLabel" type="Label" parent="PerformanceUI/ContainerInventoryWindow/Panel/Layout/Columns/PlayerColumn"]
+layout_mode = 2
+text = "Player Inventory"
+horizontal_alignment = 1
+
+[node name="PlayerItems" type="ItemList" parent="PerformanceUI/ContainerInventoryWindow/Panel/Layout/Columns/PlayerColumn"]
+custom_minimum_size = Vector2(275, 285)
+layout_mode = 2
+size_flags_vertical = 3
+select_mode = 0
+
+[node name="Status" type="Label" parent="PerformanceUI/ContainerInventoryWindow/Panel/Layout"]
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.92, 0.83, 0.55, 1)
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CloseHint" type="Label" parent="PerformanceUI/ContainerInventoryWindow/Panel/Layout"]
+layout_mode = 2
+text = "Escape closes the container"
+horizontal_alignment = 1
+
+[node name="Close" type="Button" parent="PerformanceUI/ContainerInventoryWindow/Panel/Layout"]
+layout_mode = 2
+text = "Close"
 
 [node name="DamageFlash" type="ColorRect" parent="PerformanceUI"]
 modulate = Color(1, 1, 1, 0)

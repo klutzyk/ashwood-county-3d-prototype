@@ -19,20 +19,20 @@ public partial class PlayerInteraction : Node
 	public string CurrentPromptText => CurrentInteractable?.PromptText ?? string.Empty;
 	public bool IsInteracting => _activeInteractable is not null;
 
-	private Node3D _player = null!;
+	private ThirdPersonPlayer _player = null!;
 	private PlayerHealth _health = null!;
 	private Interactable? _activeInteractable;
 	private float _interactionElapsed;
 
 	public override void _Ready()
 	{
-		_player = GetParent<Node3D>();
+		_player = GetParent<ThirdPersonPlayer>();
 		_health = _player.GetNode<PlayerHealth>("Health");
 	}
 
 	public override void _PhysicsProcess(double delta)
 	{
-		if (_health.IsDead)
+		if (_health.IsDead || _player.IsInventoryUiOpen)
 		{
 			CancelInteraction();
 			SetCurrentInteractable(null);
@@ -45,7 +45,7 @@ public partial class PlayerInteraction : Node
 
 	public override void _UnhandledInput(InputEvent @event)
 	{
-		if (_health.IsDead || @event is InputEventKey { Echo: true })
+		if (_health.IsDead || _player.IsInventoryUiOpen || @event is InputEventKey { Echo: true })
 		{
 			return;
 		}
@@ -108,6 +108,7 @@ public partial class PlayerInteraction : Node
 		Interactable completedInteractable = _activeInteractable;
 		CancelInteraction();
 		completedInteractable.Interact(_player);
+		EmitSignal(SignalName.PromptChanged, CurrentPromptText);
 	}
 
 	private void CancelInteraction()

@@ -12,9 +12,12 @@
 [ext_resource type="Texture2D" path="res://assets/third_party/vehicles/alfa_romeo/textures/alfa3_rou.png" id="10_alfa3_r"]
 [ext_resource type="Texture2D" path="res://assets/third_party/vehicles/alfa_romeo/textures/alfa3-metallic.png" id="11_alfa3_m"]
 [ext_resource type="Texture2D" path="res://assets/third_party/vehicles/alfa_romeo/textures/windows.png" id="12_windows"]
-[ext_resource type="Script" path="res://scripts/interactions/PrototypeCarInteraction.cs" id="13_car_interaction"]
+[ext_resource type="Script" path="res://scripts/interactions/SearchableContainer.cs" id="13_searchable"]
 [ext_resource type="Script" path="res://scripts/interactions/Interactable.cs" id="14_interactable"]
 [ext_resource type="Resource" path="res://assets/items/bandage.tres" id="15_bandage"]
+[ext_resource type="Resource" path="res://assets/items/water.tres" id="16_water"]
+[ext_resource type="Resource" path="res://assets/items/prototype_container_loot.tres" id="17_loot"]
+[ext_resource type="Script" path="res://scripts/items/ContainerInventory.cs" id="18_inventory"]
 
 [sub_resource type="StandardMaterial3D" id="Alfa1Material"]
 resource_name = "alfa1"
@@ -58,8 +61,6 @@ texture_filter = 5
 size = Vector3(4.3, 1.3, 1.65)
 
 [node name="RustedAlfaRomeo" type="StaticBody3D"]
-script = ExtResource("13_car_interaction")
-RewardItem = ExtResource("15_bandage")
 
 [node name="Visual" parent="." instance=ExtResource("1_car")]
 transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, 0.83, -0.023, 0.078)
@@ -77,11 +78,18 @@ surface_material_override/0 = SubResource("Alfa3Material")
 position = Vector3(0, 0.72, 0)
 shape = SubResource("CarShape")
 
-[node name="Interactable" type="Node3D" parent="."]
+[node name="SearchableContainer" type="Node3D" parent="."]
 position = Vector3(0, 0.72, 0)
+
+script = ExtResource("13_searchable")
+DisplayName = "Abandoned Car"
+LootTable = ExtResource("17_loot")
+InitialItems = Array[Resource]([ExtResource("15_bandage"), ExtResource("16_water")])
+
+[node name="Interactable" type="Node3D" parent="SearchableContainer"]
 script = ExtResource("14_interactable")
-InteractionName = "Car"
-InteractionPrompt = "Search"
-HoldDuration = 2.0
+
+[node name="Inventory" type="Node" parent="SearchableContainer"]
+script = ExtResource("18_inventory")
 
 [editable path="Visual"]

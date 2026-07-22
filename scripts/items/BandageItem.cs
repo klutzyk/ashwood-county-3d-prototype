@@ -9,6 +9,7 @@ namespace AshwoodCounty3DPrototype.Items;
 public partial class BandageItem : ItemDefinition
 {
 	[Export] public float HealthRestored { get; set; } = 40.0f;
+	public override string UseFeedback => $"Restored {Mathf.RoundToInt(HealthRestored)} health.";
 
 	public override bool Use(Node user)
 	{

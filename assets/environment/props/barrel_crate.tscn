@@ -1,6 +1,10 @@
 [gd_scene format=3]
 
 [ext_resource type="PackedScene" path="res://assets/third_party/common/containers/barrel__crate.glb" id="1_containers"]
+[ext_resource type="Script" path="res://scripts/interactions/SearchableContainer.cs" id="2_searchable"]
+[ext_resource type="Script" path="res://scripts/interactions/Interactable.cs" id="3_interactable"]
+[ext_resource type="Script" path="res://scripts/items/ContainerInventory.cs" id="4_inventory"]
+[ext_resource type="Resource" path="res://assets/items/prototype_container_loot.tres" id="5_loot"]
 
 [node name="BarrelCrate" type="Node3D"]
 
@@ -12,5 +16,17 @@ visible = false
 
 [node name="barrelbroken" parent="Visual/Sketchfab_model/abda27c02f1c444eb849d527f16260ae_fbx/RootNode" index="3"]
 visible = false
+
+[node name="SearchableContainer" type="Node3D" parent="."]
+position = Vector3(0, 0.7, 0)
+script = ExtResource("2_searchable")
+DisplayName = "Crate"
+LootTable = ExtResource("5_loot")
+
+[node name="Interactable" type="Node3D" parent="SearchableContainer"]
+script = ExtResource("3_interactable")
+
+[node name="Inventory" type="Node" parent="SearchableContainer"]
+script = ExtResource("4_inventory")
 
 [editable path="Visual"]

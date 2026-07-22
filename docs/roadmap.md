@@ -34,70 +34,70 @@ Complete and test one vertical slice before starting the next.
 
 ## Search Flow
 
-- [ ] Hold interaction input to search
-- [ ] Display search progress
-- [ ] Cancel search when interaction input is released
-- [ ] Cancel search when the player leaves interaction range
-- [ ] Prevent player movement while searching
-- [ ] Open container inventory when searching completes
+- [x] Hold interaction input to search
+- [x] Display search progress
+- [x] Cancel search when interaction input is released
+- [x] Cancel search when the player leaves interaction range
+- [x] Prevent player movement while searching
+- [x] Open container inventory when searching completes
 
 ## Container Inventory
 
-- [ ] Create reusable container inventory data
-- [ ] Keep container items separate from player inventory
-- [ ] Create container inventory UI
-- [ ] Show container display name
-- [ ] List contained items
-- [ ] Close container UI
-- [ ] Pause or restrict player control while container UI is open
+- [x] Create reusable container inventory data
+- [x] Keep container items separate from player inventory
+- [x] Create container inventory UI
+- [x] Show container display name
+- [x] List contained items
+- [x] Close container UI
+- [x] Pause or restrict player control while container UI is open
 
 ## Item Transfers
 
-- [ ] Select an item in the container
-- [ ] Transfer selected item to player inventory
-- [ ] Remove transferred item from container inventory
-- [ ] Prevent transfer when player inventory is full
-- [ ] Display player inventory beside container inventory
-- [ ] Select an item in player inventory
-- [ ] Transfer player item into open container
-- [ ] Update both inventories immediately
-- [ ] Preserve stack quantities during transfers
+- [x] Select an item in the container
+- [x] Transfer selected item to player inventory
+- [x] Remove transferred item from container inventory
+- [x] Prevent transfer when player inventory is full
+- [x] Display player inventory beside container inventory
+- [x] Select an item in player inventory
+- [x] Transfer player item into open container
+- [x] Update both inventories immediately
+- [x] Preserve stack quantities during transfers
 
 ## Container State
 
-- [ ] Generate container loot only once
-- [ ] Preserve uncollected items in the container
-- [ ] Preserve items added by the player
-- [ ] Remember whether the container has been searched
-- [ ] Keep state while the current scene remains loaded
+- [x] Generate container loot only once
+- [x] Preserve uncollected items in the container
+- [x] Preserve items added by the player
+- [x] Remember whether the container has been searched
+- [x] Keep state while the current scene remains loaded
 
 ## Prototype Loot
 
-- [ ] Bandage item
-- [ ] Water item
-- [ ] Food item
-- [ ] Extensible loot-table definition
-- [ ] Randomise abandoned-car contents
-- [ ] Allow an empty loot result
-- [ ] Do not automatically award generated loot
+- [x] Bandage item
+- [x] Water item
+- [x] Food item
+- [x] Extensible loot-table definition
+- [x] Randomise abandoned-car contents
+- [x] Allow an empty loot result
+- [x] Do not automatically award generated loot
 
 ## Item Usage
 
 - [x] Use bandage from player inventory
 - [x] Bandage restores health
 - [x] Bandage is consumed
-- [ ] Food placeholder behaviour
-- [ ] Water placeholder behaviour
-- [ ] Prevent invalid item usage
+- [x] Food placeholder behaviour
+- [x] Water placeholder behaviour
+- [x] Prevent invalid item usage
 
 ## Reusable Containers
 
-- [ ] Convert abandoned car to reusable searchable-container setup
-- [ ] Create searchable crate
-- [ ] Create searchable cupboard
-- [ ] Allow per-container display name
-- [ ] Allow per-container search duration
-- [ ] Allow per-container loot table
+- [x] Convert abandoned car to reusable searchable-container setup
+- [x] Create searchable crate
+- [x] Create searchable cupboard
+- [x] Allow per-container display name
+- [x] Allow per-container search duration
+- [x] Allow per-container loot table
 
 ---
 

@@ -10,9 +10,12 @@ public partial class ItemDefinition : Resource
 	[Export] public StringName ItemId { get; set; } = new();
 	[Export] public string DisplayName { get; set; } = string.Empty;
 	[Export(PropertyHint.MultilineText)] public string Description { get; set; } = string.Empty;
+	[Export(PropertyHint.MultilineText)] public string UseMessage { get; set; } = string.Empty;
+
+	public virtual string UseFeedback => UseMessage;
 
 	public virtual bool Use(Node user)
 	{
-		return false;
+		return !string.IsNullOrWhiteSpace(UseMessage);
 	}
 }

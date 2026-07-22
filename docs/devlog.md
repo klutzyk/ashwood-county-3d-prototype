@@ -177,13 +177,37 @@ Next objective:
 
 Implement search progress followed by the reusable container inventory UI.
 
---- 
+---
+
+## Search and Loot Vertical Slice
+
+Completed:
+
+- Reusable searchable-container setup for the abandoned car, crate and prototype cupboard
+- Hold-E search progress with movement lock and cancellation on release or distance
+- Independent, ordered container inventories that retain scene-lifetime state
+- Side-by-side container and four-slot player inventory UI
+- Explicit Take and Store transfers with immediate updates, stack preservation and capacity checks
+- Bandage, Water and Food item use, including placeholder feedback for unimplemented needs
+- Configurable weighted loot tables with a one-time 40/30/20/10 Bandage/Water/Food/Nothing roll
+- Escape-to-close behavior and player-control restriction while container UI is open
+
+Outcome:
+
+Searching reveals container contents without automatically transferring them. Containers remember generated loot and subsequent item changes until the scene is reloaded; save/load and ground dropping remain intentionally unimplemented.
+
+Validation:
+
+- Automated scene test passed search completion and cancellation, transfers, full-inventory handling, item use, one-time loot and retained container state
+- Godot scene load and C# build completed without errors
+
+---
 
 ## Current Milestone
 
-Working on:
+Completed:
 
-Vertical Slice 1
+Vertical Slice 1 search-and-loot feasibility test.
 
 Next objective:
 

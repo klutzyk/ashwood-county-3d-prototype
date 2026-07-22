@@ -22,8 +22,10 @@ public partial class ThirdPersonPlayer : CharacterBody3D
 	private PlayerStamina _stamina = null!;
 	private PlayerInteraction _interaction = null!;
 	private float _cameraPitch = -0.2f;
+	private bool _inventoryUiOpen;
 
 	public bool IsSprinting { get; private set; }
+	public bool IsInventoryUiOpen => _inventoryUiOpen;
 
 	public override void _Ready()
 	{
@@ -40,6 +42,11 @@ public partial class ThirdPersonPlayer : CharacterBody3D
 
 	public override void _UnhandledInput(InputEvent @event)
 	{
+		if (_inventoryUiOpen)
+		{
+			return;
+		}
+
 		if (@event is InputEventKey keyEvent && keyEvent.Keycode == Key.Escape && keyEvent.Pressed)
 		{
 			Input.MouseMode = Input.MouseModeEnum.Visible;
@@ -76,7 +83,7 @@ public partial class ThirdPersonPlayer : CharacterBody3D
 			return;
 		}
 
-		if (_interaction.IsInteracting)
+		if (_interaction.IsInteracting || _inventoryUiOpen)
 		{
 			IsSprinting = false;
 			_stamina.UpdateStamina(isSprinting: false, deltaTime);
@@ -107,6 +114,16 @@ public partial class ThirdPersonPlayer : CharacterBody3D
 
 		MoveAndSlide();
 		FollowPlayerWithCamera();
+	}
+
+	public void SetInventoryUiOpen(bool isOpen)
+	{
+		_inventoryUiOpen = isOpen;
+		if (isOpen)
+		{
+			IsSprinting = false;
+			StopHorizontalMovement();
+		}
 	}
 
 	private void StopHorizontalMovement()
