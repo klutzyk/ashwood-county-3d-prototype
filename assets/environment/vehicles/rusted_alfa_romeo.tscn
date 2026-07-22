@@ -1,0 +1,75 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" uid="uid://dt4uiy2a7e8dw" path="res://assets/third_party/vehicles/alfa_romeo/source/alfa.fbx" id="1_car"]
+[ext_resource type="Texture2D" path="res://assets/third_party/vehicles/alfa_romeo/textures/alfa.png" id="2_alfa_a"]
+[ext_resource type="Texture2D" path="res://assets/third_party/vehicles/alfa_romeo/textures/alfa-normal.png" id="3_alfa_n"]
+[ext_resource type="Texture2D" path="res://assets/third_party/vehicles/alfa_romeo/textures/alfa_rou.png" id="4_alfa_r"]
+[ext_resource type="Texture2D" path="res://assets/third_party/vehicles/alfa_romeo/textures/alfa2.png" id="5_alfa2_a"]
+[ext_resource type="Texture2D" path="res://assets/third_party/vehicles/alfa_romeo/textures/alfa2-normal.png" id="6_alfa2_n"]
+[ext_resource type="Texture2D" path="res://assets/third_party/vehicles/alfa_romeo/textures/alfa2_metallic.png" id="7_alfa2_m"]
+[ext_resource type="Texture2D" path="res://assets/third_party/vehicles/alfa_romeo/textures/alfa3.png" id="8_alfa3_a"]
+[ext_resource type="Texture2D" path="res://assets/third_party/vehicles/alfa_romeo/textures/alfa3_normal.png" id="9_alfa3_n"]
+[ext_resource type="Texture2D" path="res://assets/third_party/vehicles/alfa_romeo/textures/alfa3_rou.png" id="10_alfa3_r"]
+[ext_resource type="Texture2D" path="res://assets/third_party/vehicles/alfa_romeo/textures/alfa3-metallic.png" id="11_alfa3_m"]
+[ext_resource type="Texture2D" path="res://assets/third_party/vehicles/alfa_romeo/textures/windows.png" id="12_windows"]
+
+[sub_resource type="StandardMaterial3D" id="Alfa1Material"]
+resource_name = "alfa1"
+albedo_texture = ExtResource("2_alfa_a")
+roughness = 1.0
+roughness_texture = ExtResource("4_alfa_r")
+normal_enabled = true
+normal_texture = ExtResource("3_alfa_n")
+texture_filter = 5
+
+[sub_resource type="StandardMaterial3D" id="Alfa2Material"]
+resource_name = "alfa2"
+albedo_texture = ExtResource("5_alfa2_a")
+metallic = 1.0
+metallic_texture = ExtResource("7_alfa2_m")
+roughness = 0.7
+normal_enabled = true
+normal_texture = ExtResource("6_alfa2_n")
+texture_filter = 5
+
+[sub_resource type="StandardMaterial3D" id="Alfa3Material"]
+resource_name = "alfa3"
+albedo_texture = ExtResource("8_alfa3_a")
+metallic = 1.0
+metallic_texture = ExtResource("11_alfa3_m")
+roughness = 1.0
+roughness_texture = ExtResource("10_alfa3_r")
+normal_enabled = true
+normal_texture = ExtResource("9_alfa3_n")
+texture_filter = 5
+
+[sub_resource type="StandardMaterial3D" id="WindowsMaterial"]
+resource_name = "windows"
+transparency = 1
+cull_mode = 2
+albedo_texture = ExtResource("12_windows")
+roughness = 0.35
+texture_filter = 5
+
+[sub_resource type="BoxShape3D" id="CarShape"]
+size = Vector3(4.3, 1.3, 1.65)
+
+[node name="RustedAlfaRomeo" type="StaticBody3D"]
+
+[node name="Visual" parent="." instance=ExtResource("1_car")]
+transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, 0.83, -0.023, 0.078)
+
+[node name="alfabody" parent="Visual" index="0"]
+surface_material_override/0 = SubResource("Alfa1Material")
+surface_material_override/1 = SubResource("Alfa2Material")
+surface_material_override/2 = SubResource("Alfa3Material")
+surface_material_override/3 = SubResource("WindowsMaterial")
+
+[node name="wheels" parent="Visual" index="1"]
+surface_material_override/0 = SubResource("Alfa3Material")
+
+[node name="VehicleCollision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.72, 0)
+shape = SubResource("CarShape")
+
+[editable path="Visual"]

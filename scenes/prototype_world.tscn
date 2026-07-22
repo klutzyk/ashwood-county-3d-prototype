@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" path="res://assets/environment/nature/common_tree_2.tscn" id="7_tree_2"]
 [ext_resource type="Material" path="res://assets/materials/grass_ground.tres" id="8_grass"]
 [ext_resource type="PackedScene" path="res://assets/environment/buildings/old_russian_house.tscn" id="9_house"]
+[ext_resource type="PackedScene" path="res://assets/environment/vehicles/rusted_alfa_romeo.tscn" id="10_car"]
 
 [sub_resource type="BoxMesh" id="GrassMesh"]
 material = ExtResource("8_grass")
@@ -92,6 +93,12 @@ transform = Transform3D(0.9135454, 0, -0.40673664, 0, 1, 0, 0.40673664, 0, 0.913
 [node name="OldRussianHouse" parent="Buildings" instance=ExtResource("9_house")]
 position = Vector3(10, 0, -8)
 rotation_degrees = Vector3(0, 90, 0)
+
+[node name="Vehicles" type="Node3D" parent="."]
+
+[node name="RustedAlfaRomeo" parent="Vehicles" instance=ExtResource("10_car")]
+position = Vector3(3.9, 0.08, -1)
+rotation_degrees = Vector3(0, 60, 0)
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1750895960]
 transform = Transform3D(0.88294756, 0.36994863, -0.2890356, 0, 0.6156615, 0.7880107, 0.46947157, -0.6957722, 0.5435968, 0, 0, 0)
