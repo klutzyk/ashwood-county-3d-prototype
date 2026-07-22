@@ -79,6 +79,22 @@ Walking remains unchanged, while sprinting is now a limited resource with clear 
 
 ---
 
+## Interaction Framework
+
+Completed:
+
+- Reusable interactable component and callback signal
+- Closest interactable selection within a configurable range
+- E-key interaction input
+- Contextual interaction prompt
+- Abandoned car interaction callback
+
+Outcome:
+
+The player can select and trigger one nearby interactable at a time. The abandoned car prints a prototype message; searching, items and loot remain unimplemented.
+
+---
+
 ## Current Milestone
 
 Working on:

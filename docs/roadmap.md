@@ -38,8 +38,8 @@ Complete one vertical slice before starting the next.
 
 ## Interaction
 
-- [ ] Interaction system
-- [ ] Interaction prompt
+- [x] Interaction system
+- [x] Interaction prompt
 - [ ] Search action
 
 ## Inventory
