@@ -57,6 +57,20 @@ of each downloaded asset and its license information with project records.
 - **Local location:** `assets/environment/buildings/`
 - **Status:** Planned for prototype use
 
+### Forest Ground 01
+
+- **Asset type:** Forest-floor ground texture
+- **Creator:** Rob Tuytel
+- **Source:** [Forest Ground 01 on Poly Haven](https://polyhaven.com/a/forrest_ground_01)
+- **License:** [CC0 1.0 Universal](https://polyhaven.com/license)
+- **Asset details:** Two-metre seamless surface; the project currently retains
+  the 1K diffuse, roughness, and displacement maps.
+- **Attribution requirement:** Not required; the author and source are credited
+  here for provenance.
+- **Prototype use:** Grass and forest-floor terrain surface
+- **Local location:** `assets/third_party/materials/grass/`
+- **Status:** In use
+
 ### Asphalt 02
 
 - **Asset type:** Asphalt surface texture

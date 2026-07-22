@@ -7,13 +7,10 @@
 [ext_resource type="Material" path="res://assets/materials/asphalt_02.tres" id="5_asphalt"]
 [ext_resource type="PackedScene" path="res://assets/environment/nature/common_tree_1.tscn" id="6_tree_1"]
 [ext_resource type="PackedScene" path="res://assets/environment/nature/common_tree_2.tscn" id="7_tree_2"]
-
-[sub_resource type="StandardMaterial3D" id="GrassMaterial"]
-albedo_color = Color(0.13, 0.25, 0.105, 1)
-roughness = 1.0
+[ext_resource type="Material" path="res://assets/materials/grass_ground.tres" id="8_grass"]
 
 [sub_resource type="BoxMesh" id="GrassMesh"]
-material = SubResource("GrassMaterial")
+material = ExtResource("8_grass")
 size = Vector3(50, 0.2, 50)
 
 [sub_resource type="BoxShape3D" id="GrassShape"]
@@ -34,6 +31,7 @@ ambient_light_source = 3
 ambient_light_color = Color(0.55, 0.62, 0.7, 1)
 ambient_light_energy = 0.65
 tonemap_mode = 2
+tonemap_exposure = 0.32
 
 [sub_resource type="CapsuleShape3D" id="PlayerShape"]
 radius = 0.45
@@ -56,24 +54,22 @@ mesh = SubResource("GrassMesh")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="GrassTerrain" unique_id=651728689]
 shape = SubResource("GrassShape")
 
-[node name="Road" type="StaticBody3D" parent="."]
-position = Vector3(0, 0.04, -2)
+[node name="Road" type="StaticBody3D" parent="." unique_id=8273561]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.04, -2)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Road"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Road" unique_id=1846167386]
 mesh = SubResource("RoadMesh")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Road"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Road" unique_id=908416186]
 shape = SubResource("RoadShape")
 
-[node name="Trees" type="Node3D" parent="."]
+[node name="Trees" type="Node3D" parent="." unique_id=1807275455]
 
-[node name="CommonTree1" parent="Trees" instance=ExtResource("6_tree_1")]
-position = Vector3(-7, 0, -6)
-rotation_degrees = Vector3(0, 18, 0)
+[node name="CommonTree1" parent="Trees" unique_id=1076600856 instance=ExtResource("6_tree_1")]
+transform = Transform3D(0.95105654, 0, 0.309017, 0, 1, 0, -0.309017, 0, 0.95105654, -7, 0, -6)
 
-[node name="CommonTree2" parent="Trees" instance=ExtResource("7_tree_2")]
-position = Vector3(7, 0, 4)
-rotation_degrees = Vector3(0, -24, 0)
+[node name="CommonTree2" parent="Trees" unique_id=770413001 instance=ExtResource("7_tree_2")]
+transform = Transform3D(0.9135454, 0, -0.40673664, 0, 1, 0, 0.40673664, 0, 0.9135454, 7, 0, 4)
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1750895960]
 transform = Transform3D(0.88294756, 0.36994863, -0.2890356, 0, 0.6156615, 0.7880107, 0.46947157, -0.6957722, 0.5435968, 0, 0, 0)
