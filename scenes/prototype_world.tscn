@@ -1,0 +1,155 @@
+[gd_scene load_steps=18 format=3]
+
+[ext_resource type="Script" path="res://scripts/player/ThirdPersonPlayer.cs" id="1_player"]
+[ext_resource type="Script" path="res://scripts/ui/PerformanceDisplay.cs" id="2_fps"]
+
+[sub_resource type="StandardMaterial3D" id="GroundMaterial"]
+albedo_color = Color(0.18, 0.28, 0.16, 1)
+roughness = 1.0
+
+[sub_resource type="BoxMesh" id="GroundMesh"]
+material = SubResource("GroundMaterial")
+size = Vector3(50, 0.2, 50)
+
+[sub_resource type="BoxShape3D" id="GroundShape"]
+size = Vector3(50, 0.2, 50)
+
+[sub_resource type="StandardMaterial3D" id="PlayerMaterial"]
+albedo_color = Color(0.72, 0.22, 0.14, 1)
+roughness = 0.8
+
+[sub_resource type="CapsuleMesh" id="PlayerMesh"]
+material = SubResource("PlayerMaterial")
+radius = 0.45
+height = 2.0
+
+[sub_resource type="CapsuleShape3D" id="PlayerShape"]
+radius = 0.45
+height = 2.0
+
+[sub_resource type="StandardMaterial3D" id="ObstacleMaterial"]
+albedo_color = Color(0.33, 0.30, 0.27, 1)
+roughness = 0.9
+
+[sub_resource type="BoxMesh" id="BoxMeshLarge"]
+material = SubResource("ObstacleMaterial")
+size = Vector3(4, 3, 2)
+
+[sub_resource type="BoxShape3D" id="BoxShapeLarge"]
+size = Vector3(4, 3, 2)
+
+[sub_resource type="BoxMesh" id="BoxMeshTall"]
+material = SubResource("ObstacleMaterial")
+size = Vector3(2, 5, 2)
+
+[sub_resource type="BoxShape3D" id="BoxShapeTall"]
+size = Vector3(2, 5, 2)
+
+[sub_resource type="BoxMesh" id="BoxMeshWide"]
+material = SubResource("ObstacleMaterial")
+size = Vector3(7, 2, 1.5)
+
+[sub_resource type="BoxShape3D" id="BoxShapeWide"]
+size = Vector3(7, 2, 1.5)
+
+[sub_resource type="Environment" id="WorldEnvironment"]
+background_mode = 1
+background_color = Color(0.46, 0.62, 0.76, 1)
+background_energy_multiplier = 0.8
+ambient_light_source = 3
+ambient_light_color = Color(0.55, 0.62, 0.7, 1)
+ambient_light_energy = 0.65
+tonemap_mode = 2
+
+[sub_resource type="StyleBoxFlat" id="FpsBackground"]
+bg_color = Color(0.02, 0.03, 0.04, 0.72)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="PrototypeWorld" type="Node3D"]
+
+[node name="Ground" type="StaticBody3D" parent="."]
+position = Vector3(0, -0.1, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground"]
+mesh = SubResource("GroundMesh")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground"]
+shape = SubResource("GroundShape")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-52, -28, 0)
+light_color = Color(1, 0.94, 0.82, 1)
+light_energy = 1.15
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("WorldEnvironment")
+
+[node name="Player" type="CharacterBody3D" parent="."]
+position = Vector3(0, 1, 6)
+script = ExtResource("1_player")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player"]
+shape = SubResource("PlayerShape")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Player"]
+mesh = SubResource("PlayerMesh")
+
+[node name="CameraRig" type="Node3D" parent="Player"]
+position = Vector3(0, 0.75, 0)
+
+[node name="SpringArm3D" type="SpringArm3D" parent="Player/CameraRig"]
+rotation_degrees = Vector3(-11.5, 0, 0)
+spring_length = 5.0
+margin = 0.15
+collision_mask = 1
+
+[node name="Camera3D" type="Camera3D" parent="Player/CameraRig/SpringArm3D"]
+current = true
+fov = 70.0
+
+[node name="ObstacleA" type="StaticBody3D" parent="."]
+position = Vector3(-5, 1.5, -3)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="ObstacleA"]
+mesh = SubResource("BoxMeshLarge")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ObstacleA"]
+shape = SubResource("BoxShapeLarge")
+
+[node name="ObstacleB" type="StaticBody3D" parent="."]
+position = Vector3(4, 2.5, -7)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="ObstacleB"]
+mesh = SubResource("BoxMeshTall")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ObstacleB"]
+shape = SubResource("BoxShapeTall")
+
+[node name="ObstacleC" type="StaticBody3D" parent="."]
+position = Vector3(1, 1, 0)
+rotation_degrees = Vector3(0, 32, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="ObstacleC"]
+mesh = SubResource("BoxMeshWide")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ObstacleC"]
+shape = SubResource("BoxShapeWide")
+
+[node name="PerformanceUI" type="CanvasLayer" parent="."]
+
+[node name="FpsLabel" type="Label" parent="PerformanceUI"]
+offset_left = 12.0
+offset_top = 12.0
+offset_right = 112.0
+offset_bottom = 44.0
+theme_override_colors/font_color = Color(0.9, 0.95, 0.88, 1)
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("FpsBackground")
+text = "FPS: --"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("2_fps")
