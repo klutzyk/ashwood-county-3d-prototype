@@ -83,6 +83,26 @@ Players should frequently ask:
 
 ---
 
+## 6. Persistent World Resources
+
+Items should exist inside the world rather than appearing directly in the player's possession.
+
+Cars, cupboards, lockers, corpses and other containers maintain their own inventories.
+
+Searching reveals what a container holds.
+
+The player chooses:
+
+- What to take
+- What to leave
+- What to return for later
+- Whether limited inventory space is worth using
+
+Uncollected items should remain where they were found.
+
+This supports exploration, resource planning and the feeling that locations continue to exist independently of the player.
+---
+
 # Prototype Goal
 
 The prototype is **not** the full game.
