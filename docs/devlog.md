@@ -141,6 +141,21 @@ The player can see the Bandage in the first inventory slot after searching the a
 
 ---
 
+## Bandage Use
+
+Completed:
+
+- Slot 1 item-use input
+- Bandage health restoration
+- Successful-use item consumption
+- Full-health and death safeguards
+
+Outcome:
+
+Pressing 1 uses the Bandage to restore 40 health and removes it from the inventory. The Bandage is not consumed when healing cannot occur.
+
+---
+
 ## Current Milestone
 
 Working on:

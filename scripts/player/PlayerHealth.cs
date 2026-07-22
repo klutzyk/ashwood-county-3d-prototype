@@ -58,4 +58,16 @@ public partial class PlayerHealth : Node
 
 		return true;
 	}
+
+	public bool RestoreHealth(float amount)
+	{
+		if (amount <= 0.0f || IsDead || CurrentHealth >= MaximumHealth)
+		{
+			return false;
+		}
+
+		CurrentHealth = Mathf.Clamp(CurrentHealth + amount, 0.0f, MaximumHealth);
+		EmitSignal(SignalName.HealthChanged, CurrentHealth, MaximumHealth);
+		return true;
+	}
 }

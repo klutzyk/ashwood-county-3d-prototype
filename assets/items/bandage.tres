@@ -1,9 +1,10 @@
-[gd_resource type="Resource" script_class="ItemDefinition" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="BandageItem" load_steps=2 format=3]
 
-[ext_resource type="Script" path="res://scripts/items/ItemDefinition.cs" id="1_item"]
+[ext_resource type="Script" path="res://scripts/items/BandageItem.cs" id="1_item"]
 
 [resource]
 script = ExtResource("1_item")
 ItemId = &"bandage"
 DisplayName = "Bandage"
 Description = "A basic medical bandage."
+HealthRestored = 40.0

@@ -16,6 +16,19 @@ public partial class PlayerInventory : Node
 
 	public int Capacity => SlotCount;
 
+	public override void _UnhandledInput(InputEvent @event)
+	{
+		if (@event is InputEventKey { Echo: true } || !@event.IsActionPressed("use_slot_1"))
+		{
+			return;
+		}
+
+		if (UseItemAt(0, GetParent()))
+		{
+			GetViewport().SetInputAsHandled();
+		}
+	}
+
 	public bool AddItem(ItemDefinition item, int quantity = 1)
 	{
 		if (item is null || item.ItemId.IsEmpty || quantity <= 0)
@@ -54,6 +67,28 @@ public partial class PlayerInventory : Node
 	public int GetQuantityAt(int slot)
 	{
 		return IsValidSlot(slot) ? _quantities[slot] : 0;
+	}
+
+	public bool UseItemAt(int slot, Node user)
+	{
+		if (!IsValidSlot(slot) || _items[slot] is not ItemDefinition item || _quantities[slot] <= 0)
+		{
+			return false;
+		}
+
+		if (!item.Use(user))
+		{
+			return false;
+		}
+
+		_quantities[slot]--;
+		if (_quantities[slot] == 0)
+		{
+			_items[slot] = null;
+		}
+
+		EmitSignal(SignalName.InventoryChanged);
+		return true;
 	}
 
 	private int FindItemSlot(StringName itemId)
