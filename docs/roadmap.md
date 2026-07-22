@@ -40,7 +40,7 @@ Complete one vertical slice before starting the next.
 
 - [x] Interaction system
 - [x] Interaction prompt
-- [ ] Search action
+- [x] Search action
 
 ## Inventory
 
@@ -56,7 +56,7 @@ Complete one vertical slice before starting the next.
 
 ## World
 
-- [ ] Search abandoned car
+- [x] Search abandoned car
 - [ ] Search house
 - [ ] Search crate
 

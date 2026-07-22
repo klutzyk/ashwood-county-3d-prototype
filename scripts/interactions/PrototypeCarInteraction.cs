@@ -13,6 +13,6 @@ public partial class PrototypeCarInteraction : StaticBody3D
 
 	private static void OnInteracted(Node interactor)
 	{
-		GD.Print("Searching car...");
+		GD.Print("Search complete.");
 	}
 }

@@ -1,4 +1,5 @@
 using Godot;
+using AshwoodCounty3DPrototype.Interactions;
 
 namespace AshwoodCounty3DPrototype.Player;
 
@@ -19,6 +20,7 @@ public partial class ThirdPersonPlayer : CharacterBody3D
 	private SpringArm3D _springArm = null!;
 	private PlayerHealth _health = null!;
 	private PlayerStamina _stamina = null!;
+	private PlayerInteraction _interaction = null!;
 	private float _cameraPitch = -0.2f;
 
 	public bool IsSprinting { get; private set; }
@@ -29,6 +31,7 @@ public partial class ThirdPersonPlayer : CharacterBody3D
 		_springArm = GetNode<SpringArm3D>("CameraRig/SpringArm3D");
 		_health = GetNode<PlayerHealth>("Health");
 		_stamina = GetNode<PlayerStamina>("Stamina");
+		_interaction = GetNode<PlayerInteraction>("Interaction");
 		_cameraRig.TopLevel = true;
 		FollowPlayerWithCamera();
 		_springArm.Rotation = new Vector3(_cameraPitch, 0.0f, 0.0f);
@@ -63,6 +66,17 @@ public partial class ThirdPersonPlayer : CharacterBody3D
 	{
 		float deltaTime = (float)delta;
 		if (_health.IsDead)
+		{
+			IsSprinting = false;
+			_stamina.UpdateStamina(isSprinting: false, deltaTime);
+			StopHorizontalMovement();
+			ApplyGravity(deltaTime);
+			MoveAndSlide();
+			FollowPlayerWithCamera();
+			return;
+		}
+
+		if (_interaction.IsInteracting)
 		{
 			IsSprinting = false;
 			_stamina.UpdateStamina(isSprinting: false, deltaTime);

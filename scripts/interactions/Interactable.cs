@@ -13,9 +13,10 @@ public partial class Interactable : Node3D
 
 	[Export] public string InteractionName { get; set; } = "Object";
 	[Export] public string InteractionPrompt { get; set; } = "Interact with";
+	[Export] public float HoldDuration { get; set; }
 	[Export] public bool Enabled { get; set; } = true;
 
-	public string PromptText => $"Press E to {InteractionPrompt.Trim()} {InteractionName.Trim()}";
+	public string PromptText => $"{(HoldDuration > 0.0f ? "Hold" : "Press")} E to {InteractionPrompt.Trim()} {InteractionName.Trim()}";
 
 	public override void _Ready()
 	{

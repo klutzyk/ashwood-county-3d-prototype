@@ -95,6 +95,22 @@ The player can select and trigger one nearby interactable at a time. The abandon
 
 ---
 
+## Searching Prototype
+
+Completed:
+
+- Hold-E search action
+- Two-second progress bar
+- Movement and sprint lock during searching
+- Cancellation when E is released or the target becomes invalid
+- Abandoned car search completion callback
+
+Outcome:
+
+The abandoned car can now be searched through a timed, cancellable interaction. Search results, items and loot remain unimplemented.
+
+---
+
 ## Current Milestone
 
 Working on:
