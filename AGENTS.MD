@@ -1,129 +1,104 @@
 # AGENTS.md
 
-# Project
+## Project
 
-This repository is a feasibility prototype for a potential third-person 3D zombie survival game.
+Ashwood County is a Godot 4.7.1 .NET prototype for a third-person 3D zombie survival game.
 
-This is NOT the main game.
+The current objective is to build and evaluate one small, polished gameplay vertical slice before expanding the project.
 
-The objective is to determine whether:
+The prototype has already validated:
 
-- Godot 4.7.1 .NET is suitable.
-- The Compatibility renderer performs well.
-- Development is comfortable on integrated graphics.
-- A visually appealing 3D game is realistic using AI-assisted development.
+- Third-person player movement
+- Mouse-controlled camera
+- Idle, walking and running animations
+- Imported 3D environment assets
+- Basic environment lighting
+- Static collision
+- Navigation
+- One animated zombie with detection, pursuit and attack behaviour
+- Acceptable performance using the Compatibility renderer
 
-Do not expand scope.
+Do not expand into a large open world or unrelated systems.
 
 ---
 
-# Technology
-
-Engine
+## Technology
 
 - Godot 4.7.1 .NET
 - C#
-- Compatibility Renderer
+- Compatibility renderer
+
+Do not change the engine, renderer or language unless explicitly requested.
 
 ---
 
-# Design Philosophy
+## Priorities
 
-Priorities:
+In order:
 
 1. Gameplay feel
-2. Visual atmosphere
-3. Performance
-4. Code quality
+2. Stable vertical slices
+3. Performance on the development laptop
+4. Visual atmosphere
+5. Maintainable code
 
-Do not optimize prematurely.
-
----
-
-# Scope
-
-Implement only small vertical slices.
-
-Each task should be independently testable.
-
-Avoid implementing multiple gameplay systems simultaneously.
+Prefer a simple working implementation over premature generalisation.
 
 ---
 
-# Coding Standards
+## Development Scope
 
-- Use C#
+Implement one focused gameplay slice per task.
+
+Each task must:
+
+- Be independently testable
+- Preserve working systems
+- Avoid unrelated refactoring
+- Avoid speculative future architecture
+- Stop when the requested feature is complete
+
+Do not implement additional roadmap features unless explicitly requested.
+
+When a requested task is too large, split it into smaller tasks before implementation.
+
+---
+
+## Coding Standards
+
+- Use C#.
 - Keep classes focused.
-- Prefer composition over inheritance.
-- Expose tunable values with `[Export]`.
+- Prefer composition over deep inheritance.
+- Expose genuinely tunable values with `[Export]`.
 - Use descriptive names.
-- Avoid magic numbers.
-- Keep methods short.
+- Avoid unexplained magic numbers.
+- Keep methods reasonably small.
+- Reuse existing systems rather than duplicating behaviour.
+- Do not add plugins or external dependencies without approval.
+- Do not modify third-party source assets directly when a project-owned wrapper or material can be used.
 
 ---
 
-# Repository Structure
+## Repository Structure
 
+```text
 assets/
+  characters/
+    player/
+    zombies/
   environment/
     buildings/
     nature/
     roads/
     vehicles/
-  characters/
-    player/
-    zombies/
   materials/
   third_party/
+
 docs/
+  assets_reference.md
+  devlog.md
+  roadmap.md
+  vision.md
+
 scenes/
 scripts/
-
----
-
-# Workflow
-
-Before every implementation:
-
-1. Inspect the repository.
-2. Understand the existing architecture.
-3. Implement only the requested feature.
-4. Build the project.
-5. Report:
-
-- Files changed
-- Manual testing
-- Build status
-- Known limitations
-- Suggested commit message
-
-Do not modify unrelated systems.
-
----
-
-# Current Goal
-
-Build a polished third-person movement prototype.
-
-The prototype should eventually include:
-
-- Third-person movement
-- Camera
-- One environment
-- One house
-- Trees
-- Props
-- One zombie
-- Basic lighting
-
-Nothing else.
-
-No inventory.
-
-No combat.
-
-No AI systems.
-
-No save system.
-
-The purpose is to evaluate visuals, performance and development workflow.

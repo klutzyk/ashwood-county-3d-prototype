@@ -2,6 +2,7 @@
 
 using System;
 using Godot;
+using AshwoodCounty3DPrototype.Player;
 
 namespace AshwoodCounty3DPrototype.Zombies;
 
@@ -15,6 +16,9 @@ public partial class PrototypeZombie : CharacterBody3D
 	[Export] public float PlayerTargetHeight { get; set; } = 0.75f;
 	[Export(PropertyHint.Layers3DPhysics)] public uint VisionCollisionMask { get; set; } = 1;
 	[Export] public float AttackDistance { get; set; } = 1.6f;
+	[Export] public float AttackDamage { get; set; } = 20.0f;
+	[Export] public float AttackCooldown { get; set; } = 1.0f;
+	[Export] public float AttackHitMoment { get; set; } = 0.98f;
 	[Export] public float MoveSpeed { get; set; } = 0.36f;
 	[Export] public float Acceleration { get; set; } = 8.0f;
 	[Export] public float Gravity { get; set; } = 24.0f;
@@ -40,16 +44,21 @@ public partial class PrototypeZombie : CharacterBody3D
 	private NavigationAgent3D _navigationAgent = null!;
 	private AnimationPlayer _animationPlayer = null!;
 	private Node3D _player = null!;
+	private PlayerHealth _playerHealth = null!;
 	private BehaviourState _state = BehaviourState.Idle;
 	private float _pathUpdateElapsed;
 	private float _timeSincePlayerVisible = float.PositiveInfinity;
 	private Vector3 _lastKnownPlayerPosition;
+	private float _previousAttackAnimationPosition;
+	private float _timeSinceAttackHit;
+	private bool _attackHitAttempted;
 
 	public string CurrentStateName => _state.ToString();
 
 	public override void _Ready()
 	{
 		_player = GetNode<Node3D>(PlayerPath);
+		_playerHealth = _player.GetNode<PlayerHealth>("Health");
 		_navigationAgent = GetNode<NavigationAgent3D>("NavigationAgent3D");
 		_animationPlayer = FindDescendant<AnimationPlayer>(this)
 			?? throw new InvalidOperationException("Zombie model is missing an AnimationPlayer.");
@@ -68,6 +77,7 @@ public partial class PrototypeZombie : CharacterBody3D
 		UpdatePlayerAwareness(canSeePlayer, deltaTime);
 		BehaviourState nextState = DetermineState(distanceToPlayer, canSeePlayer);
 		SetState(nextState);
+		UpdateAttack(deltaTime, distanceToPlayer, canSeePlayer);
 
 		Vector3 movementDirection = _state == BehaviourState.Chasing
 			? GetNavigationDirection(deltaTime)
@@ -82,6 +92,43 @@ public partial class PrototypeZombie : CharacterBody3D
 		RotateToward(facingDirection, deltaTime);
 
 		MoveAndSlide();
+	}
+
+	private void UpdateAttack(float delta, float distanceToPlayer, bool canSeePlayer)
+	{
+		if (_state != BehaviourState.Attacking)
+		{
+			return;
+		}
+
+		_timeSinceAttackHit += delta;
+		float animationLength = (float)_animationPlayer.CurrentAnimationLength;
+		float hitMoment = Mathf.Clamp(AttackHitMoment, 0.0f, animationLength);
+		float currentPosition = (float)_animationPlayer.CurrentAnimationPosition;
+
+		if (!_attackHitAttempted &&
+			_previousAttackAnimationPosition <= hitMoment &&
+			currentPosition >= hitMoment)
+		{
+			_attackHitAttempted = true;
+			if (_timeSinceAttackHit >= Mathf.Max(AttackCooldown, 0.0f) &&
+				canSeePlayer && distanceToPlayer <= AttackDistance)
+			{
+				_playerHealth.ApplyDamage(AttackDamage);
+				_timeSinceAttackHit = 0.0f;
+			}
+		}
+
+		_previousAttackAnimationPosition = currentPosition;
+		if (_animationPlayer.IsPlaying() ||
+			_timeSinceAttackHit < Mathf.Max(AttackCooldown, 0.0f))
+		{
+			return;
+		}
+
+		_previousAttackAnimationPosition = 0.0f;
+		_attackHitAttempted = false;
+		_animationPlayer.Play(AttackAnimationName, AnimationBlendTime);
 	}
 
 	private BehaviourState DetermineState(float distanceToPlayer, bool canSeePlayer)
@@ -215,6 +262,12 @@ public partial class PrototypeZombie : CharacterBody3D
 		}
 
 		_state = nextState;
+		if (_state == BehaviourState.Attacking)
+		{
+			_previousAttackAnimationPosition = 0.0f;
+			_timeSinceAttackHit = Mathf.Max(AttackCooldown, 0.0f);
+			_attackHitAttempted = false;
+		}
 		PlayStateAnimation();
 	}
 
@@ -232,12 +285,16 @@ public partial class PrototypeZombie : CharacterBody3D
 	private void ConfigureAnimations()
 	{
 		AnimationLibrary library = _animationPlayer.GetAnimationLibrary("");
-		AddAnimation(library, IdleAnimationName, IdleAnimationPath);
-		AddAnimation(library, WalkAnimationName, WalkAnimationPath);
-		AddAnimation(library, AttackAnimationName, AttackAnimationPath);
+		AddAnimation(library, IdleAnimationName, IdleAnimationPath, shouldLoop: true);
+		AddAnimation(library, WalkAnimationName, WalkAnimationPath, shouldLoop: true);
+		AddAnimation(library, AttackAnimationName, AttackAnimationPath, shouldLoop: false);
 	}
 
-	private static void AddAnimation(AnimationLibrary library, string name, string assetPath)
+	private static void AddAnimation(
+		AnimationLibrary library,
+		string name,
+		string assetPath,
+		bool shouldLoop)
 	{
 		PackedScene animationScene = ResourceLoader.Load<PackedScene>(assetPath);
 		Node sourceRoot = animationScene.Instantiate();
@@ -245,7 +302,9 @@ public partial class PrototypeZombie : CharacterBody3D
 			?? throw new InvalidOperationException($"{assetPath} is missing an AnimationPlayer.");
 		Animation animation = (Animation)sourcePlayer.GetAnimation(SourceAnimationName).Duplicate(true);
 
-		animation.LoopMode = Animation.LoopModeEnum.Linear;
+		animation.LoopMode = shouldLoop
+			? Animation.LoopModeEnum.Linear
+			: Animation.LoopModeEnum.None;
 		KeepRootMotionInPlace(animation);
 		if (library.HasAnimation(name))
 		{

@@ -17,6 +17,8 @@
 [ext_resource type="PackedScene" path="res://assets/environment/props/barrel_crate.tscn" id="15_containers"]
 [ext_resource type="NavigationMesh" path="res://assets/navigation/prototype_world_navmesh.tres" id="16_navigation"]
 [ext_resource type="PackedScene" path="res://scenes/zombies/prototype_zombie.tscn" id="17_zombie"]
+[ext_resource type="Script" path="res://scripts/player/PlayerHealth.cs" id="18_health"]
+[ext_resource type="Script" path="res://scripts/ui/PlayerStatusDisplay.cs" id="19_player_status"]
 
 [sub_resource type="BoxMesh" id="GrassMesh"]
 material = ExtResource("8_grass")
@@ -161,6 +163,9 @@ script = ExtResource("1_player")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Player" unique_id=1560467523]
 shape = SubResource("PlayerShape")
 
+[node name="Health" type="Node" parent="Player"]
+script = ExtResource("18_health")
+
 [node name="Visual" type="Node3D" parent="Player" unique_id=517271585]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, -1, 0)
 
@@ -187,6 +192,7 @@ script = ExtResource("4_animation")
 position = Vector3(11, 0.9, -14)
 
 [node name="PerformanceUI" type="CanvasLayer" parent="." unique_id=1832903103]
+script = ExtResource("19_player_status")
 
 [node name="FpsLabel" type="Label" parent="PerformanceUI" unique_id=1389187676]
 offset_left = 12.0
@@ -200,3 +206,64 @@ text = "FPS: --"
 horizontal_alignment = 1
 vertical_alignment = 1
 script = ExtResource("2_fps")
+
+[node name="HealthLabel" type="Label" parent="PerformanceUI"]
+offset_left = 12.0
+offset_top = 52.0
+offset_right = 196.0
+offset_bottom = 84.0
+theme_override_colors/font_color = Color(0.92, 0.95, 0.9, 1)
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("FpsBackground")
+text = "Health: 100 / 100"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DamageFlash" type="ColorRect" parent="PerformanceUI"]
+modulate = Color(1, 1, 1, 0)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.75, 0.02, 0.02, 1)
+
+[node name="DeathOverlay" type="ColorRect" parent="PerformanceUI"]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.015, 0.01, 0.01, 0.72)
+
+[node name="DeathText" type="VBoxContainer" parent="PerformanceUI/DeathOverlay"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -160.0
+offset_top = -55.0
+offset_right = 160.0
+offset_bottom = 55.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 8
+
+[node name="Title" type="Label" parent="PerformanceUI/DeathOverlay/DeathText"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.86, 0.12, 0.1, 1)
+theme_override_font_sizes/font_size = 34
+text = "You Died"
+horizontal_alignment = 1
+
+[node name="Restart" type="Label" parent="PerformanceUI/DeathOverlay/DeathText"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.92, 0.92, 0.9, 1)
+theme_override_font_sizes/font_size = 18
+text = "Press R to Restart"
+horizontal_alignment = 1

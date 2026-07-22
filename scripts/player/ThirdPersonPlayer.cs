@@ -17,12 +17,14 @@ public partial class ThirdPersonPlayer : CharacterBody3D
 
 	private Node3D _cameraRig = null!;
 	private SpringArm3D _springArm = null!;
+	private PlayerHealth _health = null!;
 	private float _cameraPitch = -0.2f;
 
 	public override void _Ready()
 	{
 		_cameraRig = GetNode<Node3D>("CameraRig");
 		_springArm = GetNode<SpringArm3D>("CameraRig/SpringArm3D");
+		_health = GetNode<PlayerHealth>("Health");
 		_cameraRig.TopLevel = true;
 		FollowPlayerWithCamera();
 		_springArm.Rotation = new Vector3(_cameraPitch, 0.0f, 0.0f);
@@ -56,6 +58,15 @@ public partial class ThirdPersonPlayer : CharacterBody3D
 	public override void _PhysicsProcess(double delta)
 	{
 		float deltaTime = (float)delta;
+		if (_health.IsDead)
+		{
+			StopHorizontalMovement();
+			ApplyGravity(deltaTime);
+			MoveAndSlide();
+			FollowPlayerWithCamera();
+			return;
+		}
+
 		Vector3 movementDirection = GetMovementDirection();
 		float targetSpeed = Input.IsActionPressed("run") ? RunSpeed : WalkSpeed;
 
@@ -69,6 +80,14 @@ public partial class ThirdPersonPlayer : CharacterBody3D
 
 		MoveAndSlide();
 		FollowPlayerWithCamera();
+	}
+
+	private void StopHorizontalMovement()
+	{
+		Vector3 velocity = Velocity;
+		velocity.X = 0.0f;
+		velocity.Z = 0.0f;
+		Velocity = velocity;
 	}
 
 	private Vector3 GetMovementDirection()
