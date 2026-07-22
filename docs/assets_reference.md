@@ -71,6 +71,74 @@ of each downloaded asset and its license information with project records.
 - **Local location:** `assets/third_party/materials/grass/`
 - **Status:** In use
 
+### Forest Ground 06
+
+- **Asset type:** Compacted forest-soil texture
+- **Creator:** Charlotte Baglioni
+- **Source:** [Forest Ground 06 on Poly Haven](https://polyhaven.com/a/forest_ground_06)
+- **License:** [CC0 1.0 Universal](https://polyhaven.com/license)
+- **Asset details:** 2.1-metre seamless surface; the project retains the 1K
+  diffuse and displacement maps.
+- **Attribution requirement:** Not required; the author and source are credited
+  here for provenance.
+- **Prototype use:** Dirt roadside shoulders
+- **Local location:** `assets/third_party/materials/grass/`
+- **Status:** In use
+
+### Modular Electricity Poles
+
+- **Asset type:** Modular utility-pole model and material set
+- **Creator:** James Ray Cock
+- **Source:** [Modular Electricity Poles on Poly Haven](https://polyhaven.com/a/modular_electricity_poles)
+- **License:** [CC0 1.0 Universal](https://polyhaven.com/license)
+- **Attribution requirement:** Not required; the author and source are credited
+  here for provenance.
+- **Prototype use:** Textures applied to lightweight primitive utility-pole
+  proxies; the original model geometry is not currently present in the project.
+- **Local location:** `assets/third_party/common/poles/`
+- **Status:** Partially integrated
+
+### Weathered Roadsign | GameReady
+
+- **Asset type:** Weathered speed-limit sign model
+- **Creator:** Mark Peters (`mark-peters`)
+- **Source:** [Weathered Roadsign on Sketchfab](https://sketchfab.com/3d-models/weathered-roadsign-gameready-d7020fa18b7b4220ac4eb2c49af4cddc)
+- **License:** [Creative Commons Attribution 4.0 International](https://creativecommons.org/licenses/by/4.0/)
+- **Attribution requirement:** Credit the creator, asset title, source, license,
+  and any modifications.
+- **Credit text:** "Weathered Roadsign | GameReady" by Mark Peters, licensed
+  under CC BY 4.0, via Sketchfab. Repositioned for Ashwood County 3D Prototype.
+- **Prototype use:** Roadside sign prop
+- **Local location:** `assets/third_party/common/signs/`
+- **Status:** In use
+
+### Barrel & Crate
+
+- **Asset type:** Low-poly container prop set
+- **Creator:** DJMaesen (`@bumstrum`)
+- **Source:** [Barrel & Crate on Sketchfab](https://sketchfab.com/3d-models/barrel-crate-ed9f90ec662b4b3c972b4567899b8293)
+- **License:** [Creative Commons Attribution 4.0 International](https://creativecommons.org/licenses/by/4.0/)
+- **Attribution requirement:** Credit the creator, asset title, source, license,
+  and any modifications.
+- **Credit text:** "Barrel & Crate" by DJMaesen (`@bumstrum`), licensed under
+  CC BY 4.0, via Sketchfab. Scaled and selected for Ashwood County 3D Prototype.
+- **Prototype use:** Intact barrel and crate beside the house
+- **Local location:** `assets/third_party/common/containers/`
+- **Status:** In use
+
+### Old Tyre
+
+- **Asset type:** Worn vehicle-tyre model and material set
+- **Creator:** MP
+- **Source:** [Old Tyre on Poly Haven](https://polyhaven.com/a/old_tyre)
+- **License:** [CC0 1.0 Universal](https://polyhaven.com/license)
+- **Attribution requirement:** Not required; the author and source are credited
+  here for provenance.
+- **Prototype use:** Diffuse texture applied to a lightweight primitive tyre
+  proxy; the original model geometry is not currently present in the project.
+- **Local location:** `assets/third_party/materials/scrap/`
+- **Status:** Partially integrated
+
 ### Asphalt 02
 
 - **Asset type:** Asphalt surface texture
@@ -114,7 +182,7 @@ of each downloaded asset and its license information with project records.
 ## Release Checklist
 
 - [x] Record source and license links for all listed assets.
-- [x] Record creators and ready-to-use credits for both CC BY assets.
+- [x] Record creators and ready-to-use credits for all CC BY assets.
 - [ ] Retain local copies of applicable licenses or download records.
 - [ ] Include all required CC BY credits in any distributed build.
 - [ ] Note material modifications in the final credits.

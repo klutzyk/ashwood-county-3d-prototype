@@ -1,0 +1,9 @@
+[gd_resource type="StandardMaterial3D" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/third_party/materials/grass/forest_ground_06_diff_1k.jpg" id="1_albedo"]
+
+[resource]
+albedo_texture = ExtResource("1_albedo")
+roughness = 1.0
+texture_filter = 5
+uv1_scale = Vector3(1.2, 17, 1.2)

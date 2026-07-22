@@ -1,0 +1,21 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://assets/third_party/materials/scrap/old_tyre_diff_1k.jpg" id="1_tyre"]
+
+[sub_resource type="StandardMaterial3D" id="TyreMaterial"]
+albedo_color = Color(0.28, 0.28, 0.28, 1)
+albedo_texture = ExtResource("1_tyre")
+roughness = 1.0
+texture_filter = 5
+
+[sub_resource type="TorusMesh" id="TyreMesh"]
+material = SubResource("TyreMaterial")
+inner_radius = 0.18
+outer_radius = 0.36
+rings = 20
+ring_segments = 12
+
+[node name="OldTyre" type="Node3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("TyreMesh")

@@ -1,0 +1,16 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://assets/third_party/common/containers/barrel__crate.glb" id="1_containers"]
+
+[node name="BarrelCrate" type="Node3D"]
+
+[node name="Visual" parent="." instance=ExtResource("1_containers")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0.386, -0.004, -0.019)
+
+[node name="cratebroken" parent="Visual/Sketchfab_model/abda27c02f1c444eb849d527f16260ae_fbx/RootNode" index="1"]
+visible = false
+
+[node name="barrelbroken" parent="Visual/Sketchfab_model/abda27c02f1c444eb849d527f16260ae_fbx/RootNode" index="3"]
+visible = false
+
+[editable path="Visual"]

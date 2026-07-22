@@ -1,0 +1,8 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://assets/third_party/common/signs/weathered_roadsign__gameready.glb" id="1_sign"]
+
+[node name="WeatheredRoadsign" type="Node3D"]
+
+[node name="Visual" parent="." instance=ExtResource("1_sign")]
+position = Vector3(48.9546, 0.1932, -12.6241)
