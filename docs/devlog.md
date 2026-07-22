@@ -63,6 +63,22 @@ This validates navigation, animation transitions and basic AI behaviour.
 
 ---
 
+## Player Stamina
+
+Completed:
+
+- Sprint stamina drain
+- Delayed stamina regeneration
+- Exhaustion lockout and recovery threshold
+- Stamina HUD bar
+- Run animation tied to actual sprint state
+
+Outcome:
+
+Walking remains unchanged, while sprinting is now a limited resource with clear visual feedback.
+
+---
+
 ## Current Milestone
 
 Working on:
@@ -71,7 +87,7 @@ Vertical Slice 1
 
 Next objective:
 
-Implement player health and damage.
+Awaiting the next focused vertical-slice task.
 
 ---
 

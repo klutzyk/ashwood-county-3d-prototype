@@ -34,7 +34,7 @@ public partial class PlayerAnimationController : AnimationTree
 	{
 		float horizontalSpeed = new Vector2(_player.Velocity.X, _player.Velocity.Z).Length();
 		float walkTarget = Mathf.Clamp(horizontalSpeed / _player.WalkSpeed, 0.0f, 1.0f);
-		float runTarget = Input.IsActionPressed("run") && horizontalSpeed > 0.1f ? 1.0f : 0.0f;
+		float runTarget = _player.IsSprinting && horizontalSpeed > 0.1f ? 1.0f : 0.0f;
 		float blendStep = BlendSpeed * (float)delta;
 
 		_idleWalkBlend = Mathf.MoveToward(_idleWalkBlend, walkTarget, blendStep);

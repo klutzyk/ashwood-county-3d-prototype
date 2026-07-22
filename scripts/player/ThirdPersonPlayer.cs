@@ -5,7 +5,7 @@ namespace AshwoodCounty3DPrototype.Player;
 public partial class ThirdPersonPlayer : CharacterBody3D
 {
 	[Export] public float WalkSpeed { get; set; } = 4.0f;
-	[Export] public float RunSpeed { get; set; } = 7.0f;
+	[Export] public float SprintSpeed { get; set; } = 7.0f;
 	[Export] public float Acceleration { get; set; } = 18.0f;
 	[Export] public float Gravity { get; set; } = 24.0f;
 	[Export] public float MouseSensitivity { get; set; } = 0.0025f;
@@ -18,13 +18,17 @@ public partial class ThirdPersonPlayer : CharacterBody3D
 	private Node3D _cameraRig = null!;
 	private SpringArm3D _springArm = null!;
 	private PlayerHealth _health = null!;
+	private PlayerStamina _stamina = null!;
 	private float _cameraPitch = -0.2f;
+
+	public bool IsSprinting { get; private set; }
 
 	public override void _Ready()
 	{
 		_cameraRig = GetNode<Node3D>("CameraRig");
 		_springArm = GetNode<SpringArm3D>("CameraRig/SpringArm3D");
 		_health = GetNode<PlayerHealth>("Health");
+		_stamina = GetNode<PlayerStamina>("Stamina");
 		_cameraRig.TopLevel = true;
 		FollowPlayerWithCamera();
 		_springArm.Rotation = new Vector3(_cameraPitch, 0.0f, 0.0f);
@@ -60,6 +64,8 @@ public partial class ThirdPersonPlayer : CharacterBody3D
 		float deltaTime = (float)delta;
 		if (_health.IsDead)
 		{
+			IsSprinting = false;
+			_stamina.UpdateStamina(isSprinting: false, deltaTime);
 			StopHorizontalMovement();
 			ApplyGravity(deltaTime);
 			MoveAndSlide();
@@ -68,7 +74,14 @@ public partial class ThirdPersonPlayer : CharacterBody3D
 		}
 
 		Vector3 movementDirection = GetMovementDirection();
-		float targetSpeed = Input.IsActionPressed("run") ? RunSpeed : WalkSpeed;
+		bool wantsToSprint = Input.IsActionPressed("run") && !movementDirection.IsZeroApprox();
+		IsSprinting = wantsToSprint && _stamina.CanSprint;
+		_stamina.UpdateStamina(IsSprinting, deltaTime);
+		if (!_stamina.CanSprint)
+		{
+			IsSprinting = false;
+		}
+		float targetSpeed = IsSprinting ? SprintSpeed : WalkSpeed;
 
 		ApplyHorizontalMovement(movementDirection, targetSpeed, deltaTime);
 		ApplyGravity(deltaTime);

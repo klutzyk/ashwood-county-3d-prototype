@@ -26,15 +26,15 @@ Complete one vertical slice before starting the next.
 
 ## Player
 
-- [ ] Health
-- [ ] Damage
-- [ ] Death
-- [ ] Restart
+- [x] Health
+- [x] Damage
+- [x] Death
+- [x] Restart
 
 ## Movement
 
-- [ ] Sprint
-- [ ] Stamina
+- [x] Sprint
+- [x] Stamina
 
 ## Interaction
 
