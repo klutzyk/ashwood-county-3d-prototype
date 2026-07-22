@@ -15,6 +15,8 @@
 [ext_resource type="PackedScene" path="res://assets/environment/roads/utility_pole.tscn" id="13_pole"]
 [ext_resource type="PackedScene" path="res://assets/environment/roads/weathered_roadsign.tscn" id="14_sign"]
 [ext_resource type="PackedScene" path="res://assets/environment/props/barrel_crate.tscn" id="15_containers"]
+[ext_resource type="NavigationMesh" path="res://assets/navigation/prototype_world_navmesh.tres" id="16_navigation"]
+[ext_resource type="PackedScene" path="res://scenes/zombies/prototype_zombie.tscn" id="17_zombie"]
 
 [sub_resource type="BoxMesh" id="GrassMesh"]
 material = ExtResource("8_grass")
@@ -68,6 +70,9 @@ corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
 [node name="PrototypeWorld" type="Node3D" unique_id=390521270]
+
+[node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
+navigation_mesh = ExtResource("16_navigation")
 
 [node name="GrassTerrain" type="StaticBody3D" parent="." unique_id=265849430]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
@@ -175,6 +180,11 @@ fov = 70.0
 
 [node name="AnimationTree" type="AnimationTree" parent="Player" unique_id=1211255373]
 script = ExtResource("4_animation")
+
+[node name="Zombies" type="Node3D" parent="."]
+
+[node name="PrototypeZombie" parent="Zombies" instance=ExtResource("17_zombie")]
+position = Vector3(11, 0.9, -14)
 
 [node name="PerformanceUI" type="CanvasLayer" parent="." unique_id=1832903103]
 
