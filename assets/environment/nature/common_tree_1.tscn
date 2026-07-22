@@ -1,0 +1,23 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" uid="uid://dainlu7ona646" path="res://assets/third_party/nature/CommonTree_1.gltf" id="1_tree"]
+[ext_resource type="Material" path="res://assets/materials/tree_bark.tres" id="2_bark"]
+[ext_resource type="Material" path="res://assets/materials/tree_leaves.tres" id="3_leaves"]
+
+[sub_resource type="CylinderShape3D" id="TrunkShape"]
+radius = 0.45
+height = 3.4
+
+[node name="CommonTree1" type="StaticBody3D"]
+
+[node name="Visual" parent="." instance=ExtResource("1_tree")]
+
+[node name="CommonTree_1" parent="Visual" index="0"]
+surface_material_override/0 = ExtResource("2_bark")
+surface_material_override/1 = ExtResource("3_leaves")
+
+[node name="TrunkCollision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 1.45, 0)
+shape = SubResource("TrunkShape")
+
+[editable path="Visual"]

@@ -4,16 +4,27 @@
 [ext_resource type="Script" uid="uid://bonxghg7ovam5" path="res://scripts/ui/PerformanceDisplay.cs" id="2_fps"]
 [ext_resource type="PackedScene" uid="uid://djrqu67cg22bu" path="res://assets/characters/player/Remy.fbx" id="3_remy"]
 [ext_resource type="Script" uid="uid://yffxb2u2vsyt" path="res://scripts/player/PlayerAnimationController.cs" id="4_animation"]
+[ext_resource type="Material" path="res://assets/materials/asphalt_02.tres" id="5_asphalt"]
+[ext_resource type="PackedScene" path="res://assets/environment/nature/common_tree_1.tscn" id="6_tree_1"]
+[ext_resource type="PackedScene" path="res://assets/environment/nature/common_tree_2.tscn" id="7_tree_2"]
 
-[sub_resource type="StandardMaterial3D" id="GroundMaterial"]
-albedo_color = Color(0.18, 0.28, 0.16, 1)
+[sub_resource type="StandardMaterial3D" id="GrassMaterial"]
+albedo_color = Color(0.13, 0.25, 0.105, 1)
+roughness = 1.0
 
-[sub_resource type="BoxMesh" id="GroundMesh"]
-material = SubResource("GroundMaterial")
+[sub_resource type="BoxMesh" id="GrassMesh"]
+material = SubResource("GrassMaterial")
 size = Vector3(50, 0.2, 50)
 
-[sub_resource type="BoxShape3D" id="GroundShape"]
+[sub_resource type="BoxShape3D" id="GrassShape"]
 size = Vector3(50, 0.2, 50)
+
+[sub_resource type="BoxMesh" id="RoadMesh"]
+material = ExtResource("5_asphalt")
+size = Vector3(8, 0.08, 36)
+
+[sub_resource type="BoxShape3D" id="RoadShape"]
+size = Vector3(8, 0.08, 36)
 
 [sub_resource type="Environment" id="WorldEnvironment"]
 background_mode = 1
@@ -27,31 +38,6 @@ tonemap_mode = 2
 [sub_resource type="CapsuleShape3D" id="PlayerShape"]
 radius = 0.45
 
-[sub_resource type="StandardMaterial3D" id="ObstacleMaterial"]
-albedo_color = Color(0.33, 0.3, 0.27, 1)
-roughness = 0.9
-
-[sub_resource type="BoxMesh" id="BoxMeshLarge"]
-material = SubResource("ObstacleMaterial")
-size = Vector3(4, 3, 2)
-
-[sub_resource type="BoxShape3D" id="BoxShapeLarge"]
-size = Vector3(4, 3, 2)
-
-[sub_resource type="BoxMesh" id="BoxMeshTall"]
-material = SubResource("ObstacleMaterial")
-size = Vector3(2, 5, 2)
-
-[sub_resource type="BoxShape3D" id="BoxShapeTall"]
-size = Vector3(2, 5, 2)
-
-[sub_resource type="BoxMesh" id="BoxMeshWide"]
-material = SubResource("ObstacleMaterial")
-size = Vector3(7, 2, 1.5)
-
-[sub_resource type="BoxShape3D" id="BoxShapeWide"]
-size = Vector3(7, 2, 1.5)
-
 [sub_resource type="StyleBoxFlat" id="FpsBackground"]
 bg_color = Color(0.02, 0.03, 0.04, 0.72)
 corner_radius_top_left = 4
@@ -61,14 +47,33 @@ corner_radius_bottom_left = 4
 
 [node name="PrototypeWorld" type="Node3D" unique_id=390521270]
 
-[node name="Ground" type="StaticBody3D" parent="." unique_id=265849430]
+[node name="GrassTerrain" type="StaticBody3D" parent="." unique_id=265849430]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground" unique_id=48643851]
-mesh = SubResource("GroundMesh")
+[node name="MeshInstance3D" type="MeshInstance3D" parent="GrassTerrain" unique_id=48643851]
+mesh = SubResource("GrassMesh")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground" unique_id=651728689]
-shape = SubResource("GroundShape")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GrassTerrain" unique_id=651728689]
+shape = SubResource("GrassShape")
+
+[node name="Road" type="StaticBody3D" parent="."]
+position = Vector3(0, 0.04, -2)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Road"]
+mesh = SubResource("RoadMesh")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Road"]
+shape = SubResource("RoadShape")
+
+[node name="Trees" type="Node3D" parent="."]
+
+[node name="CommonTree1" parent="Trees" instance=ExtResource("6_tree_1")]
+position = Vector3(-7, 0, -6)
+rotation_degrees = Vector3(0, 18, 0)
+
+[node name="CommonTree2" parent="Trees" instance=ExtResource("7_tree_2")]
+position = Vector3(7, 0, 4)
+rotation_degrees = Vector3(0, -24, 0)
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1750895960]
 transform = Transform3D(0.88294756, 0.36994863, -0.2890356, 0, 0.6156615, 0.7880107, 0.46947157, -0.6957722, 0.5435968, 0, 0, 0)
@@ -105,33 +110,6 @@ fov = 70.0
 
 [node name="AnimationTree" type="AnimationTree" parent="Player" unique_id=1211255373]
 script = ExtResource("4_animation")
-
-[node name="ObstacleA" type="StaticBody3D" parent="." unique_id=1108913811]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 1.5, -3)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="ObstacleA" unique_id=739342948]
-mesh = SubResource("BoxMeshLarge")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="ObstacleA" unique_id=764057452]
-shape = SubResource("BoxShapeLarge")
-
-[node name="ObstacleB" type="StaticBody3D" parent="." unique_id=430163681]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 2.5, -7)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="ObstacleB" unique_id=825573045]
-mesh = SubResource("BoxMeshTall")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="ObstacleB" unique_id=1647569509]
-shape = SubResource("BoxShapeTall")
-
-[node name="ObstacleC" type="StaticBody3D" parent="." unique_id=464860643]
-transform = Transform3D(0.8480481, 0, 0.52991927, 0, 1, 0, -0.52991927, 0, 0.8480481, 1, 1, 0)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="ObstacleC" unique_id=254231008]
-mesh = SubResource("BoxMeshWide")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="ObstacleC" unique_id=532387337]
-shape = SubResource("BoxShapeWide")
 
 [node name="PerformanceUI" type="CanvasLayer" parent="." unique_id=1832903103]
 
