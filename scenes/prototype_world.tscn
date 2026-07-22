@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" path="res://assets/environment/nature/common_tree_1.tscn" id="6_tree_1"]
 [ext_resource type="PackedScene" path="res://assets/environment/nature/common_tree_2.tscn" id="7_tree_2"]
 [ext_resource type="Material" path="res://assets/materials/grass_ground.tres" id="8_grass"]
+[ext_resource type="PackedScene" path="res://assets/environment/buildings/old_russian_house.tscn" id="9_house"]
 
 [sub_resource type="BoxMesh" id="GrassMesh"]
 material = ExtResource("8_grass")
@@ -23,13 +24,28 @@ size = Vector3(8, 0.08, 36)
 [sub_resource type="BoxShape3D" id="RoadShape"]
 size = Vector3(8, 0.08, 36)
 
+[sub_resource type="ProceduralSkyMaterial" id="AfternoonSkyMaterial"]
+sky_top_color = Color(0.2, 0.36, 0.58, 1)
+sky_horizon_color = Color(0.78, 0.61, 0.47, 1)
+sky_curve = 0.18
+ground_bottom_color = Color(0.16, 0.12, 0.09, 1)
+ground_horizon_color = Color(0.78, 0.61, 0.47, 1)
+ground_curve = 0.12
+sun_angle_max = 12.0
+sun_curve = 0.08
+sun_energy_multiplier = 1.5
+
+[sub_resource type="Sky" id="AfternoonSky"]
+radiance_size = 3
+process_mode = 1
+sky_material = SubResource("AfternoonSkyMaterial")
+
 [sub_resource type="Environment" id="WorldEnvironment"]
-background_mode = 1
-background_color = Color(0.46, 0.62, 0.76, 1)
-background_energy_multiplier = 0.8
+background_mode = 2
+sky = SubResource("AfternoonSky")
+background_energy_multiplier = 0.85
 ambient_light_source = 3
-ambient_light_color = Color(0.55, 0.62, 0.7, 1)
-ambient_light_energy = 0.65
+ambient_light_energy = 0.55
 tonemap_mode = 2
 tonemap_exposure = 0.32
 
@@ -71,11 +87,18 @@ transform = Transform3D(0.95105654, 0, 0.309017, 0, 1, 0, -0.309017, 0, 0.951056
 [node name="CommonTree2" parent="Trees" unique_id=770413001 instance=ExtResource("7_tree_2")]
 transform = Transform3D(0.9135454, 0, -0.40673664, 0, 1, 0, 0.40673664, 0, 0.9135454, 7, 0, 4)
 
+[node name="Buildings" type="Node3D" parent="."]
+
+[node name="OldRussianHouse" parent="Buildings" instance=ExtResource("9_house")]
+position = Vector3(10, 0, -8)
+rotation_degrees = Vector3(0, 90, 0)
+
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1750895960]
 transform = Transform3D(0.88294756, 0.36994863, -0.2890356, 0, 0.6156615, 0.7880107, 0.46947157, -0.6957722, 0.5435968, 0, 0, 0)
-light_color = Color(1, 0.94, 0.82, 1)
-light_energy = 1.15
+light_color = Color(1, 0.88, 0.72, 1)
+light_energy = 1.0
 shadow_enabled = true
+shadow_blur = 3.0
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=877615492]
 environment = SubResource("WorldEnvironment")

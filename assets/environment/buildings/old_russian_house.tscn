@@ -1,0 +1,167 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" uid="uid://d1cuv86ygv3ln" path="res://assets/third_party/buildings/old_russian_house/source/Dom.fbx" id="1_house"]
+[ext_resource type="Texture2D" path="res://assets/third_party/buildings/old_russian_house/textures/Stena_albedo.jpg" id="2_stena_a"]
+[ext_resource type="Texture2D" path="res://assets/third_party/buildings/old_russian_house/textures/Stena_roughness.jpg" id="3_stena_r"]
+[ext_resource type="Texture2D" path="res://assets/third_party/buildings/old_russian_house/textures/Pol_albedo.jpg" id="4_pol_a"]
+[ext_resource type="Texture2D" path="res://assets/third_party/buildings/old_russian_house/textures/Pol_roughness.jpg" id="5_pol_r"]
+[ext_resource type="Texture2D" path="res://assets/third_party/buildings/old_russian_house/textures/Kozirek_albedo.jpg" id="6_kozirek_a"]
+[ext_resource type="Texture2D" path="res://assets/third_party/buildings/old_russian_house/textures/Kozirek_roughness.jpg" id="7_kozirek_r"]
+[ext_resource type="Texture2D" path="res://assets/third_party/buildings/old_russian_house/textures/Shifer_albedo.jpg" id="8_shifer_a"]
+[ext_resource type="Texture2D" path="res://assets/third_party/buildings/old_russian_house/textures/Shifer_roughness.jpg" id="9_shifer_r"]
+[ext_resource type="Texture2D" path="res://assets/third_party/buildings/old_russian_house/textures/Korob1_albedo.jpg" id="10_korob1_a"]
+[ext_resource type="Texture2D" path="res://assets/third_party/buildings/old_russian_house/textures/Korob1_roughness.jpg" id="11_korob1_r"]
+[ext_resource type="Texture2D" path="res://assets/third_party/buildings/old_russian_house/textures/Korob2_albedo.jpg" id="12_korob2_a"]
+[ext_resource type="Texture2D" path="res://assets/third_party/buildings/old_russian_house/textures/Korob2_roughness.jpg" id="13_korob2_r"]
+[ext_resource type="Texture2D" path="res://assets/third_party/buildings/old_russian_house/textures/Okno1_albedo.jpg" id="14_okno1_a"]
+[ext_resource type="Texture2D" path="res://assets/third_party/buildings/old_russian_house/textures/Okno1_roughness.jpg" id="15_okno1_r"]
+[ext_resource type="Texture2D" path="res://assets/third_party/buildings/old_russian_house/textures/Okno2_albedo.jpg" id="16_okno2_a"]
+[ext_resource type="Texture2D" path="res://assets/third_party/buildings/old_russian_house/textures/Okno2_roughness.jpg" id="17_okno2_r"]
+[ext_resource type="Texture2D" path="res://assets/third_party/buildings/old_russian_house/textures/Door1_albedo.jpg" id="18_door1_a"]
+[ext_resource type="Texture2D" path="res://assets/third_party/buildings/old_russian_house/textures/Door1_roughness.jpg" id="19_door1_r"]
+[ext_resource type="Texture2D" path="res://assets/third_party/buildings/old_russian_house/textures/Door2_albedo.jpg" id="20_door2_a"]
+[ext_resource type="Texture2D" path="res://assets/third_party/buildings/old_russian_house/textures/Door2_roughness.jpg" id="21_door2_r"]
+[ext_resource type="Texture2D" path="res://assets/third_party/buildings/old_russian_house/textures/Stupeni_albedo.jpg" id="22_stupeni_a"]
+[ext_resource type="Texture2D" path="res://assets/third_party/buildings/old_russian_house/textures/Stupeni_roughness.jpg" id="23_stupeni_r"]
+
+[sub_resource type="StandardMaterial3D" id="StenaMaterial"]
+resource_name = "Stena"
+albedo_texture = ExtResource("2_stena_a")
+roughness = 1.0
+roughness_texture = ExtResource("3_stena_r")
+texture_filter = 5
+
+[sub_resource type="StandardMaterial3D" id="PolMaterial"]
+resource_name = "Pol"
+albedo_texture = ExtResource("4_pol_a")
+roughness = 1.0
+roughness_texture = ExtResource("5_pol_r")
+texture_filter = 5
+
+[sub_resource type="StandardMaterial3D" id="KozirekMaterial"]
+resource_name = "Kozirek"
+albedo_texture = ExtResource("6_kozirek_a")
+roughness = 1.0
+roughness_texture = ExtResource("7_kozirek_r")
+texture_filter = 5
+
+[sub_resource type="StandardMaterial3D" id="ShiferMaterial"]
+resource_name = "Shifer"
+albedo_texture = ExtResource("8_shifer_a")
+roughness = 1.0
+roughness_texture = ExtResource("9_shifer_r")
+texture_filter = 5
+
+[sub_resource type="StandardMaterial3D" id="Korob1Material"]
+resource_name = "Korob1"
+albedo_texture = ExtResource("10_korob1_a")
+roughness = 1.0
+roughness_texture = ExtResource("11_korob1_r")
+texture_filter = 5
+
+[sub_resource type="StandardMaterial3D" id="Korob2Material"]
+resource_name = "Korob2"
+albedo_texture = ExtResource("12_korob2_a")
+roughness = 1.0
+roughness_texture = ExtResource("13_korob2_r")
+texture_filter = 5
+
+[sub_resource type="StandardMaterial3D" id="Okno1Material"]
+resource_name = "Okno1"
+albedo_texture = ExtResource("14_okno1_a")
+roughness = 1.0
+roughness_texture = ExtResource("15_okno1_r")
+texture_filter = 5
+
+[sub_resource type="StandardMaterial3D" id="Okno2Material"]
+resource_name = "Okno2"
+albedo_texture = ExtResource("16_okno2_a")
+roughness = 1.0
+roughness_texture = ExtResource("17_okno2_r")
+texture_filter = 5
+
+[sub_resource type="StandardMaterial3D" id="Door1Material"]
+resource_name = "Door1"
+albedo_texture = ExtResource("18_door1_a")
+roughness = 1.0
+roughness_texture = ExtResource("19_door1_r")
+texture_filter = 5
+
+[sub_resource type="StandardMaterial3D" id="Door2Material"]
+resource_name = "Door2"
+albedo_texture = ExtResource("20_door2_a")
+roughness = 1.0
+roughness_texture = ExtResource("21_door2_r")
+texture_filter = 5
+
+[sub_resource type="StandardMaterial3D" id="StupeniMaterial"]
+resource_name = "Stupeni"
+albedo_texture = ExtResource("22_stupeni_a")
+roughness = 1.0
+roughness_texture = ExtResource("23_stupeni_r")
+texture_filter = 5
+
+[sub_resource type="BoxShape3D" id="HouseShape"]
+size = Vector3(6.4, 3.4, 5.8)
+
+[node name="OldRussianHouse" type="StaticBody3D"]
+
+[node name="Visual" parent="." instance=ExtResource("1_house")]
+position = Vector3(-2.012, 0, 0.989)
+
+[node name="Box001" parent="Visual" index="0"]
+surface_material_override/0 = SubResource("StenaMaterial")
+[node name="Object" parent="Visual" index="1"]
+surface_material_override/0 = SubResource("PolMaterial")
+[node name="Shape002" parent="Visual" index="2"]
+surface_material_override/0 = SubResource("KozirekMaterial")
+[node name="Plane001" parent="Visual" index="3"]
+surface_material_override/0 = SubResource("ShiferMaterial")
+[node name="Object003" parent="Visual" index="4"]
+surface_material_override/0 = SubResource("Korob1Material")
+[node name="Object005" parent="Visual" index="5"]
+surface_material_override/0 = SubResource("Korob2Material")
+[node name="Object007" parent="Visual" index="6"]
+surface_material_override/0 = SubResource("Okno2Material")
+[node name="Object009" parent="Visual" index="7"]
+surface_material_override/0 = SubResource("Okno1Material")
+[node name="Box002" parent="Visual" index="8"]
+surface_material_override/0 = SubResource("Door1Material")
+[node name="Object010" parent="Visual" index="9"]
+surface_material_override/0 = SubResource("Okno1Material")
+[node name="Object011" parent="Visual" index="10"]
+surface_material_override/0 = SubResource("Okno1Material")
+[node name="Object012" parent="Visual" index="11"]
+surface_material_override/0 = SubResource("Okno1Material")
+[node name="Object013" parent="Visual" index="12"]
+surface_material_override/0 = SubResource("Okno1Material")
+[node name="Object014" parent="Visual" index="13"]
+surface_material_override/0 = SubResource("Okno1Material")
+[node name="Object015" parent="Visual" index="14"]
+surface_material_override/0 = SubResource("Okno1Material")
+[node name="Object016" parent="Visual" index="15"]
+surface_material_override/0 = SubResource("Korob2Material")
+[node name="Object017" parent="Visual" index="16"]
+surface_material_override/0 = SubResource("Korob2Material")
+[node name="Object018" parent="Visual" index="17"]
+surface_material_override/0 = SubResource("Korob2Material")
+[node name="Object019" parent="Visual" index="18"]
+surface_material_override/0 = SubResource("Korob2Material")
+[node name="Box003" parent="Visual" index="19"]
+surface_material_override/0 = SubResource("StupeniMaterial")
+[node name="Box004" parent="Visual" index="20"]
+surface_material_override/0 = SubResource("Door2Material")
+[node name="Box005" parent="Visual" index="21"]
+surface_material_override/0 = SubResource("Door2Material")
+[node name="Box006" parent="Visual" index="22"]
+surface_material_override/0 = SubResource("Door2Material")
+[node name="Box007" parent="Visual" index="23"]
+surface_material_override/0 = SubResource("Door2Material")
+[node name="Box008" parent="Visual" index="24"]
+surface_material_override/0 = SubResource("Door2Material")
+
+[node name="BuildingCollision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 1.7, 0)
+shape = SubResource("HouseShape")
+
+[editable path="Visual"]
