@@ -30,6 +30,8 @@ public partial class PrototypeZombie : CharacterBody3D
 	[Export] public float DistantAwarenessUpdateInterval { get; set; } = 0.35f;
 	[Export] public float DistantAwarenessThreshold { get; set; } = 18.0f;
 	[Export] public float SeparationUpdateInterval { get; set; } = 0.15f;
+	[Export] public float DistantSeparationUpdateInterval { get; set; } = 0.5f;
+	[Export] public float DistantSeparationThreshold { get; set; } = 18.0f;
 	[Export] public float NavigationPathHeightOffset { get; set; } = -0.7f;
 	[Export] public float WanderRadius { get; set; } = 6.0f;
 	[Export] public float WanderSpeed { get; set; } = 0.28f;
@@ -37,8 +39,8 @@ public partial class PrototypeZombie : CharacterBody3D
 	[Export] public float MaximumIdleDuration { get; set; } = 3.5f;
 	[Export] public float WanderTargetTolerance { get; set; } = 0.65f;
 	[Export] public int WanderTargetAttempts { get; set; } = 6;
-	[Export] public float SeparationRadius { get; set; } = 1.35f;
-	[Export] public float SeparationStrength { get; set; } = 0.9f;
+	[Export] public float SeparationRadius { get; set; } = 1.5f;
+	[Export] public float SeparationStrength { get; set; } = 1.15f;
 	[Export] public float InvestigationSpeed { get; set; } = 0.32f;
 	[Export] public float InvestigationDuration { get; set; } = 2.5f;
 	[Export] public float InvestigationTargetTolerance { get; set; } = 0.75f;
@@ -140,7 +142,14 @@ public partial class PrototypeZombie : CharacterBody3D
 		ScheduleIdleDelay();
 		_navigationAgent.PathHeightOffset = NavigationPathHeightOffset;
 		_navigationAgent.TargetDesiredDistance = Mathf.Max(AttackDistance - 0.3f, 0.5f);
-		_pathUpdateElapsed = PathUpdateInterval;
+		_navigationAgent.AvoidanceEnabled = false;
+		_pathUpdateElapsed = _random.RandfRange(0.0f, Mathf.Max(PathUpdateInterval, 0.01f));
+		_awarenessUpdateRemaining = _random.RandfRange(
+			0.0f,
+			Mathf.Max(AwarenessUpdateInterval, 0.01f));
+		_separationUpdateRemaining = _random.RandfRange(
+			0.0f,
+			Mathf.Max(SeparationUpdateInterval, 0.01f));
 		_cachedDistanceToPlayer = HorizontalDistanceTo(_player.GlobalPosition);
 		_visionQuery = PhysicsRayQueryParameters3D.Create(Vector3.Zero, Vector3.Zero);
 		_visionQuery.CollisionMask = VisionCollisionMask;
@@ -187,7 +196,7 @@ public partial class PrototypeZombie : CharacterBody3D
 			BehaviourState.SearchingPlayer => GetPathDirection(),
 			_ => Vector3.Zero,
 		};
-		if (!movementDirection.IsZeroApprox())
+		if (!movementDirection.IsZeroApprox() || _state == BehaviourState.Attacking)
 		{
 			movementDirection = ApplySeparation(movementDirection, deltaTime);
 		}
@@ -196,6 +205,7 @@ public partial class PrototypeZombie : CharacterBody3D
 		{
 			BehaviourState.Wandering => WanderSpeed,
 			BehaviourState.Investigating => InvestigationSpeed,
+			BehaviourState.Attacking => MoveSpeed * 0.35f,
 			_ => MoveSpeed,
 		};
 		ApplyHorizontalMovement(movementDirection, movementSpeed, deltaTime);
@@ -318,7 +328,7 @@ public partial class PrototypeZombie : CharacterBody3D
 		Visible = true;
 		SetGameplayNoiseResponseEnabled(isAlive);
 		SetPhysicsProcess(isAlive);
-		_navigationAgent.AvoidanceEnabled = isAlive;
+		_navigationAgent.AvoidanceEnabled = false;
 		if (!isAlive)
 		{
 			Velocity = Vector3.Zero;
@@ -671,7 +681,10 @@ public partial class PrototypeZombie : CharacterBody3D
 		if (_separationUpdateRemaining <= 0.0f)
 		{
 			_cachedSeparation = CalculateSeparation(radius);
-			_separationUpdateRemaining = Mathf.Max(SeparationUpdateInterval, 0.01f);
+			float updateInterval = _cachedDistanceToPlayer > DistantSeparationThreshold
+				? DistantSeparationUpdateInterval
+				: SeparationUpdateInterval;
+			_separationUpdateRemaining = Mathf.Max(updateInterval, 0.01f);
 		}
 
 		Vector3 combined = movementDirection + (_cachedSeparation * SeparationStrength);
@@ -784,7 +797,10 @@ public partial class PrototypeZombie : CharacterBody3D
 		else if (_state == BehaviourState.Chasing)
 		{
 			_navigationAgent.TargetDesiredDistance = Mathf.Max(AttackDistance - 0.3f, 0.5f);
-			_pathUpdateElapsed = PathUpdateInterval;
+			_navigationAgent.TargetPosition = _lastKnownPlayerPosition;
+			_pathUpdateElapsed = _random.RandfRange(
+				0.0f,
+				Mathf.Max(PathUpdateInterval, 0.01f));
 		}
 		else if (_state == BehaviourState.Investigating)
 		{

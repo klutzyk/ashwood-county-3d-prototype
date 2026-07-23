@@ -740,3 +740,34 @@ Validation:
 - Day/night and flashlight validation passed toggle timing, final visibility,
   camera attachment, offset, range, energy, cone and attenuation checks
 - C# build completed with no warnings or errors
+
+---
+
+## Zombie Crowd Performance and Separation
+
+Completed:
+
+- Staggered initial awareness, path and separation timing across the fifteen
+  authored zombies
+- Throttled local-separation scans further when zombies are distant
+- Strengthened lightweight close separation and allowed reduced-speed spacing
+  while zombies crowd into attack range
+- Kept full NavigationAgent avoidance disabled so it does not duplicate the
+  existing local steering work
+- Preserved independent state, variants, pursuit, search, sound investigation,
+  attacks, death shutdown and corpse interaction
+
+Outcome:
+
+Nearby chasers spread apart more clearly, while distant zombies perform
+awareness and local-spacing work less frequently and on staggered frames.
+
+Validation:
+
+- New crowd validation passed population, throttling, avoidance, close-spacing
+  and dead-zombie inactivity checks
+- Pursuit validation passed chase, last-known-position search, queued sound
+  investigation and death shutdown
+- Rendered checks varied with device state; the final isolated run measured
+  163.95 FPS with a 9.61 ms p95 frame time, matching the original rendered baseline
+- C# build completed with no warnings or errors
