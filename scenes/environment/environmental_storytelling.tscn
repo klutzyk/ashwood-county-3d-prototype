@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" path="res://scenes/environment/story/roadside_breakdown.tscn" id="1_roadside"]
 [ext_resource type="PackedScene" uid="uid://b85ulujaqe3s5" path="res://scenes/environment/story/looted_pharmacy.tscn" id="2_pharmacy"]
 [ext_resource type="PackedScene" path="res://scenes/environment/story/barricaded_back_door.tscn" id="3_door"]
-[ext_resource type="PackedScene" path="res://scenes/environment/story/service_station_camp.tscn" id="4_camp"]
+[ext_resource type="PackedScene" uid="uid://cnnrrfrhwhboh" path="res://scenes/environment/story/service_station_camp.tscn" id="4_camp"]
 [ext_resource type="PackedScene" uid="uid://cpua772k33ume" path="res://scenes/environment/story/emergency_roadblock.tscn" id="5_roadblock"]
 [ext_resource type="PackedScene" path="res://scenes/environment/story/residential_evacuation.tscn" id="6_evacuation"]
 [ext_resource type="PackedScene" path="res://scenes/environment/story/diner_casualty_trail.tscn" id="7_diner"]
@@ -11,7 +11,7 @@
 [node name="EnvironmentalStorytelling" type="Node3D" unique_id=1195274452]
 
 [node name="RoadsideBreakdown" parent="." unique_id=1123833779 instance=ExtResource("1_roadside")]
-transform = Transform3D(0.9838437, 0, -0.17902958, 0, 1, 0, 0.17902958, 0, 0.9838437, 6.7, 0, -19.6)
+transform = Transform3D(0.9838437, 0, -0.17902958, 0, 1, 0, 0.17902958, 0, 0.9838437, 6.7, 0, -23.330183)
 
 [node name="LootedPharmacy" parent="." unique_id=1297173785 instance=ExtResource("2_pharmacy")]
 transform = Transform3D(0.99680173, 0, -0.07991469, 0, 1, 0, 0.07991469, 0, 0.99680173, -10.25, 0, 12.6)
@@ -20,7 +20,7 @@ transform = Transform3D(0.99680173, 0, -0.07991469, 0, 1, 0, 0.07991469, 0, 0.99
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.12, 0, -8.2)
 
 [node name="ServiceStationCamp" parent="." unique_id=876241378 instance=ExtResource("4_camp")]
-transform = Transform3D(0.99280864, 0, 0.119712204, 0, 1, 0, -0.119712204, 0, 0.99280864, -10.4, 0, -14.2)
+transform = Transform3D(-1.4963524, 0, 0.10454337, 0, 1.5, 0, -0.10454337, 0, -1.4963524, 7.5599337, 0, -17.531584)
 
 [node name="EmergencyRoadblock" parent="." unique_id=1864788416 instance=ExtResource("5_roadblock")]
 transform = Transform3D(0.99680173, 0, 0.07991469, 0, 1, 0, -0.07991469, 0, 0.99680173, 47.2, 0, 39.2)

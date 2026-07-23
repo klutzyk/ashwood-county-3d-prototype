@@ -15,7 +15,7 @@
 [ext_resource type="PackedScene" path="res://assets/environment/roads/utility_pole.tscn" id="13_pole"]
 [ext_resource type="PackedScene" path="res://assets/environment/roads/weathered_roadsign.tscn" id="14_sign"]
 [ext_resource type="PackedScene" path="res://assets/environment/props/barrel_crate.tscn" id="15_containers"]
-[ext_resource type="NavigationMesh" path="res://assets/navigation/prototype_world_navmesh.tres" id="16_navigation"]
+[ext_resource type="NavigationMesh" uid="uid://cfpspvcrgq13c" path="res://assets/navigation/prototype_world_navmesh.tres" id="16_navigation"]
 [ext_resource type="PackedScene" path="res://scenes/zombies/prototype_zombie.tscn" id="17_zombie"]
 [ext_resource type="Script" uid="uid://c63cry5p42kx3" path="res://scripts/player/PlayerHealth.cs" id="18_health"]
 [ext_resource type="Script" uid="uid://dxriwhwypmphj" path="res://scripts/ui/PlayerStatusDisplay.cs" id="19_player_status"]
@@ -26,30 +26,30 @@
 [ext_resource type="Script" uid="uid://dub86l0nfntrm" path="res://scripts/ui/InventoryDisplay.cs" id="24_inventory_display"]
 [ext_resource type="Script" uid="uid://ckua384mtsn6w" path="res://scripts/ui/ContainerInventoryDisplay.cs" id="25_container_ui"]
 [ext_resource type="PackedScene" path="res://assets/environment/props/prototype_cupboard.tscn" id="26_cupboard"]
-[ext_resource type="PackedScene" path="res://assets/environment/props/roadside_dressing.tscn" id="27_roadside"]
+[ext_resource type="PackedScene" uid="uid://cpxn30uo4mu28" path="res://assets/environment/props/roadside_dressing.tscn" id="27_roadside"]
 [ext_resource type="PackedScene" path="res://assets/environment/buildings/ServiceStation/service_station.tscn" id="28_station"]
 [ext_resource type="PackedScene" path="res://assets/environment/buildings/Pharmacy/pharmacy.tscn" id="29_pharmacy"]
-[ext_resource type="Script" path="res://scripts/objectives/AntibioticsObjective.cs" id="30_objective"]
+[ext_resource type="Script" uid="uid://ddpthloiq72m8" path="res://scripts/objectives/AntibioticsObjective.cs" id="30_objective"]
 [ext_resource type="PackedScene" path="res://assets/environment/props/prototype_safe_point.tscn" id="31_safe_point"]
-[ext_resource type="Script" path="res://scripts/ui/ObjectiveDisplay.cs" id="32_objective_ui"]
-[ext_resource type="Script" path="res://scripts/world/WorldTime.cs" id="33_world_time"]
-[ext_resource type="Script" path="res://scripts/player/PlayerFlashlight.cs" id="34_flashlight"]
-[ext_resource type="Script" path="res://scripts/ui/WorldClockDisplay.cs" id="35_clock"]
-[ext_resource type="Script" path="res://scripts/save/SaveGameManager.cs" id="36_save_manager"]
-[ext_resource type="Script" path="res://scripts/ui/GameplayNotificationDisplay.cs" id="37_notifications"]
-[ext_resource type="Script" path="res://scripts/player/PlayerMeleeCombat.cs" id="38_melee"]
-[ext_resource type="Script" path="res://scripts/player/PlayerNeeds.cs" id="39_needs"]
-[ext_resource type="Script" path="res://scripts/world/AtmosphereAudio.cs" id="40_atmosphere"]
+[ext_resource type="Script" uid="uid://elgr5qknnad5" path="res://scripts/ui/ObjectiveDisplay.cs" id="32_objective_ui"]
+[ext_resource type="Script" uid="uid://dyehbpg7lgijq" path="res://scripts/world/WorldTime.cs" id="33_world_time"]
+[ext_resource type="Script" uid="uid://p6msgli6dknl" path="res://scripts/player/PlayerFlashlight.cs" id="34_flashlight"]
+[ext_resource type="Script" uid="uid://b8vcumvy1wmsx" path="res://scripts/ui/WorldClockDisplay.cs" id="35_clock"]
+[ext_resource type="Script" uid="uid://bixniwejftorw" path="res://scripts/save/SaveGameManager.cs" id="36_save_manager"]
+[ext_resource type="Script" uid="uid://cvaenhebgapl2" path="res://scripts/ui/GameplayNotificationDisplay.cs" id="37_notifications"]
+[ext_resource type="Script" uid="uid://ckhn2gnyiwxtf" path="res://scripts/player/PlayerMeleeCombat.cs" id="38_melee"]
+[ext_resource type="Script" uid="uid://cj4ob7ksgj0tu" path="res://scripts/player/PlayerNeeds.cs" id="39_needs"]
+[ext_resource type="Script" uid="uid://dl88ah5wmoeo5" path="res://scripts/world/AtmosphereAudio.cs" id="40_atmosphere"]
 [ext_resource type="Resource" path="res://assets/zombies/slow_walker.tres" id="41_slow"]
 [ext_resource type="Resource" path="res://assets/zombies/walker.tres" id="42_walker"]
 [ext_resource type="Resource" path="res://assets/zombies/runner.tres" id="43_runner"]
 [ext_resource type="Resource" path="res://assets/weapons/baseball_bat.tres" id="44_baseball_bat"]
 [ext_resource type="PackedScene" path="res://scenes/ui/pause_menu.tscn" id="45_pause_menu"]
-[ext_resource type="Script" path="res://scripts/objectives/ServiceStationSuppliesObjective.cs" id="46_supplies_objective"]
+[ext_resource type="Script" uid="uid://wq2qcjyedixr" path="res://scripts/objectives/ServiceStationSuppliesObjective.cs" id="46_supplies_objective"]
 [ext_resource type="PackedScene" path="res://scenes/environment/town_composition_polish.tscn" id="47_town_composition"]
-[ext_resource type="PackedScene" path="res://scenes/environment/environmental_storytelling.tscn" id="48_storytelling"]
+[ext_resource type="PackedScene" uid="uid://sms158fbmf5f" path="res://scenes/environment/environmental_storytelling.tscn" id="48_storytelling"]
 [ext_resource type="PackedScene" path="res://scenes/environment/residential_district.tscn" id="49_residential_district"]
-[ext_resource type="PackedScene" path="res://assets/environment/buildings/Diner/diner.tscn" id="50_diner"]
+[ext_resource type="PackedScene" uid="uid://b83nc4eh3isht" path="res://assets/environment/buildings/Diner/diner.tscn" id="50_diner"]
 [ext_resource type="PackedScene" path="res://scenes/environment/town_road_network.tscn" id="51_road_network"]
 [ext_resource type="PackedScene" path="res://scenes/environment/town_atmosphere_pass.tscn" id="52_atmosphere_pass"]
 
@@ -104,6 +104,18 @@ tonemap_exposure = 0.5
 
 [sub_resource type="CapsuleShape3D" id="PlayerShape"]
 radius = 0.45
+
+[sub_resource type="StandardMaterial3D" id="BatMaterial"]
+albedo_color = Color(0.36, 0.18, 0.07, 1)
+roughness = 0.82
+
+[sub_resource type="CylinderMesh" id="BatMesh"]
+material = SubResource("BatMaterial")
+top_radius = 0.065
+bottom_radius = 0.1
+height = 1.05
+radial_segments = 10
+rings = 1
 
 [sub_resource type="StyleBoxFlat" id="FpsBackground"]
 bg_color = Color(0.02, 0.03, 0.04, 0.72)
@@ -180,45 +192,29 @@ corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
-[sub_resource type="StandardMaterial3D" id="BatMaterial"]
-albedo_color = Color(0.36, 0.18, 0.07, 1)
-roughness = 0.82
-
-[sub_resource type="CylinderMesh" id="BatMesh"]
-material = SubResource("BatMaterial")
-top_radius = 0.065
-bottom_radius = 0.1
-height = 1.05
-radial_segments = 10
-rings = 1
-
 [node name="PrototypeWorld" type="Node3D" unique_id=390521270]
 
-[node name="AntibioticsObjective" type="Node" parent="."]
+[node name="AntibioticsObjective" type="Node" parent="." unique_id=1074394797]
 script = ExtResource("30_objective")
 
-[node name="ServiceStationSuppliesObjective" type="Node" parent="."]
+[node name="ServiceStationSuppliesObjective" type="Node" parent="." unique_id=841301541]
 script = ExtResource("46_supplies_objective")
 
-[node name="WorldTime" type="Node" parent="."]
+[node name="WorldTime" type="Node" parent="." unique_id=824017023]
 script = ExtResource("33_world_time")
 
-[node name="AtmosphereAudio" type="Node" parent="."]
+[node name="AtmosphereAudio" type="Node" parent="." unique_id=1024712090]
 script = ExtResource("40_atmosphere")
 
-[node name="Wind" type="AudioStreamPlayer" parent="AtmosphereAudio"]
-bus = &"Ambient"
+[node name="Wind" type="AudioStreamPlayer" parent="AtmosphereAudio" unique_id=760919382]
 
-[node name="ZombieGroans" type="AudioStreamPlayer" parent="AtmosphereAudio"]
-bus = &"Ambient"
+[node name="ZombieGroans" type="AudioStreamPlayer" parent="AtmosphereAudio" unique_id=2011312538]
 
-[node name="DayInsects" type="AudioStreamPlayer" parent="AtmosphereAudio"]
-bus = &"Ambient"
+[node name="DayInsects" type="AudioStreamPlayer" parent="AtmosphereAudio" unique_id=1879383679]
 
-[node name="NightCrickets" type="AudioStreamPlayer" parent="AtmosphereAudio"]
-bus = &"Ambient"
+[node name="NightCrickets" type="AudioStreamPlayer" parent="AtmosphereAudio" unique_id=428177660]
 
-[node name="SaveGameManager" type="Node" parent="."]
+[node name="SaveGameManager" type="Node" parent="." unique_id=115745992]
 script = ExtResource("36_save_manager")
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="." unique_id=242024835]
@@ -322,8 +318,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.5, 0, -11)
 [node name="Pharmacy" parent="Buildings" unique_id=1814510951 instance=ExtResource("29_pharmacy")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15, 0, 9.5)
 
-[node name="Diner" parent="Buildings" instance=ExtResource("50_diner")]
-position = Vector3(15, 0, 16)
+[node name="Diner" parent="Buildings" unique_id=68038295 instance=ExtResource("50_diner")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 0, 16)
 
 [node name="Vehicles" type="Node3D" parent="." unique_id=676071636]
 
@@ -358,18 +354,18 @@ transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 13.2, 0, -6.2)
 [node name="HouseRoadsideDressing" parent="Props" unique_id=442290748 instance=ExtResource("27_roadside")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, -8)
 
-[node name="TownCompositionPolish" parent="Props" instance=ExtResource("47_town_composition")]
+[node name="TownCompositionPolish" parent="Props" unique_id=2057554173 instance=ExtResource("47_town_composition")]
 
-[node name="EnvironmentalStorytelling" parent="Props" instance=ExtResource("48_storytelling")]
+[node name="EnvironmentalStorytelling" parent="Props" unique_id=427184484 instance=ExtResource("48_storytelling")]
 
-[node name="TownAtmospherePass" parent="Props" instance=ExtResource("52_atmosphere_pass")]
+[node name="TownAtmospherePass" parent="Props" unique_id=318077016 instance=ExtResource("52_atmosphere_pass")]
 
-[node name="ResidentialDistrict" parent="." instance=ExtResource("49_residential_district")]
+[node name="ResidentialDistrict" parent="." unique_id=1273734582 instance=ExtResource("49_residential_district")]
 
-[node name="TownRoadNetwork" parent="." instance=ExtResource("51_road_network")]
+[node name="TownRoadNetwork" parent="." unique_id=1501981868 instance=ExtResource("51_road_network")]
 
-[node name="PrototypeSafePoint" parent="." instance=ExtResource("31_safe_point")]
-position = Vector3(5.1, 0.1, -8.7)
+[node name="PrototypeSafePoint" parent="." unique_id=838078603 instance=ExtResource("31_safe_point")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.1, 0.1, -8.7)
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1750895960]
 transform = Transform3D(0.88294756, 0.36994863, -0.2890356, 0, 0.6156615, 0.7880107, 0.46947157, -0.6957722, 0.5435968, 0, 0, 0)
@@ -397,7 +393,7 @@ script = ExtResource("18_health")
 [node name="Stamina" type="Node" parent="Player" unique_id=1466562127]
 script = ExtResource("20_stamina")
 
-[node name="Needs" type="Node" parent="Player"]
+[node name="Needs" type="Node" parent="Player" unique_id=1168599646]
 script = ExtResource("39_needs")
 
 [node name="Interaction" type="Node" parent="Player" unique_id=1403928352]
@@ -406,16 +402,15 @@ script = ExtResource("21_player_interaction")
 [node name="Inventory" type="Node" parent="Player" unique_id=1565084567]
 script = ExtResource("23_inventory")
 
-[node name="MeleeCombat" type="Node3D" parent="Player"]
+[node name="MeleeCombat" type="Node3D" parent="Player" unique_id=2129107630]
 script = ExtResource("38_melee")
 WeaponDefinition = ExtResource("44_baseball_bat")
 
-[node name="WeaponPivot" type="Node3D" parent="Player/MeleeCombat"]
-position = Vector3(0.48, 0.48, 0.22)
+[node name="WeaponPivot" type="Node3D" parent="Player/MeleeCombat" unique_id=372816950]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.48, 0.48, 0.22)
 
-[node name="BaseballBat" type="MeshInstance3D" parent="Player/MeleeCombat/WeaponPivot"]
-position = Vector3(0, 0.5, 0)
-rotation = Vector3(0, 0, 0.22)
+[node name="BaseballBat" type="MeshInstance3D" parent="Player/MeleeCombat/WeaponPivot" unique_id=1833165327]
+transform = Transform3D(0.97589743, -0.21822962, 0, 0.21822962, 0.97589743, 0, 0, 0, 1, 0, 0.5, 0)
 mesh = SubResource("BatMesh")
 
 [node name="Visual" type="Node3D" parent="Player" unique_id=517271585]
@@ -435,10 +430,9 @@ margin = 0.15
 current = true
 fov = 70.0
 
-[node name="Flashlight" type="SpotLight3D" parent="Player/CameraRig/SpringArm3D/Camera3D"]
-script = ExtResource("34_flashlight")
+[node name="Flashlight" type="SpotLight3D" parent="Player/CameraRig/SpringArm3D/Camera3D" unique_id=244755447]
 light_color = Color(1, 0.94, 0.82, 1)
-shadow_enabled = false
+script = ExtResource("34_flashlight")
 
 [node name="AnimationTree" type="AnimationTree" parent="Player" unique_id=1211255373]
 script = ExtResource("4_animation")
@@ -446,120 +440,105 @@ script = ExtResource("4_animation")
 [node name="Zombies" type="Node3D" parent="." unique_id=102466295]
 
 [node name="PrototypeZombie1" parent="Zombies" unique_id=901850475 instance=ExtResource("17_zombie")]
-position = Vector3(-9, 0.9, 7)
-rotation = Vector3(0, 2.7, 0)
+transform = Transform3D(-0.90407217, 0, 0.42737985, 0, 1, 0, -0.42737985, 0, -0.90407217, -9, 0.9, 7)
 VariantProfile = ExtResource("42_walker")
 WanderRadius = 3.0
 MinimumIdleDuration = 1.2
 MaximumIdleDuration = 2.8
 
 [node name="PrototypeZombie2" parent="Zombies" unique_id=1794350066 instance=ExtResource("17_zombie")]
-position = Vector3(-8, 0.9, 12)
-rotation = Vector3(0, -1.1, 0)
+transform = Transform3D(0.4535961, 0, -0.8912074, 0, 1, 0, 0.8912074, 0, 0.4535961, -8, 0.9, 12)
 VariantProfile = ExtResource("42_walker")
 WanderRadius = 3.5
 MinimumIdleDuration = 2.0
 MaximumIdleDuration = 4.6
 
 [node name="PrototypeZombie3" parent="Zombies" unique_id=1000755475 instance=ExtResource("17_zombie")]
-position = Vector3(-18, 0.9, 16)
-rotation = Vector3(0, 0.35, 0)
+transform = Transform3D(0.9393727, 0, 0.3428978, 0, 1, 0, -0.3428978, 0, 0.9393727, -18, 0.9, 16)
 VariantProfile = ExtResource("41_slow")
 WanderRadius = 3.0
 MinimumIdleDuration = 2.8
 MaximumIdleDuration = 5.2
 
 [node name="PrototypeZombie4" parent="Zombies" unique_id=477813490 instance=ExtResource("17_zombie")]
-position = Vector3(-8, 0.9, -12)
-rotation = Vector3(0, 2.1, 0)
+transform = Transform3D(-0.50484604, 0, 0.8632094, 0, 1, 0, -0.8632094, 0, -0.50484604, -8, 0.9, -12)
 VariantProfile = ExtResource("42_walker")
 WanderRadius = 3.2
 MinimumIdleDuration = 1.0
 MaximumIdleDuration = 2.4
 
 [node name="PrototypeZombie5" parent="Zombies" unique_id=371058572 instance=ExtResource("17_zombie")]
-position = Vector3(-9, 0.9, -18)
-rotation = Vector3(0, -2.45, 0)
+transform = Transform3D(-0.7702313, 0, -0.6377647, 0, 1, 0, 0.6377647, 0, -0.7702313, -9, 0.9, -18)
 VariantProfile = ExtResource("41_slow")
 WanderRadius = 3.0
 MinimumIdleDuration = 2.2
 MaximumIdleDuration = 4.0
 
-[node name="PrototypeZombie6" parent="Zombies" instance=ExtResource("17_zombie")]
-position = Vector3(-19, 0.9, -17)
-rotation = Vector3(0, 1.85, 0)
+[node name="PrototypeZombie6" parent="Zombies" unique_id=1219532700 instance=ExtResource("17_zombie")]
+transform = Transform3D(-0.27559027, 0, 0.9612752, 0, 1, 0, -0.9612752, 0, -0.27559027, -19, 0.9, -17)
 VariantProfile = ExtResource("42_walker")
 WanderRadius = 3.4
 MinimumIdleDuration = 1.6
 MaximumIdleDuration = 3.2
 
-[node name="PrototypeZombie7" parent="Zombies" instance=ExtResource("17_zombie")]
-position = Vector3(12, 0.9, 40)
-rotation = Vector3(0, -0.8, 0)
+[node name="PrototypeZombie7" parent="Zombies" unique_id=1731980926 instance=ExtResource("17_zombie")]
+transform = Transform3D(0.6967067, 0, -0.7173561, 0, 1, 0, 0.7173561, 0, 0.6967067, 12, 0.9, 40)
 VariantProfile = ExtResource("41_slow")
 WanderRadius = 3.8
 MinimumIdleDuration = 3.0
 MaximumIdleDuration = 5.5
 
-[node name="PrototypeZombie8" parent="Zombies" instance=ExtResource("17_zombie")]
-position = Vector3(21, 0.9, 42)
-rotation = Vector3(0, 2.6, 0)
+[node name="PrototypeZombie8" parent="Zombies" unique_id=190251225 instance=ExtResource("17_zombie")]
+transform = Transform3D(-0.8568887, 0, 0.51550144, 0, 1, 0, -0.51550144, 0, -0.8568887, 21, 0.9, 42)
 VariantProfile = ExtResource("43_runner")
 WanderRadius = 4.0
 MinimumIdleDuration = 1.3
 MaximumIdleDuration = 3.0
 
-[node name="PrototypeZombie9" parent="Zombies" instance=ExtResource("17_zombie")]
-position = Vector3(31, 0.9, 38)
-rotation = Vector3(0, -2.2, 0)
+[node name="PrototypeZombie9" parent="Zombies" unique_id=457765030 instance=ExtResource("17_zombie")]
+transform = Transform3D(-0.58850116, 0, -0.80849636, 0, 1, 0, 0.80849636, 0, -0.58850116, 31, 0.9, 38)
 VariantProfile = ExtResource("41_slow")
 WanderRadius = 3.6
 MinimumIdleDuration = 2.4
 MaximumIdleDuration = 4.8
 
-[node name="PrototypeZombie10" parent="Zombies" instance=ExtResource("17_zombie")]
-position = Vector3(42, 0.9, 40)
-rotation = Vector3(0, 0.55, 0)
+[node name="PrototypeZombie10" parent="Zombies" unique_id=1510086496 instance=ExtResource("17_zombie")]
+transform = Transform3D(0.8525245, 0, 0.52268726, 0, 1, 0, -0.52268726, 0, 0.8525245, 42, 0.9, 40)
 VariantProfile = ExtResource("42_walker")
 WanderRadius = 4.0
 MinimumIdleDuration = 1.8
 MaximumIdleDuration = 3.6
 
-[node name="PrototypeZombie11" parent="Zombies" instance=ExtResource("17_zombie")]
-position = Vector3(-3, 0.9, 49)
-rotation = Vector3(0, -1.4, 0)
+[node name="PrototypeZombie11" parent="Zombies" unique_id=257214177 instance=ExtResource("17_zombie")]
+transform = Transform3D(0.16996716, 0, -0.98544973, 0, 1, 0, 0.98544973, 0, 0.16996716, -3, 0.9, 49)
 VariantProfile = ExtResource("41_slow")
 WanderRadius = 2.5
 MinimumIdleDuration = 2.6
 MaximumIdleDuration = 5.0
 
-[node name="PrototypeZombie12" parent="Zombies" instance=ExtResource("17_zombie")]
-position = Vector3(2.5, 0.9, 48)
-rotation = Vector3(0, 2.95, 0)
+[node name="PrototypeZombie12" parent="Zombies" unique_id=222394080 instance=ExtResource("17_zombie")]
+transform = Transform3D(-0.9817022, 0, 0.1904226, 0, 1, 0, -0.1904226, 0, -0.9817022, 2.5, 0.9, 48)
 VariantProfile = ExtResource("42_walker")
 WanderRadius = 2.8
 MinimumIdleDuration = 1.1
 MaximumIdleDuration = 2.7
 
-[node name="PrototypeZombie13" parent="Zombies" instance=ExtResource("17_zombie")]
-position = Vector3(-1, 0.9, 53)
-rotation = Vector3(0, 0.2, 0)
+[node name="PrototypeZombie13" parent="Zombies" unique_id=95353040 instance=ExtResource("17_zombie")]
+transform = Transform3D(0.9800666, 0, 0.19866933, 0, 1, 0, -0.19866933, 0, 0.9800666, -1, 0.9, 53)
 VariantProfile = ExtResource("43_runner")
 WanderRadius = 2.4
 MinimumIdleDuration = 2.1
 MaximumIdleDuration = 4.2
 
-[node name="PrototypeZombie14" parent="Zombies" instance=ExtResource("17_zombie")]
-position = Vector3(3, 0.9, 52)
-rotation = Vector3(0, 1.2, 0)
+[node name="PrototypeZombie14" parent="Zombies" unique_id=1525970747 instance=ExtResource("17_zombie")]
+transform = Transform3D(0.3623577, 0, 0.9320391, 0, 1, 0, -0.9320391, 0, 0.3623577, 3, 0.9, 52)
 VariantProfile = ExtResource("41_slow")
 WanderRadius = 2.6
 MinimumIdleDuration = 3.2
 MaximumIdleDuration = 5.8
 
-[node name="PrototypeZombie15" parent="Zombies" instance=ExtResource("17_zombie")]
-position = Vector3(-2, 0.9, -22)
-rotation = Vector3(0, -2.75, 0)
+[node name="PrototypeZombie15" parent="Zombies" unique_id=361413640 instance=ExtResource("17_zombie")]
+transform = Transform3D(-0.9243024, 0, -0.381661, 0, 1, 0, 0.381661, 0, -0.9243024, -2, 0.9, -22)
 VariantProfile = ExtResource("41_slow")
 WanderRadius = 4.5
 MinimumIdleDuration = 0.9
@@ -568,7 +547,7 @@ MaximumIdleDuration = 2.2
 [node name="PerformanceUI" type="CanvasLayer" parent="." unique_id=1832903103]
 script = ExtResource("19_player_status")
 
-[node name="WorldClock" type="Label" parent="PerformanceUI"]
+[node name="WorldClock" type="Label" parent="PerformanceUI" unique_id=1385109458]
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
@@ -585,7 +564,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 script = ExtResource("35_clock")
 
-[node name="GameplayNotifications" type="Label" parent="PerformanceUI"]
+[node name="GameplayNotifications" type="Label" parent="PerformanceUI" unique_id=503567080]
 visible = false
 anchors_preset = 10
 anchor_right = 1.0
@@ -600,7 +579,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 script = ExtResource("37_notifications")
 
-[node name="ObjectiveDisplay" type="Control" parent="PerformanceUI"]
+[node name="ObjectiveDisplay" type="Control" parent="PerformanceUI" unique_id=1285759933]
 layout_mode = 3
 anchors_preset = 0
 offset_left = 12.0
@@ -609,7 +588,7 @@ offset_right = 400.0
 offset_bottom = 238.0
 script = ExtResource("32_objective_ui")
 
-[node name="ObjectiveText" type="Label" parent="PerformanceUI/ObjectiveDisplay"]
+[node name="ObjectiveText" type="Label" parent="PerformanceUI/ObjectiveDisplay" unique_id=1660285981]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -618,7 +597,8 @@ grow_horizontal = 2
 theme_override_colors/font_color = Color(0.94, 0.93, 0.82, 1)
 theme_override_font_sizes/font_size = 16
 theme_override_styles/normal = SubResource("FpsBackground")
-text = "OBJECTIVE\nSearch the pharmacy for antibiotics"
+text = "OBJECTIVE
+Search the pharmacy for antibiotics"
 vertical_alignment = 1
 
 [node name="FpsLabel" type="Label" parent="PerformanceUI" unique_id=1389187676]
@@ -667,7 +647,7 @@ theme_override_styles/fill = SubResource("StaminaFill")
 value = 100.0
 show_percentage = false
 
-[node name="HungerLabel" type="Label" parent="PerformanceUI"]
+[node name="HungerLabel" type="Label" parent="PerformanceUI" unique_id=405847466]
 offset_left = 210.0
 offset_top = 52.0
 offset_right = 276.0
@@ -677,7 +657,7 @@ theme_override_font_sizes/font_size = 14
 text = "Hunger"
 vertical_alignment = 1
 
-[node name="HungerBar" type="ProgressBar" parent="PerformanceUI"]
+[node name="HungerBar" type="ProgressBar" parent="PerformanceUI" unique_id=1080070298]
 offset_left = 280.0
 offset_top = 53.0
 offset_right = 392.0
@@ -688,7 +668,7 @@ theme_override_styles/fill = SubResource("HungerFill")
 value = 100.0
 show_percentage = false
 
-[node name="ThirstLabel" type="Label" parent="PerformanceUI"]
+[node name="ThirstLabel" type="Label" parent="PerformanceUI" unique_id=851431720]
 offset_left = 210.0
 offset_top = 92.0
 offset_right = 276.0
@@ -698,7 +678,7 @@ theme_override_font_sizes/font_size = 14
 text = "Thirst"
 vertical_alignment = 1
 
-[node name="ThirstBar" type="ProgressBar" parent="PerformanceUI"]
+[node name="ThirstBar" type="ProgressBar" parent="PerformanceUI" unique_id=1458435913]
 offset_left = 280.0
 offset_top = 93.0
 offset_right = 392.0
@@ -893,17 +873,17 @@ layout_mode = 2
 disabled = true
 text = "< Store"
 
-[node name="TakeQuantity" type="Button" parent="PerformanceUI/ContainerInventoryWindow/Panel/Layout/Columns/Actions"]
+[node name="TakeQuantity" type="Button" parent="PerformanceUI/ContainerInventoryWindow/Panel/Layout/Columns/Actions" unique_id=400814346]
 layout_mode = 2
 disabled = true
 text = "Take Qty >"
 
-[node name="StoreQuantity" type="Button" parent="PerformanceUI/ContainerInventoryWindow/Panel/Layout/Columns/Actions"]
+[node name="StoreQuantity" type="Button" parent="PerformanceUI/ContainerInventoryWindow/Panel/Layout/Columns/Actions" unique_id=1011300300]
 layout_mode = 2
 disabled = true
 text = "< Store Qty"
 
-[node name="Split" type="Button" parent="PerformanceUI/ContainerInventoryWindow/Panel/Layout/Columns/Actions"]
+[node name="Split" type="Button" parent="PerformanceUI/ContainerInventoryWindow/Panel/Layout/Columns/Actions" unique_id=302083947]
 layout_mode = 2
 disabled = true
 text = "Split"
@@ -930,7 +910,7 @@ size_flags_vertical = 3
 theme_override_styles/selected = SubResource("InventorySelection")
 theme_override_styles/selected_focus = SubResource("InventorySelection")
 
-[node name="Details" type="Label" parent="PerformanceUI/ContainerInventoryWindow/Panel/Layout"]
+[node name="Details" type="Label" parent="PerformanceUI/ContainerInventoryWindow/Panel/Layout" unique_id=1731415879]
 custom_minimum_size = Vector2(0, 58)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.9, 0.91, 0.84, 1)
@@ -956,23 +936,20 @@ horizontal_alignment = 1
 layout_mode = 2
 text = "Close"
 
-[node name="QuantityDialog" type="ConfirmationDialog" parent="PerformanceUI/ContainerInventoryWindow"]
+[node name="QuantityDialog" type="ConfirmationDialog" parent="PerformanceUI/ContainerInventoryWindow" unique_id=1408199023]
 title = "Choose Quantity"
 initial_position = 1
 size = Vector2i(340, 170)
 dialog_text = "Choose a quantity."
 
-[node name="Quantity" type="SpinBox" parent="PerformanceUI/ContainerInventoryWindow/QuantityDialog"]
+[node name="Quantity" type="SpinBox" parent="PerformanceUI/ContainerInventoryWindow/QuantityDialog" unique_id=1564309515]
 offset_left = 35.0
 offset_top = 58.0
 offset_right = 305.0
 offset_bottom = 94.0
 min_value = 1.0
 max_value = 1.0
-step = 1.0
 value = 1.0
-allow_greater = false
-allow_lesser = false
 
 [node name="DamageFlash" type="ColorRect" parent="PerformanceUI" unique_id=1215380182]
 modulate = Color(1, 1, 1, 0)
@@ -1023,4 +1000,4 @@ theme_override_font_sizes/font_size = 18
 text = "Press R to Restart"
 horizontal_alignment = 1
 
-[node name="PauseMenu" parent="PerformanceUI" instance=ExtResource("45_pause_menu")]
+[node name="PauseMenu" parent="PerformanceUI" unique_id=354200872 instance=ExtResource("45_pause_menu")]

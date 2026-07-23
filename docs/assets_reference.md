@@ -190,6 +190,22 @@ of each downloaded asset and its license information with project records.
 ## Rusted Metal Shel
 **credits** - "Rusted metal shelf" (https://skfb.ly/6U7QS) by ELIZION is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 
+## Medical crate
+**credits** - "Medical Crate [derivative]" (https://skfb.ly/pJvWq) by romullus is licensed under Creative Commons Attribution-ShareAlike (http://creativecommons.org/licenses/by-sa/4.0/).
+
+## Old dirty matteress
+**credits** - "Old dirty mattress" (https://skfb.ly/6R7LL) by KIFIR is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+
+
+## Tent
+**credits** - "Tent" (https://skfb.ly/oTyQz) by trueaimisbetterthandarudas is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+
+## Home US Mailbox
+**credits** - "Home US Mailbox 📫" (https://skfb.ly/oqVAr) by Glowbox 3D is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+
+## Trees and bush Pack LOWPOLY
+**credits** - "Trees and bush Pack LOWPOLY" (https://skfb.ly/p6MUp) by EFX is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+
 
 ## Project-Owned Prototype Town Geometry
 

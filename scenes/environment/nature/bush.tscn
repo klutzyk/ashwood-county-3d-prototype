@@ -1,0 +1,51 @@
+[gd_scene format=4 uid="uid://bt4kjr7kfw24x"]
+
+[ext_resource type="Texture2D" uid="uid://c360j5kdfgvfa" path="res://assets/third_party/nature/treespack/trees_and_bush_pack_lowpoly_2.png" id="1_u1wqy"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cdj1w"]
+resource_name = "bushType1"
+transparency = 4
+cull_mode = 2
+albedo_texture = ExtResource("1_u1wqy")
+texture_repeat = false
+metadata/_gltf_primary_texture_coord = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_aojyj"]
+_surfaces = [{
+"aabb": AABB(-0.870105, -0.53802645, -0.8181548, 1.5754659, 1.0760529, 1.5219431),
+"format": 34896613377,
+"index_count": 24,
+"index_data": PackedByteArray("AAABAAIAAAADAAEABAAFAAYABAAHAAUACAAJAAoACAALAAkADAANAA4ADAAPAA0A"),
+"name": "bushType1",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 16,
+"vertex_data": PackedByteArray("kx0LCZ2JAAAw/fP2nYkAADD9CwmdiQAAkx3z9p2JAACeackBTPsAANhdNf75GwAAAAD4PugzAAB3xwbBXeMAAN/AAADV5AAA4mz///sYAAC2tggvAAAAAAt39tDR/QAA+QCTJFZ2AAD//2ZBS5sAAN25fyKjEQAAGkd6Q///AAA=")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_2pfs7"]
+resource_name = "Sketchfab_Scene_BushSmall_bushType1_0"
+_surfaces = [{
+"aabb": AABB(-0.870105, -0.53802645, -0.8181548, 1.5754659, 1.0760529, 1.5219431),
+"attribute_data": PackedByteArray("AAAAAP///////wAAAAD//wAAAAD///////8AAAAA//8AAAAA////////AAAAAP//AAAAAP///////wAAAAD//w=="),
+"format": 34896613399,
+"index_count": 24,
+"index_data": PackedByteArray("AAABAAIAAAADAAEABAAFAAYABAAHAAUACAAJAAoACAALAAkADAANAA4ADAAPAA0A"),
+"material": SubResource("StandardMaterial3D_cdj1w"),
+"name": "bushType1",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 16,
+"vertex_data": PackedByteArray("kx0LCZ2J/n8w/fP2nYn+fzD9Cwmdif5/kx3z9p2J/n+eackBTPvjJthdNf75G+MmAAD4Pugz4yZ3xwbBXePjJt/AAADV5Bw94mz///sYHD22tggvAAAcPQt39tDR/Rw9+QCTJFZ2D0P//2ZBS5sPQ925fyKjEQ9DGkd6Q///D0P/f////3////9/////f///5Wh4LOVoeCzlaHgs5Wh4LKGpIg6hqSIOoakiDqGpIg51LIZodSyGaHUshmh1LIZo")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_aojyj")
+
+[node name="Node3D" type="Node3D" unique_id=763723101]
+
+[node name="BushSmall" type="Node3D" parent="." unique_id=1599328110]
+transform = Transform3D(4.4515514e-07, -9.993647e-08, 2.28628, 1.5129331e-23, 2.28628, 9.993647e-08, -2.28628, -1.945835e-14, 4.4515514e-07, 0, 0.818326, 0)
+
+[node name="BushSmall_bushType1_0" type="MeshInstance3D" parent="BushSmall" unique_id=50964672]
+mesh = SubResource("ArrayMesh_2pfs7")
