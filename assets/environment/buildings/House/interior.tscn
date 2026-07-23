@@ -121,13 +121,13 @@ shape = SubResource("BedShape")
 [node name="LivingRoomLight" type="OmniLight3D" parent="."]
 position = Vector3(0, 2.55, 2.7)
 light_color = Color(1, 0.73, 0.46, 1)
-light_energy = 0.55
+light_energy = 0.62
 omni_range = 5.5
 shadow_enabled = false
 
 [node name="BackRoomsLight" type="OmniLight3D" parent="."]
 position = Vector3(0.4, 2.5, -2.8)
 light_color = Color(1, 0.72, 0.44, 1)
-light_energy = 0.45
+light_energy = 0.5
 omni_range = 5.0
 shadow_enabled = false

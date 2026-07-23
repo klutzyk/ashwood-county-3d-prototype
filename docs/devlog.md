@@ -687,3 +687,31 @@ Validation:
 - Day/night and flashlight regression validation passed
 - Main scene imported successfully in Godot 4.7.1 .NET
 - C# build completed with no warnings or errors
+
+---
+
+## Night Visibility and Lighting Balance
+
+Completed:
+
+- Raised the minimum night ambient, sky and directional contributions while
+  keeping them well below daytime levels
+- Extended the existing flashlight reach while lowering its peak energy and
+  softening distance falloff
+- Increased the energy of existing house, pharmacy and service-station lights
+  without adding lights, shadows or volumetric effects
+- Preserved the existing day/night interpolation and settings
+
+Outcome:
+
+Road edges and character silhouettes retain low-level context outside the
+flashlight beam, while interiors and entrances remain readable without making
+night resemble daytime.
+
+Validation:
+
+- Expanded day/night validation passed configured darkness, silhouette,
+  flashlight, interior and entrance-light bounds
+- Two post-change rendered checks averaged 187.28 and 188.10 FPS with 8.37 and
+  8.20 ms p95 frame times, retaining the performance-pass improvement
+- C# build completed with no warnings or errors

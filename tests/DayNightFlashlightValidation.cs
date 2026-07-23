@@ -38,6 +38,21 @@ public partial class DayNightFlashlightValidation : Node
 			Require(environment.BackgroundEnergyMultiplier < afternoonSky, "sky brightness dims gradually");
 			Require(environment.AmbientLightEnergy >= worldTime.NightAmbientEnergy,
 				"night retains the configured minimum ambient visibility");
+			worldTime.SetTimeOfDay(23.0f);
+			Require(environment.AmbientLightEnergy >= 0.22f &&
+				environment.AmbientLightEnergy <= 0.3f,
+				"night ambient light remains dark but preserves nearby silhouettes");
+			Require(environment.BackgroundEnergyMultiplier >= 0.16f &&
+				environment.BackgroundEnergyMultiplier <= 0.24f,
+				"night sky contribution preserves road and roofline readability");
+			Require(sun.LightEnergy >= 0.05f && sun.LightEnergy <= 0.1f,
+				"moon-direction light remains subtle but gives characters shape");
+			Require(world.GetNode<OmniLight3D>(
+				"Buildings/Pharmacy/Interior/RetailLight").LightEnergy >= 0.55f,
+				"pharmacy retail floor remains readable at night");
+			Require(world.GetNode<OmniLight3D>(
+				"Buildings/ServiceStation/Exterior/CanopyLight").LightEnergy >= 0.6f,
+				"service-station entrance remains readable at night");
 
 			Require(!flashlight.IsEnabled && !flashlight.ShadowEnabled, "flashlight starts off without shadows");
 			flashlight._UnhandledInput(new InputEventAction
@@ -47,6 +62,10 @@ public partial class DayNightFlashlightValidation : Node
 			});
 			Require(flashlight.IsEnabled, "F-toggle behavior enables the flashlight outdoors");
 			Require(flashlight.GetParent() is Camera3D, "flashlight direction is inherited from the camera");
+			Require(flashlight.SpotRange >= 19.0f && flashlight.LightEnergy <= 3.0f,
+				"flashlight reaches road edges without an over-bright centre");
+			Require(flashlight.SpotAttenuation <= 1.0f,
+				"flashlight falloff keeps some peripheral context visible");
 			player.GlobalPosition = new Vector3(-17.5f, 1.0f, 12.2f);
 			await ToSignal(GetTree(), SceneTree.SignalName.PhysicsFrame);
 			Require(flashlight.IsEnabled && flashlight.IsInsideTree(),

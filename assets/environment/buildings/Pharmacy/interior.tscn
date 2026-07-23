@@ -95,13 +95,13 @@ position = Vector3(-2.65, 0, 2.7)
 [node name="RetailLight" type="OmniLight3D" parent="."]
 position = Vector3(1.1, 3.35, 0)
 light_color = Color(1, 0.78, 0.55, 1)
-light_energy = 0.5
+light_energy = 0.58
 omni_range = 6.2
 shadow_enabled = false
 
 [node name="BackRoomLight" type="OmniLight3D" parent="."]
 position = Vector3(-2.45, 3.1, 0)
 light_color = Color(1, 0.7, 0.42, 1)
-light_energy = 0.32
+light_energy = 0.38
 omni_range = 4.0
 shadow_enabled = false

@@ -233,6 +233,6 @@ modulate = Color(0.86, 0.16, 0.09, 1)
 [node name="CanopyLight" type="OmniLight3D" parent="."]
 position = Vector3(2.2, 3.42, 0)
 light_color = Color(1, 0.83, 0.58, 1)
-light_energy = 0.55
+light_energy = 0.64
 omni_range = 7.0
 shadow_enabled = false

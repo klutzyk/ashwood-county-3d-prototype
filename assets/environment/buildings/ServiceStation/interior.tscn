@@ -103,13 +103,13 @@ shape = SubResource("StorageShelfShape")
 [node name="StoreLight" type="OmniLight3D" parent="."]
 position = Vector3(-3.2, 3.0, 0)
 light_color = Color(1, 0.77, 0.52, 1)
-light_energy = 0.45
+light_energy = 0.54
 omni_range = 5.5
 shadow_enabled = false
 
 [node name="StorageLight" type="OmniLight3D" parent="."]
 position = Vector3(-5.7, 2.8, 0)
 light_color = Color(1, 0.68, 0.4, 1)
-light_energy = 0.28
+light_energy = 0.34
 omni_range = 3.8
 shadow_enabled = false

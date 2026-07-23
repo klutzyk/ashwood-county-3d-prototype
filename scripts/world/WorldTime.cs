@@ -17,11 +17,11 @@ public partial class WorldTime : Node
 
 	[Export] public NodePath DirectionalLightPath { get; set; } = new("../DirectionalLight3D");
 	[Export] public NodePath WorldEnvironmentPath { get; set; } = new("../WorldEnvironment");
-	[Export] public float NightAmbientEnergy { get; set; } = 0.16f;
+	[Export] public float NightAmbientEnergy { get; set; } = 0.24f;
 	[Export] public float DayAmbientEnergy { get; set; } = 0.8f;
-	[Export] public float NightSkyEnergy { get; set; } = 0.12f;
+	[Export] public float NightSkyEnergy { get; set; } = 0.18f;
 	[Export] public float DaySkyEnergy { get; set; } = 0.7f;
-	[Export] public float NightDirectionalEnergy { get; set; } = 0.025f;
+	[Export] public float NightDirectionalEnergy { get; set; } = 0.06f;
 	[Export] public float DayDirectionalEnergy { get; set; } = 0.65f;
 
 	public float CurrentHour { get; private set; }
