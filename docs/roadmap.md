@@ -302,7 +302,7 @@ Complete and test one vertical slice before starting the next.
 - [x] Refine inventory and container usability
 - [x] Harden prototype save loading
 - [x] Polish antibiotics objective flow
-- [ ] Balance prototype ambience
+- [x] Balance prototype ambience
 - [ ] Validate and clean the autonomous polish batch
 
 ---

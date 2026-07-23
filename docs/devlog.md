@@ -882,3 +882,31 @@ Validation:
 - Gameplay notification validation passed transfer, objective and safe-point checks
 - Same-process and fresh-process save/load validations passed completed-state persistence
 - C# build completed with no warnings or errors
+
+---
+
+## Prototype Ambience Mixing Pass
+
+Completed:
+
+- Rebalanced the existing wind, distant groan, insect and cricket layer levels
+- Added shared mix headroom so simultaneous ambient layers do not become excessive
+- Added a smoothed equal-power day/night crossfade that also handles clock or
+  load-time jumps without snapping
+- Increased the randomized delay between intermittent groans while retaining
+  the existing single-voice no-overlap generator
+- Preserved the exported per-layer controls and existing Master audio bus
+- Added no audio assets or sound categories
+
+Outcome:
+
+The ambience changes more gently across dawn, dusk and loaded time changes, with
+quieter intermittent groans and a less crowded continuous sound bed.
+
+Validation:
+
+- New atmosphere validation passed randomized-delay, headroom, Master bus,
+  day mix, smooth transition and night mix checks
+- Day/night and flashlight regression validation passed
+- Main scene initialized all audio generators without errors
+- C# build completed with no warnings or errors

@@ -8,12 +8,14 @@ namespace AshwoodCounty3DPrototype.World;
 public partial class AtmosphereAudio : Node
 {
 	[Export] public NodePath WorldTimePath { get; set; } = new("../WorldTime");
-	[Export(PropertyHint.Range, "-80,6,0.5")] public float WindVolumeDb { get; set; } = -24.0f;
-	[Export(PropertyHint.Range, "-80,6,0.5")] public float ZombieGroanVolumeDb { get; set; } = -28.0f;
-	[Export(PropertyHint.Range, "-80,6,0.5")] public float DayInsectsVolumeDb { get; set; } = -31.0f;
-	[Export(PropertyHint.Range, "-80,6,0.5")] public float NightCricketsVolumeDb { get; set; } = -27.0f;
-	[Export] public float MinimumGroanInterval { get; set; } = 9.0f;
-	[Export] public float MaximumGroanInterval { get; set; } = 22.0f;
+	[Export(PropertyHint.Range, "-80,6,0.5")] public float WindVolumeDb { get; set; } = -26.0f;
+	[Export(PropertyHint.Range, "-80,6,0.5")] public float ZombieGroanVolumeDb { get; set; } = -31.0f;
+	[Export(PropertyHint.Range, "-80,6,0.5")] public float DayInsectsVolumeDb { get; set; } = -32.0f;
+	[Export(PropertyHint.Range, "-80,6,0.5")] public float NightCricketsVolumeDb { get; set; } = -30.0f;
+	[Export(PropertyHint.Range, "-12,0,0.5")] public float AmbienceHeadroomDb { get; set; } = -2.0f;
+	[Export(PropertyHint.Range, "0.1,4,0.1")] public float MixTransitionSpeed { get; set; } = 0.8f;
+	[Export] public float MinimumGroanInterval { get; set; } = 12.0f;
+	[Export] public float MaximumGroanInterval { get; set; } = 28.0f;
 
 	private const float MixRate = 22050.0f;
 	private const float SilentVolumeDb = -80.0f;
@@ -38,6 +40,7 @@ public partial class AtmosphereAudio : Node
 	private float _groanPitch;
 
 	public float DaylightBlend { get; private set; }
+	public float TargetDaylightBlend { get; private set; }
 
 	public override void _Ready()
 	{
@@ -53,12 +56,12 @@ public partial class AtmosphereAudio : Node
 		_groanPlayback = StartGenerator(_groanPlayer);
 		_insectsPlayback = StartGenerator(_insectsPlayer);
 		_cricketsPlayback = StartGenerator(_cricketsPlayer);
-		UpdateDayNightMix();
+		UpdateDayNightMix(0.0f, snapToTarget: true);
 	}
 
 	public override void _Process(double delta)
 	{
-		UpdateDayNightMix();
+		UpdateDayNightMix((float)delta, snapToTarget: false);
 		FillPlayback(_windPlayback, NextWindSample);
 		FillPlayback(_groanPlayback, NextGroanSample);
 		FillPlayback(_insectsPlayback, NextDayInsectSample);
@@ -107,16 +110,33 @@ public partial class AtmosphereAudio : Node
 		}
 	}
 
-	private void UpdateDayNightMix()
+	private void UpdateDayNightMix(float delta, bool snapToTarget)
 	{
 		float sunHeight = Mathf.Sin(((_worldTime.CurrentHour - 6.0f) / 24.0f) * Mathf.Tau);
-		DaylightBlend = Mathf.SmoothStep(0.0f, 1.0f, Mathf.Clamp((sunHeight + 0.08f) / 0.45f, 0.0f, 1.0f));
+		TargetDaylightBlend = Mathf.SmoothStep(
+			0.0f,
+			1.0f,
+			Mathf.Clamp((sunHeight + 0.08f) / 0.45f, 0.0f, 1.0f));
+		DaylightBlend = snapToTarget
+			? TargetDaylightBlend
+			: Mathf.MoveToward(
+				DaylightBlend,
+				TargetDaylightBlend,
+				Mathf.Max(MixTransitionSpeed, 0.01f) * delta);
 		float nightBlend = 1.0f - DaylightBlend;
+		float dayCrossfade = Mathf.Sqrt(DaylightBlend);
+		float nightCrossfade = Mathf.Sqrt(nightBlend);
 
-		_windPlayer.VolumeDb = WindVolumeDb + Mathf.Lerp(1.5f, 0.0f, DaylightBlend);
-		_groanPlayer.VolumeDb = ZombieGroanVolumeDb + Mathf.Lerp(2.0f, -2.0f, DaylightBlend);
-		_insectsPlayer.VolumeDb = BlendVolume(DayInsectsVolumeDb, DaylightBlend);
-		_cricketsPlayer.VolumeDb = BlendVolume(NightCricketsVolumeDb, nightBlend);
+		_windPlayer.VolumeDb = WindVolumeDb + AmbienceHeadroomDb +
+			Mathf.Lerp(1.0f, -1.0f, DaylightBlend);
+		_groanPlayer.VolumeDb = ZombieGroanVolumeDb + AmbienceHeadroomDb +
+			Mathf.Lerp(1.5f, -2.5f, DaylightBlend);
+		_insectsPlayer.VolumeDb = BlendVolume(
+			DayInsectsVolumeDb + AmbienceHeadroomDb,
+			dayCrossfade);
+		_cricketsPlayer.VolumeDb = BlendVolume(
+			NightCricketsVolumeDb + AmbienceHeadroomDb,
+			nightCrossfade);
 	}
 
 	private float NextWindSample()
