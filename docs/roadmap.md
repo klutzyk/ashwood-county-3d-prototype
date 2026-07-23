@@ -365,7 +365,8 @@ Complete and test one vertical slice before starting the next.
   connected navigation
 - [x] Add one enterable modular diner landmark with existing door interaction,
   lightweight interior lighting and separate searchable food containers
-- [ ] Improve the road network
+- [x] Improve the road network with a second intersection, sidewalks, shoulders,
+  markings, street/stop signs, barriers and connected navigation
 - [ ] Improve town atmosphere
 - [ ] Redistribute the existing zombie population
 - [ ] Improve logical loot placement

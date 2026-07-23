@@ -50,6 +50,7 @@
 [ext_resource type="PackedScene" path="res://scenes/environment/environmental_storytelling.tscn" id="48_storytelling"]
 [ext_resource type="PackedScene" path="res://scenes/environment/residential_district.tscn" id="49_residential_district"]
 [ext_resource type="PackedScene" path="res://assets/environment/buildings/Diner/diner.tscn" id="50_diner"]
+[ext_resource type="PackedScene" path="res://scenes/environment/town_road_network.tscn" id="51_road_network"]
 
 [sub_resource type="BoxMesh" id="GrassMesh"]
 material = ExtResource("8_grass")
@@ -361,6 +362,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, -8)
 [node name="EnvironmentalStorytelling" parent="Props" instance=ExtResource("48_storytelling")]
 
 [node name="ResidentialDistrict" parent="." instance=ExtResource("49_residential_district")]
+
+[node name="TownRoadNetwork" parent="." instance=ExtResource("51_road_network")]
 
 [node name="PrototypeSafePoint" parent="." instance=ExtResource("31_safe_point")]
 position = Vector3(5.1, 0.1, -8.7)

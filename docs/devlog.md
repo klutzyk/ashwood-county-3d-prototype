@@ -1395,6 +1395,31 @@ Validation:
   passed
 - C# build completed with no warnings or errors
 
+---
+
+## Town Road Network
+
+Completed:
+
+- Added a short diner access junction as a second town intersection
+- Added collidable sidewalks along the original main road and residential street
+- Added residential centre markings, stop lines, two stop signs and two named
+  street signs
+- Added physical barriers to define the bounded residential and main-road ends
+- Added connected navigation coverage for the diner approach
+
+Outcome:
+
+The road hierarchy now reads clearly at both commercial and residential
+junctions while keeping the prototype boundary explicit.
+
+Validation:
+
+- Town-road validation passed junction collision, sidewalk, marking, sign,
+  barrier and navigation checks
+- Residential-district and zombie-pursuit regressions passed
+- C# build completed with no warnings or errors
+
 
 ## Representative Full-Game Performance Benchmark
 
