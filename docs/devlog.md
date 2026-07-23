@@ -1127,3 +1127,32 @@ Validation:
 - Main-menu, atmosphere, day/night, flashlight and melee regressions passed
 - Fixed rendered benchmark measured 176.15 FPS average and 9.10 ms p95
 - C# build completed with no warnings or errors
+
+---
+
+## Gameplay Pause Menu
+
+Completed:
+
+- Added an Escape-driven pause menu with Resume, Save, Load, Settings, Return to
+  Main Menu and Quit actions
+- Paused scene simulation while keeping the menu and shared settings UI responsive
+- Routed Save and Load through the existing single-slot save manager
+- Prevented pause from opening over container inventory or the death presentation
+- Removed the player controller's former Escape-only mouse release to give modal
+  input one consistent owner
+- Restored pause state and mouse capture cleanly when resuming, loading or leaving
+  gameplay
+
+Outcome:
+
+Gameplay now has a complete lightweight pause flow without duplicating settings or
+save systems and without allowing overlapping modal screens.
+
+Validation:
+
+- Pause-menu validation passed simulation pause, interaction blocking, settings,
+  Save/Load, inventory/death exclusions and Resume cleanup
+- Inventory, save/load and settings regressions passed
+- Fixed rendered benchmark measured 160.23 FPS average and 9.64 ms p95
+- C# build completed with no warnings or errors

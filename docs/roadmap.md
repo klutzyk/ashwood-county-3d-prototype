@@ -317,7 +317,7 @@ Complete and test one vertical slice before starting the next.
 - [x] World interaction consistency
 - [x] Main menu
 - [x] Persistent settings menu
-- [ ] Pause menu
+- [x] Pause menu
 - [ ] Service-station supplies objective
 - [ ] Safe-point storage
 - [ ] Town composition polish

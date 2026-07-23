@@ -44,6 +44,7 @@
 [ext_resource type="Resource" path="res://assets/zombies/walker.tres" id="42_walker"]
 [ext_resource type="Resource" path="res://assets/zombies/runner.tres" id="43_runner"]
 [ext_resource type="Resource" path="res://assets/weapons/baseball_bat.tres" id="44_baseball_bat"]
+[ext_resource type="PackedScene" path="res://scenes/ui/pause_menu.tscn" id="45_pause_menu"]
 
 [sub_resource type="BoxMesh" id="GrassMesh"]
 material = ExtResource("8_grass")
@@ -993,3 +994,5 @@ theme_override_colors/font_color = Color(0.92, 0.92, 0.9, 1)
 theme_override_font_sizes/font_size = 18
 text = "Press R to Restart"
 horizontal_alignment = 1
+
+[node name="PauseMenu" parent="PerformanceUI" instance=ExtResource("45_pause_menu")]

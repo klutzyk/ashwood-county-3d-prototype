@@ -75,13 +75,6 @@ public partial class ThirdPersonPlayer : CharacterBody3D
 			return;
 		}
 
-		if (@event is InputEventKey keyEvent && keyEvent.Keycode == Key.Escape && keyEvent.Pressed)
-		{
-			Input.MouseMode = Input.MouseModeEnum.Visible;
-			GetViewport().SetInputAsHandled();
-			return;
-		}
-
 		if (@event.IsActionPressed("melee_attack"))
 		{
 			Input.MouseMode = Input.MouseModeEnum.Captured;
