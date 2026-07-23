@@ -206,6 +206,12 @@ of each downloaded asset and its license information with project records.
 ## Trees and bush Pack LOWPOLY
 **credits** - "Trees and bush Pack LOWPOLY" (https://skfb.ly/p6MUp) by EFX is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 
+## Old office window
+**credits** - "Old Office Window" (https://skfb.ly/6WMFq) by sudreyskr is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+
+## Public bin
+**credits** - "Public Bin ( Free )" (https://skfb.ly/6RnCz) by Giora is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+
 
 ## Project-Owned Prototype Town Geometry
 

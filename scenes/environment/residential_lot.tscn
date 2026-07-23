@@ -1,27 +1,43 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene format=3 uid="uid://vrg0lrpmcsfy"]
 
-[ext_resource type="PackedScene" path="res://assets/environment/buildings/House/exterior.tscn" id="1_house"]
-[ext_resource type="PackedScene" path="res://assets/environment/props/roadside_dressing.tscn" id="2_dressing"]
+[ext_resource type="PackedScene" uid="uid://1dyfk4ta8vm1" path="res://assets/environment/buildings/House/exterior.tscn" id="1_house"]
+[ext_resource type="PackedScene" uid="uid://cpxn30uo4mu28" path="res://assets/environment/props/roadside_dressing.tscn" id="2_dressing"]
+[ext_resource type="PackedScene" uid="uid://cru7i0xjux2qp" path="res://assets/third_party/props/bins/public_bin__free.glb" id="3_a1voo"]
+[ext_resource type="PackedScene" uid="uid://bbxle42wyicnn" path="res://assets/third_party/props/utilities/utility_box_02_1k.gltf/utility_box_02_1k.gltf" id="4_6koqr"]
 
 [sub_resource type="StandardMaterial3D" id="GardenMaterial"]
 albedo_color = Color(0.13, 0.19, 0.09, 1)
-roughness = 1.0
 
 [sub_resource type="BoxMesh" id="GardenMesh"]
 material = SubResource("GardenMaterial")
 size = Vector3(5.8, 0.025, 2.1)
 
-[node name="ResidentialLot" type="Node3D"]
+[node name="ResidentialLot" type="Node3D" unique_id=1017382425]
 
-[node name="HouseExterior" parent="." instance=ExtResource("1_house")]
+[node name="HouseExterior" parent="." unique_id=378923665 instance=ExtResource("1_house")]
 
-[node name="RoadsideDressing" parent="." instance=ExtResource("2_dressing")]
+[node name="RoadsideDressing" parent="." unique_id=544370559 instance=ExtResource("2_dressing")]
 
-[node name="Driveway" parent="RoadsideDressing" index="0"]
-scale = Vector3(0.44, 1, 1)
+[node name="Driveway" parent="RoadsideDressing" index="0" unique_id=1083349279]
+transform = Transform3D(0.44, 0, 0, 0, 1, 0, 0, 0, 1, -4.85, 0.035, 2.8)
 
-[node name="FrontGarden" type="MeshInstance3D" parent="."]
-position = Vector3(-3, 0.018, -1.1)
+[node name="Sketchfab_Scene" parent="RoadsideDressing/RubbishBin" parent_id_path=PackedInt32Array(544370559, 1605450143) index="0" unique_id=818928928 instance=ExtResource("3_a1voo")]
+transform = Transform3D(0.52069855, 0, -0.46783862, 0, 0.7, 0, 0.46783862, 0, 0.52069855, -0.09311867, 0.71518, -0.51172364)
+
+[node name="Body" parent="RoadsideDressing/RubbishBin" parent_id_path=PackedInt32Array(544370559, 1605450143) index="1" unique_id=474417820]
+visible = false
+
+[node name="Lid" parent="RoadsideDressing/RubbishBin" parent_id_path=PackedInt32Array(544370559, 1605450143) index="2" unique_id=1608916612]
+visible = false
+
+[node name="UtilityCabinet" parent="RoadsideDressing" index="3" unique_id=593452029]
+visible = false
+
+[node name="utility_box_02_1k" parent="RoadsideDressing" unique_id=2107808618 instance=ExtResource("4_6koqr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.8040187, 0, 5.304564)
+
+[node name="FrontGarden" type="MeshInstance3D" parent="." unique_id=1258973300]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0.018, -1.1)
 cast_shadow = 0
 visibility_range_end = 52.0
 mesh = SubResource("GardenMesh")
