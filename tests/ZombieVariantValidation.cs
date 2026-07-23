@@ -45,6 +45,8 @@ public partial class ZombieVariantValidation : Node
 					$"{profile.DisplayName} uses project-owned material overrides");
 				Require(zombie.GetNode<SearchableContainer>("CorpseLoot") is not null,
 					$"{profile.DisplayName} preserves corpse loot");
+				Require(zombie.GetNode<ZombieAudioFeedback>("AudioFeedback").MaxDistance <= 20.0f,
+					$"{profile.DisplayName} uses bounded localized audio feedback");
 			}
 
 			Require(counts.GetValueOrDefault("slow_walker") == 7 &&

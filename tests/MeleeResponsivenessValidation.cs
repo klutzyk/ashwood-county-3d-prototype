@@ -55,6 +55,8 @@ public partial class MeleeResponsivenessValidation : Node
 			combat.SetProcess(false);
 
 			ZombieHealth targetHealth = target.GetNode<ZombieHealth>("Health");
+			ZombieAudioFeedback targetAudio =
+				target.GetNode<ZombieAudioFeedback>("AudioFeedback");
 			int attacksStarted = 0;
 			combat.AttackStarted += () => attacksStarted++;
 
@@ -73,6 +75,8 @@ public partial class MeleeResponsivenessValidation : Node
 				"one hit lands as the bat crosses the target");
 			Require(target.IsHitStunned && target.CurrentAnimationName == "HitReaction",
 				"impact starts the authored zombie reaction and brief hit stun");
+			Require(targetAudio.LastCueName == nameof(ZombieAudioCue.Hurt),
+				"impact triggers localized zombie hurt feedback at contact");
 			Require(target.ActiveKnockbackVelocity.Z > 0.0f,
 				"knockback follows the attack direction");
 			Require(player.IsMeleeImpactFeedbackActive,

@@ -83,6 +83,7 @@ public partial class PrototypeZombie : CharacterBody3D
 	private Node3D _player = null!;
 	private PlayerHealth _playerHealth = null!;
 	private ZombieHealth _health = null!;
+	private ZombieAudioFeedback _audioFeedback = null!;
 	private Node3D _visual = null!;
 	private SearchableContainer _corpseLoot = null!;
 	private VisibleOnScreenNotifier3D _visibilityNotifier = null!;
@@ -135,6 +136,7 @@ public partial class PrototypeZombie : CharacterBody3D
 		_player = GetNode<Node3D>(PlayerPath);
 		_playerHealth = _player.GetNode<PlayerHealth>("Health");
 		_health = GetNode<ZombieHealth>("Health");
+		_audioFeedback = GetNode<ZombieAudioFeedback>("AudioFeedback");
 		_visual = GetNode<Node3D>("Visual");
 		_corpseLoot = GetNode<SearchableContainer>("CorpseLoot");
 		_visibilityNotifier = GetNode<VisibleOnScreenNotifier3D>("VisibilityNotifier");
@@ -288,6 +290,7 @@ public partial class PrototypeZombie : CharacterBody3D
 		_previousAttackAnimationPosition = 0.0f;
 		_attackHitAttempted = false;
 		_animationPlayer.Play(AttackAnimationName, AnimationBlendTime);
+		_audioFeedback.PlayCue(ZombieAudioCue.Attack);
 	}
 
 	private BehaviourState DetermineState(float distanceToPlayer, bool canSeePlayer)
@@ -373,6 +376,7 @@ public partial class PrototypeZombie : CharacterBody3D
 		_knockbackVelocity = knockbackVelocity;
 		_hitReactionRemaining = Mathf.Max(HitReactionDuration, 0.0f);
 		_animationPlayer.Play(HitReactionAnimationName, 0.06f);
+		_audioFeedback.PlayCue(ZombieAudioCue.Hurt);
 		return true;
 	}
 
@@ -406,6 +410,7 @@ public partial class PrototypeZombie : CharacterBody3D
 		_corpseLoot.SetInteractionEnabled(true);
 		SetPhysicsProcess(false);
 		_animationPlayer.Play(DeathAnimationName, AnimationBlendTime);
+		_audioFeedback.PlayCue(ZombieAudioCue.Death);
 	}
 
 	private static ulong CreateStableLootSeed(string value)
@@ -802,9 +807,14 @@ public partial class PrototypeZombie : CharacterBody3D
 			_previousAttackAnimationPosition = 0.0f;
 			_timeSinceAttackHit = Mathf.Max(AttackCooldown, 0.0f);
 			_attackHitAttempted = false;
+			_audioFeedback.PlayCue(ZombieAudioCue.Attack);
 		}
 		else if (_state == BehaviourState.Chasing)
 		{
+			if (previousState is not BehaviourState.Chasing and not BehaviourState.Attacking)
+			{
+				_audioFeedback.PlayCue(ZombieAudioCue.Alert);
+			}
 			_navigationAgent.TargetDesiredDistance = Mathf.Max(AttackDistance - 0.3f, 0.5f);
 			_navigationAgent.TargetPosition = _lastKnownPlayerPosition;
 			_pathUpdateElapsed = _random.RandfRange(

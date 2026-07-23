@@ -1794,3 +1794,20 @@ Validation:
 
 - Antibiotics and service-station objective-flow validations passed
 - C# build completed with no warnings or errors
+
+---
+
+## Localized Zombie Audio Feedback
+
+Completed:
+
+- Added lightweight spatial alert, attack, hurt and death cues to every zombie
+- Timed attack cues to animation starts and hurt cues to confirmed melee contact
+- Bounded cue distance and suppressed rapid repeats to preserve the ambience mix
+- Reused the existing procedural-audio approach because no authored combat
+  audio assets are currently present
+
+Validation:
+
+- Melee-responsiveness and zombie-variant validations passed
+- C# build completed with no warnings or errors

@@ -137,6 +137,7 @@ Completed.
 - [x] Hunger
 - [x] Thirst
 - [x] Ambient sounds
+- [x] Localized zombie alert, attack, hurt and death feedback
 - [x] Objectives
 - [x] Notifications
 - [x] Objective progression and completion presentation
