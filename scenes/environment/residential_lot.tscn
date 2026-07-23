@@ -17,8 +17,13 @@ size = Vector3(5.8, 0.025, 2.1)
 
 [node name="RoadsideDressing" parent="." instance=ExtResource("2_dressing")]
 
+[node name="Driveway" parent="RoadsideDressing" index="0"]
+scale = Vector3(0.44, 1, 1)
+
 [node name="FrontGarden" type="MeshInstance3D" parent="."]
-position = Vector3(-4.1, 0.018, -1.1)
+position = Vector3(-3, 0.018, -1.1)
 cast_shadow = 0
 visibility_range_end = 52.0
 mesh = SubResource("GardenMesh")
+
+[editable path="RoadsideDressing"]

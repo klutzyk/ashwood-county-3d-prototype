@@ -107,3 +107,29 @@ pacing and can be compounded by the camera's visible render workload.
 
 Use `-GodotPath` or `ASHWOOD_GODOT_PATH` when Godot is not on `PATH`. Close
 other GPU-heavy applications and repeat anomalous results.
+
+## Post-Town-Expansion Result
+
+Captured on 2026-07-23 after the eight-slice town expansion and world-polish
+pass:
+
+| Metric | Expanded full game, 20 seconds |
+| --- | ---: |
+| Average FPS | 181.14 |
+| Median frame time | 4.98 ms |
+| p95 frame time | 9.93 ms |
+| p99 frame time | 11.42 ms |
+| Minimum instantaneous FPS | 60.25 |
+| Process time | 10.230 ms |
+| Physics time | 3.744 ms |
+| Navigation time | 0.014 ms |
+| Draw calls | 415.8 |
+| Visible objects | 532.4 |
+| Primitives | 191,379.2 |
+
+The run retained 15 active zombies and navigation agents, all gameplay managers,
+11 lights with one shadow caster, four active ambience players, and the normal
+camera/UI. The fixed benchmark camera does not frame the new northern district,
+so this result verifies that the integrated world remains within the established
+performance envelope; it should not be interpreted as a worst-case district
+view.

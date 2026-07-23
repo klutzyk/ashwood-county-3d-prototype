@@ -504,7 +504,7 @@ MaximumIdleDuration = 5.5
 [node name="PrototypeZombie8" parent="Zombies" instance=ExtResource("17_zombie")]
 position = Vector3(21, 0.9, 42)
 rotation = Vector3(0, 2.6, 0)
-VariantProfile = ExtResource("42_walker")
+VariantProfile = ExtResource("43_runner")
 WanderRadius = 4.0
 MinimumIdleDuration = 1.3
 MaximumIdleDuration = 3.0
@@ -552,7 +552,7 @@ MaximumIdleDuration = 4.2
 [node name="PrototypeZombie14" parent="Zombies" instance=ExtResource("17_zombie")]
 position = Vector3(3, 0.9, 52)
 rotation = Vector3(0, 1.2, 0)
-VariantProfile = ExtResource("42_walker")
+VariantProfile = ExtResource("41_slow")
 WanderRadius = 2.6
 MinimumIdleDuration = 3.2
 MaximumIdleDuration = 5.8

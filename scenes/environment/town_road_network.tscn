@@ -4,10 +4,10 @@
 
 [sub_resource type="BoxMesh" id="AccessRoadMesh"]
 material = ExtResource("1_asphalt")
-size = Vector3(14, 0.08, 6)
+size = Vector3(11, 0.08, 6)
 
 [sub_resource type="BoxShape3D" id="AccessRoadShape"]
-size = Vector3(14, 0.08, 6)
+size = Vector3(11, 0.08, 6)
 
 [sub_resource type="StandardMaterial3D" id="ConcreteMaterial"]
 albedo_color = Color(0.43, 0.42, 0.39, 1)
@@ -100,7 +100,7 @@ filter_baking_aabb = AABB(-2, -1, 12, 14, 8, 8)
 navigation_mesh = SubResource("DinerAccessNavigation")
 
 [node name="DinerAccessIntersection" type="StaticBody3D" parent="."]
-position = Vector3(7, 0.045, 16)
+position = Vector3(5.5, 0.045, 16)
 
 [node name="Mesh" type="MeshInstance3D" parent="DinerAccessIntersection"]
 mesh = SubResource("AccessRoadMesh")

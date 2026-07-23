@@ -1523,6 +1523,38 @@ Validation:
 - Town-atmosphere and interaction-consistency regressions passed
 - C# build completed with no warnings or errors
 
+---
+
+## Expanded World Polish
+
+Completed:
+
+- Shortened residential driveways and pulled gardens behind the street edge
+- Stopped Diner Lane at the diner frontage instead of beneath the building
+- Cleared the service-station toolbox from the storage shelf
+- Rebuilt the original-town navigation mesh against the expanded collision
+  geometry, including the diner and access junction
+- Matched the default navigation-map cell height to the baked mesh resolution
+- Confirmed local building lights remain lightweight and non-shadowed
+
+Outcome:
+
+The expanded town now has cleaner lot/road joins, consistent prop clearance and
+navigation that respects the added landmark while retaining the Compatibility
+renderer.
+
+Validation:
+
+- World-polish validation passed road/lot clearance, local-light, renderer,
+  navigation-resolution and around-diner path checks
+- All 27 non-save validation scenes passed; the zombie-distribution test printed
+  PASS during the rapid sweep and then passed normally on the documented
+  isolated retry
+- Two-process version-1 save/load validation passed
+- Representative full-game benchmark measured 181.14 FPS average, 4.98 ms
+  median, 9.93 ms p95 and 60.25 minimum instantaneous FPS
+- C# build completed with no warnings or errors
+
 
 ## Representative Full-Game Performance Benchmark
 

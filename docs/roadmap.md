@@ -375,4 +375,5 @@ Complete and test one vertical slice before starting the next.
   house/diner/service-station food and service-station tools
 - [x] Add emergency-roadblock, residential-evacuation and diner-casualty scenes
   to the existing static environmental storytelling
-- [ ] Complete a world-polish pass
+- [x] Complete a world-polish pass for road/lot clipping, prop clearance,
+  lighting consistency and rebuilt navigation

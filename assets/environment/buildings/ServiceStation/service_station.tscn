@@ -20,4 +20,4 @@ OpenAngleDegrees = -95.0
 position = Vector3(-3.2, 1.05, 1.15)
 
 [node name="Toolbox" parent="." instance=ExtResource("5_toolbox")]
-position = Vector3(-5.55, 0, -4.0)
+position = Vector3(-5, 0, -3.8)
