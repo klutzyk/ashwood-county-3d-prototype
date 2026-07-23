@@ -1,0 +1,119 @@
+[gd_scene load_steps=12 format=3]
+
+[ext_resource type="Material" path="res://assets/materials/building_wall.tres" id="1_wall"]
+[ext_resource type="Material" path="res://assets/materials/building_fixture.tres" id="2_fixture"]
+
+[sub_resource type="BoxMesh" id="WallMesh"]
+material = ExtResource("1_wall")
+size = Vector3(1, 1, 1)
+
+[sub_resource type="BoxMesh" id="FixtureMesh"]
+material = ExtResource("2_fixture")
+size = Vector3(1, 1, 1)
+
+[sub_resource type="BoxShape3D" id="FrontHalfShape"]
+size = Vector3(0.2, 3.4, 5.1)
+
+[sub_resource type="BoxShape3D" id="DoorHeaderShape"]
+size = Vector3(0.2, 1.2, 1.6)
+
+[sub_resource type="BoxShape3D" id="BackShape"]
+size = Vector3(0.2, 3.4, 12)
+
+[sub_resource type="BoxShape3D" id="SideShape"]
+size = Vector3(8, 3.4, 0.2)
+
+[sub_resource type="BoxMesh" id="RoofMesh"]
+material = ExtResource("2_fixture")
+size = Vector3(8.4, 0.25, 12.4)
+
+[sub_resource type="StandardMaterial3D" id="GlassMaterial"]
+transparency = 1
+albedo_color = Color(0.11, 0.2, 0.2, 0.68)
+metallic = 0.12
+roughness = 0.3
+
+[sub_resource type="BoxMesh" id="WindowMesh"]
+material = SubResource("GlassMaterial")
+size = Vector3(0.08, 1.35, 2.1)
+
+[node name="DinerExterior" type="StaticBody3D"]
+
+[node name="FrontNorth" type="MeshInstance3D" parent="."]
+position = Vector3(-4, 1.7, -3.45)
+scale = Vector3(0.2, 3.4, 5.1)
+mesh = SubResource("WallMesh")
+
+[node name="FrontNorthCollision" type="CollisionShape3D" parent="."]
+position = Vector3(-4, 1.7, -3.45)
+shape = SubResource("FrontHalfShape")
+
+[node name="FrontSouth" type="MeshInstance3D" parent="."]
+position = Vector3(-4, 1.7, 3.45)
+scale = Vector3(0.2, 3.4, 5.1)
+mesh = SubResource("WallMesh")
+
+[node name="FrontSouthCollision" type="CollisionShape3D" parent="."]
+position = Vector3(-4, 1.7, 3.45)
+shape = SubResource("FrontHalfShape")
+
+[node name="DoorHeader" type="MeshInstance3D" parent="."]
+position = Vector3(-4, 2.8, 0)
+scale = Vector3(0.2, 1.2, 1.6)
+mesh = SubResource("WallMesh")
+
+[node name="DoorHeaderCollision" type="CollisionShape3D" parent="."]
+position = Vector3(-4, 2.8, 0)
+shape = SubResource("DoorHeaderShape")
+
+[node name="BackWall" type="MeshInstance3D" parent="."]
+position = Vector3(4, 1.7, 0)
+scale = Vector3(0.2, 3.4, 12)
+mesh = SubResource("WallMesh")
+
+[node name="BackWallCollision" type="CollisionShape3D" parent="."]
+position = Vector3(4, 1.7, 0)
+shape = SubResource("BackShape")
+
+[node name="NorthWall" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.7, -6)
+scale = Vector3(8, 3.4, 0.2)
+mesh = SubResource("WallMesh")
+
+[node name="NorthWallCollision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 1.7, -6)
+shape = SubResource("SideShape")
+
+[node name="SouthWall" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.7, 6)
+scale = Vector3(8, 3.4, 0.2)
+mesh = SubResource("WallMesh")
+
+[node name="SouthWallCollision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 1.7, 6)
+shape = SubResource("SideShape")
+
+[node name="Roof" type="MeshInstance3D" parent="."]
+position = Vector3(0, 3.52, 0)
+mesh = SubResource("RoofMesh")
+
+[node name="FrontWindowNorth" type="MeshInstance3D" parent="."]
+position = Vector3(-4.12, 1.55, -3.25)
+mesh = SubResource("WindowMesh")
+
+[node name="FrontWindowSouth" type="MeshInstance3D" parent="."]
+position = Vector3(-4.12, 1.55, 3.25)
+mesh = SubResource("WindowMesh")
+
+[node name="SignBacking" type="MeshInstance3D" parent="."]
+position = Vector3(-4.15, 3.6, 0)
+scale = Vector3(0.18, 1.05, 5.2)
+mesh = SubResource("FixtureMesh")
+
+[node name="DinerSign" type="Label3D" parent="."]
+position = Vector3(-4.28, 3.6, 0)
+rotation = Vector3(0, -1.5707964, 0)
+text = "ASHWOOD DINER"
+font_size = 38
+outline_size = 6
+modulate = Color(0.9, 0.74, 0.4, 1)

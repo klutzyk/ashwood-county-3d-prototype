@@ -1,0 +1,23 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/environment/buildings/Diner/exterior.tscn" id="1_exterior"]
+[ext_resource type="PackedScene" path="res://assets/environment/buildings/Diner/interior.tscn" id="2_interior"]
+[ext_resource type="PackedScene" path="res://assets/environment/buildings/shared/door.tscn" id="3_door"]
+[ext_resource type="PackedScene" path="res://scenes/containers/diner_pantry.tscn" id="4_pantry"]
+[ext_resource type="PackedScene" path="res://scenes/containers/diner_fridge.tscn" id="5_fridge"]
+
+[node name="Diner" type="Node3D"]
+
+[node name="Exterior" parent="." instance=ExtResource("1_exterior")]
+
+[node name="Interior" parent="." instance=ExtResource("2_interior")]
+
+[node name="FrontDoor" parent="." instance=ExtResource("3_door")]
+position = Vector3(-3.88, 0.03, -0.7)
+OpenAngleDegrees = 95.0
+
+[node name="Pantry" parent="." instance=ExtResource("4_pantry")]
+position = Vector3(3.25, 1.0, -4.45)
+
+[node name="Fridge" parent="." instance=ExtResource("5_fridge")]
+position = Vector3(3.25, 1.0, 4.45)

@@ -363,7 +363,8 @@ Complete and test one vertical slice before starting the next.
 - [x] Add one attached residential district with an extended road, one new
   street, eight modular houses, complete lot dressing, abandoned vehicles and
   connected navigation
-- [ ] Add one enterable town landmark
+- [x] Add one enterable modular diner landmark with existing door interaction,
+  lightweight interior lighting and separate searchable food containers
 - [ ] Improve the road network
 - [ ] Improve town atmosphere
 - [ ] Redistribute the existing zombie population

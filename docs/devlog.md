@@ -1369,6 +1369,32 @@ Validation:
   p95 versus the session baseline of 114.06 FPS and 18.32 ms p95
 - C# build completed with no warnings or errors
 
+---
+
+## Ashwood Diner Landmark
+
+Completed:
+
+- Added one modular diner with separate exterior, interior and root scenes
+- Added a continuous collision-preserving entrance using the existing hinged door
+- Added dining booths, a service counter, kitchen division and lightweight warm
+  interior lighting
+- Added separate searchable pantry and fridge inventories using existing food
+  loot tables and explicit item transfers
+
+Outcome:
+
+The original town now has one recognisable, enterable food landmark without new
+items, NPCs or interaction systems.
+
+Validation:
+
+- Town-landmark validation passed modular composition, collision, door
+  interaction, lighting and independent container-state checks
+- Interaction-consistency, weighted-loot and same-session save/load regressions
+  passed
+- C# build completed with no warnings or errors
+
 
 ## Representative Full-Game Performance Benchmark
 

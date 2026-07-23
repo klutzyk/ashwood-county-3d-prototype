@@ -1,0 +1,18 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/interactions/SearchableContainer.cs" id="1_searchable"]
+[ext_resource type="Script" path="res://scripts/interactions/Interactable.cs" id="2_interactable"]
+[ext_resource type="Script" path="res://scripts/items/ContainerInventory.cs" id="3_inventory"]
+[ext_resource type="Resource" path="res://assets/items/loot_tables/cupboard.tres" id="4_loot"]
+
+[node name="DinerPantry" type="Node3D"]
+script = ExtResource("1_searchable")
+DisplayName = "Diner Pantry"
+SearchDuration = 1.6
+LootTable = ExtResource("4_loot")
+
+[node name="Interactable" type="Node3D" parent="."]
+script = ExtResource("2_interactable")
+
+[node name="Inventory" type="Node" parent="."]
+script = ExtResource("3_inventory")
