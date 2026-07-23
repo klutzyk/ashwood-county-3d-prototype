@@ -1,6 +1,18 @@
-[gd_scene load_steps=20 format=3]
+[gd_scene format=4 uid="uid://cxag0cl12kkfm"]
 
 [ext_resource type="Material" path="res://assets/materials/asphalt_02.tres" id="1_asphalt"]
+[ext_resource type="Texture2D" uid="uid://cft8xiesfeu4e" path="res://assets/third_party/common/signs/road_signs_0.png" id="2_ccuxs"]
+
+[sub_resource type="NavigationMesh" id="DinerAccessNavigation"]
+vertices = PackedVector3Array(-1, 0.2, 13, 11, 0.2, 13, -1, 0.2, 19, 11, 0.2, 19)
+polygons = [PackedInt32Array(0, 1, 3, 2)]
+geometry_parsed_geometry_type = 1
+geometry_collision_mask = 1
+cell_height = 0.1
+agent_height = 1.8
+agent_max_climb = 0.3
+region_merge_size = 8.0
+filter_baking_aabb = AABB(-2, -1, 12, 14, 8, 8)
 
 [sub_resource type="BoxMesh" id="AccessRoadMesh"]
 material = ExtResource("1_asphalt")
@@ -33,11 +45,53 @@ roughness = 0.92
 
 [sub_resource type="BoxMesh" id="RoadDashMesh"]
 material = SubResource("RoadPaintMaterial")
-size = Vector3(3.0, 0.018, 0.12)
+size = Vector3(3, 0.018, 0.12)
 
 [sub_resource type="BoxMesh" id="StopLineMesh"]
 material = SubResource("RoadPaintMaterial")
 size = Vector3(0.18, 0.02, 5.2)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3l0ci"]
+resource_name = "Clean"
+transparency = 2
+alpha_scissor_threshold = 0.52876353
+alpha_antialiasing_mode = 0
+cull_mode = 2
+albedo_texture = ExtResource("2_ccuxs")
+roughness = 0.5
+metadata/_gltf_primary_texture_coord = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_tkksd"]
+_surfaces = [{
+"aabb": AABB(-1.4728248, -0.49682713, -0.116940364, 2.9456494, 11.359006, 0.21467546),
+"format": 34896613377,
+"index_count": 240,
+"index_data": PackedByteArray("AAABAAIAAgADAAAAAgAEAAMABQAEAAIAAQAFAAIABAAGAAMAAAADAAYABAAHAAYABQAHAAQACAAGAAcACAAHAAUAAAAGAAgABQAJAAgAAAAIAAkAAQAKAAUABQAKAAkAAAAJAAsAAAALAAEADAAJAAoADQALAAkADQAJAAwADAAKAA4AAQAOAAoACwAPAAEACwAQAA8ADQAQAAsAAQAPABEAEAARAA8AEAASABEADQASABAAAQARABMAEwARABIAEwASAA0AAQATAA4ADQAUABMAFAAOABMAFQANAAwADQAVABQAFgAMAA4AFQAMABYAFgAOABcAFAAXAA4AFwAYABYAFQAZABQAFAAaABcAFwAaABgAFAAZABoAFgAYABsAFgAbABUAGwAYABoAFQAbABkAGwAaABkAHAAdAB4AHAAfAB0AIAAfABwAIAAcAB4AHQAfACEAIAAhAB8AIgAhACAAIgAgAB4AHQAhACMAIgAjACEAJAAdACMAHgAdACQAIgAeACUAHgAkACUAJgAiACUAJgAjACIAJAAjACcAJgAnACMAKAAkACcAJQAkACgAKQAnACYAJgAlACoAKgApACYAJQAoACoAKQArACcAJwArACgAKgArACkAKgAoACsA"),
+"name": "Clean",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 44,
+"vertex_data": PackedByteArray("unYAAK3bAABMeP//LxMAALp2//+t2wAAmXEAAK3bAACZcf//rdsAAPN4//9u7wAAaHEAAG7vAABocf//bu8AAPN4AABu7wAArnoAALwmAACuev//vCYAAEx4AAAvEwAAUIUAALwmAACyhwAALxMAAFCF//+8JgAAq3n//wAAAACreQAAAAAAAFOG//8AAAAAU4YAAAAAAACyh///LxMAAESJ//+t2wAARIkAAK3bAAALhwAAbu8AAAuH//9u7wAAlo4AAG7vAABljv//rdsAAJaO//9u7wAAZY4AAK3bAAD//3/diu4AAAS18fD+/wAABLXx8IruAAD//3/d/v8AAP7/AMKK7gAA/v8Awv7/AAADtY+uiu4AAAO1j67+/wAA+0rx8P7/AAD7SvHwiu4AAPpKj66K7gAA+kqPrv7/AAAAAIDd/v8AAAAAAMKK7gAAAACA3YruAAAAAADC//8AAA==")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_nbsss"]
+resource_name = "Sketchfab_Scene_Object_35"
+_surfaces = [{
+"aabb": AABB(-1.4728248, -0.49682713, -0.116940364, 2.9456494, 11.359006, 0.21467546),
+"attribute_data": PackedByteArray("pg0AANkJ/v+mDf7/2QkAAGAL/v/ACwAAYAsAAMAL/v9gCwAAkwf+/2AL/v+TBwAA3g/dJAgUCSWoE3UkqBMhIwgUFCM9EHslPRA+KIEPOCWBD4Eo3g/cKKgTRCkIFLAoCBSlKqgTmCqoE+QcPRDqHQgUdx3eD0wd3g9MHT0QrCA9EOod3g9KIYEP7yCBD6cdqBOzIT0QrCDeD0ohCBQfIagTsyEIFBQjCBQfIagTByNfBP7/IQcAAF8EAAAhB/7/Mw4AAG4K/v8zDv7/bgoAABcEAABSAP7/FwT+/1IAAAAbBP7/ZAcAABsEAABkB/7/2QkAAHgJ/v/ZCf7/eAkAABMOAACzDf7/Ew7+/7MNAAATDv7/cw4AABMOAABzDv7/CgsAABYJ//8KC///FgkAAAoL/v9fDAAACgsAAF8M/v8IFHcdqBOPG6gT5BwIFIMbsw0AAF8M/v+zDf7/XwwAACEH//8WCQAAIQcAABYJ//8qEuB3WxIFaCoSBWhbEuB3nR75S2we1FudHtRbbB75S70S4HeMEhaDvRIWg4wS4HdiIrNekyJ8U2IifFOTIrNeKhIWg1sS4HcqEuB3WxIWg4wS4HdbEhaDjBIWg1sS4HeMEgVoWxLgd4wS4HdbEgVovRIFaIwS4He9EuB3jBIFaKQOxl/bGfxqtin8aqQO60/sNMZf2xm1ROw060+2KbVEdXEeeWlx+YiXfDiUcoxElLR88G2xlxaJj4z8bb2XO3k="),
+"format": 34896613399,
+"index_count": 240,
+"index_data": PackedByteArray("AAABAAIAAAADAAEABAAFAAYABAAHAAUACAAJAAoACAALAAkADAANAA4ADQAPAA4ADQAQAA8ADAARAA0ADAASABEADAATABQADAAUABUADAAVABIAFgASABUAFgAXABIAFgAYABcAFgAZABgAGgAbABwAGgAdABsAHgAfACAAHgAhAB8AHgAiACEAHgAjACIAJAAlACYAJAAnACUAKAApACoAKAArACkALAAtAC4ALAAvAC0AMAAxADIAMAAzADEANAA1ADYANAA3ADUAOAA5ADoAOAA7ADkAPAA9AD4APAA/AD0AQABBAEIAQABDAEEARABFAEYARABHAEUASABJAEoASABLAEkATABNAE4ATABPAE0AUABRAFIAUABTAFEAVABVAFYAVABXAFUAWABZAFoAWABbAFkAXABdAF4AXABfAF0AYABhAGIAYABjAGEAZABlAGYAZABnAGUAaABpAGoAaABrAGkAbABtAG4AbABvAG0AcABxAHIAcABzAHEAdAB1AHYAdAB3AHUAeAB5AHoAeAB7AHkAfAB9AH4AfgB/AHwAfgCAAH8AgACBAH8AgACCAIEAggCDAIEAhACFAIYAhgCHAIQAhwCIAIQAhwCJAIgAiQCKAIgAiQCLAIoA"),
+"material": SubResource("StandardMaterial3D_3l0ci"),
+"name": "Clean",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 140,
+"vertex_data": PackedByteArray("unYAAK3boztMeP//LxOjO7p2//+t26M7THgAAC8Tozuyh///LxNhIFOGAAAAAGEgsocAAC8TYSBThv//AABhILKHAAAvE6M7RIn//63bozuyh///LxOjO0SJAACt26M7THj//y8TqirzeP//bu+qKrp2//+t26oqmXH//63bqipocf//bu+qKq56//+8JqoqUIX//7wmqiqref//AACqKlOG//8AAKoqsof//y8TqipEif//rduqKguH//9u76oqlo7//27vqipljv//rduqKkSJAACt26oqUIUAALwmqioLhwAAbu+qKrKHAAAvE6oqsocAAC8TqiquegAAvCaqKlCFAAC8JqoqTHgAAC8TqiqreQAAAACqKlOGAAAAAKoqunYAAK3bqiquegAAvCaqKkx4AAAvE6oq83gAAG7vqiq6dgAArduqKmhxAABu76oq83gAAG7vqiqZcQAArduqKlCFAAC8JgAArnr//7wmAABQhf//vCYAAK56AAC8JgAAC4cAAG7vzERQhf//vCbMRAuH//9u78xEUIUAALwmzETzeP//bu8AAK56AAC8JgAA83gAAG7vAACuev//vCYAAKt5AAAAAAAAU4b//wAAAACref//AAAAAFOGAAAAAAAATHgAAC8TYSCref//AABhIEx4//8vE2Egq3kAAAAAYSBljgAArduVOpaO//9u75U6ZY7//63blTqWjgAAbu+VOplx//+t25U6aHEAAG7vlTqZcQAArduVOmhx//9u75U6C4f//27vAACWjgAAbu8AAAuHAABu7wAAlo7//27vAABEiQAArdsAAGWO//+t2wAARIn//63bAABljgAArdsAAAuHAABu76oqZY4AAK3bqipEiQAArduqKpaOAABu76oqunb//63bAACZcQAArdsAALp2AACt2wAAmXH//63bAADzeAAAbu8AAGhx//9u7wAA83j//27vAABocQAAbu8AAP//f92K7lMWBLXx8P7/UxYEtfHwiu5TFv//f93+/1MWA7WProruAjr+/wDC/v8COv7/AMKK7gI6A7WPrv7/AjoAAIDdiu4AAAAAAML//wAAAAAAworuAAAAAIDd/v8AAAS18fCK7qoq+0rx8P7/qir7SvHwiu6qKgS18fD+/6oq/v8AworuAAD//3/d/v8AAP//f92K7gAA/v8Awv7/AAD6So+uiu6qKgO1j67+/6oqA7WProruqir6So+u/v+qKgAAAMKK7lMW+kqPrv7/Uxb6So+uiu5TFgAAAML//1MW+0rx8IruVBYAAIDd/v9UFgAAgN2K7lQW+0rx8P7/VBYAAIDdiu4AAAAAAMKK7gAA+kqProruAAD7SvHwiu4AAAO1j66K7gAABLXx8IruAAD+/wDCiu4AAP//f92K7gAA+kqPrv7/HmAAAADC//8eYAAAgN3+/x5g+0rx8P7/HmADtY+u/v8eYAS18fD+/x5g/v8Awv7/HmD//3/d/v8eYP9//v//f////3////9//v//fwAA/38AAP9/AAD/fwAA/38AAP9/AAD/fwAA/38AAKqqqaqpqqqqqqqqqqmqqqqpqqqqqaqqqqqqqaqqqqmqqaqqqqqqqaqpqqqqqaqqqqmqqqqpqqqqqipU1aoqVNWqKlTVqipU1aoqVNWqKlTVqipU1aoqVNWqKlTVqipU1aoqVNWqKlTVqipU1aoqVNWqKlTVqipU1aoqVNWqKlTV/3//f/9//3//f/9//3//f/9/////f/7//3/+//9///85vP9/Obz/fzm8/385vP9/////f////3////9/////f/9//v/+f/7//n/+//9//v//fwAA/38AAP9/AAD/fwAA/n/9//9/////f////n/9//9//3//f/9//3//f/9//3////9/////f////3////9/qipU1aoqVNWqKlTVqipU1f///3////9/////f////3//f/9//3//f/9//3//f/9/BLX1lQS19ZUEtfWVBLX1lQBj/jkAY/45AGP+OQBj/jn///+/////v////7////+/qqqpqqqqqaqqqqmqqqqpqgAA/78AAP+/AAD/vwAA/79UVVVVVFVVVVRVVVVUVVVV+koJavpKCWr6Sglq+koJagjqBDUI6gQ1COoENQjqBDWB2oJagdqCWoHaglqB2oJagdqCWoHaglqB2oJagdqCWv7/AAD+/wAA/v8AAP7/AAD+/wAA/v8AAP7/AAD+/wAA")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_tkksd")
 
 [sub_resource type="StandardMaterial3D" id="SignPostMaterial"]
 albedo_color = Color(0.18, 0.2, 0.19, 1)
@@ -52,27 +106,12 @@ height = 2.4
 radial_segments = 8
 rings = 1
 
-[sub_resource type="StandardMaterial3D" id="StopSignMaterial"]
-albedo_color = Color(0.68, 0.035, 0.025, 1)
-roughness = 0.7
-
-[sub_resource type="CylinderMesh" id="StopSignMesh"]
-material = SubResource("StopSignMaterial")
-top_radius = 0.48
-bottom_radius = 0.48
-height = 0.08
-radial_segments = 8
-rings = 1
-
 [sub_resource type="StandardMaterial3D" id="BarrierMaterial"]
 albedo_color = Color(0.44, 0.42, 0.37, 1)
 roughness = 0.95
 
 [sub_resource type="BoxMesh" id="BarrierMesh"]
 material = SubResource("BarrierMaterial")
-size = Vector3(1.7, 0.6, 0.5)
-
-[sub_resource type="BoxShape3D" id="BarrierShape"]
 size = Vector3(1.7, 0.6, 0.5)
 
 [sub_resource type="StandardMaterial3D" id="BarrierStripeMaterial"]
@@ -83,226 +122,191 @@ roughness = 0.72
 material = SubResource("BarrierStripeMaterial")
 size = Vector3(1.72, 0.11, 0.52)
 
-[sub_resource type="NavigationMesh" id="DinerAccessNavigation"]
-vertices = PackedVector3Array(-1, 0.2, 13, 11, 0.2, 13, -1, 0.2, 19, 11, 0.2, 19)
-polygons = [PackedInt32Array(0, 1, 3, 2)]
-geometry_parsed_geometry_type = 1
-geometry_collision_mask = 1
-cell_height = 0.1
-agent_height = 1.8
-agent_max_climb = 0.3
-region_merge_size = 8.0
-filter_baking_aabb = AABB(-2, -1, 12, 14, 8, 8)
+[sub_resource type="BoxShape3D" id="BarrierShape"]
+size = Vector3(1.7, 0.6, 0.5)
 
-[node name="TownRoadNetwork" type="Node3D"]
+[node name="TownRoadNetwork" type="Node3D" unique_id=1378697112]
 
-[node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
+[node name="NavigationRegion3D" type="NavigationRegion3D" parent="." unique_id=2071061100]
 navigation_mesh = SubResource("DinerAccessNavigation")
 
-[node name="DinerAccessIntersection" type="StaticBody3D" parent="."]
-position = Vector3(5.5, 0.045, 16)
+[node name="DinerAccessIntersection" type="StaticBody3D" parent="." unique_id=1325588782]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.5, 0.045, 16)
 
-[node name="Mesh" type="MeshInstance3D" parent="DinerAccessIntersection"]
+[node name="Mesh" type="MeshInstance3D" parent="DinerAccessIntersection" unique_id=732561794]
 mesh = SubResource("AccessRoadMesh")
 
-[node name="Collision" type="CollisionShape3D" parent="DinerAccessIntersection"]
+[node name="Collision" type="CollisionShape3D" parent="DinerAccessIntersection" unique_id=617292137]
 shape = SubResource("AccessRoadShape")
 
-[node name="Sidewalks" type="Node3D" parent="."]
+[node name="Sidewalks" type="Node3D" parent="." unique_id=811923879]
 
-[node name="OriginalWest" type="StaticBody3D" parent="Sidewalks"]
-position = Vector3(-5.15, 0.06, -1)
+[node name="OriginalWest" type="StaticBody3D" parent="Sidewalks" unique_id=2014086823]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.15, 0.06, -1)
 
-[node name="Mesh" type="MeshInstance3D" parent="Sidewalks/OriginalWest"]
+[node name="Mesh" type="MeshInstance3D" parent="Sidewalks/OriginalWest" unique_id=521368964]
 cast_shadow = 0
 mesh = SubResource("MainSidewalkMesh")
 
-[node name="Collision" type="CollisionShape3D" parent="Sidewalks/OriginalWest"]
+[node name="Collision" type="CollisionShape3D" parent="Sidewalks/OriginalWest" unique_id=1339707809]
 shape = SubResource("MainSidewalkShape")
 
-[node name="OriginalEast" type="StaticBody3D" parent="Sidewalks"]
-position = Vector3(5.15, 0.06, -1)
+[node name="OriginalEast" type="StaticBody3D" parent="Sidewalks" unique_id=400722433]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.15, 0.06, -1)
 
-[node name="Mesh" type="MeshInstance3D" parent="Sidewalks/OriginalEast"]
+[node name="Mesh" type="MeshInstance3D" parent="Sidewalks/OriginalEast" unique_id=442782608]
 cast_shadow = 0
 mesh = SubResource("MainSidewalkMesh")
 
-[node name="Collision" type="CollisionShape3D" parent="Sidewalks/OriginalEast"]
+[node name="Collision" type="CollisionShape3D" parent="Sidewalks/OriginalEast" unique_id=1579565000]
 shape = SubResource("MainSidewalkShape")
 
-[node name="ResidentialNorth" type="StaticBody3D" parent="Sidewalks"]
-position = Vector3(25, 0.06, 45.15)
+[node name="ResidentialNorth" type="StaticBody3D" parent="Sidewalks" unique_id=324708272]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25, 0.06, 45.15)
 
-[node name="Mesh" type="MeshInstance3D" parent="Sidewalks/ResidentialNorth"]
+[node name="Mesh" type="MeshInstance3D" parent="Sidewalks/ResidentialNorth" unique_id=234366457]
 cast_shadow = 0
 mesh = SubResource("ResidentialSidewalkMesh")
 
-[node name="Collision" type="CollisionShape3D" parent="Sidewalks/ResidentialNorth"]
+[node name="Collision" type="CollisionShape3D" parent="Sidewalks/ResidentialNorth" unique_id=1555760547]
 shape = SubResource("ResidentialSidewalkShape")
 
-[node name="ResidentialSouth" type="StaticBody3D" parent="Sidewalks"]
-position = Vector3(25, 0.06, 34.85)
+[node name="ResidentialSouth" type="StaticBody3D" parent="Sidewalks" unique_id=2006301765]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25, 0.06, 34.85)
 
-[node name="Mesh" type="MeshInstance3D" parent="Sidewalks/ResidentialSouth"]
+[node name="Mesh" type="MeshInstance3D" parent="Sidewalks/ResidentialSouth" unique_id=2062419102]
 cast_shadow = 0
 mesh = SubResource("ResidentialSidewalkMesh")
 
-[node name="Collision" type="CollisionShape3D" parent="Sidewalks/ResidentialSouth"]
+[node name="Collision" type="CollisionShape3D" parent="Sidewalks/ResidentialSouth" unique_id=827439974]
 shape = SubResource("ResidentialSidewalkShape")
 
-[node name="RoadMarkings" type="Node3D" parent="."]
+[node name="RoadMarkings" type="Node3D" parent="." unique_id=204961513]
 
-[node name="ResidentialDash1" type="MeshInstance3D" parent="RoadMarkings"]
-position = Vector3(8, 0.095, 40)
+[node name="ResidentialDash1" type="MeshInstance3D" parent="RoadMarkings" unique_id=1982241212]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0.095, 40)
 cast_shadow = 0
 mesh = SubResource("RoadDashMesh")
 
-[node name="ResidentialDash2" type="MeshInstance3D" parent="RoadMarkings"]
-position = Vector3(14, 0.095, 40)
+[node name="ResidentialDash2" type="MeshInstance3D" parent="RoadMarkings" unique_id=1453997520]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 0.095, 40)
 cast_shadow = 0
 mesh = SubResource("RoadDashMesh")
 
-[node name="ResidentialDash3" type="MeshInstance3D" parent="RoadMarkings"]
-position = Vector3(20, 0.095, 40)
+[node name="ResidentialDash3" type="MeshInstance3D" parent="RoadMarkings" unique_id=1171732848]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0.095, 40)
 cast_shadow = 0
 mesh = SubResource("RoadDashMesh")
 
-[node name="ResidentialDash4" type="MeshInstance3D" parent="RoadMarkings"]
-position = Vector3(26, 0.095, 40)
+[node name="ResidentialDash4" type="MeshInstance3D" parent="RoadMarkings" unique_id=1774125361]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26, 0.095, 40)
 cast_shadow = 0
 mesh = SubResource("RoadDashMesh")
 
-[node name="ResidentialDash5" type="MeshInstance3D" parent="RoadMarkings"]
-position = Vector3(32, 0.095, 40)
+[node name="ResidentialDash5" type="MeshInstance3D" parent="RoadMarkings" unique_id=1076597701]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32, 0.095, 40)
 cast_shadow = 0
 mesh = SubResource("RoadDashMesh")
 
-[node name="ResidentialDash6" type="MeshInstance3D" parent="RoadMarkings"]
-position = Vector3(38, 0.095, 40)
+[node name="ResidentialDash6" type="MeshInstance3D" parent="RoadMarkings" unique_id=49240729]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 38, 0.095, 40)
 cast_shadow = 0
 mesh = SubResource("RoadDashMesh")
 
-[node name="ResidentialDash7" type="MeshInstance3D" parent="RoadMarkings"]
-position = Vector3(44, 0.095, 40)
+[node name="ResidentialDash7" type="MeshInstance3D" parent="RoadMarkings" unique_id=769772448]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 44, 0.095, 40)
 cast_shadow = 0
 mesh = SubResource("RoadDashMesh")
 
-[node name="DinerAccessDash" type="MeshInstance3D" parent="RoadMarkings"]
-position = Vector3(7.4, 0.095, 16)
+[node name="DinerAccessDash" type="MeshInstance3D" parent="RoadMarkings" unique_id=1676673497]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.4, 0.095, 16)
 cast_shadow = 0
 mesh = SubResource("RoadDashMesh")
 
-[node name="ResidentialStopLine" type="MeshInstance3D" parent="RoadMarkings"]
-position = Vector3(5.2, 0.098, 40)
+[node name="ResidentialStopLine" type="MeshInstance3D" parent="RoadMarkings" unique_id=1024953525]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.2, 0.098, 40)
 cast_shadow = 0
 mesh = SubResource("StopLineMesh")
 
-[node name="DinerStopLine" type="MeshInstance3D" parent="RoadMarkings"]
-position = Vector3(4.8, 0.098, 16)
+[node name="DinerStopLine" type="MeshInstance3D" parent="RoadMarkings" unique_id=1591465957]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.8, 0.098, 16)
 cast_shadow = 0
 mesh = SubResource("StopLineMesh")
 
-[node name="Signs" type="Node3D" parent="."]
+[node name="Signs" type="Node3D" parent="." unique_id=573672801]
 
-[node name="ResidentialStopSign" type="Node3D" parent="Signs"]
-position = Vector3(5.8, 0, 35.7)
+[node name="ResidentialStopSign" type="Node3D" parent="Signs" unique_id=525821764]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.8, 0, 35.7)
 
-[node name="Post" type="MeshInstance3D" parent="Signs/ResidentialStopSign"]
-position = Vector3(0, 1.2, 0)
+[node name="StopSign" type="MeshInstance3D" parent="Signs/ResidentialStopSign" unique_id=1218934086]
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)
+mesh = SubResource("ArrayMesh_nbsss")
+
+[node name="DinerStopSign" type="Node3D" parent="Signs" unique_id=1591232441]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.5, 0, 12.4)
+
+[node name="StopSign" type="MeshInstance3D" parent="Signs/DinerStopSign" unique_id=1046080450]
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)
+mesh = SubResource("ArrayMesh_nbsss")
+
+[node name="ResidentialStreetSign" type="Node3D" parent="Signs" unique_id=2141437565]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.7, 0, 35.7)
+
+[node name="Post" type="MeshInstance3D" parent="Signs/ResidentialStreetSign" unique_id=820400729]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
 cast_shadow = 0
 mesh = SubResource("SignPostMesh")
 
-[node name="Board" type="MeshInstance3D" parent="Signs/ResidentialStopSign"]
-position = Vector3(0, 2.35, 0)
-rotation = Vector3(1.5707964, 0, 0)
-cast_shadow = 0
-mesh = SubResource("StopSignMesh")
-
-[node name="Text" type="Label3D" parent="Signs/ResidentialStopSign"]
-position = Vector3(0, 2.35, -0.06)
-text = "STOP"
-font_size = 30
-outline_size = 4
-
-[node name="DinerStopSign" type="Node3D" parent="Signs"]
-position = Vector3(5.5, 0, 12.4)
-
-[node name="Post" type="MeshInstance3D" parent="Signs/DinerStopSign"]
-position = Vector3(0, 1.2, 0)
-cast_shadow = 0
-mesh = SubResource("SignPostMesh")
-
-[node name="Board" type="MeshInstance3D" parent="Signs/DinerStopSign"]
-position = Vector3(0, 2.35, 0)
-rotation = Vector3(1.5707964, 0, 0)
-cast_shadow = 0
-mesh = SubResource("StopSignMesh")
-
-[node name="Text" type="Label3D" parent="Signs/DinerStopSign"]
-position = Vector3(0, 2.35, -0.06)
-text = "STOP"
-font_size = 30
-outline_size = 4
-
-[node name="ResidentialStreetSign" type="Node3D" parent="Signs"]
-position = Vector3(-5.7, 0, 35.7)
-
-[node name="Post" type="MeshInstance3D" parent="Signs/ResidentialStreetSign"]
-position = Vector3(0, 1.2, 0)
-cast_shadow = 0
-mesh = SubResource("SignPostMesh")
-
-[node name="Name" type="Label3D" parent="Signs/ResidentialStreetSign"]
-position = Vector3(0, 2.45, 0)
+[node name="Name" type="Label3D" parent="Signs/ResidentialStreetSign" unique_id=1704329360]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.45, 0)
+modulate = Color(0.84, 0.88, 0.75, 1)
 text = "BIRCH STREET"
 font_size = 28
 outline_size = 5
-modulate = Color(0.84, 0.88, 0.75, 1)
 
-[node name="DinerStreetSign" type="Node3D" parent="Signs"]
-position = Vector3(-5.7, 0, 12.4)
+[node name="DinerStreetSign" type="Node3D" parent="Signs" unique_id=262413289]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.7, 0, 12.4)
 
-[node name="Post" type="MeshInstance3D" parent="Signs/DinerStreetSign"]
-position = Vector3(0, 1.2, 0)
+[node name="Post" type="MeshInstance3D" parent="Signs/DinerStreetSign" unique_id=658256783]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
 cast_shadow = 0
 mesh = SubResource("SignPostMesh")
 
-[node name="Name" type="Label3D" parent="Signs/DinerStreetSign"]
-position = Vector3(0, 2.45, 0)
+[node name="Name" type="Label3D" parent="Signs/DinerStreetSign" unique_id=600996012]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.45, 0)
+modulate = Color(0.84, 0.88, 0.75, 1)
 text = "DINER LANE"
 font_size = 28
 outline_size = 5
-modulate = Color(0.84, 0.88, 0.75, 1)
 
-[node name="Barriers" type="Node3D" parent="."]
+[node name="Barriers" type="Node3D" parent="." unique_id=1306253325]
 
-[node name="ResidentialEnd" type="StaticBody3D" parent="Barriers"]
-position = Vector3(50.8, 0.3, 40)
+[node name="ResidentialEnd" type="StaticBody3D" parent="Barriers" unique_id=547603656]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 50.8, 0.3, 40)
 
-[node name="Body" type="MeshInstance3D" parent="Barriers/ResidentialEnd"]
+[node name="Body" type="MeshInstance3D" parent="Barriers/ResidentialEnd" unique_id=575080172]
 cast_shadow = 0
 mesh = SubResource("BarrierMesh")
 
-[node name="Stripe" type="MeshInstance3D" parent="Barriers/ResidentialEnd"]
-position = Vector3(0, 0.1, 0)
+[node name="Stripe" type="MeshInstance3D" parent="Barriers/ResidentialEnd" unique_id=2017728210]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
 cast_shadow = 0
 mesh = SubResource("BarrierStripeMesh")
 
-[node name="Collision" type="CollisionShape3D" parent="Barriers/ResidentialEnd"]
+[node name="Collision" type="CollisionShape3D" parent="Barriers/ResidentialEnd" unique_id=1516502932]
 shape = SubResource("BarrierShape")
 
-[node name="MainRoadEnd" type="StaticBody3D" parent="Barriers"]
-position = Vector3(0, 0.3, 54.2)
-rotation = Vector3(0, 1.5707964, 0)
+[node name="MainRoadEnd" type="StaticBody3D" parent="Barriers" unique_id=90675146]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 0.3, 54.2)
 
-[node name="Body" type="MeshInstance3D" parent="Barriers/MainRoadEnd"]
+[node name="Body" type="MeshInstance3D" parent="Barriers/MainRoadEnd" unique_id=855980774]
 cast_shadow = 0
 mesh = SubResource("BarrierMesh")
 
-[node name="Stripe" type="MeshInstance3D" parent="Barriers/MainRoadEnd"]
-position = Vector3(0, 0.1, 0)
+[node name="Stripe" type="MeshInstance3D" parent="Barriers/MainRoadEnd" unique_id=886862811]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
 cast_shadow = 0
 mesh = SubResource("BarrierStripeMesh")
 
-[node name="Collision" type="CollisionShape3D" parent="Barriers/MainRoadEnd"]
+[node name="Collision" type="CollisionShape3D" parent="Barriers/MainRoadEnd" unique_id=341465144]
 shape = SubResource("BarrierShape")

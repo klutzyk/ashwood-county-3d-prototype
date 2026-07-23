@@ -212,6 +212,8 @@ of each downloaded asset and its license information with project records.
 ## Public bin
 **credits** - "Public Bin ( Free )" (https://skfb.ly/6RnCz) by Giora is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 
+## Road Signs
+**credits** - "Road Signs" (https://skfb.ly/oFIJX) by FrodoUndead is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 
 ## Project-Owned Prototype Town Geometry
 

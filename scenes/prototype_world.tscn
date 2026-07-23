@@ -8,9 +8,12 @@
 [ext_resource type="PackedScene" path="res://assets/environment/nature/common_tree_1.tscn" id="6_tree_1"]
 [ext_resource type="PackedScene" path="res://assets/environment/nature/common_tree_2.tscn" id="7_tree_2"]
 [ext_resource type="Material" path="res://assets/materials/grass_ground.tres" id="8_grass"]
+[ext_resource type="Texture2D" uid="uid://di485lm54u55n" path="res://assets/third_party/materials/asphalt/asphalt_02_1k.gltf/textures/asphalt_02_diff_1k.jpg" id="9_craje"]
 [ext_resource type="PackedScene" path="res://assets/environment/buildings/House/house.tscn" id="9_house"]
 [ext_resource type="PackedScene" path="res://assets/environment/vehicles/rusted_alfa_romeo.tscn" id="10_car"]
+[ext_resource type="Texture2D" uid="uid://brdyl6xp75sm" path="res://assets/third_party/materials/asphalt/asphalt_02_1k.gltf/textures/asphalt_02_nor_gl_1k.jpg" id="10_rl0qt"]
 [ext_resource type="Material" path="res://assets/materials/dirt_shoulder.tres" id="11_dirt"]
+[ext_resource type="Texture2D" uid="uid://bmgs83acdqydv" path="res://assets/third_party/materials/asphalt/asphalt_02_1k.gltf/textures/asphalt_02_rough_1k.jpg" id="11_qdgl8"]
 [ext_resource type="PackedScene" path="res://assets/environment/vehicles/old_tyre.tscn" id="12_tyre"]
 [ext_resource type="PackedScene" path="res://assets/environment/roads/utility_pole.tscn" id="13_pole"]
 [ext_resource type="PackedScene" path="res://assets/environment/roads/weathered_roadsign.tscn" id="14_sign"]
@@ -48,9 +51,9 @@
 [ext_resource type="Script" uid="uid://wq2qcjyedixr" path="res://scripts/objectives/ServiceStationSuppliesObjective.cs" id="46_supplies_objective"]
 [ext_resource type="PackedScene" path="res://scenes/environment/town_composition_polish.tscn" id="47_town_composition"]
 [ext_resource type="PackedScene" uid="uid://sms158fbmf5f" path="res://scenes/environment/environmental_storytelling.tscn" id="48_storytelling"]
-[ext_resource type="PackedScene" path="res://scenes/environment/residential_district.tscn" id="49_residential_district"]
+[ext_resource type="PackedScene" uid="uid://cnhjyul2b3cyj" path="res://scenes/environment/residential_district.tscn" id="49_residential_district"]
 [ext_resource type="PackedScene" uid="uid://b83nc4eh3isht" path="res://assets/environment/buildings/Diner/diner.tscn" id="50_diner"]
-[ext_resource type="PackedScene" path="res://scenes/environment/town_road_network.tscn" id="51_road_network"]
+[ext_resource type="PackedScene" uid="uid://cxag0cl12kkfm" path="res://scenes/environment/town_road_network.tscn" id="51_road_network"]
 [ext_resource type="PackedScene" path="res://scenes/environment/town_atmosphere_pass.tscn" id="52_atmosphere_pass"]
 
 [sub_resource type="BoxMesh" id="GrassMesh"]
@@ -63,6 +66,13 @@ size = Vector3(50, 0.2, 50)
 [sub_resource type="BoxMesh" id="RoadMesh"]
 material = ExtResource("5_asphalt")
 size = Vector3(8, 0.08, 48)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_k08rd"]
+albedo_texture = ExtResource("9_craje")
+roughness_texture = ExtResource("11_qdgl8")
+normal_enabled = true
+normal_texture = ExtResource("10_rl0qt")
+uv1_scale = Vector3(8, 6, 2)
 
 [sub_resource type="BoxShape3D" id="RoadShape"]
 size = Vector3(8, 0.08, 48)
@@ -235,6 +245,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.04, -1)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Road" unique_id=1846167386]
 mesh = SubResource("RoadMesh")
+surface_material_override/0 = SubResource("StandardMaterial3D_k08rd")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Road" unique_id=908416186]
 shape = SubResource("RoadShape")
