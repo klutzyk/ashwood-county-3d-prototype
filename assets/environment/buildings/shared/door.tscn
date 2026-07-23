@@ -1,0 +1,52 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://scripts/interactions/DoorController.cs" id="1_controller"]
+[ext_resource type="Script" path="res://scripts/interactions/Interactable.cs" id="2_interactable"]
+[ext_resource type="Material" path="res://assets/materials/building_door.tres" id="3_door"]
+
+[sub_resource type="BoxMesh" id="DoorMesh"]
+material = ExtResource("3_door")
+size = Vector3(0.12, 2.2, 1.4)
+
+[sub_resource type="BoxShape3D" id="DoorShape"]
+size = Vector3(0.12, 2.2, 1.4)
+
+[sub_resource type="StandardMaterial3D" id="HandleMaterial"]
+albedo_color = Color(0.72, 0.58, 0.25, 1)
+metallic = 0.75
+roughness = 0.35
+
+[sub_resource type="SphereMesh" id="HandleMesh"]
+material = SubResource("HandleMaterial")
+radius = 0.07
+height = 0.14
+radial_segments = 8
+rings = 4
+
+[node name="Door" type="Node3D"]
+script = ExtResource("1_controller")
+
+[node name="Hinge" type="Node3D" parent="."]
+
+[node name="DoorBody" type="StaticBody3D" parent="Hinge"]
+position = Vector3(0, 1.1, 0.7)
+
+[node name="Panel" type="MeshInstance3D" parent="Hinge/DoorBody"]
+mesh = SubResource("DoorMesh")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hinge/DoorBody"]
+shape = SubResource("DoorShape")
+
+[node name="HandleOutside" type="MeshInstance3D" parent="Hinge/DoorBody"]
+position = Vector3(-0.09, 0, 0.48)
+mesh = SubResource("HandleMesh")
+
+[node name="HandleInside" type="MeshInstance3D" parent="Hinge/DoorBody"]
+position = Vector3(0.09, 0, 0.48)
+mesh = SubResource("HandleMesh")
+
+[node name="Interactable" type="Node3D" parent="."]
+position = Vector3(0, 1.1, 0.7)
+script = ExtResource("2_interactable")
+InteractionName = "Door"
+InteractionPrompt = "Open"

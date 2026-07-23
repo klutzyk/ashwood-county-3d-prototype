@@ -87,7 +87,7 @@ position = Vector3(-0.29, 1.45, 0.12)
 mesh = SubResource("SmallBoxMesh")
 
 [node name="RubbishBin" type="Node3D" parent="."]
-position = Vector3(-3.2, 0, -2.3)
+position = Vector3(-4.75, 0, -2.3)
 rotation = Vector3(0, -0.18, 0)
 
 [node name="Body" type="MeshInstance3D" parent="RubbishBin"]
@@ -100,12 +100,12 @@ scale = Vector3(1.08, 0.12, 1.08)
 mesh = SubResource("BinMesh")
 
 [node name="UtilityCabinet" type="MeshInstance3D" parent="."]
-position = Vector3(3.65, 0.53, 4.2)
+position = Vector3(2.8, 0.53, 5.35)
 rotation = Vector3(0, 0.08, 0)
 mesh = SubResource("UtilityBoxMesh")
 
 [node name="FenceNorth" type="Node3D" parent="."]
-position = Vector3(0, 0, -5.1)
+position = Vector3(0, 0, -5.35)
 
 [node name="Post1" type="MeshInstance3D" parent="FenceNorth"]
 position = Vector3(-4.6, 0.58, 0)
@@ -148,17 +148,17 @@ position = Vector3(3.27, 0.38, 0)
 mesh = SubResource("FenceRailMesh")
 
 [node name="BushFrontLeft" parent="." instance=ExtResource("1_bush")]
-position = Vector3(-2.4, 0, 4.0)
+position = Vector3(-4.45, 0, 4.0)
 scale = Vector3(0.72, 0.72, 0.72)
 
 [node name="BushFrontRight" parent="." instance=ExtResource("1_bush")]
-position = Vector3(2.35, 0, 4.15)
+position = Vector3(-4.45, 0, 1.15)
 scale = Vector3(0.82, 0.82, 0.82)
 
 [node name="BushFenceLeft" parent="." instance=ExtResource("1_bush")]
-position = Vector3(-3.8, 0, -4.6)
+position = Vector3(-3.8, 0, -5.55)
 scale = Vector3(0.68, 0.68, 0.68)
 
 [node name="BushFenceRight" parent="." instance=ExtResource("1_bush")]
-position = Vector3(3.65, 0, -4.65)
+position = Vector3(3.65, 0, -5.55)
 scale = Vector3(0.76, 0.76, 0.76)

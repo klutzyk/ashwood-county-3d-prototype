@@ -1,0 +1,115 @@
+[gd_scene load_steps=12 format=3]
+
+[ext_resource type="Material" path="res://assets/materials/building_floor.tres" id="1_floor"]
+[ext_resource type="Material" path="res://assets/materials/building_partition.tres" id="2_partition"]
+[ext_resource type="Material" path="res://assets/materials/building_fixture.tres" id="3_fixture"]
+
+[sub_resource type="BoxMesh" id="FloorMesh"]
+material = ExtResource("1_floor")
+size = Vector3(4.8, 0.03, 8.8)
+
+[sub_resource type="BoxMesh" id="PartitionMesh"]
+material = ExtResource("2_partition")
+size = Vector3(1, 1, 1)
+
+[sub_resource type="BoxMesh" id="FixtureMesh"]
+material = ExtResource("3_fixture")
+size = Vector3(1, 1, 1)
+
+[sub_resource type="BoxShape3D" id="PartitionShape"]
+size = Vector3(0.12, 3.0, 3.65)
+
+[sub_resource type="BoxShape3D" id="CounterShape"]
+size = Vector3(0.7, 1.0, 2.8)
+
+[sub_resource type="BoxShape3D" id="ShelfShape"]
+size = Vector3(2.0, 1.55, 0.42)
+
+[sub_resource type="BoxShape3D" id="StorageShelfShape"]
+size = Vector3(0.5, 1.8, 2.4)
+
+[sub_resource type="BoxShape3D" id="FreezerShape"]
+size = Vector3(0.65, 1.45, 2.5)
+
+[node name="ServiceStationInterior" type="StaticBody3D"]
+
+[node name="Floor" type="MeshInstance3D" parent="."]
+position = Vector3(-3.9, 0.015, 0)
+mesh = SubResource("FloorMesh")
+
+[node name="StorageWallNorth" type="MeshInstance3D" parent="."]
+position = Vector3(-4.85, 1.5, -2.575)
+scale = Vector3(0.12, 3.0, 3.65)
+mesh = SubResource("PartitionMesh")
+
+[node name="StorageWallNorthCollision" type="CollisionShape3D" parent="."]
+position = Vector3(-4.85, 1.5, -2.575)
+shape = SubResource("PartitionShape")
+
+[node name="StorageWallSouth" type="MeshInstance3D" parent="."]
+position = Vector3(-4.85, 1.5, 2.575)
+scale = Vector3(0.12, 3.0, 3.65)
+mesh = SubResource("PartitionMesh")
+
+[node name="StorageWallSouthCollision" type="CollisionShape3D" parent="."]
+position = Vector3(-4.85, 1.5, 2.575)
+shape = SubResource("PartitionShape")
+
+[node name="CheckoutCounter" type="MeshInstance3D" parent="."]
+position = Vector3(-2.2, 0.5, 3.2)
+scale = Vector3(0.7, 1.0, 2.8)
+mesh = SubResource("FixtureMesh")
+
+[node name="CheckoutCounterCollision" type="CollisionShape3D" parent="."]
+position = Vector3(-2.2, 0.5, 3.2)
+shape = SubResource("CounterShape")
+
+[node name="StoreShelfNorth" type="MeshInstance3D" parent="."]
+position = Vector3(-3.2, 0.78, -1.45)
+scale = Vector3(2.0, 1.55, 0.42)
+mesh = SubResource("FixtureMesh")
+
+[node name="StoreShelfNorthCollision" type="CollisionShape3D" parent="."]
+position = Vector3(-3.2, 0.78, -1.45)
+shape = SubResource("ShelfShape")
+
+[node name="StoreShelfSouth" type="MeshInstance3D" parent="."]
+position = Vector3(-3.2, 0.78, 0.8)
+scale = Vector3(2.0, 1.55, 0.42)
+mesh = SubResource("FixtureMesh")
+
+[node name="StoreShelfSouthCollision" type="CollisionShape3D" parent="."]
+position = Vector3(-3.2, 0.78, 0.8)
+shape = SubResource("ShelfShape")
+
+[node name="ColdCase" type="MeshInstance3D" parent="."]
+position = Vector3(-5.95, 0.73, 2.1)
+scale = Vector3(0.65, 1.45, 2.5)
+mesh = SubResource("FixtureMesh")
+
+[node name="ColdCaseCollision" type="CollisionShape3D" parent="."]
+position = Vector3(-5.95, 0.73, 2.1)
+shape = SubResource("FreezerShape")
+
+[node name="StorageShelf" type="MeshInstance3D" parent="."]
+position = Vector3(-5.9, 0.9, -2.7)
+scale = Vector3(0.5, 1.8, 2.4)
+mesh = SubResource("FixtureMesh")
+
+[node name="StorageShelfCollision" type="CollisionShape3D" parent="."]
+position = Vector3(-5.9, 0.9, -2.7)
+shape = SubResource("StorageShelfShape")
+
+[node name="StoreLight" type="OmniLight3D" parent="."]
+position = Vector3(-3.2, 3.0, 0)
+light_color = Color(1, 0.77, 0.52, 1)
+light_energy = 0.45
+omni_range = 5.5
+shadow_enabled = false
+
+[node name="StorageLight" type="OmniLight3D" parent="."]
+position = Vector3(-5.7, 2.8, 0)
+light_color = Color(1, 0.68, 0.4, 1)
+light_energy = 0.28
+omni_range = 3.8
+shadow_enabled = false

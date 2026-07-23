@@ -8,7 +8,7 @@
 [ext_resource type="PackedScene" path="res://assets/environment/nature/common_tree_1.tscn" id="6_tree_1"]
 [ext_resource type="PackedScene" path="res://assets/environment/nature/common_tree_2.tscn" id="7_tree_2"]
 [ext_resource type="Material" path="res://assets/materials/grass_ground.tres" id="8_grass"]
-[ext_resource type="PackedScene" path="res://assets/environment/buildings/old_russian_house.tscn" id="9_house"]
+[ext_resource type="PackedScene" path="res://assets/environment/buildings/House/house.tscn" id="9_house"]
 [ext_resource type="PackedScene" path="res://assets/environment/vehicles/rusted_alfa_romeo.tscn" id="10_car"]
 [ext_resource type="Material" path="res://assets/materials/dirt_shoulder.tres" id="11_dirt"]
 [ext_resource type="PackedScene" path="res://assets/environment/vehicles/old_tyre.tscn" id="12_tyre"]
@@ -27,8 +27,8 @@
 [ext_resource type="Script" path="res://scripts/ui/ContainerInventoryDisplay.cs" id="25_container_ui"]
 [ext_resource type="PackedScene" path="res://assets/environment/props/prototype_cupboard.tscn" id="26_cupboard"]
 [ext_resource type="PackedScene" path="res://assets/environment/props/roadside_dressing.tscn" id="27_roadside"]
-[ext_resource type="PackedScene" path="res://assets/environment/buildings/service_station.tscn" id="28_station"]
-[ext_resource type="PackedScene" path="res://assets/environment/buildings/pharmacy_exterior.tscn" id="29_pharmacy"]
+[ext_resource type="PackedScene" path="res://assets/environment/buildings/ServiceStation/service_station.tscn" id="28_station"]
+[ext_resource type="PackedScene" path="res://assets/environment/buildings/Pharmacy/pharmacy.tscn" id="29_pharmacy"]
 
 [sub_resource type="BoxMesh" id="GrassMesh"]
 material = ExtResource("8_grass")
@@ -209,13 +209,13 @@ transform = Transform3D(0.9135454, 0, -0.40673664, 0, 1, 0, 0.40673664, 0, 0.913
 
 [node name="Buildings" type="Node3D" parent="." unique_id=113263586]
 
-[node name="OldRussianHouse" parent="Buildings" unique_id=370173774 instance=ExtResource("9_house")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 10, 0, -8)
+[node name="House" parent="Buildings" unique_id=370173774 instance=ExtResource("9_house")]
+position = Vector3(10, 0, -8)
 
 [node name="ServiceStation" parent="Buildings" instance=ExtResource("28_station")]
 position = Vector3(-14.5, 0, -11)
 
-[node name="PharmacyExterior" parent="Buildings" instance=ExtResource("29_pharmacy")]
+[node name="Pharmacy" parent="Buildings" instance=ExtResource("29_pharmacy")]
 position = Vector3(-15, 0, 9.5)
 
 [node name="Vehicles" type="Node3D" parent="." unique_id=676071636]
@@ -246,7 +246,7 @@ transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -5.4
 transform = Transform3D(0.90630776, 0, 0.42261827, 0, 1, 0, -0.42261827, 0, 0.90630776, 7.4, 0, -12.4)
 
 [node name="PrototypeCupboard" parent="Props" instance=ExtResource("26_cupboard")]
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 14.2, 0, -8)
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 13.2, 0, -6.2)
 
 [node name="HouseRoadsideDressing" parent="Props" instance=ExtResource("27_roadside")]
 position = Vector3(10, 0, -8)

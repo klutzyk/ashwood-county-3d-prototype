@@ -1,0 +1,238 @@
+[gd_scene load_steps=18 format=3]
+
+[ext_resource type="Material" path="res://assets/materials/building_wall.tres" id="1_wall"]
+[ext_resource type="Material" path="res://assets/materials/building_fixture.tres" id="2_fixture"]
+[ext_resource type="Material" path="res://assets/materials/building_partition.tres" id="3_light"]
+
+[sub_resource type="BoxMesh" id="WallMesh"]
+material = ExtResource("1_wall")
+size = Vector3(1, 1, 1)
+
+[sub_resource type="BoxMesh" id="FixtureMesh"]
+material = ExtResource("2_fixture")
+size = Vector3(1, 1, 1)
+
+[sub_resource type="BoxMesh" id="LightMesh"]
+material = ExtResource("3_light")
+size = Vector3(1, 1, 1)
+
+[sub_resource type="StandardMaterial3D" id="StationRed"]
+albedo_color = Color(0.58, 0.055, 0.035, 1)
+roughness = 0.7
+
+[sub_resource type="BoxMesh" id="RedMesh"]
+material = SubResource("StationRed")
+size = Vector3(1, 1, 1)
+
+[sub_resource type="BoxShape3D" id="FrontShape"]
+size = Vector3(0.2, 3.8, 3.7)
+
+[sub_resource type="BoxShape3D" id="HeaderShape"]
+size = Vector3(0.2, 1.6, 1.6)
+
+[sub_resource type="BoxShape3D" id="BackShape"]
+size = Vector3(0.2, 3.8, 9)
+
+[sub_resource type="BoxShape3D" id="SideShape"]
+size = Vector3(5, 3.8, 0.2)
+
+[sub_resource type="BoxShape3D" id="ColumnShape"]
+size = Vector3(0.28, 3.7, 0.28)
+
+[sub_resource type="BoxShape3D" id="PumpShape"]
+size = Vector3(0.7, 1.45, 0.62)
+
+[sub_resource type="StandardMaterial3D" id="Glass"]
+transparency = 1
+albedo_color = Color(0.08, 0.16, 0.17, 0.7)
+metallic = 0.18
+roughness = 0.28
+
+[sub_resource type="BoxMesh" id="WindowMesh"]
+material = SubResource("Glass")
+size = Vector3(0.08, 1.65, 2.3)
+
+[sub_resource type="BoxMesh" id="ForecourtMesh"]
+material = ExtResource("3_light")
+size = Vector3(14, 0.04, 12)
+
+[sub_resource type="BoxMesh" id="CanopyMesh"]
+material = ExtResource("3_light")
+size = Vector3(7.5, 0.35, 8.2)
+
+[sub_resource type="BoxMesh" id="RoofMesh"]
+material = ExtResource("2_fixture")
+size = Vector3(5.4, 0.24, 9.4)
+
+[node name="ServiceStationExterior" type="StaticBody3D"]
+
+[node name="Forecourt" type="MeshInstance3D" parent="."]
+position = Vector3(0.5, 0.02, 0)
+mesh = SubResource("ForecourtMesh")
+
+[node name="ShopFrontNorth" type="MeshInstance3D" parent="."]
+position = Vector3(-1.4, 1.9, -2.65)
+scale = Vector3(0.2, 3.8, 3.7)
+mesh = SubResource("WallMesh")
+
+[node name="ShopFrontNorthCollision" type="CollisionShape3D" parent="."]
+position = Vector3(-1.4, 1.9, -2.65)
+shape = SubResource("FrontShape")
+
+[node name="ShopFrontSouth" type="MeshInstance3D" parent="."]
+position = Vector3(-1.4, 1.9, 2.65)
+scale = Vector3(0.2, 3.8, 3.7)
+mesh = SubResource("WallMesh")
+
+[node name="ShopFrontSouthCollision" type="CollisionShape3D" parent="."]
+position = Vector3(-1.4, 1.9, 2.65)
+shape = SubResource("FrontShape")
+
+[node name="DoorHeader" type="MeshInstance3D" parent="."]
+position = Vector3(-1.4, 3.0, 0)
+scale = Vector3(0.2, 1.6, 1.6)
+mesh = SubResource("WallMesh")
+
+[node name="DoorHeaderCollision" type="CollisionShape3D" parent="."]
+position = Vector3(-1.4, 3.0, 0)
+shape = SubResource("HeaderShape")
+
+[node name="ShopBack" type="MeshInstance3D" parent="."]
+position = Vector3(-6.4, 1.9, 0)
+scale = Vector3(0.2, 3.8, 9)
+mesh = SubResource("WallMesh")
+
+[node name="ShopBackCollision" type="CollisionShape3D" parent="."]
+position = Vector3(-6.4, 1.9, 0)
+shape = SubResource("BackShape")
+
+[node name="ShopNorthWall" type="MeshInstance3D" parent="."]
+position = Vector3(-3.9, 1.9, -4.5)
+scale = Vector3(5, 3.8, 0.2)
+mesh = SubResource("WallMesh")
+
+[node name="ShopNorthWallCollision" type="CollisionShape3D" parent="."]
+position = Vector3(-3.9, 1.9, -4.5)
+shape = SubResource("SideShape")
+
+[node name="ShopSouthWall" type="MeshInstance3D" parent="."]
+position = Vector3(-3.9, 1.9, 4.5)
+scale = Vector3(5, 3.8, 0.2)
+mesh = SubResource("WallMesh")
+
+[node name="ShopSouthWallCollision" type="CollisionShape3D" parent="."]
+position = Vector3(-3.9, 1.9, 4.5)
+shape = SubResource("SideShape")
+
+[node name="ShopRoof" type="MeshInstance3D" parent="."]
+position = Vector3(-3.9, 3.93, 0)
+mesh = SubResource("RoofMesh")
+
+[node name="ShopWindowNorth" type="MeshInstance3D" parent="."]
+position = Vector3(-1.28, 1.52, -2.65)
+mesh = SubResource("WindowMesh")
+
+[node name="ShopWindowSouth" type="MeshInstance3D" parent="."]
+position = Vector3(-1.28, 1.52, 2.65)
+mesh = SubResource("WindowMesh")
+
+[node name="ShopSign" type="Label3D" parent="."]
+position = Vector3(-1.23, 3.2, 0)
+rotation = Vector3(0, 1.5707964, 0)
+text = "ASHWOOD FUEL"
+font_size = 46
+outline_size = 7
+modulate = Color(0.94, 0.91, 0.76, 1)
+
+[node name="Canopy" type="MeshInstance3D" parent="."]
+position = Vector3(2.2, 3.75, 0)
+mesh = SubResource("CanopyMesh")
+
+[node name="CanopyTrimFront" type="MeshInstance3D" parent="."]
+position = Vector3(5.95, 3.75, 0)
+scale = Vector3(0.22, 0.38, 8.35)
+mesh = SubResource("RedMesh")
+
+[node name="CanopyTrimNorth" type="MeshInstance3D" parent="."]
+position = Vector3(2.2, 3.75, -4.18)
+scale = Vector3(7.5, 0.38, 0.22)
+mesh = SubResource("RedMesh")
+
+[node name="CanopyTrimSouth" type="MeshInstance3D" parent="."]
+position = Vector3(2.2, 3.75, 4.18)
+scale = Vector3(7.5, 0.38, 0.22)
+mesh = SubResource("RedMesh")
+
+[node name="ColumnNorth" type="MeshInstance3D" parent="."]
+position = Vector3(3.8, 1.86, -3.05)
+scale = Vector3(0.28, 3.7, 0.28)
+mesh = SubResource("FixtureMesh")
+
+[node name="ColumnNorthCollision" type="CollisionShape3D" parent="."]
+position = Vector3(3.8, 1.86, -3.05)
+shape = SubResource("ColumnShape")
+
+[node name="ColumnSouth" type="MeshInstance3D" parent="."]
+position = Vector3(3.8, 1.86, 3.05)
+scale = Vector3(0.28, 3.7, 0.28)
+mesh = SubResource("FixtureMesh")
+
+[node name="ColumnSouthCollision" type="CollisionShape3D" parent="."]
+position = Vector3(3.8, 1.86, 3.05)
+shape = SubResource("ColumnShape")
+
+[node name="PumpNorth" type="MeshInstance3D" parent="."]
+position = Vector3(2.1, 0.75, -2.2)
+scale = Vector3(0.7, 1.45, 0.62)
+mesh = SubResource("LightMesh")
+
+[node name="PumpNorthCollision" type="CollisionShape3D" parent="."]
+position = Vector3(2.1, 0.75, -2.2)
+shape = SubResource("PumpShape")
+
+[node name="PumpNorthStripe" type="MeshInstance3D" parent="."]
+position = Vector3(2.1, 1.38, -2.2)
+scale = Vector3(0.75, 0.16, 0.67)
+mesh = SubResource("RedMesh")
+
+[node name="PumpSouth" type="MeshInstance3D" parent="."]
+position = Vector3(2.1, 0.75, 2.2)
+scale = Vector3(0.7, 1.45, 0.62)
+mesh = SubResource("LightMesh")
+
+[node name="PumpSouthCollision" type="CollisionShape3D" parent="."]
+position = Vector3(2.1, 0.75, 2.2)
+shape = SubResource("PumpShape")
+
+[node name="PumpSouthStripe" type="MeshInstance3D" parent="."]
+position = Vector3(2.1, 1.38, 2.2)
+scale = Vector3(0.75, 0.16, 0.67)
+mesh = SubResource("RedMesh")
+
+[node name="PricePylon" type="Node3D" parent="."]
+position = Vector3(5.2, 0, 4.8)
+
+[node name="Post" type="MeshInstance3D" parent="PricePylon"]
+position = Vector3(0, 1.5, 0)
+scale = Vector3(0.25, 3.0, 0.25)
+mesh = SubResource("FixtureMesh")
+
+[node name="Board" type="MeshInstance3D" parent="PricePylon"]
+position = Vector3(0, 3.15, 0)
+scale = Vector3(0.18, 1.35, 1.0)
+mesh = SubResource("LightMesh")
+
+[node name="Price" type="Label3D" parent="PricePylon"]
+position = Vector3(0.13, 3.15, 0)
+rotation = Vector3(0, 1.5707964, 0)
+text = "FUEL\n189.9"
+font_size = 32
+outline_size = 6
+modulate = Color(0.86, 0.16, 0.09, 1)
+
+[node name="CanopyLight" type="OmniLight3D" parent="."]
+position = Vector3(2.2, 3.42, 0)
+light_color = Color(1, 0.83, 0.58, 1)
+light_energy = 0.55
+omni_range = 7.0
+shadow_enabled = false

@@ -53,9 +53,10 @@ of each downloaded asset and its license information with project records.
   and any modifications.
 - **Credit text:** "Old Russian house" by Yury Misiyuk (`@Tim0`), licensed under
   CC BY 4.0, via Sketchfab. Modified for use in Ashwood County 3D Prototype.
-- **Prototype use:** Environment building
+- **Prototype use:** Retained as a candidate future replacement exterior
 - **Local location:** `assets/environment/buildings/`
-- **Status:** In use
+- **Status:** Retained but not currently instantiated; the modular prototype
+  house uses project-owned geometry
 
 ### Forest Ground 01
 
@@ -190,12 +191,14 @@ of each downloaded asset and its license information with project records.
 - **Licence:** Project-owned; no third-party licence applies
 - **Attribution requirement:** None
 - **Prototype use:** House driveway, mailbox, rubbish bin, utility cabinet,
-  fencing, reusable bushes, road markings, service-station forecourt and pumps,
-  and a small pharmacy exterior
+  fencing, reusable bushes, road markings, modular building shells, prototype
+  interiors, service-station forecourt and pumps, and reusable hinged doors
 - **Local locations:** `assets/environment/props/roadside_dressing.tscn`,
   `assets/environment/nature/small_bush.tscn`,
-  `assets/environment/buildings/service_station.tscn`, and
-  `assets/environment/buildings/pharmacy_exterior.tscn`
+  `assets/environment/buildings/House/`,
+  `assets/environment/buildings/Pharmacy/`,
+  `assets/environment/buildings/ServiceStation/`, and
+  `assets/environment/buildings/shared/`
 - **Status:** In use
 - **Download note:** No additional third-party files were downloaded for this
   town-dressing slice, so there are no unused downloads to remove.

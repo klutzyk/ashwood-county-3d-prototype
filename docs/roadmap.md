@@ -136,13 +136,22 @@ Complete and test one vertical slice before starting the next.
 
 ## House Entry
 
-- [ ] Front-door interaction
-- [ ] Enter-house transition
-- [ ] Placeholder house interior
-- [ ] Interior collision
-- [ ] Interior lighting
-- [ ] Exit-house interaction
-- [ ] Return player outside near the entrance
+- [x] Front-door interaction
+- [x] Continuous doorway entry without teleporting
+- [x] Placeholder house interior
+- [x] Interior collision
+- [x] Interior lighting
+- [x] Exit through the same physical doorway
+- [x] Preserve player position across entry and exit
+
+## Modular Buildings
+
+- [x] Separate house exterior, interior and root scenes
+- [x] Separate pharmacy exterior, interior and root scenes
+- [x] Separate service-station exterior, interior and root scenes
+- [x] Reusable animated door controller
+- [x] Collision-preserving hinged doors
+- [x] Lightweight warm interior lighting
 
 ## Interior Loot
 

@@ -253,3 +253,38 @@ Validation:
 - Godot imported and loaded the new scenes without errors
 - Runtime preview capture completed using the Compatibility renderer
 - C# build completed without errors
+
+---
+
+## Modular Enterable Buildings
+
+Completed:
+
+- Split the house, pharmacy and service station into independent exterior,
+  interior and assembled root scenes
+- Added a reusable interaction-driven door controller with smooth hinged motion
+  and a collision shape that follows the visible door
+- Replaced solid building blockers with simple box-collision wall sections and
+  physical doorway gaps
+- Added prototype living room, kitchen and bedroom zones to the house
+- Added a retail floor, checkout, shelving and back room to the pharmacy
+- Added a checkout area, convenience shelving and storage room to the service
+  station
+- Added lightweight warm interior lights without baked lighting or GI
+- Moved the existing searchable cupboard and crate into the explorable house
+  layout without changing their inventory or loot behaviour
+
+Outcome:
+
+All three town buildings can be entered continuously through physical doors.
+Exterior scenes can now be replaced independently without changing interiors,
+door behaviour or other gameplay systems.
+
+Validation:
+
+- Automated runtime checks passed door open/close animation, closed/open doorway
+  collision, exterior wall collision and interior presence for all buildings
+- Existing zombie detection and pursuit still functioned in an open-road test
+- Compatibility-renderer preview completed at approximately 6.1 ms CPU and
+  5.0 ms GPU render time per frame during movie capture
+- Godot scene load and C# build completed with no warnings or errors

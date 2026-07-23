@@ -1,0 +1,159 @@
+[gd_scene load_steps=14 format=3]
+
+[ext_resource type="Material" path="res://assets/materials/building_wall.tres" id="1_wall"]
+[ext_resource type="Material" path="res://assets/materials/building_fixture.tres" id="2_fixture"]
+[ext_resource type="Material" path="res://assets/materials/building_partition.tres" id="3_trim"]
+
+[sub_resource type="BoxMesh" id="WallMesh"]
+material = ExtResource("1_wall")
+size = Vector3(1, 1, 1)
+
+[sub_resource type="BoxMesh" id="FixtureMesh"]
+material = ExtResource("2_fixture")
+size = Vector3(1, 1, 1)
+
+[sub_resource type="BoxMesh" id="TrimMesh"]
+material = ExtResource("3_trim")
+size = Vector3(1, 1, 1)
+
+[sub_resource type="BoxShape3D" id="FrontShape"]
+size = Vector3(0.2, 4.4, 3.7)
+
+[sub_resource type="BoxShape3D" id="HeaderShape"]
+size = Vector3(0.2, 2.2, 1.6)
+
+[sub_resource type="BoxShape3D" id="BackShape"]
+size = Vector3(0.2, 4.4, 9)
+
+[sub_resource type="BoxShape3D" id="SideShape"]
+size = Vector3(7, 4.4, 0.2)
+
+[sub_resource type="StandardMaterial3D" id="Glass"]
+transparency = 1
+albedo_color = Color(0.075, 0.17, 0.16, 0.7)
+metallic = 0.2
+roughness = 0.25
+
+[sub_resource type="BoxMesh" id="WindowMesh"]
+material = SubResource("Glass")
+size = Vector3(0.08, 1.7, 2.35)
+
+[sub_resource type="StandardMaterial3D" id="PharmacyGreen"]
+albedo_color = Color(0.05, 0.42, 0.2, 1)
+roughness = 0.72
+emission_enabled = true
+emission = Color(0.02, 0.12, 0.05, 1)
+emission_energy_multiplier = 0.4
+
+[sub_resource type="BoxMesh" id="CrossMesh"]
+material = SubResource("PharmacyGreen")
+size = Vector3(0.12, 0.9, 0.26)
+
+[sub_resource type="BoxMesh" id="PavementMesh"]
+material = ExtResource("3_trim")
+size = Vector3(2.4, 0.04, 9.8)
+
+[sub_resource type="BoxMesh" id="RoofMesh"]
+material = ExtResource("2_fixture")
+size = Vector3(7.35, 0.24, 9.35)
+
+[node name="PharmacyExterior" type="StaticBody3D"]
+
+[node name="FrontNorth" type="MeshInstance3D" parent="."]
+position = Vector3(3.5, 2.2, -2.65)
+scale = Vector3(0.2, 4.4, 3.7)
+mesh = SubResource("WallMesh")
+
+[node name="FrontNorthCollision" type="CollisionShape3D" parent="."]
+position = Vector3(3.5, 2.2, -2.65)
+shape = SubResource("FrontShape")
+
+[node name="FrontSouth" type="MeshInstance3D" parent="."]
+position = Vector3(3.5, 2.2, 2.65)
+scale = Vector3(0.2, 4.4, 3.7)
+mesh = SubResource("WallMesh")
+
+[node name="FrontSouthCollision" type="CollisionShape3D" parent="."]
+position = Vector3(3.5, 2.2, 2.65)
+shape = SubResource("FrontShape")
+
+[node name="DoorHeader" type="MeshInstance3D" parent="."]
+position = Vector3(3.5, 3.3, 0)
+scale = Vector3(0.2, 2.2, 1.6)
+mesh = SubResource("WallMesh")
+
+[node name="DoorHeaderCollision" type="CollisionShape3D" parent="."]
+position = Vector3(3.5, 3.3, 0)
+shape = SubResource("HeaderShape")
+
+[node name="BackWall" type="MeshInstance3D" parent="."]
+position = Vector3(-3.5, 2.2, 0)
+scale = Vector3(0.2, 4.4, 9)
+mesh = SubResource("WallMesh")
+
+[node name="BackWallCollision" type="CollisionShape3D" parent="."]
+position = Vector3(-3.5, 2.2, 0)
+shape = SubResource("BackShape")
+
+[node name="NorthWall" type="MeshInstance3D" parent="."]
+position = Vector3(0, 2.2, -4.5)
+scale = Vector3(7, 4.4, 0.2)
+mesh = SubResource("WallMesh")
+
+[node name="NorthWallCollision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 2.2, -4.5)
+shape = SubResource("SideShape")
+
+[node name="SouthWall" type="MeshInstance3D" parent="."]
+position = Vector3(0, 2.2, 4.5)
+scale = Vector3(7, 4.4, 0.2)
+mesh = SubResource("WallMesh")
+
+[node name="SouthWallCollision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 2.2, 4.5)
+shape = SubResource("SideShape")
+
+[node name="Roof" type="MeshInstance3D" parent="."]
+position = Vector3(0, 4.52, 0)
+mesh = SubResource("RoofMesh")
+
+[node name="Pavement" type="MeshInstance3D" parent="."]
+position = Vector3(4.65, 0.02, 0)
+mesh = SubResource("PavementMesh")
+
+[node name="SignBand" type="MeshInstance3D" parent="."]
+position = Vector3(3.63, 3.55, 0)
+scale = Vector3(0.18, 0.9, 8.7)
+mesh = SubResource("TrimMesh")
+
+[node name="Name" type="Label3D" parent="."]
+position = Vector3(3.75, 3.55, 0.4)
+rotation = Vector3(0, 1.5707964, 0)
+text = "ASHWOOD PHARMACY"
+font_size = 44
+outline_size = 7
+modulate = Color(0.05, 0.3, 0.13, 1)
+
+[node name="Cross" type="Node3D" parent="."]
+position = Vector3(3.76, 3.55, -3.35)
+
+[node name="Vertical" type="MeshInstance3D" parent="Cross"]
+mesh = SubResource("CrossMesh")
+
+[node name="Horizontal" type="MeshInstance3D" parent="Cross"]
+rotation = Vector3(1.5707964, 0, 0)
+mesh = SubResource("CrossMesh")
+
+[node name="WindowNorth" type="MeshInstance3D" parent="."]
+position = Vector3(3.62, 1.55, -2.6)
+mesh = SubResource("WindowMesh")
+
+[node name="WindowSouth" type="MeshInstance3D" parent="."]
+position = Vector3(3.62, 1.55, 2.6)
+mesh = SubResource("WindowMesh")
+
+[node name="DoorAwning" type="MeshInstance3D" parent="."]
+position = Vector3(4.0, 2.65, 0)
+rotation = Vector3(0, 0, -0.12)
+scale = Vector3(1.1, 0.12, 2.4)
+mesh = SubResource("FixtureMesh")
