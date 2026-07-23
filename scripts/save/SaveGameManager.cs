@@ -39,6 +39,7 @@ public partial class SaveGameManager : Node
 	private ThirdPersonPlayer _player = null!;
 	private PlayerHealth _health = null!;
 	private PlayerStamina _stamina = null!;
+	private PlayerNeeds _needs = null!;
 	private PlayerInventory _playerInventory = null!;
 	private AntibioticsObjective _objective = null!;
 	private WorldTime _worldTime = null!;
@@ -48,6 +49,7 @@ public partial class SaveGameManager : Node
 		_player = GetNode<ThirdPersonPlayer>(PlayerPath);
 		_health = _player.GetNode<PlayerHealth>("Health");
 		_stamina = _player.GetNode<PlayerStamina>("Stamina");
+		_needs = _player.GetNode<PlayerNeeds>("Needs");
 		_playerInventory = _player.GetNode<PlayerInventory>("Inventory");
 		_objective = GetNode<AntibioticsObjective>(ObjectivePath);
 		_worldTime = GetNode<WorldTime>(WorldTimePath);
@@ -142,6 +144,8 @@ public partial class SaveGameManager : Node
 			PlayerHealth = _health.CurrentHealth,
 			PlayerStamina = _stamina.CurrentStamina,
 			PlayerCanSprint = _stamina.CanSprint,
+			PlayerHunger = _needs.CurrentHunger,
+			PlayerThirst = _needs.CurrentThirst,
 			ObjectiveState = (int)_objective.State,
 			WorldTimeHours = _worldTime.CurrentHour,
 		};
@@ -175,10 +179,13 @@ public partial class SaveGameManager : Node
 		if (data.Version != SaveGameDataV1.CurrentVersion ||
 			!Enum.IsDefined(typeof(AntibioticsObjectiveState), data.ObjectiveState) ||
 			!IsFinite(data.PlayerHealth) || !IsFinite(data.PlayerStamina) ||
+			!IsFinite(data.PlayerHunger) || !IsFinite(data.PlayerThirst) ||
 			!IsFinite(data.WorldTimeHours) || !IsFinite(data.PlayerTransform.Position) ||
 			!IsFinite(data.PlayerTransform.Rotation) ||
 			data.PlayerHealth < 0.0f || data.PlayerHealth > _health.MaximumHealth ||
 			data.PlayerStamina < 0.0f || data.PlayerStamina > _stamina.MaximumStamina ||
+			data.PlayerHunger < 0.0f || data.PlayerHunger > _needs.MaximumHunger ||
+			data.PlayerThirst < 0.0f || data.PlayerThirst > _needs.MaximumThirst ||
 			data.WorldTimeHours < 0.0f || data.WorldTimeHours >= 24.0f)
 		{
 			return false;
@@ -233,6 +240,7 @@ public partial class SaveGameManager : Node
 		_player.Velocity = Vector3.Zero;
 		_health.RestoreState(data.PlayerHealth);
 		_stamina.RestoreState(data.PlayerStamina, data.PlayerCanSprint);
+		_needs.RestoreState(data.PlayerHunger, data.PlayerThirst);
 		RestoreItems(_playerInventory, validated.PlayerItems);
 
 		foreach ((SearchableContainer container, ContainerSaveData containerData, List<ResolvedItem> items) in validated.Containers)

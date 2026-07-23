@@ -55,6 +55,7 @@ public partial class SaveLoadValidation : Node
 		ThirdPersonPlayer player = world.GetNode<ThirdPersonPlayer>("Player");
 		PlayerHealth health = player.GetNode<PlayerHealth>("Health");
 		PlayerStamina stamina = player.GetNode<PlayerStamina>("Stamina");
+		PlayerNeeds needs = player.GetNode<PlayerNeeds>("Needs");
 		PlayerInventory inventory = player.GetNode<PlayerInventory>("Inventory");
 		AntibioticsObjective objective = world.GetNode<AntibioticsObjective>("AntibioticsObjective");
 		WorldTime worldTime = world.GetNode<WorldTime>("WorldTime");
@@ -71,6 +72,7 @@ public partial class SaveLoadValidation : Node
 		player.Rotation = SavedRotation;
 		health.RestoreState(73.0f);
 		stamina.RestoreState(42.0f, false);
+		needs.RestoreState(61.0f, 37.0f);
 		inventory.ClearItems();
 		inventory.AddItem(GD.Load<ItemDefinition>("res://assets/items/antibiotics.tres"), 1);
 		cabinet.Inventory.ClearItems();
@@ -92,6 +94,7 @@ public partial class SaveLoadValidation : Node
 		player.Rotation = Vector3.Zero;
 		health.RestoreState(0.0f);
 		stamina.RestoreState(100.0f, true);
+		needs.RestoreState(100.0f, 100.0f);
 		inventory.ClearItems();
 		foreach (SearchableContainer container in new[] { cabinet, car, crate, cupboard })
 		{
@@ -141,6 +144,9 @@ public partial class SaveLoadValidation : Node
 			"player health restores");
 		Require(Mathf.IsEqualApprox(player.GetNode<PlayerStamina>("Stamina").CurrentStamina, 42.0f) &&
 			!player.GetNode<PlayerStamina>("Stamina").CanSprint, "player stamina state restores");
+		Require(Mathf.Abs(player.GetNode<PlayerNeeds>("Needs").CurrentHunger - 61.0f) < 0.05f &&
+			Mathf.Abs(player.GetNode<PlayerNeeds>("Needs").CurrentThirst - 37.0f) < 0.05f,
+			"player hunger and thirst restore");
 		Require(inventory.GetQuantity(AntibioticsObjective.AntibioticsItemId) == 1,
 			"player inventory contents restore");
 		Require(world.GetNode<AntibioticsObjective>("AntibioticsObjective").State ==

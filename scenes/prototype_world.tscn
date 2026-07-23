@@ -38,6 +38,7 @@
 [ext_resource type="Script" path="res://scripts/save/SaveGameManager.cs" id="36_save_manager"]
 [ext_resource type="Script" path="res://scripts/ui/SaveStatusDisplay.cs" id="37_save_status"]
 [ext_resource type="Script" path="res://scripts/player/PlayerMeleeCombat.cs" id="38_melee"]
+[ext_resource type="Script" path="res://scripts/player/PlayerNeeds.cs" id="39_needs"]
 
 [sub_resource type="BoxMesh" id="GrassMesh"]
 material = ExtResource("8_grass")
@@ -107,6 +108,20 @@ corner_radius_bottom_left = 3
 
 [sub_resource type="StyleBoxFlat" id="StaminaFill"]
 bg_color = Color(0.68, 0.72, 0.28, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="HungerFill"]
+bg_color = Color(0.72, 0.5, 0.2, 0.95)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="ThirstFill"]
+bg_color = Color(0.25, 0.58, 0.82, 0.95)
 corner_radius_top_left = 3
 corner_radius_top_right = 3
 corner_radius_bottom_right = 3
@@ -308,6 +323,9 @@ script = ExtResource("18_health")
 [node name="Stamina" type="Node" parent="Player" unique_id=1466562127]
 script = ExtResource("20_stamina")
 
+[node name="Needs" type="Node" parent="Player"]
+script = ExtResource("39_needs")
+
 [node name="Interaction" type="Node" parent="Player" unique_id=1403928352]
 script = ExtResource("21_player_interaction")
 
@@ -487,6 +505,48 @@ offset_bottom = 111.0
 theme_override_font_sizes/font_size = 12
 theme_override_styles/background = SubResource("StaminaBackground")
 theme_override_styles/fill = SubResource("StaminaFill")
+value = 100.0
+show_percentage = false
+
+[node name="HungerLabel" type="Label" parent="PerformanceUI"]
+offset_left = 210.0
+offset_top = 52.0
+offset_right = 276.0
+offset_bottom = 72.0
+theme_override_colors/font_color = Color(0.93, 0.78, 0.5, 1)
+theme_override_font_sizes/font_size = 14
+text = "Hunger"
+vertical_alignment = 1
+
+[node name="HungerBar" type="ProgressBar" parent="PerformanceUI"]
+offset_left = 280.0
+offset_top = 53.0
+offset_right = 392.0
+offset_bottom = 71.0
+theme_override_font_sizes/font_size = 12
+theme_override_styles/background = SubResource("StaminaBackground")
+theme_override_styles/fill = SubResource("HungerFill")
+value = 100.0
+show_percentage = false
+
+[node name="ThirstLabel" type="Label" parent="PerformanceUI"]
+offset_left = 210.0
+offset_top = 92.0
+offset_right = 276.0
+offset_bottom = 112.0
+theme_override_colors/font_color = Color(0.58, 0.8, 1, 1)
+theme_override_font_sizes/font_size = 14
+text = "Thirst"
+vertical_alignment = 1
+
+[node name="ThirstBar" type="ProgressBar" parent="PerformanceUI"]
+offset_left = 280.0
+offset_top = 93.0
+offset_right = 392.0
+offset_bottom = 111.0
+theme_override_font_sizes/font_size = 12
+theme_override_styles/background = SubResource("StaminaBackground")
+theme_override_styles/fill = SubResource("ThirstFill")
 value = 100.0
 show_percentage = false
 

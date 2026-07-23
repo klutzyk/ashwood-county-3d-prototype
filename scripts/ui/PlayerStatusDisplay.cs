@@ -9,13 +9,17 @@ public partial class PlayerStatusDisplay : CanvasLayer
 {
 	[Export] public NodePath HealthPath { get; set; } = new("../Player/Health");
 	[Export] public NodePath StaminaPath { get; set; } = new("../Player/Stamina");
+	[Export] public NodePath NeedsPath { get; set; } = new("../Player/Needs");
 	[Export] public float DamageFlashDuration { get; set; } = 0.2f;
 	[Export] public float DamageFlashOpacity { get; set; } = 0.24f;
 
 	private PlayerHealth _health = null!;
 	private PlayerStamina _stamina = null!;
+	private PlayerNeeds _needs = null!;
 	private Label _healthLabel = null!;
 	private ProgressBar _staminaBar = null!;
+	private ProgressBar _hungerBar = null!;
+	private ProgressBar _thirstBar = null!;
 	private ColorRect _damageFlash = null!;
 	private Control _deathOverlay = null!;
 	private float _damageFlashRemaining;
@@ -24,8 +28,11 @@ public partial class PlayerStatusDisplay : CanvasLayer
 	{
 		_health = GetNode<PlayerHealth>(HealthPath);
 		_stamina = GetNode<PlayerStamina>(StaminaPath);
+		_needs = GetNode<PlayerNeeds>(NeedsPath);
 		_healthLabel = GetNode<Label>("HealthLabel");
 		_staminaBar = GetNode<ProgressBar>("StaminaBar");
+		_hungerBar = GetNode<ProgressBar>("HungerBar");
+		_thirstBar = GetNode<ProgressBar>("ThirstBar");
 		_damageFlash = GetNode<ColorRect>("DamageFlash");
 		_deathOverlay = GetNode<Control>("DeathOverlay");
 
@@ -33,9 +40,13 @@ public partial class PlayerStatusDisplay : CanvasLayer
 		_health.Damaged += ShowDamageFlash;
 		_health.Died += ShowDeathScreen;
 		_stamina.StaminaChanged += UpdateStaminaBar;
+		_needs.HungerChanged += UpdateHungerBar;
+		_needs.ThirstChanged += UpdateThirstBar;
 
 		UpdateHealthLabel(_health.CurrentHealth, _health.MaximumHealth);
 		UpdateStaminaBar(_stamina.CurrentStamina, _stamina.MaximumStamina);
+		UpdateHungerBar(_needs.CurrentHunger, _needs.MaximumHunger);
+		UpdateThirstBar(_needs.CurrentThirst, _needs.MaximumThirst);
 		SetFlashOpacity(0.0f);
 		_deathOverlay.Visible = _health.IsDead;
 	}
@@ -79,6 +90,18 @@ public partial class PlayerStatusDisplay : CanvasLayer
 	{
 		_staminaBar.MaxValue = maximumStamina;
 		_staminaBar.Value = currentStamina;
+	}
+
+	private void UpdateHungerBar(float currentHunger, float maximumHunger)
+	{
+		_hungerBar.MaxValue = maximumHunger;
+		_hungerBar.Value = currentHunger;
+	}
+
+	private void UpdateThirstBar(float currentThirst, float maximumThirst)
+	{
+		_thirstBar.MaxValue = maximumThirst;
+		_thirstBar.Value = currentThirst;
 	}
 
 	private void ShowDamageFlash(float damageAmount)

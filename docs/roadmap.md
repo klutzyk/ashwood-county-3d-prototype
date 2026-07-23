@@ -224,13 +224,13 @@ Complete and test one vertical slice before starting the next.
 
 ## Needs
 
-- [ ] Hunger data
-- [ ] Thirst data
-- [ ] Hunger reduction over time
-- [ ] Thirst reduction over time
-- [ ] Food restores hunger
-- [ ] Water restores thirst
-- [ ] Basic hunger and thirst UI
+- [x] Hunger data
+- [x] Thirst data
+- [x] Hunger reduction over time
+- [x] Thirst reduction over time
+- [x] Food restores hunger
+- [x] Water restores thirst
+- [x] Basic hunger and thirst UI
 
 ---
 

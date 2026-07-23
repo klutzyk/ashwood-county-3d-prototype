@@ -14,6 +14,8 @@ public sealed class SaveGameDataV1
 	public float PlayerHealth { get; set; }
 	public float PlayerStamina { get; set; }
 	public bool PlayerCanSprint { get; set; }
+	public float PlayerHunger { get; set; } = 100.0f;
+	public float PlayerThirst { get; set; } = 100.0f;
 	public List<ItemStackSaveData> PlayerInventory { get; set; } = new();
 	public int ObjectiveState { get; set; }
 	public float WorldTimeHours { get; set; }

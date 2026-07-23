@@ -495,3 +495,28 @@ a searched corpse allows the player to retrieve or store items left there.
 Validation:
 
 - C# build completed with no warnings or errors
+
+---
+
+## Prototype Hunger and Thirst
+
+Completed:
+
+- Added independent Hunger and Thirst values with exported maximums and drain rates
+- Added compact Hunger and Thirst HUD bars beside Health and Stamina
+- Converted prototype Food and Water into reusable need-restoring items
+- Prevented consuming Food or Water when its corresponding need is already full
+- Added configurable gradual health loss when either need reaches zero
+- Saved, validated and restored both needs in the existing version 1 save format
+- Kept older version 1 saves compatible by defaulting absent needs to full
+
+Outcome:
+
+Food and Water now matter in the current survival loop without adding nutrition,
+cooking, disease or other out-of-scope systems. Need drain and zero-need damage
+are slow, exported prototype tuning values.
+
+Validation:
+
+- Save/load validation now covers independent Hunger and Thirst restoration
+- C# build completed with no warnings or errors
