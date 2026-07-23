@@ -17,6 +17,9 @@ public partial class ContainerInventoryDisplay : Control
 	private Label _title = null!;
 	private ItemList _containerItems = null!;
 	private ItemList _playerItems = null!;
+	private Label _containerLabel = null!;
+	private Label _playerLabel = null!;
+	private Label _details = null!;
 	private Label _status = null!;
 	private Button _takeButton = null!;
 	private Button _storeButton = null!;
@@ -24,6 +27,8 @@ public partial class ContainerInventoryDisplay : Control
 	private ContainerInventory? _containerInventory;
 	private PlayerInventory? _playerInventory;
 	private ThirdPersonPlayer? _player;
+	private PlayerHealth? _playerHealth;
+	private PlayerNeeds? _playerNeeds;
 	private int _selectedContainerIndex = -1;
 	private int _selectedPlayerIndex = -1;
 
@@ -33,6 +38,9 @@ public partial class ContainerInventoryDisplay : Control
 		_title = GetNode<Label>("Panel/Layout/Title");
 		_containerItems = GetNode<ItemList>("Panel/Layout/Columns/ContainerColumn/ContainerItems");
 		_playerItems = GetNode<ItemList>("Panel/Layout/Columns/PlayerColumn/PlayerItems");
+		_containerLabel = GetNode<Label>("Panel/Layout/Columns/ContainerColumn/ContainerLabel");
+		_playerLabel = GetNode<Label>("Panel/Layout/Columns/PlayerColumn/PlayerLabel");
+		_details = GetNode<Label>("Panel/Layout/Details");
 		_status = GetNode<Label>("Panel/Layout/Status");
 		_takeButton = GetNode<Button>("Panel/Layout/Columns/Actions/Take");
 		_storeButton = GetNode<Button>("Panel/Layout/Columns/Actions/Store");
@@ -71,18 +79,26 @@ public partial class ContainerInventoryDisplay : Control
 		_containerInventory = container.Inventory;
 		_player = player;
 		_playerInventory = player.GetNode<PlayerInventory>("Inventory");
+		_playerHealth = player.GetNode<PlayerHealth>("Health");
+		_playerNeeds = player.GetNode<PlayerNeeds>("Needs");
 		_containerInventory.InventoryChanged += RefreshContainer;
 		_playerInventory.InventoryChanged += RefreshPlayer;
 		_playerInventory.ItemUsed += ShowStatus;
+		_playerHealth.HealthChanged += OnPlayerConditionChanged;
+		_playerNeeds.HungerChanged += OnPlayerConditionChanged;
+		_playerNeeds.ThirstChanged += OnPlayerConditionChanged;
 		_selectedContainerIndex = -1;
 		_selectedPlayerIndex = -1;
-		_title.Text = container.DisplayName;
+		_title.Text = $"{container.DisplayName} Inventory";
+		_containerLabel.Text = container.DisplayName;
 		_status.Text = string.Empty;
+		_details.Text = "Select an item to view its details.";
 		Visible = true;
 		_player.SetInventoryUiOpen(true);
 		Input.MouseMode = Input.MouseModeEnum.Visible;
 		RefreshContainer();
 		RefreshPlayer();
+		SelectInitialItem();
 	}
 
 	public void Close()
@@ -100,12 +116,20 @@ public partial class ContainerInventoryDisplay : Control
 		_containerInventory = null;
 		_playerInventory = null;
 		_player = null;
+		_playerHealth = null;
+		_playerNeeds = null;
 	}
 
 	public void SelectContainerItem(int index)
 	{
 		_selectedContainerIndex = _containerInventory is not null &&
 			index >= 0 && index < _containerInventory.StackCount ? index : -1;
+		if (_selectedContainerIndex >= 0)
+		{
+			_selectedPlayerIndex = -1;
+			_playerItems.DeselectAll();
+		}
+		RefreshDetails();
 		RefreshButtons();
 	}
 
@@ -113,6 +137,12 @@ public partial class ContainerInventoryDisplay : Control
 	{
 		_selectedPlayerIndex = _playerInventory is not null &&
 			index >= 0 && index < _playerInventory.StackCount ? index : -1;
+		if (_selectedPlayerIndex >= 0)
+		{
+			_selectedContainerIndex = -1;
+			_containerItems.DeselectAll();
+		}
+		RefreshDetails();
 		RefreshButtons();
 	}
 
@@ -157,12 +187,20 @@ public partial class ContainerInventoryDisplay : Control
 
 	private void RefreshContainer()
 	{
+		bool hadContainerSelection = _selectedContainerIndex >= 0;
 		_containerItems.Clear();
 		if (_containerInventory is null || _containerInventory.StackCount == 0)
 		{
 			_containerItems.AddItem("Empty");
 			_containerItems.SetItemDisabled(0, true);
 			_selectedContainerIndex = -1;
+			if (hadContainerSelection && _playerInventory is not null && _playerInventory.StackCount > 0)
+			{
+				int movedItemIndex = _playerInventory.StackCount - 1;
+				_playerItems.Select(movedItemIndex);
+				SelectPlayerItem(movedItemIndex);
+			}
+			RefreshDetails();
 			RefreshButtons();
 			return;
 		}
@@ -177,11 +215,13 @@ public partial class ContainerInventoryDisplay : Control
 		{
 			_containerItems.Select(_selectedContainerIndex);
 		}
+		RefreshDetails();
 		RefreshButtons();
 	}
 
 	private void RefreshPlayer()
 	{
+		bool hadPlayerSelection = _selectedPlayerIndex >= 0;
 		_playerItems.Clear();
 		if (_playerInventory is null)
 		{
@@ -196,25 +236,83 @@ public partial class ContainerInventoryDisplay : Control
 				: $"{slot + 1}. {item.DisplayName} x{_playerInventory.GetQuantityAt(slot)}");
 			_playerItems.SetItemDisabled(slot, item is null);
 		}
+		_playerLabel.Text = $"Player Inventory ({_playerInventory.StackCount}/{PlayerInventory.SlotCount} slots)";
 
 		_selectedPlayerIndex = Mathf.Clamp(_selectedPlayerIndex, -1, _playerInventory.StackCount - 1);
 		if (_selectedPlayerIndex >= 0)
 		{
 			_playerItems.Select(_selectedPlayerIndex);
 		}
+		else if (hadPlayerSelection && _containerInventory is not null && _containerInventory.StackCount > 0)
+		{
+			int movedItemIndex = _containerInventory.StackCount - 1;
+			_containerItems.Select(movedItemIndex);
+			SelectContainerItem(movedItemIndex);
+		}
+		RefreshDetails();
 		RefreshButtons();
 	}
 
 	private void RefreshButtons()
 	{
-		_takeButton.Disabled = _selectedContainerIndex < 0;
-		_storeButton.Disabled = _selectedPlayerIndex < 0;
-		_useButton.Disabled = _selectedPlayerIndex < 0;
+		ItemDefinition? containerItem = _containerInventory?.GetItemAt(_selectedContainerIndex);
+		ItemDefinition? playerItem = _playerInventory?.GetItemAt(_selectedPlayerIndex);
+		_takeButton.Disabled = containerItem is null || _playerInventory is null ||
+			!_playerInventory.CanAdd(containerItem);
+		_storeButton.Disabled = playerItem is null || _containerInventory is null ||
+			!_containerInventory.CanAdd(playerItem);
+		_useButton.Disabled = playerItem is null || _player is null || !playerItem.CanUse(_player);
+	}
+
+	private void RefreshDetails()
+	{
+		ItemDefinition? item = null;
+		int quantity = 0;
+		if (_selectedContainerIndex >= 0 && _containerInventory is not null)
+		{
+			item = _containerInventory.GetItemAt(_selectedContainerIndex);
+			quantity = _containerInventory.GetQuantityAt(_selectedContainerIndex);
+		}
+		else if (_selectedPlayerIndex >= 0 && _playerInventory is not null)
+		{
+			item = _playerInventory.GetItemAt(_selectedPlayerIndex);
+			quantity = _playerInventory.GetQuantityAt(_selectedPlayerIndex);
+		}
+
+		_details.Text = item is null
+			? "Select an item to view its details."
+			: $"{item.DisplayName}  x{quantity}\n{item.Description}";
+	}
+
+	private void SelectInitialItem()
+	{
+		if (_containerInventory is not null && _containerInventory.StackCount > 0)
+		{
+			_containerItems.GrabFocus();
+			_containerItems.Select(0);
+			SelectContainerItem(0);
+			return;
+		}
+
+		if (_playerInventory is not null && _playerInventory.StackCount > 0)
+		{
+			_playerItems.GrabFocus();
+			_playerItems.Select(0);
+			SelectPlayerItem(0);
+			return;
+		}
+
+		GetNode<Button>("Panel/Layout/Close").GrabFocus();
 	}
 
 	private void ShowStatus(string message)
 	{
 		_status.Text = message;
+	}
+
+	private void OnPlayerConditionChanged(float currentValue, float maximumValue)
+	{
+		RefreshButtons();
 	}
 
 	private void DisconnectInventories()
@@ -227,6 +325,15 @@ public partial class ContainerInventoryDisplay : Control
 		{
 			_playerInventory.InventoryChanged -= RefreshPlayer;
 			_playerInventory.ItemUsed -= ShowStatus;
+		}
+		if (_playerHealth is not null)
+		{
+			_playerHealth.HealthChanged -= OnPlayerConditionChanged;
+		}
+		if (_playerNeeds is not null)
+		{
+			_playerNeeds.HungerChanged -= OnPlayerConditionChanged;
+			_playerNeeds.ThirstChanged -= OnPlayerConditionChanged;
 		}
 	}
 }

@@ -23,6 +23,14 @@ public partial class NeedRestoringItem : ItemDefinition
 		}
 	}
 
+	public override bool CanUse(Node user)
+	{
+		PlayerNeeds? needs = user.GetNodeOrNull<PlayerNeeds>("Needs");
+		return needs is not null &&
+			((HungerRestored > 0.0f && needs.CurrentHunger < needs.MaximumHunger) ||
+			(ThirstRestored > 0.0f && needs.CurrentThirst < needs.MaximumThirst));
+	}
+
 	public override bool Use(Node user)
 	{
 		PlayerNeeds? needs = user.GetNodeOrNull<PlayerNeeds>("Needs");

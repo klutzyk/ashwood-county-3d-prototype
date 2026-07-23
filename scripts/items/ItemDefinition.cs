@@ -14,8 +14,13 @@ public partial class ItemDefinition : Resource
 
 	public virtual string UseFeedback => UseMessage;
 
-	public virtual bool Use(Node user)
+	public virtual bool CanUse(Node user)
 	{
 		return !string.IsNullOrWhiteSpace(UseMessage);
+	}
+
+	public virtual bool Use(Node user)
+	{
+		return CanUse(user);
 	}
 }

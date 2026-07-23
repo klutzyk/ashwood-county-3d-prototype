@@ -99,6 +99,12 @@ Complete and test one vertical slice before starting the next.
 - [x] Allow per-container search duration
 - [x] Allow per-container loot table
 
+## Inventory Interface Polish
+
+- [x] Highlight and describe the selected player or container item
+- [x] Show Take, Store and Use availability from current capacity and player state
+- [x] Support mouse selection, keyboard focus navigation and Escape close
+
 ---
 
 # Vertical Slice 2 — Melee Survival

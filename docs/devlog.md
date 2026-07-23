@@ -613,3 +613,27 @@ Validation:
 - Focused runtime validation passed visible chase, last-known search, queued sound
   investigation and dead-zombie processing shutdown
 - C# build completed with no warnings or errors
+
+---
+
+## Inventory and Container Interface Polish
+
+Completed:
+
+- Clarified the open container and player inventory columns with slot capacity
+- Added a high-contrast selected-item style and item name, quantity and description
+- Kept Take, Store and Use visible while disabling actions that are not currently valid
+- Added side-aware selection, initial keyboard focus and clean Escape close behaviour
+- Preserved the existing explicit transfer, stacking and capacity rules
+
+Outcome:
+
+Container decisions are readable at a glance with both mouse and keyboard input,
+while uncollected and invalid-transfer items remain in their original inventory.
+
+Validation:
+
+- Focused runtime validation passed selection details, action availability, Take,
+  Store, Use, full-capacity retention and Escape close
+- Existing antibiotics objective-flow regression validation passed
+- C# build completed with no warnings or errors
