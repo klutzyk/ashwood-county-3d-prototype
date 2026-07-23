@@ -5,22 +5,37 @@
 [ext_resource type="Script" uid="uid://bjwk0iv64xsfc" path="res://scripts/items/ContainerInventory.cs" id="3_inventory"]
 [ext_resource type="Resource" uid="uid://bbs50khnn3msd" path="res://assets/items/loot_tables/fridge.tres" id="4_loot"]
 [ext_resource type="PackedScene" uid="uid://b0wdj6lvxl4tl" path="res://assets/third_party/common/containers/old_fridge.glb" id="5_5cs0p"]
+[ext_resource type="Script" uid="uid://bqcfmnam3r0h0" path="res://scenes/containers/FridgeAnimationController.cs" id="6_n3182"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_kgutl"]
+size = Vector3(0.7, 1, 0.5)
 
 [node name="DinerFridge" type="Node3D" unique_id=203465238]
 script = ExtResource("1_searchable")
 DisplayName = "Diner Fridge"
-SearchDuration = 1.8
+SearchDuration = 0.0
 LootTable = ExtResource("4_loot")
 
 [node name="Interactable" type="Node3D" parent="." unique_id=73624045]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0.2710079)
 script = ExtResource("2_interactable")
 InteractionName = "Diner Fridge"
 InteractionPrompt = "Search"
+HoldDuration = 2.0
 
 [node name="Inventory" type="Node" parent="." unique_id=963283914]
 script = ExtResource("3_inventory")
 
 [node name="Visual" parent="." unique_id=202503369 instance=ExtResource("5_5cs0p")]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=1142662259]
+
+[node name="FridgeCollision" type="CollisionShape3D" parent="StaticBody3D" unique_id=812653990]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.54873484, 0.017282963)
+shape = SubResource("BoxShape3D_kgutl")
+
+[node name="FridgeAnimationController" type="Node" parent="." unique_id=1565479145 node_paths=PackedStringArray("AnimationPlayer")]
+script = ExtResource("6_n3182")
+AnimationPlayer = NodePath("../Visual/AnimationPlayer")
 
 [editable path="Visual"]

@@ -95,15 +95,6 @@ mesh = SubResource("FixtureMesh")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.25, 1, -4.9)
 shape = SubResource("StorageShape")
 
-[node name="FridgeFixture" type="MeshInstance3D" parent="." unique_id=1518388809]
-transform = Transform3D(1.2, 0, 0, 0, 2, 0, 0, 0, 0.6, 3.25, 1, 4.9)
-visible = false
-mesh = SubResource("FixtureMesh")
-
-[node name="FridgeCollision" type="CollisionShape3D" parent="." unique_id=557080165]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.25, 1, 4.9)
-shape = SubResource("StorageShape")
-
 [node name="DiningLight" type="OmniLight3D" parent="." unique_id=536529602]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6, 2.75, 0)
 light_color = Color(1, 0.75, 0.48, 1)

@@ -8,6 +8,8 @@ namespace AshwoodCounty3DPrototype.Interactions;
 
 public partial class SearchableContainer : Node3D
 {
+	[Signal]
+	public delegate void SearchCompletedEventHandler();
 	public static readonly StringName GroupName = new("searchable_containers");
 
 	[Export] public string DisplayName { get; set; } = "Container";
@@ -58,6 +60,8 @@ public partial class SearchableContainer : Node3D
 			LootTable?.GenerateInto(Inventory, _random);
 			IsSearched = true;
 			ConfigureInteraction();
+
+			EmitSignal(SignalName.SearchCompleted);
 		}
 
 		ContainerInventoryDisplay? display = GetTree()
