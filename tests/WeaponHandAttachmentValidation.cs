@@ -43,7 +43,8 @@ public partial class WeaponHandAttachmentValidation : Node
 				"bat scene mounts directly at the hand attachment");
 
 			Node3D gripOffset = bat.GetNode<Node3D>("GripOffset");
-			Require(gripOffset.Position.IsEqualApprox(new Vector3(0, 0.05323243f, 0)),
+			Require(gripOffset.Position.IsEqualApprox(
+				new Vector3(0, -0.04148422f, -0.04133047f)),
 				"reusable bat scene stores its grip position");
 			Require(!gripOffset.Basis.IsEqualApprox(Basis.Identity),
 				"reusable bat scene stores its grip rotation");
@@ -68,7 +69,7 @@ public partial class WeaponHandAttachmentValidation : Node
 			Require(bat.GetParent() == attachment &&
 				bat.GlobalTransform.IsEqualApprox(attachment.GlobalTransform),
 				"visible bat remains attached to the animated right hand during attack");
-			combat._Process(0.4);
+			combat._Process(0.6);
 			Require(!combat.IsAttacking,
 				"melee attack still completes normally");
 

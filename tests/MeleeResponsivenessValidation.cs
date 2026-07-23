@@ -71,6 +71,12 @@ public partial class MeleeResponsivenessValidation : Node
 				targetHealth.CurrentHealth,
 				targetHealth.MaximumHealth - weapon.Damage),
 				"one hit lands as the bat crosses the target");
+			Require(target.IsHitStunned && target.CurrentAnimationName == "HitReaction",
+				"impact starts the authored zombie reaction and brief hit stun");
+			Require(target.ActiveKnockbackVelocity.Z > 0.0f,
+				"knockback follows the attack direction");
+			Require(player.IsMeleeImpactFeedbackActive,
+				"camera feedback starts only after a confirmed hit");
 			Require(combat.RequestAttack(), "input during follow-through queues combo step two");
 			Require(!combat.RequestAttack(), "only one attack can be queued at a time");
 			combat._Process(0.16);

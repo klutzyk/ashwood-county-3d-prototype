@@ -175,6 +175,10 @@ public partial class PlayerMeleeCombat : Node3D
 				direction * Mathf.Max(Weapon.Knockback, 0.0f));
 		}
 
+		if (hitAnything)
+		{
+			_player.RequestMeleeImpactFeedback();
+		}
 		return hitAnything;
 	}
 

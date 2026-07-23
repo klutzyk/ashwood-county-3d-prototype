@@ -14,6 +14,8 @@ public partial class ThirdPersonPlayer : CharacterBody3D
 	[Export] public float MouseSensitivity { get; set; } = 0.0025f;
 	[Export] public float SprintNoiseRadius { get; set; } = 9.0f;
 	[Export] public float SprintNoiseInterval { get; set; } = 0.6f;
+	[Export] public float MeleeImpactShakeStrength { get; set; } = 0.035f;
+	[Export] public float MeleeImpactShakeDuration { get; set; } = 0.08f;
 
 	private const float CameraHeight = 0.75f;
 	private const float MinimumPitch = -1.05f;
@@ -30,9 +32,12 @@ public partial class ThirdPersonPlayer : CharacterBody3D
 	private bool _inventoryUiOpen;
 	private float _sprintNoiseElapsed;
 	private bool _wasSprinting;
+	private float _meleeImpactShakeRemaining;
+	private float _meleeImpactShakeElapsed;
 
 	public bool IsSprinting { get; private set; }
 	public bool IsInventoryUiOpen => _inventoryUiOpen;
+	public bool IsMeleeImpactFeedbackActive => _meleeImpactShakeRemaining > 0.0f;
 	public bool CanUseWorldInteractions =>
 		!_health.IsDead && !_inventoryUiOpen && !GetTree().Paused;
 
@@ -161,6 +166,12 @@ public partial class ThirdPersonPlayer : CharacterBody3D
 		}
 	}
 
+	public void RequestMeleeImpactFeedback()
+	{
+		_meleeImpactShakeRemaining = Mathf.Max(MeleeImpactShakeDuration, 0.0f);
+		_meleeImpactShakeElapsed = 0.0f;
+	}
+
 	private void UpdateSprintNoise(float delta)
 	{
 		if (!IsSprinting)
@@ -240,6 +251,22 @@ public partial class ThirdPersonPlayer : CharacterBody3D
 
 	private void FollowPlayerWithCamera()
 	{
-		_cameraRig.GlobalPosition = GlobalPosition + (Vector3.Up * CameraHeight);
+		Vector3 shakeOffset = Vector3.Zero;
+		if (_meleeImpactShakeRemaining > 0.0f)
+		{
+			float delta = (float)GetPhysicsProcessDeltaTime();
+			_meleeImpactShakeRemaining = Mathf.Max(_meleeImpactShakeRemaining - delta, 0.0f);
+			_meleeImpactShakeElapsed += delta;
+			float duration = Mathf.Max(MeleeImpactShakeDuration, 0.001f);
+			float fade = _meleeImpactShakeRemaining / duration;
+			float strength = Mathf.Max(MeleeImpactShakeStrength, 0.0f) * fade;
+			shakeOffset = new Vector3(
+				Mathf.Sin(_meleeImpactShakeElapsed * 115.0f),
+				Mathf.Sin(_meleeImpactShakeElapsed * 83.0f),
+				0.0f) * strength;
+		}
+
+		_cameraRig.GlobalPosition =
+			GlobalPosition + (Vector3.Up * CameraHeight) + shakeOffset;
 	}
 }

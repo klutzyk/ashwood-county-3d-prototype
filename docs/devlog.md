@@ -1660,3 +1660,26 @@ Validation:
 - Melee responsiveness validation passed timing, one-hit guarding, combo limits,
   queue restrictions and recovery
 - C# build completed with no warnings or errors
+
+---
+
+## Melee Impact Feedback
+
+Completed:
+
+- Replaced the zombie scale pulse with the downloaded Mixamo being-hit animation
+- Extended the existing hit pause slightly and preserved directional knockback
+  with a heavier decay
+- Added a very small, short camera displacement only when a melee hit is confirmed
+- Confirmed no attack or impact audio assets are currently available to retime
+
+Outcome:
+
+Successful hits now interrupt and displace zombies with a readable reaction,
+while misses remain visually quiet and camera feedback stays restrained.
+
+Validation:
+
+- Melee responsiveness validation passed authored reaction playback, hit stun,
+  directional knockback and confirmed-hit-only camera feedback
+- C# build completed with no warnings or errors

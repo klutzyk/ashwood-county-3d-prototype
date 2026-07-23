@@ -70,6 +70,8 @@ Completed except final polish.
 - [x] Authored two-handed attack animation
 - [x] Three-step melee combo with anticipation and recovery
 - [x] Visual impact timing and anti-spam input rules
+- [x] Authored zombie hit reactions with directional knockback and hit stun
+- [x] Subtle camera feedback on confirmed melee impacts
 
 Remaining
 

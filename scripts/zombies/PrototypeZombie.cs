@@ -49,18 +49,21 @@ public partial class PrototypeZombie : CharacterBody3D
 	[Export] public float PlayerSearchRadius { get; set; } = 2.5f;
 	[Export] public float PlayerSearchTargetInterval { get; set; } = 0.9f;
 	[Export] public float LastKnownPositionTolerance { get; set; } = 0.75f;
-	[Export] public float HitReactionDuration { get; set; } = 0.24f;
-	[Export] public float KnockbackDamping { get; set; } = 12.0f;
+	[Export] public float HitReactionDuration { get; set; } = 0.34f;
+	[Export] public float KnockbackDamping { get; set; } = 9.0f;
 	[Export] public float AnimationUpdateDistance { get; set; } = 28.0f;
 
 	private const string SourceAnimationName = "mixamo_com";
 	private const string IdleAnimationName = "Idle";
 	private const string WalkAnimationName = "Walk";
 	private const string AttackAnimationName = "Attack";
+	private const string HitReactionAnimationName = "HitReaction";
 	private const string DeathAnimationName = "Death";
 	private const string IdleAnimationPath = "res://assets/characters/zombies/zombie idle.fbx";
 	private const string WalkAnimationPath = "res://assets/characters/zombies/zombie walk.fbx";
 	private const string AttackAnimationPath = "res://assets/characters/zombies/zombie attack.fbx";
+	private const string HitReactionAnimationPath =
+		"res://assets/characters/zombies/ZombieBeingShot_mixamo.fbx";
 	private const string DeathAnimationPath = "res://assets/characters/zombies/zombie death.fbx";
 	private const float AnimationBlendTime = 0.2f;
 
@@ -121,6 +124,9 @@ public partial class PrototypeZombie : CharacterBody3D
 	public Vector3 LastHeardPosition => _lastHeardPosition;
 	public GameplayNoiseCategory LastHeardCategory => _lastHeardCategory;
 	public bool IsAlive { get; private set; } = true;
+	public bool IsHitStunned => _hitReactionRemaining > 0.0f;
+	public Vector3 ActiveKnockbackVelocity => _knockbackVelocity;
+	public StringName CurrentAnimationName => _animationPlayer.CurrentAnimation;
 	public StringName VariantIdentifier => VariantProfile?.Identifier ?? new StringName("walker");
 	public float HearingSensitivity { get; private set; } = 1.0f;
 
@@ -366,7 +372,7 @@ public partial class PrototypeZombie : CharacterBody3D
 
 		_knockbackVelocity = knockbackVelocity;
 		_hitReactionRemaining = Mathf.Max(HitReactionDuration, 0.0f);
-		_visual.Scale = new Vector3(1.05f, 0.94f, 1.05f);
+		_animationPlayer.Play(HitReactionAnimationName, 0.06f);
 		return true;
 	}
 
@@ -382,10 +388,8 @@ public partial class PrototypeZombie : CharacterBody3D
 		_knockbackVelocity = _knockbackVelocity.MoveToward(
 			Vector3.Zero,
 			Mathf.Max(KnockbackDamping, 0.0f) * delta);
-		_visual.Scale = _visual.Scale.Lerp(Vector3.One, Mathf.Clamp(delta * 12.0f, 0.0f, 1.0f));
 		if (_hitReactionRemaining <= 0.0f)
 		{
-			_visual.Scale = Vector3.One;
 			PlayStateAnimation();
 		}
 	}
@@ -874,6 +878,11 @@ public partial class PrototypeZombie : CharacterBody3D
 		AddAnimation(library, IdleAnimationName, IdleAnimationPath, shouldLoop: true);
 		AddAnimation(library, WalkAnimationName, WalkAnimationPath, shouldLoop: true);
 		AddAnimation(library, AttackAnimationName, AttackAnimationPath, shouldLoop: false);
+		AddAnimation(
+			library,
+			HitReactionAnimationName,
+			HitReactionAnimationPath,
+			shouldLoop: false);
 		AddAnimation(library, DeathAnimationName, DeathAnimationPath, shouldLoop: false);
 	}
 
@@ -932,7 +941,21 @@ public partial class PrototypeZombie : CharacterBody3D
 		Node sourceRoot = animationScene.Instantiate();
 		AnimationPlayer sourcePlayer = FindDescendant<AnimationPlayer>(sourceRoot)
 			?? throw new InvalidOperationException($"{assetPath} is missing an AnimationPlayer.");
-		Animation animation = (Animation)sourcePlayer.GetAnimation(SourceAnimationName).Duplicate(true);
+		StringName sourceAnimationName = SourceAnimationName;
+		if (!sourcePlayer.HasAnimation(sourceAnimationName))
+		{
+			foreach (StringName availableName in sourcePlayer.GetAnimationList())
+			{
+				if (availableName != "RESET")
+				{
+					sourceAnimationName = availableName;
+					break;
+				}
+			}
+		}
+		Animation animation = (Animation)sourcePlayer
+			.GetAnimation(sourceAnimationName)
+			.Duplicate(true);
 
 		animation.LoopMode = shouldLoop
 			? Animation.LoopModeEnum.Linear
