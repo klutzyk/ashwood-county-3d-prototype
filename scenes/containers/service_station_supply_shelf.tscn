@@ -1,0 +1,22 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://scripts/interactions/SearchableContainer.cs" id="1_searchable"]
+[ext_resource type="Script" path="res://scripts/interactions/Interactable.cs" id="2_interactable"]
+[ext_resource type="Script" path="res://scripts/items/ContainerInventory.cs" id="3_inventory"]
+[ext_resource type="Script" path="res://scripts/items/ItemDefinition.cs" id="4_item"]
+[ext_resource type="Resource" path="res://assets/items/canned_food.tres" id="5_canned"]
+[ext_resource type="Resource" path="res://assets/items/water.tres" id="6_water"]
+[ext_resource type="Resource" path="res://assets/items/loot_tables/service_station_shelf.tres" id="7_loot"]
+
+[node name="SupplyShelf" type="Node3D"]
+script = ExtResource("1_searchable")
+DisplayName = "Service Station Supply Shelf"
+SearchDuration = 1.8
+LootTable = ExtResource("7_loot")
+InitialItems = Array[ExtResource("4_item")]([ExtResource("5_canned"), ExtResource("6_water")])
+
+[node name="Interactable" type="Node3D" parent="."]
+script = ExtResource("2_interactable")
+
+[node name="Inventory" type="Node" parent="."]
+script = ExtResource("3_inventory")

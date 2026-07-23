@@ -13,12 +13,13 @@ The prototype currently uses save version **1**.
   state is changed
 
 Version 1 stores player transform, health, stamina, hunger, thirst, inventory,
-the antibiotics objective state, world time, existing container search/content
-state and the alive/dead state of all placed prototype zombies. Saves created
-before needs were added load with full hunger and thirst; broader backward
-compatibility is intentionally not provided yet. When new authored containers
-or zombies are added to the scene, older valid saves leave those new nodes in
-their default state.
+the antibiotics and service-station objective states, world time, existing
+container search/content state and the alive/dead state of all placed prototype
+zombies. Saves created before needs were added load with full hunger and thirst.
+Saves without the later service-station objective field retain a locked default;
+when antibiotics were already completed, loading normalizes that state to the
+new objective's search step. When new authored containers or zombies are added
+to the scene, older valid saves leave those new nodes in their default state.
 
 Inventory and container item arrays store one entry per stack. Repeated item
 identifiers are valid and preserve intentionally split stacks. Each quantity is

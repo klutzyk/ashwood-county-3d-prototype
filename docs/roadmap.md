@@ -318,7 +318,7 @@ Complete and test one vertical slice before starting the next.
 - [x] Main menu
 - [x] Persistent settings menu
 - [x] Pause menu
-- [ ] Service-station supplies objective
+- [x] Service-station supplies objective
 - [ ] Safe-point storage
 - [ ] Town composition polish
 - [ ] Environmental storytelling

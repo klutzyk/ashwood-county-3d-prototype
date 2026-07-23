@@ -29,6 +29,8 @@ public partial class SaveGameManager : Node
 	[Export] public string SaveFilePath { get; set; } = DefaultSaveFilePath;
 	[Export] public NodePath PlayerPath { get; set; } = new("../Player");
 	[Export] public NodePath ObjectivePath { get; set; } = new("../AntibioticsObjective");
+	[Export] public NodePath SuppliesObjectivePath { get; set; } =
+		new("../ServiceStationSuppliesObjective");
 	[Export] public NodePath WorldTimePath { get; set; } = new("../WorldTime");
 
 	private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = true };
@@ -53,6 +55,7 @@ public partial class SaveGameManager : Node
 	private PlayerNeeds _needs = null!;
 	private PlayerInventory _playerInventory = null!;
 	private AntibioticsObjective _objective = null!;
+	private ServiceStationSuppliesObjective _suppliesObjective = null!;
 	private WorldTime _worldTime = null!;
 
 	public override void _Ready()
@@ -63,6 +66,7 @@ public partial class SaveGameManager : Node
 		_needs = _player.GetNode<PlayerNeeds>("Needs");
 		_playerInventory = _player.GetNode<PlayerInventory>("Inventory");
 		_objective = GetNode<AntibioticsObjective>(ObjectivePath);
+		_suppliesObjective = GetNode<ServiceStationSuppliesObjective>(SuppliesObjectivePath);
 		_worldTime = GetNode<WorldTime>(WorldTimePath);
 		if (GameLaunchContext.ConsumeContinueRequest())
 		{
@@ -124,6 +128,9 @@ public partial class SaveGameManager : Node
 			data.PlayerTransform?.Position is null || data.PlayerTransform.Rotation is null ||
 			data.PlayerInventory is null || data.Containers is null || data.Zombies is null ||
 			!Enum.IsDefined(typeof(AntibioticsObjectiveState), data.ObjectiveState) ||
+			!Enum.IsDefined(
+				typeof(ServiceStationSuppliesObjectiveState),
+				data.ServiceStationObjectiveState) ||
 			!IsFinite(data.PlayerHealth) || data.PlayerHealth < 0.0f || data.PlayerHealth > 100.0f ||
 			!IsFinite(data.PlayerStamina) || data.PlayerStamina < 0.0f || data.PlayerStamina > 100.0f ||
 			!IsFinite(data.PlayerHunger) || data.PlayerHunger < 0.0f || data.PlayerHunger > 100.0f ||
@@ -285,6 +292,7 @@ public partial class SaveGameManager : Node
 			PlayerHunger = _needs.CurrentHunger,
 			PlayerThirst = _needs.CurrentThirst,
 			ObjectiveState = (int)_objective.State,
+			ServiceStationObjectiveState = (int)_suppliesObjective.State,
 			WorldTimeHours = _worldTime.CurrentHour,
 		};
 		data.PlayerInventory = CaptureItems(_playerInventory);
@@ -322,6 +330,9 @@ public partial class SaveGameManager : Node
 			data.Zombies is null ||
 			data.Version != SaveGameDataV1.CurrentVersion ||
 			!Enum.IsDefined(typeof(AntibioticsObjectiveState), data.ObjectiveState) ||
+			!Enum.IsDefined(
+				typeof(ServiceStationSuppliesObjectiveState),
+				data.ServiceStationObjectiveState) ||
 			!IsFinite(data.PlayerHealth) || !IsFinite(data.PlayerStamina) ||
 			!IsFinite(data.PlayerHunger) || !IsFinite(data.PlayerThirst) ||
 			!IsFinite(data.WorldTimeHours) || !IsFinite(data.PlayerTransform.Position) ||
@@ -411,6 +422,8 @@ public partial class SaveGameManager : Node
 		}
 
 		_objective.RestoreState((AntibioticsObjectiveState)data.ObjectiveState);
+		_suppliesObjective.RestoreState(
+			(ServiceStationSuppliesObjectiveState)data.ServiceStationObjectiveState);
 		_worldTime.SetTimeOfDay(data.WorldTimeHours);
 	}
 

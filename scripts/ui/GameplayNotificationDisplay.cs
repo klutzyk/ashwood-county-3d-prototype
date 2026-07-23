@@ -14,6 +14,8 @@ public partial class GameplayNotificationDisplay : Label
 
 	[Export] public NodePath InventoryPath { get; set; } = new("../../Player/Inventory");
 	[Export] public NodePath ObjectivePath { get; set; } = new("../../AntibioticsObjective");
+	[Export] public NodePath SuppliesObjectivePath { get; set; } =
+		new("../../ServiceStationSuppliesObjective");
 	[Export] public NodePath SaveManagerPath { get; set; } = new("../../SaveGameManager");
 	[Export] public float FadeDuration { get; set; } = 0.2f;
 	[Export] public float MessageDuration { get; set; } = 1.8f;
@@ -34,6 +36,7 @@ public partial class GameplayNotificationDisplay : Label
 	private float _remaining;
 	private PlayerInventory _inventory = null!;
 	private AntibioticsObjective _objective = null!;
+	private ServiceStationSuppliesObjective _suppliesObjective = null!;
 	private SaveGameManager _saveManager = null!;
 
 	public int PendingCount => _messages.Count + (string.IsNullOrEmpty(_currentMessage) ? 0 : 1);
@@ -44,9 +47,11 @@ public partial class GameplayNotificationDisplay : Label
 		AddToGroup(GroupName);
 		_inventory = GetNode<PlayerInventory>(InventoryPath);
 		_objective = GetNode<AntibioticsObjective>(ObjectivePath);
+		_suppliesObjective = GetNode<ServiceStationSuppliesObjective>(SuppliesObjectivePath);
 		_saveManager = GetNode<SaveGameManager>(SaveManagerPath);
 		_inventory.ItemUsed += OnItemUsed;
 		_objective.StateChanged += OnObjectiveStateChanged;
+		_suppliesObjective.StateChanged += OnSuppliesObjectiveStateChanged;
 		_saveManager.StatusMessageRequested += QueueNotification;
 		Visible = false;
 		Modulate = new Color(Modulate, 0.0f);
@@ -61,6 +66,10 @@ public partial class GameplayNotificationDisplay : Label
 		if (IsInstanceValid(_objective))
 		{
 			_objective.StateChanged -= OnObjectiveStateChanged;
+		}
+		if (IsInstanceValid(_suppliesObjective))
+		{
+			_suppliesObjective.StateChanged -= OnSuppliesObjectiveStateChanged;
 		}
 		if (IsInstanceValid(_saveManager))
 		{
@@ -192,5 +201,14 @@ public partial class GameplayNotificationDisplay : Label
 		QueueNotification(objectiveState == AntibioticsObjectiveState.Completed
 			? "Objective completed: Antibiotics delivered"
 			: $"Objective updated: {_objective.DisplayText}");
+	}
+
+	private void OnSuppliesObjectiveStateChanged(int state)
+	{
+		ServiceStationSuppliesObjectiveState objectiveState =
+			(ServiceStationSuppliesObjectiveState)state;
+		QueueNotification(objectiveState == ServiceStationSuppliesObjectiveState.Completed
+			? "Objective completed: Emergency supplies delivered"
+			: $"Objective updated: {_suppliesObjective.DisplayText}");
 	}
 }

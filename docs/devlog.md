@@ -1156,3 +1156,32 @@ Validation:
 - Inventory, save/load and settings regressions passed
 - Fixed rendered benchmark measured 160.23 FPS average and 9.64 ms p95
 - C# build completed with no warnings or errors
+
+---
+
+## Service-Station Supplies Objective
+
+Completed:
+
+- Added a structured second objective that unlocks after antibiotics delivery
+- Added a searchable service-station shelf with guaranteed Canned Food and Water
+  plus the existing weighted service-station loot profile
+- Required explicit container-to-player transfers before objective progression
+- Accepted one Canned Food and either one Water or Soda at the safe point
+- Consumed exactly the submitted quantities while preserving all other inventory
+- Extended objective display, prompt and notification feedback for the new flow
+- Persisted the additional state in save version 1 with a safe default and
+  normalization for saves created before the field existed
+
+Outcome:
+
+The vertical slice now has a short sequential objective loop that reuses the
+existing container, inventory, interaction, notification and save foundations.
+
+Validation:
+
+- Service-station objective validation passed activation, guaranteed container
+  contents, explicit transfer, exact submission, persistence and prior-save loading
+- Original objective, notification and two-process save/load regressions passed
+- Fixed rendered benchmark measured 146.22 FPS average and 10.32 ms p95
+- C# build completed with no warnings or errors

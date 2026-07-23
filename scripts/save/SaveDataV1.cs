@@ -2,6 +2,7 @@
 
 using System.Collections.Generic;
 using Godot;
+using AshwoodCounty3DPrototype.Objectives;
 
 namespace AshwoodCounty3DPrototype.Save;
 
@@ -18,6 +19,8 @@ public sealed class SaveGameDataV1
 	public float PlayerThirst { get; set; } = 100.0f;
 	public List<ItemStackSaveData> PlayerInventory { get; set; } = new();
 	public int ObjectiveState { get; set; }
+	public int ServiceStationObjectiveState { get; set; } =
+		(int)ServiceStationSuppliesObjectiveState.Locked;
 	public float WorldTimeHours { get; set; }
 	public List<ContainerSaveData> Containers { get; set; } = new();
 	public List<ZombieSaveData> Zombies { get; set; } = new();
