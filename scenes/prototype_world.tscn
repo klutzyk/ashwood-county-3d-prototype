@@ -35,6 +35,8 @@
 [ext_resource type="Script" path="res://scripts/world/WorldTime.cs" id="33_world_time"]
 [ext_resource type="Script" path="res://scripts/player/PlayerFlashlight.cs" id="34_flashlight"]
 [ext_resource type="Script" path="res://scripts/ui/WorldClockDisplay.cs" id="35_clock"]
+[ext_resource type="Script" path="res://scripts/save/SaveGameManager.cs" id="36_save_manager"]
+[ext_resource type="Script" path="res://scripts/ui/SaveStatusDisplay.cs" id="37_save_status"]
 
 [sub_resource type="BoxMesh" id="GrassMesh"]
 material = ExtResource("8_grass")
@@ -144,6 +146,9 @@ script = ExtResource("30_objective")
 
 [node name="WorldTime" type="Node" parent="."]
 script = ExtResource("33_world_time")
+
+[node name="SaveGameManager" type="Node" parent="."]
+script = ExtResource("36_save_manager")
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="." unique_id=242024835]
 navigation_mesh = ExtResource("16_navigation")
@@ -363,6 +368,21 @@ text = "17:00"
 horizontal_alignment = 1
 vertical_alignment = 1
 script = ExtResource("35_clock")
+
+[node name="SaveStatus" type="Label" parent="PerformanceUI"]
+visible = false
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 56.0
+offset_bottom = 94.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.72, 0.95, 0.76, 1)
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("FpsBackground")
+text = "Game Saved"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("37_save_status")
 
 [node name="ObjectiveDisplay" type="Control" parent="PerformanceUI"]
 layout_mode = 3

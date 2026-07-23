@@ -419,3 +419,29 @@ Validation:
 - Flashlight toggle, camera attachment, outdoor use and pharmacy interior use passed
 - Pharmacy objective regression validation still passed
 - C# build completed with no warnings or errors
+
+---
+
+## Minimal Prototype Save/Load
+
+Completed:
+
+- Added explicit JSON save-data classes with save version 1
+- Added one local `user://` slot with F5 save and F9 load controls
+- Saved player transform, health, stamina, inventory, objective state and world time
+- Saved search state and remaining inventory for every existing container
+- Saved independent alive/dead state for all five placed prototype zombies
+- Added brief save/load status feedback and safe missing/invalid-file handling
+
+Outcome:
+
+The current playable loop persists between sessions without serializing live
+nodes or attempting to capture arbitrary future scene state.
+
+Validation:
+
+- Same-session save, state mutation and load-back validation passed
+- A second Godot process loaded the persisted validation save successfully
+- Missing and malformed saves were rejected without crashes or partial mutation
+- Pharmacy objective and day/night flashlight regression validations passed
+- C# build completed with no warnings or errors

@@ -70,4 +70,16 @@ public partial class PlayerHealth : Node
 		EmitSignal(SignalName.HealthChanged, CurrentHealth, MaximumHealth);
 		return true;
 	}
+
+	public void RestoreState(float currentHealth)
+	{
+		CurrentHealth = Mathf.Clamp(currentHealth, 0.0f, MaximumHealth);
+		IsDead = CurrentHealth <= 0.0f;
+		_invulnerabilityRemaining = 0.0f;
+		EmitSignal(SignalName.HealthChanged, CurrentHealth, MaximumHealth);
+		if (IsDead)
+		{
+			EmitSignal(SignalName.Died);
+		}
+	}
 }

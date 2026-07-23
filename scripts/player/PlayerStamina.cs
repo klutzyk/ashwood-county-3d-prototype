@@ -51,6 +51,14 @@ public partial class PlayerStamina : Node
 		}
 	}
 
+	public void RestoreState(float currentStamina, bool canSprint)
+	{
+		CurrentStamina = Mathf.Clamp(currentStamina, 0.0f, MaximumStamina);
+		CanSprint = canSprint && CurrentStamina > 0.0f;
+		_timeSinceSprinting = 0.0f;
+		EmitStaminaChanged();
+	}
+
 	private void Regenerate(float delta)
 	{
 		_timeSinceSprinting += delta;

@@ -65,6 +65,11 @@ public partial class AntibioticsObjective : Node
 		return true;
 	}
 
+	public void RestoreState(AntibioticsObjectiveState state)
+	{
+		SetState(state);
+	}
+
 	private void OnInventoryChanged()
 	{
 		if (State == AntibioticsObjectiveState.SearchPharmacy &&

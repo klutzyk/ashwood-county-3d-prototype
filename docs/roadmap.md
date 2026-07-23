@@ -239,9 +239,20 @@ Complete and test one vertical slice before starting the next.
 
 ---
 
+# Prototype Save/Load
+
+- [x] Versioned save-data classes without live-node serialization
+- [x] One local F5/F9 save slot with brief status feedback
+- [x] Restore player transform, health, stamina and inventory
+- [x] Restore objective state and world time
+- [x] Restore existing container search state and remaining items
+- [x] Restore placed zombie alive/dead state
+- [x] Handle missing and invalid save files safely
+
+---
+
 # Later
 
-- Save and load
 - Community and safehouse
 - Advanced survivor relationships
 - Character needs and schedules

@@ -68,6 +68,11 @@ public partial class PlayerStatusDisplay : CanvasLayer
 	private void UpdateHealthLabel(float currentHealth, float maximumHealth)
 	{
 		_healthLabel.Text = $"Health: {Mathf.CeilToInt(currentHealth)} / {Mathf.CeilToInt(maximumHealth)}";
+		if (_deathOverlay is not null && currentHealth > 0.0f && _deathOverlay.Visible)
+		{
+			_deathOverlay.Visible = false;
+			Input.MouseMode = Input.MouseModeEnum.Captured;
+		}
 	}
 
 	private void UpdateStaminaBar(float currentStamina, float maximumStamina)

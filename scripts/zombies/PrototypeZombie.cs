@@ -78,11 +78,12 @@ public partial class PrototypeZombie : CharacterBody3D
 	private GameplayNoiseCategory _lastHeardCategory;
 	private float _investigationRemaining;
 
-	private static readonly StringName ZombieGroupName = new("prototype_zombies");
+	public static readonly StringName ZombieGroupName = new("prototype_zombies");
 
 	public string CurrentStateName => _state.ToString();
 	public Vector3 LastHeardPosition => _lastHeardPosition;
 	public GameplayNoiseCategory LastHeardCategory => _lastHeardCategory;
+	public bool IsAlive { get; private set; } = true;
 
 	public override void _Ready()
 	{
@@ -111,6 +112,11 @@ public partial class PrototypeZombie : CharacterBody3D
 
 	public override void _PhysicsProcess(double delta)
 	{
+		if (!IsAlive)
+		{
+			return;
+		}
+
 		float deltaTime = (float)delta;
 		float distanceToPlayer = HorizontalDistanceTo(_player.GlobalPosition);
 		bool canSeePlayer = CanSeePlayer(distanceToPlayer);
@@ -221,6 +227,32 @@ public partial class PrototypeZombie : CharacterBody3D
 		if (!enabled)
 		{
 			_hasHeardNoise = false;
+		}
+	}
+
+	public void SetAlive(bool isAlive)
+	{
+		IsAlive = isAlive;
+		Visible = isAlive;
+		SetGameplayNoiseResponseEnabled(isAlive);
+		SetPhysicsProcess(isAlive);
+		if (!isAlive)
+		{
+			Velocity = Vector3.Zero;
+		}
+
+		SetCollisionDisabled(this, !isAlive);
+	}
+
+	private static void SetCollisionDisabled(Node node, bool disabled)
+	{
+		foreach (Node child in node.GetChildren())
+		{
+			if (child is CollisionShape3D collisionShape)
+			{
+				collisionShape.SetDeferred(CollisionShape3D.PropertyName.Disabled, disabled);
+			}
+			SetCollisionDisabled(child, disabled);
 		}
 	}
 

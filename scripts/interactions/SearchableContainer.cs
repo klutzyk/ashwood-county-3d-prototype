@@ -8,6 +8,8 @@ namespace AshwoodCounty3DPrototype.Interactions;
 
 public partial class SearchableContainer : Node3D
 {
+	public static readonly StringName GroupName = new("searchable_containers");
+
 	[Export] public string DisplayName { get; set; } = "Container";
 	[Export] public float SearchDuration { get; set; } = 2.0f;
 	[Export] public LootTable? LootTable { get; set; }
@@ -21,6 +23,7 @@ public partial class SearchableContainer : Node3D
 
 	public override void _Ready()
 	{
+		AddToGroup(GroupName);
 		_interactable = GetNode<Interactable>("Interactable");
 		Inventory = GetNode<ContainerInventory>("Inventory");
 		_interactable.Interacted += OnInteracted;
@@ -29,6 +32,12 @@ public partial class SearchableContainer : Node3D
 		{
 			Inventory.AddItem(item);
 		}
+		ConfigureInteraction();
+	}
+
+	public void RestoreSearchedState(bool isSearched)
+	{
+		IsSearched = isSearched;
 		ConfigureInteraction();
 	}
 

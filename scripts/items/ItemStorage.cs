@@ -73,6 +73,18 @@ public abstract partial class ItemStorage : Node
 		return stackIndex >= 0 && RemoveItemAt(stackIndex, quantity);
 	}
 
+	public void ClearItems()
+	{
+		if (_items.Count == 0)
+		{
+			return;
+		}
+
+		_items.Clear();
+		_quantities.Clear();
+		NotifyChanged();
+	}
+
 	public bool TransferStackTo(int stackIndex, ItemStorage target)
 	{
 		if (!IsValidStack(stackIndex) || target is null || ReferenceEquals(this, target))
