@@ -17,14 +17,14 @@
 [ext_resource type="PackedScene" path="res://assets/environment/props/barrel_crate.tscn" id="15_containers"]
 [ext_resource type="NavigationMesh" path="res://assets/navigation/prototype_world_navmesh.tres" id="16_navigation"]
 [ext_resource type="PackedScene" path="res://scenes/zombies/prototype_zombie.tscn" id="17_zombie"]
-[ext_resource type="Script" path="res://scripts/player/PlayerHealth.cs" id="18_health"]
-[ext_resource type="Script" path="res://scripts/ui/PlayerStatusDisplay.cs" id="19_player_status"]
-[ext_resource type="Script" path="res://scripts/player/PlayerStamina.cs" id="20_stamina"]
-[ext_resource type="Script" path="res://scripts/interactions/PlayerInteraction.cs" id="21_player_interaction"]
-[ext_resource type="Script" path="res://scripts/ui/InteractionPromptDisplay.cs" id="22_interaction_prompt"]
-[ext_resource type="Script" path="res://scripts/items/PlayerInventory.cs" id="23_inventory"]
-[ext_resource type="Script" path="res://scripts/ui/InventoryDisplay.cs" id="24_inventory_display"]
-[ext_resource type="Script" path="res://scripts/ui/ContainerInventoryDisplay.cs" id="25_container_ui"]
+[ext_resource type="Script" uid="uid://c63cry5p42kx3" path="res://scripts/player/PlayerHealth.cs" id="18_health"]
+[ext_resource type="Script" uid="uid://dxriwhwypmphj" path="res://scripts/ui/PlayerStatusDisplay.cs" id="19_player_status"]
+[ext_resource type="Script" uid="uid://bvc2wwex63f0" path="res://scripts/player/PlayerStamina.cs" id="20_stamina"]
+[ext_resource type="Script" uid="uid://bbhjeph6hbisy" path="res://scripts/interactions/PlayerInteraction.cs" id="21_player_interaction"]
+[ext_resource type="Script" uid="uid://ddcruqqoi8jd5" path="res://scripts/ui/InteractionPromptDisplay.cs" id="22_interaction_prompt"]
+[ext_resource type="Script" uid="uid://bxuexda7xdti8" path="res://scripts/items/PlayerInventory.cs" id="23_inventory"]
+[ext_resource type="Script" uid="uid://dub86l0nfntrm" path="res://scripts/ui/InventoryDisplay.cs" id="24_inventory_display"]
+[ext_resource type="Script" uid="uid://ckua384mtsn6w" path="res://scripts/ui/ContainerInventoryDisplay.cs" id="25_container_ui"]
 [ext_resource type="PackedScene" path="res://assets/environment/props/prototype_cupboard.tscn" id="26_cupboard"]
 [ext_resource type="PackedScene" path="res://assets/environment/props/roadside_dressing.tscn" id="27_roadside"]
 [ext_resource type="PackedScene" path="res://assets/environment/buildings/ServiceStation/service_station.tscn" id="28_station"]
@@ -116,6 +116,10 @@ corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
 [sub_resource type="StyleBoxFlat" id="ContainerPanelBackground"]
+content_margin_left = 20.0
+content_margin_top = 16.0
+content_margin_right = 20.0
+content_margin_bottom = 16.0
 bg_color = Color(0.025, 0.03, 0.03, 0.97)
 border_width_left = 1
 border_width_top = 1
@@ -126,14 +130,10 @@ corner_radius_top_left = 6
 corner_radius_top_right = 6
 corner_radius_bottom_right = 6
 corner_radius_bottom_left = 6
-content_margin_left = 20.0
-content_margin_top = 16.0
-content_margin_right = 20.0
-content_margin_bottom = 16.0
 
 [node name="PrototypeWorld" type="Node3D" unique_id=390521270]
 
-[node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
+[node name="NavigationRegion3D" type="NavigationRegion3D" parent="." unique_id=242024835]
 navigation_mesh = ExtResource("16_navigation")
 
 [node name="GrassTerrain" type="StaticBody3D" parent="." unique_id=265849430]
@@ -165,38 +165,38 @@ mesh = SubResource("ShoulderMesh")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.25, 0.01, -1)
 mesh = SubResource("ShoulderMesh")
 
-[node name="RoadMarkings" type="Node3D" parent="."]
+[node name="RoadMarkings" type="Node3D" parent="." unique_id=1839874757]
 
-[node name="Dash1" type="MeshInstance3D" parent="RoadMarkings"]
-position = Vector3(0, 0.09, -21)
+[node name="Dash1" type="MeshInstance3D" parent="RoadMarkings" unique_id=606612256]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.09, -21)
 mesh = SubResource("RoadLineMesh")
 
-[node name="Dash2" type="MeshInstance3D" parent="RoadMarkings"]
-position = Vector3(0, 0.09, -15)
+[node name="Dash2" type="MeshInstance3D" parent="RoadMarkings" unique_id=1333253835]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.09, -15)
 mesh = SubResource("RoadLineMesh")
 
-[node name="Dash3" type="MeshInstance3D" parent="RoadMarkings"]
-position = Vector3(0, 0.09, -9)
+[node name="Dash3" type="MeshInstance3D" parent="RoadMarkings" unique_id=1058423927]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.09, -9)
 mesh = SubResource("RoadLineMesh")
 
-[node name="Dash4" type="MeshInstance3D" parent="RoadMarkings"]
-position = Vector3(0, 0.09, -3)
+[node name="Dash4" type="MeshInstance3D" parent="RoadMarkings" unique_id=688322156]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.09, -3)
 mesh = SubResource("RoadLineMesh")
 
-[node name="Dash5" type="MeshInstance3D" parent="RoadMarkings"]
-position = Vector3(0, 0.09, 3)
+[node name="Dash5" type="MeshInstance3D" parent="RoadMarkings" unique_id=78783954]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.09, 3)
 mesh = SubResource("RoadLineMesh")
 
-[node name="Dash6" type="MeshInstance3D" parent="RoadMarkings"]
-position = Vector3(0, 0.09, 9)
+[node name="Dash6" type="MeshInstance3D" parent="RoadMarkings" unique_id=1736057488]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.09, 9)
 mesh = SubResource("RoadLineMesh")
 
-[node name="Dash7" type="MeshInstance3D" parent="RoadMarkings"]
-position = Vector3(0, 0.09, 15)
+[node name="Dash7" type="MeshInstance3D" parent="RoadMarkings" unique_id=1827885003]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.09, 15)
 mesh = SubResource("RoadLineMesh")
 
-[node name="Dash8" type="MeshInstance3D" parent="RoadMarkings"]
-position = Vector3(0, 0.09, 21)
+[node name="Dash8" type="MeshInstance3D" parent="RoadMarkings" unique_id=432719208]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.09, 21)
 mesh = SubResource("RoadLineMesh")
 
 [node name="Trees" type="Node3D" parent="." unique_id=1807275455]
@@ -210,18 +210,18 @@ transform = Transform3D(0.9135454, 0, -0.40673664, 0, 1, 0, 0.40673664, 0, 0.913
 [node name="Buildings" type="Node3D" parent="." unique_id=113263586]
 
 [node name="House" parent="Buildings" unique_id=370173774 instance=ExtResource("9_house")]
-position = Vector3(10, 0, -8)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, -8)
 
-[node name="ServiceStation" parent="Buildings" instance=ExtResource("28_station")]
-position = Vector3(-14.5, 0, -11)
+[node name="ServiceStation" parent="Buildings" unique_id=581956221 instance=ExtResource("28_station")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.5, 0, -11)
 
-[node name="Pharmacy" parent="Buildings" instance=ExtResource("29_pharmacy")]
-position = Vector3(-15, 0, 9.5)
+[node name="Pharmacy" parent="Buildings" unique_id=1814510951 instance=ExtResource("29_pharmacy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15, 0, 9.5)
 
 [node name="Vehicles" type="Node3D" parent="." unique_id=676071636]
 
 [node name="RustedAlfaRomeo" parent="Vehicles" unique_id=1832410622 instance=ExtResource("10_car")]
-transform = Transform3D(0.49999997, 0, 0.86602545, 0, 1, 0, -0.86602545, 0, 0.49999997, 3.9, 0.08, -1)
+transform = Transform3D(0.49999997, 0, 0.86602545, 0, 1, 0, -0.86602545, 0, 0.49999997, 3.031279, 0.08, 1.7984738)
 
 [node name="Infrastructure" type="Node3D" parent="." unique_id=1226906342]
 
@@ -245,11 +245,11 @@ transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -5.4
 [node name="BarrelCrate" parent="Props" unique_id=1518656841 instance=ExtResource("15_containers")]
 transform = Transform3D(0.90630776, 0, 0.42261827, 0, 1, 0, -0.42261827, 0, 0.90630776, 7.4, 0, -12.4)
 
-[node name="PrototypeCupboard" parent="Props" instance=ExtResource("26_cupboard")]
+[node name="PrototypeCupboard" parent="Props" unique_id=1670339128 instance=ExtResource("26_cupboard")]
 transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 13.2, 0, -6.2)
 
-[node name="HouseRoadsideDressing" parent="Props" instance=ExtResource("27_roadside")]
-position = Vector3(10, 0, -8)
+[node name="HouseRoadsideDressing" parent="Props" unique_id=442290748 instance=ExtResource("27_roadside")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, -8)
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1750895960]
 transform = Transform3D(0.88294756, 0.36994863, -0.2890356, 0, 0.6156615, 0.7880107, 0.46947157, -0.6957722, 0.5435968, 0, 0, 0)
@@ -269,16 +269,16 @@ script = ExtResource("1_player")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Player" unique_id=1560467523]
 shape = SubResource("PlayerShape")
 
-[node name="Health" type="Node" parent="Player"]
+[node name="Health" type="Node" parent="Player" unique_id=364837584]
 script = ExtResource("18_health")
 
-[node name="Stamina" type="Node" parent="Player"]
+[node name="Stamina" type="Node" parent="Player" unique_id=1466562127]
 script = ExtResource("20_stamina")
 
-[node name="Interaction" type="Node" parent="Player"]
+[node name="Interaction" type="Node" parent="Player" unique_id=1403928352]
 script = ExtResource("21_player_interaction")
 
-[node name="Inventory" type="Node" parent="Player"]
+[node name="Inventory" type="Node" parent="Player" unique_id=1565084567]
 script = ExtResource("23_inventory")
 
 [node name="Visual" type="Node3D" parent="Player" unique_id=517271585]
@@ -301,31 +301,26 @@ fov = 70.0
 [node name="AnimationTree" type="AnimationTree" parent="Player" unique_id=1211255373]
 script = ExtResource("4_animation")
 
-[node name="Zombies" type="Node3D" parent="."]
+[node name="Zombies" type="Node3D" parent="." unique_id=102466295]
 
-[node name="PrototypeZombie1" parent="Zombies" instance=ExtResource("17_zombie")]
-position = Vector3(11, 0.9, -14)
-rotation = Vector3(0, 2.7, 0)
+[node name="PrototypeZombie1" parent="Zombies" unique_id=901850475 instance=ExtResource("17_zombie")]
+transform = Transform3D(-0.90407217, 0, 0.42737985, 0, 1, 0, -0.42737985, 0, -0.90407217, 11, 0.9, -14)
 WanderRadius = 4.0
 
-[node name="PrototypeZombie2" parent="Zombies" instance=ExtResource("17_zombie")]
-position = Vector3(-2, 0.9, -19)
-rotation = Vector3(0, 0.55, 0)
+[node name="PrototypeZombie2" parent="Zombies" unique_id=1794350066 instance=ExtResource("17_zombie")]
+transform = Transform3D(0.8525245, 0, 0.52268726, 0, 1, 0, -0.52268726, 0, 0.8525245, -2, 0.9, -19)
 WanderRadius = 4.0
 
-[node name="PrototypeZombie3" parent="Zombies" instance=ExtResource("17_zombie")]
-position = Vector3(-17, 0.9, 0)
-rotation = Vector3(0, -1.2, 0)
+[node name="PrototypeZombie3" parent="Zombies" unique_id=1000755475 instance=ExtResource("17_zombie")]
+transform = Transform3D(0.3623577, 0, -0.9320391, 0, 1, 0, 0.9320391, 0, 0.3623577, -17, 0.9, 0)
 WanderRadius = 4.0
 
-[node name="PrototypeZombie4" parent="Zombies" instance=ExtResource("17_zombie")]
-position = Vector3(10, 0.9, 19)
-rotation = Vector3(0, 2.1, 0)
+[node name="PrototypeZombie4" parent="Zombies" unique_id=477813490 instance=ExtResource("17_zombie")]
+transform = Transform3D(-0.50484604, 0, 0.8632094, 0, 1, 0, -0.8632094, 0, -0.50484604, 10, 0.9, 19)
 WanderRadius = 4.0
 
-[node name="PrototypeZombie5" parent="Zombies" instance=ExtResource("17_zombie")]
-position = Vector3(-8, 0.9, 20)
-rotation = Vector3(0, -2.45, 0)
+[node name="PrototypeZombie5" parent="Zombies" unique_id=371058572 instance=ExtResource("17_zombie")]
+transform = Transform3D(-0.7702313, 0, -0.6377647, 0, 1, 0, 0.6377647, 0, -0.7702313, -8, 0.9, 20)
 WanderRadius = 3.5
 
 [node name="PerformanceUI" type="CanvasLayer" parent="." unique_id=1832903103]
@@ -344,7 +339,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 script = ExtResource("2_fps")
 
-[node name="HealthLabel" type="Label" parent="PerformanceUI"]
+[node name="HealthLabel" type="Label" parent="PerformanceUI" unique_id=348264223]
 offset_left = 12.0
 offset_top = 52.0
 offset_right = 196.0
@@ -356,7 +351,7 @@ text = "Health: 100 / 100"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="StaminaLabel" type="Label" parent="PerformanceUI"]
+[node name="StaminaLabel" type="Label" parent="PerformanceUI" unique_id=38428074]
 offset_left = 12.0
 offset_top = 92.0
 offset_right = 82.0
@@ -366,7 +361,7 @@ theme_override_font_sizes/font_size = 14
 text = "Stamina"
 vertical_alignment = 1
 
-[node name="StaminaBar" type="ProgressBar" parent="PerformanceUI"]
+[node name="StaminaBar" type="ProgressBar" parent="PerformanceUI" unique_id=693057295]
 offset_left = 84.0
 offset_top = 93.0
 offset_right = 196.0
@@ -377,7 +372,7 @@ theme_override_styles/fill = SubResource("StaminaFill")
 value = 100.0
 show_percentage = false
 
-[node name="InteractionPrompt" type="Label" parent="PerformanceUI"]
+[node name="InteractionPrompt" type="Label" parent="PerformanceUI" unique_id=450557816]
 visible = false
 anchors_preset = 7
 anchor_left = 0.5
@@ -398,7 +393,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 script = ExtResource("22_interaction_prompt")
 
-[node name="InteractionProgress" type="ProgressBar" parent="PerformanceUI"]
+[node name="InteractionProgress" type="ProgressBar" parent="PerformanceUI" unique_id=140765741]
 visible = false
 anchors_preset = 7
 anchor_left = 0.5
@@ -417,7 +412,7 @@ max_value = 1.0
 step = 0.001
 show_percentage = false
 
-[node name="InventorySlots" type="HBoxContainer" parent="PerformanceUI"]
+[node name="InventorySlots" type="HBoxContainer" parent="PerformanceUI" unique_id=1855206085]
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
@@ -432,7 +427,51 @@ grow_vertical = 0
 theme_override_constants/separation = 6
 script = ExtResource("24_inventory_display")
 
-[node name="ItemFeedback" type="Label" parent="PerformanceUI"]
+[node name="Slot1" type="Label" parent="PerformanceUI/InventorySlots" unique_id=1406399826]
+custom_minimum_size = Vector2(75, 54)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.92, 0.86, 1)
+theme_override_font_sizes/font_size = 13
+theme_override_styles/normal = SubResource("InventorySlotBackground")
+text = "1
+Empty"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Slot2" type="Label" parent="PerformanceUI/InventorySlots" unique_id=606493562]
+custom_minimum_size = Vector2(75, 54)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.92, 0.86, 1)
+theme_override_font_sizes/font_size = 13
+theme_override_styles/normal = SubResource("InventorySlotBackground")
+text = "2
+Empty"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Slot3" type="Label" parent="PerformanceUI/InventorySlots" unique_id=1730446257]
+custom_minimum_size = Vector2(75, 54)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.92, 0.86, 1)
+theme_override_font_sizes/font_size = 13
+theme_override_styles/normal = SubResource("InventorySlotBackground")
+text = "3
+Empty"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Slot4" type="Label" parent="PerformanceUI/InventorySlots" unique_id=501415315]
+custom_minimum_size = Vector2(75, 54)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.92, 0.86, 1)
+theme_override_font_sizes/font_size = 13
+theme_override_styles/normal = SubResource("InventorySlotBackground")
+text = "4
+Empty"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ItemFeedback" type="Label" parent="PerformanceUI" unique_id=58061946]
 visible = false
 anchors_preset = 10
 anchor_right = 1.0
@@ -445,47 +484,7 @@ theme_override_styles/normal = SubResource("FpsBackground")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Slot1" type="Label" parent="PerformanceUI/InventorySlots"]
-custom_minimum_size = Vector2(75, 54)
-layout_mode = 2
-theme_override_colors/font_color = Color(0.9, 0.92, 0.86, 1)
-theme_override_font_sizes/font_size = 13
-theme_override_styles/normal = SubResource("InventorySlotBackground")
-text = "1\nEmpty"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Slot2" type="Label" parent="PerformanceUI/InventorySlots"]
-custom_minimum_size = Vector2(75, 54)
-layout_mode = 2
-theme_override_colors/font_color = Color(0.9, 0.92, 0.86, 1)
-theme_override_font_sizes/font_size = 13
-theme_override_styles/normal = SubResource("InventorySlotBackground")
-text = "2\nEmpty"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Slot3" type="Label" parent="PerformanceUI/InventorySlots"]
-custom_minimum_size = Vector2(75, 54)
-layout_mode = 2
-theme_override_colors/font_color = Color(0.9, 0.92, 0.86, 1)
-theme_override_font_sizes/font_size = 13
-theme_override_styles/normal = SubResource("InventorySlotBackground")
-text = "3\nEmpty"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Slot4" type="Label" parent="PerformanceUI/InventorySlots"]
-custom_minimum_size = Vector2(75, 54)
-layout_mode = 2
-theme_override_colors/font_color = Color(0.9, 0.92, 0.86, 1)
-theme_override_font_sizes/font_size = 13
-theme_override_styles/normal = SubResource("InventorySlotBackground")
-text = "4\nEmpty"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="ContainerInventoryWindow" type="Control" parent="PerformanceUI"]
+[node name="ContainerInventoryWindow" type="Control" parent="PerformanceUI" unique_id=1358894882]
 visible = false
 layout_mode = 3
 anchors_preset = 15
@@ -496,7 +495,7 @@ grow_vertical = 2
 mouse_filter = 1
 script = ExtResource("25_container_ui")
 
-[node name="Dim" type="ColorRect" parent="PerformanceUI/ContainerInventoryWindow"]
+[node name="Dim" type="ColorRect" parent="PerformanceUI/ContainerInventoryWindow" unique_id=814200506]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -506,7 +505,7 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0.005, 0.007, 0.007, 0.72)
 
-[node name="Panel" type="PanelContainer" parent="PerformanceUI/ContainerInventoryWindow"]
+[node name="Panel" type="PanelContainer" parent="PerformanceUI/ContainerInventoryWindow" unique_id=1448089322]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -521,92 +520,90 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("ContainerPanelBackground")
 
-[node name="Layout" type="VBoxContainer" parent="PerformanceUI/ContainerInventoryWindow/Panel"]
+[node name="Layout" type="VBoxContainer" parent="PerformanceUI/ContainerInventoryWindow/Panel" unique_id=1961615379]
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="Title" type="Label" parent="PerformanceUI/ContainerInventoryWindow/Panel/Layout"]
+[node name="Title" type="Label" parent="PerformanceUI/ContainerInventoryWindow/Panel/Layout" unique_id=1658894589]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.94, 0.93, 0.84, 1)
 theme_override_font_sizes/font_size = 24
 text = "Container"
 horizontal_alignment = 1
 
-[node name="Columns" type="HBoxContainer" parent="PerformanceUI/ContainerInventoryWindow/Panel/Layout"]
+[node name="Columns" type="HBoxContainer" parent="PerformanceUI/ContainerInventoryWindow/Panel/Layout" unique_id=429051985]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/separation = 14
 
-[node name="ContainerColumn" type="VBoxContainer" parent="PerformanceUI/ContainerInventoryWindow/Panel/Layout/Columns"]
+[node name="ContainerColumn" type="VBoxContainer" parent="PerformanceUI/ContainerInventoryWindow/Panel/Layout/Columns" unique_id=799702630]
 custom_minimum_size = Vector2(275, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="ContainerLabel" type="Label" parent="PerformanceUI/ContainerInventoryWindow/Panel/Layout/Columns/ContainerColumn"]
+[node name="ContainerLabel" type="Label" parent="PerformanceUI/ContainerInventoryWindow/Panel/Layout/Columns/ContainerColumn" unique_id=1233792890]
 layout_mode = 2
 text = "Container Items"
 horizontal_alignment = 1
 
-[node name="ContainerItems" type="ItemList" parent="PerformanceUI/ContainerInventoryWindow/Panel/Layout/Columns/ContainerColumn"]
+[node name="ContainerItems" type="ItemList" parent="PerformanceUI/ContainerInventoryWindow/Panel/Layout/Columns/ContainerColumn" unique_id=1633911158]
 custom_minimum_size = Vector2(275, 285)
 layout_mode = 2
 size_flags_vertical = 3
-select_mode = 0
 
-[node name="Actions" type="VBoxContainer" parent="PerformanceUI/ContainerInventoryWindow/Panel/Layout/Columns"]
+[node name="Actions" type="VBoxContainer" parent="PerformanceUI/ContainerInventoryWindow/Panel/Layout/Columns" unique_id=251482782]
 custom_minimum_size = Vector2(115, 0)
 layout_mode = 2
-alignment = 1
 theme_override_constants/separation = 10
+alignment = 1
 
-[node name="Take" type="Button" parent="PerformanceUI/ContainerInventoryWindow/Panel/Layout/Columns/Actions"]
+[node name="Take" type="Button" parent="PerformanceUI/ContainerInventoryWindow/Panel/Layout/Columns/Actions" unique_id=715435518]
 layout_mode = 2
 disabled = true
 text = "Take >"
 
-[node name="Store" type="Button" parent="PerformanceUI/ContainerInventoryWindow/Panel/Layout/Columns/Actions"]
+[node name="Store" type="Button" parent="PerformanceUI/ContainerInventoryWindow/Panel/Layout/Columns/Actions" unique_id=674674026]
 layout_mode = 2
 disabled = true
 text = "< Store"
 
-[node name="Use" type="Button" parent="PerformanceUI/ContainerInventoryWindow/Panel/Layout/Columns/Actions"]
+[node name="Use" type="Button" parent="PerformanceUI/ContainerInventoryWindow/Panel/Layout/Columns/Actions" unique_id=1664673194]
 layout_mode = 2
 disabled = true
 text = "Use"
 
-[node name="PlayerColumn" type="VBoxContainer" parent="PerformanceUI/ContainerInventoryWindow/Panel/Layout/Columns"]
+[node name="PlayerColumn" type="VBoxContainer" parent="PerformanceUI/ContainerInventoryWindow/Panel/Layout/Columns" unique_id=1801068065]
 custom_minimum_size = Vector2(275, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="PlayerLabel" type="Label" parent="PerformanceUI/ContainerInventoryWindow/Panel/Layout/Columns/PlayerColumn"]
+[node name="PlayerLabel" type="Label" parent="PerformanceUI/ContainerInventoryWindow/Panel/Layout/Columns/PlayerColumn" unique_id=828420317]
 layout_mode = 2
 text = "Player Inventory"
 horizontal_alignment = 1
 
-[node name="PlayerItems" type="ItemList" parent="PerformanceUI/ContainerInventoryWindow/Panel/Layout/Columns/PlayerColumn"]
+[node name="PlayerItems" type="ItemList" parent="PerformanceUI/ContainerInventoryWindow/Panel/Layout/Columns/PlayerColumn" unique_id=527236606]
 custom_minimum_size = Vector2(275, 285)
 layout_mode = 2
 size_flags_vertical = 3
-select_mode = 0
 
-[node name="Status" type="Label" parent="PerformanceUI/ContainerInventoryWindow/Panel/Layout"]
+[node name="Status" type="Label" parent="PerformanceUI/ContainerInventoryWindow/Panel/Layout" unique_id=1852325592]
 custom_minimum_size = Vector2(0, 28)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.92, 0.83, 0.55, 1)
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="CloseHint" type="Label" parent="PerformanceUI/ContainerInventoryWindow/Panel/Layout"]
+[node name="CloseHint" type="Label" parent="PerformanceUI/ContainerInventoryWindow/Panel/Layout" unique_id=156819399]
 layout_mode = 2
 text = "Escape closes the container"
 horizontal_alignment = 1
 
-[node name="Close" type="Button" parent="PerformanceUI/ContainerInventoryWindow/Panel/Layout"]
+[node name="Close" type="Button" parent="PerformanceUI/ContainerInventoryWindow/Panel/Layout" unique_id=328231842]
 layout_mode = 2
 text = "Close"
 
-[node name="DamageFlash" type="ColorRect" parent="PerformanceUI"]
+[node name="DamageFlash" type="ColorRect" parent="PerformanceUI" unique_id=1215380182]
 modulate = Color(1, 1, 1, 0)
 anchors_preset = 15
 anchor_right = 1.0
@@ -616,7 +613,7 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0.75, 0.02, 0.02, 1)
 
-[node name="DeathOverlay" type="ColorRect" parent="PerformanceUI"]
+[node name="DeathOverlay" type="ColorRect" parent="PerformanceUI" unique_id=2074271147]
 visible = false
 anchors_preset = 15
 anchor_right = 1.0
@@ -626,7 +623,7 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0.015, 0.01, 0.01, 0.72)
 
-[node name="DeathText" type="VBoxContainer" parent="PerformanceUI/DeathOverlay"]
+[node name="DeathText" type="VBoxContainer" parent="PerformanceUI/DeathOverlay" unique_id=172828927]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -641,14 +638,14 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 8
 
-[node name="Title" type="Label" parent="PerformanceUI/DeathOverlay/DeathText"]
+[node name="Title" type="Label" parent="PerformanceUI/DeathOverlay/DeathText" unique_id=2019858440]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.86, 0.12, 0.1, 1)
 theme_override_font_sizes/font_size = 34
 text = "You Died"
 horizontal_alignment = 1
 
-[node name="Restart" type="Label" parent="PerformanceUI/DeathOverlay/DeathText"]
+[node name="Restart" type="Label" parent="PerformanceUI/DeathOverlay/DeathText" unique_id=581032631]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.92, 0.92, 0.9, 1)
 theme_override_font_sizes/font_size = 18

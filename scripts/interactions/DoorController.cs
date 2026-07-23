@@ -1,6 +1,7 @@
 #nullable enable
 
 using Godot;
+using AshwoodCounty3DPrototype.Gameplay;
 
 namespace AshwoodCounty3DPrototype.Interactions;
 
@@ -14,6 +15,7 @@ public partial class DoorController : Node3D
 	[Export] public float OpenAngleDegrees { get; set; } = -95.0f;
 	[Export] public float AnimationDuration { get; set; } = 0.45f;
 	[Export] public bool StartsOpen { get; set; }
+	[Export] public float NoiseRadius { get; set; } = 10.0f;
 
 	public bool IsOpen { get; private set; }
 
@@ -36,6 +38,7 @@ public partial class DoorController : Node3D
 	public void ToggleDoor()
 	{
 		IsOpen = !IsOpen;
+		GameplayNoise.Emit(GlobalPosition, NoiseRadius, GameplayNoiseCategory.Door);
 		_activeTween?.Kill();
 		_activeTween = CreateTween()
 			.SetTrans(Tween.TransitionType.Sine)

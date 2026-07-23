@@ -1,4 +1,5 @@
 using Godot;
+using AshwoodCounty3DPrototype.Gameplay;
 using AshwoodCounty3DPrototype.Interactions;
 
 namespace AshwoodCounty3DPrototype.Player;
@@ -10,6 +11,9 @@ public partial class ThirdPersonPlayer : CharacterBody3D
 	[Export] public float Acceleration { get; set; } = 18.0f;
 	[Export] public float Gravity { get; set; } = 24.0f;
 	[Export] public float MouseSensitivity { get; set; } = 0.0025f;
+	[Export] public float SprintNoiseRadius { get; set; } = 9.0f;
+	[Export] public float SprintNoiseInterval { get; set; } = 0.6f;
+	[Export] public float MeleeNoiseRadius { get; set; } = 12.0f;
 
 	private const float CameraHeight = 0.75f;
 	private const float MinimumPitch = -1.05f;
@@ -23,6 +27,8 @@ public partial class ThirdPersonPlayer : CharacterBody3D
 	private PlayerInteraction _interaction = null!;
 	private float _cameraPitch = -0.2f;
 	private bool _inventoryUiOpen;
+	private float _sprintNoiseElapsed;
+	private bool _wasSprinting;
 
 	public bool IsSprinting { get; private set; }
 	public bool IsInventoryUiOpen => _inventoryUiOpen;
@@ -75,6 +81,7 @@ public partial class ThirdPersonPlayer : CharacterBody3D
 		if (_health.IsDead)
 		{
 			IsSprinting = false;
+			UpdateSprintNoise(deltaTime);
 			_stamina.UpdateStamina(isSprinting: false, deltaTime);
 			StopHorizontalMovement();
 			ApplyGravity(deltaTime);
@@ -86,6 +93,7 @@ public partial class ThirdPersonPlayer : CharacterBody3D
 		if (_interaction.IsInteracting || _inventoryUiOpen)
 		{
 			IsSprinting = false;
+			UpdateSprintNoise(deltaTime);
 			_stamina.UpdateStamina(isSprinting: false, deltaTime);
 			StopHorizontalMovement();
 			ApplyGravity(deltaTime);
@@ -102,6 +110,7 @@ public partial class ThirdPersonPlayer : CharacterBody3D
 		{
 			IsSprinting = false;
 		}
+		UpdateSprintNoise(deltaTime);
 		float targetSpeed = IsSprinting ? SprintSpeed : WalkSpeed;
 
 		ApplyHorizontalMovement(movementDirection, targetSpeed, deltaTime);
@@ -124,6 +133,33 @@ public partial class ThirdPersonPlayer : CharacterBody3D
 			IsSprinting = false;
 			StopHorizontalMovement();
 		}
+	}
+
+	public void EmitMeleeAttackNoise()
+	{
+		if (!_health.IsDead)
+		{
+			GameplayNoise.Emit(GlobalPosition, MeleeNoiseRadius, GameplayNoiseCategory.Melee);
+		}
+	}
+
+	private void UpdateSprintNoise(float delta)
+	{
+		if (!IsSprinting)
+		{
+			_wasSprinting = false;
+			_sprintNoiseElapsed = 0.0f;
+			return;
+		}
+
+		_sprintNoiseElapsed += delta;
+		float interval = Mathf.Max(SprintNoiseInterval, 0.05f);
+		if (!_wasSprinting || _sprintNoiseElapsed >= interval)
+		{
+			GameplayNoise.Emit(GlobalPosition, SprintNoiseRadius, GameplayNoiseCategory.Sprint);
+			_sprintNoiseElapsed = 0.0f;
+		}
+		_wasSprinting = true;
 	}
 
 	private void StopHorizontalMovement()

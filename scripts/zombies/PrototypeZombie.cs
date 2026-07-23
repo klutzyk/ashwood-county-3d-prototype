@@ -2,6 +2,7 @@
 
 using System;
 using Godot;
+using AshwoodCounty3DPrototype.Gameplay;
 using AshwoodCounty3DPrototype.Player;
 
 namespace AshwoodCounty3DPrototype.Zombies;
@@ -33,6 +34,9 @@ public partial class PrototypeZombie : CharacterBody3D
 	[Export] public int WanderTargetAttempts { get; set; } = 6;
 	[Export] public float SeparationRadius { get; set; } = 1.2f;
 	[Export] public float SeparationStrength { get; set; } = 0.75f;
+	[Export] public float InvestigationSpeed { get; set; } = 0.32f;
+	[Export] public float InvestigationDuration { get; set; } = 2.5f;
+	[Export] public float InvestigationTargetTolerance { get; set; } = 0.75f;
 
 	private const string SourceAnimationName = "mixamo_com";
 	private const string IdleAnimationName = "Idle";
@@ -47,6 +51,8 @@ public partial class PrototypeZombie : CharacterBody3D
 	{
 		Idle,
 		Wandering,
+		Investigating,
+		Searching,
 		Chasing,
 		Attacking,
 	}
@@ -66,10 +72,17 @@ public partial class PrototypeZombie : CharacterBody3D
 	private Vector3 _wanderOrigin;
 	private float _idleRemaining;
 	private Vector3 _wanderTarget;
+	private bool _hasHeardNoise;
+	private bool _respondsToGameplayNoise = true;
+	private Vector3 _lastHeardPosition;
+	private GameplayNoiseCategory _lastHeardCategory;
+	private float _investigationRemaining;
 
 	private static readonly StringName ZombieGroupName = new("prototype_zombies");
 
 	public string CurrentStateName => _state.ToString();
+	public Vector3 LastHeardPosition => _lastHeardPosition;
+	public GameplayNoiseCategory LastHeardCategory => _lastHeardCategory;
 
 	public override void _Ready()
 	{
@@ -87,7 +100,13 @@ public partial class PrototypeZombie : CharacterBody3D
 		_navigationAgent.PathHeightOffset = NavigationPathHeightOffset;
 		_navigationAgent.TargetDesiredDistance = Mathf.Max(AttackDistance - 0.3f, 0.5f);
 		_pathUpdateElapsed = PathUpdateInterval;
+		GameplayNoise.Emitted += OnGameplayNoiseEmitted;
 		PlayStateAnimation();
+	}
+
+	public override void _ExitTree()
+	{
+		GameplayNoise.Emitted -= OnGameplayNoiseEmitted;
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -98,6 +117,7 @@ public partial class PrototypeZombie : CharacterBody3D
 		UpdatePlayerAwareness(canSeePlayer, deltaTime);
 		BehaviourState nextState = DetermineState(distanceToPlayer, canSeePlayer);
 		SetState(nextState);
+		UpdateInvestigation(deltaTime);
 		UpdateWandering(deltaTime);
 		UpdateAttack(deltaTime, distanceToPlayer, canSeePlayer);
 
@@ -105,6 +125,7 @@ public partial class PrototypeZombie : CharacterBody3D
 		{
 			BehaviourState.Chasing => GetChaseNavigationDirection(deltaTime),
 			BehaviourState.Wandering => GetPathDirection(),
+			BehaviourState.Investigating => GetPathDirection(),
 			_ => Vector3.Zero,
 		};
 		if (!movementDirection.IsZeroApprox())
@@ -112,7 +133,12 @@ public partial class PrototypeZombie : CharacterBody3D
 			movementDirection = ApplySeparation(movementDirection);
 		}
 
-		float movementSpeed = _state == BehaviourState.Wandering ? WanderSpeed : MoveSpeed;
+		float movementSpeed = _state switch
+		{
+			BehaviourState.Wandering => WanderSpeed,
+			BehaviourState.Investigating => InvestigationSpeed,
+			_ => MoveSpeed,
+		};
 		ApplyHorizontalMovement(movementDirection, movementSpeed, deltaTime);
 		ApplyGravity(deltaTime);
 
@@ -170,6 +196,13 @@ public partial class PrototypeZombie : CharacterBody3D
 				: BehaviourState.Chasing;
 		}
 
+		if (_hasHeardNoise)
+		{
+			return _state == BehaviourState.Searching
+				? BehaviourState.Searching
+				: BehaviourState.Investigating;
+		}
+
 		if ((_state == BehaviourState.Chasing || _state == BehaviourState.Attacking) &&
 			_timeSincePlayerVisible <= LostSightGracePeriod &&
 			HorizontalDistanceTo(_lastKnownPlayerPosition) > _navigationAgent.TargetDesiredDistance)
@@ -182,12 +215,65 @@ public partial class PrototypeZombie : CharacterBody3D
 			: BehaviourState.Idle;
 	}
 
+	public void SetGameplayNoiseResponseEnabled(bool enabled)
+	{
+		_respondsToGameplayNoise = enabled;
+		if (!enabled)
+		{
+			_hasHeardNoise = false;
+		}
+	}
+
+	private void OnGameplayNoiseEmitted(GameplayNoiseEvent noise)
+	{
+		if (!_respondsToGameplayNoise || _state == BehaviourState.Attacking ||
+			HorizontalDistanceTo(noise.WorldPosition) > noise.AudibleRadius)
+		{
+			return;
+		}
+
+		_lastHeardPosition = noise.WorldPosition;
+		_lastHeardCategory = noise.Category;
+		_hasHeardNoise = true;
+		if (_state is BehaviourState.Investigating or BehaviourState.Searching)
+		{
+			SetState(BehaviourState.Investigating, forceRefresh: true);
+		}
+	}
+
+	private void UpdateInvestigation(float delta)
+	{
+		if (_state == BehaviourState.Investigating)
+		{
+			if (_navigationAgent.IsNavigationFinished() ||
+				HorizontalDistanceTo(_lastHeardPosition) <= Mathf.Max(InvestigationTargetTolerance, 0.1f))
+			{
+				_investigationRemaining = Mathf.Max(InvestigationDuration, 0.0f);
+				SetState(BehaviourState.Searching);
+			}
+			return;
+		}
+
+		if (_state != BehaviourState.Searching)
+		{
+			return;
+		}
+
+		_investigationRemaining = Mathf.Max(_investigationRemaining - delta, 0.0f);
+		if (_investigationRemaining <= 0.0f)
+		{
+			_hasHeardNoise = false;
+			SetState(BehaviourState.Idle);
+		}
+	}
+
 	private void UpdatePlayerAwareness(bool canSeePlayer, float delta)
 	{
 		if (canSeePlayer)
 		{
 			_timeSincePlayerVisible = 0.0f;
 			_lastKnownPlayerPosition = _player.GlobalPosition;
+			_hasHeardNoise = false;
 			return;
 		}
 
@@ -413,9 +499,9 @@ public partial class PrototypeZombie : CharacterBody3D
 		return new Vector2(first.X, first.Z).DistanceTo(new Vector2(second.X, second.Z));
 	}
 
-	private void SetState(BehaviourState nextState)
+	private void SetState(BehaviourState nextState, bool forceRefresh = false)
 	{
-		if (_state == nextState)
+		if (_state == nextState && !forceRefresh)
 		{
 			return;
 		}
@@ -433,6 +519,11 @@ public partial class PrototypeZombie : CharacterBody3D
 			_navigationAgent.TargetDesiredDistance = Mathf.Max(AttackDistance - 0.3f, 0.5f);
 			_pathUpdateElapsed = PathUpdateInterval;
 		}
+		else if (_state == BehaviourState.Investigating)
+		{
+			_navigationAgent.TargetDesiredDistance = Mathf.Max(InvestigationTargetTolerance, 0.1f);
+			_navigationAgent.TargetPosition = _lastHeardPosition;
+		}
 		else if (_state == BehaviourState.Idle && previousState != BehaviourState.Idle)
 		{
 			ScheduleIdleDelay();
@@ -446,6 +537,7 @@ public partial class PrototypeZombie : CharacterBody3D
 		{
 			BehaviourState.Chasing => WalkAnimationName,
 			BehaviourState.Wandering => WalkAnimationName,
+			BehaviourState.Investigating => WalkAnimationName,
 			BehaviourState.Attacking => AttackAnimationName,
 			_ => IdleAnimationName,
 		};

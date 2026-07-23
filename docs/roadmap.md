@@ -170,7 +170,7 @@ Complete and test one vertical slice before starting the next.
 - [x] Prevent excessive zombie overlap
 - [x] Basic wandering
 - [ ] Basic patrol area
-- [ ] Basic sound attraction
+- [x] Basic sound attraction
 - [x] Performance test with multiple zombies
 
 ---

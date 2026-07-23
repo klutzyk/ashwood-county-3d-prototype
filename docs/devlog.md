@@ -327,3 +327,45 @@ Scope note:
 
 Zombie health and death remain unimplemented roadmap items, so dead-zombie
 shutdown behaviour was not available to preserve or validate in this slice.
+
+---
+
+## Reusable Zombie Sound Attraction
+
+Completed:
+
+- Added a lightweight reusable gameplay-noise event with world position,
+  audible radius and an optional category
+- Added exported sprint and melee noise radii to the player, with interval-based
+  sprint emission so walking remains silent
+- Added an exported door noise radius and emission on both opening and closing
+- Added independent zombie investigation and timed search states using each
+  zombie's existing `NavigationAgent3D`
+- Preserved behavior priority: attack, visible chase, recent sound, then normal
+  wandering
+- Allowed a newer audible event to replace an active investigation target
+- Kept investigation paths event-driven rather than recalculating every frame
+
+Outcome:
+
+Nearby zombies investigate the last heard sprint, melee or door position, wait
+briefly at the destination, then resume their existing idle/wander cycle if the
+player is not found.
+
+Validation:
+
+- Runtime checks passed with all five zombie instances loaded
+- Sprinting and the melee hook attracted zombies outside their field of view
+- Walking emitted no gameplay noise
+- Opening a door emitted a categorized noise event
+- Newer sounds replaced older investigation positions
+- Investigation expired back to the normal idle/wander cycle
+- Compatibility-renderer capture completed 180 frames at the fixed 60 FPS target
+- Godot headless scene load and C# build completed with no warnings or errors
+
+Scope note:
+
+The repository still has no player melee combat action or zombie health/death
+system. `EmitMeleeAttackNoise()` is ready for the planned melee action to call,
+and `SetGameplayNoiseResponseEnabled(false)` is ready for a future zombie-death
+handler. Those unrelated combat systems were not added in this slice.
