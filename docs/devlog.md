@@ -542,3 +542,28 @@ same lightweight zombie scene and controller.
 Validation:
 
 - C# build completed with no warnings or errors
+
+---
+
+## Prototype Day/Night Atmosphere
+
+Completed:
+
+- Added lightweight, naturally continuous procedural ambient wind
+- Added randomized distant zombie groans with varied interval, duration and pitch
+- Added daytime insect ambience and night-time cricket ambience
+- Crossfaded insects and crickets from the existing world-time daylight value
+- Shifted wind and distant-groan levels subtly between day and night
+- Exposed independent volume values and groan interval tuning
+- Kept the implementation free of music, voices, weather and external audio assets
+
+Outcome:
+
+The prototype now has a changing ambient sound bed that reinforces the clock
+without introducing additional gameplay systems or renderer-dependent effects.
+
+Validation:
+
+- Headless main-scene run completed without runtime or audio initialization errors
+- Existing day/night flashlight and pharmacy objective regression validations passed
+- C# build completed with no warnings or errors

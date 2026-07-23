@@ -39,6 +39,7 @@
 [ext_resource type="Script" path="res://scripts/ui/SaveStatusDisplay.cs" id="37_save_status"]
 [ext_resource type="Script" path="res://scripts/player/PlayerMeleeCombat.cs" id="38_melee"]
 [ext_resource type="Script" path="res://scripts/player/PlayerNeeds.cs" id="39_needs"]
+[ext_resource type="Script" path="res://scripts/world/AtmosphereAudio.cs" id="40_atmosphere"]
 
 [sub_resource type="BoxMesh" id="GrassMesh"]
 material = ExtResource("8_grass")
@@ -174,6 +175,17 @@ script = ExtResource("30_objective")
 
 [node name="WorldTime" type="Node" parent="."]
 script = ExtResource("33_world_time")
+
+[node name="AtmosphereAudio" type="Node" parent="."]
+script = ExtResource("40_atmosphere")
+
+[node name="Wind" type="AudioStreamPlayer" parent="AtmosphereAudio"]
+
+[node name="ZombieGroans" type="AudioStreamPlayer" parent="AtmosphereAudio"]
+
+[node name="DayInsects" type="AudioStreamPlayer" parent="AtmosphereAudio"]
+
+[node name="NightCrickets" type="AudioStreamPlayer" parent="AtmosphereAudio"]
 
 [node name="SaveGameManager" type="Node" parent="."]
 script = ExtResource("36_save_manager")

@@ -232,6 +232,15 @@ Complete and test one vertical slice before starting the next.
 - [x] Water restores thirst
 - [x] Basic hunger and thirst UI
 
+## Atmosphere
+
+- [x] Ambient wind
+- [x] Randomized distant zombie groans
+- [x] Daytime insects
+- [x] Night-time crickets
+- [x] Day/night ambient crossfade
+- [x] Exported atmosphere volume controls
+
 ---
 
 # Vertical Slice 7 — Survivor Prototype

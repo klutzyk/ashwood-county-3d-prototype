@@ -203,6 +203,21 @@ of each downloaded asset and its license information with project records.
 - **Download note:** No additional third-party files were downloaded for this
   town-dressing slice, so there are no unused downloads to remove.
 
+## Project-Owned Procedural Atmosphere
+
+### Wind, Insects, Crickets, and Distant Groans
+
+- **Asset type:** Runtime-generated prototype ambience
+- **Creator/provider:** Ashwood County project
+- **Source:** Original procedural synthesis in the project audio controller
+- **Licence:** Project-owned; no third-party licence applies
+- **Attribution requirement:** None
+- **Prototype use:** Naturally looping wind, daytime insects, night crickets and
+  randomized distant zombie groans
+- **Local location:** `scripts/world/AtmosphereAudio.cs`
+- **Status:** In use
+- **Download note:** No external audio files were downloaded for this slice.
+
 ## Release Checklist
 
 - [x] Record source and license links for all listed assets.
