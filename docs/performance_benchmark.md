@@ -17,5 +17,12 @@ Run:
 & 'C:\Users\kalz9\Downloads\Godot_v4.7.1-stable_mono_win64\Godot_v4.7.1-stable_mono_win64\Godot_v4.7.1-stable_mono_win64_console.exe' --path . --resolution 1280x720 tests/rendered_performance_benchmark.tscn
 ```
 
+Global command:
+
+```powershell
+& "C:\Users\kalz9\Downloads\Godot_v4.7.1-stable_mono_win64\Godot_v4.7.1-stable_mono_win64\Godot_v4.7.1-stable_mono_win64_console.exe" `
+  --path "C:\ashwood-county-3d-prototype"
+```
+
 Record the reported average FPS and p95 frame time. Close other GPU-heavy
 applications and repeat a run when a result looks anomalous.
