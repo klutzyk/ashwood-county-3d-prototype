@@ -1,6 +1,7 @@
 #nullable enable
 
 using System;
+using System.Collections.Generic;
 using Godot;
 
 namespace AshwoodCounty3DPrototype.Player;
@@ -12,8 +13,13 @@ public partial class PlayerAnimationController : AnimationTree
 	private const string WalkAnimationName = "Walk";
 	private const string RunAnimationName = "Run";
 	private const string TwoHandIdleAnimationName = "TwoHandIdle";
+	private const string MeleeAttackAnimationName = "MeleeAttack";
 	private const string TwoHandIdlePath =
 	"res://assets/characters/player/2hand Idle.fbx";
+	private const string UniversalAnimationLibraryPath =
+		"res://assets/characters/player/anim/UAL1_Standard.glb";
+	private const string UniversalMeleeAttackName = "Sword_Attack";
+	private const float UniversalMeleeAttackLength = 1.5333333f;
 	private const string IdlePath = "res://assets/characters/player/Idle.fbx";
 	private const string WalkPath = "res://assets/characters/player/Walking.fbx";
 	private const string RunPath = "res://assets/characters/player/Fast Run.fbx";
@@ -24,6 +30,34 @@ public partial class PlayerAnimationController : AnimationTree
 	private float _runBlend;
 	private bool _isTwoHandedWeaponEquipped;
 	private float _twoHandIdleBlend;
+	private AnimationPlayer _animationPlayer = null!;
+
+	private static readonly Dictionary<string, string> UniversalToMixamoBones =
+		new(StringComparer.OrdinalIgnoreCase)
+		{
+			["pelvis"] = "mixamorig_Hips",
+			["spine_01"] = "mixamorig_Spine",
+			["spine_02"] = "mixamorig_Spine1",
+			["spine_03"] = "mixamorig_Spine2",
+			["neck_01"] = "mixamorig_Neck",
+			["head"] = "mixamorig_Head",
+			["clavicle_l"] = "mixamorig_LeftShoulder",
+			["upperarm_l"] = "mixamorig_LeftArm",
+			["lowerarm_l"] = "mixamorig_LeftForeArm",
+			["hand_l"] = "mixamorig_LeftHand",
+			["clavicle_r"] = "mixamorig_RightShoulder",
+			["upperarm_r"] = "mixamorig_RightArm",
+			["lowerarm_r"] = "mixamorig_RightForeArm",
+			["hand_r"] = "mixamorig_RightHand",
+			["thigh_l"] = "mixamorig_LeftUpLeg",
+			["calf_l"] = "mixamorig_LeftLeg",
+			["foot_l"] = "mixamorig_LeftFoot",
+			["ball_l"] = "mixamorig_LeftToeBase",
+			["thigh_r"] = "mixamorig_RightUpLeg",
+			["calf_r"] = "mixamorig_RightLeg",
+			["foot_r"] = "mixamorig_RightFoot",
+			["ball_r"] = "mixamorig_RightToeBase",
+		};
 	
 	public void SetTwoHandedWeaponEquipped(bool equipped)
 	{
@@ -33,14 +67,12 @@ public partial class PlayerAnimationController : AnimationTree
 	public override void _Ready()
 	{
 		_player = GetParent<ThirdPersonPlayer>();
-		AnimationPlayer animationPlayer = FindDescendant<AnimationPlayer>(_player)
+		_animationPlayer = FindDescendant<AnimationPlayer>(_player)
 			?? throw new InvalidOperationException("Remy is missing an AnimationPlayer.");
-		
-		//temporarily assign two handed
-		//_isTwoHandedWeaponEquipped = true;
-		
-		AddLocomotionAnimations(animationPlayer);
-		ConfigureBlendTree(animationPlayer);
+
+		AddLocomotionAnimations(_animationPlayer);
+		AddUniversalMeleeAnimation(_animationPlayer);
+		ConfigureBlendTree(_animationPlayer);
 	}
 
 	public override void _Process(double delta)
@@ -84,6 +116,21 @@ public partial class PlayerAnimationController : AnimationTree
 		Set("parameters/IdleType/blend_amount", _twoHandIdleBlend);
 		Set("parameters/IdleWalk/blend_amount", _idleWalkBlend);
 		Set("parameters/RunBlend/blend_amount", _runBlend);
+	}
+
+	public void PlayMeleeAttack(int comboStep, float attackDuration)
+	{
+		float comboSpeedScale = comboStep switch
+		{
+			2 => 1.04f,
+			3 => 0.98f,
+			_ => 1.0f,
+		};
+		float duration = Mathf.Max(attackDuration, 0.05f);
+		Set(
+			"parameters/AttackSpeed/scale",
+			(UniversalMeleeAttackLength / duration) * comboSpeedScale);
+		Set("parameters/MeleeAttack/request", 1);
 	}
 
 	private void AddLocomotionAnimations(AnimationPlayer animationPlayer)
@@ -157,6 +204,27 @@ public partial class PlayerAnimationController : AnimationTree
 			new Vector2(0.0f, 0.0f)
 		);
 
+		blendTree.AddNode(
+			"AttackClip",
+			CreateAnimationNode(MeleeAttackAnimationName),
+			new Vector2(-40.0f, 180.0f)
+		);
+
+		blendTree.AddNode(
+			"AttackSpeed",
+			new AnimationNodeTimeScale(),
+			new Vector2(180.0f, 180.0f)
+		);
+
+		AnimationNodeOneShot meleeAttack = new();
+		meleeAttack.Set("fadein_time", 0.08f);
+		meleeAttack.Set("fadeout_time", 0.14f);
+		blendTree.AddNode(
+			"MeleeAttack",
+			meleeAttack,
+			new Vector2(420.0f, 0.0f)
+		);
+
 		blendTree.ConnectNode("IdleType", 0, "Idle");
 		blendTree.ConnectNode("IdleType", 1, "TwoHandIdle");
 
@@ -166,11 +234,87 @@ public partial class PlayerAnimationController : AnimationTree
 		blendTree.ConnectNode("RunBlend", 0, "IdleWalk");
 		blendTree.ConnectNode("RunBlend", 1, "Run");
 
-		blendTree.ConnectNode("output", 0, "RunBlend");
+		blendTree.ConnectNode("AttackSpeed", 0, "AttackClip");
+		blendTree.ConnectNode("MeleeAttack", 0, "RunBlend");
+		blendTree.ConnectNode("MeleeAttack", 1, "AttackSpeed");
+		blendTree.ConnectNode("output", 0, "MeleeAttack");
 
 		AnimPlayer = GetPathTo(animationPlayer);
 		TreeRoot = blendTree;
 		Active = true;
+	}
+
+	private static void AddUniversalMeleeAnimation(AnimationPlayer animationPlayer)
+	{
+		PackedScene animationScene =
+			ResourceLoader.Load<PackedScene>(UniversalAnimationLibraryPath);
+		Node sourceRoot = animationScene.Instantiate();
+		AnimationPlayer sourcePlayer = FindDescendant<AnimationPlayer>(sourceRoot)
+			?? throw new InvalidOperationException(
+				$"{UniversalAnimationLibraryPath} is missing an AnimationPlayer.");
+		if (!sourcePlayer.HasAnimation(UniversalMeleeAttackName))
+		{
+			sourceRoot.Free();
+			throw new InvalidOperationException(
+				$"{UniversalAnimationLibraryPath} is missing {UniversalMeleeAttackName}.");
+		}
+
+		AnimationLibrary targetLibrary = animationPlayer.GetAnimationLibrary("");
+		string targetSkeletonPath = GetTargetSkeletonPath(
+			targetLibrary.GetAnimation(IdleAnimationName));
+		Animation animation = (Animation)sourcePlayer
+			.GetAnimation(UniversalMeleeAttackName)
+			.Duplicate(true);
+
+		for (int track = animation.GetTrackCount() - 1; track >= 0; track--)
+		{
+			if (animation.TrackGetType(track) != Animation.TrackType.Rotation3D)
+			{
+				animation.RemoveTrack(track);
+				continue;
+			}
+
+			string sourceBone = GetTrackBoneName(animation.TrackGetPath(track));
+			if (!UniversalToMixamoBones.TryGetValue(sourceBone, out string? targetBone))
+			{
+				animation.RemoveTrack(track);
+				continue;
+			}
+
+			animation.TrackSetPath(
+				track,
+				new NodePath($"{targetSkeletonPath}:{targetBone}"));
+		}
+
+		animation.LoopMode = Animation.LoopModeEnum.None;
+		targetLibrary.AddAnimation(
+			MeleeAttackAnimationName,
+			animation);
+		sourceRoot.Free();
+	}
+
+	private static string GetTargetSkeletonPath(Animation animation)
+	{
+		for (int track = 0; track < animation.GetTrackCount(); track++)
+		{
+			string path = animation.TrackGetPath(track).ToString();
+			if (!path.EndsWith(":mixamorig_Hips", StringComparison.Ordinal))
+			{
+				continue;
+			}
+
+			return path[..path.LastIndexOf(':')];
+		}
+
+		throw new InvalidOperationException(
+			"Remy's idle animation is missing its hips track.");
+	}
+
+	private static string GetTrackBoneName(NodePath path)
+	{
+		string value = path.ToString();
+		int separator = value.LastIndexOf(':');
+		return separator >= 0 ? value[(separator + 1)..] : value;
 	}
 	
 	private static AnimationNodeAnimation CreateAnimationNode(string animationName)

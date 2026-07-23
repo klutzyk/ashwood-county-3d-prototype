@@ -67,6 +67,9 @@ Completed except final polish.
 - [x] Knockback
 - [x] Zombie death
 - [x] Corpse loot
+- [x] Authored two-handed attack animation
+- [x] Three-step melee combo with anticipation and recovery
+- [x] Visual impact timing and anti-spam input rules
 
 Remaining
 

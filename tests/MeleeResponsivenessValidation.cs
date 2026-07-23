@@ -27,7 +27,7 @@ public partial class MeleeResponsivenessValidation : Node
 				Mathf.IsEqualApprox(weapon.Damage, 40.0f) &&
 				Mathf.IsEqualApprox(weapon.Range, 2.2f) &&
 				Mathf.IsEqualApprox(weapon.AttackArcDegrees, 85.0f) &&
-				Mathf.IsEqualApprox(weapon.Cooldown, 0.65f) &&
+				Mathf.IsEqualApprox(weapon.Cooldown, 0.28f) &&
 				Mathf.IsEqualApprox(weapon.Knockback, 5.0f) &&
 				Mathf.IsEqualApprox(weapon.NoiseRadius, 12.0f),
 				"baseball bat preserves all combat tuning in reusable weapon data");
@@ -47,7 +47,10 @@ public partial class MeleeResponsivenessValidation : Node
 			target.SetPhysicsProcess(false);
 			combat.AttackDuration = 0.3f;
 			combat.HitMoment = 0.45f;
-			weapon.Cooldown = 0.4f;
+			combat.ComboQueueOpenMoment = 0.38f;
+			combat.MaximumComboAttacks = 3;
+			weapon.Cooldown = 0.2f;
+			weapon.Damage = 20.0f;
 			combat.InputBufferDuration = 0.18f;
 			combat.SetProcess(false);
 
@@ -56,35 +59,47 @@ public partial class MeleeResponsivenessValidation : Node
 			combat.AttackStarted += () => attacksStarted++;
 
 			Require(combat.TryAttack(), "ready attack starts immediately");
-			Require(combat.IsAttacking && attacksStarted == 1, "attack start is visible in the input frame");
+			Require(combat.IsAttacking && attacksStarted == 1 && combat.ComboStep == 1,
+				"attack start is visible in the input frame");
 			combat._Process(0.1);
 			Require(Mathf.IsEqualApprox(targetHealth.CurrentHealth, targetHealth.MaximumHealth),
 				"damage waits for the configured impact moment");
+			Require(!combat.RequestAttack(),
+				"early mashing cannot queue before the anticipation completes");
 			combat._Process(0.04);
 			Require(Mathf.IsEqualApprox(
 				targetHealth.CurrentHealth,
 				targetHealth.MaximumHealth - weapon.Damage),
 				"one hit lands as the bat crosses the target");
-			combat._Process(0.12);
-			Require(Mathf.IsEqualApprox(
-				targetHealth.CurrentHealth,
-				targetHealth.MaximumHealth - weapon.Damage),
-				"one swing cannot damage the same target twice");
-
-			Require(combat.RequestAttack(), "late cooldown input is buffered");
-			combat._Process(0.04);
-			combat._Process(0.11);
-			combat._Process(0.01);
-			Require(attacksStarted == 2, "buffered input starts exactly when cooldown becomes ready");
-			combat._Process(0.13);
+			Require(combat.RequestAttack(), "input during follow-through queues combo step two");
+			Require(!combat.RequestAttack(), "only one attack can be queued at a time");
+			combat._Process(0.16);
+			Require(attacksStarted == 2 && combat.ComboStep == 2,
+				"queued step two starts after the first follow-through");
+			combat._Process(0.14);
 			Require(Mathf.IsEqualApprox(
 				targetHealth.CurrentHealth,
 				targetHealth.MaximumHealth - (weapon.Damage * 2.0f)),
-				"second swing applies one consistent hit");
-			combat._Process(0.2);
-			combat._Process(0.1);
-			Require(combat.CanAttack && combat.IsShowingReadyFeedback,
-				"bat returns to its lightweight ready pose after cooldown");
+				"combo step two applies one consistent hit");
+
+			Require(combat.RequestAttack(), "input during recovery queues combo step three");
+			combat._Process(0.16);
+			Require(attacksStarted == 3 && combat.ComboStep == 3,
+				"combo is capped at its authored third step");
+			combat._Process(0.14);
+			Require(Mathf.IsEqualApprox(
+				targetHealth.CurrentHealth,
+				targetHealth.MaximumHealth - (weapon.Damage * 3.0f)),
+				"third swing applies one consistent hit");
+			Require(!combat.RequestAttack(), "a fourth attack cannot be chained");
+			combat._Process(0.16);
+			Require(!combat.CanAttack && !combat.RequestAttack(),
+				"full recovery blocks immediate animation spam");
+			combat._Process(0.03);
+			Require(combat.RequestAttack(), "late recovery input uses the short buffer");
+			combat._Process(0.17);
+			Require(attacksStarted == 4 && combat.ComboStep == 1,
+				"a recovered attack starts a fresh combo");
 
 			GD.Print("MELEE_RESPONSIVENESS_VALIDATION: PASS");
 			GetTree().Quit(0);

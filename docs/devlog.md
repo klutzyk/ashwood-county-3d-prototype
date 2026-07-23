@@ -1634,3 +1634,29 @@ Validation:
 - Melee responsiveness validation passed attack start, timed hits, input
   buffering and ready-pose recovery
 - C# build completed with no warnings or errors
+
+---
+
+## Authored Melee Combo Flow
+
+Completed:
+
+- Replaced the procedural-only attack presentation with the Universal Animation
+  Library two-handed sword strike retargeted to Remy and retimed for the bat
+- Added readable anticipation, impact, follow-through and recovery phases
+- Added a maximum three-step combo with one queued link per attack
+- Rejected early mashing, fourth-step chains and inputs outside the short
+  recovery buffer
+- Moved damage to the rendered bat-contact portion of the authored motion
+
+Outcome:
+
+Bat attacks now read as committed full-body swings, while deliberate timing can
+chain three hits without allowing animation restart spam.
+
+Validation:
+
+- Rendered pose captures confirmed the authored wind-up and follow-through
+- Melee responsiveness validation passed timing, one-hit guarding, combo limits,
+  queue restrictions and recovery
+- C# build completed with no warnings or errors
