@@ -313,7 +313,7 @@ Complete and test one vertical slice before starting the next.
 - [x] Weighted container loot tables
 - [x] Inventory stack management
 - [x] Zombie variant profiles
-- [ ] Melee weapon data foundation
+- [x] Melee weapon data foundation
 - [ ] World interaction consistency
 - [ ] Main menu
 - [ ] Persistent settings menu

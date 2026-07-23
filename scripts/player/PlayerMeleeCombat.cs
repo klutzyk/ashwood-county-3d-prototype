@@ -2,6 +2,7 @@
 
 using System.Collections.Generic;
 using Godot;
+using AshwoodCounty3DPrototype.Items;
 using AshwoodCounty3DPrototype.Zombies;
 
 namespace AshwoodCounty3DPrototype.Player;
@@ -14,11 +15,7 @@ public partial class PlayerMeleeCombat : Node3D
 	[Signal]
 	public delegate void AttackFinishedEventHandler();
 
-	[Export] public float Damage { get; set; } = 40.0f;
-	[Export] public float Range { get; set; } = 2.2f;
-	[Export(PropertyHint.Range, "1,180,1")] public float AttackAngle { get; set; } = 85.0f;
-	[Export] public float Cooldown { get; set; } = 0.65f;
-	[Export] public float KnockbackForce { get; set; } = 5.0f;
+	[Export] public MeleeWeaponDefinition? WeaponDefinition { get; set; }
 	[Export] public float AttackDuration { get; set; } = 0.38f;
 	[Export(PropertyHint.Range, "0,1,0.01")] public float HitMoment { get; set; } = 0.45f;
 	[Export(PropertyHint.Range, "0,0.3,0.01")] public float InputBufferDuration { get; set; } = 0.12f;
@@ -35,6 +32,8 @@ public partial class PlayerMeleeCombat : Node3D
 	public bool IsAttacking { get; private set; }
 	public bool CanAttack => !IsAttacking && _cooldownRemaining <= 0.0f;
 	public bool IsShowingReadyFeedback => !IsAttacking && _readyPoseBlend >= 0.95f;
+	private MeleeWeaponDefinition Weapon => WeaponDefinition
+		?? throw new System.InvalidOperationException("Melee combat requires a weapon definition.");
 
 	public override void _Ready()
 	{
@@ -93,11 +92,11 @@ public partial class PlayerMeleeCombat : Node3D
 
 		IsAttacking = true;
 		_attackElapsed = 0.0f;
-		_cooldownRemaining = Mathf.Max(Cooldown, 0.0f);
+		_cooldownRemaining = Mathf.Max(Weapon.Cooldown, 0.0f);
 		_bufferedAttackRemaining = 0.0f;
 		_hasAppliedHit = false;
 		SetWeaponPose(0.0f);
-		_player.EmitMeleeAttackNoise();
+		_player.EmitMeleeAttackNoise(Weapon.NoiseRadius);
 		EmitSignal(SignalName.AttackStarted);
 		return true;
 	}
@@ -124,8 +123,9 @@ public partial class PlayerMeleeCombat : Node3D
 		Vector3 forward = _player.GlobalBasis.Z;
 		forward.Y = 0.0f;
 		forward = forward.Normalized();
-		float maximumRange = Mathf.Max(Range, 0.0f);
-		float minimumDot = Mathf.Cos(Mathf.DegToRad(Mathf.Clamp(AttackAngle, 1.0f, 180.0f) * 0.5f));
+		float maximumRange = Mathf.Max(Weapon.Range, 0.0f);
+		float minimumDot = Mathf.Cos(Mathf.DegToRad(
+			Mathf.Clamp(Weapon.AttackArcDegrees, 1.0f, 180.0f) * 0.5f));
 		HashSet<PrototypeZombie> hitZombies = new();
 
 		foreach (Node node in GetTree().GetNodesInGroup(PrototypeZombie.ZombieGroupName))
@@ -150,8 +150,8 @@ public partial class PlayerMeleeCombat : Node3D
 			}
 
 			zombie.ReceiveMeleeHit(
-				Mathf.Max(Damage, 0.0f),
-				direction * Mathf.Max(KnockbackForce, 0.0f));
+				Mathf.Max(Weapon.Damage, 0.0f),
+				direction * Mathf.Max(Weapon.Knockback, 0.0f));
 		}
 	}
 

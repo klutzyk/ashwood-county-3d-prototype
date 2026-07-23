@@ -13,7 +13,6 @@ public partial class ThirdPersonPlayer : CharacterBody3D
 	[Export] public float MouseSensitivity { get; set; } = 0.0025f;
 	[Export] public float SprintNoiseRadius { get; set; } = 9.0f;
 	[Export] public float SprintNoiseInterval { get; set; } = 0.6f;
-	[Export] public float MeleeNoiseRadius { get; set; } = 12.0f;
 
 	private const float CameraHeight = 0.75f;
 	private const float MinimumPitch = -1.05f;
@@ -137,11 +136,14 @@ public partial class ThirdPersonPlayer : CharacterBody3D
 		}
 	}
 
-	public void EmitMeleeAttackNoise()
+	public void EmitMeleeAttackNoise(float noiseRadius)
 	{
 		if (!_health.IsDead)
 		{
-			GameplayNoise.Emit(GlobalPosition, MeleeNoiseRadius, GameplayNoiseCategory.Melee);
+			GameplayNoise.Emit(
+				GlobalPosition,
+				Mathf.Max(noiseRadius, 0.0f),
+				GameplayNoiseCategory.Melee);
 		}
 	}
 

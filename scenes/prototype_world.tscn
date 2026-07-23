@@ -43,6 +43,7 @@
 [ext_resource type="Resource" path="res://assets/zombies/slow_walker.tres" id="41_slow"]
 [ext_resource type="Resource" path="res://assets/zombies/walker.tres" id="42_walker"]
 [ext_resource type="Resource" path="res://assets/zombies/runner.tres" id="43_runner"]
+[ext_resource type="Resource" path="res://assets/weapons/baseball_bat.tres" id="44_baseball_bat"]
 
 [sub_resource type="BoxMesh" id="GrassMesh"]
 material = ExtResource("8_grass")
@@ -379,6 +380,7 @@ script = ExtResource("23_inventory")
 
 [node name="MeleeCombat" type="Node3D" parent="Player"]
 script = ExtResource("38_melee")
+WeaponDefinition = ExtResource("44_baseball_bat")
 
 [node name="WeaponPivot" type="Node3D" parent="Player/MeleeCombat"]
 position = Vector3(0.48, 0.48, 0.22)

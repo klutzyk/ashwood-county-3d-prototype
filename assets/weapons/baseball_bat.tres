@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="MeleeWeaponDefinition" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/items/MeleeWeaponDefinition.cs" id="1_weapon"]
+
+[resource]
+script = ExtResource("1_weapon")
+Identifier = &"baseball_bat"
+DisplayName = "Baseball Bat"
+Damage = 40.0
+Range = 2.2
+AttackArcDegrees = 85.0
+Cooldown = 0.65
+Knockback = 5.0
+NoiseRadius = 12.0

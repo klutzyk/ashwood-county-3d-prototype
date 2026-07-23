@@ -2,6 +2,7 @@
 
 using System;
 using Godot;
+using AshwoodCounty3DPrototype.Items;
 using AshwoodCounty3DPrototype.Player;
 using AshwoodCounty3DPrototype.Zombies;
 
@@ -19,6 +20,17 @@ public partial class MeleeResponsivenessValidation : Node
 
 			ThirdPersonPlayer player = world.GetNode<ThirdPersonPlayer>("Player");
 			PlayerMeleeCombat combat = player.GetNode<PlayerMeleeCombat>("MeleeCombat");
+			MeleeWeaponDefinition weapon = combat.WeaponDefinition
+				?? throw new InvalidOperationException("baseball bat definition is missing");
+			Require(weapon.Identifier == "baseball_bat" &&
+				weapon.DisplayName == "Baseball Bat" &&
+				Mathf.IsEqualApprox(weapon.Damage, 40.0f) &&
+				Mathf.IsEqualApprox(weapon.Range, 2.2f) &&
+				Mathf.IsEqualApprox(weapon.AttackArcDegrees, 85.0f) &&
+				Mathf.IsEqualApprox(weapon.Cooldown, 0.65f) &&
+				Mathf.IsEqualApprox(weapon.Knockback, 5.0f) &&
+				Mathf.IsEqualApprox(weapon.NoiseRadius, 12.0f),
+				"baseball bat preserves all combat tuning in reusable weapon data");
 			PrototypeZombie target = world.GetNode<PrototypeZombie>("Zombies/PrototypeZombie1");
 			foreach (Node child in world.GetNode("Zombies").GetChildren())
 			{
@@ -35,7 +47,7 @@ public partial class MeleeResponsivenessValidation : Node
 			target.SetPhysicsProcess(false);
 			combat.AttackDuration = 0.3f;
 			combat.HitMoment = 0.45f;
-			combat.Cooldown = 0.4f;
+			weapon.Cooldown = 0.4f;
 			combat.InputBufferDuration = 0.18f;
 			combat.SetProcess(false);
 
@@ -51,12 +63,12 @@ public partial class MeleeResponsivenessValidation : Node
 			combat._Process(0.04);
 			Require(Mathf.IsEqualApprox(
 				targetHealth.CurrentHealth,
-				targetHealth.MaximumHealth - combat.Damage),
+				targetHealth.MaximumHealth - weapon.Damage),
 				"one hit lands as the bat crosses the target");
 			combat._Process(0.12);
 			Require(Mathf.IsEqualApprox(
 				targetHealth.CurrentHealth,
-				targetHealth.MaximumHealth - combat.Damage),
+				targetHealth.MaximumHealth - weapon.Damage),
 				"one swing cannot damage the same target twice");
 
 			Require(combat.RequestAttack(), "late cooldown input is buffered");
@@ -67,7 +79,7 @@ public partial class MeleeResponsivenessValidation : Node
 			combat._Process(0.13);
 			Require(Mathf.IsEqualApprox(
 				targetHealth.CurrentHealth,
-				targetHealth.MaximumHealth - (combat.Damage * 2.0f)),
+				targetHealth.MaximumHealth - (weapon.Damage * 2.0f)),
 				"second swing applies one consistent hit");
 			combat._Process(0.2);
 			combat._Process(0.1);

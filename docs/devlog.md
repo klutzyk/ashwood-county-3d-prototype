@@ -1015,3 +1015,28 @@ Validation:
 - Crowd, pursuit, melee and save/load regressions passed
 - Fixed 1280x720 rendered benchmark measured 192.94 FPS average and 8.08 ms p95
 - C# build completed with no warnings or errors
+
+---
+
+## Reusable Melee Weapon Definition
+
+Completed:
+
+- Moved baseball-bat identifier, display name, damage, range, attack arc,
+  cooldown, knockback and noise radius into one structured resource
+- Made the existing combat controller consume its assigned weapon definition
+- Routed melee noise through the weapon value rather than player-controller tuning
+- Kept attack duration, impact moment, input buffer and procedural swing unchanged
+- Kept the baseball bat as the only authored and usable weapon
+
+Outcome:
+
+A later melee weapon can be assigned through data without rewriting hit
+detection or input flow, while the current baseball-bat feel remains unchanged.
+
+Validation:
+
+- Melee responsiveness validation passed definition values, immediate input,
+  impact timing, one-hit guarding, buffering, repeat damage and ready feedback
+- Zombie pursuit and crowd regressions passed
+- C# build completed with no warnings or errors
