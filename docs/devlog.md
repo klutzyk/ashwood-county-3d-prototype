@@ -1778,3 +1778,19 @@ Validation:
 
 - Interaction-consistency and gameplay-notification validations passed
 - C# build completed with no warnings or errors
+
+---
+
+## Objective and Status HUD Polish
+
+Completed:
+
+- Added clear two-step objective progression and a distinct completion state
+- Added a restrained objective-change highlight
+- Added live percentages to stamina, hunger and thirst labels
+- Added low-condition colour cues to health and survival status readouts
+
+Validation:
+
+- Antibiotics and service-station objective-flow validations passed
+- C# build completed with no warnings or errors

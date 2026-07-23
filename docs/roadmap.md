@@ -139,6 +139,8 @@ Completed.
 - [x] Ambient sounds
 - [x] Objectives
 - [x] Notifications
+- [x] Objective progression and completion presentation
+- [x] Readable status values and low-condition HUD feedback
 
 ---
 

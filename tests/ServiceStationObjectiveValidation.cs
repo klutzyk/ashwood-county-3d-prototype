@@ -41,6 +41,8 @@ public partial class ServiceStationObjectiveValidation : Node
 			Interactable safePoint =
 				world.GetNode<Interactable>("PrototypeSafePoint/Interactable");
 			SaveGameManager saveManager = world.GetNode<SaveGameManager>("SaveGameManager");
+			Label objectiveText = world.GetNode<Label>(
+				"PerformanceUI/ObjectiveDisplay/ObjectiveText");
 			saveManager.SaveFilePath = ValidationSavePath;
 
 			Require(supplies.State == ServiceStationSuppliesObjectiveState.Locked,
@@ -90,6 +92,8 @@ public partial class ServiceStationObjectiveValidation : Node
 			safePoint.Interact(player);
 			Require(supplies.State == ServiceStationSuppliesObjectiveState.Completed,
 				"safe-point interaction completes the supplies objective");
+			Require(objectiveText.Text.Contains("OBJECTIVES COMPLETE"),
+				"objective HUD clearly presents completion");
 			Require(inventory.GetQuantity(
 					ServiceStationSuppliesObjective.CannedFoodItemId) ==
 					cannedBefore - 1 &&

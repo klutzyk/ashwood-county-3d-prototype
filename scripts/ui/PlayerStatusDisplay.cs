@@ -17,6 +17,9 @@ public partial class PlayerStatusDisplay : CanvasLayer
 	private PlayerStamina _stamina = null!;
 	private PlayerNeeds _needs = null!;
 	private Label _healthLabel = null!;
+	private Label _staminaLabel = null!;
+	private Label _hungerLabel = null!;
+	private Label _thirstLabel = null!;
 	private ProgressBar _staminaBar = null!;
 	private ProgressBar _hungerBar = null!;
 	private ProgressBar _thirstBar = null!;
@@ -30,6 +33,9 @@ public partial class PlayerStatusDisplay : CanvasLayer
 		_stamina = GetNode<PlayerStamina>(StaminaPath);
 		_needs = GetNode<PlayerNeeds>(NeedsPath);
 		_healthLabel = GetNode<Label>("HealthLabel");
+		_staminaLabel = GetNode<Label>("StaminaLabel");
+		_hungerLabel = GetNode<Label>("HungerLabel");
+		_thirstLabel = GetNode<Label>("ThirstLabel");
 		_staminaBar = GetNode<ProgressBar>("StaminaBar");
 		_hungerBar = GetNode<ProgressBar>("HungerBar");
 		_thirstBar = GetNode<ProgressBar>("ThirstBar");
@@ -79,6 +85,7 @@ public partial class PlayerStatusDisplay : CanvasLayer
 	private void UpdateHealthLabel(float currentHealth, float maximumHealth)
 	{
 		_healthLabel.Text = $"Health: {Mathf.CeilToInt(currentHealth)} / {Mathf.CeilToInt(maximumHealth)}";
+		_healthLabel.Modulate = ConditionTint(GetRatio(currentHealth, maximumHealth));
 		if (_deathOverlay is not null && currentHealth > 0.0f && _deathOverlay.Visible)
 		{
 			_deathOverlay.Visible = false;
@@ -90,18 +97,27 @@ public partial class PlayerStatusDisplay : CanvasLayer
 	{
 		_staminaBar.MaxValue = maximumStamina;
 		_staminaBar.Value = currentStamina;
+		float ratio = GetRatio(currentStamina, maximumStamina);
+		_staminaLabel.Text = $"Stamina {Mathf.RoundToInt(ratio * 100.0f)}%";
+		_staminaBar.Modulate = ConditionTint(ratio);
 	}
 
 	private void UpdateHungerBar(float currentHunger, float maximumHunger)
 	{
 		_hungerBar.MaxValue = maximumHunger;
 		_hungerBar.Value = currentHunger;
+		float ratio = GetRatio(currentHunger, maximumHunger);
+		_hungerLabel.Text = $"Hunger {Mathf.RoundToInt(ratio * 100.0f)}%";
+		_hungerBar.Modulate = ConditionTint(ratio);
 	}
 
 	private void UpdateThirstBar(float currentThirst, float maximumThirst)
 	{
 		_thirstBar.MaxValue = maximumThirst;
 		_thirstBar.Value = currentThirst;
+		float ratio = GetRatio(currentThirst, maximumThirst);
+		_thirstLabel.Text = $"Thirst {Mathf.RoundToInt(ratio * 100.0f)}%";
+		_thirstBar.Modulate = ConditionTint(ratio);
 	}
 
 	private void ShowDamageFlash(float damageAmount)
@@ -121,5 +137,25 @@ public partial class PlayerStatusDisplay : CanvasLayer
 	private void SetFlashOpacity(float opacity)
 	{
 		_damageFlash.Modulate = new Color(1.0f, 1.0f, 1.0f, Mathf.Clamp(opacity, 0.0f, 1.0f));
+	}
+
+	private static float GetRatio(float currentValue, float maximumValue)
+	{
+		return maximumValue <= 0.0f
+			? 0.0f
+			: Mathf.Clamp(currentValue / maximumValue, 0.0f, 1.0f);
+	}
+
+	private static Color ConditionTint(float ratio)
+	{
+		if (ratio <= 0.2f)
+		{
+			return new Color(1.0f, 0.58f, 0.52f);
+		}
+		if (ratio <= 0.4f)
+		{
+			return new Color(1.0f, 0.82f, 0.58f);
+		}
+		return Colors.White;
 	}
 }

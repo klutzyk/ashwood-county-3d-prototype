@@ -28,8 +28,12 @@ public partial class ObjectiveFlowValidation : Node
 				"Buildings/Pharmacy/Interior/MedicineCabinet/SearchableContainer");
 			ContainerInventoryDisplay inventoryUi = world.GetNode<ContainerInventoryDisplay>(
 				"PerformanceUI/ContainerInventoryWindow");
+			Label objectiveText = world.GetNode<Label>(
+				"PerformanceUI/ObjectiveDisplay/ObjectiveText");
 
 			Require(objective.State == AntibioticsObjectiveState.SearchPharmacy, "objective starts in search state");
+			Require(objectiveText.Text.Contains("1 / 2"),
+				"objective HUD communicates overall progression");
 			Require(!cabinet.IsSearched, "pharmacy cabinet starts unsearched");
 			Require(cabinet.Inventory.GetQuantity(AntibioticsObjective.AntibioticsItemId) == 1,
 				"cabinet owns one antibiotics item before searching");
@@ -71,6 +75,8 @@ public partial class ObjectiveFlowValidation : Node
 			world.GetNode<Interactable>("PrototypeSafePoint/Interactable").Interact(player);
 			Require(objective.State == AntibioticsObjectiveState.Completed,
 				"safe-point interaction completes the objective");
+			Require(objectiveText.Text.Contains("2 / 2"),
+				"objective HUD advances to the second existing objective");
 			Require(playerInventory.GetQuantity(AntibioticsObjective.AntibioticsItemId) == 0,
 				"completion submits the antibiotics");
 			Require(stateChangeCount == 2 && completionCount == 1,

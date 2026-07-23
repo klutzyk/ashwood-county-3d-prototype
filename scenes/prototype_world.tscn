@@ -608,7 +608,7 @@ grow_horizontal = 2
 theme_override_colors/font_color = Color(0.94, 0.93, 0.82, 1)
 theme_override_font_sizes/font_size = 16
 theme_override_styles/normal = SubResource("FpsBackground")
-text = "OBJECTIVE
+text = "CURRENT OBJECTIVE  1 / 2
 Search the pharmacy for antibiotics"
 vertical_alignment = 1
 
@@ -640,7 +640,7 @@ vertical_alignment = 1
 [node name="StaminaLabel" type="Label" parent="PerformanceUI" unique_id=38428074]
 offset_left = 12.0
 offset_top = 92.0
-offset_right = 82.0
+offset_right = 104.0
 offset_bottom = 112.0
 theme_override_colors/font_color = Color(0.9, 0.92, 0.78, 1)
 theme_override_font_sizes/font_size = 14
@@ -648,7 +648,7 @@ text = "Stamina"
 vertical_alignment = 1
 
 [node name="StaminaBar" type="ProgressBar" parent="PerformanceUI" unique_id=693057295]
-offset_left = 84.0
+offset_left = 106.0
 offset_top = 93.0
 offset_right = 196.0
 offset_bottom = 111.0
@@ -661,7 +661,7 @@ show_percentage = false
 [node name="HungerLabel" type="Label" parent="PerformanceUI" unique_id=405847466]
 offset_left = 210.0
 offset_top = 52.0
-offset_right = 276.0
+offset_right = 298.0
 offset_bottom = 72.0
 theme_override_colors/font_color = Color(0.93, 0.78, 0.5, 1)
 theme_override_font_sizes/font_size = 14
@@ -669,7 +669,7 @@ text = "Hunger"
 vertical_alignment = 1
 
 [node name="HungerBar" type="ProgressBar" parent="PerformanceUI" unique_id=1080070298]
-offset_left = 280.0
+offset_left = 300.0
 offset_top = 53.0
 offset_right = 392.0
 offset_bottom = 71.0
@@ -682,7 +682,7 @@ show_percentage = false
 [node name="ThirstLabel" type="Label" parent="PerformanceUI" unique_id=851431720]
 offset_left = 210.0
 offset_top = 92.0
-offset_right = 276.0
+offset_right = 298.0
 offset_bottom = 112.0
 theme_override_colors/font_color = Color(0.58, 0.8, 1, 1)
 theme_override_font_sizes/font_size = 14
@@ -690,7 +690,7 @@ text = "Thirst"
 vertical_alignment = 1
 
 [node name="ThirstBar" type="ProgressBar" parent="PerformanceUI" unique_id=1458435913]
-offset_left = 280.0
+offset_left = 300.0
 offset_top = 93.0
 offset_right = 392.0
 offset_bottom = 111.0

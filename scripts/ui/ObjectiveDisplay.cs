@@ -44,13 +44,32 @@ public partial class ObjectiveDisplay : Control
 	private void OnStateChanged(int state)
 	{
 		Refresh();
+		if (_suppliesObjective.State == ServiceStationSuppliesObjectiveState.Completed)
+		{
+			return;
+		}
+		Tween tween = CreateTween();
+		_objectiveText.Modulate = new Color(1.0f, 0.92f, 0.62f, 1.0f);
+		tween.TweenProperty(_objectiveText, "modulate", Colors.White, 0.35f)
+			.SetTrans(Tween.TransitionType.Sine)
+			.SetEase(Tween.EaseType.Out);
 	}
 
 	private void Refresh()
 	{
-		string displayText = _objective.State == AntibioticsObjectiveState.Completed
-			? _suppliesObjective.DisplayText
-			: _objective.DisplayText;
-		_objectiveText.Text = $"OBJECTIVE\n{displayText}";
+		if (_suppliesObjective.State == ServiceStationSuppliesObjectiveState.Completed)
+		{
+			_objectiveText.Text = "OBJECTIVES COMPLETE\nEmergency supplies delivered";
+			_objectiveText.Modulate = new Color(0.72f, 0.92f, 0.68f, 1.0f);
+			return;
+		}
+
+		bool firstObjective = _objective.State != AntibioticsObjectiveState.Completed;
+		string displayText = firstObjective
+			? _objective.DisplayText
+			: _suppliesObjective.DisplayText;
+		_objectiveText.Text = $"CURRENT OBJECTIVE  {(firstObjective ? "1 / 2" : "2 / 2")}\n" +
+			displayText;
+		_objectiveText.Modulate = Colors.White;
 	}
 }
