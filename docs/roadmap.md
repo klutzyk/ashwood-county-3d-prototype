@@ -148,14 +148,14 @@ Environment
 - [ ] Terrain blending
 - [ ] Grass variation
 - [ ] Bush variation
-- [ ] Better ground materials
+- [x] Better ground materials
 
 Buildings
 
-- [ ] Better house materials
-- [ ] Better pharmacy exterior
-- [ ] Better diner
-- [ ] Better service station
+- [x] Better house materials
+- [x] Better pharmacy exterior
+- [x] Better diner
+- [x] Better service station
 
 Props
 

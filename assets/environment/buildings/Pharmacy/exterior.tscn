@@ -3,6 +3,7 @@
 [ext_resource type="Material" path="res://assets/materials/building_wall.tres" id="1_wall"]
 [ext_resource type="Material" path="res://assets/materials/building_fixture.tres" id="2_fixture"]
 [ext_resource type="Material" path="res://assets/materials/building_partition.tres" id="3_trim"]
+[ext_resource type="Material" path="res://assets/materials/building_roof.tres" id="4_roof"]
 
 [sub_resource type="BoxMesh" id="WallMesh"]
 material = ExtResource("1_wall")
@@ -54,7 +55,7 @@ material = ExtResource("3_trim")
 size = Vector3(2.4, 0.04, 9.8)
 
 [sub_resource type="BoxMesh" id="RoofMesh"]
-material = ExtResource("2_fixture")
+material = ExtResource("4_roof")
 size = Vector3(7.35, 0.24, 9.35)
 
 [node name="PharmacyExterior" type="StaticBody3D"]

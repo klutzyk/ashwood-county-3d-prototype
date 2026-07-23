@@ -2,6 +2,7 @@
 
 [ext_resource type="Material" path="res://assets/materials/building_wall.tres" id="1_wall"]
 [ext_resource type="Material" path="res://assets/materials/building_fixture.tres" id="2_fixture"]
+[ext_resource type="Material" path="res://assets/materials/building_roof.tres" id="2_roof"]
 [ext_resource type="Texture2D" uid="uid://drvikjgjd6tr2" path="res://assets/third_party/materials/textures/walls/patterned_concrete_wall_1k.gltf/textures/patterned_concrete_wall_diff_1k.jpg" id="2_iue8o"]
 [ext_resource type="Texture2D" uid="uid://dvtesmcmfaf6h" path="res://assets/third_party/materials/textures/walls/patterned_concrete_wall_1k.gltf/textures/patterned_concrete_wall_arm_1k.jpg" id="3_1pejx"]
 [ext_resource type="Texture2D" uid="uid://cv61dd7iv0oia" path="res://assets/third_party/materials/textures/walls/patterned_concrete_wall_1k.gltf/textures/patterned_concrete_wall_nor_gl_1k.jpg" id="3_ef15t"]
@@ -89,7 +90,7 @@ ao_texture = ExtResource("6_oacr0")
 uv1_scale = Vector3(8, 3, 1)
 
 [sub_resource type="BoxMesh" id="RoofMesh"]
-material = ExtResource("2_fixture")
+material = ExtResource("2_roof")
 size = Vector3(8.4, 0.25, 10.4)
 
 [sub_resource type="StandardMaterial3D" id="WindowMaterial"]

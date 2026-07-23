@@ -1683,3 +1683,29 @@ Validation:
 - Melee responsiveness validation passed authored reaction playback, hit stun,
   directional knockback and confirmed-hit-only camera feedback
 - C# build completed with no warnings or errors
+
+---
+
+## Downloaded Building Material Pass
+
+Completed:
+
+- Replaced flat placeholder exterior materials with downloaded plastered,
+  weathered and concrete PBR texture sets
+- Replaced placeholder interior floors and partitions with downloaded textured
+  materials
+- Applied downloaded slate roofing and weathered door texture sets to all four
+  enterable building types
+- Reused project-owned material wrappers without editing third-party sources
+- Preserved all building meshes, collision shapes, entrances and lighting
+
+Outcome:
+
+The house, pharmacy, service station and diner now have distinct, weathered
+surface character inside and out without changing their gameplay geometry.
+
+Validation:
+
+- Town-landmark and world-polish validations passed
+- Rendered Compatibility world load completed without scene or material errors
+- C# build completed with no warnings or errors
