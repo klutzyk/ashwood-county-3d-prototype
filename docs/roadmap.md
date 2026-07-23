@@ -315,7 +315,7 @@ Complete and test one vertical slice before starting the next.
 - [x] Zombie variant profiles
 - [x] Melee weapon data foundation
 - [x] World interaction consistency
-- [ ] Main menu
+- [x] Main menu
 - [ ] Persistent settings menu
 - [ ] Pause menu
 - [ ] Service-station supplies objective

@@ -1068,3 +1068,33 @@ Validation:
 - Inventory, objective, notification, weighted-loot, save/load and pursuit
   regressions passed
 - C# build completed with no warnings or errors
+
+---
+
+## Prototype Main Menu
+
+Completed:
+
+- Added a lightweight project-owned main menu with New Game, Continue, Settings
+  and Quit
+- Disabled Continue for missing, malformed or unsupported save files
+- Added overwrite confirmation only when a valid save exists
+- Started New Game through a clean scene load after removing prior save artifacts
+- Added one-shot Continue launch intent so gameplay loads after its scene is ready
+- Preserved direct launching of gameplay, benchmark and validation scenes
+- Added mouse and keyboard focus flow
+
+Outcome:
+
+Normal project launch now has a clear entry point without introducing profiles,
+multiple slots, character selection or cinematic startup.
+
+Validation:
+
+- Main-menu validation passed save-state gating, overwrite confirmation,
+  Settings/Back focus and clean one-shot launch state
+- Rendered project entry loaded without scene or script errors
+- Direct save/load and inventory validation scenes still passed
+- Fixed rendered gameplay benchmark remained above target at 162.19 FPS average
+  and 9.89 ms p95
+- C# build completed with no warnings or errors

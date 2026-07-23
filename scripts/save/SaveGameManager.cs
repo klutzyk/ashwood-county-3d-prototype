@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 using Godot;
+using AshwoodCounty3DPrototype.Game;
 using AshwoodCounty3DPrototype.Interactions;
 using AshwoodCounty3DPrototype.Items;
 using AshwoodCounty3DPrototype.Objectives;
@@ -18,13 +19,14 @@ namespace AshwoodCounty3DPrototype.Save;
 
 public partial class SaveGameManager : Node
 {
+	public const string DefaultSaveFilePath = "user://ashwood_county_save_v1.json";
 	private const int VersionOneMinimumContainerCount = 4;
 	private const int VersionOneMinimumZombieCount = 5;
 
 	[Signal]
 	public delegate void StatusMessageRequestedEventHandler(string message);
 
-	[Export] public string SaveFilePath { get; set; } = "user://ashwood_county_save_v1.json";
+	[Export] public string SaveFilePath { get; set; } = DefaultSaveFilePath;
 	[Export] public NodePath PlayerPath { get; set; } = new("../Player");
 	[Export] public NodePath ObjectivePath { get; set; } = new("../AntibioticsObjective");
 	[Export] public NodePath WorldTimePath { get; set; } = new("../WorldTime");
@@ -62,6 +64,118 @@ public partial class SaveGameManager : Node
 		_playerInventory = _player.GetNode<PlayerInventory>("Inventory");
 		_objective = GetNode<AntibioticsObjective>(ObjectivePath);
 		_worldTime = GetNode<WorldTime>(WorldTimePath);
+		if (GameLaunchContext.ConsumeContinueRequest())
+		{
+			CallDeferred(MethodName.LoadRequestedGame);
+		}
+	}
+
+	private void LoadRequestedGame()
+	{
+		LoadGame();
+	}
+
+	public static bool HasValidSaveFile(string saveFilePath = DefaultSaveFilePath)
+	{
+		if (!GodotFileAccess.FileExists(saveFilePath))
+		{
+			return false;
+		}
+
+		try
+		{
+			using GodotFileAccess? file =
+				GodotFileAccess.Open(saveFilePath, GodotFileAccess.ModeFlags.Read);
+			SaveGameDataV1? data = file is null
+				? null
+				: JsonSerializer.Deserialize<SaveGameDataV1>(file.GetAsText(), JsonOptions);
+			return IsStructurallyValid(data);
+		}
+		catch (Exception)
+		{
+			return false;
+		}
+	}
+
+	public static bool DeleteSaveFile(string saveFilePath = DefaultSaveFilePath)
+	{
+		bool success = true;
+		foreach (string path in new[] { saveFilePath, $"{saveFilePath}.tmp", $"{saveFilePath}.bak" })
+		{
+			string absolutePath = ProjectSettings.GlobalizePath(path);
+			try
+			{
+				if (File.Exists(absolutePath))
+				{
+					File.Delete(absolutePath);
+				}
+			}
+			catch (Exception)
+			{
+				success = false;
+			}
+		}
+		return success;
+	}
+
+	private static bool IsStructurallyValid(SaveGameDataV1? data)
+	{
+		if (data is null || data.Version != SaveGameDataV1.CurrentVersion ||
+			data.PlayerTransform?.Position is null || data.PlayerTransform.Rotation is null ||
+			data.PlayerInventory is null || data.Containers is null || data.Zombies is null ||
+			!Enum.IsDefined(typeof(AntibioticsObjectiveState), data.ObjectiveState) ||
+			!IsFinite(data.PlayerHealth) || data.PlayerHealth < 0.0f || data.PlayerHealth > 100.0f ||
+			!IsFinite(data.PlayerStamina) || data.PlayerStamina < 0.0f || data.PlayerStamina > 100.0f ||
+			!IsFinite(data.PlayerHunger) || data.PlayerHunger < 0.0f || data.PlayerHunger > 100.0f ||
+			!IsFinite(data.PlayerThirst) || data.PlayerThirst < 0.0f || data.PlayerThirst > 100.0f ||
+			!IsFinite(data.WorldTimeHours) || data.WorldTimeHours < 0.0f ||
+			data.WorldTimeHours >= 24.0f ||
+			!IsFinite(data.PlayerTransform.Position) ||
+			!IsFinite(data.PlayerTransform.Rotation) ||
+			data.Containers.Count < VersionOneMinimumContainerCount ||
+			data.Zombies.Count < VersionOneMinimumZombieCount ||
+			!HasValidItemStacks(data.PlayerInventory))
+		{
+			return false;
+		}
+
+		HashSet<string> containerPaths = new(StringComparer.Ordinal);
+		foreach (ContainerSaveData container in data.Containers)
+		{
+			if (container is null || string.IsNullOrWhiteSpace(container.NodePath) ||
+				!containerPaths.Add(container.NodePath) || !HasValidItemStacks(container.Items))
+			{
+				return false;
+			}
+		}
+
+		HashSet<string> zombiePaths = new(StringComparer.Ordinal);
+		foreach (ZombieSaveData zombie in data.Zombies)
+		{
+			if (zombie is null || string.IsNullOrWhiteSpace(zombie.NodePath) ||
+				!zombiePaths.Add(zombie.NodePath))
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+
+	private static bool HasValidItemStacks(List<ItemStackSaveData>? stacks)
+	{
+		if (stacks is null)
+		{
+			return false;
+		}
+		foreach (ItemStackSaveData stack in stacks)
+		{
+			if (stack is null || stack.Quantity <= 0 ||
+				!ItemResourcePaths.ContainsKey(stack.ItemId))
+			{
+				return false;
+			}
+		}
+		return true;
 	}
 
 	public override void _UnhandledInput(InputEvent @event)
