@@ -1343,6 +1343,33 @@ Known limitations:
 
 ---
 
+## Residential District Expansion
+
+Completed:
+
+- Added one northern residential district at approximately 66% of the original
+  ground footprint
+- Continued the main road into one attached residential street
+- Added eight lots using the existing modular house exterior and roadside
+  dressing, including driveways, fences, gardens, bins and bushes
+- Reused current utility poles and two abandoned vehicles
+- Added a connected lightweight navigation region over the new road network
+
+Outcome:
+
+The town has a distinct residential edge with believable lot spacing while
+remaining a bounded prototype map.
+
+Validation:
+
+- Residential-district validation passed lot count and dressing, road collision,
+  navigation coverage, vehicle/pole placement and expansion footprint
+- Interaction-consistency and same-session save/load regressions passed
+- Representative full-game benchmark measured 143.56 FPS average and 11.31 ms
+  p95 versus the session baseline of 114.06 FPS and 18.32 ms p95
+- C# build completed with no warnings or errors
+
+
 ## Representative Full-Game Performance Benchmark
 
 Completed:

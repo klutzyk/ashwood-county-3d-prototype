@@ -1,0 +1,160 @@
+[gd_scene load_steps=14 format=3]
+
+[ext_resource type="Material" path="res://assets/materials/grass_ground.tres" id="1_grass"]
+[ext_resource type="Material" path="res://assets/materials/asphalt_02.tres" id="2_asphalt"]
+[ext_resource type="Material" path="res://assets/materials/dirt_shoulder.tres" id="3_dirt"]
+[ext_resource type="PackedScene" path="res://scenes/environment/residential_lot.tscn" id="4_lot"]
+[ext_resource type="PackedScene" path="res://assets/environment/roads/utility_pole.tscn" id="5_pole"]
+[ext_resource type="PackedScene" path="res://assets/environment/vehicles/rusted_alfa_romeo.tscn" id="6_car"]
+
+[sub_resource type="BoxMesh" id="TerrainMesh"]
+material = ExtResource("1_grass")
+size = Vector3(55, 0.2, 30)
+
+[sub_resource type="BoxShape3D" id="TerrainShape"]
+size = Vector3(55, 0.2, 30)
+
+[sub_resource type="BoxMesh" id="MainRoadMesh"]
+material = ExtResource("2_asphalt")
+size = Vector3(8, 0.08, 31)
+
+[sub_resource type="BoxShape3D" id="MainRoadShape"]
+size = Vector3(8, 0.08, 31)
+
+[sub_resource type="BoxMesh" id="ResidentialRoadMesh"]
+material = ExtResource("2_asphalt")
+size = Vector3(50, 0.08, 8)
+
+[sub_resource type="BoxShape3D" id="ResidentialRoadShape"]
+size = Vector3(50, 0.08, 8)
+
+[sub_resource type="BoxMesh" id="ShoulderLongMesh"]
+material = ExtResource("3_dirt")
+size = Vector3(50, 0.025, 1.5)
+
+[sub_resource type="BoxMesh" id="ShoulderShortMesh"]
+material = ExtResource("3_dirt")
+size = Vector3(1.5, 0.025, 31)
+
+[sub_resource type="NavigationMesh" id="DistrictNavigationMesh"]
+vertices = PackedVector3Array(-4, 0.2, 24, 4, 0.2, 24, -4, 0.2, 34.5, 4, 0.2, 34.5, 50, 0.2, 34.5, -4, 0.2, 45.5, 4, 0.2, 45.5, 50, 0.2, 45.5, -4, 0.2, 55, 4, 0.2, 55)
+polygons = [PackedInt32Array(0, 1, 3, 2), PackedInt32Array(2, 3, 4, 7, 6, 5), PackedInt32Array(5, 6, 9, 8)]
+geometry_parsed_geometry_type = 1
+geometry_collision_mask = 1
+cell_height = 0.1
+agent_height = 1.8
+agent_max_climb = 0.3
+region_merge_size = 8.0
+filter_baking_aabb = AABB(-5, -1, 23, 56, 8, 33)
+
+[node name="ResidentialDistrict" type="Node3D"]
+
+[node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
+navigation_mesh = SubResource("DistrictNavigationMesh")
+
+[node name="Terrain" type="StaticBody3D" parent="."]
+position = Vector3(22.5, -0.1, 40)
+
+[node name="Mesh" type="MeshInstance3D" parent="Terrain"]
+mesh = SubResource("TerrainMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="Terrain"]
+shape = SubResource("TerrainShape")
+
+[node name="Roads" type="Node3D" parent="."]
+
+[node name="MainRoadExtension" type="StaticBody3D" parent="Roads"]
+position = Vector3(0, 0.04, 39.5)
+
+[node name="Mesh" type="MeshInstance3D" parent="Roads/MainRoadExtension"]
+mesh = SubResource("MainRoadMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="Roads/MainRoadExtension"]
+shape = SubResource("MainRoadShape")
+
+[node name="ResidentialStreet" type="StaticBody3D" parent="Roads"]
+position = Vector3(25, 0.045, 40)
+
+[node name="Mesh" type="MeshInstance3D" parent="Roads/ResidentialStreet"]
+mesh = SubResource("ResidentialRoadMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="Roads/ResidentialStreet"]
+shape = SubResource("ResidentialRoadShape")
+
+[node name="NorthShoulder" type="MeshInstance3D" parent="Roads"]
+position = Vector3(25, 0.01, 44.75)
+cast_shadow = 0
+mesh = SubResource("ShoulderLongMesh")
+
+[node name="SouthShoulder" type="MeshInstance3D" parent="Roads"]
+position = Vector3(25, 0.01, 35.25)
+cast_shadow = 0
+mesh = SubResource("ShoulderLongMesh")
+
+[node name="WestShoulder" type="MeshInstance3D" parent="Roads"]
+position = Vector3(-4.75, 0.01, 39.5)
+cast_shadow = 0
+mesh = SubResource("ShoulderShortMesh")
+
+[node name="EastShoulder" type="MeshInstance3D" parent="Roads"]
+position = Vector3(4.75, 0.01, 39.5)
+cast_shadow = 0
+mesh = SubResource("ShoulderShortMesh")
+
+[node name="ResidentialLots" type="Node3D" parent="."]
+
+[node name="SouthLot1" parent="ResidentialLots" instance=ExtResource("4_lot")]
+position = Vector3(8, 0, 29.8)
+rotation = Vector3(0, 1.5707964, 0)
+
+[node name="SouthLot2" parent="ResidentialLots" instance=ExtResource("4_lot")]
+position = Vector3(20, 0, 29.8)
+rotation = Vector3(0, 1.5707964, 0)
+
+[node name="SouthLot3" parent="ResidentialLots" instance=ExtResource("4_lot")]
+position = Vector3(32, 0, 29.8)
+rotation = Vector3(0, 1.5707964, 0)
+
+[node name="SouthLot4" parent="ResidentialLots" instance=ExtResource("4_lot")]
+position = Vector3(44, 0, 29.8)
+rotation = Vector3(0, 1.5707964, 0)
+
+[node name="NorthLot1" parent="ResidentialLots" instance=ExtResource("4_lot")]
+position = Vector3(8, 0, 50.2)
+rotation = Vector3(0, -1.5707964, 0)
+
+[node name="NorthLot2" parent="ResidentialLots" instance=ExtResource("4_lot")]
+position = Vector3(20, 0, 50.2)
+rotation = Vector3(0, -1.5707964, 0)
+
+[node name="NorthLot3" parent="ResidentialLots" instance=ExtResource("4_lot")]
+position = Vector3(32, 0, 50.2)
+rotation = Vector3(0, -1.5707964, 0)
+
+[node name="NorthLot4" parent="ResidentialLots" instance=ExtResource("4_lot")]
+position = Vector3(44, 0, 50.2)
+rotation = Vector3(0, -1.5707964, 0)
+
+[node name="Infrastructure" type="Node3D" parent="."]
+
+[node name="UtilityPole1" parent="Infrastructure" instance=ExtResource("5_pole")]
+position = Vector3(5.5, 0, 45.8)
+
+[node name="UtilityPole2" parent="Infrastructure" instance=ExtResource("5_pole")]
+position = Vector3(21.5, 0, 45.8)
+
+[node name="UtilityPole3" parent="Infrastructure" instance=ExtResource("5_pole")]
+position = Vector3(37.5, 0, 45.8)
+
+[node name="UtilityPole4" parent="Infrastructure" instance=ExtResource("5_pole")]
+position = Vector3(49, 0, 45.8)
+
+[node name="AbandonedVehicles" type="Node3D" parent="."]
+
+[node name="DrivewayCar" parent="AbandonedVehicles" instance=ExtResource("6_car")]
+position = Vector3(19.2, 0.08, 34.1)
+rotation = Vector3(0, 1.48, 0)
+
+[node name="KerbsideCar" parent="AbandonedVehicles" instance=ExtResource("6_car")]
+position = Vector3(39.5, 0.08, 41.7)
+rotation = Vector3(0, -1.63, 0)

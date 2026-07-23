@@ -1,0 +1,24 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/environment/buildings/House/exterior.tscn" id="1_house"]
+[ext_resource type="PackedScene" path="res://assets/environment/props/roadside_dressing.tscn" id="2_dressing"]
+
+[sub_resource type="StandardMaterial3D" id="GardenMaterial"]
+albedo_color = Color(0.13, 0.19, 0.09, 1)
+roughness = 1.0
+
+[sub_resource type="BoxMesh" id="GardenMesh"]
+material = SubResource("GardenMaterial")
+size = Vector3(5.8, 0.025, 2.1)
+
+[node name="ResidentialLot" type="Node3D"]
+
+[node name="HouseExterior" parent="." instance=ExtResource("1_house")]
+
+[node name="RoadsideDressing" parent="." instance=ExtResource("2_dressing")]
+
+[node name="FrontGarden" type="MeshInstance3D" parent="."]
+position = Vector3(-4.1, 0.018, -1.1)
+cast_shadow = 0
+visibility_range_end = 52.0
+mesh = SubResource("GardenMesh")

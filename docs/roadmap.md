@@ -355,3 +355,18 @@ Complete and test one vertical slice before starting the next.
 - Radio system
 - Larger handcrafted world
 - Steam integration
+
+---
+
+# Town Expansion Pass
+
+- [x] Add one attached residential district with an extended road, one new
+  street, eight modular houses, complete lot dressing, abandoned vehicles and
+  connected navigation
+- [ ] Add one enterable town landmark
+- [ ] Improve the road network
+- [ ] Improve town atmosphere
+- [ ] Redistribute the existing zombie population
+- [ ] Improve logical loot placement
+- [ ] Add environmental storytelling scenes
+- [ ] Complete a world-polish pass
