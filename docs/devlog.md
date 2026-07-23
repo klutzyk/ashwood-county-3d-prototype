@@ -1040,3 +1040,31 @@ Validation:
   impact timing, one-hit guarding, buffering, repeat damage and ready feedback
 - Zombie pursuit and crowd regressions passed
 - C# build completed with no warnings or errors
+
+---
+
+## World Interaction Consistency
+
+Completed:
+
+- Standardized prompts as `Press [E]` or `Hold [E]` instructions
+- Kept nearest-distance selection and filtered candidates through one cached
+  lightweight line-of-sight query
+- Allowed each interactable's own collision while rejecting intervening walls
+- Propagated door and searched-container prompt changes immediately
+- Cleared prompts and hold progress as soon as a target becomes disabled or invalid
+- Blocked both input-driven and direct interactions while dead, paused or in
+  blocking inventory UI
+
+Outcome:
+
+Doors, containers, corpses, building entrances and the safe point now follow
+the same candidate, prompt and blocking rules without changing their actions.
+
+Validation:
+
+- Interaction consistency validation passed nearest selection, prompt updates,
+  wall occlusion, death/UI blocking and hold cancellation
+- Inventory, objective, notification, weighted-loot, save/load and pursuit
+  regressions passed
+- C# build completed with no warnings or errors

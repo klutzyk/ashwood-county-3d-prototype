@@ -72,8 +72,6 @@ public partial class DoorController : Node3D
 
 	private void UpdatePrompt()
 	{
-		_interactable.InteractionName = "Door";
-		_interactable.InteractionPrompt = IsOpen ? "Close" : "Open";
-		_interactable.HoldDuration = 0.0f;
+		_interactable.ConfigurePrompt(IsOpen ? "Close" : "Open", "Door", 0.0f);
 	}
 }

@@ -14,25 +14,29 @@ public partial class PlayerInteraction : Node
 	public delegate void InteractionProgressChangedEventHandler(float progress, bool visible);
 
 	[Export] public float InteractionRange { get; set; } = 3.0f;
+	[Export] public float EyeHeight { get; set; } = 0.8f;
+	[Export(PropertyHint.Layers3DPhysics)] public uint LineOfSightCollisionMask { get; set; } = 1;
 
 	public Interactable? CurrentInteractable { get; private set; }
 	public string CurrentPromptText => CurrentInteractable?.PromptText ?? string.Empty;
 	public bool IsInteracting => _activeInteractable is not null;
 
 	private ThirdPersonPlayer _player = null!;
-	private PlayerHealth _health = null!;
 	private Interactable? _activeInteractable;
 	private float _interactionElapsed;
+	private PhysicsRayQueryParameters3D _lineOfSightQuery = null!;
 
 	public override void _Ready()
 	{
 		_player = GetParent<ThirdPersonPlayer>();
-		_health = _player.GetNode<PlayerHealth>("Health");
+		_lineOfSightQuery = PhysicsRayQueryParameters3D.Create(Vector3.Zero, Vector3.Zero);
+		_lineOfSightQuery.CollisionMask = LineOfSightCollisionMask;
+		_lineOfSightQuery.Exclude = new Godot.Collections.Array<Rid> { _player.GetRid() };
 	}
 
 	public override void _PhysicsProcess(double delta)
 	{
-		if (_health.IsDead || _player.IsInventoryUiOpen)
+		if (!_player.CanUseWorldInteractions)
 		{
 			CancelInteraction();
 			SetCurrentInteractable(null);
@@ -45,7 +49,7 @@ public partial class PlayerInteraction : Node
 
 	public override void _UnhandledInput(InputEvent @event)
 	{
-		if (_health.IsDead || _player.IsInventoryUiOpen || @event is InputEventKey { Echo: true })
+		if (!_player.CanUseWorldInteractions || @event is InputEventKey { Echo: true })
 		{
 			return;
 		}
@@ -129,13 +133,14 @@ public partial class PlayerInteraction : Node
 		float closestDistanceSquared = Mathf.Pow(Mathf.Max(InteractionRange, 0.0f), 2.0f);
 		foreach (Node node in GetTree().GetNodesInGroup(Interactable.GroupName))
 		{
-			if (node is not Interactable interactable || !interactable.Enabled || !interactable.IsInsideTree())
+			if (node is not Interactable interactable || !interactable.Enabled ||
+				!interactable.IsInsideTree())
 			{
 				continue;
 			}
 
 			float distanceSquared = _player.GlobalPosition.DistanceSquaredTo(interactable.GlobalPosition);
-			if (distanceSquared > closestDistanceSquared)
+			if (distanceSquared > closestDistanceSquared || !HasLineOfSight(interactable))
 			{
 				continue;
 			}
@@ -145,6 +150,39 @@ public partial class PlayerInteraction : Node
 		}
 
 		return closest;
+	}
+
+	private bool HasLineOfSight(Interactable interactable)
+	{
+		_lineOfSightQuery.From = _player.GlobalPosition + (Vector3.Up * EyeHeight);
+		_lineOfSightQuery.To = interactable.GlobalPosition;
+		_lineOfSightQuery.CollisionMask = LineOfSightCollisionMask;
+		Godot.Collections.Dictionary hit =
+			_player.GetWorld3D().DirectSpaceState.IntersectRay(_lineOfSightQuery);
+		if (hit.Count == 0)
+		{
+			return true;
+		}
+
+		Node? collider = hit["collider"].AsGodotObject() as Node;
+		Node interactionOwner = FindInteractionOwner(interactable);
+		return collider == interactionOwner ||
+			(collider is not null && interactionOwner.IsAncestorOf(collider));
+	}
+
+	private static Node FindInteractionOwner(Interactable interactable)
+	{
+		Node? ancestor = interactable.GetParent();
+		Node fallback = ancestor ?? interactable;
+		while (ancestor is not null)
+		{
+			if (ancestor is CollisionObject3D)
+			{
+				return ancestor;
+			}
+			ancestor = ancestor.GetParent();
+		}
+		return fallback;
 	}
 
 	private void SetCurrentInteractable(Interactable? interactable)
@@ -159,7 +197,30 @@ public partial class PlayerInteraction : Node
 			CancelInteraction();
 		}
 
+		if (CurrentInteractable is not null)
+		{
+			CurrentInteractable.PromptConfigurationChanged -= OnPromptConfigurationChanged;
+			CurrentInteractable.AvailabilityChanged -= OnAvailabilityChanged;
+		}
 		CurrentInteractable = interactable;
+		if (CurrentInteractable is not null)
+		{
+			CurrentInteractable.PromptConfigurationChanged += OnPromptConfigurationChanged;
+			CurrentInteractable.AvailabilityChanged += OnAvailabilityChanged;
+		}
 		EmitSignal(SignalName.PromptChanged, CurrentPromptText);
+	}
+
+	private void OnPromptConfigurationChanged()
+	{
+		EmitSignal(SignalName.PromptChanged, CurrentPromptText);
+	}
+
+	private void OnAvailabilityChanged(bool enabled)
+	{
+		if (!enabled)
+		{
+			SetCurrentInteractable(null);
+		}
 	}
 }

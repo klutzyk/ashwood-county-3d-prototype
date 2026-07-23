@@ -1,6 +1,7 @@
 #nullable enable
 
 using Godot;
+using AshwoodCounty3DPrototype.Player;
 
 namespace AshwoodCounty3DPrototype.Interactions;
 
@@ -11,23 +12,58 @@ public partial class Interactable : Node3D
 	[Signal]
 	public delegate void InteractedEventHandler(Node interactor);
 
+	[Signal]
+	public delegate void PromptConfigurationChangedEventHandler();
+
+	[Signal]
+	public delegate void AvailabilityChangedEventHandler(bool enabled);
+
 	[Export] public string InteractionName { get; set; } = "Object";
 	[Export] public string InteractionPrompt { get; set; } = "Interact with";
 	[Export] public float HoldDuration { get; set; }
-	[Export] public bool Enabled { get; set; } = true;
+	[Export]
+	public bool Enabled
+	{
+		get => _enabled;
+		set
+		{
+			if (_enabled == value)
+			{
+				return;
+			}
+			_enabled = value;
+			EmitSignal(SignalName.AvailabilityChanged, _enabled);
+		}
+	}
 
-	public string PromptText => $"{(HoldDuration > 0.0f ? "Hold" : "Press")} E to {InteractionPrompt.Trim()} {InteractionName.Trim()}";
+	public string PromptText =>
+		$"{(HoldDuration > 0.0f ? "Hold [E]" : "Press [E]")} to " +
+		$"{InteractionPrompt.Trim()} {InteractionName.Trim()}";
+
+	private bool _enabled = true;
 
 	public override void _Ready()
 	{
 		AddToGroup(GroupName);
 	}
 
-	public void Interact(Node interactor)
+	public bool Interact(Node interactor)
 	{
-		if (Enabled)
+		if (!Enabled ||
+			(interactor is ThirdPersonPlayer player && !player.CanUseWorldInteractions))
 		{
-			EmitSignal(SignalName.Interacted, interactor);
+			return false;
 		}
+
+		EmitSignal(SignalName.Interacted, interactor);
+		return true;
+	}
+
+	public void ConfigurePrompt(string action, string displayName, float holdDuration)
+	{
+		InteractionPrompt = action.Trim();
+		InteractionName = displayName.Trim();
+		HoldDuration = Mathf.Max(holdDuration, 0.0f);
+		EmitSignal(SignalName.PromptConfigurationChanged);
 	}
 }

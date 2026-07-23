@@ -75,4 +75,4 @@ billboard = 1
 position = Vector3(0, 0.8, 0)
 script = ExtResource("2_interactable")
 InteractionName = "Safe Point"
-InteractionPrompt = "Deliver antibiotics at"
+InteractionPrompt = "Deliver Antibiotics at"

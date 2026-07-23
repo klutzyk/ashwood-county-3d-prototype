@@ -67,8 +67,9 @@ public partial class SearchableContainer : Node3D
 
 	private void ConfigureInteraction()
 	{
-		_interactable.InteractionName = DisplayName;
-		_interactable.InteractionPrompt = IsSearched ? "Open" : "Search";
-		_interactable.HoldDuration = IsSearched ? 0.0f : Mathf.Max(SearchDuration, 0.0f);
+		_interactable.ConfigurePrompt(
+			IsSearched ? "Open" : "Search",
+			DisplayName,
+			IsSearched ? 0.0f : SearchDuration);
 	}
 }

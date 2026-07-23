@@ -32,6 +32,8 @@ public partial class ThirdPersonPlayer : CharacterBody3D
 
 	public bool IsSprinting { get; private set; }
 	public bool IsInventoryUiOpen => _inventoryUiOpen;
+	public bool CanUseWorldInteractions =>
+		!_health.IsDead && !_inventoryUiOpen && !GetTree().Paused;
 
 	public override void _Ready()
 	{

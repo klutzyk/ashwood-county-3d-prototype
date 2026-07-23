@@ -314,7 +314,7 @@ Complete and test one vertical slice before starting the next.
 - [x] Inventory stack management
 - [x] Zombie variant profiles
 - [x] Melee weapon data foundation
-- [ ] World interaction consistency
+- [x] World interaction consistency
 - [ ] Main menu
 - [ ] Persistent settings menu
 - [ ] Pause menu
