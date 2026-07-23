@@ -43,6 +43,12 @@ public partial class InteractionConsistencyValidation : Node
 			near.ConfigurePrompt("Close", "Near Door", 0.0f);
 			Require(latestPrompt == "Press [E] to Close Near Door",
 				"prompt changes appear immediately without changing candidates");
+			near.SetPromptOverride("Opening Door…");
+			Require(latestPrompt == "Opening Door…",
+				"temporary interaction feedback can replace the standard prompt");
+			near.SetPromptOverride(string.Empty);
+			Require(latestPrompt == "Press [E] to Close Near Door",
+				"clearing temporary feedback restores the configured prompt");
 
 			StaticBody3D blocker = AddBlocker(
 				world, player.GlobalPosition + new Vector3(0, 0.8f, 0.75f));

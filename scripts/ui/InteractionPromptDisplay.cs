@@ -31,7 +31,17 @@ public partial class InteractionPromptDisplay : Label
 
 	private void UpdateProgress(float progress, bool visible)
 	{
-		_progressBar.Value = Mathf.Clamp(progress, 0.0f, 1.0f);
+		float clampedProgress = Mathf.Clamp(progress, 0.0f, 1.0f);
+		_progressBar.Value = clampedProgress;
 		_progressBar.Visible = visible;
+		if (visible && _playerInteraction.CurrentInteractable is Interactable interactable)
+		{
+			Text = $"Searching {interactable.InteractionName}… {Mathf.RoundToInt(clampedProgress * 100.0f)}%";
+			Visible = true;
+		}
+		else if (!visible)
+		{
+			UpdatePrompt(_playerInteraction.CurrentPromptText);
+		}
 	}
 }

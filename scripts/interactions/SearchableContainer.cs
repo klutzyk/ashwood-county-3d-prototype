@@ -60,6 +60,7 @@ public partial class SearchableContainer : Node3D
 			LootTable?.GenerateInto(Inventory, _random);
 			IsSearched = true;
 			ConfigureInteraction();
+			NotifySearchResult();
 
 			EmitSignal(SignalName.SearchCompleted);
 		}
@@ -75,5 +76,23 @@ public partial class SearchableContainer : Node3D
 			IsSearched ? "Open" : "Search",
 			DisplayName,
 			IsSearched ? 0.0f : SearchDuration);
+	}
+
+	private void NotifySearchResult()
+	{
+		int itemCount = 0;
+		for (int index = 0; index < Inventory.StackCount; index++)
+		{
+			itemCount += Inventory.GetQuantityAt(index);
+		}
+
+		if (GetTree().GetFirstNodeInGroup(GameplayNotificationDisplay.GroupName) is
+			GameplayNotificationDisplay notifications)
+		{
+			string result = itemCount == 0
+				? "empty"
+				: $"{itemCount} item{(itemCount == 1 ? string.Empty : "s")} found";
+			notifications.QueueNotification($"Searched {DisplayName}: {result}");
+		}
 	}
 }

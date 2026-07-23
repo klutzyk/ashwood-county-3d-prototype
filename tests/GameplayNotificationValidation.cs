@@ -37,6 +37,8 @@ public partial class GameplayNotificationValidation : Node
 				"notifications fade in rather than appearing abruptly");
 
 			cabinet.GetNode<Interactable>("Interactable").Interact(player);
+			Require(notifications.ContainsMessage("Searched"),
+				"completed searches report their loot result");
 			inventoryUi.TakeSelected();
 			Require(notifications.ContainsMessage("Item taken"),
 				"successful Take queues item feedback");
@@ -51,6 +53,11 @@ public partial class GameplayNotificationValidation : Node
 			inventoryUi.TakeSelected();
 			Require(notifications.ContainsMessage("Inventory full"),
 				"failed full-capacity Take queues inventory-full feedback");
+
+			inventoryUi.SelectPlayerItem(3);
+			inventoryUi.StoreSelected();
+			Require(notifications.ContainsMessage("Item stored"),
+				"successful Store queues item feedback");
 
 			player.GetNode<PlayerHealth>("Health").ApplyDamage(20.0f);
 			inventoryUi.SelectPlayerItem(1);

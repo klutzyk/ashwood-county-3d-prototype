@@ -36,11 +36,13 @@ public partial class Interactable : Node3D
 		}
 	}
 
-	public string PromptText =>
-		$"{(HoldDuration > 0.0f ? "Hold [E]" : "Press [E]")} to " +
-		$"{InteractionPrompt.Trim()} {InteractionName.Trim()}";
+	public string PromptText => string.IsNullOrWhiteSpace(_promptOverride)
+		? $"{(HoldDuration > 0.0f ? "Hold [E]" : "Press [E]")} to " +
+			$"{InteractionPrompt.Trim()} {InteractionName.Trim()}"
+		: _promptOverride;
 
 	private bool _enabled = true;
+	private string _promptOverride = string.Empty;
 
 	public override void _Ready()
 	{
@@ -64,6 +66,17 @@ public partial class Interactable : Node3D
 		InteractionPrompt = action.Trim();
 		InteractionName = displayName.Trim();
 		HoldDuration = Mathf.Max(holdDuration, 0.0f);
+		EmitSignal(SignalName.PromptConfigurationChanged);
+	}
+
+	public void SetPromptOverride(string promptText)
+	{
+		string trimmedPrompt = promptText.Trim();
+		if (_promptOverride == trimmedPrompt)
+		{
+			return;
+		}
+		_promptOverride = trimmedPrompt;
 		EmitSignal(SignalName.PromptConfigurationChanged);
 	}
 }

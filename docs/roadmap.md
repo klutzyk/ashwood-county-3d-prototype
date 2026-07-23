@@ -54,6 +54,8 @@ Completed.
 - [x] Water
 - [x] Scrap
 - [x] Loot persistence
+- [x] Search progress and loot-result feedback
+- [x] Polished container transfer feedback
 
 ---
 
@@ -88,6 +90,7 @@ Completed except interior polish.
 Completed
 
 - [x] Enterable buildings
+- [x] Door transition feedback and input locking
 - [x] Continuous interiors
 - [x] Searchable buildings
 

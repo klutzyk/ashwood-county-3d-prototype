@@ -1759,3 +1759,22 @@ Validation:
 - Town-landmark, loot-placement and interaction-consistency validations passed
 - Rendered Compatibility world load completed without scene errors
 - C# build completed with no warnings or errors
+
+---
+
+## Interaction Feedback Pass
+
+Completed:
+
+- Added live percentage feedback while searching and a concise result message
+  when a container is first revealed
+- Added live container stack counts and matching feedback for both taking and
+  storing loot
+- Prevented repeated door input during movement and exposed clear
+  opening/closing prompt feedback
+- Preserved container ownership, explicit transfers and existing door gameplay
+
+Validation:
+
+- Interaction-consistency and gameplay-notification validations passed
+- C# build completed with no warnings or errors

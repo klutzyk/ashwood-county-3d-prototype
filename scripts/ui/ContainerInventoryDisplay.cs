@@ -125,7 +125,6 @@ public partial class ContainerInventoryDisplay : Control
 		_playerNeeds.ThirstChanged += OnPlayerConditionChanged;
 		_selectedContainerIndex = -1;
 		_selectedPlayerIndex = -1;
-		_title.Text = $"{container.DisplayName} Inventory";
 		_containerLabel.Text = container.DisplayName;
 		_status.Text = string.Empty;
 		_details.Text = "Select an item to view its details.";
@@ -267,6 +266,7 @@ public partial class ContainerInventoryDisplay : Control
 			SelectContainerItem(destinationIndex);
 		}
 		ShowStatus($"Stored {item?.DisplayName} x{quantity}.");
+		Notify($"Item stored: {item?.DisplayName} x{quantity}");
 		return true;
 	}
 
@@ -330,6 +330,7 @@ public partial class ContainerInventoryDisplay : Control
 		_containerItems.Clear();
 		if (_containerInventory is null || _containerInventory.StackCount == 0)
 		{
+			UpdateContainerTitle();
 			_containerItems.AddItem("Empty");
 			_containerItems.SetItemDisabled(0, true);
 			_selectedContainerIndex = -1;
@@ -351,6 +352,7 @@ public partial class ContainerInventoryDisplay : Control
 				$"{item.DisplayName} x{_containerInventory.GetQuantityAt(index)}",
 				item.Icon);
 		}
+		UpdateContainerTitle();
 		_selectedContainerIndex = Mathf.Clamp(_selectedContainerIndex, -1, _containerInventory.StackCount - 1);
 		if (_selectedContainerIndex >= 0)
 		{
@@ -393,6 +395,19 @@ public partial class ContainerInventoryDisplay : Control
 		}
 		RefreshDetails();
 		RefreshButtons();
+	}
+
+	private void UpdateContainerTitle()
+	{
+		if (CurrentContainer is null || _containerInventory is null)
+		{
+			return;
+		}
+
+		_title.Text = _containerInventory.StackCount == 0
+			? $"{CurrentContainer.DisplayName} • Empty"
+			: $"{CurrentContainer.DisplayName} • {_containerInventory.StackCount} " +
+				$"stack{(_containerInventory.StackCount == 1 ? string.Empty : "s")}";
 	}
 
 	private void RefreshButtons()

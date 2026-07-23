@@ -18,6 +18,7 @@ public partial class DoorController : Node3D
 	[Export] public float NoiseRadius { get; set; } = 10.0f;
 
 	public bool IsOpen { get; private set; }
+	public bool IsAnimating { get; private set; }
 
 	private Node3D _hinge = null!;
 	private Interactable _interactable = null!;
@@ -37,9 +38,15 @@ public partial class DoorController : Node3D
 
 	public void ToggleDoor()
 	{
+		if (IsAnimating)
+		{
+			return;
+		}
+
 		IsOpen = !IsOpen;
+		IsAnimating = true;
 		GameplayNoise.Emit(GlobalPosition, NoiseRadius, GameplayNoiseCategory.Door);
-		_activeTween?.Kill();
+		_interactable.SetPromptOverride(IsOpen ? "Opening Door…" : "Closing Door…");
 		_activeTween = CreateTween()
 			.SetTrans(Tween.TransitionType.Sine)
 			.SetEase(Tween.EaseType.InOut);
@@ -48,9 +55,7 @@ public partial class DoorController : Node3D
 			"rotation:y",
 			GetTargetRotation(),
 			Mathf.Max(AnimationDuration, 0.01f));
-		_activeTween.TweenCallback(Callable.From(() =>
-			EmitSignal(SignalName.DoorStateChanged, IsOpen)));
-		UpdatePrompt();
+		_activeTween.TweenCallback(Callable.From(FinishAnimation));
 	}
 
 	private void OnInteracted(Node interactor)
@@ -72,6 +77,14 @@ public partial class DoorController : Node3D
 
 	private void UpdatePrompt()
 	{
+		_interactable.SetPromptOverride(string.Empty);
 		_interactable.ConfigurePrompt(IsOpen ? "Close" : "Open", "Door", 0.0f);
+	}
+
+	private void FinishAnimation()
+	{
+		IsAnimating = false;
+		UpdatePrompt();
+		EmitSignal(SignalName.DoorStateChanged, IsOpen);
 	}
 }
