@@ -1610,3 +1610,27 @@ Validation:
 - World polish validation (`WorldPolishValidation`) passed with zero errors
 - C# build completed with 0 warnings or errors
 
+---
+
+## Reusable Baseball Bat Hand Attachment
+
+Completed:
+
+- Extracted the baseball bat model and tuned grip transform into a reusable
+  weapon scene
+- Mounted the reusable scene under Remy's existing right-hand bone attachment
+- Removed only the obsolete hidden bat visual from the gameplay WeaponPivot
+- Preserved the WeaponPivot combat pose, hit detection and two-handed idle
+
+Outcome:
+
+The visible baseball bat now follows the animated right hand while combat
+continues to use the existing invisible gameplay pivot.
+
+Validation:
+
+- Weapon-hand attachment validation passed right-hand binding, reusable grip
+  transform, visible model, two-handed idle blend and attack-pivot checks
+- Melee responsiveness validation passed attack start, timed hits, input
+  buffering and ready-pose recovery
+- C# build completed with no warnings or errors

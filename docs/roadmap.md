@@ -62,6 +62,7 @@ Completed.
 Completed except final polish.
 
 - [x] Baseball bat
+- [x] Reusable right-hand baseball bat attachment
 - [x] Zombie damage
 - [x] Knockback
 - [x] Zombie death

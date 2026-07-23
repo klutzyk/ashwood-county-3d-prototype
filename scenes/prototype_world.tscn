@@ -43,7 +43,7 @@
 [ext_resource type="Script" uid="uid://ckhn2gnyiwxtf" path="res://scripts/player/PlayerMeleeCombat.cs" id="38_melee"]
 [ext_resource type="Script" uid="uid://cj4ob7ksgj0tu" path="res://scripts/player/PlayerNeeds.cs" id="39_needs"]
 [ext_resource type="Script" uid="uid://dl88ah5wmoeo5" path="res://scripts/world/AtmosphereAudio.cs" id="40_atmosphere"]
-[ext_resource type="PackedScene" uid="uid://c21quvp2au3a3" path="res://assets/third_party/common/weapons/baseball_bat_1k.gltf/baseball_bat_1k.gltf" id="40_rl0qt"]
+[ext_resource type="PackedScene" path="res://assets/weapons/baseball_bat.tscn" id="40_rl0qt"]
 [ext_resource type="Resource" path="res://assets/zombies/slow_walker.tres" id="41_slow"]
 [ext_resource type="Resource" path="res://assets/zombies/walker.tres" id="42_walker"]
 [ext_resource type="Resource" path="res://assets/zombies/runner.tres" id="43_runner"]
@@ -409,10 +409,6 @@ WeaponDefinition = ExtResource("44_baseball_bat")
 [node name="WeaponPivot" type="Node3D" parent="Player/MeleeCombat" unique_id=372816950]
 transform = Transform3D(0.907437, 0.42018816, 0, -0.42018816, 0.907437, 0, 0, 0, 1, 0.48, 0.48000002, 0.21999979)
 
-[node name="baseball_bat_1k" parent="Player/MeleeCombat/WeaponPivot" unique_id=381845487 instance=ExtResource("40_rl0qt")]
-transform = Transform3D(0.9999996, 2.9802322e-08, 0, -2.9802322e-08, 0.9999996, 0, 0, 0, 1, 0.29874092, 0.27938354, -0.26374245)
-visible = false
-
 [node name="Visual" type="Node3D" parent="Player" unique_id=517271585]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, -1, 0)
 
@@ -423,8 +419,7 @@ transform = Transform3D(-9.536764e-07, -0.99999994, -8.195639e-08, 1.5238767e-07
 bone_name = "mixamorig_RightHand"
 bone_idx = 36
 
-[node name="baseball_bat_1k" parent="Player/Visual/Remy/Skeleton3D/RightHandWeaponAttachment" unique_id=399326202 instance=ExtResource("40_rl0qt")]
-transform = Transform3D(0.9999995, -1.2022733e-06, 8.9810345e-07, -1.3738027e-06, -0.4925757, 0.8702696, -6.039178e-07, -0.8702692, -0.49257588, 0, 0.05323243, 0)
+[node name="BaseballBat" parent="Player/Visual/Remy/Skeleton3D/RightHandWeaponAttachment" instance=ExtResource("40_rl0qt")]
 
 [node name="CameraRig" type="Node3D" parent="Player" unique_id=947114645]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
