@@ -99,7 +99,7 @@ Do not create separate inventory implementations for cars, cupboards, crates or 
 
 ## Repository Structure
 
-```text
+
 assets/
   characters/
     player/
@@ -158,6 +158,26 @@ Include:
 - Suggested commit message
 
 Only include additional detail when requested.
+
+---
+
+## Autonomous Development
+
+When implementing a requested roadmap slice:
+
+- Read the project documentation before making changes.
+- Implement only the requested slice.
+- Build the project.
+- Validate the affected gameplay.
+- Update roadmap.md.
+- Update devlog.md.
+- Review the Git diff.
+- Stage only relevant files.
+- Create a Git commit with a concise conventional commit message.
+- Do not push.
+- Stop after the commit.
+
+Do not continue to future roadmap tasks unless explicitly instructed.
 
 ---
 
