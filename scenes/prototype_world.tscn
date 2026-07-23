@@ -36,7 +36,7 @@
 [ext_resource type="Script" path="res://scripts/player/PlayerFlashlight.cs" id="34_flashlight"]
 [ext_resource type="Script" path="res://scripts/ui/WorldClockDisplay.cs" id="35_clock"]
 [ext_resource type="Script" path="res://scripts/save/SaveGameManager.cs" id="36_save_manager"]
-[ext_resource type="Script" path="res://scripts/ui/SaveStatusDisplay.cs" id="37_save_status"]
+[ext_resource type="Script" path="res://scripts/ui/GameplayNotificationDisplay.cs" id="37_notifications"]
 [ext_resource type="Script" path="res://scripts/player/PlayerMeleeCombat.cs" id="38_melee"]
 [ext_resource type="Script" path="res://scripts/player/PlayerNeeds.cs" id="39_needs"]
 [ext_resource type="Script" path="res://scripts/world/AtmosphereAudio.cs" id="40_atmosphere"]
@@ -560,20 +560,20 @@ horizontal_alignment = 1
 vertical_alignment = 1
 script = ExtResource("35_clock")
 
-[node name="SaveStatus" type="Label" parent="PerformanceUI"]
+[node name="GameplayNotifications" type="Label" parent="PerformanceUI"]
 visible = false
 anchors_preset = 10
 anchor_right = 1.0
-offset_top = 56.0
-offset_bottom = 94.0
+offset_top = 62.0
+offset_bottom = 108.0
 grow_horizontal = 2
-theme_override_colors/font_color = Color(0.72, 0.95, 0.76, 1)
+theme_override_colors/font_color = Color(0.94, 0.92, 0.75, 1)
 theme_override_font_sizes/font_size = 18
 theme_override_styles/normal = SubResource("FpsBackground")
-text = "Game Saved"
+text = "Notification"
 horizontal_alignment = 1
 vertical_alignment = 1
-script = ExtResource("37_save_status")
+script = ExtResource("37_notifications")
 
 [node name="ObjectiveDisplay" type="Control" parent="PerformanceUI"]
 layout_mode = 3
@@ -594,21 +594,6 @@ theme_override_colors/font_color = Color(0.94, 0.93, 0.82, 1)
 theme_override_font_sizes/font_size = 16
 theme_override_styles/normal = SubResource("FpsBackground")
 text = "OBJECTIVE\nSearch the pharmacy for antibiotics"
-vertical_alignment = 1
-
-[node name="CompletionMessage" type="Label" parent="PerformanceUI/ObjectiveDisplay"]
-visible = false
-layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_top = 66.0
-offset_bottom = 108.0
-grow_horizontal = 2
-theme_override_colors/font_color = Color(0.6, 1, 0.66, 1)
-theme_override_font_sizes/font_size = 18
-theme_override_styles/normal = SubResource("FpsBackground")
-text = "Objective Complete: Antibiotics delivered"
-horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="FpsLabel" type="Label" parent="PerformanceUI" unique_id=1389187676]
@@ -795,19 +780,6 @@ theme_override_font_sizes/font_size = 13
 theme_override_styles/normal = SubResource("InventorySlotBackground")
 text = "4
 Empty"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="ItemFeedback" type="Label" parent="PerformanceUI" unique_id=58061946]
-visible = false
-anchors_preset = 10
-anchor_right = 1.0
-offset_top = 128.0
-offset_bottom = 162.0
-grow_horizontal = 2
-theme_override_colors/font_color = Color(0.94, 0.92, 0.75, 1)
-theme_override_font_sizes/font_size = 16
-theme_override_styles/normal = SubResource("FpsBackground")
 horizontal_alignment = 1
 vertical_alignment = 1
 

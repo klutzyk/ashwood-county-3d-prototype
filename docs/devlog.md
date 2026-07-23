@@ -637,3 +637,27 @@ Validation:
   Store, Use, full-capacity retention and Escape close
 - Existing antibiotics objective-flow regression validation passed
 - C# build completed with no warnings or errors
+
+---
+
+## Objective and Gameplay Notification Polish
+
+Completed:
+
+- Replaced overlapping item, objective and save labels with one queued notification display
+- Added fade-in, hold and fade-out presentation with duplicate cooldown suppression
+- Routed item taken, inventory full, item used, objective update/completion and save/load feedback
+- Preserved the structured antibiotics objective and existing save-status signals
+- Reworked the safe point as a compact supply crate and sign with subtle local emission
+
+Outcome:
+
+Important survival feedback arrives in order without covering itself, and the
+safe point is readable nearby while remaining normally occluded by world geometry.
+
+Validation:
+
+- Focused runtime validation passed queuing, duplicate suppression, fading, all
+  required message sources and the occluded physical safe-point treatment
+- Antibiotics objective-flow and save/load regression validations passed
+- C# build completed with no warnings or errors

@@ -182,6 +182,12 @@ Complete and test one vertical slice before starting the next.
 - [x] Submit antibiotics at the marked safe point
 - [x] Display objective guidance and brief completion feedback
 
+## Objective and Player Feedback Polish
+
+- [x] Queue and fade item, capacity, objective, save and load notifications
+- [x] Suppress repeated notification spam
+- [x] Replace the oversized safe-point glow with compact physical dressing
+
 ---
 
 # Vertical Slice 4 — Expanded Threat

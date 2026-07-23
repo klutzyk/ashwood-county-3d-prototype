@@ -153,10 +153,16 @@ public partial class ContainerInventoryDisplay : Control
 			return;
 		}
 
+		ItemDefinition? item = _containerInventory.GetItemAt(_selectedContainerIndex);
+		int quantity = _containerInventory.GetQuantityAt(_selectedContainerIndex);
 		if (!_containerInventory.TransferStackTo(_selectedContainerIndex, _playerInventory))
 		{
 			ShowStatus("Player inventory is full.");
+			Notify("Inventory full");
+			return;
 		}
+
+		Notify($"Item taken: {item?.DisplayName} x{quantity}");
 	}
 
 	public void StoreSelected()
@@ -308,6 +314,15 @@ public partial class ContainerInventoryDisplay : Control
 	private void ShowStatus(string message)
 	{
 		_status.Text = message;
+	}
+
+	private void Notify(string message)
+	{
+		if (GetTree().GetFirstNodeInGroup(GameplayNotificationDisplay.GroupName) is
+			GameplayNotificationDisplay notifications)
+		{
+			notifications.QueueNotification(message);
+		}
 	}
 
 	private void OnPlayerConditionChanged(float currentValue, float maximumValue)
