@@ -322,7 +322,7 @@ Complete and test one vertical slice before starting the next.
 - [x] Safe-point storage
 - [x] Town composition polish
 - [x] Environmental storytelling
-- [ ] Direct-launch development script
+- [x] Direct-launch development script
 - [ ] Final autonomous regression pass
 
 ---

@@ -1273,3 +1273,32 @@ Validation:
 - Rendered gameplay scene loaded without scene or script errors
 - Fixed rendered benchmark measured 171.69 FPS average and 9.09 ms p95
 - C# build completed with no warnings or errors
+
+---
+
+## Direct Runtime Launch Tool
+
+Completed:
+
+- Added `tools/launch-runtime.ps1` for launching the game or rendered benchmark
+  without the editor
+- Added an optional `WIDTHxHEIGHT` resolution argument
+- Supported an explicit Godot path, `ASHWOOD_GODOT_PATH`, and common PATH command
+  names in a clear precedence order
+- Added clear pre-launch failures for missing Godot or `project.godot`
+- Added a dry-run mode for checking local configuration without opening the game
+- Replaced machine-specific benchmark commands with portable helper examples
+
+Outcome:
+
+Direct runtime and benchmark launches now use one repository-owned command that
+works from the project root without embedding a private machine path.
+
+Validation:
+
+- Game and benchmark dry runs passed explicit-path, environment-path and
+  resolution handling
+- Missing-Godot validation returned the documented clear failure
+- The helper launched the real rendered benchmark successfully at 1280 x 720
+- Direct helper benchmark measured 174.89 FPS average and 8.87 ms p95
+- C# build completed with no warnings or errors
