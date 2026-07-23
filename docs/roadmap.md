@@ -367,7 +367,8 @@ Complete and test one vertical slice before starting the next.
   lightweight interior lighting and separate searchable food containers
 - [x] Improve the road network with a second intersection, sidewalks, shoulders,
   markings, street/stop signs, barriers and connected navigation
-- [ ] Improve town atmosphere
+- [x] Improve town atmosphere with restrained commercial, diner, residential
+  and maintenance prop clusters using existing assets
 - [ ] Redistribute the existing zombie population
 - [ ] Improve logical loot placement
 - [ ] Add environmental storytelling scenes

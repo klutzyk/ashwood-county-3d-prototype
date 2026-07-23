@@ -1,0 +1,232 @@
+[gd_scene load_steps=19 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/environment/vehicles/old_tyre.tscn" id="1_tyre"]
+[ext_resource type="PackedScene" path="res://assets/environment/nature/small_bush.tscn" id="3_bush"]
+
+[sub_resource type="StandardMaterial3D" id="DarkMetal"]
+albedo_color = Color(0.09, 0.11, 0.1, 1)
+metallic = 0.38
+roughness = 0.82
+
+[sub_resource type="BoxMesh" id="DumpsterBodyMesh"]
+material = SubResource("DarkMetal")
+size = Vector3(2.2, 1.25, 1.15)
+
+[sub_resource type="BoxMesh" id="DumpsterLidMesh"]
+material = SubResource("DarkMetal")
+size = Vector3(2.3, 0.12, 1.22)
+
+[sub_resource type="StandardMaterial3D" id="UtilityMaterial"]
+albedo_color = Color(0.18, 0.23, 0.17, 1)
+metallic = 0.25
+roughness = 0.84
+
+[sub_resource type="BoxMesh" id="UtilityBoxMesh"]
+material = SubResource("UtilityMaterial")
+size = Vector3(0.8, 1.05, 0.45)
+
+[sub_resource type="StandardMaterial3D" id="PaintedMetal"]
+albedo_color = Color(0.12, 0.24, 0.34, 1)
+metallic = 0.42
+roughness = 0.72
+
+[sub_resource type="BoxMesh" id="NewsBoxMesh"]
+material = SubResource("PaintedMetal")
+size = Vector3(0.46, 0.82, 0.42)
+
+[sub_resource type="StandardMaterial3D" id="WoodMaterial"]
+albedo_color = Color(0.3, 0.2, 0.12, 1)
+roughness = 0.96
+
+[sub_resource type="BoxMesh" id="BenchSeatMesh"]
+material = SubResource("WoodMaterial")
+size = Vector3(2.2, 0.14, 0.52)
+
+[sub_resource type="BoxMesh" id="BenchBackMesh"]
+material = SubResource("WoodMaterial")
+size = Vector3(2.2, 0.72, 0.12)
+
+[sub_resource type="BoxMesh" id="BenchLegMesh"]
+material = SubResource("DarkMetal")
+size = Vector3(0.12, 0.62, 0.46)
+
+[sub_resource type="BoxMesh" id="TrolleyBasketMesh"]
+material = SubResource("DarkMetal")
+size = Vector3(1.05, 0.58, 0.72)
+
+[sub_resource type="CylinderMesh" id="TrolleyWheelMesh"]
+material = SubResource("DarkMetal")
+top_radius = 0.12
+bottom_radius = 0.12
+height = 0.08
+radial_segments = 8
+rings = 1
+
+[sub_resource type="BoxMesh" id="FencePostMesh"]
+material = SubResource("WoodMaterial")
+size = Vector3(0.15, 1.05, 0.15)
+
+[sub_resource type="BoxMesh" id="FenceRailMesh"]
+material = SubResource("WoodMaterial")
+size = Vector3(2.4, 0.12, 0.12)
+
+[sub_resource type="StandardMaterial3D" id="ConcreteMaterial"]
+albedo_color = Color(0.37, 0.36, 0.33, 1)
+roughness = 0.98
+
+[sub_resource type="BoxMesh" id="UtilityPlinthMesh"]
+material = SubResource("ConcreteMaterial")
+size = Vector3(1.15, 0.18, 0.72)
+
+[node name="TownAtmospherePass" type="Node3D"]
+
+[node name="CommercialAlley" type="Node3D" parent="."]
+position = Vector3(-21.7, 0, 5.2)
+
+[node name="Dumpster" type="Node3D" parent="CommercialAlley"]
+rotation = Vector3(0, 0.12, 0)
+
+[node name="Body" type="MeshInstance3D" parent="CommercialAlley/Dumpster"]
+position = Vector3(0, 0.625, 0)
+cast_shadow = 0
+visibility_range_end = 48.0
+mesh = SubResource("DumpsterBodyMesh")
+
+[node name="Lid" type="MeshInstance3D" parent="CommercialAlley/Dumpster"]
+position = Vector3(0, 1.31, -0.02)
+rotation = Vector3(0.05, 0, 0)
+cast_shadow = 0
+visibility_range_end = 48.0
+mesh = SubResource("DumpsterLidMesh")
+
+[node name="UtilityBox" type="MeshInstance3D" parent="CommercialAlley"]
+position = Vector3(1.7, 0.525, -0.45)
+rotation = Vector3(0, -0.08, 0)
+cast_shadow = 0
+visibility_range_end = 42.0
+mesh = SubResource("UtilityBoxMesh")
+
+[node name="NewsBoxA" type="MeshInstance3D" parent="CommercialAlley"]
+position = Vector3(-1.55, 0.41, 0.4)
+rotation = Vector3(0, -0.08, 0)
+cast_shadow = 0
+visibility_range_end = 38.0
+mesh = SubResource("NewsBoxMesh")
+
+[node name="NewsBoxB" type="MeshInstance3D" parent="CommercialAlley"]
+position = Vector3(-2.1, 0.41, 0.32)
+rotation = Vector3(0, 0.06, 0)
+cast_shadow = 0
+visibility_range_end = 38.0
+mesh = SubResource("NewsBoxMesh")
+
+[node name="DinerFrontage" type="Node3D" parent="."]
+position = Vector3(8.4, 0, 21.2)
+
+[node name="Bench" type="Node3D" parent="DinerFrontage"]
+rotation = Vector3(0, 0.06, 0)
+
+[node name="Seat" type="MeshInstance3D" parent="DinerFrontage/Bench"]
+position = Vector3(0, 0.62, 0)
+cast_shadow = 0
+visibility_range_end = 42.0
+mesh = SubResource("BenchSeatMesh")
+
+[node name="Back" type="MeshInstance3D" parent="DinerFrontage/Bench"]
+position = Vector3(0, 0.92, 0.25)
+rotation = Vector3(-0.12, 0, 0)
+cast_shadow = 0
+visibility_range_end = 42.0
+mesh = SubResource("BenchBackMesh")
+
+[node name="LeftLeg" type="MeshInstance3D" parent="DinerFrontage/Bench"]
+position = Vector3(-0.78, 0.31, 0)
+cast_shadow = 0
+visibility_range_end = 42.0
+mesh = SubResource("BenchLegMesh")
+
+[node name="RightLeg" type="MeshInstance3D" parent="DinerFrontage/Bench"]
+position = Vector3(0.78, 0.31, 0)
+cast_shadow = 0
+visibility_range_end = 42.0
+mesh = SubResource("BenchLegMesh")
+
+[node name="ShoppingTrolley" type="Node3D" parent="DinerFrontage"]
+position = Vector3(2.3, 0, -0.2)
+rotation = Vector3(0, -0.28, 0)
+
+[node name="Basket" type="MeshInstance3D" parent="DinerFrontage/ShoppingTrolley"]
+position = Vector3(0, 0.76, 0)
+cast_shadow = 0
+visibility_range_end = 40.0
+mesh = SubResource("TrolleyBasketMesh")
+
+[node name="WheelFront" type="MeshInstance3D" parent="DinerFrontage/ShoppingTrolley"]
+position = Vector3(-0.36, 0.14, -0.24)
+rotation = Vector3(0, 0, 1.5707964)
+cast_shadow = 0
+visibility_range_end = 36.0
+mesh = SubResource("TrolleyWheelMesh")
+
+[node name="WheelRear" type="MeshInstance3D" parent="DinerFrontage/ShoppingTrolley"]
+position = Vector3(0.36, 0.14, 0.24)
+rotation = Vector3(0, 0, 1.5707964)
+cast_shadow = 0
+visibility_range_end = 36.0
+mesh = SubResource("TrolleyWheelMesh")
+
+[node name="ResidentialVerge" type="Node3D" parent="."]
+position = Vector3(42.5, 0, 46.7)
+
+[node name="BrokenFence" type="Node3D" parent="ResidentialVerge"]
+
+[node name="PostLeft" type="MeshInstance3D" parent="ResidentialVerge/BrokenFence"]
+position = Vector3(-1.2, 0.525, 0)
+cast_shadow = 0
+visibility_range_end = 44.0
+mesh = SubResource("FencePostMesh")
+
+[node name="PostRight" type="MeshInstance3D" parent="ResidentialVerge/BrokenFence"]
+position = Vector3(1.2, 0.525, 0)
+rotation = Vector3(0, 0, 0.18)
+cast_shadow = 0
+visibility_range_end = 44.0
+mesh = SubResource("FencePostMesh")
+
+[node name="FallenRail" type="MeshInstance3D" parent="ResidentialVerge/BrokenFence"]
+position = Vector3(0, 0.32, 0.08)
+rotation = Vector3(0.04, 0, -0.24)
+cast_shadow = 0
+visibility_range_end = 44.0
+mesh = SubResource("FenceRailMesh")
+
+[node name="UtilityPlinth" type="MeshInstance3D" parent="ResidentialVerge"]
+position = Vector3(2.2, 0.09, -0.15)
+cast_shadow = 0
+visibility_range_end = 40.0
+mesh = SubResource("UtilityPlinthMesh")
+
+[node name="UtilityBox" type="MeshInstance3D" parent="ResidentialVerge"]
+position = Vector3(2.2, 0.7, -0.15)
+cast_shadow = 0
+visibility_range_end = 40.0
+mesh = SubResource("UtilityBoxMesh")
+
+[node name="Bush" parent="ResidentialVerge" instance=ExtResource("3_bush")]
+position = Vector3(-2.0, 0, -0.25)
+scale = Vector3(0.65, 0.65, 0.65)
+
+[node name="MaintenanceLayby" type="Node3D" parent="."]
+position = Vector3(-8.2, 0, -20.2)
+
+[node name="TyreA" parent="MaintenanceLayby" instance=ExtResource("1_tyre")]
+position = Vector3(0, 0.13, 0)
+rotation = Vector3(1.48, 0.2, -0.08)
+
+[node name="TyreB" parent="MaintenanceLayby" instance=ExtResource("1_tyre")]
+position = Vector3(0.55, 0.28, 0.1)
+rotation = Vector3(1.36, -0.24, 0.2)
+
+[node name="TyreC" parent="MaintenanceLayby" instance=ExtResource("1_tyre")]
+position = Vector3(0.92, 0.13, -0.34)
+rotation = Vector3(1.52, 0.38, 0.04)
