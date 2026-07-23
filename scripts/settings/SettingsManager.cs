@@ -57,7 +57,7 @@ public partial class SettingsManager : Node
 	public void LoadSettings()
 	{
 		SettingsData loaded = new();
-		ConfigFile config = new();
+		using ConfigFile config = new();
 		if (config.Load(SettingsFilePath) == Error.Ok)
 		{
 			loaded.MasterVolume = (float)config.GetValue("audio", "master", loaded.MasterVolume);
@@ -80,7 +80,7 @@ public partial class SettingsManager : Node
 
 	public Error SaveSettings()
 	{
-		ConfigFile config = new();
+		using ConfigFile config = new();
 		config.SetValue("audio", "master", Current.MasterVolume);
 		config.SetValue("audio", "ambient", Current.AmbientVolume);
 		config.SetValue("audio", "effects", Current.EffectsVolume);

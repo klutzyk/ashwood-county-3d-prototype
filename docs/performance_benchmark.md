@@ -39,3 +39,16 @@ Use `-DryRun` to verify path detection and arguments without opening Godot.
 
 Record the reported average FPS and p95 frame time. Close other GPU-heavy
 applications and repeat a run when a result looks anomalous.
+
+## Latest Validated Result
+
+Final autonomous regression on 2026-07-23 used the command above at 1280 x 720:
+
+| Run | Average FPS | p95 frame time |
+| --- | ---: | ---: |
+| 1 | 169.67 | 9.08 ms |
+| 2 | 174.31 | 9.11 ms |
+| 3 | 174.22 | 9.04 ms |
+
+The median result was **174.22 FPS average** with a **9.08 ms median p95**,
+comfortably above the prototype's approximately 60 FPS target.

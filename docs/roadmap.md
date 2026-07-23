@@ -323,7 +323,19 @@ Complete and test one vertical slice before starting the next.
 - [x] Town composition polish
 - [x] Environmental storytelling
 - [x] Direct-launch development script
-- [ ] Final autonomous regression pass
+- [x] Final autonomous regression pass
+
+## Current Prototype Limitations
+
+- One small handcrafted map and one fixed zombie population
+- One usable melee weapon and no equipment, firearms or crafting
+- Two authored objectives rather than a general quest system
+- One local save slot with no profiles or broad save-version migration
+- Static environmental-storytelling props with no new interactions
+- Placeholder geometry, item icons and procedural atmosphere audio
+- No survivors, dialogue, vehicles, weather or community simulation
+- Godot .NET headless tests can emit a known four-object shutdown leak warning;
+  rapid multi-process runs may rarely need an isolated retry after printing PASS
 
 ---
 

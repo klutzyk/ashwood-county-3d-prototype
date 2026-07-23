@@ -16,33 +16,32 @@ It exists to answer three questions:
 
 ## Current Status
 
-Prototype
+Small playable vertical-slice prototype with exploration, looting, melee combat,
+two objectives, persistence and a fixed multi-zombie town scene.
 
 ## Goals
 
-- Third-person movement
-- Third-person camera
-- Simple environment
-- Basic lighting
-- One zombie
-- Performance evaluation
+- Responsive third-person movement, camera and melee
+- One small explorable town with searchable interiors
+- Reusable inventory, container, objective and save foundations
+- A fixed varied zombie population using shared AI
+- Compatibility-renderer atmosphere and performance evaluation
 
-## Non-goals
+## Current Scope and Limitations
 
 This repository is **not** intended to become the full game.
 
-Large gameplay systems such as:
+The current prototype deliberately remains limited to:
 
-- inventory
-- combat
-- quests
-- AI
-- dialogue
-- saving
+- one small handcrafted map;
+- one baseball bat;
+- two authored objectives;
+- one local save slot;
+- placeholder UI icons, geometry and procedural ambience;
+- no survivors, dialogue, crafting, firearms, vehicles, weather or open world.
 
-are intentionally excluded.
-
-The purpose is to evaluate whether a full 3D version of Ashwood County is technically and creatively viable.
+The purpose is to evaluate whether a full 3D version of Ashwood County is
+technically and creatively viable.
 
 ## Development
 

@@ -47,7 +47,7 @@ public partial class GameplayNotificationValidation : Node
 			playerInventory.AddItem(GD.Load<ItemDefinition>("res://assets/items/bandage.tres"));
 			playerInventory.AddItem(GD.Load<ItemDefinition>("res://assets/items/food.tres"));
 			playerInventory.AddItem(GD.Load<ItemDefinition>("res://assets/items/water.tres"));
-			inventoryUi.SelectContainerItem(0);
+			inventoryUi.SelectContainerItem(cabinet.Inventory.FindItemStack("scrap"));
 			inventoryUi.TakeSelected();
 			Require(notifications.ContainsMessage("Inventory full"),
 				"failed full-capacity Take queues inventory-full feedback");

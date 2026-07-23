@@ -1302,3 +1302,41 @@ Validation:
 - The helper launched the real rendered benchmark successfully at 1280 x 720
 - Direct helper benchmark measured 174.89 FPS average and 8.87 ms p95
 - C# build completed with no warnings or errors
+
+---
+
+## Final Autonomous Prototype Expansion Regression
+
+Completed:
+
+- Ran every automated validation scene across menus, settings, gameplay,
+  interactions, inventory, items, objectives, world dressing and zombie systems
+- Ran same-session and fresh-process save/load validation
+- Loaded both the project main menu and gameplay scene through rendered runtime
+- Fixed a notification test that selected a random weighted-loot stack by index
+  instead of the stable Scrap item identifier
+- Deterministically disposed settings `ConfigFile` instances during load and save
+- Documented the completed queue, current prototype limits and repeatable runtime
+  benchmark result
+
+Outcome:
+
+All autonomous expansion slices are integrated, the queue's regressions are
+resolved and the repository remains a focused, performant vertical slice.
+
+Validation:
+
+- All 20 non-save validation scenes passed; one rapid-run managed teardown
+  required an isolated retry after its assertions had printed PASS
+- Two-process version-1 save/load validation passed
+- Main-menu and gameplay rendered entry points loaded without scene or script errors
+- Three direct-helper benchmark runs measured 169.67, 174.31 and 174.22 FPS
+- Median direct-runtime result was 174.22 FPS average and 9.08 ms median p95
+- C# build completed with no warnings or errors
+
+Known limitations:
+
+- Scope remains one small map, one melee weapon, two objectives and one save slot
+- Art, icons and atmosphere audio remain prototype-quality
+- Godot .NET headless shutdown can emit the existing four-object leak warning and
+  can rarely return a teardown access violation during rapid multi-process runs
