@@ -11,6 +11,9 @@ public partial class PlayerAnimationController : AnimationTree
 	private const string IdleAnimationName = "Idle";
 	private const string WalkAnimationName = "Walk";
 	private const string RunAnimationName = "Run";
+	private const string TwoHandIdleAnimationName = "TwoHandIdle";
+	private const string TwoHandIdlePath =
+	"res://assets/characters/player/2hand Idle.fbx";
 	private const string IdlePath = "res://assets/characters/player/Idle.fbx";
 	private const string WalkPath = "res://assets/characters/player/Walking.fbx";
 	private const string RunPath = "res://assets/characters/player/Fast Run.fbx";
@@ -19,26 +22,66 @@ public partial class PlayerAnimationController : AnimationTree
 	private ThirdPersonPlayer _player = null!;
 	private float _idleWalkBlend;
 	private float _runBlend;
-
+	private bool _isTwoHandedWeaponEquipped;
+	private float _twoHandIdleBlend;
+	
+	public void SetTwoHandedWeaponEquipped(bool equipped)
+	{
+		_isTwoHandedWeaponEquipped = equipped;
+	}
+	
 	public override void _Ready()
 	{
 		_player = GetParent<ThirdPersonPlayer>();
 		AnimationPlayer animationPlayer = FindDescendant<AnimationPlayer>(_player)
 			?? throw new InvalidOperationException("Remy is missing an AnimationPlayer.");
-
+		
+		//temporarily assign two handed
+		_isTwoHandedWeaponEquipped = true;
+		
 		AddLocomotionAnimations(animationPlayer);
 		ConfigureBlendTree(animationPlayer);
 	}
 
 	public override void _Process(double delta)
 	{
-		float horizontalSpeed = new Vector2(_player.Velocity.X, _player.Velocity.Z).Length();
-		float walkTarget = Mathf.Clamp(horizontalSpeed / _player.WalkSpeed, 0.0f, 1.0f);
-		float runTarget = _player.IsSprinting && horizontalSpeed > 0.1f ? 1.0f : 0.0f;
+		float horizontalSpeed =
+			new Vector2(_player.Velocity.X, _player.Velocity.Z).Length();
+
+		float walkTarget =
+			Mathf.Clamp(horizontalSpeed / _player.WalkSpeed, 0.0f, 1.0f);
+
+		float runTarget =
+			_player.IsSprinting && horizontalSpeed > 0.1f
+				? 1.0f
+				: 0.0f;
+
 		float blendStep = BlendSpeed * (float)delta;
 
-		_idleWalkBlend = Mathf.MoveToward(_idleWalkBlend, walkTarget, blendStep);
-		_runBlend = Mathf.MoveToward(_runBlend, runTarget, blendStep);
+		float twoHandTarget =
+			_isTwoHandedWeaponEquipped && horizontalSpeed < 0.1f
+				? 1.0f
+				: 0.0f;
+
+		_twoHandIdleBlend = Mathf.MoveToward(
+			_twoHandIdleBlend,
+			twoHandTarget,
+			blendStep
+		);
+
+		_idleWalkBlend = Mathf.MoveToward(
+			_idleWalkBlend,
+			walkTarget,
+			blendStep
+		);
+
+		_runBlend = Mathf.MoveToward(
+			_runBlend,
+			runTarget,
+			blendStep
+		);
+
+		Set("parameters/IdleType/blend_amount", _twoHandIdleBlend);
 		Set("parameters/IdleWalk/blend_amount", _idleWalkBlend);
 		Set("parameters/RunBlend/blend_amount", _runBlend);
 	}
@@ -46,7 +89,9 @@ public partial class PlayerAnimationController : AnimationTree
 	private void AddLocomotionAnimations(AnimationPlayer animationPlayer)
 	{
 		AnimationLibrary library = animationPlayer.GetAnimationLibrary("");
+
 		AddAnimation(library, IdleAnimationName, IdlePath);
+		AddAnimation(library, TwoHandIdleAnimationName, TwoHandIdlePath);
 		AddAnimation(library, WalkAnimationName, WalkPath);
 		AddAnimation(library, RunAnimationName, RunPath);
 	}
@@ -69,26 +114,71 @@ public partial class PlayerAnimationController : AnimationTree
 	private void ConfigureBlendTree(AnimationPlayer animationPlayer)
 	{
 		AnimationNodeBlendTree blendTree = new();
-		blendTree.AddNode("Idle", CreateAnimationNode(IdleAnimationName), new Vector2(-500.0f, -120.0f));
-		blendTree.AddNode("Walk", CreateAnimationNode(WalkAnimationName), new Vector2(-500.0f, 40.0f));
-		blendTree.AddNode("IdleWalk", new AnimationNodeBlend2(), new Vector2(-260.0f, -60.0f));
-		blendTree.AddNode("Run", CreateAnimationNode(RunAnimationName), new Vector2(-260.0f, 120.0f));
-		blendTree.AddNode("RunBlend", new AnimationNodeBlend2(), new Vector2(0.0f, 0.0f));
 
-		blendTree.ConnectNode("IdleWalk", 0, "Idle");
+		blendTree.AddNode(
+			"Idle",
+			CreateAnimationNode(IdleAnimationName),
+			new Vector2(-700.0f, -180.0f)
+		);
+
+		blendTree.AddNode(
+			"TwoHandIdle",
+			CreateAnimationNode(TwoHandIdleAnimationName),
+			new Vector2(-700.0f, -60.0f)
+		);
+
+		blendTree.AddNode(
+			"IdleType",
+			new AnimationNodeBlend2(),
+			new Vector2(-480.0f, -120.0f)
+		);
+
+		blendTree.AddNode(
+			"Walk",
+			CreateAnimationNode(WalkAnimationName),
+			new Vector2(-480.0f, 40.0f)
+		);
+
+		blendTree.AddNode(
+			"IdleWalk",
+			new AnimationNodeBlend2(),
+			new Vector2(-260.0f, -40.0f)
+		);
+
+		blendTree.AddNode(
+			"Run",
+			CreateAnimationNode(RunAnimationName),
+			new Vector2(-260.0f, 140.0f)
+		);
+
+		blendTree.AddNode(
+			"RunBlend",
+			new AnimationNodeBlend2(),
+			new Vector2(0.0f, 0.0f)
+		);
+
+		blendTree.ConnectNode("IdleType", 0, "Idle");
+		blendTree.ConnectNode("IdleType", 1, "TwoHandIdle");
+
+		blendTree.ConnectNode("IdleWalk", 0, "IdleType");
 		blendTree.ConnectNode("IdleWalk", 1, "Walk");
+
 		blendTree.ConnectNode("RunBlend", 0, "IdleWalk");
 		blendTree.ConnectNode("RunBlend", 1, "Run");
+
 		blendTree.ConnectNode("output", 0, "RunBlend");
 
 		AnimPlayer = GetPathTo(animationPlayer);
 		TreeRoot = blendTree;
 		Active = true;
 	}
-
+	
 	private static AnimationNodeAnimation CreateAnimationNode(string animationName)
 	{
-		return new AnimationNodeAnimation { Animation = animationName };
+		return new AnimationNodeAnimation
+		{
+			Animation = animationName
+		};
 	}
 
 	private static void KeepRootMotionInPlace(Animation animation)

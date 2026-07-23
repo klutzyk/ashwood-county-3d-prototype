@@ -411,11 +411,20 @@ transform = Transform3D(0.907437, 0.42018816, 0, -0.42018816, 0.907437, 0, 0, 0,
 
 [node name="baseball_bat_1k" parent="Player/MeleeCombat/WeaponPivot" unique_id=381845487 instance=ExtResource("40_rl0qt")]
 transform = Transform3D(0.9999996, 2.9802322e-08, 0, -2.9802322e-08, 0.9999996, 0, 0, 0, 1, 0.29874092, 0.27938354, -0.26374245)
+visible = false
 
 [node name="Visual" type="Node3D" parent="Player" unique_id=517271585]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, -1, 0)
 
 [node name="Remy" parent="Player/Visual" unique_id=615219697 instance=ExtResource("3_remy")]
+
+[node name="RightHandWeaponAttachment" type="BoneAttachment3D" parent="Player/Visual/Remy/Skeleton3D" parent_id_path=PackedInt32Array(615219697, 635193917) index="7" unique_id=372434050]
+transform = Transform3D(-9.536764e-07, -0.99999994, -8.195639e-08, 1.5238767e-07, 3.1664968e-08, -1, 1, -8.778647e-07, 8.986122e-08, -1.4574536, 2.9993963, -0.12103976)
+bone_name = "mixamorig_RightHand"
+bone_idx = 36
+
+[node name="baseball_bat_1k" parent="Player/Visual/Remy/Skeleton3D/RightHandWeaponAttachment" unique_id=399326202 instance=ExtResource("40_rl0qt")]
+transform = Transform3D(0.9999995, -1.2022733e-06, 8.9810345e-07, -1.3738027e-06, -0.4925757, 0.8702696, -6.039178e-07, -0.8702692, -0.49257588, 0, 0.05323243, 0)
 
 [node name="CameraRig" type="Node3D" parent="Player" unique_id=947114645]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
@@ -1000,3 +1009,5 @@ text = "Press R to Restart"
 horizontal_alignment = 1
 
 [node name="PauseMenu" parent="PerformanceUI" unique_id=354200872 instance=ExtResource("45_pause_menu")]
+
+[editable path="Player/Visual/Remy"]
