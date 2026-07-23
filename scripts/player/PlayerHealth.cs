@@ -21,8 +21,12 @@ public partial class PlayerHealth : Node
 	public float CurrentHealth { get; private set; }
 	public bool IsDead { get; private set; }
 	public bool IsInvulnerable => _invulnerabilityRemaining > 0.0f;
+	public bool HasDamageResistance => _damageResistanceRemaining > 0.0f;
+	public float DamageResistanceRemaining => _damageResistanceRemaining;
 
 	private float _invulnerabilityRemaining;
+	private float _damageResistanceRemaining;
+	private float _damageTakenMultiplier = 1.0f;
 
 	public override void _Ready()
 	{
@@ -36,6 +40,13 @@ public partial class PlayerHealth : Node
 		_invulnerabilityRemaining = Mathf.Max(
 			_invulnerabilityRemaining - (float)delta,
 			0.0f);
+		_damageResistanceRemaining = Mathf.Max(
+			_damageResistanceRemaining - (float)delta,
+			0.0f);
+		if (_damageResistanceRemaining <= 0.0f)
+		{
+			_damageTakenMultiplier = 1.0f;
+		}
 	}
 
 	public bool ApplyDamage(float damageAmount)
@@ -45,9 +56,10 @@ public partial class PlayerHealth : Node
 			return false;
 		}
 
-		CurrentHealth = Mathf.Clamp(CurrentHealth - damageAmount, 0.0f, MaximumHealth);
+		float appliedDamage = damageAmount * _damageTakenMultiplier;
+		CurrentHealth = Mathf.Clamp(CurrentHealth - appliedDamage, 0.0f, MaximumHealth);
 		_invulnerabilityRemaining = Mathf.Max(InvulnerabilityDuration, 0.0f);
-		EmitSignal(SignalName.Damaged, damageAmount);
+		EmitSignal(SignalName.Damaged, appliedDamage);
 		EmitSignal(SignalName.HealthChanged, CurrentHealth, MaximumHealth);
 
 		if (CurrentHealth <= 0.0f)
@@ -56,6 +68,18 @@ public partial class PlayerHealth : Node
 			EmitSignal(SignalName.Died);
 		}
 
+		return true;
+	}
+
+	public bool ApplyDamageResistance(float damageReduction, float duration)
+	{
+		if (IsDead || HasDamageResistance || damageReduction <= 0.0f || duration <= 0.0f)
+		{
+			return false;
+		}
+
+		_damageTakenMultiplier = 1.0f - Mathf.Clamp(damageReduction, 0.0f, 0.9f);
+		_damageResistanceRemaining = duration;
 		return true;
 	}
 
@@ -76,6 +100,8 @@ public partial class PlayerHealth : Node
 		CurrentHealth = Mathf.Clamp(currentHealth, 0.0f, MaximumHealth);
 		IsDead = CurrentHealth <= 0.0f;
 		_invulnerabilityRemaining = 0.0f;
+		_damageResistanceRemaining = 0.0f;
+		_damageTakenMultiplier = 1.0f;
 		EmitSignal(SignalName.HealthChanged, CurrentHealth, MaximumHealth);
 		if (IsDead)
 		{

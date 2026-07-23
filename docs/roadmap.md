@@ -307,6 +307,26 @@ Complete and test one vertical slice before starting the next.
 
 ---
 
+# Autonomous Prototype Expansion
+
+- [x] Expanded item definitions
+- [ ] Weighted container loot tables
+- [ ] Inventory stack management
+- [ ] Zombie variant profiles
+- [ ] Melee weapon data foundation
+- [ ] World interaction consistency
+- [ ] Main menu
+- [ ] Persistent settings menu
+- [ ] Pause menu
+- [ ] Service-station supplies objective
+- [ ] Safe-point storage
+- [ ] Town composition polish
+- [ ] Environmental storytelling
+- [ ] Direct-launch development script
+- [ ] Final autonomous regression pass
+
+---
+
 # Later
 
 - Community and safehouse

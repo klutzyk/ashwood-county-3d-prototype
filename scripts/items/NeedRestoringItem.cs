@@ -15,6 +15,11 @@ public partial class NeedRestoringItem : ItemDefinition
 	{
 		get
 		{
+			if (HungerRestored > 0.0f && ThirstRestored > 0.0f)
+			{
+				return $"Restored {Mathf.RoundToInt(ThirstRestored)} thirst and " +
+					$"{Mathf.RoundToInt(HungerRestored)} hunger.";
+			}
 			if (HungerRestored > 0.0f)
 			{
 				return $"Restored {Mathf.RoundToInt(HungerRestored)} hunger.";
@@ -27,6 +32,11 @@ public partial class NeedRestoringItem : ItemDefinition
 	{
 		get
 		{
+			if (HungerRestored > 0.0f && ThirstRestored > 0.0f)
+			{
+				return $"Restores {Mathf.RoundToInt(ThirstRestored)} thirst and " +
+					$"{Mathf.RoundToInt(HungerRestored)} hunger.";
+			}
 			if (HungerRestored > 0.0f)
 			{
 				return $"Restores {Mathf.RoundToInt(HungerRestored)} hunger.";

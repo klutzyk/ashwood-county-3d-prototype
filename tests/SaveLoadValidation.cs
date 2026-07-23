@@ -77,6 +77,11 @@ public partial class SaveLoadValidation : Node
 		inventory.AddItem(GD.Load<ItemDefinition>("res://assets/items/antibiotics.tres"), 1);
 		cabinet.Inventory.ClearItems();
 		cabinet.Inventory.AddItem(GD.Load<ItemDefinition>("res://assets/items/water.tres"), 2);
+		cabinet.Inventory.AddItem(GD.Load<ItemDefinition>("res://assets/items/medkit.tres"), 1);
+		cabinet.Inventory.AddItem(GD.Load<ItemDefinition>("res://assets/items/painkillers.tres"), 2);
+		cabinet.Inventory.AddItem(GD.Load<ItemDefinition>("res://assets/items/soda.tres"), 3);
+		cabinet.Inventory.AddItem(GD.Load<ItemDefinition>("res://assets/items/canned_food.tres"), 4);
+		cabinet.Inventory.AddItem(GD.Load<ItemDefinition>("res://assets/items/chocolate.tres"), 5);
 		cabinet.RestoreSearchedState(true);
 		SetContainerState(car, true, "res://assets/items/food.tres", 3);
 		SetContainerState(crate, true, "res://assets/items/water.tres", 1);
@@ -174,6 +179,12 @@ public partial class SaveLoadValidation : Node
 			"world time restores");
 		Require(cabinet.IsSearched && cabinet.Inventory.GetQuantity("water") == 2,
 			"pharmacy container searched state and remaining items restore");
+		Require(cabinet.Inventory.GetQuantity("medkit") == 1 &&
+			cabinet.Inventory.GetQuantity("painkillers") == 2 &&
+			cabinet.Inventory.GetQuantity("soda") == 3 &&
+			cabinet.Inventory.GetQuantity("canned_food") == 4 &&
+			cabinet.Inventory.GetQuantity("chocolate") == 5,
+			"expanded item identifiers restore safely from version 1 saves");
 		RequireContainer(world, "Vehicles/RustedAlfaRomeo/SearchableContainer", true, "food", 3);
 		RequireContainer(world, "Props/BarrelCrate/SearchableContainer", true, "water", 1);
 		RequireContainer(world, "Props/PrototypeCupboard/SearchableContainer", false, "bandage", 2);

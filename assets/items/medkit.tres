@@ -1,14 +1,14 @@
 [gd_resource type="Resource" script_class="BandageItem" load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://scripts/items/BandageItem.cs" id="1_item"]
-[ext_resource type="Texture2D" path="res://assets/items/icons/bandage.svg" id="2_icon"]
+[ext_resource type="Texture2D" path="res://assets/items/icons/medkit.svg" id="2_icon"]
 
 [resource]
 script = ExtResource("1_item")
-ItemId = &"bandage"
-DisplayName = "Bandage"
-Description = "A basic medical bandage."
-StackLimit = 5
+ItemId = &"medkit"
+DisplayName = "Medkit"
+Description = "A compact emergency medical kit."
+StackLimit = 2
 Category = 0
 Icon = ExtResource("2_icon")
-HealthRestored = 40.0
+HealthRestored = 75.0

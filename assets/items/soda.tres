@@ -1,14 +1,15 @@
 [gd_resource type="Resource" script_class="NeedRestoringItem" load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://scripts/items/NeedRestoringItem.cs" id="1_item"]
-[ext_resource type="Texture2D" path="res://assets/items/icons/food.svg" id="2_icon"]
+[ext_resource type="Texture2D" path="res://assets/items/icons/soda.svg" id="2_icon"]
 
 [resource]
 script = ExtResource("1_item")
-ItemId = &"food"
-DisplayName = "Food"
-Description = "A sealed portion of food."
+ItemId = &"soda"
+DisplayName = "Soda"
+Description = "A sugary canned drink."
 StackLimit = 4
-Category = 1
+Category = 2
 Icon = ExtResource("2_icon")
-HungerRestored = 35.0
+HungerRestored = 5.0
+ThirstRestored = 25.0

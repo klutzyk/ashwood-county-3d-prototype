@@ -1,10 +1,14 @@
-[gd_resource type="Resource" script_class="NeedRestoringItem" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="NeedRestoringItem" load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://scripts/items/NeedRestoringItem.cs" id="1_item"]
+[ext_resource type="Texture2D" path="res://assets/items/icons/water.svg" id="2_icon"]
 
 [resource]
 script = ExtResource("1_item")
 ItemId = &"water"
 DisplayName = "Water"
 Description = "A bottle of drinking water."
+StackLimit = 4
+Category = 2
+Icon = ExtResource("2_icon")
 ThirstRestored = 40.0

@@ -251,7 +251,9 @@ public partial class ContainerInventoryDisplay : Control
 		for (int index = 0; index < _containerInventory.StackCount; index++)
 		{
 			ItemDefinition item = _containerInventory.GetItemAt(index)!;
-			_containerItems.AddItem($"{item.DisplayName} x{_containerInventory.GetQuantityAt(index)}");
+			_containerItems.AddItem(
+				$"{item.DisplayName} x{_containerInventory.GetQuantityAt(index)}",
+				item.Icon);
 		}
 		_selectedContainerIndex = Mathf.Clamp(_selectedContainerIndex, -1, _containerInventory.StackCount - 1);
 		if (_selectedContainerIndex >= 0)
@@ -276,7 +278,8 @@ public partial class ContainerInventoryDisplay : Control
 			ItemDefinition? item = _playerInventory.GetItemAt(slot);
 			_playerItems.AddItem(item is null
 				? $"{slot + 1}. Empty"
-				: $"{slot + 1}. {item.DisplayName} x{_playerInventory.GetQuantityAt(slot)}");
+				: $"{slot + 1}. {item.DisplayName} x{_playerInventory.GetQuantityAt(slot)}",
+				item?.Icon);
 			_playerItems.SetItemDisabled(slot, item is null);
 		}
 		_playerLabel.Text = $"Player Inventory ({_playerInventory.StackCount}/{PlayerInventory.SlotCount} slots)";
@@ -324,7 +327,16 @@ public partial class ContainerInventoryDisplay : Control
 
 		_details.Text = item is null
 			? "Select an item to view its details."
-			: $"{item.DisplayName}  x{quantity}\n{item.Description}\nEffect: {item.EffectDescription}";
+			: $"{item.DisplayName}  x{quantity}\n{item.Description}\n" +
+				$"Category: {FormatCategory(item.Category)}  Stack limit: {item.StackLimit}\n" +
+				$"Effect: {item.EffectDescription}";
+	}
+
+	private static string FormatCategory(ItemCategory category)
+	{
+		return category == ItemCategory.CraftingMaterial
+			? "Crafting Material"
+			: category.ToString();
 	}
 
 	private void SelectInitialItem()

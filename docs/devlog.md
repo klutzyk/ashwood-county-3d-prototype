@@ -910,3 +910,29 @@ Validation:
 - Day/night and flashlight regression validation passed
 - Main scene initialized all audio generators without errors
 - C# build completed with no warnings or errors
+
+---
+
+## Expanded Prototype Item Catalogue
+
+Completed:
+
+- Added Medkit, Painkillers, Soda, Canned Food and Chocolate definitions while
+  retaining the existing Scrap, Bandage, Food, Water and Antibiotics identifiers
+- Added category, stack-limit and lightweight project-owned placeholder icon
+  metadata to every prototype item
+- Made Medkits restore more health than Bandages and added temporary 25% damage
+  resistance to Painkillers
+- Added combined hunger/thirst restoration for Soda and distinct food values
+- Registered every new stable identifier with the version 1 save loader
+
+Outcome:
+
+The existing inventory resource architecture now covers a small readable
+survival catalogue without adding crafting, equipment or general buff systems.
+
+Validation:
+
+- Item catalogue validation passed metadata, item effects and non-usable Scrap
+- Inventory UI, objective flow, version 1 save/load and day/night regressions passed
+- C# build completed with no warnings or errors
