@@ -320,7 +320,7 @@ Complete and test one vertical slice before starting the next.
 - [x] Pause menu
 - [x] Service-station supplies objective
 - [x] Safe-point storage
-- [ ] Town composition polish
+- [x] Town composition polish
 - [ ] Environmental storytelling
 - [ ] Direct-launch development script
 - [ ] Final autonomous regression pass

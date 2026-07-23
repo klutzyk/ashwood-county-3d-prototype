@@ -46,6 +46,7 @@
 [ext_resource type="Resource" path="res://assets/weapons/baseball_bat.tres" id="44_baseball_bat"]
 [ext_resource type="PackedScene" path="res://scenes/ui/pause_menu.tscn" id="45_pause_menu"]
 [ext_resource type="Script" path="res://scripts/objectives/ServiceStationSuppliesObjective.cs" id="46_supplies_objective"]
+[ext_resource type="PackedScene" path="res://scenes/environment/town_composition_polish.tscn" id="47_town_composition"]
 
 [sub_resource type="BoxMesh" id="GrassMesh"]
 material = ExtResource("8_grass")
@@ -348,6 +349,8 @@ transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 13.2, 0, -6.2)
 
 [node name="HouseRoadsideDressing" parent="Props" unique_id=442290748 instance=ExtResource("27_roadside")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, -8)
+
+[node name="TownCompositionPolish" parent="Props" instance=ExtResource("47_town_composition")]
 
 [node name="PrototypeSafePoint" parent="." instance=ExtResource("31_safe_point")]
 position = Vector3(5.1, 0.1, -8.7)

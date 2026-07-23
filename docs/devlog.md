@@ -1215,3 +1215,32 @@ Validation:
   passed
 - Fixed rendered benchmark measured 173.11 FPS average and 8.90 ms p95
 - C# build completed with no warnings or errors
+
+---
+
+## Prototype Town Composition
+
+Completed:
+
+- Added one lightweight project-owned composition scene around the pharmacy,
+  service station, house, roadside and safe point
+- Reused current bushes and tyres with restrained primitive bins, a utility
+  cabinet, an empty crate, low fencing and roadside barriers
+- Placed rear-lot and side-yard dressing away from all building entrances
+- Kept the safe-point approach open and all additions visual-only
+- Added distance culling and disabled shadows on small primitive details
+- Added no collision, physics objects, interactions, assets or map expansion
+
+Outcome:
+
+Previously sparse edges now have clearer land use and visual rhythm while the
+established traversal and objective routes remain unchanged.
+
+Validation:
+
+- Town-composition validation passed area coverage, restrained geometry count,
+  entrance clearances and visual-only node checks
+- Interaction-consistency validation passed
+- Rendered gameplay scene loaded without scene or script errors
+- Fixed rendered benchmark measured 177.11 FPS average and 8.74 ms p95
+- C# build completed with no warnings or errors
