@@ -1,7 +1,9 @@
-[gd_scene load_steps=12 format=3]
+[gd_scene load_steps=15 format=3]
 
 [ext_resource type="Script" path="res://scripts/objectives/PrototypeSafePoint.cs" id="1_safe_point"]
 [ext_resource type="Script" path="res://scripts/interactions/Interactable.cs" id="2_interactable"]
+[ext_resource type="Script" path="res://scripts/interactions/SearchableContainer.cs" id="3_searchable"]
+[ext_resource type="Script" path="res://scripts/items/ContainerInventory.cs" id="4_inventory"]
 
 [sub_resource type="StandardMaterial3D" id="SafePointMaterial"]
 albedo_color = Color(0.18, 0.48, 0.24, 1)
@@ -76,3 +78,15 @@ position = Vector3(0, 0.8, 0)
 script = ExtResource("2_interactable")
 InteractionName = "Safe Point"
 InteractionPrompt = "Deliver Antibiotics at"
+
+[node name="Storage" type="Node3D" parent="."]
+script = ExtResource("3_searchable")
+DisplayName = "Safe Point Storage"
+SearchDuration = 0.0
+
+[node name="Interactable" type="Node3D" parent="Storage"]
+script = ExtResource("2_interactable")
+Enabled = false
+
+[node name="Inventory" type="Node" parent="Storage"]
+script = ExtResource("4_inventory")

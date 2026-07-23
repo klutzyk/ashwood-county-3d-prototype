@@ -319,7 +319,7 @@ Complete and test one vertical slice before starting the next.
 - [x] Persistent settings menu
 - [x] Pause menu
 - [x] Service-station supplies objective
-- [ ] Safe-point storage
+- [x] Safe-point storage
 - [ ] Town composition polish
 - [ ] Environmental storytelling
 - [ ] Direct-launch development script

@@ -1185,3 +1185,33 @@ Validation:
 - Original objective, notification and two-process save/load regressions passed
 - Fixed rendered benchmark measured 146.22 FPS average and 10.32 ms p95
 - C# build completed with no warnings or errors
+
+---
+
+## Persistent Safe-Point Storage
+
+Completed:
+
+- Added an empty Safe Point Storage inventory using the existing searchable
+  container and container-inventory UI foundations
+- Unlocked storage interaction after antibiotics delivery without adding a second
+  competing world prompt
+- Kept Take and Store as explicit player actions
+- Prioritized valid objective submissions, then opened storage when no delivery
+  occurred
+- Preserved unrelated player and storage items during supply submission
+- Persisted storage search state and item stacks through normal container save data
+
+Outcome:
+
+The safe point now doubles as a small reusable community cache after the first
+objective while objective deliveries remain explicit and isolated.
+
+Validation:
+
+- Safe-point storage validation passed unlock gating, Take/Store, naming,
+  interaction ownership, persistence and objective separation
+- Service-station objective, inventory UI and two-process save/load regressions
+  passed
+- Fixed rendered benchmark measured 173.11 FPS average and 8.90 ms p95
+- C# build completed with no warnings or errors

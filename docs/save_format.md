@@ -20,6 +20,8 @@ Saves without the later service-station objective field retain a locked default;
 when antibiotics were already completed, loading normalizes that state to the
 new objective's search step. When new authored containers or zombies are added
 to the scene, older valid saves leave those new nodes in their default state.
+Safe Point Storage is captured through the same container path, searched-state
+and item-stack records as every other world container.
 
 Inventory and container item arrays store one entry per stack. Repeated item
 identifiers are valid and preserve intentionally split stacks. Each quantity is

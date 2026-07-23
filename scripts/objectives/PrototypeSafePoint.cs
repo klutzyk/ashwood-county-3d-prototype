@@ -2,6 +2,7 @@
 
 using Godot;
 using AshwoodCounty3DPrototype.Interactions;
+using AshwoodCounty3DPrototype.UI;
 
 namespace AshwoodCounty3DPrototype.Objectives;
 
@@ -10,10 +11,14 @@ public partial class PrototypeSafePoint : Node3D
 	private Interactable _interactable = null!;
 	private AntibioticsObjective _objective = null!;
 	private ServiceStationSuppliesObjective _suppliesObjective = null!;
+	private SearchableContainer _storage = null!;
 
 	public override void _Ready()
 	{
 		_interactable = GetNode<Interactable>("Interactable");
+		_storage = GetNode<SearchableContainer>("Storage");
+		_storage.RestoreSearchedState(true);
+		_storage.SetInteractionEnabled(false);
 		_objective = GetTree().GetFirstNodeInGroup(AntibioticsObjective.GroupName) as AntibioticsObjective
 			?? throw new System.InvalidOperationException("Prototype safe point requires an antibiotics objective.");
 		_suppliesObjective = GetTree().GetFirstNodeInGroup(
@@ -52,7 +57,17 @@ public partial class PrototypeSafePoint : Node3D
 		{
 			return;
 		}
-		_suppliesObjective.TryComplete();
+		if (_suppliesObjective.TryComplete())
+		{
+			return;
+		}
+		if (_objective.State == AntibioticsObjectiveState.Completed)
+		{
+			ContainerInventoryDisplay? display = GetTree()
+				.GetFirstNodeInGroup(ContainerInventoryDisplay.GroupName) as
+				ContainerInventoryDisplay;
+			display?.Open(_storage, interactor);
+		}
 	}
 
 	private void OnObjectiveStateChanged(int state)
@@ -64,9 +79,10 @@ public partial class PrototypeSafePoint : Node3D
 	{
 		string action = _objective.State != AntibioticsObjectiveState.Completed
 			? "Deliver antibiotics at"
-			: _suppliesObjective.State != ServiceStationSuppliesObjectiveState.Completed
+			: _suppliesObjective.State ==
+				ServiceStationSuppliesObjectiveState.ReturnToSafePoint
 				? "Deliver supplies at"
-				: "Check";
+				: "Open";
 		_interactable.ConfigurePrompt(action, "Safe Point", 0.0f);
 	}
 }
