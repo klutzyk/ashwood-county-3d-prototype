@@ -1,0 +1,37 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://scripts/interactions/SearchableContainer.cs" id="1_searchable"]
+[ext_resource type="Script" path="res://scripts/interactions/Interactable.cs" id="2_interactable"]
+[ext_resource type="Script" path="res://scripts/items/ContainerInventory.cs" id="3_inventory"]
+[ext_resource type="Resource" path="res://assets/items/loot_tables/fridge.tres" id="4_loot"]
+[ext_resource type="Material" path="res://assets/materials/building_fixture.tres" id="5_fixture"]
+
+[sub_resource type="BoxMesh" id="FridgeMesh"]
+material = ExtResource("5_fixture")
+size = Vector3(1.15, 2.0, 0.85)
+
+[sub_resource type="BoxShape3D" id="FridgeShape"]
+size = Vector3(1.15, 2.0, 0.85)
+
+[node name="HouseKitchenFridge" type="StaticBody3D"]
+
+[node name="Mesh" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1, 0)
+mesh = SubResource("FridgeMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 1, 0)
+shape = SubResource("FridgeShape")
+
+[node name="SearchableContainer" type="Node3D" parent="."]
+position = Vector3(0, 1, 0)
+script = ExtResource("1_searchable")
+DisplayName = "House Kitchen Fridge"
+SearchDuration = 1.6
+LootTable = ExtResource("4_loot")
+
+[node name="Interactable" type="Node3D" parent="SearchableContainer"]
+script = ExtResource("2_interactable")
+
+[node name="Inventory" type="Node" parent="SearchableContainer"]
+script = ExtResource("3_inventory")

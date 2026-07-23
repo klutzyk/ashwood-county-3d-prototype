@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=6 format=3]
 
 [ext_resource type="PackedScene" path="res://assets/environment/buildings/ServiceStation/exterior.tscn" id="1_exterior"]
 [ext_resource type="PackedScene" path="res://assets/environment/buildings/ServiceStation/interior.tscn" id="2_interior"]
 [ext_resource type="PackedScene" path="res://assets/environment/buildings/shared/door.tscn" id="3_door"]
 [ext_resource type="PackedScene" path="res://scenes/containers/service_station_supply_shelf.tscn" id="4_supplies"]
+[ext_resource type="PackedScene" path="res://scenes/containers/service_station_toolbox.tscn" id="5_toolbox"]
 
 [node name="ServiceStation" type="Node3D"]
 
@@ -17,3 +18,6 @@ OpenAngleDegrees = -95.0
 
 [node name="SupplyShelf" parent="." instance=ExtResource("4_supplies")]
 position = Vector3(-3.2, 1.05, 1.15)
+
+[node name="Toolbox" parent="." instance=ExtResource("5_toolbox")]
+position = Vector3(-5.55, 0, -4.0)

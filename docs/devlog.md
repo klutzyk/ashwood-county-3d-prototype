@@ -1470,6 +1470,33 @@ Validation:
 - Zombie crowd, pursuit and same-session save/load regressions passed
 - C# build completed with no warnings or errors
 
+---
+
+## Logical Loot Placement
+
+Completed:
+
+- Kept pharmacy medicine in its existing objective cabinet and added a separate
+  bathroom medicine cabinet using the standard medical loot table
+- Added a searchable house kitchen fridge and clarified the existing cupboard
+  as kitchen storage
+- Retained separate diner pantry/fridge and service-station supply inventories
+- Added a service-station toolbox using the existing tools loot table
+- Added no item definitions and kept every container on the reusable inventory,
+  search and explicit-transfer foundation
+
+Outcome:
+
+Container contents now follow the purpose of each room and business while all
+new container paths remain additive for version-1 saves.
+
+Validation:
+
+- Loot-placement validation passed location, display-name, loot-table and
+  independent inventory checks
+- Weighted-loot, inventory-UI and same-session save/load regressions passed
+- C# build completed with no warnings or errors
+
 
 ## Representative Full-Game Performance Benchmark
 

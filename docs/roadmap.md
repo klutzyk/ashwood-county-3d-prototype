@@ -371,6 +371,7 @@ Complete and test one vertical slice before starting the next.
   and maintenance prop clusters using existing assets
 - [x] Redistribute the existing 15 zombies into quiet areas, pharmacy/service
   hotspots, residential groups and one dangerous road-end hotspot
-- [ ] Improve logical loot placement
+- [x] Improve logical loot placement for pharmacy/bathroom medicine,
+  house/diner/service-station food and service-station tools
 - [ ] Add environmental storytelling scenes
 - [ ] Complete a world-polish pass

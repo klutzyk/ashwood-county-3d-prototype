@@ -1,0 +1,41 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://scripts/interactions/SearchableContainer.cs" id="1_searchable"]
+[ext_resource type="Script" path="res://scripts/interactions/Interactable.cs" id="2_interactable"]
+[ext_resource type="Script" path="res://scripts/items/ContainerInventory.cs" id="3_inventory"]
+[ext_resource type="Resource" path="res://assets/items/loot_tables/toolbox.tres" id="4_loot"]
+
+[sub_resource type="StandardMaterial3D" id="ToolboxMaterial"]
+albedo_color = Color(0.48, 0.08, 0.045, 1)
+metallic = 0.42
+roughness = 0.72
+
+[sub_resource type="BoxMesh" id="ToolboxMesh"]
+material = SubResource("ToolboxMaterial")
+size = Vector3(1.0, 0.48, 0.52)
+
+[sub_resource type="BoxShape3D" id="ToolboxShape"]
+size = Vector3(1.0, 0.48, 0.52)
+
+[node name="ServiceStationToolbox" type="StaticBody3D"]
+
+[node name="Mesh" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.24, 0)
+mesh = SubResource("ToolboxMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.24, 0)
+shape = SubResource("ToolboxShape")
+
+[node name="SearchableContainer" type="Node3D" parent="."]
+position = Vector3(0, 0.45, 0)
+script = ExtResource("1_searchable")
+DisplayName = "Service Station Toolbox"
+SearchDuration = 1.5
+LootTable = ExtResource("4_loot")
+
+[node name="Interactable" type="Node3D" parent="SearchableContainer"]
+script = ExtResource("2_interactable")
+
+[node name="Inventory" type="Node" parent="SearchableContainer"]
+script = ExtResource("3_inventory")
