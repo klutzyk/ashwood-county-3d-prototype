@@ -299,7 +299,7 @@ Complete and test one vertical slice before starting the next.
 - [x] Polish the player flashlight
 - [x] Improve zombie crowd performance and separation
 - [x] Improve melee responsiveness
-- [ ] Refine inventory and container usability
+- [x] Refine inventory and container usability
 - [ ] Harden prototype save loading
 - [ ] Polish antibiotics objective flow
 - [ ] Balance prototype ambience

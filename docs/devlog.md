@@ -799,3 +799,31 @@ Validation:
   one-hit guarding, buffered input, repeated damage and ready-pose feedback
 - Zombie crowd regression validation passed
 - C# build completed with no warnings or errors
+
+---
+
+## Container and Inventory Quality Pass
+
+Completed:
+
+- Kept selection and keyboard focus attached to an item as it moves between a
+  container and the player
+- Added explicit success, full-inventory, missing-selection and invalid-use messages
+- Expanded item details to show name, quantity, description and numeric effect
+- Made ItemList activation use Take or Use consistently for keyboard Enter and
+  mouse double-click
+- Preserved visible Take, Store and Use buttons, explicit transfers, container
+  state and existing save compatibility
+
+Outcome:
+
+Inventory decisions remain stable after transfers and invalid actions now
+explain what prevented them, while both mouse and keyboard flows use the same
+underlying actions.
+
+Validation:
+
+- Expanded inventory validation passed focus and selection preservation, item
+  effects, Take, Store, full capacity, invalid Use, valid Use and Escape close
+- Objective-flow regression validation passed
+- C# build completed with no warnings or errors

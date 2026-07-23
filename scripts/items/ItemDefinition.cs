@@ -13,6 +13,8 @@ public partial class ItemDefinition : Resource
 	[Export(PropertyHint.MultilineText)] public string UseMessage { get; set; } = string.Empty;
 
 	public virtual string UseFeedback => UseMessage;
+	public virtual string EffectDescription =>
+		string.IsNullOrWhiteSpace(UseMessage) ? "No direct use effect." : UseMessage;
 
 	public virtual bool CanUse(Node user)
 	{

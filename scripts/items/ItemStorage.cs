@@ -123,7 +123,7 @@ public abstract partial class ItemStorage : Node
 		EmitSignal(SignalName.InventoryChanged);
 	}
 
-	private int FindItemStack(StringName itemId)
+	public int FindItemStack(StringName itemId)
 	{
 		for (int stack = 0; stack < _items.Count; stack++)
 		{

@@ -48,6 +48,16 @@ public partial class ContainerInventoryDisplay : Control
 
 		_containerItems.ItemSelected += index => SelectContainerItem((int)index);
 		_playerItems.ItemSelected += index => SelectPlayerItem((int)index);
+		_containerItems.ItemActivated += index =>
+		{
+			SelectContainerItem((int)index);
+			TakeSelected();
+		};
+		_playerItems.ItemActivated += index =>
+		{
+			SelectPlayerItem((int)index);
+			UseSelected();
+		};
 		_takeButton.Pressed += TakeSelected;
 		_storeButton.Pressed += StoreSelected;
 		_useButton.Pressed += UseSelected;
@@ -150,6 +160,7 @@ public partial class ContainerInventoryDisplay : Control
 	{
 		if (_containerInventory is null || _playerInventory is null || _selectedContainerIndex < 0)
 		{
+			ShowStatus("Select a container item to take.");
 			return;
 		}
 
@@ -162,6 +173,14 @@ public partial class ContainerInventoryDisplay : Control
 			return;
 		}
 
+		int destinationIndex = item is null ? -1 : _playerInventory.FindItemStack(item.ItemId);
+		if (destinationIndex >= 0)
+		{
+			_playerItems.GrabFocus();
+			_playerItems.Select(destinationIndex);
+			SelectPlayerItem(destinationIndex);
+		}
+		ShowStatus($"Taken {item?.DisplayName} x{quantity}.");
 		Notify($"Item taken: {item?.DisplayName} x{quantity}");
 	}
 
@@ -169,19 +188,33 @@ public partial class ContainerInventoryDisplay : Control
 	{
 		if (_containerInventory is null || _playerInventory is null || _selectedPlayerIndex < 0)
 		{
+			ShowStatus("Select a player item to store.");
 			return;
 		}
 
+		ItemDefinition? item = _playerInventory.GetItemAt(_selectedPlayerIndex);
+		int quantity = _playerInventory.GetQuantityAt(_selectedPlayerIndex);
 		if (!_playerInventory.TransferStackTo(_selectedPlayerIndex, _containerInventory))
 		{
 			ShowStatus("Item could not be stored.");
+			return;
 		}
+
+		int destinationIndex = item is null ? -1 : _containerInventory.FindItemStack(item.ItemId);
+		if (destinationIndex >= 0)
+		{
+			_containerItems.GrabFocus();
+			_containerItems.Select(destinationIndex);
+			SelectContainerItem(destinationIndex);
+		}
+		ShowStatus($"Stored {item?.DisplayName} x{quantity}.");
 	}
 
 	public void UseSelected()
 	{
 		if (_playerInventory is null || _player is null || _selectedPlayerIndex < 0)
 		{
+			ShowStatus("Select a player item to use.");
 			return;
 		}
 
@@ -287,7 +320,7 @@ public partial class ContainerInventoryDisplay : Control
 
 		_details.Text = item is null
 			? "Select an item to view its details."
-			: $"{item.DisplayName}  x{quantity}\n{item.Description}";
+			: $"{item.DisplayName}  x{quantity}\n{item.Description}\nEffect: {item.EffectDescription}";
 	}
 
 	private void SelectInitialItem()

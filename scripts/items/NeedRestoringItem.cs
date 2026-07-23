@@ -23,6 +23,18 @@ public partial class NeedRestoringItem : ItemDefinition
 		}
 	}
 
+	public override string EffectDescription
+	{
+		get
+		{
+			if (HungerRestored > 0.0f)
+			{
+				return $"Restores {Mathf.RoundToInt(HungerRestored)} hunger.";
+			}
+			return $"Restores {Mathf.RoundToInt(ThirstRestored)} thirst.";
+		}
+	}
+
 	public override bool CanUse(Node user)
 	{
 		PlayerNeeds? needs = user.GetNodeOrNull<PlayerNeeds>("Needs");
