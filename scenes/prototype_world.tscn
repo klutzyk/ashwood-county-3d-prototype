@@ -47,6 +47,7 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/pause_menu.tscn" id="45_pause_menu"]
 [ext_resource type="Script" path="res://scripts/objectives/ServiceStationSuppliesObjective.cs" id="46_supplies_objective"]
 [ext_resource type="PackedScene" path="res://scenes/environment/town_composition_polish.tscn" id="47_town_composition"]
+[ext_resource type="PackedScene" path="res://scenes/environment/environmental_storytelling.tscn" id="48_storytelling"]
 
 [sub_resource type="BoxMesh" id="GrassMesh"]
 material = ExtResource("8_grass")
@@ -351,6 +352,8 @@ transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 13.2, 0, -6.2)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, -8)
 
 [node name="TownCompositionPolish" parent="Props" instance=ExtResource("47_town_composition")]
+
+[node name="EnvironmentalStorytelling" parent="Props" instance=ExtResource("48_storytelling")]
 
 [node name="PrototypeSafePoint" parent="." instance=ExtResource("31_safe_point")]
 position = Vector3(5.1, 0.1, -8.7)

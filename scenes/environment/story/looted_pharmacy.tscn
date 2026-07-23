@@ -1,0 +1,75 @@
+[gd_scene load_steps=6 format=3]
+
+[sub_resource type="StandardMaterial3D" id="CardboardMaterial"]
+albedo_color = Color(0.43, 0.31, 0.18, 1)
+roughness = 1.0
+
+[sub_resource type="BoxMesh" id="BoxMesh"]
+material = SubResource("CardboardMaterial")
+size = Vector3(1, 1, 1)
+
+[sub_resource type="StandardMaterial3D" id="ShelfMaterial"]
+albedo_color = Color(0.2, 0.22, 0.2, 1)
+metallic = 0.18
+roughness = 0.82
+
+[sub_resource type="BoxMesh" id="ShelfBoardMesh"]
+material = SubResource("ShelfMaterial")
+size = Vector3(1.75, 0.09, 0.42)
+
+[sub_resource type="BoxMesh" id="ShelfSideMesh"]
+material = SubResource("ShelfMaterial")
+size = Vector3(0.09, 1.25, 0.42)
+
+[node name="LootedPharmacy" type="Node3D"]
+
+[node name="CollapsedShelf" type="Node3D" parent="."]
+rotation = Vector3(0.04, -0.28, -0.18)
+
+[node name="SideLeft" type="MeshInstance3D" parent="CollapsedShelf"]
+position = Vector3(-0.82, 0.63, 0)
+cast_shadow = 0
+visibility_range_end = 34.0
+mesh = SubResource("ShelfSideMesh")
+
+[node name="SideRight" type="MeshInstance3D" parent="CollapsedShelf"]
+position = Vector3(0.82, 0.63, 0)
+cast_shadow = 0
+visibility_range_end = 34.0
+mesh = SubResource("ShelfSideMesh")
+
+[node name="ShelfLow" type="MeshInstance3D" parent="CollapsedShelf"]
+position = Vector3(0, 0.18, 0)
+cast_shadow = 0
+visibility_range_end = 34.0
+mesh = SubResource("ShelfBoardMesh")
+
+[node name="ShelfHigh" type="MeshInstance3D" parent="CollapsedShelf"]
+position = Vector3(0, 0.92, 0)
+cast_shadow = 0
+visibility_range_end = 34.0
+mesh = SubResource("ShelfBoardMesh")
+
+[node name="EmptyBoxA" type="MeshInstance3D" parent="."]
+position = Vector3(-1.05, 0.18, -0.65)
+rotation = Vector3(0.08, 0.45, -0.12)
+scale = Vector3(0.72, 0.36, 0.58)
+cast_shadow = 0
+visibility_range_end = 30.0
+mesh = SubResource("BoxMesh")
+
+[node name="EmptyBoxB" type="MeshInstance3D" parent="."]
+position = Vector3(0.75, 0.13, -0.78)
+rotation = Vector3(-0.06, -0.25, 0.06)
+scale = Vector3(0.55, 0.26, 0.7)
+cast_shadow = 0
+visibility_range_end = 30.0
+mesh = SubResource("BoxMesh")
+
+[node name="EmptyBoxC" type="MeshInstance3D" parent="."]
+position = Vector3(1.25, 0.11, 0.25)
+rotation = Vector3(0.14, 0.18, 0.22)
+scale = Vector3(0.42, 0.22, 0.5)
+cast_shadow = 0
+visibility_range_end = 30.0
+mesh = SubResource("BoxMesh")

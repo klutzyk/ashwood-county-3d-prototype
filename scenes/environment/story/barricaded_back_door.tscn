@@ -1,0 +1,50 @@
+[gd_scene load_steps=6 format=3]
+
+[sub_resource type="StandardMaterial3D" id="DoorMaterial"]
+albedo_color = Color(0.095, 0.11, 0.1, 1)
+roughness = 0.88
+
+[sub_resource type="BoxMesh" id="DoorMesh"]
+material = SubResource("DoorMaterial")
+size = Vector3(0.08, 2.25, 1.25)
+
+[sub_resource type="StandardMaterial3D" id="BoardMaterial"]
+albedo_color = Color(0.34, 0.23, 0.13, 1)
+roughness = 1.0
+
+[sub_resource type="BoxMesh" id="BoardMesh"]
+material = SubResource("BoardMaterial")
+size = Vector3(0.12, 0.18, 1.75)
+
+[sub_resource type="BoxMesh" id="BlockMesh"]
+material = SubResource("BoardMaterial")
+size = Vector3(0.55, 0.45, 0.6)
+
+[node name="BarricadedBackDoor" type="Node3D"]
+
+[node name="UnusedDoor" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.125, 0)
+cast_shadow = 0
+visibility_range_end = 38.0
+mesh = SubResource("DoorMesh")
+
+[node name="BoardA" type="MeshInstance3D" parent="."]
+position = Vector3(-0.08, 0.72, 0)
+rotation = Vector3(0.2, 0, 1.5707964)
+cast_shadow = 0
+visibility_range_end = 38.0
+mesh = SubResource("BoardMesh")
+
+[node name="BoardB" type="MeshInstance3D" parent="."]
+position = Vector3(-0.09, 1.45, 0)
+rotation = Vector3(-0.16, 0, 1.5707964)
+cast_shadow = 0
+visibility_range_end = 38.0
+mesh = SubResource("BoardMesh")
+
+[node name="BracingBlock" type="MeshInstance3D" parent="."]
+position = Vector3(-0.34, 0.225, 0.82)
+rotation = Vector3(0, 0.3, 0)
+cast_shadow = 0
+visibility_range_end = 30.0
+mesh = SubResource("BlockMesh")

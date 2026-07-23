@@ -321,7 +321,7 @@ Complete and test one vertical slice before starting the next.
 - [x] Service-station supplies objective
 - [x] Safe-point storage
 - [x] Town composition polish
-- [ ] Environmental storytelling
+- [x] Environmental storytelling
 - [ ] Direct-launch development script
 - [ ] Final autonomous regression pass
 

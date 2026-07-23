@@ -1,0 +1,59 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/environment/vehicles/old_tyre.tscn" id="1_tyre"]
+
+[sub_resource type="StandardMaterial3D" id="BarrierMaterial"]
+albedo_color = Color(0.4, 0.39, 0.35, 1)
+roughness = 0.95
+
+[sub_resource type="BoxMesh" id="BarrierMesh"]
+material = SubResource("BarrierMaterial")
+size = Vector3(1.5, 0.52, 0.42)
+
+[sub_resource type="StandardMaterial3D" id="WarningMaterial"]
+albedo_color = Color(0.7, 0.19, 0.045, 1)
+roughness = 0.72
+
+[sub_resource type="BoxMesh" id="WarningStripMesh"]
+material = SubResource("WarningMaterial")
+size = Vector3(1.53, 0.1, 0.44)
+
+[sub_resource type="StandardMaterial3D" id="LuggageMaterial"]
+albedo_color = Color(0.2, 0.16, 0.11, 1)
+roughness = 0.92
+
+[sub_resource type="BoxMesh" id="LuggageMesh"]
+material = SubResource("LuggageMaterial")
+size = Vector3(0.8, 0.48, 0.55)
+
+[node name="RoadsideBreakdown" type="Node3D"]
+
+[node name="Barrier" type="Node3D" parent="."]
+rotation = Vector3(0, 0.25, 0)
+
+[node name="Body" type="MeshInstance3D" parent="Barrier"]
+position = Vector3(0, 0.26, 0)
+cast_shadow = 0
+visibility_range_end = 42.0
+mesh = SubResource("BarrierMesh")
+
+[node name="WarningStrip" type="MeshInstance3D" parent="Barrier"]
+position = Vector3(0, 0.35, 0)
+cast_shadow = 0
+visibility_range_end = 42.0
+mesh = SubResource("WarningStripMesh")
+
+[node name="TyreFlat" parent="." instance=ExtResource("1_tyre")]
+position = Vector3(1.15, 0.12, -0.3)
+rotation = Vector3(0.08, 0.2, -0.08)
+
+[node name="TyreDropped" parent="." instance=ExtResource("1_tyre")]
+position = Vector3(1.55, 0.36, 0.12)
+rotation = Vector3(0.18, 0.1, 1.42)
+
+[node name="AbandonedLuggage" type="MeshInstance3D" parent="."]
+position = Vector3(-0.7, 0.24, -0.9)
+rotation = Vector3(0, -0.32, 0.08)
+cast_shadow = 0
+visibility_range_end = 36.0
+mesh = SubResource("LuggageMesh")

@@ -1244,3 +1244,32 @@ Validation:
 - Rendered gameplay scene loaded without scene or script errors
 - Fixed rendered benchmark measured 177.11 FPS average and 8.74 ms p95
 - C# build completed with no warnings or errors
+
+---
+
+## Environmental Storytelling Scenes
+
+Completed:
+
+- Added exactly four small static arrangements: roadside breakdown debris,
+  looted pharmacy clutter, a barricaded unused house door and an abandoned
+  service-station camp
+- Used current tyre assets and project-owned primitive geometry only
+- Kept each arrangement visually distinct through simple object placement
+- Positioned all arrangements away from required doors and interactables
+- Added no collision, physics, gore, lights, particles or implied interactions
+- Applied distance culling and disabled shadows on the lightweight details
+
+Outcome:
+
+The town now communicates recent abandonment and scavenging through restrained
+visual placement without changing gameplay routes or adding systems.
+
+Validation:
+
+- Environmental-storytelling validation passed the four-scene limit, geometry
+  budgets, interaction clearance and static-safety checks
+- Interaction-consistency validation passed
+- Rendered gameplay scene loaded without scene or script errors
+- Fixed rendered benchmark measured 171.69 FPS average and 9.09 ms p95
+- C# build completed with no warnings or errors

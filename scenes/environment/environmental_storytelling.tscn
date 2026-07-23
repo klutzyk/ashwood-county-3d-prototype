@@ -1,0 +1,23 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/environment/story/roadside_breakdown.tscn" id="1_roadside"]
+[ext_resource type="PackedScene" path="res://scenes/environment/story/looted_pharmacy.tscn" id="2_pharmacy"]
+[ext_resource type="PackedScene" path="res://scenes/environment/story/barricaded_back_door.tscn" id="3_door"]
+[ext_resource type="PackedScene" path="res://scenes/environment/story/service_station_camp.tscn" id="4_camp"]
+
+[node name="EnvironmentalStorytelling" type="Node3D"]
+
+[node name="RoadsideBreakdown" parent="." instance=ExtResource("1_roadside")]
+position = Vector3(6.7, 0, -19.6)
+rotation = Vector3(0, -0.18, 0)
+
+[node name="LootedPharmacy" parent="." instance=ExtResource("2_pharmacy")]
+position = Vector3(-10.25, 0, 12.6)
+rotation = Vector3(0, -0.08, 0)
+
+[node name="BarricadedBackDoor" parent="." instance=ExtResource("3_door")]
+position = Vector3(14.12, 0, -8.2)
+
+[node name="ServiceStationCamp" parent="." instance=ExtResource("4_camp")]
+position = Vector3(-10.4, 0, -14.2)
+rotation = Vector3(0, 0.12, 0)

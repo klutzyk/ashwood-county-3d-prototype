@@ -1,0 +1,103 @@
+[gd_scene load_steps=10 format=3]
+
+[sub_resource type="StandardMaterial3D" id="TarpMaterial"]
+albedo_color = Color(0.18, 0.24, 0.17, 1)
+roughness = 0.94
+
+[sub_resource type="BoxMesh" id="TarpMesh"]
+material = SubResource("TarpMaterial")
+size = Vector3(2.4, 0.06, 1.8)
+
+[sub_resource type="StandardMaterial3D" id="PoleMaterial"]
+albedo_color = Color(0.24, 0.2, 0.15, 1)
+roughness = 1.0
+
+[sub_resource type="CylinderMesh" id="PoleMesh"]
+material = SubResource("PoleMaterial")
+top_radius = 0.035
+bottom_radius = 0.045
+height = 1.35
+radial_segments = 6
+
+[sub_resource type="StandardMaterial3D" id="CrateMaterial"]
+albedo_color = Color(0.33, 0.23, 0.13, 1)
+roughness = 1.0
+
+[sub_resource type="BoxMesh" id="CrateMesh"]
+material = SubResource("CrateMaterial")
+size = Vector3(0.82, 0.62, 0.72)
+
+[sub_resource type="StandardMaterial3D" id="BedrollMaterial"]
+albedo_color = Color(0.25, 0.18, 0.12, 1)
+roughness = 0.95
+
+[sub_resource type="CylinderMesh" id="BedrollMesh"]
+material = SubResource("BedrollMaterial")
+top_radius = 0.22
+bottom_radius = 0.22
+height = 1.15
+radial_segments = 10
+
+[sub_resource type="StandardMaterial3D" id="FireRingMaterial"]
+albedo_color = Color(0.12, 0.115, 0.105, 1)
+roughness = 1.0
+
+[sub_resource type="TorusMesh" id="FireRingMesh"]
+material = SubResource("FireRingMaterial")
+inner_radius = 0.28
+outer_radius = 0.4
+rings = 14
+ring_segments = 8
+
+[node name="ServiceStationCamp" type="Node3D"]
+
+[node name="Tarp" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.15, 0)
+rotation = Vector3(0, 0, -0.08)
+cast_shadow = 0
+visibility_range_end = 38.0
+mesh = SubResource("TarpMesh")
+
+[node name="PoleA" type="MeshInstance3D" parent="."]
+position = Vector3(-1.05, 0.675, -0.72)
+cast_shadow = 0
+visibility_range_end = 34.0
+mesh = SubResource("PoleMesh")
+
+[node name="PoleB" type="MeshInstance3D" parent="."]
+position = Vector3(-1.05, 0.675, 0.72)
+cast_shadow = 0
+visibility_range_end = 34.0
+mesh = SubResource("PoleMesh")
+
+[node name="PoleC" type="MeshInstance3D" parent="."]
+position = Vector3(1.05, 0.675, -0.72)
+cast_shadow = 0
+visibility_range_end = 34.0
+mesh = SubResource("PoleMesh")
+
+[node name="PoleD" type="MeshInstance3D" parent="."]
+position = Vector3(1.05, 0.675, 0.72)
+cast_shadow = 0
+visibility_range_end = 34.0
+mesh = SubResource("PoleMesh")
+
+[node name="EmptySupplyCrate" type="MeshInstance3D" parent="."]
+position = Vector3(-0.65, 0.31, 0.1)
+rotation = Vector3(0, 0.16, 0)
+cast_shadow = 0
+visibility_range_end = 32.0
+mesh = SubResource("CrateMesh")
+
+[node name="Bedroll" type="MeshInstance3D" parent="."]
+position = Vector3(0.55, 0.22, 0.25)
+rotation = Vector3(0, 0, 1.5707964)
+cast_shadow = 0
+visibility_range_end = 32.0
+mesh = SubResource("BedrollMesh")
+
+[node name="ColdFireRing" type="MeshInstance3D" parent="."]
+position = Vector3(0.65, 0.08, -1.25)
+cast_shadow = 0
+visibility_range_end = 30.0
+mesh = SubResource("FireRingMesh")
