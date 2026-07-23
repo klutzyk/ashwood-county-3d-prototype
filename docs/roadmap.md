@@ -180,12 +180,12 @@ Complete and test one vertical slice before starting the next.
 
 # Vertical Slice 4 — Expanded Threat
 
-- [x] Five independently functioning zombies
+- [x] Approximately fifteen independently functioning zombies
 - [x] Independent zombie health
 - [x] Independent detection and pursuit
 - [x] Prevent excessive zombie overlap
 - [x] Basic wandering
-- [ ] Basic patrol area
+- [x] Basic patrol area
 - [x] Basic sound attraction
 - [x] Performance test with multiple zombies
 

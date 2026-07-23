@@ -520,3 +520,25 @@ Validation:
 
 - Save/load validation now covers independent Hunger and Thirst restoration
 - C# build completed with no warnings or errors
+
+---
+
+## Expanded Prototype Zombie Population
+
+Completed:
+
+- Increased the authored population from five to fifteen reusable zombie instances
+- Distributed zombies across outdoor road, verge and town-perimeter navigation areas
+- Kept all starting positions outside the house, pharmacy and service station
+- Varied wander radii, idle windows, wandering speeds, chase speeds and detection ranges
+- Preserved independent health, corpse loot, pursuit, sound investigation and save state
+- Kept the population scene-authored with no spawner, hordes or additional zombie types
+
+Outcome:
+
+The town now carries a broader, less uniform ambient threat while retaining the
+same lightweight zombie scene and controller.
+
+Validation:
+
+- C# build completed with no warnings or errors

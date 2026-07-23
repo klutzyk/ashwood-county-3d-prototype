@@ -17,6 +17,9 @@ namespace AshwoodCounty3DPrototype.Save;
 
 public partial class SaveGameManager : Node
 {
+	private const int VersionOneMinimumContainerCount = 4;
+	private const int VersionOneMinimumZombieCount = 5;
+
 	[Signal]
 	public delegate void StatusMessageRequestedEventHandler(string message);
 
@@ -194,7 +197,10 @@ public partial class SaveGameManager : Node
 		Node worldRoot = GetParent();
 		List<SearchableContainer> existingContainers = GetContainers();
 		List<PrototypeZombie> existingZombies = GetZombies();
-		if (data.Containers.Count != existingContainers.Count || data.Zombies.Count != existingZombies.Count)
+		if (data.Containers.Count < VersionOneMinimumContainerCount ||
+			data.Containers.Count > existingContainers.Count ||
+			data.Zombies.Count < VersionOneMinimumZombieCount ||
+			data.Zombies.Count > existingZombies.Count)
 		{
 			return false;
 		}

@@ -10,6 +10,8 @@ The prototype currently uses save version **1**.
 
 Version 1 stores player transform, health, stamina, hunger, thirst, inventory,
 the antibiotics objective state, world time, existing container search/content
-state and the alive/dead state of the placed prototype zombies. Saves created
+state and the alive/dead state of all placed prototype zombies. Saves created
 before needs were added load with full hunger and thirst; broader backward
-compatibility is intentionally not provided yet.
+compatibility is intentionally not provided yet. When new authored containers
+or zombies are added to the scene, older valid saves leave those new nodes in
+their default state.
