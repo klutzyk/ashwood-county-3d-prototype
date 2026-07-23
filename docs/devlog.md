@@ -225,3 +225,31 @@ Important findings:
 - AI-assisted workflow is productive.
 - Small focused implementation tasks produce the best results.
 - Raw third-party asset packs should remain outside the project until curated.
+
+---
+
+## Prototype Town Dressing
+
+Completed:
+
+- Extended the prototype road and shoulders across the playable terrain
+- Added centre-line markings and a dressed house frontage with a driveway,
+  mailbox, rubbish bin, utility cabinet, fencing and reusable small bushes
+- Added a lightweight service-station exterior with a shop, canopy, pumps,
+  price pylon, forecourt and exterior lighting
+- Added a small pharmacy exterior with storefront glazing, pavement, awning,
+  signage and rooftop detail
+- Reused the existing house, road materials, poles, road sign, tyre, car and
+  container assets
+
+Outcome:
+
+The original roadside test now reads as a small town strip with three distinct
+points of interest while remaining lightweight for the Compatibility renderer.
+No additional third-party assets were required or downloaded.
+
+Validation:
+
+- Godot imported and loaded the new scenes without errors
+- Runtime preview capture completed using the Compatibility renderer
+- C# build completed without errors

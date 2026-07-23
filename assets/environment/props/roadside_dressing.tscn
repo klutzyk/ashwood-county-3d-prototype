@@ -1,0 +1,164 @@
+[gd_scene load_steps=14 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/environment/nature/small_bush.tscn" id="1_bush"]
+
+[sub_resource type="StandardMaterial3D" id="DrivewayMaterial"]
+albedo_color = Color(0.22, 0.21, 0.19, 1)
+roughness = 1.0
+
+[sub_resource type="BoxMesh" id="DrivewayMesh"]
+material = SubResource("DrivewayMaterial")
+size = Vector3(7.4, 0.06, 3.2)
+
+[sub_resource type="StandardMaterial3D" id="WeatheredWood"]
+albedo_color = Color(0.29, 0.21, 0.14, 1)
+roughness = 1.0
+
+[sub_resource type="BoxMesh" id="FencePostMesh"]
+material = SubResource("WeatheredWood")
+size = Vector3(0.16, 1.15, 0.16)
+
+[sub_resource type="BoxMesh" id="FenceRailMesh"]
+material = SubResource("WeatheredWood")
+size = Vector3(3.15, 0.12, 0.12)
+
+[sub_resource type="StandardMaterial3D" id="MailboxMetal"]
+albedo_color = Color(0.14, 0.17, 0.18, 1)
+metallic = 0.55
+roughness = 0.72
+
+[sub_resource type="BoxMesh" id="MailboxBodyMesh"]
+material = SubResource("MailboxMetal")
+size = Vector3(0.48, 0.46, 0.78)
+
+[sub_resource type="BoxMesh" id="MailboxCapMesh"]
+material = SubResource("MailboxMetal")
+size = Vector3(0.5, 0.16, 0.8)
+
+[sub_resource type="StandardMaterial3D" id="RedPaint"]
+albedo_color = Color(0.58, 0.055, 0.035, 1)
+roughness = 0.75
+
+[sub_resource type="BoxMesh" id="SmallBoxMesh"]
+material = SubResource("RedPaint")
+size = Vector3(0.08, 0.42, 0.25)
+
+[sub_resource type="StandardMaterial3D" id="UtilityGreen"]
+albedo_color = Color(0.16, 0.23, 0.17, 1)
+metallic = 0.25
+roughness = 0.8
+
+[sub_resource type="BoxMesh" id="UtilityBoxMesh"]
+material = SubResource("UtilityGreen")
+size = Vector3(0.95, 1.05, 0.48)
+
+[sub_resource type="StandardMaterial3D" id="BinPlastic"]
+albedo_color = Color(0.075, 0.11, 0.085, 1)
+roughness = 0.88
+
+[sub_resource type="BoxMesh" id="BinMesh"]
+material = SubResource("BinPlastic")
+size = Vector3(0.72, 1.0, 0.68)
+
+[node name="RoadsideDressing" type="Node3D"]
+
+[node name="Driveway" type="MeshInstance3D" parent="."]
+position = Vector3(-4.85, 0.035, 2.8)
+mesh = SubResource("DrivewayMesh")
+
+[node name="Mailbox" type="Node3D" parent="."]
+position = Vector3(-4.8, 0, 5.1)
+
+[node name="Post" type="MeshInstance3D" parent="Mailbox"]
+position = Vector3(0, 0.62, 0)
+scale = Vector3(1, 1.08, 1)
+mesh = SubResource("FencePostMesh")
+
+[node name="Body" type="MeshInstance3D" parent="Mailbox"]
+position = Vector3(0, 1.33, 0)
+mesh = SubResource("MailboxBodyMesh")
+
+[node name="Cap" type="MeshInstance3D" parent="Mailbox"]
+position = Vector3(0, 1.64, 0)
+mesh = SubResource("MailboxCapMesh")
+
+[node name="Flag" type="MeshInstance3D" parent="Mailbox"]
+position = Vector3(-0.29, 1.45, 0.12)
+mesh = SubResource("SmallBoxMesh")
+
+[node name="RubbishBin" type="Node3D" parent="."]
+position = Vector3(-3.2, 0, -2.3)
+rotation = Vector3(0, -0.18, 0)
+
+[node name="Body" type="MeshInstance3D" parent="RubbishBin"]
+position = Vector3(0, 0.54, 0)
+mesh = SubResource("BinMesh")
+
+[node name="Lid" type="MeshInstance3D" parent="RubbishBin"]
+position = Vector3(0, 1.08, -0.02)
+scale = Vector3(1.08, 0.12, 1.08)
+mesh = SubResource("BinMesh")
+
+[node name="UtilityCabinet" type="MeshInstance3D" parent="."]
+position = Vector3(3.65, 0.53, 4.2)
+rotation = Vector3(0, 0.08, 0)
+mesh = SubResource("UtilityBoxMesh")
+
+[node name="FenceNorth" type="Node3D" parent="."]
+position = Vector3(0, 0, -5.1)
+
+[node name="Post1" type="MeshInstance3D" parent="FenceNorth"]
+position = Vector3(-4.6, 0.58, 0)
+mesh = SubResource("FencePostMesh")
+
+[node name="Post2" type="MeshInstance3D" parent="FenceNorth"]
+position = Vector3(-1.45, 0.58, 0)
+mesh = SubResource("FencePostMesh")
+
+[node name="Post3" type="MeshInstance3D" parent="FenceNorth"]
+position = Vector3(1.7, 0.58, 0)
+mesh = SubResource("FencePostMesh")
+
+[node name="Post4" type="MeshInstance3D" parent="FenceNorth"]
+position = Vector3(4.85, 0.58, 0)
+mesh = SubResource("FencePostMesh")
+
+[node name="Rail1A" type="MeshInstance3D" parent="FenceNorth"]
+position = Vector3(-3.02, 0.78, 0)
+mesh = SubResource("FenceRailMesh")
+
+[node name="Rail1B" type="MeshInstance3D" parent="FenceNorth"]
+position = Vector3(-3.02, 0.38, 0)
+mesh = SubResource("FenceRailMesh")
+
+[node name="Rail2A" type="MeshInstance3D" parent="FenceNorth"]
+position = Vector3(0.12, 0.78, 0)
+mesh = SubResource("FenceRailMesh")
+
+[node name="Rail2B" type="MeshInstance3D" parent="FenceNorth"]
+position = Vector3(0.12, 0.38, 0)
+mesh = SubResource("FenceRailMesh")
+
+[node name="Rail3A" type="MeshInstance3D" parent="FenceNorth"]
+position = Vector3(3.27, 0.78, 0)
+mesh = SubResource("FenceRailMesh")
+
+[node name="Rail3B" type="MeshInstance3D" parent="FenceNorth"]
+position = Vector3(3.27, 0.38, 0)
+mesh = SubResource("FenceRailMesh")
+
+[node name="BushFrontLeft" parent="." instance=ExtResource("1_bush")]
+position = Vector3(-2.4, 0, 4.0)
+scale = Vector3(0.72, 0.72, 0.72)
+
+[node name="BushFrontRight" parent="." instance=ExtResource("1_bush")]
+position = Vector3(2.35, 0, 4.15)
+scale = Vector3(0.82, 0.82, 0.82)
+
+[node name="BushFenceLeft" parent="." instance=ExtResource("1_bush")]
+position = Vector3(-3.8, 0, -4.6)
+scale = Vector3(0.68, 0.68, 0.68)
+
+[node name="BushFenceRight" parent="." instance=ExtResource("1_bush")]
+position = Vector3(3.65, 0, -4.65)
+scale = Vector3(0.76, 0.76, 0.76)

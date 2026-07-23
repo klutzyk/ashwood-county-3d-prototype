@@ -1,0 +1,43 @@
+[gd_scene load_steps=5 format=3]
+
+[sub_resource type="StandardMaterial3D" id="BushLeaves"]
+albedo_color = Color(0.16, 0.25, 0.11, 1)
+roughness = 1.0
+
+[sub_resource type="SphereMesh" id="BushMesh"]
+material = SubResource("BushLeaves")
+radius = 0.72
+height = 1.15
+radial_segments = 10
+rings = 5
+
+[sub_resource type="StandardMaterial3D" id="BushStem"]
+albedo_color = Color(0.18, 0.105, 0.055, 1)
+roughness = 1.0
+
+[sub_resource type="CylinderMesh" id="StemMesh"]
+material = SubResource("BushStem")
+top_radius = 0.08
+bottom_radius = 0.12
+height = 0.65
+radial_segments = 8
+
+[node name="SmallBush" type="Node3D"]
+
+[node name="Stem" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.32, 0)
+mesh = SubResource("StemMesh")
+
+[node name="FoliageCentre" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.72, 0)
+mesh = SubResource("BushMesh")
+
+[node name="FoliageLeft" type="MeshInstance3D" parent="."]
+position = Vector3(-0.43, 0.55, 0.08)
+scale = Vector3(0.72, 0.72, 0.72)
+mesh = SubResource("BushMesh")
+
+[node name="FoliageRight" type="MeshInstance3D" parent="."]
+position = Vector3(0.42, 0.51, -0.12)
+scale = Vector3(0.68, 0.68, 0.68)
+mesh = SubResource("BushMesh")

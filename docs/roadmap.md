@@ -168,13 +168,13 @@ Complete and test one vertical slice before starting the next.
 
 # Vertical Slice 5 — Prototype World
 
-- [ ] Extend the road
-- [ ] Add several building exteriors
-- [ ] Add fences
-- [ ] Add roadside props
+- [x] Extend the road
+- [x] Add several building exteriors
+- [x] Add fences
+- [x] Add roadside props
 - [ ] Add additional abandoned vehicles
 - [ ] Add terrain variation
-- [ ] Add roadside shoulders
+- [x] Add roadside shoulders
 - [ ] Replace mismatched prototype trees
 - [ ] Define world boundaries
 - [ ] Rebuild navigation for expanded area

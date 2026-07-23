@@ -41,7 +41,7 @@ of each downloaded asset and its license information with project records.
   provenance.
 - **Prototype use:** Environment dressing
 - **Local location:** `assets/environment/nature/`
-- **Status:** Planned for prototype use
+- **Status:** In use as a curated two-tree subset
 
 ### Old Russian House
 
@@ -55,7 +55,7 @@ of each downloaded asset and its license information with project records.
   CC BY 4.0, via Sketchfab. Modified for use in Ashwood County 3D Prototype.
 - **Prototype use:** Environment building
 - **Local location:** `assets/environment/buildings/`
-- **Status:** Planned for prototype use
+- **Status:** In use
 
 ### Forest Ground 01
 
@@ -148,8 +148,8 @@ of each downloaded asset and its license information with project records.
 - **Attribution requirement:** Not required; the author and source are credited
   here for provenance.
 - **Prototype use:** Road surface
-- **Local location:** `assets/environment/roads/`
-- **Status:** Planned for prototype use
+- **Local location:** `assets/third_party/materials/asphalt/`
+- **Status:** In use
 
 ### Clean Asphalt
 
@@ -177,7 +177,28 @@ of each downloaded asset and its license information with project records.
   BY 4.0, via Sketchfab. Modified for use in Ashwood County 3D Prototype.
 - **Prototype use:** Environment vehicle prop
 - **Local location:** `assets/environment/vehicles/`
-- **Status:** Planned for prototype use
+- **Status:** In use
+
+## Project-Owned Prototype Town Geometry
+
+### Roadside Dressing, Service Station, Pharmacy, and Small Bush
+
+- **Asset type:** Lightweight Godot-native environment geometry
+- **Creator/provider:** Ashwood County project
+- **Source:** Original project-owned meshes assembled from Godot primitives; no
+  external model or texture downloads were used
+- **Licence:** Project-owned; no third-party licence applies
+- **Attribution requirement:** None
+- **Prototype use:** House driveway, mailbox, rubbish bin, utility cabinet,
+  fencing, reusable bushes, road markings, service-station forecourt and pumps,
+  and a small pharmacy exterior
+- **Local locations:** `assets/environment/props/roadside_dressing.tscn`,
+  `assets/environment/nature/small_bush.tscn`,
+  `assets/environment/buildings/service_station.tscn`, and
+  `assets/environment/buildings/pharmacy_exterior.tscn`
+- **Status:** In use
+- **Download note:** No additional third-party files were downloaded for this
+  town-dressing slice, so there are no unused downloads to remove.
 
 ## Release Checklist
 

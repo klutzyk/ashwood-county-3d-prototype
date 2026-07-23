@@ -1,0 +1,136 @@
+[gd_scene load_steps=15 format=3]
+
+[sub_resource type="StandardMaterial3D" id="Brick"]
+albedo_color = Color(0.35, 0.16, 0.105, 1)
+roughness = 0.96
+
+[sub_resource type="BoxMesh" id="BuildingMesh"]
+material = SubResource("Brick")
+size = Vector3(7, 4.4, 9)
+
+[sub_resource type="StandardMaterial3D" id="Cream"]
+albedo_color = Color(0.72, 0.69, 0.6, 1)
+roughness = 0.86
+
+[sub_resource type="BoxMesh" id="SignBandMesh"]
+material = SubResource("Cream")
+size = Vector3(0.25, 1.0, 8.65)
+
+[sub_resource type="StandardMaterial3D" id="Green"]
+albedo_color = Color(0.05, 0.42, 0.2, 1)
+roughness = 0.72
+emission_enabled = true
+emission = Color(0.02, 0.16, 0.07, 1)
+emission_energy_multiplier = 0.55
+
+[sub_resource type="BoxMesh" id="CrossBarMesh"]
+material = SubResource("Green")
+size = Vector3(0.18, 0.92, 0.28)
+
+[sub_resource type="StandardMaterial3D" id="Glass"]
+transparency = 1
+albedo_color = Color(0.075, 0.17, 0.16, 0.74)
+metallic = 0.2
+roughness = 0.25
+
+[sub_resource type="BoxMesh" id="WindowMesh"]
+material = SubResource("Glass")
+size = Vector3(0.12, 1.8, 2.45)
+
+[sub_resource type="StandardMaterial3D" id="Awning"]
+albedo_color = Color(0.075, 0.25, 0.14, 1)
+roughness = 0.8
+
+[sub_resource type="BoxMesh" id="AwningMesh"]
+material = SubResource("Awning")
+size = Vector3(1.15, 0.14, 3.0)
+
+[sub_resource type="StandardMaterial3D" id="Concrete"]
+albedo_color = Color(0.4, 0.39, 0.36, 1)
+roughness = 0.95
+
+[sub_resource type="BoxMesh" id="PavementMesh"]
+material = SubResource("Concrete")
+size = Vector3(2.5, 0.12, 10)
+
+[sub_resource type="StandardMaterial3D" id="RoofMetal"]
+albedo_color = Color(0.09, 0.1, 0.095, 1)
+metallic = 0.5
+roughness = 0.62
+
+[sub_resource type="BoxMesh" id="RoofMesh"]
+material = SubResource("RoofMetal")
+size = Vector3(7.35, 0.28, 9.35)
+
+[sub_resource type="BoxShape3D" id="BuildingShape"]
+size = Vector3(7, 4.4, 9)
+
+[sub_resource type="BoxShape3D" id="PavementShape"]
+size = Vector3(2.5, 0.12, 10)
+
+[node name="PharmacyExterior" type="StaticBody3D"]
+
+[node name="Building" type="MeshInstance3D" parent="."]
+position = Vector3(0, 2.2, 0)
+mesh = SubResource("BuildingMesh")
+
+[node name="BuildingCollision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 2.2, 0)
+shape = SubResource("BuildingShape")
+
+[node name="Roof" type="MeshInstance3D" parent="."]
+position = Vector3(0, 4.46, 0)
+mesh = SubResource("RoofMesh")
+
+[node name="Pavement" type="MeshInstance3D" parent="."]
+position = Vector3(4.65, 0.06, 0)
+mesh = SubResource("PavementMesh")
+
+[node name="PavementCollision" type="CollisionShape3D" parent="."]
+position = Vector3(4.65, 0.06, 0)
+shape = SubResource("PavementShape")
+
+[node name="SignBand" type="MeshInstance3D" parent="."]
+position = Vector3(3.58, 3.45, 0)
+mesh = SubResource("SignBandMesh")
+
+[node name="Name" type="Label3D" parent="."]
+position = Vector3(3.73, 3.45, 0.45)
+rotation = Vector3(0, 1.5707964, 0)
+text = "ASHWOOD PHARMACY"
+font_size = 44
+outline_size = 7
+modulate = Color(0.05, 0.3, 0.13, 1)
+
+[node name="Cross" type="Node3D" parent="."]
+position = Vector3(3.74, 3.45, -3.35)
+
+[node name="Vertical" type="MeshInstance3D" parent="Cross"]
+mesh = SubResource("CrossBarMesh")
+
+[node name="Horizontal" type="MeshInstance3D" parent="Cross"]
+rotation = Vector3(1.5707964, 0, 0)
+mesh = SubResource("CrossBarMesh")
+
+[node name="WindowNorth" type="MeshInstance3D" parent="."]
+position = Vector3(3.56, 1.65, -2.55)
+mesh = SubResource("WindowMesh")
+
+[node name="WindowSouth" type="MeshInstance3D" parent="."]
+position = Vector3(3.56, 1.65, 2.55)
+mesh = SubResource("WindowMesh")
+
+[node name="Door" type="MeshInstance3D" parent="."]
+position = Vector3(3.57, 1.35, 0)
+scale = Vector3(1, 1.45, 0.72)
+mesh = SubResource("WindowMesh")
+
+[node name="DoorAwning" type="MeshInstance3D" parent="."]
+position = Vector3(4.05, 2.75, 0)
+rotation = Vector3(0, 0, -0.12)
+mesh = SubResource("AwningMesh")
+
+[node name="RoofUnit" type="MeshInstance3D" parent="."]
+position = Vector3(-0.65, 4.78, 1.9)
+scale = Vector3(0.34, 0.42, 0.58)
+mesh = SubResource("BuildingMesh")
