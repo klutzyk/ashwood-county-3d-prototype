@@ -827,3 +827,30 @@ Validation:
   effects, Take, Store, full capacity, invalid Use, valid Use and Escape close
 - Objective-flow regression validation passed
 - C# build completed with no warnings or errors
+
+---
+
+## Save System Robustness
+
+Completed:
+
+- Preserved save version 1 and every currently persisted gameplay system
+- Validated captured state before writing and all deserialized references,
+  collections, capacities, item IDs, paths and values before applying
+- Wrote and flushed a temporary file before atomically replacing the primary
+  save on the same filesystem
+- Safely cleaned temporary and replacement-backup files without risking the
+  existing primary save
+- Added explicit future-version rejection and concise save/load failure logging
+
+Outcome:
+
+Interrupted writes cannot truncate the existing primary save, and malformed or
+newer-version data is rejected without partially changing the live game.
+
+Validation:
+
+- Same-process capture, atomic replacement and full-state reload passed
+- Fresh-process reload passed
+- Missing, malformed and future-version saves were rejected without mutation
+- C# build completed with no warnings or errors

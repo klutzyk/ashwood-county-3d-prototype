@@ -7,6 +7,10 @@ The prototype currently uses save version **1**.
 - Live Godot nodes are never serialized
 - Loading accepts version 1 only and validates all item IDs, container paths,
   zombie paths and numeric values before changing the running scene
+- Saving writes and flushes a temporary file before atomically replacing the
+  primary file on the same filesystem
+- Unsupported future versions and malformed data are rejected before any live
+  state is changed
 
 Version 1 stores player transform, health, stamina, hunger, thirst, inventory,
 the antibiotics objective state, world time, existing container search/content

@@ -89,6 +89,9 @@ public partial class SaveLoadValidation : Node
 		manager.StatusMessageRequested += message => statusMessage = message;
 		Require(manager.SaveGame(), "versioned save file is written");
 		Require(statusMessage == "Game Saved", "successful save requests brief feedback");
+		Require(manager.SaveGame(), "existing save is atomically replaced");
+		Require(!GodotFileAccess.FileExists($"{ValidationSavePath}.tmp"),
+			"successful atomic save leaves no temporary file");
 
 		player.GlobalPosition = Vector3.Zero;
 		player.Rotation = Vector3.Zero;
@@ -130,6 +133,15 @@ public partial class SaveLoadValidation : Node
 		Require(!manager.LoadGame(), "invalid save data is rejected without crashing");
 		Require(world.GetNode<Node3D>("Player").GlobalPosition.IsEqualApprox(positionBeforeInvalidLoad),
 			"invalid save does not partially mutate live state");
+
+		using (GodotFileAccess futureFile = GodotFileAccess.Open(
+			ValidationSavePath, GodotFileAccess.ModeFlags.Write)!)
+		{
+			futureFile.StoreString("{\"Version\":2}");
+		}
+		Require(!manager.LoadGame(), "unsupported future save version is rejected safely");
+		Require(world.GetNode<Node3D>("Player").GlobalPosition.IsEqualApprox(positionBeforeInvalidLoad),
+			"future save rejection does not mutate live state");
 		DirAccess.RemoveAbsolute(absolutePath);
 	}
 

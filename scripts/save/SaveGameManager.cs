@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.Json;
 using Godot;
@@ -79,21 +80,22 @@ public partial class SaveGameManager : Node
 
 	public bool SaveGame()
 	{
+		string temporaryPath = GetTemporarySavePath();
 		try
 		{
 			SaveGameDataV1 saveData = CaptureState();
-			using GodotFileAccess? file = GodotFileAccess.Open(SaveFilePath, GodotFileAccess.ModeFlags.Write);
-			if (file is null)
+			if (!TryValidate(saveData, out _))
 			{
-				throw new InvalidOperationException($"Could not open save file ({GodotFileAccess.GetOpenError()}).");
+				throw new InvalidOperationException("Captured state did not pass version 1 validation.");
 			}
 
-			file.StoreString(JsonSerializer.Serialize(saveData, JsonOptions));
+			WriteSaveAtomically(JsonSerializer.Serialize(saveData, JsonOptions), temporaryPath);
 			EmitSignal(SignalName.StatusMessageRequested, "Game Saved");
 			return true;
 		}
 		catch (Exception exception)
 		{
+			TryDeleteFile(temporaryPath);
 			GD.PushWarning($"Save failed: {exception.Message}");
 			EmitSignal(SignalName.StatusMessageRequested, "Game Could Not Be Saved");
 			return false;
@@ -117,9 +119,23 @@ public partial class SaveGameManager : Node
 			}
 
 			SaveGameDataV1? saveData = JsonSerializer.Deserialize<SaveGameDataV1>(file.GetAsText(), JsonOptions);
-			if (saveData is null || !TryValidate(saveData, out ValidatedSaveData validated))
+			if (saveData is null)
 			{
-				throw new InvalidOperationException("Save data is invalid or does not match this prototype version.");
+				throw new InvalidOperationException("Save data was empty.");
+			}
+			if (saveData.Version > SaveGameDataV1.CurrentVersion)
+			{
+				throw new InvalidOperationException(
+					$"Save version {saveData.Version} is newer than supported version " +
+					$"{SaveGameDataV1.CurrentVersion}.");
+			}
+			if (saveData.Version < SaveGameDataV1.CurrentVersion)
+			{
+				throw new InvalidOperationException($"Save version {saveData.Version} is not supported.");
+			}
+			if (!TryValidate(saveData, out ValidatedSaveData validated))
+			{
+				throw new InvalidOperationException("Save version 1 data failed validation.");
 			}
 
 			ApplyState(saveData, validated);
@@ -179,7 +195,13 @@ public partial class SaveGameManager : Node
 	private bool TryValidate(SaveGameDataV1 data, out ValidatedSaveData validated)
 	{
 		validated = null!;
-		if (data.Version != SaveGameDataV1.CurrentVersion ||
+		if (data.PlayerTransform is null ||
+			data.PlayerTransform.Position is null ||
+			data.PlayerTransform.Rotation is null ||
+			data.PlayerInventory is null ||
+			data.Containers is null ||
+			data.Zombies is null ||
+			data.Version != SaveGameDataV1.CurrentVersion ||
 			!Enum.IsDefined(typeof(AntibioticsObjectiveState), data.ObjectiveState) ||
 			!IsFinite(data.PlayerHealth) || !IsFinite(data.PlayerStamina) ||
 			!IsFinite(data.PlayerHunger) || !IsFinite(data.PlayerThirst) ||
@@ -210,13 +232,20 @@ public partial class SaveGameManager : Node
 		{
 			return false;
 		}
+		if (playerItems.Count > _playerInventory.Capacity)
+		{
+			return false;
+		}
 		result.PlayerItems = playerItems;
 
 		HashSet<SearchableContainer> seenContainers = new();
 		foreach (ContainerSaveData containerData in data.Containers)
 		{
-			SearchableContainer? container = worldRoot.GetNodeOrNull<SearchableContainer>(containerData.NodePath);
-			if (container is null || !seenContainers.Add(container) ||
+			SearchableContainer? container = containerData is null
+				? null
+				: worldRoot.GetNodeOrNull<SearchableContainer>(containerData.NodePath);
+			if (containerData is null || containerData.Items is null ||
+				container is null || !seenContainers.Add(container) ||
 				!TryResolveItems(containerData.Items, out List<ResolvedItem>? items))
 			{
 				return false;
@@ -227,8 +256,10 @@ public partial class SaveGameManager : Node
 		HashSet<PrototypeZombie> seenZombies = new();
 		foreach (ZombieSaveData zombieData in data.Zombies)
 		{
-			PrototypeZombie? zombie = worldRoot.GetNodeOrNull<PrototypeZombie>(zombieData.NodePath);
-			if (zombie is null || !seenZombies.Add(zombie))
+			PrototypeZombie? zombie = zombieData is null
+				? null
+				: worldRoot.GetNodeOrNull<PrototypeZombie>(zombieData.NodePath);
+			if (zombieData is null || zombie is null || !seenZombies.Add(zombie))
 			{
 				return false;
 			}
@@ -278,13 +309,18 @@ public partial class SaveGameManager : Node
 		return items;
 	}
 
-	private static bool TryResolveItems(List<ItemStackSaveData> itemData, out List<ResolvedItem> items)
+	private static bool TryResolveItems(List<ItemStackSaveData>? itemData, out List<ResolvedItem> items)
 	{
 		items = new List<ResolvedItem>();
+		if (itemData is null)
+		{
+			return false;
+		}
 		HashSet<string> seenItemIds = new(StringComparer.Ordinal);
 		foreach (ItemStackSaveData stack in itemData)
 		{
-			if (stack.Quantity <= 0 || !seenItemIds.Add(stack.ItemId) ||
+			if (stack is null || stack.Quantity <= 0 || string.IsNullOrWhiteSpace(stack.ItemId) ||
+				!seenItemIds.Add(stack.ItemId) ||
 				!ItemResourcePaths.TryGetValue(stack.ItemId, out string? resourcePath))
 			{
 				return false;
@@ -332,6 +368,70 @@ public partial class SaveGameManager : Node
 	private static bool IsFinite(Vector3SaveData value)
 	{
 		return value is not null && IsFinite(value.X) && IsFinite(value.Y) && IsFinite(value.Z);
+	}
+
+	private void WriteSaveAtomically(string contents, string temporaryPath)
+	{
+		using (GodotFileAccess? file = GodotFileAccess.Open(
+			temporaryPath,
+			GodotFileAccess.ModeFlags.Write))
+		{
+			if (file is null)
+			{
+				throw new InvalidOperationException(
+					$"Could not open temporary save file ({GodotFileAccess.GetOpenError()}).");
+			}
+
+			file.StoreString(contents);
+			file.Flush();
+		}
+
+		string primaryAbsolutePath = ProjectSettings.GlobalizePath(SaveFilePath);
+		string temporaryAbsolutePath = ProjectSettings.GlobalizePath(temporaryPath);
+		string backupAbsolutePath = ProjectSettings.GlobalizePath(GetBackupSavePath());
+		string? saveDirectory = Path.GetDirectoryName(primaryAbsolutePath);
+		if (!string.IsNullOrEmpty(saveDirectory))
+		{
+			Directory.CreateDirectory(saveDirectory);
+		}
+
+		if (File.Exists(primaryAbsolutePath))
+		{
+			TryDeleteAbsoluteFile(backupAbsolutePath);
+			File.Replace(
+				temporaryAbsolutePath,
+				primaryAbsolutePath,
+				backupAbsolutePath,
+				ignoreMetadataErrors: true);
+			TryDeleteAbsoluteFile(backupAbsolutePath);
+		}
+		else
+		{
+			File.Move(temporaryAbsolutePath, primaryAbsolutePath);
+		}
+	}
+
+	private string GetTemporarySavePath() => $"{SaveFilePath}.tmp";
+	private string GetBackupSavePath() => $"{SaveFilePath}.bak";
+
+	private static void TryDeleteFile(string path)
+	{
+		TryDeleteAbsoluteFile(ProjectSettings.GlobalizePath(path));
+	}
+
+	private static void TryDeleteAbsoluteFile(string absolutePath)
+	{
+		try
+		{
+			if (File.Exists(absolutePath))
+			{
+				File.Delete(absolutePath);
+			}
+		}
+		catch (Exception)
+		{
+			// Cleanup failure must not replace the primary save failure or success.
+		}
 	}
 
 	private sealed record ResolvedItem(ItemDefinition Definition, int Quantity);
