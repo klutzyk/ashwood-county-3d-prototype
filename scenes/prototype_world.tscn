@@ -238,34 +238,50 @@ mesh = SubResource("ShoulderMesh")
 
 [node name="Dash1" type="MeshInstance3D" parent="RoadMarkings" unique_id=606612256]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.09, -21)
+cast_shadow = 0
+visibility_range_end = 45.0
 mesh = SubResource("RoadLineMesh")
 
 [node name="Dash2" type="MeshInstance3D" parent="RoadMarkings" unique_id=1333253835]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.09, -15)
+cast_shadow = 0
+visibility_range_end = 45.0
 mesh = SubResource("RoadLineMesh")
 
 [node name="Dash3" type="MeshInstance3D" parent="RoadMarkings" unique_id=1058423927]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.09, -9)
+cast_shadow = 0
+visibility_range_end = 45.0
 mesh = SubResource("RoadLineMesh")
 
 [node name="Dash4" type="MeshInstance3D" parent="RoadMarkings" unique_id=688322156]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.09, -3)
+cast_shadow = 0
+visibility_range_end = 45.0
 mesh = SubResource("RoadLineMesh")
 
 [node name="Dash5" type="MeshInstance3D" parent="RoadMarkings" unique_id=78783954]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.09, 3)
+cast_shadow = 0
+visibility_range_end = 45.0
 mesh = SubResource("RoadLineMesh")
 
 [node name="Dash6" type="MeshInstance3D" parent="RoadMarkings" unique_id=1736057488]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.09, 9)
+cast_shadow = 0
+visibility_range_end = 45.0
 mesh = SubResource("RoadLineMesh")
 
 [node name="Dash7" type="MeshInstance3D" parent="RoadMarkings" unique_id=1827885003]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.09, 15)
+cast_shadow = 0
+visibility_range_end = 45.0
 mesh = SubResource("RoadLineMesh")
 
 [node name="Dash8" type="MeshInstance3D" parent="RoadMarkings" unique_id=432719208]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.09, 21)
+cast_shadow = 0
+visibility_range_end = 45.0
 mesh = SubResource("RoadLineMesh")
 
 [node name="Trees" type="Node3D" parent="." unique_id=1807275455]
@@ -329,7 +345,9 @@ light_color = Color(0.83, 0.85, 0.88, 1)
 light_energy = 0.65
 shadow_enabled = true
 shadow_opacity = 0.6
-shadow_blur = 4.0
+shadow_blur = 2.0
+directional_shadow_mode = 1
+directional_shadow_max_distance = 42.0
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=877615492]
 environment = SubResource("WorldEnvironment")

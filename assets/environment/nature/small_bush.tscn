@@ -26,18 +26,34 @@ radial_segments = 8
 
 [node name="Stem" type="MeshInstance3D" parent="."]
 position = Vector3(0, 0.32, 0)
+cast_shadow = 0
+visibility_range_end = 38.0
+visibility_range_end_margin = 5.0
+visibility_range_fade_mode = 1
 mesh = SubResource("StemMesh")
 
 [node name="FoliageCentre" type="MeshInstance3D" parent="."]
 position = Vector3(0, 0.72, 0)
+cast_shadow = 0
+visibility_range_end = 38.0
+visibility_range_end_margin = 5.0
+visibility_range_fade_mode = 1
 mesh = SubResource("BushMesh")
 
 [node name="FoliageLeft" type="MeshInstance3D" parent="."]
 position = Vector3(-0.43, 0.55, 0.08)
 scale = Vector3(0.72, 0.72, 0.72)
+cast_shadow = 0
+visibility_range_end = 38.0
+visibility_range_end_margin = 5.0
+visibility_range_fade_mode = 1
 mesh = SubResource("BushMesh")
 
 [node name="FoliageRight" type="MeshInstance3D" parent="."]
 position = Vector3(0.42, 0.51, -0.12)
 scale = Vector3(0.68, 0.68, 0.68)
+cast_shadow = 0
+visibility_range_end = 38.0
+visibility_range_end_margin = 5.0
+visibility_range_fade_mode = 1
 mesh = SubResource("BushMesh")

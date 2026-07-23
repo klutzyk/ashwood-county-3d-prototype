@@ -292,6 +292,21 @@ Complete and test one vertical slice before starting the next.
 
 ---
 
+# Autonomous Polish Batch
+
+- [x] Improve rendered prototype performance and add a repeatable fixed-scene benchmark
+- [ ] Improve nighttime lighting readability
+- [ ] Polish the player flashlight
+- [ ] Improve zombie crowd performance and separation
+- [ ] Improve melee responsiveness
+- [ ] Refine inventory and container usability
+- [ ] Harden prototype save loading
+- [ ] Polish antibiotics objective flow
+- [ ] Balance prototype ambience
+- [ ] Validate and clean the autonomous polish batch
+
+---
+
 # Later
 
 - Community and safehouse

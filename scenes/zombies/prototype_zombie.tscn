@@ -41,6 +41,10 @@ position = Vector3(0, -0.872, 0)
 
 [node name="ZombieGirl" parent="Visual" instance=ExtResource("2_model")]
 
+[node name="VisibilityNotifier" type="VisibleOnScreenNotifier3D" parent="."]
+position = Vector3(0, 0.15, 0)
+aabb = AABB(-0.75, -1, -0.75, 1.5, 2.5, 1.5)
+
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
 path_desired_distance = 0.4
 target_desired_distance = 1.3

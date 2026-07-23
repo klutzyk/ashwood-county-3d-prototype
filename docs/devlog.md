@@ -661,3 +661,29 @@ Validation:
   required message sources and the occluded physical safe-point treatment
 - Antibiotics objective-flow and save/load regression validations passed
 - C# build completed with no warnings or errors
+
+---
+
+## Rendered Prototype Performance Pass
+
+Completed:
+
+- Added a repeatable rendered benchmark at 1280 x 720, 17:00 and a fixed camera
+- Reduced directional-shadow coverage to the useful town play area
+- Removed negligible shadow work and added visibility ranges for road markings
+  and small bushes
+- Paused zombie animation evaluation while distant or off-screen without
+  changing AI, navigation, population or corpse interaction
+- Kept the Compatibility renderer, existing lights and major environment features
+
+Outcome:
+
+The same 600-frame rendered benchmark improved from 163.50 FPS with a 9.39 ms
+p95 frame time to 198.43 FPS with an 8.26 ms p95 frame time.
+
+Validation:
+
+- Zombie pursuit and search validation passed
+- Day/night and flashlight regression validation passed
+- Main scene imported successfully in Godot 4.7.1 .NET
+- C# build completed with no warnings or errors

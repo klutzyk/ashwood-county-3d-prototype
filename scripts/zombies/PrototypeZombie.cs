@@ -48,6 +48,7 @@ public partial class PrototypeZombie : CharacterBody3D
 	[Export] public float LastKnownPositionTolerance { get; set; } = 0.75f;
 	[Export] public float HitReactionDuration { get; set; } = 0.24f;
 	[Export] public float KnockbackDamping { get; set; } = 12.0f;
+	[Export] public float AnimationUpdateDistance { get; set; } = 28.0f;
 
 	private const string SourceAnimationName = "mixamo_com";
 	private const string IdleAnimationName = "Idle";
@@ -78,6 +79,7 @@ public partial class PrototypeZombie : CharacterBody3D
 	private ZombieHealth _health = null!;
 	private Node3D _visual = null!;
 	private SearchableContainer _corpseLoot = null!;
+	private VisibleOnScreenNotifier3D _visibilityNotifier = null!;
 	private BehaviourState _state = BehaviourState.Idle;
 	private float _pathUpdateElapsed;
 	private float _awarenessUpdateRemaining;
@@ -107,6 +109,8 @@ public partial class PrototypeZombie : CharacterBody3D
 	private float _separationUpdateRemaining;
 	private Vector3 _cachedSeparation;
 	private PhysicsRayQueryParameters3D _visionQuery = null!;
+	private bool _isOnScreen = true;
+	private bool _animationProcessingEnabled = true;
 
 	public static readonly StringName ZombieGroupName = new("prototype_zombies");
 
@@ -122,6 +126,7 @@ public partial class PrototypeZombie : CharacterBody3D
 		_health = GetNode<ZombieHealth>("Health");
 		_visual = GetNode<Node3D>("Visual");
 		_corpseLoot = GetNode<SearchableContainer>("CorpseLoot");
+		_visibilityNotifier = GetNode<VisibleOnScreenNotifier3D>("VisibilityNotifier");
 		_navigationAgent = GetNode<NavigationAgent3D>("NavigationAgent3D");
 		_animationPlayer = FindDescendant<AnimationPlayer>(this)
 			?? throw new InvalidOperationException("Zombie model is missing an AnimationPlayer.");
@@ -142,6 +147,8 @@ public partial class PrototypeZombie : CharacterBody3D
 		_visionQuery.Exclude = new Godot.Collections.Array<Rid> { GetRid() };
 		GameplayNoise.Emitted += OnGameplayNoiseEmitted;
 		_health.Died += OnDied;
+		_visibilityNotifier.ScreenEntered += OnScreenEntered;
+		_visibilityNotifier.ScreenExited += OnScreenExited;
 		PlayStateAnimation();
 	}
 
@@ -149,6 +156,8 @@ public partial class PrototypeZombie : CharacterBody3D
 	{
 		GameplayNoise.Emitted -= OnGameplayNoiseEmitted;
 		_health.Died -= OnDied;
+		_visibilityNotifier.ScreenEntered -= OnScreenEntered;
+		_visibilityNotifier.ScreenExited -= OnScreenExited;
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -210,6 +219,7 @@ public partial class PrototypeZombie : CharacterBody3D
 		}
 
 		_cachedDistanceToPlayer = HorizontalDistanceTo(_player.GlobalPosition);
+		UpdateAnimationProcessing();
 		_cachedCanSeePlayer = CanSeePlayer(_cachedDistanceToPlayer);
 		UpdatePlayerAwareness(_cachedCanSeePlayer, _awarenessElapsed);
 		_awarenessElapsed = 0.0f;
@@ -805,6 +815,36 @@ public partial class PrototypeZombie : CharacterBody3D
 			_ => IdleAnimationName,
 		};
 		_animationPlayer.Play(animationName, AnimationBlendTime);
+	}
+
+	private void OnScreenEntered()
+	{
+		_isOnScreen = true;
+		UpdateAnimationProcessing();
+	}
+
+	private void OnScreenExited()
+	{
+		_isOnScreen = false;
+		UpdateAnimationProcessing();
+	}
+
+	private void UpdateAnimationProcessing()
+	{
+		bool shouldProcess = IsAlive &&
+			_isOnScreen &&
+			_cachedDistanceToPlayer <= Mathf.Max(AnimationUpdateDistance, DetectionRadius);
+		if (_animationProcessingEnabled == shouldProcess)
+		{
+			return;
+		}
+
+		_animationProcessingEnabled = shouldProcess;
+		_animationPlayer.Active = shouldProcess;
+		if (shouldProcess)
+		{
+			PlayStateAnimation();
+		}
 	}
 
 	private void ConfigureAnimations()
