@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" path="res://assets/environment/buildings/Diner/exterior.tscn" id="1_exterior"]
 [ext_resource type="PackedScene" uid="uid://cfuj4wx6hieb0" path="res://assets/environment/buildings/Diner/interior.tscn" id="2_interior"]
 [ext_resource type="PackedScene" path="res://assets/environment/buildings/shared/door.tscn" id="3_door"]
-[ext_resource type="PackedScene" path="res://scenes/containers/diner_pantry.tscn" id="4_pantry"]
+[ext_resource type="PackedScene" uid="uid://j4bvpv2j3bg6" path="res://scenes/containers/diner_pantry.tscn" id="4_pantry"]
 [ext_resource type="PackedScene" uid="uid://4v8o40ni1bgy" path="res://scenes/containers/diner_fridge.tscn" id="5_fridge"]
 
 [node name="Diner" type="Node3D" unique_id=640959050]
@@ -18,7 +18,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.88, 0.03, -0.7)
 OpenAngleDegrees = 95.0
 
 [node name="Pantry" parent="." unique_id=1440625042 instance=ExtResource("4_pantry")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.25, 1, -4.45)
+transform = Transform3D(1.1110303, 0, 0, 0, 1.0899109, 0, 0, 0, 1, 2.9228294, 1.2081841, -5.800736)
+SearchDuration = 0.0
 
 [node name="Fridge" parent="." unique_id=862889262 instance=ExtResource("5_fridge")]
 transform = Transform3D(-1.5, 0, 2.2649371e-07, 0, 1.5, 0, -2.2649371e-07, 0, -1.5, 3.089517, 0.082717955, 5.381214)

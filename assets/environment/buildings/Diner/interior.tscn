@@ -26,9 +26,6 @@ size = Vector3(0.8, 1, 5.8)
 [sub_resource type="BoxShape3D" id="BoothShape"]
 size = Vector3(1, 0.85, 1.8)
 
-[sub_resource type="BoxShape3D" id="StorageShape"]
-size = Vector3(1.2, 2, 0.6)
-
 [node name="DinerInterior" type="StaticBody3D" unique_id=1283492950]
 
 [node name="Floor" type="MeshInstance3D" parent="." unique_id=1109390101]
@@ -86,14 +83,6 @@ mesh = SubResource("FixtureMesh")
 [node name="BoothSouthCollision" type="CollisionShape3D" parent="." unique_id=684925471]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0.43, 3.5)
 shape = SubResource("BoothShape")
-
-[node name="PantryFixture" type="MeshInstance3D" parent="." unique_id=1637888235]
-transform = Transform3D(1.2, 0, 0, 0, 2, 0, 0, 0, 0.6, 3.25, 1, -4.9)
-mesh = SubResource("FixtureMesh")
-
-[node name="PantryCollision" type="CollisionShape3D" parent="." unique_id=256273077]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.25, 1, -4.9)
-shape = SubResource("StorageShape")
 
 [node name="DiningLight" type="OmniLight3D" parent="." unique_id=536529602]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6, 2.75, 0)

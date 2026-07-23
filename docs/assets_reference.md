@@ -184,6 +184,12 @@ of each downloaded asset and its license information with project records.
 ## Old Fridge
 **credits** - "Old Fridge" (https://skfb.ly/ouDRB) by sergeilihandristov is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 
+## Modern Diner
+**credits** - "Modern diner" (https://skfb.ly/pDTop) by Katydid is licensed under Creative Commons Attribution-NonCommercial (http://creativecommons.org/licenses/by-nc/4.0/).
+
+## Rusted Metal Shel
+**credits** - "Rusted metal shelf" (https://skfb.ly/6U7QS) by ELIZION is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+
 
 ## Project-Owned Prototype Town Geometry
 

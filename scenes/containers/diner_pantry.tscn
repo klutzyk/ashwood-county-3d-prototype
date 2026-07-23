@@ -1,18 +1,23 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene format=3 uid="uid://j4bvpv2j3bg6"]
 
-[ext_resource type="Script" path="res://scripts/interactions/SearchableContainer.cs" id="1_searchable"]
-[ext_resource type="Script" path="res://scripts/interactions/Interactable.cs" id="2_interactable"]
-[ext_resource type="Script" path="res://scripts/items/ContainerInventory.cs" id="3_inventory"]
-[ext_resource type="Resource" path="res://assets/items/loot_tables/cupboard.tres" id="4_loot"]
+[ext_resource type="Script" uid="uid://cnvmrpkq2k7f3" path="res://scripts/interactions/SearchableContainer.cs" id="1_searchable"]
+[ext_resource type="Script" uid="uid://bwaot3gvfvo4b" path="res://scripts/interactions/Interactable.cs" id="2_interactable"]
+[ext_resource type="Script" uid="uid://bjwk0iv64xsfc" path="res://scripts/items/ContainerInventory.cs" id="3_inventory"]
+[ext_resource type="Resource" uid="uid://coaara2efh0ym" path="res://assets/items/loot_tables/cupboard.tres" id="4_loot"]
+[ext_resource type="PackedScene" uid="uid://1gg3idsr7x61" path="res://assets/third_party/common/containers/cabinets/kitchen_spice_cabinet__game_ready_model.glb" id="5_efsky"]
 
-[node name="DinerPantry" type="Node3D"]
+[node name="DinerPantry" type="Node3D" unique_id=793981491]
 script = ExtResource("1_searchable")
 DisplayName = "Diner Pantry"
 SearchDuration = 1.6
 LootTable = ExtResource("4_loot")
 
-[node name="Interactable" type="Node3D" parent="."]
+[node name="Interactable" type="Node3D" parent="." unique_id=1092088346]
 script = ExtResource("2_interactable")
 
-[node name="Inventory" type="Node" parent="."]
+[node name="Inventory" type="Node" parent="." unique_id=1810158691]
 script = ExtResource("3_inventory")
+
+[node name="Visual" type="Node3D" parent="." unique_id=1580504011]
+
+[node name="Sketchfab_Scene" parent="Visual" unique_id=1237861992 instance=ExtResource("5_efsky")]

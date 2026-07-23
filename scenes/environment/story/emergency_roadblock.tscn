@@ -1,6 +1,8 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene format=3 uid="uid://cpua772k33ume"]
 
-[ext_resource type="PackedScene" path="res://assets/third_party/vehicles/alfa_romeo/source/alfa.fbx" id="1_car_visual"]
+[ext_resource type="PackedScene" uid="uid://dt4uiy2a7e8dw" path="res://assets/third_party/vehicles/alfa_romeo/source/alfa.fbx" id="1_car_visual"]
+[ext_resource type="PackedScene" uid="uid://rahr2cqv36ov" path="res://assets/third_party/props/barriers/barrier1/concrete_road_barrier_1k.gltf" id="2_p3obj"]
+[ext_resource type="PackedScene" uid="uid://dnlvomtld5rbn" path="res://assets/third_party/props/barriers/barrier2/concrete_road_barrier_02_1k.gltf" id="3_ombiu"]
 
 [sub_resource type="StandardMaterial3D" id="BarrierMaterial"]
 albedo_color = Color(0.4, 0.39, 0.35, 1)
@@ -34,55 +36,57 @@ height = 0.42
 radial_segments = 8
 rings = 1
 
-[node name="EmergencyRoadblock" type="Node3D"]
+[node name="EmergencyRoadblock" type="Node3D" unique_id=482486780]
 
-[node name="CrashedVehicleVisual" parent="." instance=ExtResource("1_car_visual")]
-position = Vector3(0.5, 0.02, 0)
-rotation = Vector3(0.04, -0.38, -0.05)
-scale = Vector3(0.58, 0.58, 0.58)
+[node name="CrashedVehicleVisual" parent="." unique_id=265627772 instance=ExtResource("1_car_visual")]
+transform = Transform3D(0.53838235, 0.018327747, -0.21496178, -0.028964728, 0.57881176, -0.023193812, 0.2137885, 0.032264568, 0.5381946, 0.5, 0.02, 0)
 
-[node name="BarrierLeft" type="Node3D" parent="."]
-position = Vector3(-2.1, 0, 1.2)
-rotation = Vector3(0, 0.2, 0)
+[node name="BarrierLeft" type="Node3D" parent="." unique_id=562570389]
+transform = Transform3D(0.9800666, 0, 0.19866933, 0, 1, 0, -0.19866933, 0, 0.9800666, -2.1, 0, 1.2)
 
-[node name="Body" type="MeshInstance3D" parent="BarrierLeft"]
-position = Vector3(0, 0.275, 0)
+[node name="Body" type="MeshInstance3D" parent="BarrierLeft" unique_id=1671676270]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.275, 0)
+visible = false
 cast_shadow = 0
 visibility_range_end = 52.0
 mesh = SubResource("BarrierMesh")
 
-[node name="Stripe" type="MeshInstance3D" parent="BarrierLeft"]
-position = Vector3(0, 0.38, 0)
+[node name="Stripe" type="MeshInstance3D" parent="BarrierLeft" unique_id=564059083]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.38, 0)
+visible = false
 cast_shadow = 0
 visibility_range_end = 52.0
 mesh = SubResource("WarningMesh")
 
-[node name="BarrierRight" type="Node3D" parent="."]
-position = Vector3(2.4, 0, -1.25)
-rotation = Vector3(0, -0.16, 0)
+[node name="concrete_road_barrier_1k" parent="BarrierLeft" unique_id=1671235592 instance=ExtResource("2_p3obj")]
 
-[node name="Body" type="MeshInstance3D" parent="BarrierRight"]
-position = Vector3(0, 0.275, 0)
+[node name="BarrierRight" type="Node3D" parent="." unique_id=609076208]
+transform = Transform3D(0.98722726, 0, -0.15931821, 0, 1, 0, 0.15931821, 0, 0.98722726, 2.4, 0, -1.25)
+
+[node name="concrete_road_barrier_02_1k" parent="BarrierRight" unique_id=943175787 instance=ExtResource("3_ombiu")]
+
+[node name="Body" type="MeshInstance3D" parent="BarrierRight" unique_id=650905544]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.275, 0)
+visible = false
 cast_shadow = 0
 visibility_range_end = 52.0
 mesh = SubResource("BarrierMesh")
 
-[node name="Stripe" type="MeshInstance3D" parent="BarrierRight"]
-position = Vector3(0, 0.38, 0)
+[node name="Stripe" type="MeshInstance3D" parent="BarrierRight" unique_id=1611643174]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.38, 0)
+visible = false
 cast_shadow = 0
 visibility_range_end = 52.0
 mesh = SubResource("WarningMesh")
 
-[node name="AbandonedCase" type="MeshInstance3D" parent="."]
-position = Vector3(-0.9, 0.21, -1.4)
-rotation = Vector3(0, 0.26, 0)
+[node name="AbandonedCase" type="MeshInstance3D" parent="." unique_id=1778173025]
+transform = Transform3D(0.96638995, 0, 0.25708055, 0, 1, 0, -0.25708055, 0, 0.96638995, -0.9, 0.21, -1.4)
 cast_shadow = 0
 visibility_range_end = 42.0
 mesh = SubResource("CaseMesh")
 
-[node name="SpentFlare" type="MeshInstance3D" parent="."]
-position = Vector3(1.65, 0.08, 1.35)
-rotation = Vector3(1.42, 0.2, 0.08)
+[node name="SpentFlare" type="MeshInstance3D" parent="." unique_id=643606183]
+transform = Transform3D(0.9926285, 0.11746488, 0.0298452, 0.012005225, 0.14974505, -0.98865175, -0.12060103, 0.9817222, 0.147231, 1.65, 0.08, 1.35)
 cast_shadow = 0
 visibility_range_end = 36.0
 mesh = SubResource("FlareMesh")
