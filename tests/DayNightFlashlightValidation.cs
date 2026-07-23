@@ -62,14 +62,30 @@ public partial class DayNightFlashlightValidation : Node
 			});
 			Require(flashlight.IsEnabled, "F-toggle behavior enables the flashlight outdoors");
 			Require(flashlight.GetParent() is Camera3D, "flashlight direction is inherited from the camera");
+			Require(flashlight.Visible && flashlight.LightEnergy < flashlight.BeamEnergy,
+				"flashlight begins a smooth fade when toggled on");
+			await ToSignal(GetTree().CreateTimer(0.25f), SceneTreeTimer.SignalName.Timeout);
+			Require(Mathf.IsEqualApprox(flashlight.LightEnergy, flashlight.BeamEnergy),
+				"flashlight reaches its configured energy after the short fade");
 			Require(flashlight.SpotRange >= 19.0f && flashlight.LightEnergy <= 3.0f,
 				"flashlight reaches road edges without an over-bright centre");
 			Require(flashlight.SpotAttenuation <= 1.0f,
 				"flashlight falloff keeps some peripheral context visible");
+			Require(flashlight.SpotAngle <= 28.0f &&
+				flashlight.SpotAngleAttenuation < 1.0f,
+				"flashlight has a restrained hotspot and soft cone edge");
+			Require(flashlight.Position.Z < -0.4f && flashlight.Position.Y < 0.0f,
+				"flashlight origin is offset forward and down to reduce near-player spill");
 			player.GlobalPosition = new Vector3(-17.5f, 1.0f, 12.2f);
 			await ToSignal(GetTree(), SceneTree.SignalName.PhysicsFrame);
 			Require(flashlight.IsEnabled && flashlight.IsInsideTree(),
 				"camera flashlight remains active inside the pharmacy");
+			flashlight.Toggle();
+			Require(!flashlight.IsEnabled && flashlight.Visible && flashlight.LightEnergy > 0.0f,
+				"flashlight remains visible while smoothly fading out");
+			await ToSignal(GetTree().CreateTimer(0.25f), SceneTreeTimer.SignalName.Timeout);
+			Require(!flashlight.Visible && Mathf.IsZeroApprox(flashlight.LightEnergy),
+				"flashlight hides after its fade completes");
 
 			GD.Print("DAY_NIGHT_FLASHLIGHT_VALIDATION: PASS");
 			GetTree().Quit(0);

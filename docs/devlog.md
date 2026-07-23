@@ -715,3 +715,28 @@ Validation:
 - Two post-change rendered checks averaged 187.28 and 188.10 FPS with 8.37 and
   8.20 ms p95 frame times, retaining the performance-pass improvement
 - C# build completed with no warnings or errors
+
+---
+
+## Player Flashlight Polish
+
+Completed:
+
+- Added short energy fades for reliable, smooth on and off toggles
+- Offset the camera-following beam slightly forward and down to reduce awkward
+  illumination immediately around and behind the player
+- Tightened the cone and exposed distance and angular attenuation tuning
+- Added a subtle central emphasis with a softer cone edge using the existing
+  SpotLight3D settings
+- Kept flashlight shadows disabled and added no batteries, upgrades or assets
+
+Outcome:
+
+The existing flashlight now turns on immediately without popping to full
+brightness, fades out cleanly and gives a more controlled pool of readable light.
+
+Validation:
+
+- Day/night and flashlight validation passed toggle timing, final visibility,
+  camera attachment, offset, range, energy, cone and attenuation checks
+- C# build completed with no warnings or errors

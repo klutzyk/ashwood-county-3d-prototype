@@ -296,7 +296,7 @@ Complete and test one vertical slice before starting the next.
 
 - [x] Improve rendered prototype performance and add a repeatable fixed-scene benchmark
 - [x] Improve nighttime lighting readability
-- [ ] Polish the player flashlight
+- [x] Polish the player flashlight
 - [ ] Improve zombie crowd performance and separation
 - [ ] Improve melee responsiveness
 - [ ] Refine inventory and container usability

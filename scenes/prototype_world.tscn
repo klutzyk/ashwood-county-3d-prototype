@@ -405,7 +405,6 @@ fov = 70.0
 [node name="Flashlight" type="SpotLight3D" parent="Player/CameraRig/SpringArm3D/Camera3D"]
 script = ExtResource("34_flashlight")
 light_color = Color(1, 0.94, 0.82, 1)
-spot_attenuation = 1.0
 shadow_enabled = false
 
 [node name="AnimationTree" type="AnimationTree" parent="Player" unique_id=1211255373]
