@@ -1,0 +1,38 @@
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="Script" path="res://scripts/interactions/SearchableContainer.cs" id="1_searchable"]
+[ext_resource type="Script" path="res://scripts/interactions/Interactable.cs" id="2_interactable"]
+[ext_resource type="Script" path="res://scripts/items/ContainerInventory.cs" id="3_inventory"]
+[ext_resource type="Resource" path="res://assets/items/antibiotics.tres" id="4_antibiotics"]
+[ext_resource type="Material" path="res://assets/materials/building_fixture.tres" id="5_fixture"]
+[ext_resource type="Script" path="res://scripts/items/ItemDefinition.cs" id="6_item"]
+
+[sub_resource type="BoxMesh" id="CabinetMesh"]
+material = ExtResource("5_fixture")
+size = Vector3(1.1, 1.0, 0.6)
+
+[sub_resource type="BoxShape3D" id="CabinetShape"]
+size = Vector3(1.1, 1.0, 0.6)
+
+[node name="PharmacyMedicineCabinet" type="StaticBody3D"]
+
+[node name="Mesh" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.5, 0)
+mesh = SubResource("CabinetMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.5, 0)
+shape = SubResource("CabinetShape")
+
+[node name="SearchableContainer" type="Node3D" parent="."]
+position = Vector3(0, 0.7, 0)
+script = ExtResource("1_searchable")
+DisplayName = "Pharmacy Medicine Cabinet"
+SearchDuration = 2.0
+InitialItems = Array[ExtResource("6_item")]([ExtResource("4_antibiotics")])
+
+[node name="Interactable" type="Node3D" parent="SearchableContainer"]
+script = ExtResource("2_interactable")
+
+[node name="Inventory" type="Node" parent="SearchableContainer"]
+script = ExtResource("3_inventory")

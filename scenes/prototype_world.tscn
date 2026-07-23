@@ -29,6 +29,9 @@
 [ext_resource type="PackedScene" path="res://assets/environment/props/roadside_dressing.tscn" id="27_roadside"]
 [ext_resource type="PackedScene" path="res://assets/environment/buildings/ServiceStation/service_station.tscn" id="28_station"]
 [ext_resource type="PackedScene" path="res://assets/environment/buildings/Pharmacy/pharmacy.tscn" id="29_pharmacy"]
+[ext_resource type="Script" path="res://scripts/objectives/AntibioticsObjective.cs" id="30_objective"]
+[ext_resource type="PackedScene" path="res://assets/environment/props/prototype_safe_point.tscn" id="31_safe_point"]
+[ext_resource type="Script" path="res://scripts/ui/ObjectiveDisplay.cs" id="32_objective_ui"]
 
 [sub_resource type="BoxMesh" id="GrassMesh"]
 material = ExtResource("8_grass")
@@ -132,6 +135,9 @@ corner_radius_bottom_right = 6
 corner_radius_bottom_left = 6
 
 [node name="PrototypeWorld" type="Node3D" unique_id=390521270]
+
+[node name="AntibioticsObjective" type="Node" parent="."]
+script = ExtResource("30_objective")
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="." unique_id=242024835]
 navigation_mesh = ExtResource("16_navigation")
@@ -251,6 +257,9 @@ transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 13.2, 0, -6.2)
 [node name="HouseRoadsideDressing" parent="Props" unique_id=442290748 instance=ExtResource("27_roadside")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, -8)
 
+[node name="PrototypeSafePoint" parent="." instance=ExtResource("31_safe_point")]
+position = Vector3(5.1, 0.1, -8.7)
+
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1750895960]
 transform = Transform3D(0.88294756, 0.36994863, -0.2890356, 0, 0.6156615, 0.7880107, 0.46947157, -0.6957722, 0.5435968, 0, 0, 0)
 light_color = Color(0.83, 0.85, 0.88, 1)
@@ -325,6 +334,42 @@ WanderRadius = 3.5
 
 [node name="PerformanceUI" type="CanvasLayer" parent="." unique_id=1832903103]
 script = ExtResource("19_player_status")
+
+[node name="ObjectiveDisplay" type="Control" parent="PerformanceUI"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 12.0
+offset_top = 124.0
+offset_right = 400.0
+offset_bottom = 238.0
+script = ExtResource("32_objective_ui")
+
+[node name="ObjectiveText" type="Label" parent="PerformanceUI/ObjectiveDisplay"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 58.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.94, 0.93, 0.82, 1)
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("FpsBackground")
+text = "OBJECTIVE\nSearch the pharmacy for antibiotics"
+vertical_alignment = 1
+
+[node name="CompletionMessage" type="Label" parent="PerformanceUI/ObjectiveDisplay"]
+visible = false
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 66.0
+offset_bottom = 108.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.6, 1, 0.66, 1)
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("FpsBackground")
+text = "Objective Complete: Antibiotics delivered"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="FpsLabel" type="Label" parent="PerformanceUI" unique_id=1389187676]
 offset_left = 12.0

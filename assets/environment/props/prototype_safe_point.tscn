@@ -1,0 +1,51 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://scripts/objectives/PrototypeSafePoint.cs" id="1_safe_point"]
+[ext_resource type="Script" path="res://scripts/interactions/Interactable.cs" id="2_interactable"]
+
+[sub_resource type="StandardMaterial3D" id="SafePointMaterial"]
+albedo_color = Color(0.12, 0.68, 0.28, 0.75)
+emission_enabled = true
+emission = Color(0.05, 0.45, 0.14, 1)
+emission_energy_multiplier = 1.6
+transparency = 1
+
+[sub_resource type="CylinderMesh" id="SafePointBaseMesh"]
+material = SubResource("SafePointMaterial")
+top_radius = 1.15
+bottom_radius = 1.15
+height = 0.08
+radial_segments = 32
+
+[sub_resource type="TorusMesh" id="SafePointRingMesh"]
+material = SubResource("SafePointMaterial")
+inner_radius = 0.88
+outer_radius = 1.05
+rings = 24
+ring_segments = 8
+
+[node name="PrototypeSafePoint" type="Node3D"]
+script = ExtResource("1_safe_point")
+
+[node name="Base" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.05, 0)
+mesh = SubResource("SafePointBaseMesh")
+
+[node name="Ring" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.12, 0)
+mesh = SubResource("SafePointRingMesh")
+
+[node name="Label" type="Label3D" parent="."]
+position = Vector3(0, 1.35, 0)
+modulate = Color(0.72, 1, 0.76, 1)
+outline_modulate = Color(0.02, 0.08, 0.03, 1)
+outline_size = 8
+text = "SAFE POINT"
+font_size = 48
+billboard = 1
+
+[node name="Interactable" type="Node3D" parent="."]
+position = Vector3(0, 0.8, 0)
+script = ExtResource("2_interactable")
+InteractionName = "Safe Point"
+InteractionPrompt = "Deliver antibiotics at"

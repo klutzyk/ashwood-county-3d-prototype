@@ -160,6 +160,14 @@ Complete and test one vertical slice before starting the next.
 - [ ] Interior loot tables
 - [ ] Preserve container contents while switching locations
 
+## Antibiotics Objective Prototype
+
+- [x] Place antibiotics in a searchable pharmacy container
+- [x] Require explicit transfer into the player inventory
+- [x] Track search, return and completion as structured states
+- [x] Submit antibiotics at the marked safe point
+- [x] Display objective guidance and brief completion feedback
+
 ---
 
 # Vertical Slice 4 — Expanded Threat

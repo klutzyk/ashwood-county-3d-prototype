@@ -67,6 +67,12 @@ public abstract partial class ItemStorage : Node
 		return true;
 	}
 
+	public bool RemoveItem(StringName itemId, int quantity = 1)
+	{
+		int stackIndex = FindItemStack(itemId);
+		return stackIndex >= 0 && RemoveItemAt(stackIndex, quantity);
+	}
+
 	public bool TransferStackTo(int stackIndex, ItemStorage target)
 	{
 		if (!IsValidStack(stackIndex) || target is null || ReferenceEquals(this, target))

@@ -369,3 +369,26 @@ The repository still has no player melee combat action or zombie health/death
 system. `EmitMeleeAttackNoise()` is ready for the planned melee action to call,
 and `SetGameplayNoiseResponseEnabled(false)` is ready for a future zombie-death
 handler. Those unrelated combat systems were not added in this slice.
+
+---
+
+## Pharmacy Antibiotics Objective
+
+Completed:
+
+- Added a dedicated Antibiotics item in a searchable pharmacy medicine cabinet
+- Preserved separate container state and required the existing Take action
+- Added structured search, return and completion objective states
+- Added a clearly labelled safe point outside the starting house
+- Submitted the antibiotics on safe-point interaction and showed completion feedback
+
+Outcome:
+
+The player can search the pharmacy, explicitly take the antibiotics and return
+them to the safe point to complete one focused prototype objective.
+
+Validation:
+
+- Automated end-to-end runtime validation passed search, explicit transfer,
+  state progression, safe-point delivery and item submission
+- C# build completed with no warnings or errors
