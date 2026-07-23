@@ -1,8 +1,12 @@
-[gd_scene format=3]
+[gd_scene load_steps=8 format=3]
 
 [ext_resource type="Script" path="res://scripts/zombies/PrototypeZombie.cs" id="1_script"]
 [ext_resource type="PackedScene" uid="uid://7f2fbbm442ic" path="res://assets/characters/zombies/Zombiegirl W Kurniawan.fbx" id="2_model"]
 [ext_resource type="Script" path="res://scripts/zombies/ZombieHealth.cs" id="3_health"]
+[ext_resource type="Script" path="res://scripts/interactions/SearchableContainer.cs" id="4_searchable"]
+[ext_resource type="Script" path="res://scripts/interactions/Interactable.cs" id="5_interactable"]
+[ext_resource type="Script" path="res://scripts/items/ContainerInventory.cs" id="6_inventory"]
+[ext_resource type="Resource" path="res://assets/items/zombie_corpse_loot.tres" id="7_loot"]
 
 [sub_resource type="CapsuleShape3D" id="ZombieShape"]
 radius = 0.42
@@ -17,6 +21,20 @@ shape = SubResource("ZombieShape")
 
 [node name="Health" type="Node" parent="."]
 script = ExtResource("3_health")
+
+[node name="CorpseLoot" type="Node3D" parent="."]
+position = Vector3(0, 0.25, 0)
+script = ExtResource("4_searchable")
+DisplayName = "Corpse"
+SearchDuration = 1.25
+LootTable = ExtResource("7_loot")
+
+[node name="Interactable" type="Node3D" parent="CorpseLoot"]
+script = ExtResource("5_interactable")
+Enabled = false
+
+[node name="Inventory" type="Node" parent="CorpseLoot"]
+script = ExtResource("6_inventory")
 
 [node name="Visual" type="Node3D" parent="."]
 position = Vector3(0, -0.872, 0)

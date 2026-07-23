@@ -471,3 +471,27 @@ in place.
 Validation:
 
 - C# build completed with no warnings or errors
+
+---
+
+## Searchable Zombie Corpses
+
+Completed:
+
+- Attached the existing reusable searchable-container foundation to every zombie
+- Enabled corpse interaction only after that zombie dies
+- Added deterministic per-corpse loot rolls derived from stable scene paths
+- Added Bandage, Food, Bottled Water, Scrap and empty weighted outcomes
+- Generated each corpse's contents only on its first completed search
+- Preserved explicit item transfers, uncollected loot and searched state
+- Added Scrap to the versioned save/load item-resource registry
+
+Outcome:
+
+Dead zombies remain in the world and become small independent loot containers.
+Searching reveals contents without transferring them automatically, and reopening
+a searched corpse allows the player to retrieve or store items left there.
+
+Validation:
+
+- C# build completed with no warnings or errors

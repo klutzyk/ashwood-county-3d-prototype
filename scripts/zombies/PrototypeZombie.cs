@@ -3,6 +3,7 @@
 using System;
 using Godot;
 using AshwoodCounty3DPrototype.Gameplay;
+using AshwoodCounty3DPrototype.Interactions;
 using AshwoodCounty3DPrototype.Player;
 
 namespace AshwoodCounty3DPrototype.Zombies;
@@ -67,6 +68,7 @@ public partial class PrototypeZombie : CharacterBody3D
 	private PlayerHealth _playerHealth = null!;
 	private ZombieHealth _health = null!;
 	private Node3D _visual = null!;
+	private SearchableContainer _corpseLoot = null!;
 	private BehaviourState _state = BehaviourState.Idle;
 	private float _pathUpdateElapsed;
 	private float _timeSincePlayerVisible = float.PositiveInfinity;
@@ -99,6 +101,7 @@ public partial class PrototypeZombie : CharacterBody3D
 		_playerHealth = _player.GetNode<PlayerHealth>("Health");
 		_health = GetNode<ZombieHealth>("Health");
 		_visual = GetNode<Node3D>("Visual");
+		_corpseLoot = GetNode<SearchableContainer>("CorpseLoot");
 		_navigationAgent = GetNode<NavigationAgent3D>("NavigationAgent3D");
 		_animationPlayer = FindDescendant<AnimationPlayer>(this)
 			?? throw new InvalidOperationException("Zombie model is missing an AnimationPlayer.");
@@ -106,6 +109,8 @@ public partial class PrototypeZombie : CharacterBody3D
 		ConfigureAnimations();
 		AddToGroup(ZombieGroupName);
 		_random.Seed = (ulong)Time.GetTicksUsec() ^ GetInstanceId();
+		_corpseLoot.SetLootSeed(CreateStableLootSeed(GetPath().ToString()));
+		_corpseLoot.SetInteractionEnabled(false);
 		_wanderOrigin = GlobalPosition;
 		ScheduleIdleDelay();
 		_navigationAgent.PathHeightOffset = NavigationPathHeightOffset;
@@ -261,6 +266,7 @@ public partial class PrototypeZombie : CharacterBody3D
 		}
 
 		SetCollisionDisabled(this, !isAlive);
+		_corpseLoot.SetInteractionEnabled(!isAlive);
 		if (!isAlive)
 		{
 			PlayDeadPose();
@@ -320,8 +326,22 @@ public partial class PrototypeZombie : CharacterBody3D
 		_hitReactionRemaining = 0.0f;
 		_visual.Scale = Vector3.One;
 		SetCollisionDisabled(this, true);
+		_corpseLoot.SetInteractionEnabled(true);
 		SetPhysicsProcess(false);
 		_animationPlayer.Play(DeathAnimationName, AnimationBlendTime);
+	}
+
+	private static ulong CreateStableLootSeed(string value)
+	{
+		const ulong offsetBasis = 14695981039346656037UL;
+		const ulong prime = 1099511628211UL;
+		ulong hash = offsetBasis;
+		foreach (char character in value)
+		{
+			hash ^= character;
+			hash *= prime;
+		}
+		return hash;
 	}
 
 	private void PlayDeadPose()

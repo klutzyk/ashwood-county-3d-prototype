@@ -32,6 +32,7 @@ public partial class SaveGameManager : Node
 			["antibiotics"] = "res://assets/items/antibiotics.tres",
 			["bandage"] = "res://assets/items/bandage.tres",
 			["food"] = "res://assets/items/food.tres",
+			["scrap"] = "res://assets/items/scrap.tres",
 			["water"] = "res://assets/items/water.tres",
 		};
 

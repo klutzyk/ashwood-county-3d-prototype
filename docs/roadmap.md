@@ -130,6 +130,14 @@ Complete and test one vertical slice before starting the next.
 - [ ] Basic attack sound
 - [x] Temporary death presentation
 
+## Corpse Loot
+
+- [x] Keep dead zombies as searchable corpses
+- [x] Attach reusable container inventory to each corpse
+- [x] Generate deterministic randomized corpse loot only once
+- [x] Include Bandage, Food, Water and Scrap prototype loot
+- [x] Preserve uncollected corpse loot through save/load
+
 ---
 
 # Vertical Slice 3 — Building Exploration

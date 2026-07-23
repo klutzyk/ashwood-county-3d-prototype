@@ -41,6 +41,16 @@ public partial class SearchableContainer : Node3D
 		ConfigureInteraction();
 	}
 
+	public void SetInteractionEnabled(bool enabled)
+	{
+		_interactable.Enabled = enabled;
+	}
+
+	public void SetLootSeed(ulong seed)
+	{
+		_random.Seed = seed;
+	}
+
 	private void OnInteracted(Node interactor)
 	{
 		if (!IsSearched)
