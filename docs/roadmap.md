@@ -373,5 +373,6 @@ Complete and test one vertical slice before starting the next.
   hotspots, residential groups and one dangerous road-end hotspot
 - [x] Improve logical loot placement for pharmacy/bathroom medicine,
   house/diner/service-station food and service-station tools
-- [ ] Add environmental storytelling scenes
+- [x] Add emergency-roadblock, residential-evacuation and diner-casualty scenes
+  to the existing static environmental storytelling
 - [ ] Complete a world-polish pass

@@ -24,9 +24,12 @@ public partial class EnvironmentalStorytellingValidation : Node
 				"LootedPharmacy",
 				"BarricadedBackDoor",
 				"ServiceStationCamp",
+				"EmergencyRoadblock",
+				"ResidentialEvacuation",
+				"DinerCasualtyTrail",
 			};
 			Require(storytelling.GetChildCount() == arrangementNames.Length,
-				"environmental storytelling contains no more than four arrangements");
+				"environmental storytelling contains seven authored arrangements");
 
 			foreach (string arrangementName in arrangementNames)
 			{

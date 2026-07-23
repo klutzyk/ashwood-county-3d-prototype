@@ -1,0 +1,88 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/third_party/vehicles/alfa_romeo/source/alfa.fbx" id="1_car_visual"]
+
+[sub_resource type="StandardMaterial3D" id="BarrierMaterial"]
+albedo_color = Color(0.4, 0.39, 0.35, 1)
+roughness = 0.95
+
+[sub_resource type="BoxMesh" id="BarrierMesh"]
+material = SubResource("BarrierMaterial")
+size = Vector3(1.6, 0.55, 0.44)
+
+[sub_resource type="StandardMaterial3D" id="WarningMaterial"]
+albedo_color = Color(0.72, 0.18, 0.04, 1)
+roughness = 0.7
+
+[sub_resource type="BoxMesh" id="WarningMesh"]
+material = SubResource("WarningMaterial")
+size = Vector3(1.64, 0.1, 0.46)
+
+[sub_resource type="StandardMaterial3D" id="CaseMaterial"]
+albedo_color = Color(0.12, 0.17, 0.2, 1)
+roughness = 0.88
+
+[sub_resource type="BoxMesh" id="CaseMesh"]
+material = SubResource("CaseMaterial")
+size = Vector3(0.72, 0.42, 0.52)
+
+[sub_resource type="CylinderMesh" id="FlareMesh"]
+material = SubResource("WarningMaterial")
+top_radius = 0.05
+bottom_radius = 0.07
+height = 0.42
+radial_segments = 8
+rings = 1
+
+[node name="EmergencyRoadblock" type="Node3D"]
+
+[node name="CrashedVehicleVisual" parent="." instance=ExtResource("1_car_visual")]
+position = Vector3(0.5, 0.02, 0)
+rotation = Vector3(0.04, -0.38, -0.05)
+scale = Vector3(0.58, 0.58, 0.58)
+
+[node name="BarrierLeft" type="Node3D" parent="."]
+position = Vector3(-2.1, 0, 1.2)
+rotation = Vector3(0, 0.2, 0)
+
+[node name="Body" type="MeshInstance3D" parent="BarrierLeft"]
+position = Vector3(0, 0.275, 0)
+cast_shadow = 0
+visibility_range_end = 52.0
+mesh = SubResource("BarrierMesh")
+
+[node name="Stripe" type="MeshInstance3D" parent="BarrierLeft"]
+position = Vector3(0, 0.38, 0)
+cast_shadow = 0
+visibility_range_end = 52.0
+mesh = SubResource("WarningMesh")
+
+[node name="BarrierRight" type="Node3D" parent="."]
+position = Vector3(2.4, 0, -1.25)
+rotation = Vector3(0, -0.16, 0)
+
+[node name="Body" type="MeshInstance3D" parent="BarrierRight"]
+position = Vector3(0, 0.275, 0)
+cast_shadow = 0
+visibility_range_end = 52.0
+mesh = SubResource("BarrierMesh")
+
+[node name="Stripe" type="MeshInstance3D" parent="BarrierRight"]
+position = Vector3(0, 0.38, 0)
+cast_shadow = 0
+visibility_range_end = 52.0
+mesh = SubResource("WarningMesh")
+
+[node name="AbandonedCase" type="MeshInstance3D" parent="."]
+position = Vector3(-0.9, 0.21, -1.4)
+rotation = Vector3(0, 0.26, 0)
+cast_shadow = 0
+visibility_range_end = 42.0
+mesh = SubResource("CaseMesh")
+
+[node name="SpentFlare" type="MeshInstance3D" parent="."]
+position = Vector3(1.65, 0.08, 1.35)
+rotation = Vector3(1.42, 0.2, 0.08)
+cast_shadow = 0
+visibility_range_end = 36.0
+mesh = SubResource("FlareMesh")

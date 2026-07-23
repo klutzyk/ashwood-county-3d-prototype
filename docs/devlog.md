@@ -1497,6 +1497,32 @@ Validation:
 - Weighted-loot, inventory-UI and same-session save/load regressions passed
 - C# build completed with no warnings or errors
 
+---
+
+## Expanded Environmental Storytelling
+
+Completed:
+
+- Added a failed emergency roadblock with a crashed vehicle, abandoned case and
+  spent flare
+- Added a hurried residential evacuation scene with luggage, a dropped map and
+  a fallen bicycle
+- Added a static diner-side casualty trail with a dropped tray, mug and receipt
+- Kept all three scenes non-interactive, collision-free, effect-free and
+  lightweight
+
+Outcome:
+
+The expanded town now carries connected signs of evacuation, failed containment
+and sudden abandonment alongside the four existing story arrangements.
+
+Validation:
+
+- Environmental-storytelling validation passed all seven arrangements,
+  geometry budgets, static safety and interaction clearances
+- Town-atmosphere and interaction-consistency regressions passed
+- C# build completed with no warnings or errors
+
 
 ## Representative Full-Game Performance Benchmark
 

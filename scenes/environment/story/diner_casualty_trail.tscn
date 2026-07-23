@@ -1,0 +1,93 @@
+[gd_scene load_steps=7 format=3]
+
+[sub_resource type="StandardMaterial3D" id="StainMaterial"]
+albedo_color = Color(0.22, 0.015, 0.012, 1)
+roughness = 1.0
+
+[sub_resource type="CylinderMesh" id="LargeStainMesh"]
+material = SubResource("StainMaterial")
+top_radius = 0.42
+bottom_radius = 0.42
+height = 0.012
+radial_segments = 12
+rings = 1
+
+[sub_resource type="CylinderMesh" id="SmallStainMesh"]
+material = SubResource("StainMaterial")
+top_radius = 0.16
+bottom_radius = 0.16
+height = 0.012
+radial_segments = 10
+rings = 1
+
+[sub_resource type="StandardMaterial3D" id="TrayMaterial"]
+albedo_color = Color(0.28, 0.3, 0.29, 1)
+metallic = 0.55
+roughness = 0.55
+
+[sub_resource type="CylinderMesh" id="TrayMesh"]
+material = SubResource("TrayMaterial")
+top_radius = 0.46
+bottom_radius = 0.46
+height = 0.05
+radial_segments = 16
+rings = 1
+
+[sub_resource type="StandardMaterial3D" id="MugMaterial"]
+albedo_color = Color(0.75, 0.7, 0.58, 1)
+roughness = 0.8
+
+[sub_resource type="CylinderMesh" id="MugMesh"]
+material = SubResource("MugMaterial")
+top_radius = 0.13
+bottom_radius = 0.11
+height = 0.28
+radial_segments = 10
+rings = 1
+
+[sub_resource type="BoxMesh" id="ReceiptMesh"]
+material = SubResource("MugMaterial")
+size = Vector3(0.18, 0.012, 0.42)
+
+[node name="DinerCasualtyTrail" type="Node3D"]
+
+[node name="LargeStain" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.012, 0)
+scale = Vector3(1.4, 1, 0.75)
+cast_shadow = 0
+visibility_range_end = 35.0
+mesh = SubResource("LargeStainMesh")
+
+[node name="TrailDrop1" type="MeshInstance3D" parent="."]
+position = Vector3(0.55, 0.012, 0.8)
+cast_shadow = 0
+visibility_range_end = 32.0
+mesh = SubResource("SmallStainMesh")
+
+[node name="TrailDrop2" type="MeshInstance3D" parent="."]
+position = Vector3(0.85, 0.012, 1.45)
+scale = Vector3(0.72, 1, 0.9)
+cast_shadow = 0
+visibility_range_end = 32.0
+mesh = SubResource("SmallStainMesh")
+
+[node name="DroppedTray" type="MeshInstance3D" parent="."]
+position = Vector3(-0.75, 0.05, -0.2)
+rotation = Vector3(0.08, 0.2, 0.04)
+cast_shadow = 0
+visibility_range_end = 38.0
+mesh = SubResource("TrayMesh")
+
+[node name="BrokenMug" type="MeshInstance3D" parent="."]
+position = Vector3(-1.05, 0.14, 0.38)
+rotation = Vector3(0.12, 0, 1.3)
+cast_shadow = 0
+visibility_range_end = 34.0
+mesh = SubResource("MugMesh")
+
+[node name="Receipt" type="MeshInstance3D" parent="."]
+position = Vector3(-0.38, 0.018, 0.75)
+rotation = Vector3(0, -0.45, 0)
+cast_shadow = 0
+visibility_range_end = 30.0
+mesh = SubResource("ReceiptMesh")
