@@ -989,3 +989,29 @@ Validation:
 - Inventory, weighted-loot, objective, notification and save/load regressions passed
 - Same-process split-stack save/load passed
 - C# build completed with no warnings or errors
+
+---
+
+## Zombie Behaviour Variants
+
+Completed:
+
+- Added reusable Slow Walker, Walker and Runner profile resources
+- Applied profile-controlled movement speed, health, attack damage, detection,
+  hearing sensitivity and last-known-position search duration to the shared AI
+- Added subtle per-instance material overrides without editing source character assets
+- Assigned profiles across the existing fifteen zombies with only two Runners
+- Preserved the shared controller, animations, navigation, corpse loot and save state
+
+Outcome:
+
+The unchanged population now has readable threat variation without duplicated
+AI scripts, special powers, new animations or arcade colours.
+
+Validation:
+
+- Variant validation passed all profile values, population counts, subtle tints
+  and corpse-loot presence
+- Crowd, pursuit, melee and save/load regressions passed
+- Fixed 1280x720 rendered benchmark measured 192.94 FPS average and 8.08 ms p95
+- C# build completed with no warnings or errors

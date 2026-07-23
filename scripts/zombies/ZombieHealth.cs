@@ -43,4 +43,10 @@ public partial class ZombieHealth : Node
 	{
 		CurrentHealth = isAlive ? MaximumHealth : 0.0f;
 	}
+
+	public void ConfigureMaximumHealth(float maximumHealth)
+	{
+		MaximumHealth = Mathf.Max(maximumHealth, 1.0f);
+		CurrentHealth = MaximumHealth;
+	}
 }

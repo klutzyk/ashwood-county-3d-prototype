@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ZombieVariantProfile" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/zombies/ZombieVariantProfile.cs" id="1_profile"]
+
+[resource]
+script = ExtResource("1_profile")
+Identifier = &"runner"
+DisplayName = "Runner"
+MovementSpeed = 0.52
+MaximumHealth = 80.0
+AttackDamage = 16.0
+DetectionRange = 14.0
+HearingSensitivity = 1.2
+SearchDuration = 4.0
+MaterialTint = Color(0.94, 0.86, 0.82, 1)

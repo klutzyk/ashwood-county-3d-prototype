@@ -11,6 +11,7 @@ namespace AshwoodCounty3DPrototype.Zombies;
 public partial class PrototypeZombie : CharacterBody3D
 {
 	[Export] public NodePath PlayerPath { get; set; } = new("../../Player");
+	[Export] public ZombieVariantProfile? VariantProfile { get; set; }
 	[Export] public float DetectionRadius { get; set; } = 12.0f;
 	[Export] public float FieldOfViewDegrees { get; set; } = 100.0f;
 	[Export] public float LostSightGracePeriod { get; set; } = 1.25f;
@@ -120,6 +121,8 @@ public partial class PrototypeZombie : CharacterBody3D
 	public Vector3 LastHeardPosition => _lastHeardPosition;
 	public GameplayNoiseCategory LastHeardCategory => _lastHeardCategory;
 	public bool IsAlive { get; private set; } = true;
+	public StringName VariantIdentifier => VariantProfile?.Identifier ?? new StringName("walker");
+	public float HearingSensitivity { get; private set; } = 1.0f;
 
 	public override void _Ready()
 	{
@@ -133,6 +136,7 @@ public partial class PrototypeZombie : CharacterBody3D
 		_animationPlayer = FindDescendant<AnimationPlayer>(this)
 			?? throw new InvalidOperationException("Zombie model is missing an AnimationPlayer.");
 
+		ApplyVariantProfile();
 		ConfigureAnimations();
 		AddToGroup(ZombieGroupName);
 		_random.Seed = (ulong)Time.GetTicksUsec() ^ GetInstanceId();
@@ -435,7 +439,8 @@ public partial class PrototypeZombie : CharacterBody3D
 	private void OnGameplayNoiseEmitted(GameplayNoiseEvent noise)
 	{
 		if (!_respondsToGameplayNoise || _state == BehaviourState.Attacking ||
-			HorizontalDistanceTo(noise.WorldPosition) > noise.AudibleRadius)
+			HorizontalDistanceTo(noise.WorldPosition) >
+				noise.AudibleRadius * HearingSensitivity)
 		{
 			return;
 		}
@@ -870,6 +875,51 @@ public partial class PrototypeZombie : CharacterBody3D
 		AddAnimation(library, WalkAnimationName, WalkAnimationPath, shouldLoop: true);
 		AddAnimation(library, AttackAnimationName, AttackAnimationPath, shouldLoop: false);
 		AddAnimation(library, DeathAnimationName, DeathAnimationPath, shouldLoop: false);
+	}
+
+	private void ApplyVariantProfile()
+	{
+		if (VariantProfile is null)
+		{
+			return;
+		}
+
+		MoveSpeed = Mathf.Max(VariantProfile.MovementSpeed, 0.0f);
+		WanderSpeed = MoveSpeed * 0.75f;
+		InvestigationSpeed = MoveSpeed * 0.9f;
+		AttackDamage = Mathf.Max(VariantProfile.AttackDamage, 0.0f);
+		DetectionRadius = Mathf.Max(VariantProfile.DetectionRange, 0.0f);
+		HearingSensitivity = Mathf.Max(VariantProfile.HearingSensitivity, 0.0f);
+		PlayerSearchDuration = Mathf.Max(VariantProfile.SearchDuration, 0.0f);
+		_health.ConfigureMaximumHealth(VariantProfile.MaximumHealth);
+		ApplyMaterialTint(_visual, VariantProfile.MaterialTint);
+	}
+
+	private static void ApplyMaterialTint(Node node, Color tint)
+	{
+		foreach (Node child in node.GetChildren())
+		{
+			if (child is MeshInstance3D meshInstance && meshInstance.Mesh is not null)
+			{
+				for (int surface = 0; surface < meshInstance.Mesh.GetSurfaceCount(); surface++)
+				{
+					if (meshInstance.GetActiveMaterial(surface) is not BaseMaterial3D source)
+					{
+						continue;
+					}
+
+					BaseMaterial3D material = (BaseMaterial3D)source.Duplicate();
+					Color albedo = material.AlbedoColor;
+					material.AlbedoColor = new Color(
+						albedo.R * tint.R,
+						albedo.G * tint.G,
+						albedo.B * tint.B,
+						albedo.A);
+					meshInstance.SetSurfaceOverrideMaterial(surface, material);
+				}
+			}
+			ApplyMaterialTint(child, tint);
+		}
 	}
 
 	private static void AddAnimation(

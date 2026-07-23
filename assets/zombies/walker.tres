@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ZombieVariantProfile" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/zombies/ZombieVariantProfile.cs" id="1_profile"]
+
+[resource]
+script = ExtResource("1_profile")
+Identifier = &"walker"
+DisplayName = "Walker"
+MovementSpeed = 0.38
+MaximumHealth = 100.0
+AttackDamage = 20.0
+DetectionRange = 12.5
+HearingSensitivity = 1.0
+SearchDuration = 3.0
+MaterialTint = Color(0.96, 0.96, 0.92, 1)
