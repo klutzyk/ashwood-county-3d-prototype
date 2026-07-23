@@ -1,0 +1,159 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/SettingsMenuController.cs" id="1_settings"]
+
+[sub_resource type="StyleBoxFlat" id="PanelStyle"]
+bg_color = Color(0.055, 0.07, 0.064, 0.98)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.3, 0.36, 0.29, 0.9)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+
+[node name="SettingsMenu" type="Control"]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_settings")
+
+[node name="Dim" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.76)
+
+[node name="Panel" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -330.0
+offset_top = -300.0
+offset_right = 330.0
+offset_bottom = 300.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("PanelStyle")
+
+[node name="Margin" type="MarginContainer" parent="Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 20
+
+[node name="Layout" type="VBoxContainer" parent="Panel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Title" type="Label" parent="Panel/Margin/Layout"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "Settings"
+horizontal_alignment = 1
+
+[node name="Grid" type="GridContainer" parent="Panel/Margin/Layout"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/h_separation = 18
+theme_override_constants/v_separation = 13
+columns = 2
+
+[node name="MasterLabel" type="Label" parent="Panel/Margin/Layout/Grid"]
+layout_mode = 2
+text = "Master Volume"
+[node name="Master" type="HSlider" parent="Panel/Margin/Layout/Grid"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+max_value = 100.0
+value = 100.0
+
+[node name="AmbientLabel" type="Label" parent="Panel/Margin/Layout/Grid"]
+layout_mode = 2
+text = "Ambient Volume"
+[node name="Ambient" type="HSlider" parent="Panel/Margin/Layout/Grid"]
+layout_mode = 2
+max_value = 100.0
+value = 100.0
+
+[node name="EffectsLabel" type="Label" parent="Panel/Margin/Layout/Grid"]
+layout_mode = 2
+text = "Effects Volume"
+[node name="Effects" type="HSlider" parent="Panel/Margin/Layout/Grid"]
+layout_mode = 2
+max_value = 100.0
+value = 100.0
+
+[node name="SensitivityLabel" type="Label" parent="Panel/Margin/Layout/Grid"]
+layout_mode = 2
+text = "Mouse Sensitivity"
+[node name="Sensitivity" type="HSlider" parent="Panel/Margin/Layout/Grid"]
+layout_mode = 2
+min_value = 0.001
+max_value = 0.006
+step = 0.0001
+value = 0.0025
+
+[node name="WindowModeLabel" type="Label" parent="Panel/Margin/Layout/Grid"]
+layout_mode = 2
+text = "Display Mode"
+[node name="WindowMode" type="OptionButton" parent="Panel/Margin/Layout/Grid"]
+layout_mode = 2
+
+[node name="VSyncLabel" type="Label" parent="Panel/Margin/Layout/Grid"]
+layout_mode = 2
+text = "VSync"
+[node name="VSync" type="CheckButton" parent="Panel/Margin/Layout/Grid"]
+layout_mode = 2
+button_pressed = true
+text = "Enabled"
+
+[node name="ResolutionLabel" type="Label" parent="Panel/Margin/Layout/Grid"]
+layout_mode = 2
+text = "Resolution"
+[node name="Resolution" type="OptionButton" parent="Panel/Margin/Layout/Grid"]
+layout_mode = 2
+
+[node name="PresetLabel" type="Label" parent="Panel/Margin/Layout/Grid"]
+layout_mode = 2
+text = "Graphics Preset"
+[node name="Preset" type="OptionButton" parent="Panel/Margin/Layout/Grid"]
+layout_mode = 2
+
+[node name="Buttons" type="HBoxContainer" parent="Panel/Margin/Layout"]
+layout_mode = 2
+theme_override_constants/separation = 12
+alignment = 2
+
+[node name="Apply" type="Button" parent="Panel/Margin/Layout/Buttons"]
+custom_minimum_size = Vector2(120, 44)
+layout_mode = 2
+text = "Apply"
+
+[node name="Back" type="Button" parent="Panel/Margin/Layout/Buttons"]
+custom_minimum_size = Vector2(120, 44)
+layout_mode = 2
+text = "Back"
+
+[node name="DisplayConfirmation" type="ConfirmationDialog" parent="."]
+title = "Keep Display Settings?"
+initial_position = 1
+dialog_text = "Keep these display settings? They will revert automatically in 10 seconds."
+ok_button_text = "Keep"
+
+[node name="RevertTimer" type="Timer" parent="."]
+wait_time = 10.0
+one_shot = true

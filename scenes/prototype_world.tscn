@@ -196,12 +196,16 @@ script = ExtResource("33_world_time")
 script = ExtResource("40_atmosphere")
 
 [node name="Wind" type="AudioStreamPlayer" parent="AtmosphereAudio"]
+bus = &"Ambient"
 
 [node name="ZombieGroans" type="AudioStreamPlayer" parent="AtmosphereAudio"]
+bus = &"Ambient"
 
 [node name="DayInsects" type="AudioStreamPlayer" parent="AtmosphereAudio"]
+bus = &"Ambient"
 
 [node name="NightCrickets" type="AudioStreamPlayer" parent="AtmosphereAudio"]
+bus = &"Ambient"
 
 [node name="SaveGameManager" type="Node" parent="."]
 script = ExtResource("36_save_manager")

@@ -30,9 +30,10 @@ public partial class AtmosphereAudioValidation : Node
 				"intermittent groans use sensible randomized delays");
 			Require(atmosphere.AmbienceHeadroomDb <= -1.0f,
 				"ambient layers retain headroom when they overlap");
-			Require(wind.Bus == "Master" && groans.Bus == "Master" &&
-				insects.Bus == "Master" && crickets.Bus == "Master",
-				"existing master volume control remains authoritative");
+			Require(wind.Bus == "Ambient" && groans.Bus == "Ambient" &&
+				insects.Bus == "Ambient" && crickets.Bus == "Ambient" &&
+				AudioServer.GetBusSend(AudioServer.GetBusIndex("Ambient")) == "Master",
+				"ambient control remains routed through the authoritative Master bus");
 
 			worldTime.SetTimeOfDay(12.0f);
 			for (int step = 0; step < 10; step++)

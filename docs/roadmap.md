@@ -316,7 +316,7 @@ Complete and test one vertical slice before starting the next.
 - [x] Melee weapon data foundation
 - [x] World interaction consistency
 - [x] Main menu
-- [ ] Persistent settings menu
+- [x] Persistent settings menu
 - [ ] Pause menu
 - [ ] Service-station supplies objective
 - [ ] Safe-point storage

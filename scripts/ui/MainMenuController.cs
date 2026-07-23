@@ -14,7 +14,7 @@ public partial class MainMenuController : Control
 	private Button _newGame = null!;
 	private Button _continue = null!;
 	private Button _settings = null!;
-	private Control _settingsPanel = null!;
+	private SettingsMenuController _settingsPanel = null!;
 	private ConfirmationDialog _overwriteConfirmation = null!;
 
 	public override void _Ready()
@@ -22,14 +22,14 @@ public partial class MainMenuController : Control
 		_newGame = GetNode<Button>("Layout/MenuPanel/Menu/NewGame");
 		_continue = GetNode<Button>("Layout/MenuPanel/Menu/Continue");
 		_settings = GetNode<Button>("Layout/MenuPanel/Menu/Settings");
-		_settingsPanel = GetNode<Control>("SettingsPanel");
+		_settingsPanel = GetNode<SettingsMenuController>("SettingsPanel");
 		_overwriteConfirmation = GetNode<ConfirmationDialog>("OverwriteConfirmation");
 
 		_newGame.Pressed += RequestNewGame;
 		_continue.Pressed += ContinueGame;
 		_settings.Pressed += OpenSettings;
 		GetNode<Button>("Layout/MenuPanel/Menu/Quit").Pressed += () => GetTree().Quit();
-		GetNode<Button>("SettingsPanel/Panel/Layout/Back").Pressed += CloseSettings;
+		_settingsPanel.Closed += CloseSettings;
 		_overwriteConfirmation.Confirmed += StartNewGame;
 
 		_settingsPanel.Visible = false;
@@ -82,13 +82,11 @@ public partial class MainMenuController : Control
 
 	private void OpenSettings()
 	{
-		_settingsPanel.Visible = true;
-		GetNode<Button>("SettingsPanel/Panel/Layout/Back").GrabFocus();
+		_settingsPanel.Open();
 	}
 
 	private void CloseSettings()
 	{
-		_settingsPanel.Visible = false;
 		_settings.GrabFocus();
 	}
 }

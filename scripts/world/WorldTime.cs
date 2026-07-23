@@ -1,6 +1,7 @@
 #nullable enable
 
 using Godot;
+using AshwoodCounty3DPrototype.Settings;
 
 namespace AshwoodCounty3DPrototype.World;
 
@@ -36,6 +37,7 @@ public partial class WorldTime : Node
 		WorldEnvironment worldEnvironment = GetNode<WorldEnvironment>(WorldEnvironmentPath);
 		_environment = worldEnvironment.Environment
 			?? throw new System.InvalidOperationException("World time requires an Environment resource.");
+		SettingsManager.Instance?.ApplyGraphicsToScene(GetParent());
 		SetTimeOfDay(StartingHour);
 	}
 

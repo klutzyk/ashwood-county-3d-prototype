@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=6 format=3]
 
 [ext_resource type="Script" path="res://scripts/ui/MainMenuController.cs" id="1_menu"]
+[ext_resource type="PackedScene" path="res://scenes/ui/settings_menu.tscn" id="2_settings"]
 
 [sub_resource type="StyleBoxFlat" id="PanelStyle"]
 bg_color = Color(0.055, 0.07, 0.064, 0.94)
@@ -119,59 +120,7 @@ theme_override_styles/hover = SubResource("ButtonFocus")
 theme_override_styles/focus = SubResource("ButtonFocus")
 text = "Quit"
 
-[node name="SettingsPanel" type="Control" parent="."]
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Dim" type="ColorRect" parent="SettingsPanel"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0, 0, 0, 0.72)
-
-[node name="Panel" type="PanelContainer" parent="SettingsPanel"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -220.0
-offset_top = -120.0
-offset_right = 220.0
-offset_bottom = 120.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_styles/panel = SubResource("PanelStyle")
-
-[node name="Layout" type="VBoxContainer" parent="SettingsPanel/Panel"]
-layout_mode = 2
-theme_override_constants/separation = 20
-alignment = 1
-
-[node name="Title" type="Label" parent="SettingsPanel/Panel/Layout"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 26
-text = "Settings"
-horizontal_alignment = 1
-
-[node name="Message" type="Label" parent="SettingsPanel/Panel/Layout"]
-layout_mode = 2
-text = "Prototype settings are opened here."
-horizontal_alignment = 1
-
-[node name="Back" type="Button" parent="SettingsPanel/Panel/Layout"]
-custom_minimum_size = Vector2(0, 44)
-layout_mode = 2
-text = "Back"
+[node name="SettingsPanel" parent="." instance=ExtResource("2_settings")]
 
 [node name="OverwriteConfirmation" type="ConfirmationDialog" parent="."]
 title = "Start New Game?"

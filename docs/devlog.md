@@ -1098,3 +1098,32 @@ Validation:
 - Fixed rendered gameplay benchmark remained above target at 162.19 FPS average
   and 9.89 ms p95
 - C# build completed with no warnings or errors
+
+---
+
+## Persistent Prototype Settings
+
+Completed:
+
+- Added reusable Settings UI for Master, Ambient and Effects volume, mouse
+  sensitivity, display mode, VSync, resolution and graphics preset
+- Persisted settings separately in `user://ashwood_county_settings.cfg`
+- Routed procedural atmosphere through an Ambient bus that remains under Master
+- Applied mouse sensitivity live to the player controller
+- Added Low, Medium and High presets using the existing directional-shadow distance
+- Preserved the current 42 m shadow distance as the default High preset
+- Added a ten-second confirmation/revert flow for resolution and display-mode changes
+- Kept the Compatibility renderer and exposed no unsupported graphics options
+
+Outcome:
+
+The prototype now has a focused, reusable settings panel ready for both the main
+and pause menus without coupling settings to gameplay save data.
+
+Validation:
+
+- Settings validation passed persistence, bus routing, control values, menu
+  application, mouse sensitivity, graphics presets and the revert timer
+- Main-menu, atmosphere, day/night, flashlight and melee regressions passed
+- Fixed rendered benchmark measured 176.15 FPS average and 9.10 ms p95
+- C# build completed with no warnings or errors

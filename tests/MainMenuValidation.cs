@@ -28,13 +28,14 @@ public partial class MainMenuValidation : Node
 			Button newGame = menu.GetNode<Button>("Layout/MenuPanel/Menu/NewGame");
 			Button continueButton = menu.GetNode<Button>("Layout/MenuPanel/Menu/Continue");
 			Button settings = menu.GetNode<Button>("Layout/MenuPanel/Menu/Settings");
-			Control settingsPanel = menu.GetNode<Control>("SettingsPanel");
+			SettingsMenuController settingsPanel = menu.GetNode<SettingsMenuController>("SettingsPanel");
 			ConfirmationDialog confirmation = menu.GetNode<ConfirmationDialog>("OverwriteConfirmation");
 			Require(continueButton.Disabled, "Continue is disabled when no valid save exists");
 			Require(newGame.HasFocus(), "keyboard navigation starts on New Game");
 			settings.EmitSignal(Button.SignalName.Pressed);
 			Require(settingsPanel.Visible, "Settings opens from the main menu");
-			settingsPanel.GetNode<Button>("Panel/Layout/Back").EmitSignal(Button.SignalName.Pressed);
+			settingsPanel.GetNode<Button>("Panel/Margin/Layout/Buttons/Back")
+				.EmitSignal(Button.SignalName.Pressed);
 			Require(!settingsPanel.Visible && settings.HasFocus(),
 				"Settings returns focus to the main menu");
 			menu.QueueFree();

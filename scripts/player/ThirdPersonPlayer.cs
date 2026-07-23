@@ -1,6 +1,7 @@
 using Godot;
 using AshwoodCounty3DPrototype.Gameplay;
 using AshwoodCounty3DPrototype.Interactions;
+using AshwoodCounty3DPrototype.Settings;
 
 namespace AshwoodCounty3DPrototype.Player;
 
@@ -43,10 +44,28 @@ public partial class ThirdPersonPlayer : CharacterBody3D
 		_stamina = GetNode<PlayerStamina>("Stamina");
 		_interaction = GetNode<PlayerInteraction>("Interaction");
 		_meleeCombat = GetNode<PlayerMeleeCombat>("MeleeCombat");
+		if (SettingsManager.Instance is not null)
+		{
+			ApplySettings();
+			SettingsManager.Instance.SettingsChanged += ApplySettings;
+		}
 		_cameraRig.TopLevel = true;
 		FollowPlayerWithCamera();
 		_springArm.Rotation = new Vector3(_cameraPitch, 0.0f, 0.0f);
 		Input.MouseMode = Input.MouseModeEnum.Captured;
+	}
+
+	public override void _ExitTree()
+	{
+		if (SettingsManager.Instance is not null)
+		{
+			SettingsManager.Instance.SettingsChanged -= ApplySettings;
+		}
+	}
+
+	private void ApplySettings()
+	{
+		MouseSensitivity = SettingsManager.Instance?.Current.MouseSensitivity ?? MouseSensitivity;
 	}
 
 	public override void _UnhandledInput(InputEvent @event)
