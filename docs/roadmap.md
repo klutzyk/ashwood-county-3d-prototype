@@ -194,6 +194,13 @@ Complete and test one vertical slice before starting the next.
 - [x] Throttle zombie awareness and separation work by distance and interval
 - [x] Reuse zombie line-of-sight query data to avoid per-check allocations
 
+## Pursuit Polish
+
+- [x] Pursue and search the player's last known position after losing sight
+- [x] Resume pending sound investigation or wandering after player search
+- [x] Keep dead-zombie sensing and navigation inactive
+- [x] Strengthen lightweight local separation
+
 ---
 
 # Vertical Slice 5 — Prototype World

@@ -590,3 +590,26 @@ Validation:
 - Post-change headless 600-frame runs averaged 8.58 ms per frame, a 4.4% reduction
 - Headless main-scene validation completed without scene or script errors
 - C# build completed with no warnings or errors
+
+---
+
+## Zombie Pursuit and Search Polish
+
+Completed:
+
+- Added configurable travel to and local searching around the last known player position
+- Preserved attack, visible chase, player search, sound investigation and wander priority
+- Resumed pending sound investigations after an unsuccessful player search
+- Strengthened the existing lightweight local separation response
+- Kept dead-zombie physics, sensing, navigation and noise response disabled
+
+Outcome:
+
+Breaking line of sight no longer makes a zombie immediately abandon pursuit.
+Zombies check the last seen area briefly, then return to other stimuli or wandering.
+
+Validation:
+
+- Focused runtime validation passed visible chase, last-known search, queued sound
+  investigation and dead-zombie processing shutdown
+- C# build completed with no warnings or errors

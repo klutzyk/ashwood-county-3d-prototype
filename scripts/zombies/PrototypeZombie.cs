@@ -37,11 +37,15 @@ public partial class PrototypeZombie : CharacterBody3D
 	[Export] public float MaximumIdleDuration { get; set; } = 3.5f;
 	[Export] public float WanderTargetTolerance { get; set; } = 0.65f;
 	[Export] public int WanderTargetAttempts { get; set; } = 6;
-	[Export] public float SeparationRadius { get; set; } = 1.2f;
-	[Export] public float SeparationStrength { get; set; } = 0.75f;
+	[Export] public float SeparationRadius { get; set; } = 1.35f;
+	[Export] public float SeparationStrength { get; set; } = 0.9f;
 	[Export] public float InvestigationSpeed { get; set; } = 0.32f;
 	[Export] public float InvestigationDuration { get; set; } = 2.5f;
 	[Export] public float InvestigationTargetTolerance { get; set; } = 0.75f;
+	[Export] public float PlayerSearchDuration { get; set; } = 3.0f;
+	[Export] public float PlayerSearchRadius { get; set; } = 2.5f;
+	[Export] public float PlayerSearchTargetInterval { get; set; } = 0.9f;
+	[Export] public float LastKnownPositionTolerance { get; set; } = 0.75f;
 	[Export] public float HitReactionDuration { get; set; } = 0.24f;
 	[Export] public float KnockbackDamping { get; set; } = 12.0f;
 
@@ -61,7 +65,8 @@ public partial class PrototypeZombie : CharacterBody3D
 		Idle,
 		Wandering,
 		Investigating,
-		Searching,
+		SearchingNoise,
+		SearchingPlayer,
 		Chasing,
 		Attacking,
 	}
@@ -81,6 +86,10 @@ public partial class PrototypeZombie : CharacterBody3D
 	private bool _cachedCanSeePlayer;
 	private float _timeSincePlayerVisible = float.PositiveInfinity;
 	private Vector3 _lastKnownPlayerPosition;
+	private bool _hasLastKnownPlayerPosition;
+	private bool _reachedLastKnownPlayerPosition;
+	private float _playerSearchRemaining;
+	private float _playerSearchTargetRemaining;
 	private float _previousAttackAnimationPosition;
 	private float _timeSinceAttackHit;
 	private bool _attackHitAttempted;
@@ -157,6 +166,7 @@ public partial class PrototypeZombie : CharacterBody3D
 		}
 		UpdateAwareness(deltaTime);
 		UpdateInvestigation(deltaTime);
+		UpdatePlayerSearch(deltaTime);
 		UpdateWandering(deltaTime);
 		UpdateAttack(deltaTime, _cachedDistanceToPlayer, _cachedCanSeePlayer);
 
@@ -165,6 +175,7 @@ public partial class PrototypeZombie : CharacterBody3D
 			BehaviourState.Chasing => GetChaseNavigationDirection(deltaTime),
 			BehaviourState.Wandering => GetPathDirection(),
 			BehaviourState.Investigating => GetPathDirection(),
+			BehaviourState.SearchingPlayer => GetPathDirection(),
 			_ => Vector3.Zero,
 		};
 		if (!movementDirection.IsZeroApprox())
@@ -258,18 +269,22 @@ public partial class PrototypeZombie : CharacterBody3D
 				: BehaviourState.Chasing;
 		}
 
-		if (_hasHeardNoise)
-		{
-			return _state == BehaviourState.Searching
-				? BehaviourState.Searching
-				: BehaviourState.Investigating;
-		}
-
 		if ((_state == BehaviourState.Chasing || _state == BehaviourState.Attacking) &&
-			_timeSincePlayerVisible <= LostSightGracePeriod &&
-			HorizontalDistanceTo(_lastKnownPlayerPosition) > _navigationAgent.TargetDesiredDistance)
+			_timeSincePlayerVisible <= LostSightGracePeriod)
 		{
 			return BehaviourState.Chasing;
+		}
+
+		if (_hasLastKnownPlayerPosition)
+		{
+			return BehaviourState.SearchingPlayer;
+		}
+
+		if (_hasHeardNoise)
+		{
+			return _state == BehaviourState.SearchingNoise
+				? BehaviourState.SearchingNoise
+				: BehaviourState.Investigating;
 		}
 
 		return _state == BehaviourState.Wandering
@@ -408,7 +423,7 @@ public partial class PrototypeZombie : CharacterBody3D
 		_lastHeardPosition = noise.WorldPosition;
 		_lastHeardCategory = noise.Category;
 		_hasHeardNoise = true;
-		if (_state is BehaviourState.Investigating or BehaviourState.Searching)
+		if (_state is BehaviourState.Investigating or BehaviourState.SearchingNoise)
 		{
 			SetState(BehaviourState.Investigating, forceRefresh: true);
 		}
@@ -422,12 +437,12 @@ public partial class PrototypeZombie : CharacterBody3D
 				HorizontalDistanceTo(_lastHeardPosition) <= Mathf.Max(InvestigationTargetTolerance, 0.1f))
 			{
 				_investigationRemaining = Mathf.Max(InvestigationDuration, 0.0f);
-				SetState(BehaviourState.Searching);
+				SetState(BehaviourState.SearchingNoise);
 			}
 			return;
 		}
 
-		if (_state != BehaviourState.Searching)
+		if (_state != BehaviourState.SearchingNoise)
 		{
 			return;
 		}
@@ -440,13 +455,70 @@ public partial class PrototypeZombie : CharacterBody3D
 		}
 	}
 
+	private void UpdatePlayerSearch(float delta)
+	{
+		if (_state != BehaviourState.SearchingPlayer)
+		{
+			return;
+		}
+
+		float tolerance = Mathf.Max(LastKnownPositionTolerance, 0.1f);
+		if (!_reachedLastKnownPlayerPosition)
+		{
+			if (!_navigationAgent.IsNavigationFinished() &&
+				HorizontalDistanceTo(_lastKnownPlayerPosition) > tolerance)
+			{
+				return;
+			}
+
+			_reachedLastKnownPlayerPosition = true;
+			_playerSearchRemaining = Mathf.Max(PlayerSearchDuration, 0.0f);
+			_playerSearchTargetRemaining = 0.0f;
+		}
+
+		_playerSearchRemaining = Mathf.Max(_playerSearchRemaining - delta, 0.0f);
+		if (_playerSearchRemaining <= 0.0f)
+		{
+			_hasLastKnownPlayerPosition = false;
+			_reachedLastKnownPlayerPosition = false;
+			SetState(_hasHeardNoise ? BehaviourState.Investigating : BehaviourState.Idle);
+			return;
+		}
+
+		_playerSearchTargetRemaining -= delta;
+		if (_playerSearchTargetRemaining <= 0.0f || _navigationAgent.IsNavigationFinished())
+		{
+			TrySetNearbySearchTarget();
+			_playerSearchTargetRemaining = Mathf.Max(PlayerSearchTargetInterval, 0.1f);
+		}
+	}
+
+	private void TrySetNearbySearchTarget()
+	{
+		if (!NavigationMapIsReady() || PlayerSearchRadius <= 0.0f)
+		{
+			return;
+		}
+
+		float angle = _random.RandfRange(0.0f, Mathf.Tau);
+		float distance = Mathf.Sqrt(_random.Randf()) * PlayerSearchRadius;
+		Vector3 candidate = _lastKnownPlayerPosition + new Vector3(
+			Mathf.Cos(angle) * distance,
+			0.0f,
+			Mathf.Sin(angle) * distance);
+		_navigationAgent.TargetPosition = NavigationServer3D.MapGetClosestPoint(
+			_navigationAgent.GetNavigationMap(),
+			candidate);
+	}
+
 	private void UpdatePlayerAwareness(bool canSeePlayer, float delta)
 	{
 		if (canSeePlayer)
 		{
 			_timeSincePlayerVisible = 0.0f;
 			_lastKnownPlayerPosition = _player.GlobalPosition;
-			_hasHeardNoise = false;
+			_hasLastKnownPlayerPosition = true;
+			_reachedLastKnownPlayerPosition = false;
 			return;
 		}
 
@@ -709,6 +781,11 @@ public partial class PrototypeZombie : CharacterBody3D
 			_navigationAgent.TargetDesiredDistance = Mathf.Max(InvestigationTargetTolerance, 0.1f);
 			_navigationAgent.TargetPosition = _lastHeardPosition;
 		}
+		else if (_state == BehaviourState.SearchingPlayer)
+		{
+			_navigationAgent.TargetDesiredDistance = Mathf.Max(LastKnownPositionTolerance, 0.1f);
+			_navigationAgent.TargetPosition = _lastKnownPlayerPosition;
+		}
 		else if (_state == BehaviourState.Idle && previousState != BehaviourState.Idle)
 		{
 			ScheduleIdleDelay();
@@ -723,6 +800,7 @@ public partial class PrototypeZombie : CharacterBody3D
 			BehaviourState.Chasing => WalkAnimationName,
 			BehaviourState.Wandering => WalkAnimationName,
 			BehaviourState.Investigating => WalkAnimationName,
+			BehaviourState.SearchingPlayer => WalkAnimationName,
 			BehaviourState.Attacking => AttackAnimationName,
 			_ => IdleAnimationName,
 		};
