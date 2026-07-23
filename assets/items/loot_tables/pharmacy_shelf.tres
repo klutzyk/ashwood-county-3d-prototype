@@ -1,0 +1,34 @@
+[gd_resource type="Resource" script_class="LootTable" load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://scripts/items/LootTable.cs" id="1_table"]
+[ext_resource type="Script" path="res://scripts/items/LootEntry.cs" id="2_entry"]
+[ext_resource type="Resource" path="res://assets/items/bandage.tres" id="3_bandage"]
+[ext_resource type="Resource" path="res://assets/items/medkit.tres" id="4_medkit"]
+[ext_resource type="Resource" path="res://assets/items/painkillers.tres" id="5_painkillers"]
+
+[sub_resource type="Resource" id="Bandage"]
+script = ExtResource("2_entry")
+Item = ExtResource("3_bandage")
+Weight = 0.4
+MaximumQuantity = 2
+
+[sub_resource type="Resource" id="Medkit"]
+script = ExtResource("2_entry")
+Item = ExtResource("4_medkit")
+Weight = 0.12
+
+[sub_resource type="Resource" id="Painkillers"]
+script = ExtResource("2_entry")
+Item = ExtResource("5_painkillers")
+Weight = 0.28
+MaximumQuantity = 2
+
+[sub_resource type="Resource" id="Empty"]
+script = ExtResource("2_entry")
+Weight = 0.2
+
+[resource]
+script = ExtResource("1_table")
+Entries = Array[ExtResource("2_entry")]([SubResource("Bandage"), SubResource("Medkit"), SubResource("Painkillers"), SubResource("Empty")])
+MinimumRolls = 1
+MaximumRolls = 2

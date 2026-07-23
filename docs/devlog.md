@@ -936,3 +936,29 @@ Validation:
 - Item catalogue validation passed metadata, item effects and non-usable Scrap
 - Inventory UI, objective flow, version 1 save/load and day/night regressions passed
 - C# build completed with no warnings or errors
+
+---
+
+## Reusable Weighted Container Loot
+
+Completed:
+
+- Extended reusable loot tables with bounded minimum and maximum roll counts
+- Added weighted quantities and explicit empty outcomes to eight location profiles
+- Assigned appropriate profiles to the existing car trunk, cupboard, pharmacy
+  medicine cabinet and zombie corpses
+- Kept objective Antibiotics as an authored medicine-cabinet item alongside
+  optional generated medicine
+- Preserved one-time generation, explicit transfers and player-added contents
+
+Outcome:
+
+Containers can now share location-appropriate data resources without type-specific
+generation code, while saved searched state and remaining contents stay compatible.
+
+Validation:
+
+- Weighted-loot validation passed all eight profiles, roll and quantity bounds,
+  empty outcomes, one-time generation and retained player-added contents
+- Objective Antibiotics remained deterministic
+- C# build completed with no warnings or errors

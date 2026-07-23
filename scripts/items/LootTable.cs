@@ -8,8 +8,21 @@ namespace AshwoodCounty3DPrototype.Items;
 public partial class LootTable : Resource
 {
 	[Export] public Godot.Collections.Array<LootEntry> Entries { get; set; } = new();
+	[Export(PropertyHint.Range, "0,20,1")] public int MinimumRolls { get; set; } = 1;
+	[Export(PropertyHint.Range, "0,20,1")] public int MaximumRolls { get; set; } = 1;
 
 	public void GenerateInto(ItemStorage inventory, RandomNumberGenerator random)
+	{
+		int minimumRolls = Mathf.Max(MinimumRolls, 0);
+		int maximumRolls = Mathf.Max(MaximumRolls, minimumRolls);
+		int rollCount = random.RandiRange(minimumRolls, maximumRolls);
+		for (int rollIndex = 0; rollIndex < rollCount; rollIndex++)
+		{
+			GenerateRoll(inventory, random);
+		}
+	}
+
+	private void GenerateRoll(ItemStorage inventory, RandomNumberGenerator random)
 	{
 		float totalWeight = 0.0f;
 		foreach (LootEntry entry in Entries)

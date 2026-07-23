@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3]
+[gd_scene load_steps=10 format=3]
 
 [ext_resource type="Script" path="res://scripts/interactions/SearchableContainer.cs" id="1_searchable"]
 [ext_resource type="Script" path="res://scripts/interactions/Interactable.cs" id="2_interactable"]
@@ -6,6 +6,7 @@
 [ext_resource type="Resource" path="res://assets/items/antibiotics.tres" id="4_antibiotics"]
 [ext_resource type="Material" path="res://assets/materials/building_fixture.tres" id="5_fixture"]
 [ext_resource type="Script" path="res://scripts/items/ItemDefinition.cs" id="6_item"]
+[ext_resource type="Resource" path="res://assets/items/loot_tables/medicine_cabinet.tres" id="7_loot"]
 
 [sub_resource type="BoxMesh" id="CabinetMesh"]
 material = ExtResource("5_fixture")
@@ -29,6 +30,7 @@ position = Vector3(0, 0.7, 0)
 script = ExtResource("1_searchable")
 DisplayName = "Pharmacy Medicine Cabinet"
 SearchDuration = 2.0
+LootTable = ExtResource("7_loot")
 InitialItems = Array[ExtResource("6_item")]([ExtResource("4_antibiotics")])
 
 [node name="Interactable" type="Node3D" parent="SearchableContainer"]

@@ -6,7 +6,7 @@
 [ext_resource type="Script" path="res://scripts/interactions/SearchableContainer.cs" id="4_searchable"]
 [ext_resource type="Script" path="res://scripts/interactions/Interactable.cs" id="5_interactable"]
 [ext_resource type="Script" path="res://scripts/items/ContainerInventory.cs" id="6_inventory"]
-[ext_resource type="Resource" path="res://assets/items/zombie_corpse_loot.tres" id="7_loot"]
+[ext_resource type="Resource" path="res://assets/items/loot_tables/zombie_corpse.tres" id="7_loot"]
 
 [sub_resource type="CapsuleShape3D" id="ZombieShape"]
 radius = 0.42

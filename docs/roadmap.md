@@ -310,7 +310,7 @@ Complete and test one vertical slice before starting the next.
 # Autonomous Prototype Expansion
 
 - [x] Expanded item definitions
-- [ ] Weighted container loot tables
+- [x] Weighted container loot tables
 - [ ] Inventory stack management
 - [ ] Zombie variant profiles
 - [ ] Melee weapon data foundation

@@ -44,9 +44,9 @@ public partial class InventoryUiValidation : Node
 				"only Take is valid for selected container antibiotics");
 
 			containerItems.EmitSignal(ItemList.SignalName.ItemActivated, 0);
-			Require(cabinet.Inventory.StackCount == 0 &&
+			Require(cabinet.Inventory.GetQuantity("antibiotics") == 0 &&
 				playerInventory.GetQuantity("antibiotics") == 1,
-				"Enter or double-click Take transfers without duplicating container contents");
+				"Enter or double-click Take transfers the selected item without duplication");
 			Require(playerItems.HasFocus() && details.Text.Contains("Antibiotics") &&
 				details.Text.Contains("Effect: No direct use effect."),
 				"selection follows a moved item and clearly shows its effect");
@@ -63,7 +63,7 @@ public partial class InventoryUiValidation : Node
 			playerInventory.AddItem(GD.Load<ItemDefinition>("res://assets/items/food.tres"));
 			playerInventory.AddItem(GD.Load<ItemDefinition>("res://assets/items/water.tres"));
 			playerInventory.AddItem(GD.Load<ItemDefinition>("res://assets/items/scrap.tres"));
-			inventoryUi.SelectContainerItem(0);
+			inventoryUi.SelectContainerItem(cabinet.Inventory.FindItemStack("antibiotics"));
 			Require(take.Disabled, "Take is disabled when the player has no compatible free slot");
 			inventoryUi.TakeSelected();
 			Require(status.Text == "Player inventory is full.",
