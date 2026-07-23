@@ -1,15 +1,23 @@
-[gd_scene load_steps=12 format=3]
+[gd_scene format=3 uid="uid://ww2yrl24p1qs"]
 
 [ext_resource type="Material" path="res://assets/materials/building_wall.tres" id="1_wall"]
+[ext_resource type="Texture2D" uid="uid://c4s30gbafq47e" path="res://assets/third_party/materials/textures/walls/concrete_wall_009_1k.gltf/textures/concrete_wall_009_diff_1k.jpg" id="2_8rvjd"]
 [ext_resource type="Material" path="res://assets/materials/building_fixture.tres" id="2_fixture"]
+[ext_resource type="Texture2D" uid="uid://cp5bsfrx7ksk5" path="res://assets/third_party/materials/textures/walls/concrete_wall_009_1k.gltf/textures/concrete_wall_009_arm_1k.jpg" id="3_8fsd2"]
+[ext_resource type="Texture2D" uid="uid://cduvrn7243ctb" path="res://assets/third_party/materials/textures/walls/concrete_wall_009_1k.gltf/textures/concrete_wall_009_nor_gl_1k.jpg" id="4_cg3lo"]
 
 [sub_resource type="BoxMesh" id="WallMesh"]
 material = ExtResource("1_wall")
-size = Vector3(1, 1, 1)
 
-[sub_resource type="BoxMesh" id="FixtureMesh"]
-material = ExtResource("2_fixture")
-size = Vector3(1, 1, 1)
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pv1m1"]
+albedo_texture = ExtResource("2_8rvjd")
+roughness_texture = ExtResource("3_8fsd2")
+roughness_texture_channel = 1
+normal_enabled = true
+normal_texture = ExtResource("4_cg3lo")
+ao_enabled = true
+ao_texture = ExtResource("3_8fsd2")
+uv1_scale = Vector3(40, 20, 6)
 
 [sub_resource type="BoxShape3D" id="FrontHalfShape"]
 size = Vector3(0.2, 3.4, 5.1)
@@ -37,83 +45,84 @@ roughness = 0.3
 material = SubResource("GlassMaterial")
 size = Vector3(0.08, 1.35, 2.1)
 
-[node name="DinerExterior" type="StaticBody3D"]
+[sub_resource type="BoxMesh" id="FixtureMesh"]
+material = ExtResource("2_fixture")
 
-[node name="FrontNorth" type="MeshInstance3D" parent="."]
-position = Vector3(-4, 1.7, -3.45)
-scale = Vector3(0.2, 3.4, 5.1)
+[node name="DinerExterior" type="StaticBody3D" unique_id=910475145]
+
+[node name="FrontNorth" type="MeshInstance3D" parent="." unique_id=672910815]
+transform = Transform3D(0.2, 0, 0, 0, 3.4, 0, 0, 0, 5.1, -4, 1.7, -3.45)
 mesh = SubResource("WallMesh")
+surface_material_override/0 = SubResource("StandardMaterial3D_pv1m1")
 
-[node name="FrontNorthCollision" type="CollisionShape3D" parent="."]
-position = Vector3(-4, 1.7, -3.45)
+[node name="FrontNorthCollision" type="CollisionShape3D" parent="." unique_id=1955300815]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 1.7, -3.45)
 shape = SubResource("FrontHalfShape")
 
-[node name="FrontSouth" type="MeshInstance3D" parent="."]
-position = Vector3(-4, 1.7, 3.45)
-scale = Vector3(0.2, 3.4, 5.1)
+[node name="FrontSouth" type="MeshInstance3D" parent="." unique_id=1266857771]
+transform = Transform3D(0.2, 0, 0, 0, 3.4, 0, 0, 0, 5.1, -4, 1.7, 3.45)
 mesh = SubResource("WallMesh")
+surface_material_override/0 = SubResource("StandardMaterial3D_pv1m1")
 
-[node name="FrontSouthCollision" type="CollisionShape3D" parent="."]
-position = Vector3(-4, 1.7, 3.45)
+[node name="FrontSouthCollision" type="CollisionShape3D" parent="." unique_id=495730626]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 1.7, 3.45)
 shape = SubResource("FrontHalfShape")
 
-[node name="DoorHeader" type="MeshInstance3D" parent="."]
-position = Vector3(-4, 2.8, 0)
-scale = Vector3(0.2, 1.2, 1.6)
+[node name="DoorHeader" type="MeshInstance3D" parent="." unique_id=140962477]
+transform = Transform3D(0.2, 0, 0, 0, 1.2, 0, 0, 0, 1.6, -4, 2.8, 0)
 mesh = SubResource("WallMesh")
+surface_material_override/0 = SubResource("StandardMaterial3D_pv1m1")
 
-[node name="DoorHeaderCollision" type="CollisionShape3D" parent="."]
-position = Vector3(-4, 2.8, 0)
+[node name="DoorHeaderCollision" type="CollisionShape3D" parent="." unique_id=1505531079]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 2.8, 0)
 shape = SubResource("DoorHeaderShape")
 
-[node name="BackWall" type="MeshInstance3D" parent="."]
-position = Vector3(4, 1.7, 0)
-scale = Vector3(0.2, 3.4, 12)
+[node name="BackWall" type="MeshInstance3D" parent="." unique_id=768436611]
+transform = Transform3D(0.2, 0, 0, 0, 3.4, 0, 0, 0, 12, 4, 1.7, 0)
 mesh = SubResource("WallMesh")
+surface_material_override/0 = SubResource("StandardMaterial3D_pv1m1")
 
-[node name="BackWallCollision" type="CollisionShape3D" parent="."]
-position = Vector3(4, 1.7, 0)
+[node name="BackWallCollision" type="CollisionShape3D" parent="." unique_id=2104748049]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 1.7, 0)
 shape = SubResource("BackShape")
 
-[node name="NorthWall" type="MeshInstance3D" parent="."]
-position = Vector3(0, 1.7, -6)
-scale = Vector3(8, 3.4, 0.2)
+[node name="NorthWall" type="MeshInstance3D" parent="." unique_id=1914951168]
+transform = Transform3D(8, 0, 0, 0, 3.4, 0, 0, 0, 0.2, 0, 1.7, -6)
 mesh = SubResource("WallMesh")
+surface_material_override/0 = SubResource("StandardMaterial3D_pv1m1")
 
-[node name="NorthWallCollision" type="CollisionShape3D" parent="."]
-position = Vector3(0, 1.7, -6)
+[node name="NorthWallCollision" type="CollisionShape3D" parent="." unique_id=766899455]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, -6)
 shape = SubResource("SideShape")
 
-[node name="SouthWall" type="MeshInstance3D" parent="."]
-position = Vector3(0, 1.7, 6)
-scale = Vector3(8, 3.4, 0.2)
+[node name="SouthWall" type="MeshInstance3D" parent="." unique_id=488907734]
+transform = Transform3D(8, 0, 0, 0, 3.4, 0, 0, 0, 0.2, 0, 1.7, 6)
 mesh = SubResource("WallMesh")
+surface_material_override/0 = SubResource("StandardMaterial3D_pv1m1")
 
-[node name="SouthWallCollision" type="CollisionShape3D" parent="."]
-position = Vector3(0, 1.7, 6)
+[node name="SouthWallCollision" type="CollisionShape3D" parent="." unique_id=2008843893]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 6)
 shape = SubResource("SideShape")
 
-[node name="Roof" type="MeshInstance3D" parent="."]
-position = Vector3(0, 3.52, 0)
+[node name="Roof" type="MeshInstance3D" parent="." unique_id=1101446220]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.52, 0)
 mesh = SubResource("RoofMesh")
 
-[node name="FrontWindowNorth" type="MeshInstance3D" parent="."]
-position = Vector3(-4.12, 1.55, -3.25)
+[node name="FrontWindowNorth" type="MeshInstance3D" parent="." unique_id=1086758544]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.12, 1.55, -3.25)
 mesh = SubResource("WindowMesh")
 
-[node name="FrontWindowSouth" type="MeshInstance3D" parent="."]
-position = Vector3(-4.12, 1.55, 3.25)
+[node name="FrontWindowSouth" type="MeshInstance3D" parent="." unique_id=1386314787]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.12, 1.55, 3.25)
 mesh = SubResource("WindowMesh")
 
-[node name="SignBacking" type="MeshInstance3D" parent="."]
-position = Vector3(-4.15, 3.6, 0)
-scale = Vector3(0.18, 1.05, 5.2)
+[node name="SignBacking" type="MeshInstance3D" parent="." unique_id=1937529373]
+transform = Transform3D(0.18, 0, 0, 0, 1.05, 0, 0, 0, 5.2, -4.15, 3.6, 0)
 mesh = SubResource("FixtureMesh")
 
-[node name="DinerSign" type="Label3D" parent="."]
-position = Vector3(-4.28, 3.6, 0)
-rotation = Vector3(0, -1.5707964, 0)
+[node name="DinerSign" type="Label3D" parent="." unique_id=1467038917]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -4.28, 3.6, 0)
+modulate = Color(0.9, 0.74, 0.4, 1)
 text = "ASHWOOD DINER"
 font_size = 38
 outline_size = 6
-modulate = Color(0.9, 0.74, 0.4, 1)
