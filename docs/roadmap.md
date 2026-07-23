@@ -189,6 +189,11 @@ Complete and test one vertical slice before starting the next.
 - [x] Basic sound attraction
 - [x] Performance test with multiple zombies
 
+## Performance Polish
+
+- [x] Throttle zombie awareness and separation work by distance and interval
+- [x] Reuse zombie line-of-sight query data to avoid per-check allocations
+
 ---
 
 # Vertical Slice 5 — Prototype World

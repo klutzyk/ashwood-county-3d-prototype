@@ -567,3 +567,26 @@ Validation:
 - Headless main-scene run completed without runtime or audio initialization errors
 - Existing day/night flashlight and pharmacy objective regression validations passed
 - C# build completed with no warnings or errors
+
+---
+
+## Prototype Town and Zombie Performance Polish
+
+Completed:
+
+- Added configurable near and distant zombie awareness intervals
+- Throttled local separation scans while preserving continuous movement
+- Reused line-of-sight query data instead of allocating it for every check
+- Kept the full fifteen-zombie population and existing visual settings
+
+Outcome:
+
+Zombie perception, navigation and separation retain their visible behaviour with
+substantially less repeated physics-query and scene-tree work.
+
+Validation:
+
+- Pre-change headless 600-frame runs averaged 8.97 ms per frame
+- Post-change headless 600-frame runs averaged 8.58 ms per frame, a 4.4% reduction
+- Headless main-scene validation completed without scene or script errors
+- C# build completed with no warnings or errors

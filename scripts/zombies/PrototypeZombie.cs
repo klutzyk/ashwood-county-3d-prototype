@@ -26,6 +26,10 @@ public partial class PrototypeZombie : CharacterBody3D
 	[Export] public float Gravity { get; set; } = 24.0f;
 	[Export] public float TurnSpeed { get; set; } = 7.0f;
 	[Export] public float PathUpdateInterval { get; set; } = 0.35f;
+	[Export] public float AwarenessUpdateInterval { get; set; } = 0.1f;
+	[Export] public float DistantAwarenessUpdateInterval { get; set; } = 0.35f;
+	[Export] public float DistantAwarenessThreshold { get; set; } = 18.0f;
+	[Export] public float SeparationUpdateInterval { get; set; } = 0.15f;
 	[Export] public float NavigationPathHeightOffset { get; set; } = -0.7f;
 	[Export] public float WanderRadius { get; set; } = 6.0f;
 	[Export] public float WanderSpeed { get; set; } = 0.28f;
@@ -71,6 +75,10 @@ public partial class PrototypeZombie : CharacterBody3D
 	private SearchableContainer _corpseLoot = null!;
 	private BehaviourState _state = BehaviourState.Idle;
 	private float _pathUpdateElapsed;
+	private float _awarenessUpdateRemaining;
+	private float _awarenessElapsed;
+	private float _cachedDistanceToPlayer;
+	private bool _cachedCanSeePlayer;
 	private float _timeSincePlayerVisible = float.PositiveInfinity;
 	private Vector3 _lastKnownPlayerPosition;
 	private float _previousAttackAnimationPosition;
@@ -87,6 +95,9 @@ public partial class PrototypeZombie : CharacterBody3D
 	private float _investigationRemaining;
 	private float _hitReactionRemaining;
 	private Vector3 _knockbackVelocity;
+	private float _separationUpdateRemaining;
+	private Vector3 _cachedSeparation;
+	private PhysicsRayQueryParameters3D _visionQuery = null!;
 
 	public static readonly StringName ZombieGroupName = new("prototype_zombies");
 
@@ -116,6 +127,10 @@ public partial class PrototypeZombie : CharacterBody3D
 		_navigationAgent.PathHeightOffset = NavigationPathHeightOffset;
 		_navigationAgent.TargetDesiredDistance = Mathf.Max(AttackDistance - 0.3f, 0.5f);
 		_pathUpdateElapsed = PathUpdateInterval;
+		_cachedDistanceToPlayer = HorizontalDistanceTo(_player.GlobalPosition);
+		_visionQuery = PhysicsRayQueryParameters3D.Create(Vector3.Zero, Vector3.Zero);
+		_visionQuery.CollisionMask = VisionCollisionMask;
+		_visionQuery.Exclude = new Godot.Collections.Array<Rid> { GetRid() };
 		GameplayNoise.Emitted += OnGameplayNoiseEmitted;
 		_health.Died += OnDied;
 		PlayStateAnimation();
@@ -140,14 +155,10 @@ public partial class PrototypeZombie : CharacterBody3D
 			UpdateHitReaction(deltaTime);
 			return;
 		}
-		float distanceToPlayer = HorizontalDistanceTo(_player.GlobalPosition);
-		bool canSeePlayer = CanSeePlayer(distanceToPlayer);
-		UpdatePlayerAwareness(canSeePlayer, deltaTime);
-		BehaviourState nextState = DetermineState(distanceToPlayer, canSeePlayer);
-		SetState(nextState);
+		UpdateAwareness(deltaTime);
 		UpdateInvestigation(deltaTime);
 		UpdateWandering(deltaTime);
-		UpdateAttack(deltaTime, distanceToPlayer, canSeePlayer);
+		UpdateAttack(deltaTime, _cachedDistanceToPlayer, _cachedCanSeePlayer);
 
 		Vector3 movementDirection = _state switch
 		{
@@ -158,7 +169,7 @@ public partial class PrototypeZombie : CharacterBody3D
 		};
 		if (!movementDirection.IsZeroApprox())
 		{
-			movementDirection = ApplySeparation(movementDirection);
+			movementDirection = ApplySeparation(movementDirection, deltaTime);
 		}
 
 		float movementSpeed = _state switch
@@ -176,6 +187,29 @@ public partial class PrototypeZombie : CharacterBody3D
 		RotateToward(facingDirection, deltaTime);
 
 		MoveAndSlide();
+	}
+
+	private void UpdateAwareness(float delta)
+	{
+		_awarenessElapsed += delta;
+		_awarenessUpdateRemaining -= delta;
+		if (_awarenessUpdateRemaining > 0.0f)
+		{
+			return;
+		}
+
+		_cachedDistanceToPlayer = HorizontalDistanceTo(_player.GlobalPosition);
+		_cachedCanSeePlayer = CanSeePlayer(_cachedDistanceToPlayer);
+		UpdatePlayerAwareness(_cachedCanSeePlayer, _awarenessElapsed);
+		_awarenessElapsed = 0.0f;
+
+		float threshold = Mathf.Max(DistantAwarenessThreshold, DetectionRadius);
+		_awarenessUpdateRemaining = _cachedDistanceToPlayer > threshold
+			? Mathf.Max(DistantAwarenessUpdateInterval, 0.01f)
+			: Mathf.Max(AwarenessUpdateInterval, 0.01f);
+
+		BehaviourState nextState = DetermineState(_cachedDistanceToPlayer, _cachedCanSeePlayer);
+		SetState(nextState);
 	}
 
 	private void UpdateAttack(float delta, float distanceToPlayer, bool canSeePlayer)
@@ -436,11 +470,11 @@ public partial class PrototypeZombie : CharacterBody3D
 
 		Vector3 rayStart = GlobalPosition + Vector3.Up * EyeHeight;
 		Vector3 rayEnd = _player.GlobalPosition + Vector3.Up * PlayerTargetHeight;
-		PhysicsRayQueryParameters3D query = PhysicsRayQueryParameters3D.Create(rayStart, rayEnd);
-		query.CollisionMask = VisionCollisionMask;
-		query.Exclude = new Godot.Collections.Array<Rid> { GetRid() };
+		_visionQuery.From = rayStart;
+		_visionQuery.To = rayEnd;
+		_visionQuery.CollisionMask = VisionCollisionMask;
 
-		Godot.Collections.Dictionary hit = GetWorld3D().DirectSpaceState.IntersectRay(query);
+		Godot.Collections.Dictionary hit = GetWorld3D().DirectSpaceState.IntersectRay(_visionQuery);
 		return hit.Count > 0 && hit["collider"].AsGodotObject() == _player;
 	}
 
@@ -543,7 +577,7 @@ public partial class PrototypeZombie : CharacterBody3D
 		_idleRemaining = _random.RandfRange(minimum, maximum);
 	}
 
-	private Vector3 ApplySeparation(Vector3 movementDirection)
+	private Vector3 ApplySeparation(Vector3 movementDirection, float delta)
 	{
 		float radius = Mathf.Max(SeparationRadius, 0.0f);
 		if (radius <= 0.0f || SeparationStrength <= 0.0f)
@@ -551,10 +585,23 @@ public partial class PrototypeZombie : CharacterBody3D
 			return movementDirection;
 		}
 
+		_separationUpdateRemaining -= delta;
+		if (_separationUpdateRemaining <= 0.0f)
+		{
+			_cachedSeparation = CalculateSeparation(radius);
+			_separationUpdateRemaining = Mathf.Max(SeparationUpdateInterval, 0.01f);
+		}
+
+		Vector3 combined = movementDirection + (_cachedSeparation * SeparationStrength);
+		return combined.IsZeroApprox() ? movementDirection : combined.Normalized();
+	}
+
+	private Vector3 CalculateSeparation(float radius)
+	{
 		Vector3 separation = Vector3.Zero;
 		foreach (Node node in GetTree().GetNodesInGroup(ZombieGroupName))
 		{
-			if (node is not PrototypeZombie other || other == this)
+			if (node is not PrototypeZombie other || other == this || !other.IsAlive)
 			{
 				continue;
 			}
@@ -575,8 +622,7 @@ public partial class PrototypeZombie : CharacterBody3D
 			separation += offset.Normalized() * (1.0f - (distance / radius));
 		}
 
-		Vector3 combined = movementDirection + (separation * SeparationStrength);
-		return combined.IsZeroApprox() ? movementDirection : combined.Normalized();
+		return separation;
 	}
 
 	private bool NavigationMapIsReady()
