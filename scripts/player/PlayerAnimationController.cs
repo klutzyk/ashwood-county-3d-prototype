@@ -37,7 +37,7 @@ public partial class PlayerAnimationController : AnimationTree
 			?? throw new InvalidOperationException("Remy is missing an AnimationPlayer.");
 		
 		//temporarily assign two handed
-		_isTwoHandedWeaponEquipped = true;
+		//_isTwoHandedWeaponEquipped = true;
 		
 		AddLocomotionAnimations(animationPlayer);
 		ConfigureBlendTree(animationPlayer);

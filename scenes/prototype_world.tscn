@@ -43,7 +43,7 @@
 [ext_resource type="Script" uid="uid://ckhn2gnyiwxtf" path="res://scripts/player/PlayerMeleeCombat.cs" id="38_melee"]
 [ext_resource type="Script" uid="uid://cj4ob7ksgj0tu" path="res://scripts/player/PlayerNeeds.cs" id="39_needs"]
 [ext_resource type="Script" uid="uid://dl88ah5wmoeo5" path="res://scripts/world/AtmosphereAudio.cs" id="40_atmosphere"]
-[ext_resource type="PackedScene" path="res://assets/weapons/baseball_bat.tscn" id="40_rl0qt"]
+[ext_resource type="PackedScene" uid="uid://2b74dkqcteu0" path="res://assets/weapons/baseball_bat.tscn" id="40_rl0qt"]
 [ext_resource type="Resource" path="res://assets/zombies/slow_walker.tres" id="41_slow"]
 [ext_resource type="Resource" path="res://assets/zombies/walker.tres" id="42_walker"]
 [ext_resource type="Resource" path="res://assets/zombies/runner.tres" id="43_runner"]
@@ -414,12 +414,17 @@ transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, -1, 0)
 
 [node name="Remy" parent="Player/Visual" unique_id=615219697 instance=ExtResource("3_remy")]
 
-[node name="RightHandWeaponAttachment" type="BoneAttachment3D" parent="Player/Visual/Remy/Skeleton3D" parent_id_path=PackedInt32Array(615219697, 635193917) index="7" unique_id=372434050]
-transform = Transform3D(-9.536764e-07, -0.99999994, -8.195639e-08, 1.5238767e-07, 3.1664968e-08, -1, 1, -8.778647e-07, 8.986122e-08, -1.4574536, 2.9993963, -0.12103976)
+[node name="Skeleton3D" parent="Player/Visual/Remy" index="0" unique_id=635193917]
+bones/17/rotation = Quaternion(0.25189453, -0.059464402, 0.22192542, 0.9400863)
+bones/34/rotation = Quaternion(0.008705135, -0.0008868446, -0.10134756, 0.9948126)
+bones/41/rotation = Quaternion(0.25189725, 0.05946548, -0.22192715, 0.9400852)
+
+[node name="RightHandWeaponAttachment" type="BoneAttachment3D" parent="Player/Visual/Remy/Skeleton3D" index="7" unique_id=372434050]
+transform = Transform3D(-9.3877316e-07, -0.99999994, -7.8231096e-08, 1.5227124e-07, 2.9802322e-08, -1, 1, -8.6296353e-07, 8.986122e-08, -1.4574536, 2.9993963, -0.12103975)
 bone_name = "mixamorig_RightHand"
 bone_idx = 36
 
-[node name="BaseballBat" parent="Player/Visual/Remy/Skeleton3D/RightHandWeaponAttachment" instance=ExtResource("40_rl0qt")]
+[node name="BaseballBat" parent="Player/Visual/Remy/Skeleton3D/RightHandWeaponAttachment" unique_id=111216711 instance=ExtResource("40_rl0qt")]
 
 [node name="CameraRig" type="Node3D" parent="Player" unique_id=947114645]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)

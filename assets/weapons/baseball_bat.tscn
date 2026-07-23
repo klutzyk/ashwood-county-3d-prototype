@@ -1,10 +1,10 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene format=3 uid="uid://2b74dkqcteu0"]
 
 [ext_resource type="PackedScene" uid="uid://c21quvp2au3a3" path="res://assets/third_party/common/weapons/baseball_bat_1k.gltf/baseball_bat_1k.gltf" id="1_model"]
 
-[node name="BaseballBat" type="Node3D"]
+[node name="BaseballBat" type="Node3D" unique_id=103897961]
 
-[node name="GripOffset" type="Node3D" parent="."]
-transform = Transform3D(0.9999995, -1.2022733e-06, 8.9810345e-07, -1.3738027e-06, -0.4925757, 0.8702696, -6.039178e-07, -0.8702692, -0.49257588, 0, 0.05323243, 0)
+[node name="GripOffset" type="Node3D" parent="." unique_id=259247697]
+transform = Transform3D(2, -2.3795487e-06, 1.7929032e-06, -2.7324172e-06, -0.98515177, 1.740539, -1.1877075e-06, -1.740539, -0.98515177, 0, -0.04148422, -0.04133047)
 
-[node name="Visual" parent="GripOffset" instance=ExtResource("1_model")]
+[node name="Visual" parent="GripOffset" unique_id=327965397 instance=ExtResource("1_model")]
