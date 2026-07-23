@@ -237,7 +237,7 @@ public partial class SaveGameManager : Node
 		{
 			return false;
 		}
-		if (playerItems.Count > _playerInventory.Capacity)
+		if (CountRequiredStacks(playerItems) > _playerInventory.Capacity)
 		{
 			return false;
 		}
@@ -321,11 +321,9 @@ public partial class SaveGameManager : Node
 		{
 			return false;
 		}
-		HashSet<string> seenItemIds = new(StringComparer.Ordinal);
 		foreach (ItemStackSaveData stack in itemData)
 		{
 			if (stack is null || stack.Quantity <= 0 || string.IsNullOrWhiteSpace(stack.ItemId) ||
-				!seenItemIds.Add(stack.ItemId) ||
 				!ItemResourcePaths.TryGetValue(stack.ItemId, out string? resourcePath))
 			{
 				return false;
@@ -346,8 +344,19 @@ public partial class SaveGameManager : Node
 		inventory.ClearItems();
 		foreach (ResolvedItem item in items)
 		{
-			inventory.AddItem(item.Definition, item.Quantity);
+			inventory.AddSavedStack(item.Definition, item.Quantity);
 		}
+	}
+
+	private static int CountRequiredStacks(List<ResolvedItem> items)
+	{
+		int count = 0;
+		foreach (ResolvedItem item in items)
+		{
+			count += Mathf.CeilToInt(
+				item.Quantity / (float)ItemStorage.GetStackLimit(item.Definition));
+		}
+		return count;
 	}
 
 	private List<SearchableContainer> GetContainers()

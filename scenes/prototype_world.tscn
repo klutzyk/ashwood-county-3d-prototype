@@ -885,6 +885,21 @@ layout_mode = 2
 disabled = true
 text = "< Store"
 
+[node name="TakeQuantity" type="Button" parent="PerformanceUI/ContainerInventoryWindow/Panel/Layout/Columns/Actions"]
+layout_mode = 2
+disabled = true
+text = "Take Qty >"
+
+[node name="StoreQuantity" type="Button" parent="PerformanceUI/ContainerInventoryWindow/Panel/Layout/Columns/Actions"]
+layout_mode = 2
+disabled = true
+text = "< Store Qty"
+
+[node name="Split" type="Button" parent="PerformanceUI/ContainerInventoryWindow/Panel/Layout/Columns/Actions"]
+layout_mode = 2
+disabled = true
+text = "Split"
+
 [node name="Use" type="Button" parent="PerformanceUI/ContainerInventoryWindow/Panel/Layout/Columns/Actions" unique_id=1664673194]
 layout_mode = 2
 disabled = true
@@ -932,6 +947,24 @@ horizontal_alignment = 1
 [node name="Close" type="Button" parent="PerformanceUI/ContainerInventoryWindow/Panel/Layout" unique_id=328231842]
 layout_mode = 2
 text = "Close"
+
+[node name="QuantityDialog" type="ConfirmationDialog" parent="PerformanceUI/ContainerInventoryWindow"]
+title = "Choose Quantity"
+initial_position = 1
+size = Vector2i(340, 170)
+dialog_text = "Choose a quantity."
+
+[node name="Quantity" type="SpinBox" parent="PerformanceUI/ContainerInventoryWindow/QuantityDialog"]
+offset_left = 35.0
+offset_top = 58.0
+offset_right = 305.0
+offset_bottom = 94.0
+min_value = 1.0
+max_value = 1.0
+step = 1.0
+value = 1.0
+allow_greater = false
+allow_lesser = false
 
 [node name="DamageFlash" type="ColorRect" parent="PerformanceUI" unique_id=1215380182]
 modulate = Color(1, 1, 1, 0)

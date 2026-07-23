@@ -1,5 +1,6 @@
 #nullable enable
 
+using System;
 using System.Collections.Generic;
 using Godot;
 
@@ -19,34 +20,72 @@ public abstract partial class ItemStorage : Node
 
 	public bool AddItem(ItemDefinition item, int quantity = 1)
 	{
-		if (item is null || item.ItemId.IsEmpty || quantity <= 0)
+		return TryAddItem(item, quantity, out _);
+	}
+
+	public bool TryAddItem(ItemDefinition item, int quantity, out int destinationStackIndex)
+	{
+		destinationStackIndex = -1;
+		if (item is null || item.ItemId.IsEmpty || quantity <= 0 ||
+			GetAddableQuantity(item) < quantity)
 		{
 			return false;
 		}
 
-		int existingStack = FindItemStack(item.ItemId);
-		if (existingStack >= 0)
+		int remaining = quantity;
+		int stackLimit = GetStackLimit(item);
+		for (int stack = 0; stack < _items.Count && remaining > 0; stack++)
 		{
-			_quantities[existingStack] += quantity;
-			NotifyChanged();
-			return true;
+			if (_items[stack].ItemId != item.ItemId || _quantities[stack] >= stackLimit)
+			{
+				continue;
+			}
+
+			int added = Mathf.Min(stackLimit - _quantities[stack], remaining);
+			_quantities[stack] += added;
+			remaining -= added;
+			destinationStackIndex = stack;
 		}
 
-		if (IsFull)
+		while (remaining > 0)
 		{
-			return false;
+			int added = Mathf.Min(stackLimit, remaining);
+			_items.Add(item);
+			_quantities.Add(added);
+			remaining -= added;
+			destinationStackIndex = _items.Count - 1;
 		}
 
-		_items.Add(item);
-		_quantities.Add(quantity);
 		NotifyChanged();
 		return true;
 	}
 
 	public bool CanAdd(ItemDefinition item)
 	{
-		return item is not null && !item.ItemId.IsEmpty &&
-			(FindItemStack(item.ItemId) >= 0 || !IsFull);
+		return GetAddableQuantity(item) > 0;
+	}
+
+	public int GetAddableQuantity(ItemDefinition item)
+	{
+		if (item is null || item.ItemId.IsEmpty)
+		{
+			return 0;
+		}
+
+		int stackLimit = GetStackLimit(item);
+		long addable = 0;
+		foreach (int stack in FindItemStacks(item.ItemId))
+		{
+			addable += stackLimit - _quantities[stack];
+		}
+
+		if (Capacity <= 0)
+		{
+			return int.MaxValue;
+		}
+
+		addable += (long)(Capacity - StackCount) * stackLimit;
+		return (int)Math.Min(addable, int.MaxValue);
 	}
 
 	public bool RemoveItemAt(int stackIndex, int quantity = 1)
@@ -69,8 +108,30 @@ public abstract partial class ItemStorage : Node
 
 	public bool RemoveItem(StringName itemId, int quantity = 1)
 	{
-		int stackIndex = FindItemStack(itemId);
-		return stackIndex >= 0 && RemoveItemAt(stackIndex, quantity);
+		if (quantity <= 0 || GetQuantity(itemId) < quantity)
+		{
+			return false;
+		}
+
+		int remaining = quantity;
+		for (int stack = _items.Count - 1; stack >= 0 && remaining > 0; stack--)
+		{
+			if (_items[stack].ItemId != itemId)
+			{
+				continue;
+			}
+
+			int removed = Mathf.Min(_quantities[stack], remaining);
+			_quantities[stack] -= removed;
+			remaining -= removed;
+			if (_quantities[stack] == 0)
+			{
+				_items.RemoveAt(stack);
+				_quantities.RemoveAt(stack);
+			}
+		}
+		NotifyChanged();
+		return true;
 	}
 
 	public void ClearItems()
@@ -87,14 +148,24 @@ public abstract partial class ItemStorage : Node
 
 	public bool TransferStackTo(int stackIndex, ItemStorage target)
 	{
+		return TransferQuantityTo(stackIndex, GetQuantityAt(stackIndex), target, out _);
+	}
+
+	public bool TransferQuantityTo(
+		int stackIndex,
+		int quantity,
+		ItemStorage target,
+		out int destinationStackIndex)
+	{
+		destinationStackIndex = -1;
 		if (!IsValidStack(stackIndex) || target is null || ReferenceEquals(this, target))
 		{
 			return false;
 		}
 
 		ItemDefinition item = _items[stackIndex];
-		int quantity = _quantities[stackIndex];
-		if (!target.CanAdd(item) || !target.AddItem(item, quantity))
+		if (quantity <= 0 || quantity > _quantities[stackIndex] ||
+			!target.TryAddItem(item, quantity, out destinationStackIndex))
 		{
 			return false;
 		}
@@ -104,8 +175,12 @@ public abstract partial class ItemStorage : Node
 
 	public int GetQuantity(StringName itemId)
 	{
-		int stack = FindItemStack(itemId);
-		return stack >= 0 ? _quantities[stack] : 0;
+		int quantity = 0;
+		foreach (int stack in FindItemStacks(itemId))
+		{
+			quantity += _quantities[stack];
+		}
+		return quantity;
 	}
 
 	public ItemDefinition? GetItemAt(int stackIndex)
@@ -134,6 +209,65 @@ public abstract partial class ItemStorage : Node
 		}
 
 		return -1;
+	}
+
+	public int SplitStack(int stackIndex, int quantity)
+	{
+		if (!IsValidStack(stackIndex) || quantity <= 0 ||
+			quantity >= _quantities[stackIndex] || IsFull)
+		{
+			return -1;
+		}
+
+		ItemDefinition item = _items[stackIndex];
+		_quantities[stackIndex] -= quantity;
+		int newStackIndex = stackIndex + 1;
+		_items.Insert(newStackIndex, item);
+		_quantities.Insert(newStackIndex, quantity);
+		NotifyChanged();
+		return newStackIndex;
+	}
+
+	public bool AddSavedStack(ItemDefinition item, int quantity)
+	{
+		if (item is null || item.ItemId.IsEmpty || quantity <= 0)
+		{
+			return false;
+		}
+
+		int stackLimit = GetStackLimit(item);
+		int requiredStacks = Mathf.CeilToInt(quantity / (float)stackLimit);
+		if (Capacity > 0 && StackCount + requiredStacks > Capacity)
+		{
+			return false;
+		}
+
+		int remaining = quantity;
+		while (remaining > 0)
+		{
+			int added = Mathf.Min(stackLimit, remaining);
+			_items.Add(item);
+			_quantities.Add(added);
+			remaining -= added;
+		}
+		NotifyChanged();
+		return true;
+	}
+
+	public static int GetStackLimit(ItemDefinition item)
+	{
+		return Mathf.Max(item.StackLimit, 1);
+	}
+
+	private IEnumerable<int> FindItemStacks(StringName itemId)
+	{
+		for (int stack = 0; stack < _items.Count; stack++)
+		{
+			if (_items[stack].ItemId == itemId)
+			{
+				yield return stack;
+			}
+		}
 	}
 
 	private bool IsValidStack(int stackIndex)

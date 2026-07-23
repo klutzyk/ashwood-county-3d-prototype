@@ -10,6 +10,15 @@ namespace AshwoodCounty3DPrototype.UI;
 
 public partial class ContainerInventoryDisplay : Control
 {
+	private enum QuantityAction
+	{
+		None,
+		Take,
+		Store,
+		SplitContainer,
+		SplitPlayer,
+	}
+
 	public static readonly StringName GroupName = new("container_inventory_ui");
 
 	public bool IsOpen => Visible;
@@ -24,7 +33,12 @@ public partial class ContainerInventoryDisplay : Control
 	private Label _status = null!;
 	private Button _takeButton = null!;
 	private Button _storeButton = null!;
+	private Button _takeQuantityButton = null!;
+	private Button _storeQuantityButton = null!;
+	private Button _splitButton = null!;
 	private Button _useButton = null!;
+	private ConfirmationDialog _quantityDialog = null!;
+	private SpinBox _quantity = null!;
 	private ContainerInventory? _containerInventory;
 	private PlayerInventory? _playerInventory;
 	private ThirdPersonPlayer? _player;
@@ -32,6 +46,7 @@ public partial class ContainerInventoryDisplay : Control
 	private PlayerNeeds? _playerNeeds;
 	private int _selectedContainerIndex = -1;
 	private int _selectedPlayerIndex = -1;
+	private QuantityAction _quantityAction;
 
 	public override void _Ready()
 	{
@@ -45,7 +60,12 @@ public partial class ContainerInventoryDisplay : Control
 		_status = GetNode<Label>("Panel/Layout/Status");
 		_takeButton = GetNode<Button>("Panel/Layout/Columns/Actions/Take");
 		_storeButton = GetNode<Button>("Panel/Layout/Columns/Actions/Store");
+		_takeQuantityButton = GetNode<Button>("Panel/Layout/Columns/Actions/TakeQuantity");
+		_storeQuantityButton = GetNode<Button>("Panel/Layout/Columns/Actions/StoreQuantity");
+		_splitButton = GetNode<Button>("Panel/Layout/Columns/Actions/Split");
 		_useButton = GetNode<Button>("Panel/Layout/Columns/Actions/Use");
+		_quantityDialog = GetNode<ConfirmationDialog>("QuantityDialog");
+		_quantity = _quantityDialog.GetNode<SpinBox>("Quantity");
 
 		_containerItems.ItemSelected += index => SelectContainerItem((int)index);
 		_playerItems.ItemSelected += index => SelectPlayerItem((int)index);
@@ -61,7 +81,12 @@ public partial class ContainerInventoryDisplay : Control
 		};
 		_takeButton.Pressed += TakeSelected;
 		_storeButton.Pressed += StoreSelected;
+		_takeQuantityButton.Pressed += () => OpenQuantityDialog(QuantityAction.Take);
+		_storeQuantityButton.Pressed += () => OpenQuantityDialog(QuantityAction.Store);
+		_splitButton.Pressed += OpenSplitDialog;
 		_useButton.Pressed += UseSelected;
+		_quantityDialog.Confirmed += ConfirmQuantityAction;
+		_quantityDialog.Canceled += () => _quantityAction = QuantityAction.None;
 		GetNode<Button>("Panel/Layout/Close").Pressed += Close;
 		Visible = false;
 	}
@@ -165,16 +190,31 @@ public partial class ContainerInventoryDisplay : Control
 			return;
 		}
 
-		ItemDefinition? item = _containerInventory.GetItemAt(_selectedContainerIndex);
 		int quantity = _containerInventory.GetQuantityAt(_selectedContainerIndex);
-		if (!_containerInventory.TransferStackTo(_selectedContainerIndex, _playerInventory))
+		TakeSelectedQuantity(quantity);
+	}
+
+	public bool TakeSelectedQuantity(int quantity)
+	{
+		if (_containerInventory is null || _playerInventory is null ||
+			_selectedContainerIndex < 0)
+		{
+			ShowStatus("Select a container item to take.");
+			return false;
+		}
+
+		ItemDefinition? item = _containerInventory.GetItemAt(_selectedContainerIndex);
+		if (item is null || !_containerInventory.TransferQuantityTo(
+			_selectedContainerIndex,
+			quantity,
+			_playerInventory,
+			out int destinationIndex))
 		{
 			ShowStatus("Player inventory is full.");
 			Notify("Inventory full");
-			return;
+			return false;
 		}
 
-		int destinationIndex = item is null ? -1 : _playerInventory.FindItemStack(item.ItemId);
 		if (destinationIndex >= 0)
 		{
 			_playerItems.GrabFocus();
@@ -186,6 +226,7 @@ public partial class ContainerInventoryDisplay : Control
 			? " (now in player inventory)"
 			: string.Empty;
 		Notify($"Item taken: {item?.DisplayName} x{quantity}{destinationText}");
+		return true;
 	}
 
 	public void StoreSelected()
@@ -196,15 +237,29 @@ public partial class ContainerInventoryDisplay : Control
 			return;
 		}
 
-		ItemDefinition? item = _playerInventory.GetItemAt(_selectedPlayerIndex);
 		int quantity = _playerInventory.GetQuantityAt(_selectedPlayerIndex);
-		if (!_playerInventory.TransferStackTo(_selectedPlayerIndex, _containerInventory))
+		StoreSelectedQuantity(quantity);
+	}
+
+	public bool StoreSelectedQuantity(int quantity)
+	{
+		if (_containerInventory is null || _playerInventory is null || _selectedPlayerIndex < 0)
 		{
-			ShowStatus("Item could not be stored.");
-			return;
+			ShowStatus("Select a player item to store.");
+			return false;
 		}
 
-		int destinationIndex = item is null ? -1 : _containerInventory.FindItemStack(item.ItemId);
+		ItemDefinition? item = _playerInventory.GetItemAt(_selectedPlayerIndex);
+		if (item is null || !_playerInventory.TransferQuantityTo(
+			_selectedPlayerIndex,
+			quantity,
+			_containerInventory,
+			out int destinationIndex))
+		{
+			ShowStatus("Item could not be stored.");
+			return false;
+		}
+
 		if (destinationIndex >= 0)
 		{
 			_containerItems.GrabFocus();
@@ -212,6 +267,47 @@ public partial class ContainerInventoryDisplay : Control
 			SelectContainerItem(destinationIndex);
 		}
 		ShowStatus($"Stored {item?.DisplayName} x{quantity}.");
+		return true;
+	}
+
+	public bool SplitSelectedStack(int quantity)
+	{
+		ItemStorage? storage;
+		ItemList list;
+		int sourceIndex;
+		bool isContainer = _selectedContainerIndex >= 0;
+		if (isContainer)
+		{
+			storage = _containerInventory;
+			list = _containerItems;
+			sourceIndex = _selectedContainerIndex;
+		}
+		else
+		{
+			storage = _playerInventory;
+			list = _playerItems;
+			sourceIndex = _selectedPlayerIndex;
+		}
+
+		int splitIndex = storage?.SplitStack(sourceIndex, quantity) ?? -1;
+		if (splitIndex < 0)
+		{
+			ShowStatus("Stack could not be split.");
+			return false;
+		}
+
+		list.GrabFocus();
+		list.Select(splitIndex);
+		if (isContainer)
+		{
+			SelectContainerItem(splitIndex);
+		}
+		else
+		{
+			SelectPlayerItem(splitIndex);
+		}
+		ShowStatus($"Split off x{quantity}.");
+		return true;
 	}
 
 	public void UseSelected()
@@ -307,7 +403,98 @@ public partial class ContainerInventoryDisplay : Control
 			!_playerInventory.CanAdd(containerItem);
 		_storeButton.Disabled = playerItem is null || _containerInventory is null ||
 			!_containerInventory.CanAdd(playerItem);
+		_takeQuantityButton.Disabled = _takeButton.Disabled ||
+			_containerInventory!.GetQuantityAt(_selectedContainerIndex) <= 1;
+		_storeQuantityButton.Disabled = _storeButton.Disabled ||
+			_playerInventory!.GetQuantityAt(_selectedPlayerIndex) <= 1;
+		ItemStorage? selectedStorage = containerItem is not null
+			? _containerInventory
+			: playerItem is not null ? _playerInventory : null;
+		int selectedIndex = containerItem is not null
+			? _selectedContainerIndex
+			: _selectedPlayerIndex;
+		_splitButton.Disabled = selectedStorage is null || selectedStorage.IsFull ||
+			selectedStorage.GetQuantityAt(selectedIndex) <= 1;
 		_useButton.Disabled = playerItem is null || _player is null || !playerItem.CanUse(_player);
+	}
+
+	private void OpenQuantityDialog(QuantityAction action)
+	{
+		ItemDefinition? item;
+		int available;
+		int destinationCapacity;
+		switch (action)
+		{
+			case QuantityAction.Take:
+				item = _containerInventory?.GetItemAt(_selectedContainerIndex);
+				available = _containerInventory?.GetQuantityAt(_selectedContainerIndex) ?? 0;
+				destinationCapacity = item is null ? 0 : _playerInventory?.GetAddableQuantity(item) ?? 0;
+				break;
+			case QuantityAction.Store:
+				item = _playerInventory?.GetItemAt(_selectedPlayerIndex);
+				available = _playerInventory?.GetQuantityAt(_selectedPlayerIndex) ?? 0;
+				destinationCapacity = item is null ? 0 : _containerInventory?.GetAddableQuantity(item) ?? 0;
+				break;
+			default:
+				return;
+		}
+
+		int maximum = Mathf.Min(available, destinationCapacity);
+		if (item is null || maximum <= 0)
+		{
+			ShowStatus("No quantity can be transferred.");
+			return;
+		}
+		ShowQuantityDialog(action, maximum, $"Transfer {item.DisplayName}");
+	}
+
+	private void OpenSplitDialog()
+	{
+		bool isContainer = _selectedContainerIndex >= 0;
+		ItemStorage? storage = isContainer ? _containerInventory : _playerInventory;
+		int index = isContainer ? _selectedContainerIndex : _selectedPlayerIndex;
+		ItemDefinition? item = storage?.GetItemAt(index);
+		int maximum = (storage?.GetQuantityAt(index) ?? 0) - 1;
+		if (item is null || maximum <= 0 || storage!.IsFull)
+		{
+			ShowStatus("Stack could not be split.");
+			return;
+		}
+		ShowQuantityDialog(
+			isContainer ? QuantityAction.SplitContainer : QuantityAction.SplitPlayer,
+			maximum,
+			$"Split {item.DisplayName}");
+	}
+
+	private void ShowQuantityDialog(QuantityAction action, int maximum, string title)
+	{
+		_quantityAction = action;
+		_quantityDialog.Title = title;
+		_quantityDialog.DialogText = $"Choose 1 to {maximum}.";
+		_quantity.MaxValue = maximum;
+		_quantity.Value = 1;
+		_quantityDialog.PopupCentered();
+		_quantity.GetLineEdit().GrabFocus();
+		_quantity.GetLineEdit().SelectAll();
+	}
+
+	private void ConfirmQuantityAction()
+	{
+		int quantity = Mathf.RoundToInt(_quantity.Value);
+		switch (_quantityAction)
+		{
+			case QuantityAction.Take:
+				TakeSelectedQuantity(quantity);
+				break;
+			case QuantityAction.Store:
+				StoreSelectedQuantity(quantity);
+				break;
+			case QuantityAction.SplitContainer:
+			case QuantityAction.SplitPlayer:
+				SplitSelectedStack(quantity);
+				break;
+		}
+		_quantityAction = QuantityAction.None;
 	}
 
 	private void RefreshDetails()

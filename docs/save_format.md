@@ -19,3 +19,8 @@ before needs were added load with full hunger and thirst; broader backward
 compatibility is intentionally not provided yet. When new authored containers
 or zombies are added to the scene, older valid saves leave those new nodes in
 their default state.
+
+Inventory and container item arrays store one entry per stack. Repeated item
+identifiers are valid and preserve intentionally split stacks. Each quantity is
+restored within the current item stack limit; an older oversized version 1 entry
+is divided into bounded stacks when available inventory capacity permits.

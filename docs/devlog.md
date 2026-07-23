@@ -962,3 +962,30 @@ Validation:
   empty outcomes, one-time generation and retained player-added contents
 - Objective Antibiotics remained deterministic
 - C# build completed with no warnings or errors
+
+---
+
+## Inventory Stack Management
+
+Completed:
+
+- Enforced per-item stack limits across player and container inventories
+- Merged compatible stacks before creating bounded overflow stacks
+- Added chosen-quantity Take and Store actions plus a reusable quantity dialog
+- Added selected-stack splitting with predictable focus and selection
+- Kept failed additions and transfers atomic when capacity is insufficient
+- Extended version 1 loading to accept and preserve repeated split-stack entries
+
+Outcome:
+
+The four-slot player inventory now supports deliberate quantity decisions while
+containers retain explicit contents and transfers without adding weight,
+equipment, sorting, drag-and-drop or crafting.
+
+Validation:
+
+- Stack-management validation passed merging, overflow, capacity, splitting,
+  chosen-quantity transfers, selection and quantity display
+- Inventory, weighted-loot, objective, notification and save/load regressions passed
+- Same-process split-stack save/load passed
+- C# build completed with no warnings or errors

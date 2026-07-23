@@ -75,6 +75,8 @@ public partial class SaveLoadValidation : Node
 		needs.RestoreState(61.0f, 37.0f);
 		inventory.ClearItems();
 		inventory.AddItem(GD.Load<ItemDefinition>("res://assets/items/antibiotics.tres"), 1);
+		inventory.AddSavedStack(GD.Load<ItemDefinition>("res://assets/items/bandage.tres"), 3);
+		inventory.AddSavedStack(GD.Load<ItemDefinition>("res://assets/items/bandage.tres"), 2);
 		cabinet.Inventory.ClearItems();
 		cabinet.Inventory.AddItem(GD.Load<ItemDefinition>("res://assets/items/water.tres"), 2);
 		cabinet.Inventory.AddItem(GD.Load<ItemDefinition>("res://assets/items/medkit.tres"), 1);
@@ -173,6 +175,9 @@ public partial class SaveLoadValidation : Node
 			"player hunger and thirst restore");
 		Require(inventory.GetQuantity(AntibioticsObjective.AntibioticsItemId) == 1,
 			"player inventory contents restore");
+		Require(inventory.StackCount == 3 && inventory.GetQuantity("bandage") == 5 &&
+			inventory.GetQuantityAt(1) == 3 && inventory.GetQuantityAt(2) == 2,
+			"split stack boundaries and quantities restore");
 		Require(world.GetNode<AntibioticsObjective>("AntibioticsObjective").State ==
 			AntibioticsObjectiveState.ReturnToSafePoint, "structured objective state restores");
 		Require(Mathf.Abs(world.GetNode<WorldTime>("WorldTime").CurrentHour - 21.25f) < 0.05f,
