@@ -1,6 +1,7 @@
 #nullable enable
 
 using Godot;
+using AshwoodCounty3DPrototype.Weapons;
 
 namespace AshwoodCounty3DPrototype.Items;
 
@@ -9,6 +10,7 @@ public partial class MeleeWeaponDefinition : Resource
 {
 	[Export] public StringName Identifier { get; set; } = new();
 	[Export] public string DisplayName { get; set; } = string.Empty;
+	[Export] public WeaponAttachmentDefinition? Attachment { get; set; }
 	[Export] public float Damage { get; set; } = 40.0f;
 	[Export] public float Range { get; set; } = 2.2f;
 	[Export(PropertyHint.Range, "1,180,1")] public float AttackArcDegrees { get; set; } = 85.0f;

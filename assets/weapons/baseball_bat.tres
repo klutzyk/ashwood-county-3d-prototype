@@ -1,11 +1,13 @@
-[gd_resource type="Resource" script_class="MeleeWeaponDefinition" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="MeleeWeaponDefinition" load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://scripts/items/MeleeWeaponDefinition.cs" id="1_weapon"]
+[ext_resource type="Resource" path="res://assets/weapons/baseball_bat_attachment.tres" id="2_attachment"]
 
 [resource]
 script = ExtResource("1_weapon")
 Identifier = &"baseball_bat"
 DisplayName = "Baseball Bat"
+Attachment = ExtResource("2_attachment")
 Damage = 40.0
 Range = 2.2
 AttackArcDegrees = 85.0

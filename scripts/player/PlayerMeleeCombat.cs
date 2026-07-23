@@ -3,6 +3,7 @@
 using System.Collections.Generic;
 using Godot;
 using AshwoodCounty3DPrototype.Items;
+using AshwoodCounty3DPrototype.Weapons;
 using AshwoodCounty3DPrototype.Zombies;
 
 namespace AshwoodCounty3DPrototype.Player;
@@ -22,10 +23,13 @@ public partial class PlayerMeleeCombat : Node3D
 	[Export(PropertyHint.Range, "1,3,1")] public int MaximumComboAttacks { get; set; } = 3;
 	[Export(PropertyHint.Range, "0,0.3,0.01")] public float InputBufferDuration { get; set; } = 0.12f;
 	[Export] public float ReadyPoseBlendSpeed { get; set; } = 10.0f;
+	[Export] public NodePath WeaponAttachmentPath { get; set; } =
+		new("../Visual/Remy/Skeleton3D/RightHandWeaponAttachment");
 
 	private ThirdPersonPlayer _player = null!;
 	private PlayerAnimationController _animationController = null!;
 	private Node3D _weaponPivot = null!;
+	private WeaponAttachmentController _weaponAttachment = null!;
 	private float _attackElapsed;
 	private float _cooldownRemaining;
 	private float _bufferedAttackRemaining;
@@ -45,7 +49,14 @@ public partial class PlayerMeleeCombat : Node3D
 		_player = GetParent<ThirdPersonPlayer>();
 		_animationController = _player.GetNode<PlayerAnimationController>("AnimationTree");
 		_weaponPivot = GetNode<Node3D>("WeaponPivot");
-		_animationController.SetTwoHandedWeaponEquipped(true);
+		_weaponAttachment = GetNode<WeaponAttachmentController>(WeaponAttachmentPath);
+		WeaponAttachmentDefinition attachment = Weapon.Attachment
+			?? throw new System.InvalidOperationException(
+				"Melee weapon requires an attachment definition.");
+		_weaponAttachment.Equip(attachment);
+		_animationController.SetTwoHandedWeaponEquipped(
+			attachment.Handedness == WeaponHandedness.TwoHanded);
+		UpdateRestGripPose(immediate: true);
 		SetWeaponRestPose(1.0f);
 	}
 
@@ -64,6 +75,7 @@ public partial class PlayerMeleeCombat : Node3D
 
 		if (!IsAttacking)
 		{
+			UpdateRestGripPose();
 			float readyTarget = CanAttack ? 1.0f : 0.0f;
 			_readyPoseBlend = Mathf.MoveToward(
 				_readyPoseBlend,
@@ -197,6 +209,7 @@ public partial class PlayerMeleeCombat : Node3D
 		_comboAttackQueued = false;
 		_cooldownRemaining = Mathf.Max(Weapon.Cooldown, 0.0f);
 		_readyPoseBlend = 0.0f;
+		UpdateRestGripPose();
 		SetWeaponRestPose(_readyPoseBlend);
 		EmitSignal(SignalName.AttackFinished);
 	}
@@ -209,6 +222,8 @@ public partial class PlayerMeleeCombat : Node3D
 		_comboAttackQueued = false;
 		_hasAppliedHit = false;
 		SetWeaponPose(0.0f);
+		_weaponAttachment.SetGripPose(
+			WeaponAttachmentController.MeleeAttackPoseName);
 		_animationController.PlayMeleeAttack(ComboStep, AttackDuration);
 		_player.EmitMeleeAttackNoise(Weapon.NoiseRadius);
 		EmitSignal(SignalName.AttackStarted);
@@ -243,5 +258,20 @@ public partial class PlayerMeleeCombat : Node3D
 		return !health.IsDead &&
 			!_player.IsInventoryUiOpen &&
 			!_player.GetNode<Interactions.PlayerInteraction>("Interaction").IsInteracting;
+	}
+
+	private void UpdateRestGripPose(bool immediate = false)
+	{
+		float horizontalSpeed = new Vector2(_player.Velocity.X, _player.Velocity.Z).Length();
+		StringName targetPose = horizontalSpeed < 0.1f &&
+			Weapon.Attachment?.Handedness == WeaponHandedness.TwoHanded
+				? WeaponAttachmentController.TwoHandIdlePoseName
+				: WeaponAttachmentController.LocomotionPoseName;
+		if (_weaponAttachment.CurrentPoseName == targetPose && !immediate)
+		{
+			return;
+		}
+
+		_weaponAttachment.SetGripPose(targetPose, immediate);
 	}
 }
