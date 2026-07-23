@@ -182,28 +182,28 @@ Lighting
 
 Pharmacy
 
-- [ ] Shelving
-- [ ] Medicine cabinets
-- [ ] Checkout area
-- [ ] Storage room
+- [x] Shelving
+- [x] Medicine cabinets
+- [x] Checkout area
+- [x] Storage room
 
 Residential Houses
 
-- [ ] Bedrooms
-- [ ] Kitchens
-- [ ] Bathrooms
-- [ ] Living rooms
+- [x] Bedrooms
+- [x] Kitchens
+- [x] Bathrooms
+- [x] Living rooms
 
 Service Station
 
 - [ ] Garage
 - [ ] Workshop
-- [ ] Store room
+- [x] Store room
 
 Diner
 
-- [ ] Dining area
-- [ ] Kitchen
+- [x] Dining area
+- [x] Kitchen
 - [ ] Office
 
 Loot

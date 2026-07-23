@@ -5,6 +5,7 @@
 [ext_resource type="Script" path="res://scripts/items/ContainerInventory.cs" id="3_inventory"]
 [ext_resource type="Resource" path="res://assets/items/loot_tables/fridge.tres" id="4_loot"]
 [ext_resource type="Material" path="res://assets/materials/building_fixture.tres" id="5_fixture"]
+[ext_resource type="PackedScene" uid="uid://b0wdj6lvxl4tl" path="res://assets/third_party/common/containers/old_fridge.glb" id="6_fridge"]
 
 [sub_resource type="BoxMesh" id="FridgeMesh"]
 material = ExtResource("5_fixture")
@@ -15,9 +16,8 @@ size = Vector3(1.15, 2.0, 0.85)
 
 [node name="HouseKitchenFridge" type="StaticBody3D"]
 
-[node name="Mesh" type="MeshInstance3D" parent="."]
-position = Vector3(0, 1, 0)
-mesh = SubResource("FridgeMesh")
+[node name="Visual" parent="." instance=ExtResource("6_fridge")]
+scale = Vector3(1.35, 1.35, 1.35)
 
 [node name="Collision" type="CollisionShape3D" parent="."]
 position = Vector3(0, 1, 0)

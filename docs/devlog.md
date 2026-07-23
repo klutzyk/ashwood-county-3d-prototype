@@ -1734,3 +1734,28 @@ Validation:
 - Town-composition and town-atmosphere validations passed
 - World-polish validation printed PASS before the documented managed teardown
 - C# build completed with no warnings or errors
+
+---
+
+## Downloaded Interior Prop Pass
+
+Completed:
+
+- Replaced pharmacy and service-station shelf blocks with the downloaded rusted
+  shelving model
+- Replaced the house bed block with the downloaded weathered mattress
+- Replaced the house fridge and both medicine-cabinet blocks with downloaded
+  container models
+- Retained every existing collision shape, search component, loot table and
+  scene path
+
+Outcome:
+
+Key searchable interiors now read as furnished spaces instead of box layouts,
+without changing traversal or container gameplay.
+
+Validation:
+
+- Town-landmark, loot-placement and interaction-consistency validations passed
+- Rendered Compatibility world load completed without scene errors
+- C# build completed with no warnings or errors

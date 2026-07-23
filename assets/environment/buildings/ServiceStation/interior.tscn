@@ -3,6 +3,7 @@
 [ext_resource type="Material" path="res://assets/materials/building_floor.tres" id="1_floor"]
 [ext_resource type="Material" path="res://assets/materials/building_partition.tres" id="2_partition"]
 [ext_resource type="Material" path="res://assets/materials/building_fixture.tres" id="3_fixture"]
+[ext_resource type="PackedScene" uid="uid://0lxnuv6mf8s4" path="res://assets/third_party/common/containers/shelves/rusted_metal_shelf.glb" id="4_shelf"]
 
 [sub_resource type="BoxMesh" id="FloorMesh"]
 material = ExtResource("1_floor")
@@ -64,19 +65,21 @@ mesh = SubResource("FixtureMesh")
 position = Vector3(-2.2, 0.5, 3.2)
 shape = SubResource("CounterShape")
 
-[node name="StoreShelfNorth" type="MeshInstance3D" parent="."]
-position = Vector3(-3.2, 0.78, -1.45)
-scale = Vector3(2.0, 1.55, 0.42)
-mesh = SubResource("FixtureMesh")
+[node name="StoreShelfNorth" type="Node3D" parent="."]
+position = Vector3(-3.2, 0, -1.45)
+
+[node name="Visual" parent="StoreShelfNorth" instance=ExtResource("4_shelf")]
+transform = Transform3D(0.0434258, -0.13379319, 0.9900572, -0.21376635, 0.96679646, 0.14002615, -0.9759191, -0.21772164, 0.013383269, 0, 0.7908021, 0)
 
 [node name="StoreShelfNorthCollision" type="CollisionShape3D" parent="."]
 position = Vector3(-3.2, 0.78, -1.45)
 shape = SubResource("ShelfShape")
 
-[node name="StoreShelfSouth" type="MeshInstance3D" parent="."]
-position = Vector3(-3.2, 0.78, 0.8)
-scale = Vector3(2.0, 1.55, 0.42)
-mesh = SubResource("FixtureMesh")
+[node name="StoreShelfSouth" type="Node3D" parent="."]
+position = Vector3(-3.2, 0, 0.8)
+
+[node name="Visual" parent="StoreShelfSouth" instance=ExtResource("4_shelf")]
+transform = Transform3D(0.0434258, -0.13379319, 0.9900572, -0.21376635, 0.96679646, 0.14002615, -0.9759191, -0.21772164, 0.013383269, 0, 0.7908021, 0)
 
 [node name="StoreShelfSouthCollision" type="CollisionShape3D" parent="."]
 position = Vector3(-3.2, 0.78, 0.8)

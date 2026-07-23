@@ -3,6 +3,7 @@
 [ext_resource type="Material" path="res://assets/materials/building_floor.tres" id="1_floor"]
 [ext_resource type="Material" path="res://assets/materials/building_partition.tres" id="2_partition"]
 [ext_resource type="Material" path="res://assets/materials/building_fixture.tres" id="3_fixture"]
+[ext_resource type="PackedScene" uid="uid://d7lecbbrjcrc" path="res://assets/third_party/props/beds/old mattress/old_dirty_mattress.glb" id="4_mattress"]
 
 [sub_resource type="BoxMesh" id="FloorMesh"]
 material = ExtResource("1_floor")
@@ -109,10 +110,11 @@ mesh = SubResource("FixtureMesh")
 position = Vector3(-3.4, 0.48, -2.7)
 shape = SubResource("CounterShape")
 
-[node name="BedroomBed" type="MeshInstance3D" parent="."]
-position = Vector3(2.45, 0.23, -2.8)
-scale = Vector3(1.5, 0.45, 2.2)
-mesh = SubResource("FixtureMesh")
+[node name="BedroomBed" type="Node3D" parent="."]
+position = Vector3(2.45, 0, -2.8)
+
+[node name="Visual" parent="BedroomBed" instance=ExtResource("4_mattress")]
+transform = Transform3D(0.0013634628, 0, -0.01995347, 0, 0.02, 0, 0.01995347, 0, 0.0013634628, 0, 0, 0)
 
 [node name="BedroomBedCollision" type="CollisionShape3D" parent="."]
 position = Vector3(2.45, 0.23, -2.8)
