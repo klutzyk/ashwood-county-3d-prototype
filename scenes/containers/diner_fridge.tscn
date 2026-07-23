@@ -1,18 +1,26 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene format=3 uid="uid://4v8o40ni1bgy"]
 
-[ext_resource type="Script" path="res://scripts/interactions/SearchableContainer.cs" id="1_searchable"]
-[ext_resource type="Script" path="res://scripts/interactions/Interactable.cs" id="2_interactable"]
-[ext_resource type="Script" path="res://scripts/items/ContainerInventory.cs" id="3_inventory"]
-[ext_resource type="Resource" path="res://assets/items/loot_tables/fridge.tres" id="4_loot"]
+[ext_resource type="Script" uid="uid://cnvmrpkq2k7f3" path="res://scripts/interactions/SearchableContainer.cs" id="1_searchable"]
+[ext_resource type="Script" uid="uid://bwaot3gvfvo4b" path="res://scripts/interactions/Interactable.cs" id="2_interactable"]
+[ext_resource type="Script" uid="uid://bjwk0iv64xsfc" path="res://scripts/items/ContainerInventory.cs" id="3_inventory"]
+[ext_resource type="Resource" uid="uid://bbs50khnn3msd" path="res://assets/items/loot_tables/fridge.tres" id="4_loot"]
+[ext_resource type="PackedScene" uid="uid://b0wdj6lvxl4tl" path="res://assets/third_party/common/containers/old_fridge.glb" id="5_5cs0p"]
 
-[node name="DinerFridge" type="Node3D"]
+[node name="DinerFridge" type="Node3D" unique_id=203465238]
 script = ExtResource("1_searchable")
 DisplayName = "Diner Fridge"
 SearchDuration = 1.8
 LootTable = ExtResource("4_loot")
 
-[node name="Interactable" type="Node3D" parent="."]
+[node name="Interactable" type="Node3D" parent="." unique_id=73624045]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0.5)
 script = ExtResource("2_interactable")
+InteractionName = "Diner Fridge"
+InteractionPrompt = "Search"
 
-[node name="Inventory" type="Node" parent="."]
+[node name="Inventory" type="Node" parent="." unique_id=963283914]
 script = ExtResource("3_inventory")
+
+[node name="Visual" parent="." unique_id=202503369 instance=ExtResource("5_5cs0p")]
+
+[editable path="Visual"]

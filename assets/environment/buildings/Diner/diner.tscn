@@ -1,23 +1,24 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene format=3 uid="uid://b83nc4eh3isht"]
 
 [ext_resource type="PackedScene" path="res://assets/environment/buildings/Diner/exterior.tscn" id="1_exterior"]
-[ext_resource type="PackedScene" path="res://assets/environment/buildings/Diner/interior.tscn" id="2_interior"]
+[ext_resource type="PackedScene" uid="uid://cfuj4wx6hieb0" path="res://assets/environment/buildings/Diner/interior.tscn" id="2_interior"]
 [ext_resource type="PackedScene" path="res://assets/environment/buildings/shared/door.tscn" id="3_door"]
 [ext_resource type="PackedScene" path="res://scenes/containers/diner_pantry.tscn" id="4_pantry"]
-[ext_resource type="PackedScene" path="res://scenes/containers/diner_fridge.tscn" id="5_fridge"]
+[ext_resource type="PackedScene" uid="uid://4v8o40ni1bgy" path="res://scenes/containers/diner_fridge.tscn" id="5_fridge"]
 
-[node name="Diner" type="Node3D"]
+[node name="Diner" type="Node3D" unique_id=640959050]
 
-[node name="Exterior" parent="." instance=ExtResource("1_exterior")]
+[node name="Exterior" parent="." unique_id=720567001 instance=ExtResource("1_exterior")]
 
-[node name="Interior" parent="." instance=ExtResource("2_interior")]
+[node name="Interior" parent="." unique_id=1871776104 instance=ExtResource("2_interior")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4557114e-05, -0.0009551048, -0.00023055077)
 
-[node name="FrontDoor" parent="." instance=ExtResource("3_door")]
-position = Vector3(-3.88, 0.03, -0.7)
+[node name="FrontDoor" parent="." unique_id=1091516793 instance=ExtResource("3_door")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.88, 0.03, -0.7)
 OpenAngleDegrees = 95.0
 
-[node name="Pantry" parent="." instance=ExtResource("4_pantry")]
-position = Vector3(3.25, 1.0, -4.45)
+[node name="Pantry" parent="." unique_id=1440625042 instance=ExtResource("4_pantry")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.25, 1, -4.45)
 
-[node name="Fridge" parent="." instance=ExtResource("5_fridge")]
-position = Vector3(3.25, 1.0, 4.45)
+[node name="Fridge" parent="." unique_id=862889262 instance=ExtResource("5_fridge")]
+transform = Transform3D(-1.5, 0, 2.2649371e-07, 0, 1.5, 0, -2.2649371e-07, 0, -1.5, 3.089517, 0.082717955, 5.381214)

@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3]
+[gd_scene format=3 uid="uid://cfuj4wx6hieb0"]
 
 [ext_resource type="Material" path="res://assets/materials/building_floor.tres" id="1_floor"]
 [ext_resource type="Material" path="res://assets/materials/building_partition.tres" id="2_partition"]
@@ -11,118 +11,106 @@ size = Vector3(7.8, 0.08, 11.8)
 [sub_resource type="BoxShape3D" id="FloorShape"]
 size = Vector3(7.8, 0.08, 11.8)
 
-[sub_resource type="BoxMesh" id="FixtureMesh"]
-material = ExtResource("3_fixture")
-size = Vector3(1, 1, 1)
-
-[sub_resource type="BoxShape3D" id="CounterShape"]
-size = Vector3(0.8, 1.0, 5.8)
-
-[sub_resource type="BoxShape3D" id="BoothShape"]
-size = Vector3(1.0, 0.85, 1.8)
-
 [sub_resource type="BoxMesh" id="PartitionMesh"]
 material = ExtResource("2_partition")
-size = Vector3(1, 1, 1)
 
 [sub_resource type="BoxShape3D" id="KitchenWallShape"]
-size = Vector3(0.12, 3.0, 4.4)
+size = Vector3(0.12, 3, 4.4)
+
+[sub_resource type="BoxMesh" id="FixtureMesh"]
+material = ExtResource("3_fixture")
+
+[sub_resource type="BoxShape3D" id="CounterShape"]
+size = Vector3(0.8, 1, 5.8)
+
+[sub_resource type="BoxShape3D" id="BoothShape"]
+size = Vector3(1, 0.85, 1.8)
 
 [sub_resource type="BoxShape3D" id="StorageShape"]
-size = Vector3(1.2, 2.0, 0.6)
+size = Vector3(1.2, 2, 0.6)
 
-[node name="DinerInterior" type="StaticBody3D"]
+[node name="DinerInterior" type="StaticBody3D" unique_id=1283492950]
 
-[node name="Floor" type="MeshInstance3D" parent="."]
-position = Vector3(0, 0.04, 0)
+[node name="Floor" type="MeshInstance3D" parent="." unique_id=1109390101]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.04, 0)
 mesh = SubResource("FloorMesh")
 
-[node name="FloorCollision" type="CollisionShape3D" parent="."]
-position = Vector3(0, 0.04, 0)
+[node name="FloorCollision" type="CollisionShape3D" parent="." unique_id=1875619496]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.04, 0)
 shape = SubResource("FloorShape")
 
-[node name="KitchenDividerNorth" type="MeshInstance3D" parent="."]
-position = Vector3(1.8, 1.5, -3.8)
-scale = Vector3(0.12, 3.0, 4.4)
+[node name="KitchenDividerNorth" type="MeshInstance3D" parent="." unique_id=2029461504]
+transform = Transform3D(0.12, 0, 0, 0, 3, 0, 0, 0, 4.4, 1.8, 1.5, -3.8)
 mesh = SubResource("PartitionMesh")
 
-[node name="KitchenDividerNorthCollision" type="CollisionShape3D" parent="."]
-position = Vector3(1.8, 1.5, -3.8)
+[node name="KitchenDividerNorthCollision" type="CollisionShape3D" parent="." unique_id=870229855]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.8, 1.5, -3.8)
 shape = SubResource("KitchenWallShape")
 
-[node name="KitchenDividerSouth" type="MeshInstance3D" parent="."]
-position = Vector3(1.8, 1.5, 3.8)
-scale = Vector3(0.12, 3.0, 4.4)
+[node name="KitchenDividerSouth" type="MeshInstance3D" parent="." unique_id=793517221]
+transform = Transform3D(0.12, 0, 0, 0, 3, 0, 0, 0, 4.4, 1.8, 1.5, 3.8)
 mesh = SubResource("PartitionMesh")
 
-[node name="KitchenDividerSouthCollision" type="CollisionShape3D" parent="."]
-position = Vector3(1.8, 1.5, 3.8)
+[node name="KitchenDividerSouthCollision" type="CollisionShape3D" parent="." unique_id=1920533718]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.8, 1.5, 3.8)
 shape = SubResource("KitchenWallShape")
 
-[node name="ServiceCounter" type="MeshInstance3D" parent="."]
-position = Vector3(0.8, 0.5, 0)
-scale = Vector3(0.8, 1.0, 5.8)
+[node name="ServiceCounter" type="MeshInstance3D" parent="." unique_id=541622625]
+transform = Transform3D(0.8, 0, 0, 0, 1, 0, 0, 0, 5.8, 0.07924062, 0.5, 0)
 mesh = SubResource("FixtureMesh")
 
-[node name="ServiceCounterCollision" type="CollisionShape3D" parent="."]
-position = Vector3(0.8, 0.5, 0)
+[node name="ServiceCounterCollision" type="CollisionShape3D" parent="." unique_id=1821405279]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0769487, 0.5, 0)
 shape = SubResource("CounterShape")
 
-[node name="BoothNorth" type="MeshInstance3D" parent="."]
-position = Vector3(-2.5, 0.43, -3.5)
-scale = Vector3(1.0, 0.85, 1.8)
+[node name="BoothNorth" type="MeshInstance3D" parent="." unique_id=563526448]
+transform = Transform3D(1, 0, 0, 0, 0.85, 0, 0, 0, 1.8, -2.5, 0.43, -3.5)
 mesh = SubResource("FixtureMesh")
 
-[node name="BoothNorthCollision" type="CollisionShape3D" parent="."]
-position = Vector3(-2.5, 0.43, -3.5)
+[node name="BoothNorthCollision" type="CollisionShape3D" parent="." unique_id=2089955562]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0.43, -3.5)
 shape = SubResource("BoothShape")
 
-[node name="BoothCentre" type="MeshInstance3D" parent="."]
-position = Vector3(-2.5, 0.43, 0)
-scale = Vector3(1.0, 0.85, 1.8)
+[node name="BoothCentre" type="MeshInstance3D" parent="." unique_id=1101912948]
+transform = Transform3D(1, 0, 0, 0, 0.85, 0, 0, 0, 1.8, -2.5, 0.43, 0)
 mesh = SubResource("FixtureMesh")
 
-[node name="BoothCentreCollision" type="CollisionShape3D" parent="."]
-position = Vector3(-2.5, 0.43, 0)
+[node name="BoothCentreCollision" type="CollisionShape3D" parent="." unique_id=166867421]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0.43, 0)
 shape = SubResource("BoothShape")
 
-[node name="BoothSouth" type="MeshInstance3D" parent="."]
-position = Vector3(-2.5, 0.43, 3.5)
-scale = Vector3(1.0, 0.85, 1.8)
+[node name="BoothSouth" type="MeshInstance3D" parent="." unique_id=880890334]
+transform = Transform3D(1, 0, 0, 0, 0.85, 0, 0, 0, 1.8, -2.5, 0.43, 3.5)
 mesh = SubResource("FixtureMesh")
 
-[node name="BoothSouthCollision" type="CollisionShape3D" parent="."]
-position = Vector3(-2.5, 0.43, 3.5)
+[node name="BoothSouthCollision" type="CollisionShape3D" parent="." unique_id=684925471]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0.43, 3.5)
 shape = SubResource("BoothShape")
 
-[node name="PantryFixture" type="MeshInstance3D" parent="."]
-position = Vector3(3.25, 1.0, -4.9)
-scale = Vector3(1.2, 2.0, 0.6)
+[node name="PantryFixture" type="MeshInstance3D" parent="." unique_id=1637888235]
+transform = Transform3D(1.2, 0, 0, 0, 2, 0, 0, 0, 0.6, 3.25, 1, -4.9)
 mesh = SubResource("FixtureMesh")
 
-[node name="PantryCollision" type="CollisionShape3D" parent="."]
-position = Vector3(3.25, 1.0, -4.9)
+[node name="PantryCollision" type="CollisionShape3D" parent="." unique_id=256273077]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.25, 1, -4.9)
 shape = SubResource("StorageShape")
 
-[node name="FridgeFixture" type="MeshInstance3D" parent="."]
-position = Vector3(3.25, 1.0, 4.9)
-scale = Vector3(1.2, 2.0, 0.6)
+[node name="FridgeFixture" type="MeshInstance3D" parent="." unique_id=1518388809]
+transform = Transform3D(1.2, 0, 0, 0, 2, 0, 0, 0, 0.6, 3.25, 1, 4.9)
+visible = false
 mesh = SubResource("FixtureMesh")
 
-[node name="FridgeCollision" type="CollisionShape3D" parent="."]
-position = Vector3(3.25, 1.0, 4.9)
+[node name="FridgeCollision" type="CollisionShape3D" parent="." unique_id=557080165]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.25, 1, 4.9)
 shape = SubResource("StorageShape")
 
-[node name="DiningLight" type="OmniLight3D" parent="."]
-position = Vector3(-1.6, 2.75, 0)
+[node name="DiningLight" type="OmniLight3D" parent="." unique_id=536529602]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6, 2.75, 0)
 light_color = Color(1, 0.75, 0.48, 1)
 light_energy = 0.5
 omni_range = 6.0
-shadow_enabled = false
 
-[node name="KitchenLight" type="OmniLight3D" parent="."]
-position = Vector3(2.9, 2.7, 0)
+[node name="KitchenLight" type="OmniLight3D" parent="." unique_id=920851794]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.9, 2.7, 0)
 light_color = Color(1, 0.82, 0.63, 1)
 light_energy = 0.4
-omni_range = 5.0
-shadow_enabled = false

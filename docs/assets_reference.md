@@ -180,6 +180,11 @@ of each downloaded asset and its license information with project records.
 - **Local location:** `assets/environment/vehicles/`
 - **Status:** In use
 
+
+## Old Fridge
+**credits** - "Old Fridge" (https://skfb.ly/ouDRB) by sergeilihandristov is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+
+
 ## Project-Owned Prototype Town Geometry
 
 ### Roadside Dressing, Service Station, Pharmacy, and Small Bush

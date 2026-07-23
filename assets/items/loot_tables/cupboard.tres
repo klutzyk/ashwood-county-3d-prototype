@@ -1,7 +1,7 @@
-[gd_resource type="Resource" script_class="LootTable" load_steps=7 format=3]
+[gd_resource type="Resource" script_class="LootTable" format=3 uid="uid://coaara2efh0ym"]
 
-[ext_resource type="Script" path="res://scripts/items/LootTable.cs" id="1_table"]
-[ext_resource type="Script" path="res://scripts/items/LootEntry.cs" id="2_entry"]
+[ext_resource type="Script" uid="uid://6xkka2su0bss" path="res://scripts/items/LootTable.cs" id="1_table"]
+[ext_resource type="Script" uid="uid://bs16soce1o347" path="res://scripts/items/LootEntry.cs" id="2_entry"]
 [ext_resource type="Resource" path="res://assets/items/canned_food.tres" id="3_canned"]
 [ext_resource type="Resource" path="res://assets/items/food.tres" id="4_food"]
 [ext_resource type="Resource" path="res://assets/items/chocolate.tres" id="5_chocolate"]
@@ -29,5 +29,4 @@ Weight = 0.2
 [resource]
 script = ExtResource("1_table")
 Entries = Array[ExtResource("2_entry")]([SubResource("Canned"), SubResource("Food"), SubResource("Chocolate"), SubResource("Empty")])
-MinimumRolls = 1
 MaximumRolls = 2
