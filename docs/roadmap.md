@@ -298,7 +298,7 @@ Complete and test one vertical slice before starting the next.
 - [x] Improve nighttime lighting readability
 - [x] Polish the player flashlight
 - [x] Improve zombie crowd performance and separation
-- [ ] Improve melee responsiveness
+- [x] Improve melee responsiveness
 - [ ] Refine inventory and container usability
 - [ ] Harden prototype save loading
 - [ ] Polish antibiotics objective flow

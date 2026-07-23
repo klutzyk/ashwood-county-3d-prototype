@@ -771,3 +771,31 @@ Validation:
 - Rendered checks varied with device state; the final isolated run measured
   163.95 FPS with a 9.61 ms p95 frame time, matching the original rendered baseline
 - C# build completed with no warnings or errors
+
+---
+
+## Melee Responsiveness Pass
+
+Completed:
+
+- Routed melee through the configured input action and started ready attacks in
+  the input frame
+- Added a short input buffer for presses made during the final cooldown window
+- Aligned the damage check with the procedural bat crossing the target
+- Preserved the per-swing hit guard, configurable cooldown, range, arc, damage
+  and consistent horizontal knockback
+- Added a lightweight lowered cooldown pose that visibly returns to a raised
+  ready pose
+
+Outcome:
+
+The existing bat responds reliably to quick presses, lands damage at the visible
+impact point and communicates when the next swing is ready without adding UI or
+new combat systems.
+
+Validation:
+
+- New deterministic melee validation passed immediate start, pre-impact timing,
+  one-hit guarding, buffered input, repeated damage and ready-pose feedback
+- Zombie crowd regression validation passed
+- C# build completed with no warnings or errors

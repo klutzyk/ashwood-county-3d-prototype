@@ -62,11 +62,10 @@ public partial class ThirdPersonPlayer : CharacterBody3D
 			return;
 		}
 
-		if (@event is InputEventMouseButton mouseButton &&
-			mouseButton.ButtonIndex == MouseButton.Left && mouseButton.Pressed)
+		if (@event.IsActionPressed("melee_attack"))
 		{
 			Input.MouseMode = Input.MouseModeEnum.Captured;
-			_meleeCombat.TryAttack();
+			_meleeCombat.RequestAttack();
 			GetViewport().SetInputAsHandled();
 			return;
 		}

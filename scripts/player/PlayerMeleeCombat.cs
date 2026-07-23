@@ -20,30 +20,50 @@ public partial class PlayerMeleeCombat : Node3D
 	[Export] public float Cooldown { get; set; } = 0.65f;
 	[Export] public float KnockbackForce { get; set; } = 5.0f;
 	[Export] public float AttackDuration { get; set; } = 0.38f;
-	[Export(PropertyHint.Range, "0,1,0.01")] public float HitMoment { get; set; } = 0.42f;
+	[Export(PropertyHint.Range, "0,1,0.01")] public float HitMoment { get; set; } = 0.45f;
+	[Export(PropertyHint.Range, "0,0.3,0.01")] public float InputBufferDuration { get; set; } = 0.12f;
+	[Export] public float ReadyPoseBlendSpeed { get; set; } = 10.0f;
 
 	private ThirdPersonPlayer _player = null!;
 	private Node3D _weaponPivot = null!;
 	private float _attackElapsed;
 	private float _cooldownRemaining;
+	private float _bufferedAttackRemaining;
+	private float _readyPoseBlend = 1.0f;
 	private bool _hasAppliedHit;
 
 	public bool IsAttacking { get; private set; }
 	public bool CanAttack => !IsAttacking && _cooldownRemaining <= 0.0f;
+	public bool IsShowingReadyFeedback => !IsAttacking && _readyPoseBlend >= 0.95f;
 
 	public override void _Ready()
 	{
 		_player = GetParent<ThirdPersonPlayer>();
 		_weaponPivot = GetNode<Node3D>("WeaponPivot");
-		SetWeaponPose(0.0f);
+		SetWeaponRestPose(1.0f);
 	}
 
 	public override void _Process(double delta)
 	{
 		float deltaTime = (float)delta;
 		_cooldownRemaining = Mathf.Max(_cooldownRemaining - deltaTime, 0.0f);
+		if (_bufferedAttackRemaining > 0.0f)
+		{
+			_bufferedAttackRemaining = Mathf.Max(_bufferedAttackRemaining - deltaTime, 0.0f);
+			if (CanAttack && TryAttack())
+			{
+				_bufferedAttackRemaining = 0.0f;
+			}
+		}
+
 		if (!IsAttacking)
 		{
+			float readyTarget = CanAttack ? 1.0f : 0.0f;
+			_readyPoseBlend = Mathf.MoveToward(
+				_readyPoseBlend,
+				readyTarget,
+				Mathf.Max(ReadyPoseBlendSpeed, 0.0f) * deltaTime);
+			SetWeaponRestPose(_readyPoseBlend);
 			return;
 		}
 
@@ -66,9 +86,7 @@ public partial class PlayerMeleeCombat : Node3D
 
 	public bool TryAttack()
 	{
-		PlayerHealth health = _player.GetNode<PlayerHealth>("Health");
-		if (!CanAttack || health.IsDead || _player.IsInventoryUiOpen ||
-			_player.GetNode<Interactions.PlayerInteraction>("Interaction").IsInteracting)
+		if (!CanAttack || !CanAcceptAttackInput())
 		{
 			return false;
 		}
@@ -76,10 +94,28 @@ public partial class PlayerMeleeCombat : Node3D
 		IsAttacking = true;
 		_attackElapsed = 0.0f;
 		_cooldownRemaining = Mathf.Max(Cooldown, 0.0f);
+		_bufferedAttackRemaining = 0.0f;
 		_hasAppliedHit = false;
+		SetWeaponPose(0.0f);
 		_player.EmitMeleeAttackNoise();
 		EmitSignal(SignalName.AttackStarted);
 		return true;
+	}
+
+	public bool RequestAttack()
+	{
+		if (TryAttack())
+		{
+			return true;
+		}
+
+		if (!CanAcceptAttackInput() || (!IsAttacking && _cooldownRemaining <= 0.0f))
+		{
+			return false;
+		}
+
+		_bufferedAttackRemaining = Mathf.Max(InputBufferDuration, 0.0f);
+		return _bufferedAttackRemaining > 0.0f;
 	}
 
 	private void ApplyAttackHit()
@@ -123,15 +159,39 @@ public partial class PlayerMeleeCombat : Node3D
 	{
 		IsAttacking = false;
 		_attackElapsed = 0.0f;
-		SetWeaponPose(0.0f);
+		_readyPoseBlend = 0.0f;
+		SetWeaponRestPose(_readyPoseBlend);
 		EmitSignal(SignalName.AttackFinished);
 	}
 
 	private void SetWeaponPose(float progress)
 	{
-		float easedProgress = Mathf.SmoothStep(0.0f, 1.0f, progress);
-		float yaw = Mathf.Lerp(65.0f, -70.0f, easedProgress);
-		float roll = Mathf.Sin(progress * Mathf.Pi) * -28.0f;
+		float impactProgress = Mathf.Clamp(HitMoment, 0.1f, 0.9f);
+		float swingProgress = progress <= impactProgress
+			? 0.72f * Mathf.SmoothStep(0.0f, 1.0f, progress / impactProgress)
+			: Mathf.Lerp(
+				0.72f,
+				1.0f,
+				(progress - impactProgress) / (1.0f - impactProgress));
+		float yaw = Mathf.Lerp(68.0f, -72.0f, swingProgress);
+		float roll = Mathf.Sin(progress * Mathf.Pi) * -30.0f;
 		_weaponPivot.RotationDegrees = new Vector3(-18.0f, yaw, roll);
+	}
+
+	private void SetWeaponRestPose(float readyBlend)
+	{
+		float blend = Mathf.Clamp(readyBlend, 0.0f, 1.0f);
+		_weaponPivot.RotationDegrees = new Vector3(
+			Mathf.Lerp(-8.0f, -18.0f, blend),
+			Mathf.Lerp(48.0f, 68.0f, blend),
+			Mathf.Lerp(8.0f, 0.0f, blend));
+	}
+
+	private bool CanAcceptAttackInput()
+	{
+		PlayerHealth health = _player.GetNode<PlayerHealth>("Health");
+		return !health.IsDead &&
+			!_player.IsInventoryUiOpen &&
+			!_player.GetNode<Interactions.PlayerInteraction>("Interaction").IsInteracting;
 	}
 }
