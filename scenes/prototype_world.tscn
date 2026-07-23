@@ -32,6 +32,9 @@
 [ext_resource type="Script" path="res://scripts/objectives/AntibioticsObjective.cs" id="30_objective"]
 [ext_resource type="PackedScene" path="res://assets/environment/props/prototype_safe_point.tscn" id="31_safe_point"]
 [ext_resource type="Script" path="res://scripts/ui/ObjectiveDisplay.cs" id="32_objective_ui"]
+[ext_resource type="Script" path="res://scripts/world/WorldTime.cs" id="33_world_time"]
+[ext_resource type="Script" path="res://scripts/player/PlayerFlashlight.cs" id="34_flashlight"]
+[ext_resource type="Script" path="res://scripts/ui/WorldClockDisplay.cs" id="35_clock"]
 
 [sub_resource type="BoxMesh" id="GrassMesh"]
 material = ExtResource("8_grass")
@@ -138,6 +141,9 @@ corner_radius_bottom_left = 6
 
 [node name="AntibioticsObjective" type="Node" parent="."]
 script = ExtResource("30_objective")
+
+[node name="WorldTime" type="Node" parent="."]
+script = ExtResource("33_world_time")
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="." unique_id=242024835]
 navigation_mesh = ExtResource("16_navigation")
@@ -307,6 +313,12 @@ margin = 0.15
 current = true
 fov = 70.0
 
+[node name="Flashlight" type="SpotLight3D" parent="Player/CameraRig/SpringArm3D/Camera3D"]
+script = ExtResource("34_flashlight")
+light_color = Color(1, 0.94, 0.82, 1)
+spot_attenuation = 1.25
+shadow_enabled = false
+
 [node name="AnimationTree" type="AnimationTree" parent="Player" unique_id=1211255373]
 script = ExtResource("4_animation")
 
@@ -334,6 +346,23 @@ WanderRadius = 3.5
 
 [node name="PerformanceUI" type="CanvasLayer" parent="." unique_id=1832903103]
 script = ExtResource("19_player_status")
+
+[node name="WorldClock" type="Label" parent="PerformanceUI"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -116.0
+offset_top = 12.0
+offset_right = -12.0
+offset_bottom = 50.0
+grow_horizontal = 0
+theme_override_colors/font_color = Color(0.94, 0.93, 0.82, 1)
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("FpsBackground")
+text = "17:00"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("35_clock")
 
 [node name="ObjectiveDisplay" type="Control" parent="PerformanceUI"]
 layout_mode = 3

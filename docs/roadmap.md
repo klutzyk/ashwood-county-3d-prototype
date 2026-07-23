@@ -203,10 +203,16 @@ Complete and test one vertical slice before starting the next.
 
 ## Time
 
-- [ ] Prototype clock
-- [ ] Day/night lighting transition
-- [ ] Configurable day length
-- [ ] Display current time
+- [x] Prototype clock
+- [x] Day/night lighting transition
+- [x] Configurable day length
+- [x] Display current time
+
+## Flashlight
+
+- [x] Toggle a camera-directed flashlight with F
+- [x] Expose beam range, energy and cone angle
+- [x] Keep the light lightweight for indoor and outdoor use
 
 ## Needs
 

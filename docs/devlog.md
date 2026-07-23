@@ -392,3 +392,30 @@ Validation:
 - Automated end-to-end runtime validation passed search, explicit transfer,
   state progression, safe-point delivery and item submission
 - C# build completed with no warnings or errors
+
+---
+
+## Prototype Day/Night and Flashlight
+
+Completed:
+
+- Added structured 24-hour world time starting at 17:00
+- Rotated the directional light continuously and blended directional, ambient
+  and sky energy between readable day and night values
+- Added an exported full-day duration and a compact 24-hour clock
+- Added an F-toggle camera-directed spotlight with exported range, energy and
+  cone angle
+- Kept flashlight shadows, volumetrics and post-processing disabled
+
+Outcome:
+
+Late afternoon now transitions smoothly into a dark but readable night, and the
+player can use the same lightweight flashlight indoors and outdoors.
+
+Validation:
+
+- Automated runtime transition passed from late afternoon into night
+- Ambient and sky lighting reached configured non-black night minimums
+- Flashlight toggle, camera attachment, outdoor use and pharmacy interior use passed
+- Pharmacy objective regression validation still passed
+- C# build completed with no warnings or errors
