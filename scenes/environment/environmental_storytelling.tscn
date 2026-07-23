@@ -1,38 +1,32 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene format=3 uid="uid://sms158fbmf5f"]
 
 [ext_resource type="PackedScene" path="res://scenes/environment/story/roadside_breakdown.tscn" id="1_roadside"]
-[ext_resource type="PackedScene" path="res://scenes/environment/story/looted_pharmacy.tscn" id="2_pharmacy"]
+[ext_resource type="PackedScene" uid="uid://b85ulujaqe3s5" path="res://scenes/environment/story/looted_pharmacy.tscn" id="2_pharmacy"]
 [ext_resource type="PackedScene" path="res://scenes/environment/story/barricaded_back_door.tscn" id="3_door"]
 [ext_resource type="PackedScene" path="res://scenes/environment/story/service_station_camp.tscn" id="4_camp"]
-[ext_resource type="PackedScene" path="res://scenes/environment/story/emergency_roadblock.tscn" id="5_roadblock"]
+[ext_resource type="PackedScene" uid="uid://cpua772k33ume" path="res://scenes/environment/story/emergency_roadblock.tscn" id="5_roadblock"]
 [ext_resource type="PackedScene" path="res://scenes/environment/story/residential_evacuation.tscn" id="6_evacuation"]
 [ext_resource type="PackedScene" path="res://scenes/environment/story/diner_casualty_trail.tscn" id="7_diner"]
 
-[node name="EnvironmentalStorytelling" type="Node3D"]
+[node name="EnvironmentalStorytelling" type="Node3D" unique_id=1195274452]
 
-[node name="RoadsideBreakdown" parent="." instance=ExtResource("1_roadside")]
-position = Vector3(6.7, 0, -19.6)
-rotation = Vector3(0, -0.18, 0)
+[node name="RoadsideBreakdown" parent="." unique_id=1123833779 instance=ExtResource("1_roadside")]
+transform = Transform3D(0.9838437, 0, -0.17902958, 0, 1, 0, 0.17902958, 0, 0.9838437, 6.7, 0, -19.6)
 
-[node name="LootedPharmacy" parent="." instance=ExtResource("2_pharmacy")]
-position = Vector3(-10.25, 0, 12.6)
-rotation = Vector3(0, -0.08, 0)
+[node name="LootedPharmacy" parent="." unique_id=1297173785 instance=ExtResource("2_pharmacy")]
+transform = Transform3D(0.99680173, 0, -0.07991469, 0, 1, 0, 0.07991469, 0, 0.99680173, -10.25, 0, 12.6)
 
-[node name="BarricadedBackDoor" parent="." instance=ExtResource("3_door")]
-position = Vector3(14.12, 0, -8.2)
+[node name="BarricadedBackDoor" parent="." unique_id=1761874580 instance=ExtResource("3_door")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.12, 0, -8.2)
 
-[node name="ServiceStationCamp" parent="." instance=ExtResource("4_camp")]
-position = Vector3(-10.4, 0, -14.2)
-rotation = Vector3(0, 0.12, 0)
+[node name="ServiceStationCamp" parent="." unique_id=876241378 instance=ExtResource("4_camp")]
+transform = Transform3D(0.99280864, 0, 0.119712204, 0, 1, 0, -0.119712204, 0, 0.99280864, -10.4, 0, -14.2)
 
-[node name="EmergencyRoadblock" parent="." instance=ExtResource("5_roadblock")]
-position = Vector3(47.2, 0, 39.2)
-rotation = Vector3(0, 0.08, 0)
+[node name="EmergencyRoadblock" parent="." unique_id=1864788416 instance=ExtResource("5_roadblock")]
+transform = Transform3D(0.99680173, 0, 0.07991469, 0, 1, 0, -0.07991469, 0, 0.99680173, 47.2, 0, 39.2)
 
-[node name="ResidentialEvacuation" parent="." instance=ExtResource("6_evacuation")]
-position = Vector3(27.5, 0, 46.7)
-rotation = Vector3(0, -0.18, 0)
+[node name="ResidentialEvacuation" parent="." unique_id=784315598 instance=ExtResource("6_evacuation")]
+transform = Transform3D(0.9838437, 0, -0.17902958, 0, 1, 0, 0.17902958, 0, 0.9838437, 27.5, 0, 46.7)
 
-[node name="DinerCasualtyTrail" parent="." instance=ExtResource("7_diner")]
-position = Vector3(8.1, 0, 11.2)
-rotation = Vector3(0, 0.3, 0)
+[node name="DinerCasualtyTrail" parent="." unique_id=1792350706 instance=ExtResource("7_diner")]
+transform = Transform3D(0.9553365, 0, 0.29552022, 0, 1, 0, -0.29552022, 0, 0.9553365, 8.1, 0, 11.2)

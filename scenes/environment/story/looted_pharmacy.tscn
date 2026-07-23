@@ -1,75 +1,60 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene format=3 uid="uid://b85ulujaqe3s5"]
 
-[sub_resource type="StandardMaterial3D" id="CardboardMaterial"]
-albedo_color = Color(0.43, 0.31, 0.18, 1)
-roughness = 1.0
-
-[sub_resource type="BoxMesh" id="BoxMesh"]
-material = SubResource("CardboardMaterial")
-size = Vector3(1, 1, 1)
+[ext_resource type="PackedScene" uid="uid://0lxnuv6mf8s4" path="res://assets/third_party/common/containers/shelves/rusted_metal_shelf.glb" id="1_l358l"]
+[ext_resource type="PackedScene" uid="uid://b2nvwnrihpkrn" path="res://assets/third_party/props/crates/plastic_crate_01_1k.gltf/plastic_crate_01_1k.gltf" id="2_5ssqf"]
+[ext_resource type="PackedScene" uid="uid://crqlebj11lf3c" path="res://assets/third_party/props/crates/plastic_crate_02_1k.gltf/plastic_crate_02_1k.gltf" id="3_dvp30"]
 
 [sub_resource type="StandardMaterial3D" id="ShelfMaterial"]
 albedo_color = Color(0.2, 0.22, 0.2, 1)
 metallic = 0.18
 roughness = 0.82
 
-[sub_resource type="BoxMesh" id="ShelfBoardMesh"]
-material = SubResource("ShelfMaterial")
-size = Vector3(1.75, 0.09, 0.42)
-
 [sub_resource type="BoxMesh" id="ShelfSideMesh"]
 material = SubResource("ShelfMaterial")
 size = Vector3(0.09, 1.25, 0.42)
 
-[node name="LootedPharmacy" type="Node3D"]
+[sub_resource type="BoxMesh" id="ShelfBoardMesh"]
+material = SubResource("ShelfMaterial")
+size = Vector3(1.75, 0.09, 0.42)
 
-[node name="CollapsedShelf" type="Node3D" parent="."]
-rotation = Vector3(0.04, -0.28, -0.18)
+[node name="LootedPharmacy" type="Node3D" unique_id=1862029369]
 
-[node name="SideLeft" type="MeshInstance3D" parent="CollapsedShelf"]
-position = Vector3(-0.82, 0.63, 0)
+[node name="CollapsedShelf" type="Node3D" parent="." unique_id=1501028456]
+transform = Transform3D(0.94750684, 0.16118462, -0.2761346, -0.17888638, 0.9830567, -0.039989334, 0.2650103, 0.08728689, 0.96028674, 0, 0, 0)
+
+[node name="SideLeft" type="MeshInstance3D" parent="CollapsedShelf" unique_id=923950738]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.82, 0.63, 0)
+visible = false
 cast_shadow = 0
 visibility_range_end = 34.0
 mesh = SubResource("ShelfSideMesh")
 
-[node name="SideRight" type="MeshInstance3D" parent="CollapsedShelf"]
-position = Vector3(0.82, 0.63, 0)
+[node name="SideRight" type="MeshInstance3D" parent="CollapsedShelf" unique_id=2038497273]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.82, 0.63, 0)
+visible = false
 cast_shadow = 0
 visibility_range_end = 34.0
 mesh = SubResource("ShelfSideMesh")
 
-[node name="ShelfLow" type="MeshInstance3D" parent="CollapsedShelf"]
-position = Vector3(0, 0.18, 0)
+[node name="ShelfLow" type="MeshInstance3D" parent="CollapsedShelf" unique_id=709460515]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.18, 0)
+visible = false
 cast_shadow = 0
 visibility_range_end = 34.0
 mesh = SubResource("ShelfBoardMesh")
 
-[node name="ShelfHigh" type="MeshInstance3D" parent="CollapsedShelf"]
-position = Vector3(0, 0.92, 0)
+[node name="ShelfHigh" type="MeshInstance3D" parent="CollapsedShelf" unique_id=1335199390]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.92, 0)
+visible = false
 cast_shadow = 0
 visibility_range_end = 34.0
 mesh = SubResource("ShelfBoardMesh")
 
-[node name="EmptyBoxA" type="MeshInstance3D" parent="."]
-position = Vector3(-1.05, 0.18, -0.65)
-rotation = Vector3(0.08, 0.45, -0.12)
-scale = Vector3(0.72, 0.36, 0.58)
-cast_shadow = 0
-visibility_range_end = 30.0
-mesh = SubResource("BoxMesh")
+[node name="Sketchfab_Scene" parent="CollapsedShelf" unique_id=1874980637 instance=ExtResource("1_l358l")]
+transform = Transform3D(0.0434258, -0.13379319, 0.9900572, -0.21376635, 0.96679646, 0.14002615, -0.9759191, -0.21772164, 0.013383269, -0.14978935, 0.7908021, -0.10608466)
 
-[node name="EmptyBoxB" type="MeshInstance3D" parent="."]
-position = Vector3(0.75, 0.13, -0.78)
-rotation = Vector3(-0.06, -0.25, 0.06)
-scale = Vector3(0.55, 0.26, 0.7)
-cast_shadow = 0
-visibility_range_end = 30.0
-mesh = SubResource("BoxMesh")
+[node name="plastic_crate_01_1k" parent="." unique_id=1405671017 instance=ExtResource("2_5ssqf")]
+transform = Transform3D(0.924244, 0.15731105, 0.3478882, -0.139427, 0.98730916, -0.07603038, -0.35543364, 0.021765605, 0.93444806, -0.4409451, -0.045003206, -1.3581246)
 
-[node name="EmptyBoxC" type="MeshInstance3D" parent="."]
-position = Vector3(1.25, 0.11, 0.25)
-rotation = Vector3(0.14, 0.18, 0.22)
-scale = Vector3(0.42, 0.22, 0.5)
-cast_shadow = 0
-visibility_range_end = 30.0
-mesh = SubResource("BoxMesh")
+[node name="plastic_crate_02_1k" parent="." unique_id=871032009 instance=ExtResource("3_dvp30")]
+transform = Transform3D(0.8538644, -0.49427348, -0.16312423, 0.5169734, 0.7689615, 0.37608057, -0.06045038, -0.40545267, 0.912115, 0.7898188, -0.08911942, -0.21178365)
