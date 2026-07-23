@@ -323,6 +323,7 @@ Complete and test one vertical slice before starting the next.
 - [x] Town composition polish
 - [x] Environmental storytelling
 - [x] Direct-launch development script
+- [x] Representative full-game performance benchmark
 - [x] Final autonomous regression pass
 
 ## Current Prototype Limitations

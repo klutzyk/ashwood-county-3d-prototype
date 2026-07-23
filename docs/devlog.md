@@ -1340,3 +1340,38 @@ Known limitations:
 - Art, icons and atmosphere audio remain prototype-quality
 - Godot .NET headless shutdown can emit the existing four-object leak warning and
   can rarely return a teardown access violation during rapid multi-process runs
+
+---
+
+## Representative Full-Game Performance Benchmark
+
+Completed:
+
+- Audited the original rendered benchmark against the main-menu gameplay flow,
+  complete prototype world, autoload and persistent gameplay managers
+- Added a benchmark mode that inherits the real gameplay world and bypasses only
+  the main menu
+- Retained the normal camera, UI, objectives, needs, save system, ambient audio,
+  all 15 zombies and their normal AI, navigation and animation processing
+- Added fixed 1280 x 720, 17:00, flashlight-off, VSync-off and uncapped controls
+- Added a five-second warm-up, 20-second sample and detailed performance monitors
+- Extended the direct-launch helper with `-Target FullBenchmark`
+
+Outcome:
+
+The existing short benchmark is not a simplified render scene: it instantiates
+the complete world and leaves AI active. The large reported-FPS discrepancy was
+traced primarily to display configuration. Normal gameplay inherited the saved
+VSync-on setting, while the benchmark explicitly ran uncapped with VSync off.
+The short benchmark's approximately five-second lifetime is expected from its
+180 warm-up plus 600 sampled rendered frames.
+
+Validation:
+
+- C# build completed with no warnings or errors
+- Synthetic benchmark measured 181.21 FPS average, 5.11 ms median and 8.69 ms p95
+- Representative full-game benchmark measured 176.09 FPS average, 5.20 ms median
+  and 9.07 ms p95 over 20 seconds
+- Both audits found 15 active zombies, 15 navigation agents, normal gameplay
+  managers and the same camera, UI, lighting and animation workload
+- A diagnostic full-game VSync-on run measured 57.95 FPS at the fixed view
