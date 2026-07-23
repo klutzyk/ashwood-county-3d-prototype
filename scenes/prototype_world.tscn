@@ -43,6 +43,7 @@
 [ext_resource type="Script" uid="uid://ckhn2gnyiwxtf" path="res://scripts/player/PlayerMeleeCombat.cs" id="38_melee"]
 [ext_resource type="Script" uid="uid://cj4ob7ksgj0tu" path="res://scripts/player/PlayerNeeds.cs" id="39_needs"]
 [ext_resource type="Script" uid="uid://dl88ah5wmoeo5" path="res://scripts/world/AtmosphereAudio.cs" id="40_atmosphere"]
+[ext_resource type="PackedScene" uid="uid://c21quvp2au3a3" path="res://assets/third_party/common/weapons/baseball_bat_1k.gltf/baseball_bat_1k.gltf" id="40_rl0qt"]
 [ext_resource type="Resource" path="res://assets/zombies/slow_walker.tres" id="41_slow"]
 [ext_resource type="Resource" path="res://assets/zombies/walker.tres" id="42_walker"]
 [ext_resource type="Resource" path="res://assets/zombies/runner.tres" id="43_runner"]
@@ -114,18 +115,6 @@ tonemap_exposure = 0.5
 
 [sub_resource type="CapsuleShape3D" id="PlayerShape"]
 radius = 0.45
-
-[sub_resource type="StandardMaterial3D" id="BatMaterial"]
-albedo_color = Color(0.36, 0.18, 0.07, 1)
-roughness = 0.82
-
-[sub_resource type="CylinderMesh" id="BatMesh"]
-material = SubResource("BatMaterial")
-top_radius = 0.065
-bottom_radius = 0.1
-height = 1.05
-radial_segments = 10
-rings = 1
 
 [sub_resource type="StyleBoxFlat" id="FpsBackground"]
 bg_color = Color(0.02, 0.03, 0.04, 0.72)
@@ -418,11 +407,10 @@ script = ExtResource("38_melee")
 WeaponDefinition = ExtResource("44_baseball_bat")
 
 [node name="WeaponPivot" type="Node3D" parent="Player/MeleeCombat" unique_id=372816950]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.48, 0.48, 0.22)
+transform = Transform3D(0.907437, 0.42018816, 0, -0.42018816, 0.907437, 0, 0, 0, 1, 0.48, 0.48000002, 0.21999979)
 
-[node name="BaseballBat" type="MeshInstance3D" parent="Player/MeleeCombat/WeaponPivot" unique_id=1833165327]
-transform = Transform3D(0.97589743, -0.21822962, 0, 0.21822962, 0.97589743, 0, 0, 0, 1, 0, 0.5, 0)
-mesh = SubResource("BatMesh")
+[node name="baseball_bat_1k" parent="Player/MeleeCombat/WeaponPivot" unique_id=381845487 instance=ExtResource("40_rl0qt")]
+transform = Transform3D(0.9999996, 2.9802322e-08, 0, -2.9802322e-08, 0.9999996, 0, 0, 0, 1, 0.29874092, 0.27938354, -0.26374245)
 
 [node name="Visual" type="Node3D" parent="Player" unique_id=517271585]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, -1, 0)

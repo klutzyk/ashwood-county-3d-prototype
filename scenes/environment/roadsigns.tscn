@@ -1,0 +1,5 @@
+[gd_scene format=3 uid="uid://b85w0d6ifhafq"]
+
+[ext_resource type="PackedScene" uid="uid://b0nwebmmhx7qj" path="res://assets/third_party/common/signs/road_signs.glb" id="1_pccjm"]
+
+[node name="Sketchfab_Scene" unique_id=1298177911 instance=ExtResource("1_pccjm")]
