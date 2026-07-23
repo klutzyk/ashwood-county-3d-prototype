@@ -37,14 +37,18 @@ public partial class PrototypeZombie : CharacterBody3D
 	[Export] public float InvestigationSpeed { get; set; } = 0.32f;
 	[Export] public float InvestigationDuration { get; set; } = 2.5f;
 	[Export] public float InvestigationTargetTolerance { get; set; } = 0.75f;
+	[Export] public float HitReactionDuration { get; set; } = 0.24f;
+	[Export] public float KnockbackDamping { get; set; } = 12.0f;
 
 	private const string SourceAnimationName = "mixamo_com";
 	private const string IdleAnimationName = "Idle";
 	private const string WalkAnimationName = "Walk";
 	private const string AttackAnimationName = "Attack";
+	private const string DeathAnimationName = "Death";
 	private const string IdleAnimationPath = "res://assets/characters/zombies/zombie idle.fbx";
 	private const string WalkAnimationPath = "res://assets/characters/zombies/zombie walk.fbx";
 	private const string AttackAnimationPath = "res://assets/characters/zombies/zombie attack.fbx";
+	private const string DeathAnimationPath = "res://assets/characters/zombies/zombie death.fbx";
 	private const float AnimationBlendTime = 0.2f;
 
 	private enum BehaviourState
@@ -61,6 +65,8 @@ public partial class PrototypeZombie : CharacterBody3D
 	private AnimationPlayer _animationPlayer = null!;
 	private Node3D _player = null!;
 	private PlayerHealth _playerHealth = null!;
+	private ZombieHealth _health = null!;
+	private Node3D _visual = null!;
 	private BehaviourState _state = BehaviourState.Idle;
 	private float _pathUpdateElapsed;
 	private float _timeSincePlayerVisible = float.PositiveInfinity;
@@ -77,6 +83,8 @@ public partial class PrototypeZombie : CharacterBody3D
 	private Vector3 _lastHeardPosition;
 	private GameplayNoiseCategory _lastHeardCategory;
 	private float _investigationRemaining;
+	private float _hitReactionRemaining;
+	private Vector3 _knockbackVelocity;
 
 	public static readonly StringName ZombieGroupName = new("prototype_zombies");
 
@@ -89,6 +97,8 @@ public partial class PrototypeZombie : CharacterBody3D
 	{
 		_player = GetNode<Node3D>(PlayerPath);
 		_playerHealth = _player.GetNode<PlayerHealth>("Health");
+		_health = GetNode<ZombieHealth>("Health");
+		_visual = GetNode<Node3D>("Visual");
 		_navigationAgent = GetNode<NavigationAgent3D>("NavigationAgent3D");
 		_animationPlayer = FindDescendant<AnimationPlayer>(this)
 			?? throw new InvalidOperationException("Zombie model is missing an AnimationPlayer.");
@@ -102,12 +112,14 @@ public partial class PrototypeZombie : CharacterBody3D
 		_navigationAgent.TargetDesiredDistance = Mathf.Max(AttackDistance - 0.3f, 0.5f);
 		_pathUpdateElapsed = PathUpdateInterval;
 		GameplayNoise.Emitted += OnGameplayNoiseEmitted;
+		_health.Died += OnDied;
 		PlayStateAnimation();
 	}
 
 	public override void _ExitTree()
 	{
 		GameplayNoise.Emitted -= OnGameplayNoiseEmitted;
+		_health.Died -= OnDied;
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -118,6 +130,11 @@ public partial class PrototypeZombie : CharacterBody3D
 		}
 
 		float deltaTime = (float)delta;
+		if (_hitReactionRemaining > 0.0f)
+		{
+			UpdateHitReaction(deltaTime);
+			return;
+		}
 		float distanceToPlayer = HorizontalDistanceTo(_player.GlobalPosition);
 		bool canSeePlayer = CanSeePlayer(distanceToPlayer);
 		UpdatePlayerAwareness(canSeePlayer, deltaTime);
@@ -232,16 +249,86 @@ public partial class PrototypeZombie : CharacterBody3D
 
 	public void SetAlive(bool isAlive)
 	{
+		_health.RestoreAliveState(isAlive);
 		IsAlive = isAlive;
-		Visible = isAlive;
+		Visible = true;
 		SetGameplayNoiseResponseEnabled(isAlive);
 		SetPhysicsProcess(isAlive);
+		_navigationAgent.AvoidanceEnabled = isAlive;
 		if (!isAlive)
 		{
 			Velocity = Vector3.Zero;
 		}
 
 		SetCollisionDisabled(this, !isAlive);
+		if (!isAlive)
+		{
+			PlayDeadPose();
+		}
+		else
+		{
+			_state = BehaviourState.Idle;
+			ScheduleIdleDelay();
+			PlayStateAnimation();
+		}
+	}
+
+	public bool ReceiveMeleeHit(float damage, Vector3 knockbackVelocity)
+	{
+		if (!IsAlive || !_health.ApplyDamage(damage))
+		{
+			return false;
+		}
+
+		if (!IsAlive)
+		{
+			return true;
+		}
+
+		_knockbackVelocity = knockbackVelocity;
+		_hitReactionRemaining = Mathf.Max(HitReactionDuration, 0.0f);
+		_visual.Scale = new Vector3(1.05f, 0.94f, 1.05f);
+		return true;
+	}
+
+	private void UpdateHitReaction(float delta)
+	{
+		_hitReactionRemaining = Mathf.Max(_hitReactionRemaining - delta, 0.0f);
+		Vector3 velocity = Velocity;
+		velocity.X = _knockbackVelocity.X;
+		velocity.Z = _knockbackVelocity.Z;
+		Velocity = velocity;
+		ApplyGravity(delta);
+		MoveAndSlide();
+		_knockbackVelocity = _knockbackVelocity.MoveToward(
+			Vector3.Zero,
+			Mathf.Max(KnockbackDamping, 0.0f) * delta);
+		_visual.Scale = _visual.Scale.Lerp(Vector3.One, Mathf.Clamp(delta * 12.0f, 0.0f, 1.0f));
+		if (_hitReactionRemaining <= 0.0f)
+		{
+			_visual.Scale = Vector3.One;
+			PlayStateAnimation();
+		}
+	}
+
+	private void OnDied()
+	{
+		IsAlive = false;
+		SetGameplayNoiseResponseEnabled(false);
+		_navigationAgent.AvoidanceEnabled = false;
+		Velocity = Vector3.Zero;
+		_hitReactionRemaining = 0.0f;
+		_visual.Scale = Vector3.One;
+		SetCollisionDisabled(this, true);
+		SetPhysicsProcess(false);
+		_animationPlayer.Play(DeathAnimationName, AnimationBlendTime);
+	}
+
+	private void PlayDeadPose()
+	{
+		_animationPlayer.Play(DeathAnimationName);
+		_animationPlayer.Seek(_animationPlayer.CurrentAnimationLength, true);
+		_animationPlayer.Pause();
 	}
 
 	private static void SetCollisionDisabled(Node node, bool disabled)
@@ -582,6 +669,7 @@ public partial class PrototypeZombie : CharacterBody3D
 		AddAnimation(library, IdleAnimationName, IdleAnimationPath, shouldLoop: true);
 		AddAnimation(library, WalkAnimationName, WalkAnimationPath, shouldLoop: true);
 		AddAnimation(library, AttackAnimationName, AttackAnimationPath, shouldLoop: false);
+		AddAnimation(library, DeathAnimationName, DeathAnimationPath, shouldLoop: false);
 	}
 
 	private static void AddAnimation(

@@ -105,30 +105,30 @@ Complete and test one vertical slice before starting the next.
 
 ## Player Combat
 
-- [ ] Basic melee input
-- [ ] Melee attack animation
-- [ ] Attack cooldown
-- [ ] Attack range
-- [ ] Attack hit detection
-- [ ] Prevent repeated damage from one attack
+- [x] Basic melee input
+- [x] Melee attack animation
+- [x] Attack cooldown
+- [x] Attack range
+- [x] Attack hit detection
+- [x] Prevent repeated damage from one attack
 
 ## Zombie Health
 
-- [ ] Zombie health
-- [ ] Zombie receives damage
-- [ ] Zombie hit reaction
-- [ ] Zombie death
-- [ ] Disable dead-zombie navigation
-- [ ] Disable dead-zombie attacks
-- [ ] Disable dead-zombie collision
+- [x] Zombie health
+- [x] Zombie receives damage
+- [x] Zombie hit reaction
+- [x] Zombie death
+- [x] Disable dead-zombie navigation
+- [x] Disable dead-zombie attacks
+- [x] Disable dead-zombie collision
 
 ## Combat Feedback
 
 - [ ] Player hit feedback
-- [ ] Zombie hit feedback
+- [x] Zombie hit feedback
 - [ ] Basic impact sound
 - [ ] Basic attack sound
-- [ ] Temporary death presentation
+- [x] Temporary death presentation
 
 ---
 
@@ -173,7 +173,7 @@ Complete and test one vertical slice before starting the next.
 # Vertical Slice 4 — Expanded Threat
 
 - [x] Five independently functioning zombies
-- [ ] Independent zombie health
+- [x] Independent zombie health
 - [x] Independent detection and pursuit
 - [x] Prevent excessive zombie overlap
 - [x] Basic wandering

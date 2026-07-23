@@ -25,6 +25,7 @@ public partial class ThirdPersonPlayer : CharacterBody3D
 	private PlayerHealth _health = null!;
 	private PlayerStamina _stamina = null!;
 	private PlayerInteraction _interaction = null!;
+	private PlayerMeleeCombat _meleeCombat = null!;
 	private float _cameraPitch = -0.2f;
 	private bool _inventoryUiOpen;
 	private float _sprintNoiseElapsed;
@@ -40,6 +41,7 @@ public partial class ThirdPersonPlayer : CharacterBody3D
 		_health = GetNode<PlayerHealth>("Health");
 		_stamina = GetNode<PlayerStamina>("Stamina");
 		_interaction = GetNode<PlayerInteraction>("Interaction");
+		_meleeCombat = GetNode<PlayerMeleeCombat>("MeleeCombat");
 		_cameraRig.TopLevel = true;
 		FollowPlayerWithCamera();
 		_springArm.Rotation = new Vector3(_cameraPitch, 0.0f, 0.0f);
@@ -64,6 +66,7 @@ public partial class ThirdPersonPlayer : CharacterBody3D
 			mouseButton.ButtonIndex == MouseButton.Left && mouseButton.Pressed)
 		{
 			Input.MouseMode = Input.MouseModeEnum.Captured;
+			_meleeCombat.TryAttack();
 			GetViewport().SetInputAsHandled();
 			return;
 		}

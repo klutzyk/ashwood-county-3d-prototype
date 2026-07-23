@@ -445,3 +445,29 @@ Validation:
 - Missing and malformed saves were rejected without crashes or partial mutation
 - Pharmacy objective and day/night flashlight regression validations passed
 - C# build completed with no warnings or errors
+
+---
+
+## Reusable Prototype Melee Combat
+
+Completed:
+
+- Added a visible prototype baseball bat and Left Mouse attack input
+- Added a short procedural bat swing with an attack lock and configurable cooldown
+- Added configurable damage, range, attack arc and knockback values
+- Added independent health to every reusable zombie instance
+- Applied each swing once to zombies inside the forward attack arc
+- Added a brief zombie hit reaction and damped physical knockback
+- Used the available zombie death animation and retained dead zombies as visible corpses
+- Disabled corpse navigation, attacks and collision while preserving save/load alive state
+
+Outcome:
+
+The player can now fight nearby zombies with one deliberately simple melee
+attack. The combat and zombie-health components are reusable, and the existing
+movement, interaction, inventory, AI, noise-attraction and save systems remain
+in place.
+
+Validation:
+
+- C# build completed with no warnings or errors
