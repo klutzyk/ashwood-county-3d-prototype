@@ -854,3 +854,31 @@ Validation:
 - Fresh-process reload passed
 - Missing, malformed and future-version saves were rejected without mutation
 - C# build completed with no warnings or errors
+
+---
+
+## Antibiotics Objective Flow Polish
+
+Completed:
+
+- Kept objective transitions guarded so transfer and completion each update once
+- Verified the safe point cannot submit antibiotics while they remain in a container
+- Clarified the Take notification when antibiotics enter the player inventory
+- Separated restored-state display refreshes from gameplay state-change
+  notifications so loading completion cannot replay completion feedback
+- Increased the compact safe-point material emission within a restrained range
+  for night readability
+- Preserved completed objective state through the version 1 save system
+
+Outcome:
+
+The pharmacy-to-safe-point flow clearly communicates item ownership, cannot
+complete early or twice, and restores a completed game without duplicate messages.
+
+Validation:
+
+- Objective flow validation passed container ownership, exactly-once transition,
+  exactly-once completion, repeat interaction and silent restore checks
+- Gameplay notification validation passed transfer, objective and safe-point checks
+- Same-process and fresh-process save/load validations passed completed-state persistence
+- C# build completed with no warnings or errors

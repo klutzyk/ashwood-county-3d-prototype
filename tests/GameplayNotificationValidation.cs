@@ -73,6 +73,13 @@ public partial class GameplayNotificationValidation : Node
 			Node safePoint = world.GetNode("PrototypeSafePoint");
 			Require(safePoint.HasNode("SupplyCrate") && safePoint.HasNode("SignBoard"),
 				"safe point uses compact physical dressing");
+			MeshInstance3D safePointCrate = safePoint.GetNode<MeshInstance3D>("SupplyCrate");
+			StandardMaterial3D safePointMaterial =
+				(StandardMaterial3D)safePointCrate.Mesh.SurfaceGetMaterial(0);
+			Require(safePointMaterial.EmissionEnabled &&
+				safePointMaterial.EmissionEnergyMultiplier >= 0.5f &&
+				safePointMaterial.EmissionEnergyMultiplier < 1.0f,
+				"safe point uses restrained emission for night readability");
 			Require(!safePoint.GetNode<Label3D>("Label").NoDepthTest,
 				"safe-point label remains occluded by world geometry");
 

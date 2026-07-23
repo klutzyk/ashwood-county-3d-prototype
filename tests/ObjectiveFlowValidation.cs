@@ -41,6 +41,21 @@ public partial class ObjectiveFlowValidation : Node
 			Require(playerInventory.GetQuantity(AntibioticsObjective.AntibioticsItemId) == 0,
 				"search completion still does not transfer antibiotics");
 
+			int stateChangeCount = 0;
+			int completionCount = 0;
+			objective.StateChanged += state =>
+			{
+				stateChangeCount++;
+				if ((AntibioticsObjectiveState)state == AntibioticsObjectiveState.Completed)
+				{
+					completionCount++;
+				}
+			};
+			world.GetNode<Interactable>("PrototypeSafePoint/Interactable").Interact(player);
+			Require(objective.State == AntibioticsObjectiveState.SearchPharmacy &&
+				stateChangeCount == 0,
+				"safe point cannot submit antibiotics that remain in a container");
+
 			inventoryUi.SelectContainerItem(0);
 			inventoryUi.TakeSelected();
 			Require(cabinet.Inventory.GetQuantity(AntibioticsObjective.AntibioticsItemId) == 0,
@@ -49,6 +64,8 @@ public partial class ObjectiveFlowValidation : Node
 				"Take explicitly transfers antibiotics to the player");
 			Require(objective.State == AntibioticsObjectiveState.ReturnToSafePoint,
 				"taking antibiotics advances the structured objective state");
+			Require(stateChangeCount == 1,
+				"explicit transfer advances the objective exactly once");
 
 			inventoryUi.Close();
 			world.GetNode<Interactable>("PrototypeSafePoint/Interactable").Interact(player);
@@ -56,6 +73,17 @@ public partial class ObjectiveFlowValidation : Node
 				"safe-point interaction completes the objective");
 			Require(playerInventory.GetQuantity(AntibioticsObjective.AntibioticsItemId) == 0,
 				"completion submits the antibiotics");
+			Require(stateChangeCount == 2 && completionCount == 1,
+				"completion update and notification source occur exactly once");
+			world.GetNode<Interactable>("PrototypeSafePoint/Interactable").Interact(player);
+			Require(stateChangeCount == 2 && completionCount == 1,
+				"repeated safe-point interaction cannot duplicate completion");
+
+			int restoredCount = 0;
+			objective.StateRestored += _ => restoredCount++;
+			objective.RestoreState(AntibioticsObjectiveState.Completed);
+			Require(restoredCount == 1 && completionCount == 1,
+				"restoring completed state refreshes displays without a completion notification");
 
 			GD.Print("OBJECTIVE_FLOW_VALIDATION: PASS");
 			GetTree().Quit(0);

@@ -21,7 +21,7 @@ public partial class AntibioticsObjective : Node
 	public delegate void StateChangedEventHandler(int state);
 
 	[Signal]
-	public delegate void CompletionMessageRequestedEventHandler(string message);
+	public delegate void StateRestoredEventHandler(int state);
 
 	[Export] public NodePath PlayerInventoryPath { get; set; } = new("../Player/Inventory");
 
@@ -61,13 +61,13 @@ public partial class AntibioticsObjective : Node
 		}
 
 		SetState(AntibioticsObjectiveState.Completed);
-		EmitSignal(SignalName.CompletionMessageRequested, "Objective Complete: Antibiotics delivered");
 		return true;
 	}
 
 	public void RestoreState(AntibioticsObjectiveState state)
 	{
-		SetState(state);
+		State = state;
+		EmitSignal(SignalName.StateRestored, (int)State);
 	}
 
 	private void OnInventoryChanged()

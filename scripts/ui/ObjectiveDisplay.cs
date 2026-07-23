@@ -17,7 +17,17 @@ public partial class ObjectiveDisplay : Control
 		_objective = GetNode<AntibioticsObjective>(ObjectivePath);
 		_objectiveText = GetNode<Label>("ObjectiveText");
 		_objective.StateChanged += OnStateChanged;
+		_objective.StateRestored += OnStateChanged;
 		Refresh();
+	}
+
+	public override void _ExitTree()
+	{
+		if (IsInstanceValid(_objective))
+		{
+			_objective.StateChanged -= OnStateChanged;
+			_objective.StateRestored -= OnStateChanged;
+		}
 	}
 
 	private void OnStateChanged(int state)

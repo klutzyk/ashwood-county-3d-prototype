@@ -119,6 +119,13 @@ public partial class SaveLoadValidation : Node
 		Require(GodotFileAccess.FileExists(ValidationSavePath), "validation save persists between game processes");
 		Require(manager.LoadGame(), "fresh game process loads the local save");
 		AssertSavedState(world);
+		AntibioticsObjective objective = world.GetNode<AntibioticsObjective>("AntibioticsObjective");
+		objective.RestoreState(AntibioticsObjectiveState.Completed);
+		Require(manager.SaveGame(), "completed objective state saves");
+		objective.RestoreState(AntibioticsObjectiveState.SearchPharmacy);
+		Require(manager.LoadGame() &&
+			objective.State == AntibioticsObjectiveState.Completed,
+			"completed objective state persists through save and load");
 
 		string absolutePath = ProjectSettings.GlobalizePath(ValidationSavePath);
 		Require(DirAccess.RemoveAbsolute(absolutePath) == Error.Ok, "validation save cleanup succeeds");

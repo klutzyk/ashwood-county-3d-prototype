@@ -301,7 +301,7 @@ Complete and test one vertical slice before starting the next.
 - [x] Improve melee responsiveness
 - [x] Refine inventory and container usability
 - [x] Harden prototype save loading
-- [ ] Polish antibiotics objective flow
+- [x] Polish antibiotics objective flow
 - [ ] Balance prototype ambience
 - [ ] Validate and clean the autonomous polish batch
 

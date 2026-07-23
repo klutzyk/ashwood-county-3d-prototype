@@ -3,6 +3,7 @@
 using Godot;
 using AshwoodCounty3DPrototype.Interactions;
 using AshwoodCounty3DPrototype.Items;
+using AshwoodCounty3DPrototype.Objectives;
 using AshwoodCounty3DPrototype.Player;
 
 namespace AshwoodCounty3DPrototype.UI;
@@ -181,7 +182,10 @@ public partial class ContainerInventoryDisplay : Control
 			SelectPlayerItem(destinationIndex);
 		}
 		ShowStatus($"Taken {item?.DisplayName} x{quantity}.");
-		Notify($"Item taken: {item?.DisplayName} x{quantity}");
+		string destinationText = item?.ItemId == AntibioticsObjective.AntibioticsItemId
+			? " (now in player inventory)"
+			: string.Empty;
+		Notify($"Item taken: {item?.DisplayName} x{quantity}{destinationText}");
 	}
 
 	public void StoreSelected()

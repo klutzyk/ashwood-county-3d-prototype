@@ -7,7 +7,7 @@
 albedo_color = Color(0.18, 0.48, 0.24, 1)
 emission_enabled = true
 emission = Color(0.04, 0.22, 0.08, 1)
-emission_energy_multiplier = 0.45
+emission_energy_multiplier = 0.68
 
 [sub_resource type="CylinderMesh" id="SafePointBaseMesh"]
 material = SubResource("SafePointMaterial")
@@ -64,7 +64,7 @@ mesh = SubResource("SafePointBoardMesh")
 
 [node name="Label" type="Label3D" parent="."]
 position = Vector3(0, 1.25, 0.48)
-modulate = Color(0.82, 0.94, 0.78, 1)
+modulate = Color(0.88, 0.98, 0.84, 1)
 outline_modulate = Color(0.02, 0.08, 0.03, 1)
 outline_size = 6
 text = "SAFE POINT"
