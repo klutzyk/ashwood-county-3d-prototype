@@ -43,8 +43,8 @@ public partial class TownCompositionValidation : Node
 					geometryCount++;
 				}
 			}
-			Require(geometryCount >= 18 && geometryCount <= 36,
-				"composition uses a restrained number of lightweight visual pieces");
+			Require(geometryCount >= 18 && geometryCount <= 42,
+				$"composition uses a restrained number of detailed visual pieces ({geometryCount})");
 
 			AssertAreaClearance(
 				composition.GetNode<Node3D>("PharmacyBackLot"),

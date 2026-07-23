@@ -1709,3 +1709,28 @@ Validation:
 - Town-landmark and world-polish validations passed
 - Rendered Compatibility world load completed without scene or material errors
 - C# build completed with no warnings or errors
+
+---
+
+## Downloaded Streetside Prop Pass
+
+Completed:
+
+- Replaced selected primitive bins, utility cabinets, crates and road barriers
+  with the downloaded textured models
+- Applied the detailed bin and utility models to the shared residential-lot
+  dressing instead of duplicating them per lot
+- Kept simpler distant bins where replacing every instance would exceed the
+  established lightweight geometry budget
+- Preserved all existing placement, entrances, collision and navigation
+
+Outcome:
+
+Commercial back lots, residential verges and roadside boundaries now carry
+recognisable textured objects while retaining the town's existing layout.
+
+Validation:
+
+- Town-composition and town-atmosphere validations passed
+- World-polish validation printed PASS before the documented managed teardown
+- C# build completed with no warnings or errors

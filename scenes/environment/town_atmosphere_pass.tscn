@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" path="res://assets/environment/vehicles/old_tyre.tscn" id="1_tyre"]
 [ext_resource type="PackedScene" path="res://assets/environment/nature/small_bush.tscn" id="3_bush"]
+[ext_resource type="PackedScene" uid="uid://bbxle42wyicnn" path="res://assets/third_party/props/utilities/utility_box_02_1k.gltf/utility_box_02_1k.gltf" id="4_utility"]
 
 [sub_resource type="StandardMaterial3D" id="DarkMetal"]
 albedo_color = Color(0.09, 0.11, 0.1, 1)
@@ -99,12 +100,11 @@ cast_shadow = 0
 visibility_range_end = 48.0
 mesh = SubResource("DumpsterLidMesh")
 
-[node name="UtilityBox" type="MeshInstance3D" parent="CommercialAlley"]
-position = Vector3(1.7, 0.525, -0.45)
+[node name="UtilityBox" type="Node3D" parent="CommercialAlley"]
+position = Vector3(1.7, 0, -0.45)
 rotation = Vector3(0, -0.08, 0)
-cast_shadow = 0
-visibility_range_end = 42.0
-mesh = SubResource("UtilityBoxMesh")
+
+[node name="Visual" parent="CommercialAlley/UtilityBox" instance=ExtResource("4_utility")]
 
 [node name="NewsBoxA" type="MeshInstance3D" parent="CommercialAlley"]
 position = Vector3(-1.55, 0.41, 0.4)
@@ -206,11 +206,10 @@ cast_shadow = 0
 visibility_range_end = 40.0
 mesh = SubResource("UtilityPlinthMesh")
 
-[node name="UtilityBox" type="MeshInstance3D" parent="ResidentialVerge"]
-position = Vector3(2.2, 0.7, -0.15)
-cast_shadow = 0
-visibility_range_end = 40.0
-mesh = SubResource("UtilityBoxMesh")
+[node name="UtilityBox" type="Node3D" parent="ResidentialVerge"]
+position = Vector3(2.2, 0.18, -0.15)
+
+[node name="Visual" parent="ResidentialVerge/UtilityBox" instance=ExtResource("4_utility")]
 
 [node name="Bush" parent="ResidentialVerge" instance=ExtResource("3_bush")]
 position = Vector3(-2.0, 0, -0.25)

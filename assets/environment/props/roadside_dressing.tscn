@@ -3,6 +3,8 @@
 [ext_resource type="PackedScene" uid="uid://bualq6scxwlgs" path="res://assets/third_party/props/mailbox/home_us_mailbox.glb" id="1_8einp"]
 [ext_resource type="PackedScene" path="res://assets/environment/nature/small_bush.tscn" id="1_bush"]
 [ext_resource type="PackedScene" uid="uid://bt4kjr7kfw24x" path="res://scenes/environment/nature/bush.tscn" id="3_lg8e2"]
+[ext_resource type="PackedScene" uid="uid://cru7i0xjux2qp" path="res://assets/third_party/props/bins/public_bin__free.glb" id="4_bin"]
+[ext_resource type="PackedScene" uid="uid://bbxle42wyicnn" path="res://assets/third_party/props/utilities/utility_box_02_1k.gltf/utility_box_02_1k.gltf" id="5_utility"]
 
 [sub_resource type="StandardMaterial3D" id="DrivewayMaterial"]
 albedo_color = Color(0.22, 0.21, 0.19, 1)
@@ -54,17 +56,11 @@ transform = Transform3D(-0.049648486, 0, -0.39690682, 0, 0.4, 0, 0.39690682, 0, 
 [node name="RubbishBin" type="Node3D" parent="." unique_id=1605450143]
 transform = Transform3D(0.9838437, 0, -0.17902958, 0, 1, 0, 0.17902958, 0, 0.9838437, -4.75, 0, -2.3)
 
-[node name="Body" type="MeshInstance3D" parent="RubbishBin" unique_id=474417820]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.54, 0)
-mesh = SubResource("BinMesh")
+[node name="Visual" parent="RubbishBin" unique_id=474417820 instance=ExtResource("4_bin")]
+transform = Transform3D(0.52069855, 0, -0.46783862, 0, 0.7, 0, 0.46783862, 0, 0.52069855, -0.09311867, 0.71518, -0.51172364)
 
-[node name="Lid" type="MeshInstance3D" parent="RubbishBin" unique_id=1608916612]
-transform = Transform3D(1.08, 0, 0, 0, 0.12, 0, 0, 0, 1.08, 0, 1.08, -0.02)
-mesh = SubResource("BinMesh")
-
-[node name="UtilityCabinet" type="MeshInstance3D" parent="." unique_id=593452029]
-transform = Transform3D(0.99680173, 0, 0.07991469, 0, 1, 0, -0.07991469, 0, 0.99680173, 2.8, 0.53, 5.35)
-mesh = SubResource("UtilityBoxMesh")
+[node name="UtilityCabinet" parent="." unique_id=593452029 instance=ExtResource("5_utility")]
+transform = Transform3D(0.99680173, 0, 0.07991469, 0, 1, 0, -0.07991469, 0, 0.99680173, 2.8, 0, 5.35)
 
 [node name="FenceNorth" type="Node3D" parent="." unique_id=871541067]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5.35)

@@ -159,14 +159,14 @@ Buildings
 
 Props
 
-- [ ] More abandoned vehicles
-- [ ] Utility poles
-- [ ] Road signs
-- [ ] Mailboxes
-- [ ] Fences
-- [ ] Garbage
-- [ ] Tyres
-- [ ] Crates
+- [x] More abandoned vehicles
+- [x] Utility poles
+- [x] Road signs
+- [x] Mailboxes
+- [x] Fences
+- [x] Garbage
+- [x] Tyres
+- [x] Crates
 - [ ] Pallets
 
 Lighting

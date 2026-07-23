@@ -2,6 +2,11 @@
 
 [ext_resource type="PackedScene" path="res://assets/environment/nature/small_bush.tscn" id="1_bush"]
 [ext_resource type="PackedScene" path="res://assets/environment/vehicles/old_tyre.tscn" id="2_tyre"]
+[ext_resource type="PackedScene" uid="uid://cru7i0xjux2qp" path="res://assets/third_party/props/bins/public_bin__free.glb" id="3_bin"]
+[ext_resource type="PackedScene" uid="uid://bbxle42wyicnn" path="res://assets/third_party/props/utilities/utility_box_02_1k.gltf/utility_box_02_1k.gltf" id="4_utility"]
+[ext_resource type="PackedScene" uid="uid://b2nvwnrihpkrn" path="res://assets/third_party/props/crates/plastic_crate_01_1k.gltf/plastic_crate_01_1k.gltf" id="5_crate"]
+[ext_resource type="PackedScene" uid="uid://rahr2cqv36ov" path="res://assets/third_party/props/barriers/barrier1/concrete_road_barrier_1k.gltf" id="6_barrier_a"]
+[ext_resource type="PackedScene" uid="uid://dnlvomtld5rbn" path="res://assets/third_party/props/barriers/barrier2/concrete_road_barrier_02_1k.gltf" id="7_barrier_b"]
 
 [sub_resource type="StandardMaterial3D" id="UtilityMaterial"]
 albedo_color = Color(0.14, 0.2, 0.15, 1)
@@ -61,35 +66,20 @@ size = Vector3(1.58, 0.1, 0.46)
 [node name="PharmacyBackLot" type="Node3D" parent="."]
 position = Vector3(-19.15, 0, 10.4)
 
-[node name="UtilityCabinet" type="MeshInstance3D" parent="PharmacyBackLot"]
-position = Vector3(0, 0.6, 0)
+[node name="UtilityCabinet" parent="PharmacyBackLot" instance=ExtResource("4_utility")]
+position = Vector3(0, 0, 0)
 rotation = Vector3(0, 0.08, 0)
-cast_shadow = 0
-visibility_range_end = 38.0
-mesh = SubResource("UtilityCabinetMesh")
 
 [node name="RubbishBin" type="Node3D" parent="PharmacyBackLot"]
 position = Vector3(0.85, 0, 1.0)
 rotation = Vector3(0, -0.16, 0)
 
-[node name="Body" type="MeshInstance3D" parent="PharmacyBackLot/RubbishBin"]
-position = Vector3(0, 0.45, 0)
-cast_shadow = 0
-visibility_range_end = 34.0
-mesh = SubResource("BinBodyMesh")
+[node name="Visual" parent="PharmacyBackLot/RubbishBin" instance=ExtResource("3_bin")]
+transform = Transform3D(0.52069855, 0, -0.46783862, 0, 0.7, 0, 0.46783862, 0, 0.52069855, -0.09311867, 0.71518, -0.51172364)
 
-[node name="Lid" type="MeshInstance3D" parent="PharmacyBackLot/RubbishBin"]
-position = Vector3(0, 0.94, -0.02)
-cast_shadow = 0
-visibility_range_end = 34.0
-mesh = SubResource("BinLidMesh")
-
-[node name="EmptyCrate" type="MeshInstance3D" parent="PharmacyBackLot"]
-position = Vector3(0.2, 0.36, -1.15)
+[node name="EmptyCrate" parent="PharmacyBackLot" instance=ExtResource("5_crate")]
+position = Vector3(0.2, 0, -1.15)
 rotation = Vector3(0, 0.22, 0)
-cast_shadow = 0
-visibility_range_end = 34.0
-mesh = SubResource("CrateMesh")
 
 [node name="Bush" parent="PharmacyBackLot" instance=ExtResource("1_bush")]
 position = Vector3(-0.9, 0, -1.15)
@@ -149,33 +139,13 @@ position = Vector3(5.8, 0, 16.8)
 [node name="BarrierNorth" type="Node3D" parent="RoadsideEdge"]
 rotation = Vector3(0, 0.12, 0)
 
-[node name="Body" type="MeshInstance3D" parent="RoadsideEdge/BarrierNorth"]
-position = Vector3(0, 0.275, 0)
-cast_shadow = 0
-visibility_range_end = 40.0
-mesh = SubResource("BarrierMesh")
-
-[node name="Stripe" type="MeshInstance3D" parent="RoadsideEdge/BarrierNorth"]
-position = Vector3(0, 0.38, 0)
-cast_shadow = 0
-visibility_range_end = 40.0
-mesh = SubResource("ReflectiveStripMesh")
+[node name="Visual" parent="RoadsideEdge/BarrierNorth" instance=ExtResource("6_barrier_a")]
 
 [node name="BarrierSouth" type="Node3D" parent="RoadsideEdge"]
 position = Vector3(0.35, 0, -1.75)
 rotation = Vector3(0, -0.16, 0)
 
-[node name="Body" type="MeshInstance3D" parent="RoadsideEdge/BarrierSouth"]
-position = Vector3(0, 0.275, 0)
-cast_shadow = 0
-visibility_range_end = 40.0
-mesh = SubResource("BarrierMesh")
-
-[node name="Stripe" type="MeshInstance3D" parent="RoadsideEdge/BarrierSouth"]
-position = Vector3(0, 0.38, 0)
-cast_shadow = 0
-visibility_range_end = 40.0
-mesh = SubResource("ReflectiveStripMesh")
+[node name="Visual" parent="RoadsideEdge/BarrierSouth" instance=ExtResource("7_barrier_b")]
 
 [node name="OldTyre" parent="RoadsideEdge" instance=ExtResource("2_tyre")]
 position = Vector3(1.0, 0.13, -0.72)
