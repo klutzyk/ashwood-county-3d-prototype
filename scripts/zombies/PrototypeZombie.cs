@@ -24,6 +24,15 @@ public partial class PrototypeZombie : CharacterBody3D
 	[Export] public float Gravity { get; set; } = 24.0f;
 	[Export] public float TurnSpeed { get; set; } = 7.0f;
 	[Export] public float PathUpdateInterval { get; set; } = 0.35f;
+	[Export] public float NavigationPathHeightOffset { get; set; } = -0.7f;
+	[Export] public float WanderRadius { get; set; } = 6.0f;
+	[Export] public float WanderSpeed { get; set; } = 0.28f;
+	[Export] public float MinimumIdleDuration { get; set; } = 1.5f;
+	[Export] public float MaximumIdleDuration { get; set; } = 3.5f;
+	[Export] public float WanderTargetTolerance { get; set; } = 0.65f;
+	[Export] public int WanderTargetAttempts { get; set; } = 6;
+	[Export] public float SeparationRadius { get; set; } = 1.2f;
+	[Export] public float SeparationStrength { get; set; } = 0.75f;
 
 	private const string SourceAnimationName = "mixamo_com";
 	private const string IdleAnimationName = "Idle";
@@ -37,6 +46,7 @@ public partial class PrototypeZombie : CharacterBody3D
 	private enum BehaviourState
 	{
 		Idle,
+		Wandering,
 		Chasing,
 		Attacking,
 	}
@@ -52,6 +62,12 @@ public partial class PrototypeZombie : CharacterBody3D
 	private float _previousAttackAnimationPosition;
 	private float _timeSinceAttackHit;
 	private bool _attackHitAttempted;
+	private readonly RandomNumberGenerator _random = new();
+	private Vector3 _wanderOrigin;
+	private float _idleRemaining;
+	private Vector3 _wanderTarget;
+
+	private static readonly StringName ZombieGroupName = new("prototype_zombies");
 
 	public string CurrentStateName => _state.ToString();
 
@@ -64,6 +80,11 @@ public partial class PrototypeZombie : CharacterBody3D
 			?? throw new InvalidOperationException("Zombie model is missing an AnimationPlayer.");
 
 		ConfigureAnimations();
+		AddToGroup(ZombieGroupName);
+		_random.Seed = (ulong)Time.GetTicksUsec() ^ GetInstanceId();
+		_wanderOrigin = GlobalPosition;
+		ScheduleIdleDelay();
+		_navigationAgent.PathHeightOffset = NavigationPathHeightOffset;
 		_navigationAgent.TargetDesiredDistance = Mathf.Max(AttackDistance - 0.3f, 0.5f);
 		_pathUpdateElapsed = PathUpdateInterval;
 		PlayStateAnimation();
@@ -77,13 +98,22 @@ public partial class PrototypeZombie : CharacterBody3D
 		UpdatePlayerAwareness(canSeePlayer, deltaTime);
 		BehaviourState nextState = DetermineState(distanceToPlayer, canSeePlayer);
 		SetState(nextState);
+		UpdateWandering(deltaTime);
 		UpdateAttack(deltaTime, distanceToPlayer, canSeePlayer);
 
-		Vector3 movementDirection = _state == BehaviourState.Chasing
-			? GetNavigationDirection(deltaTime)
-			: Vector3.Zero;
+		Vector3 movementDirection = _state switch
+		{
+			BehaviourState.Chasing => GetChaseNavigationDirection(deltaTime),
+			BehaviourState.Wandering => GetPathDirection(),
+			_ => Vector3.Zero,
+		};
+		if (!movementDirection.IsZeroApprox())
+		{
+			movementDirection = ApplySeparation(movementDirection);
+		}
 
-		ApplyHorizontalMovement(movementDirection, deltaTime);
+		float movementSpeed = _state == BehaviourState.Wandering ? WanderSpeed : MoveSpeed;
+		ApplyHorizontalMovement(movementDirection, movementSpeed, deltaTime);
 		ApplyGravity(deltaTime);
 
 		Vector3 facingDirection = _state == BehaviourState.Attacking
@@ -133,17 +163,23 @@ public partial class PrototypeZombie : CharacterBody3D
 
 	private BehaviourState DetermineState(float distanceToPlayer, bool canSeePlayer)
 	{
-		if (!canSeePlayer &&
-			(_state == BehaviourState.Idle ||
-			_timeSincePlayerVisible > LostSightGracePeriod ||
-			HorizontalDistanceTo(_lastKnownPlayerPosition) <= _navigationAgent.TargetDesiredDistance))
+		if (canSeePlayer)
 		{
-			return BehaviourState.Idle;
+			return distanceToPlayer <= AttackDistance
+				? BehaviourState.Attacking
+				: BehaviourState.Chasing;
 		}
 
-		return canSeePlayer && distanceToPlayer <= AttackDistance
-			? BehaviourState.Attacking
-			: BehaviourState.Chasing;
+		if ((_state == BehaviourState.Chasing || _state == BehaviourState.Attacking) &&
+			_timeSincePlayerVisible <= LostSightGracePeriod &&
+			HorizontalDistanceTo(_lastKnownPlayerPosition) > _navigationAgent.TargetDesiredDistance)
+		{
+			return BehaviourState.Chasing;
+		}
+
+		return _state == BehaviourState.Wandering
+			? BehaviourState.Wandering
+			: BehaviourState.Idle;
 	}
 
 	private void UpdatePlayerAwareness(bool canSeePlayer, float delta)
@@ -183,11 +219,10 @@ public partial class PrototypeZombie : CharacterBody3D
 		return hit.Count > 0 && hit["collider"].AsGodotObject() == _player;
 	}
 
-	private Vector3 GetNavigationDirection(float delta)
+	private Vector3 GetChaseNavigationDirection(float delta)
 	{
 		_pathUpdateElapsed += delta;
-		Rid navigationMap = _navigationAgent.GetNavigationMap();
-		if (!navigationMap.IsValid || NavigationServer3D.MapGetIterationId(navigationMap) == 0)
+		if (!NavigationMapIsReady())
 		{
 			return Vector3.Zero;
 		}
@@ -198,6 +233,16 @@ public partial class PrototypeZombie : CharacterBody3D
 			_pathUpdateElapsed = 0.0f;
 		}
 
+		return GetPathDirection();
+	}
+
+	private Vector3 GetPathDirection()
+	{
+		if (!NavigationMapIsReady())
+		{
+			return Vector3.Zero;
+		}
+
 		if (_navigationAgent.IsNavigationFinished())
 		{
 			return Vector3.Zero;
@@ -206,10 +251,119 @@ public partial class PrototypeZombie : CharacterBody3D
 		return HorizontalDirectionTo(_navigationAgent.GetNextPathPosition());
 	}
 
-	private void ApplyHorizontalMovement(Vector3 direction, float delta)
+	private void UpdateWandering(float delta)
+	{
+		if (_state == BehaviourState.Wandering)
+		{
+			if (_navigationAgent.IsNavigationFinished() ||
+				HorizontalDistanceTo(_wanderTarget) <= Mathf.Max(WanderTargetTolerance, 0.1f))
+			{
+				SetState(BehaviourState.Idle);
+			}
+			return;
+		}
+
+		if (_state != BehaviourState.Idle)
+		{
+			return;
+		}
+
+		_idleRemaining = Mathf.Max(_idleRemaining - delta, 0.0f);
+		if (_idleRemaining <= 0.0f)
+		{
+			TryStartWandering();
+		}
+	}
+
+	private void TryStartWandering()
+	{
+		if (!NavigationMapIsReady() || WanderRadius <= 0.0f)
+		{
+			ScheduleIdleDelay();
+			return;
+		}
+
+		Rid navigationMap = _navigationAgent.GetNavigationMap();
+		int attempts = Mathf.Max(WanderTargetAttempts, 1);
+		float targetTolerance = Mathf.Max(WanderTargetTolerance, 0.1f);
+		for (int attempt = 0; attempt < attempts; attempt++)
+		{
+			float angle = _random.RandfRange(0.0f, Mathf.Tau);
+			float distance = Mathf.Sqrt(_random.Randf()) * WanderRadius;
+			Vector3 candidate = _wanderOrigin + new Vector3(
+				Mathf.Cos(angle) * distance,
+				0.0f,
+				Mathf.Sin(angle) * distance);
+			Vector3 navigationPoint = NavigationServer3D.MapGetClosestPoint(navigationMap, candidate);
+			if (HorizontalDistanceTo(navigationPoint) <= targetTolerance * 2.0f ||
+				HorizontalDistanceBetween(_wanderOrigin, navigationPoint) > WanderRadius + targetTolerance)
+			{
+				continue;
+			}
+
+			_wanderTarget = navigationPoint;
+			_navigationAgent.TargetDesiredDistance = targetTolerance;
+			_navigationAgent.TargetPosition = _wanderTarget;
+			SetState(BehaviourState.Wandering);
+			return;
+		}
+
+		ScheduleIdleDelay();
+	}
+
+	private void ScheduleIdleDelay()
+	{
+		float minimum = Mathf.Max(MinimumIdleDuration, 0.0f);
+		float maximum = Mathf.Max(MaximumIdleDuration, minimum);
+		_idleRemaining = _random.RandfRange(minimum, maximum);
+	}
+
+	private Vector3 ApplySeparation(Vector3 movementDirection)
+	{
+		float radius = Mathf.Max(SeparationRadius, 0.0f);
+		if (radius <= 0.0f || SeparationStrength <= 0.0f)
+		{
+			return movementDirection;
+		}
+
+		Vector3 separation = Vector3.Zero;
+		foreach (Node node in GetTree().GetNodesInGroup(ZombieGroupName))
+		{
+			if (node is not PrototypeZombie other || other == this)
+			{
+				continue;
+			}
+
+			Vector3 offset = GlobalPosition - other.GlobalPosition;
+			offset.Y = 0.0f;
+			float distance = offset.Length();
+			if (distance >= radius)
+			{
+				continue;
+			}
+
+			if (distance <= 0.001f)
+			{
+				offset = GetInstanceId() < other.GetInstanceId() ? Vector3.Left : Vector3.Right;
+				distance = 0.001f;
+			}
+			separation += offset.Normalized() * (1.0f - (distance / radius));
+		}
+
+		Vector3 combined = movementDirection + (separation * SeparationStrength);
+		return combined.IsZeroApprox() ? movementDirection : combined.Normalized();
+	}
+
+	private bool NavigationMapIsReady()
+	{
+		Rid navigationMap = _navigationAgent.GetNavigationMap();
+		return navigationMap.IsValid && NavigationServer3D.MapGetIterationId(navigationMap) > 0;
+	}
+
+	private void ApplyHorizontalMovement(Vector3 direction, float speed, float delta)
 	{
 		Vector3 velocity = Velocity;
-		Vector3 targetVelocity = direction * MoveSpeed;
+		Vector3 targetVelocity = direction * Mathf.Max(speed, 0.0f);
 		velocity.X = Mathf.MoveToward(velocity.X, targetVelocity.X, Acceleration * delta);
 		velocity.Z = Mathf.MoveToward(velocity.Z, targetVelocity.Z, Acceleration * delta);
 		Velocity = velocity;
@@ -254,6 +408,11 @@ public partial class PrototypeZombie : CharacterBody3D
 		return position.DistanceTo(new Vector2(target.X, target.Z));
 	}
 
+	private static float HorizontalDistanceBetween(Vector3 first, Vector3 second)
+	{
+		return new Vector2(first.X, first.Z).DistanceTo(new Vector2(second.X, second.Z));
+	}
+
 	private void SetState(BehaviourState nextState)
 	{
 		if (_state == nextState)
@@ -261,12 +420,22 @@ public partial class PrototypeZombie : CharacterBody3D
 			return;
 		}
 
+		BehaviourState previousState = _state;
 		_state = nextState;
 		if (_state == BehaviourState.Attacking)
 		{
 			_previousAttackAnimationPosition = 0.0f;
 			_timeSinceAttackHit = Mathf.Max(AttackCooldown, 0.0f);
 			_attackHitAttempted = false;
+		}
+		else if (_state == BehaviourState.Chasing)
+		{
+			_navigationAgent.TargetDesiredDistance = Mathf.Max(AttackDistance - 0.3f, 0.5f);
+			_pathUpdateElapsed = PathUpdateInterval;
+		}
+		else if (_state == BehaviourState.Idle && previousState != BehaviourState.Idle)
+		{
+			ScheduleIdleDelay();
 		}
 		PlayStateAnimation();
 	}
@@ -276,6 +445,7 @@ public partial class PrototypeZombie : CharacterBody3D
 		string animationName = _state switch
 		{
 			BehaviourState.Chasing => WalkAnimationName,
+			BehaviourState.Wandering => WalkAnimationName,
 			BehaviourState.Attacking => AttackAnimationName,
 			_ => IdleAnimationName,
 		};

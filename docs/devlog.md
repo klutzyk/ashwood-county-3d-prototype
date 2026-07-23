@@ -288,3 +288,42 @@ Validation:
 - Compatibility-renderer preview completed at approximately 6.1 ms CPU and
   5.0 ms GPU render time per frame during movie capture
 - Godot scene load and C# build completed with no warnings or errors
+
+---
+
+## Multiple Zombies and Wandering
+
+Completed:
+
+- Placed five independent instances of the existing prototype-zombie scene
+  across the town
+- Added nearby random navigation targets within an exported wander radius
+- Added exported random idle delays between wander destinations
+- Preserved timed chase-path refreshes instead of recalculating every frame
+- Added lightweight local separation while retaining physical zombie collision
+- Rebuilt the town navigation mesh from static collision shapes so paths route
+  around buildings, furniture, vehicles, trees and props
+- Kept door openings connected in the navigation mesh for open-door traversal
+
+Outcome:
+
+Zombies independently idle, wander, detect, chase and attack while sharing one
+scene and controller. No spawning, hordes, sound attraction, new zombie types,
+loot or combat systems were added.
+
+Validation:
+
+- All five zombies independently entered wandering and changed position
+- All five independently detected and pursued a visible player
+- Existing attack damage remained functional
+- Navigation routes bent around the house, pharmacy and service station
+- Navigation paths connected through all three open building entrances
+- Separation test prevented direct zombie stacking
+- Compatibility capture averaged 2.38 ms CPU and 14.54 ms GPU render time per
+  frame at a fixed 60 FPS target
+- C# build completed with no warnings or errors
+
+Scope note:
+
+Zombie health and death remain unimplemented roadmap items, so dead-zombie
+shutdown behaviour was not available to preserve or validate in this slice.

@@ -303,8 +303,30 @@ script = ExtResource("4_animation")
 
 [node name="Zombies" type="Node3D" parent="."]
 
-[node name="PrototypeZombie" parent="Zombies" instance=ExtResource("17_zombie")]
+[node name="PrototypeZombie1" parent="Zombies" instance=ExtResource("17_zombie")]
 position = Vector3(11, 0.9, -14)
+rotation = Vector3(0, 2.7, 0)
+WanderRadius = 4.0
+
+[node name="PrototypeZombie2" parent="Zombies" instance=ExtResource("17_zombie")]
+position = Vector3(-2, 0.9, -19)
+rotation = Vector3(0, 0.55, 0)
+WanderRadius = 4.0
+
+[node name="PrototypeZombie3" parent="Zombies" instance=ExtResource("17_zombie")]
+position = Vector3(-17, 0.9, 0)
+rotation = Vector3(0, -1.2, 0)
+WanderRadius = 4.0
+
+[node name="PrototypeZombie4" parent="Zombies" instance=ExtResource("17_zombie")]
+position = Vector3(10, 0.9, 19)
+rotation = Vector3(0, 2.1, 0)
+WanderRadius = 4.0
+
+[node name="PrototypeZombie5" parent="Zombies" instance=ExtResource("17_zombie")]
+position = Vector3(-8, 0.9, 20)
+rotation = Vector3(0, -2.45, 0)
+WanderRadius = 3.5
 
 [node name="PerformanceUI" type="CanvasLayer" parent="." unique_id=1832903103]
 script = ExtResource("19_player_status")
