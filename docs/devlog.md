@@ -1445,6 +1445,31 @@ Validation:
 - Existing town-composition and interaction-consistency regressions passed
 - C# build completed with no warnings or errors
 
+---
+
+## Zombie Distribution Pass
+
+Completed:
+
+- Preserved all 15 existing zombie node names, paths and save identities
+- Grouped three zombies near the pharmacy and three near the service station
+- Distributed four zombies along the new residential street
+- Created one tight four-zombie danger hotspot at the northern road end
+- Left the diner and safe point comparatively quiet, with one remote southern
+  wanderer maintaining uncertainty outside the hotspots
+
+Outcome:
+
+Threat density now communicates risk by location without increasing the AI or
+rendering workload.
+
+Validation:
+
+- Zombie-distribution validation passed population, save-path, hotspot and quiet
+  area checks
+- Zombie crowd, pursuit and same-session save/load regressions passed
+- C# build completed with no warnings or errors
+
 
 ## Representative Full-Game Performance Benchmark
 

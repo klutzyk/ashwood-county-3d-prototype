@@ -369,7 +369,8 @@ Complete and test one vertical slice before starting the next.
   markings, street/stop signs, barriers and connected navigation
 - [x] Improve town atmosphere with restrained commercial, diner, residential
   and maintenance prop clusters using existing assets
-- [ ] Redistribute the existing zombie population
+- [x] Redistribute the existing 15 zombies into quiet areas, pharmacy/service
+  hotspots, residential groups and one dangerous road-end hotspot
 - [ ] Improve logical loot placement
 - [ ] Add environmental storytelling scenes
 - [ ] Complete a world-polish pass
