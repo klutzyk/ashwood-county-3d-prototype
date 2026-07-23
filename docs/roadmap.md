@@ -1,379 +1,341 @@
 # Roadmap
 
-Each checkbox should represent approximately one focused implementation session.
-
-Complete and test one vertical slice before starting the next.
+This roadmap tracks the prototype and the planned transition into a full production game.
 
 ---
 
-# Foundation
+# Phase 1 — Prototype (Current Goal)
+
+The purpose of this phase is to answer one question:
+
+> "Is this game fun enough and technically feasible to continue building?"
+
+The prototype is intentionally small, focused and highly polished.
+
+---
+
+# Foundation ✅
 
 - [x] Third-person movement
-- [x] Mouse-controlled camera
+- [x] Mouse camera
 - [x] Character animations
-- [x] Sprint and stamina
+- [x] Sprinting
+- [x] Stamina
+- [x] Health system
+- [x] Damage system
+- [x] Player death
+- [x] Basic interaction system
+- [x] Inventory
+- [x] Searchable containers
+- [x] Loot system
 - [x] Basic environment
-- [x] Road
 - [x] Trees
-- [x] House exterior
-- [x] Abandoned car
+- [x] Road
+- [x] House
+- [x] Abandoned vehicle
+- [x] Zombie AI
 - [x] Zombie navigation
-- [x] Zombie detection and chase
-- [x] Zombie attack
-- [x] Player health
-- [x] Player damage
-- [x] Player death and restart
-- [x] Reusable interaction system
-- [x] Interaction prompt
-- [x] Minimal player inventory
-- [x] Prototype bandage usage
+- [x] Zombie attacks
+- [x] Basic lighting
+- [x] Save / Load
 
 ---
 
-# Vertical Slice 1 — Search and Loot
+# Vertical Slice 1 — Search & Loot ✅
 
-## Search Flow
+Completed.
 
-- [x] Hold interaction input to search
-- [x] Display search progress
-- [x] Cancel search when interaction input is released
-- [x] Cancel search when the player leaves interaction range
-- [x] Prevent player movement while searching
-- [x] Open container inventory when searching completes
-
-## Container Inventory
-
-- [x] Create reusable container inventory data
-- [x] Keep container items separate from player inventory
-- [x] Create container inventory UI
-- [x] Show container display name
-- [x] List contained items
-- [x] Close container UI
-- [x] Pause or restrict player control while container UI is open
-
-## Item Transfers
-
-- [x] Select an item in the container
-- [x] Transfer selected item to player inventory
-- [x] Remove transferred item from container inventory
-- [x] Prevent transfer when player inventory is full
-- [x] Display player inventory beside container inventory
-- [x] Select an item in player inventory
-- [x] Transfer player item into open container
-- [x] Update both inventories immediately
-- [x] Preserve stack quantities during transfers
-
-## Container State
-
-- [x] Generate container loot only once
-- [x] Preserve uncollected items in the container
-- [x] Preserve items added by the player
-- [x] Remember whether the container has been searched
-- [x] Keep state while the current scene remains loaded
-
-## Prototype Loot
-
-- [x] Bandage item
-- [x] Water item
-- [x] Food item
-- [x] Extensible loot-table definition
-- [x] Randomise abandoned-car contents
-- [x] Allow an empty loot result
-- [x] Do not automatically award generated loot
-
-## Item Usage
-
-- [x] Use bandage from player inventory
-- [x] Bandage restores health
-- [x] Bandage is consumed
-- [x] Food placeholder behaviour
-- [x] Water placeholder behaviour
-- [x] Prevent invalid item usage
-
-## Reusable Containers
-
-- [x] Convert abandoned car to reusable searchable-container setup
-- [x] Create searchable crate
-- [x] Create searchable cupboard
-- [x] Allow per-container display name
-- [x] Allow per-container search duration
-- [x] Allow per-container loot table
-
-## Inventory Interface Polish
-
-- [x] Highlight and describe the selected player or container item
-- [x] Show Take, Store and Use availability from current capacity and player state
-- [x] Support mouse selection, keyboard focus navigation and Escape close
+- [x] Search mechanic
+- [x] Loot containers
+- [x] Inventory transfer
+- [x] Item stacking
+- [x] Medical items
+- [x] Food
+- [x] Water
+- [x] Scrap
+- [x] Loot persistence
 
 ---
 
 # Vertical Slice 2 — Melee Survival
 
-## Player Combat
+Completed except final polish.
 
-- [x] Basic melee input
-- [x] Melee attack animation
-- [x] Attack cooldown
-- [x] Attack range
-- [x] Attack hit detection
-- [x] Prevent repeated damage from one attack
-
-## Zombie Health
-
-- [x] Zombie health
-- [x] Zombie receives damage
-- [x] Zombie hit reaction
+- [x] Baseball bat
+- [x] Zombie damage
+- [x] Knockback
 - [x] Zombie death
-- [x] Disable dead-zombie navigation
-- [x] Disable dead-zombie attacks
-- [x] Disable dead-zombie collision
+- [x] Corpse loot
 
-## Combat Feedback
+Remaining
 
 - [ ] Player hit feedback
-- [x] Zombie hit feedback
-- [ ] Basic impact sound
-- [ ] Basic attack sound
-- [x] Temporary death presentation
-
-## Corpse Loot
-
-- [x] Keep dead zombies as searchable corpses
-- [x] Attach reusable container inventory to each corpse
-- [x] Generate deterministic randomized corpse loot only once
-- [x] Include Bandage, Food, Water and Scrap prototype loot
-- [x] Preserve uncollected corpse loot through save/load
+- [ ] Attack sound effects
+- [ ] Impact sound effects
 
 ---
 
 # Vertical Slice 3 — Building Exploration
 
-## House Entry
+Completed except interior polish.
 
-- [x] Front-door interaction
-- [x] Continuous doorway entry without teleporting
-- [x] Placeholder house interior
-- [x] Interior collision
-- [x] Interior lighting
-- [x] Exit through the same physical doorway
-- [x] Preserve player position across entry and exit
+Completed
 
-## Modular Buildings
+- [x] Enterable buildings
+- [x] Continuous interiors
+- [x] Searchable buildings
 
-- [x] Separate house exterior, interior and root scenes
-- [x] Separate pharmacy exterior, interior and root scenes
-- [x] Separate service-station exterior, interior and root scenes
-- [x] Reusable animated door controller
-- [x] Collision-preserving hinged doors
-- [x] Lightweight warm interior lighting
+Remaining
 
-## Interior Loot
-
-- [ ] Searchable cupboard
-- [ ] Searchable crate
+- [ ] Interior searchable cupboards
+- [ ] Interior searchable crates
 - [ ] Interior loot tables
-- [ ] Preserve container contents while switching locations
-
-## Antibiotics Objective Prototype
-
-- [x] Place antibiotics in a searchable pharmacy container
-- [x] Require explicit transfer into the player inventory
-- [x] Track search, return and completion as structured states
-- [x] Submit antibiotics at the marked safe point
-- [x] Display objective guidance and brief completion feedback
-
-## Objective and Player Feedback Polish
-
-- [x] Queue and fade item, capacity, objective, save and load notifications
-- [x] Suppress repeated notification spam
-- [x] Replace the oversized safe-point glow with compact physical dressing
+- [ ] Interior loot persistence
 
 ---
 
-# Vertical Slice 4 — Expanded Threat
+# Vertical Slice 4 — Expanded Threat ✅
 
-- [x] Approximately fifteen independently functioning zombies
-- [x] Independent zombie health
-- [x] Independent detection and pursuit
-- [x] Prevent excessive zombie overlap
-- [x] Basic wandering
-- [x] Basic patrol area
-- [x] Basic sound attraction
-- [x] Performance test with multiple zombies
+Completed.
 
-## Performance Polish
-
-- [x] Throttle zombie awareness and separation work by distance and interval
-- [x] Reuse zombie line-of-sight query data to avoid per-check allocations
-
-## Pursuit Polish
-
-- [x] Pursue and search the player's last known position after losing sight
-- [x] Resume pending sound investigation or wandering after player search
-- [x] Keep dead-zombie sensing and navigation inactive
-- [x] Strengthen lightweight local separation
+- [x] Multiple zombie types
+- [x] Larger zombie population
+- [x] Better pursuit
+- [x] Better search behaviour
+- [x] Crowd behaviour
 
 ---
 
 # Vertical Slice 5 — Prototype World
 
-- [x] Extend the road
-- [x] Add several building exteriors
-- [x] Add fences
-- [x] Add roadside props
-- [ ] Add additional abandoned vehicles
-- [ ] Add terrain variation
-- [x] Add roadside shoulders
-- [ ] Replace mismatched prototype trees
+Remaining
+
+- [ ] Additional abandoned vehicles
+- [ ] Terrain variation
+- [ ] Replace prototype trees
 - [ ] Define world boundaries
-- [ ] Rebuild navigation for expanded area
-- [ ] Confirm acceptable performance
+- [ ] Final navigation rebuild
+- [ ] Final performance validation
 
 ---
 
-# Vertical Slice 6 — Time and Survival
+# Vertical Slice 6 — Time & Survival ✅
 
-## Time
+Completed.
 
-- [x] Prototype clock
-- [x] Day/night lighting transition
-- [x] Configurable day length
-- [x] Display current time
+- [x] Day/night cycle
+- [x] Flashlight
+- [x] Hunger
+- [x] Thirst
+- [x] Ambient sounds
+- [x] Objectives
+- [x] Notifications
 
-## Flashlight
+---
 
-- [x] Toggle a camera-directed flashlight with F
-- [x] Expose beam range, energy and cone angle
-- [x] Keep the light lightweight for indoor and outdoor use
+# Vertical Slice 6.5 — World Polish
 
-## Needs
+Environment
 
-- [x] Hunger data
-- [x] Thirst data
-- [x] Hunger reduction over time
-- [x] Thirst reduction over time
-- [x] Food restores hunger
-- [x] Water restores thirst
-- [x] Basic hunger and thirst UI
+- [ ] Improve road edges
+- [ ] Road cracks and decals
+- [ ] Terrain blending
+- [ ] Grass variation
+- [ ] Bush variation
+- [ ] Better ground materials
 
-## Atmosphere
+Buildings
 
-- [x] Ambient wind
-- [x] Randomized distant zombie groans
-- [x] Daytime insects
-- [x] Night-time crickets
-- [x] Day/night ambient crossfade
-- [x] Exported atmosphere volume controls
+- [ ] Better house materials
+- [ ] Better pharmacy exterior
+- [ ] Better diner
+- [ ] Better service station
+
+Props
+
+- [ ] More abandoned vehicles
+- [ ] Utility poles
+- [ ] Road signs
+- [ ] Mailboxes
+- [ ] Fences
+- [ ] Garbage
+- [ ] Tyres
+- [ ] Crates
+- [ ] Pallets
+
+Lighting
+
+- [ ] Better sunset lighting
+- [ ] Better moonlight
+- [ ] Better interior lighting
+- [ ] Better street lighting
+
+---
+
+# Vertical Slice 6.75 — Exploration
+
+Pharmacy
+
+- [ ] Shelving
+- [ ] Medicine cabinets
+- [ ] Checkout area
+- [ ] Storage room
+
+Residential Houses
+
+- [ ] Bedrooms
+- [ ] Kitchens
+- [ ] Bathrooms
+- [ ] Living rooms
+
+Service Station
+
+- [ ] Garage
+- [ ] Workshop
+- [ ] Store room
+
+Diner
+
+- [ ] Dining area
+- [ ] Kitchen
+- [ ] Office
+
+Loot
+
+- [ ] Logical loot placement
+- [ ] Rare loot
+- [ ] Medical loot
+- [ ] Tool loot
 
 ---
 
 # Vertical Slice 7 — Survivor Prototype
 
-- [ ] Survivor character
-- [ ] Survivor idle behaviour
-- [ ] Survivor follow behaviour
-- [ ] Basic dialogue UI
-- [ ] Dialogue choice
+Keep this intentionally small.
+
+- [ ] One survivor
+- [ ] Idle behaviour
+- [ ] Follow behaviour
+- [ ] Wait command
+- [ ] Dialogue window
 - [ ] Trust value
-- [ ] Structured memory record
-- [ ] One player choice that changes trust
+- [ ] One player decision affecting trust
+
+Stop after this slice.
 
 ---
 
-# Prototype Save/Load
+# Prototype Completion Checklist
 
-- [x] Versioned save-data classes without live-node serialization
-- [x] One local F5/F9 save slot with brief status feedback
-- [x] Restore player transform, health, stamina and inventory
-- [x] Restore objective state and world time
-- [x] Restore existing container search state and remaining items
-- [x] Restore placed zombie alive/dead state
-- [x] Handle missing and invalid save files safely
+The prototype is considered complete when:
 
----
+- [ ] Every roadmap task is complete
+- [ ] Stable 60+ FPS on the development laptop
+- [ ] No gameplay-blocking bugs
+- [ ] No crashes during normal gameplay
+- [ ] One complete gameplay loop is fully playable
 
-# Autonomous Polish Batch
+Gameplay loop
 
-- [x] Improve rendered prototype performance and add a repeatable fixed-scene benchmark
-- [x] Improve nighttime lighting readability
-- [x] Polish the player flashlight
-- [x] Improve zombie crowd performance and separation
-- [x] Improve melee responsiveness
-- [x] Refine inventory and container usability
-- [x] Harden prototype save loading
-- [x] Polish antibiotics objective flow
-- [x] Balance prototype ambience
-- [ ] Validate and clean the autonomous polish batch
+```
+Spawn
+↓
+Search buildings
+↓
+Fight zombies
+↓
+Collect supplies
+↓
+Complete objectives
+↓
+Return to safe point
+↓
+Save
+↓
+Load
+↓
+Continue playing
+```
 
----
-
-# Autonomous Prototype Expansion
-
-- [x] Expanded item definitions
-- [x] Weighted container loot tables
-- [x] Inventory stack management
-- [x] Zombie variant profiles
-- [x] Melee weapon data foundation
-- [x] World interaction consistency
-- [x] Main menu
-- [x] Persistent settings menu
-- [x] Pause menu
-- [x] Service-station supplies objective
-- [x] Safe-point storage
-- [x] Town composition polish
-- [x] Environmental storytelling
-- [x] Direct-launch development script
-- [x] Representative full-game performance benchmark
-- [x] Final autonomous regression pass
-
-## Current Prototype Limitations
-
-- One small handcrafted map and one fixed zombie population
-- One usable melee weapon and no equipment, firearms or crafting
-- Two authored objectives rather than a general quest system
-- One local save slot with no profiles or broad save-version migration
-- Static environmental-storytelling props with no new interactions
-- Placeholder geometry, item icons and procedural atmosphere audio
-- No survivors, dialogue, vehicles, weather or community simulation
-- Godot .NET headless tests can emit a known four-object shutdown leak warning;
-  rapid multi-process runs may rarely need an isolated retry after printing PASS
+Once this checklist is complete, the prototype has achieved its purpose.
 
 ---
 
-# Later
+# Phase 2 — Production Alpha
 
-- Community and safehouse
-- Advanced survivor relationships
-- Character needs and schedules
-- Weapons
-- Firearms
-- Infection
-- Vehicles
-- Weather
-- Story
-- Quests
-- Radio system
-- Larger handcrafted world
-- Steam integration
+The prototype becomes a real game.
+
+World
+
+- [ ] Replace all placeholder buildings
+- [ ] Replace all placeholder props
+- [ ] High-quality terrain
+- [ ] Better vegetation
+- [ ] Larger handcrafted town
+
+Gameplay
+
+- [ ] Firearms
+- [ ] Weapon durability
+- [ ] Crafting
+- [ ] Barricading
+- [ ] Infection
+- [ ] Safehouse
+
+Survivors
+
+- [ ] Multiple survivors
+- [ ] Relationships
+- [ ] Trading
+- [ ] Base assignments
+
+Audio
+
+- [ ] Music
+- [ ] Footsteps
+- [ ] Zombie audio
+- [ ] Indoor ambience
+
+Art
+
+- [ ] Final UI
+- [ ] Icons
+- [ ] VFX
+- [ ] Better animations
 
 ---
 
-# Town Expansion Pass
+# Phase 3 — Full Game
 
-- [x] Add one attached residential district with an extended road, one new
-  street, eight modular houses, complete lot dressing, abandoned vehicles and
-  connected navigation
-- [x] Add one enterable modular diner landmark with existing door interaction,
-  lightweight interior lighting and separate searchable food containers
-- [x] Improve the road network with a second intersection, sidewalks, shoulders,
-  markings, street/stop signs, barriers and connected navigation
-- [x] Improve town atmosphere with restrained commercial, diner, residential
-  and maintenance prop clusters using existing assets
-- [x] Redistribute the existing 15 zombies into quiet areas, pharmacy/service
-  hotspots, residential groups and one dangerous road-end hotspot
-- [x] Improve logical loot placement for pharmacy/bathroom medicine,
-  house/diner/service-station food and service-station tools
-- [x] Add emergency-roadblock, residential-evacuation and diner-casualty scenes
-  to the existing static environmental storytelling
-- [x] Complete a world-polish pass for road/lot clipping, prop clearance,
-  lighting consistency and rebuilt navigation
+Only begin after Phase 2 is stable.
+
+World
+
+- [ ] Larger map
+- [ ] Multiple towns
+- [ ] Forests
+- [ ] Rural areas
+
+Gameplay
+
+- [ ] Vehicles
+- [ ] Weather
+- [ ] Story
+- [ ] Quests
+- [ ] Radio system
+- [ ] Dynamic events
+
+Systems
+
+- [ ] Steam achievements
+- [ ] Steam Cloud
+- [ ] Controller support
+- [ ] Multiple save slots
+- [ ] Settings polish
+- [ ] Final optimization
+
+Release
+
+- [ ] Beta
+- [ ] Release Candidate
+- [ ] Steam Release
