@@ -55,7 +55,7 @@
 [ext_resource type="PackedScene" uid="uid://b83nc4eh3isht" path="res://assets/environment/buildings/Diner/diner.tscn" id="50_diner"]
 [ext_resource type="PackedScene" uid="uid://cxag0cl12kkfm" path="res://scenes/environment/town_road_network.tscn" id="51_road_network"]
 [ext_resource type="PackedScene" path="res://scenes/environment/town_atmosphere_pass.tscn" id="52_atmosphere_pass"]
-[ext_resource type="Script" path="res://scripts/weapons/WeaponAttachmentController.cs" id="54_weapon_attachment"]
+[ext_resource type="Script" uid="uid://busk2gnafli74" path="res://scripts/weapons/WeaponAttachmentController.cs" id="54_weapon_attachment"]
 
 [sub_resource type="BoxMesh" id="GrassMesh"]
 material = ExtResource("8_grass")
@@ -406,7 +406,6 @@ script = ExtResource("23_inventory")
 [node name="MeleeCombat" type="Node3D" parent="Player" unique_id=2129107630]
 script = ExtResource("38_melee")
 WeaponDefinition = ExtResource("44_baseball_bat")
-AttackDuration = 0.68
 HitMoment = 0.4
 
 [node name="WeaponPivot" type="Node3D" parent="Player/MeleeCombat" unique_id=372816950]
@@ -418,12 +417,24 @@ transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, -1, 0)
 [node name="Remy" parent="Player/Visual" unique_id=615219697 instance=ExtResource("3_remy")]
 
 [node name="Skeleton3D" parent="Player/Visual/Remy" index="0" unique_id=635193917]
-bones/17/rotation = Quaternion(0.25189453, -0.059464402, 0.22192542, 0.9400863)
-bones/34/rotation = Quaternion(0.008705135, -0.0008868446, -0.10134756, 0.9948126)
-bones/41/rotation = Quaternion(0.25189725, 0.05946548, -0.22192715, 0.9400852)
+bones/0/position = Vector3(-0.00041841506, 2.0907955, -0.014165651)
+bones/9/rotation = Quaternion(-0.41797325, -0.51503944, 0.5575851, -0.49913093)
+bones/10/rotation = Quaternion(0.014758642, 0.0011320582, 0.07646946, 0.9969621)
+bones/12/rotation = Quaternion(2.9805765e-08, 0.000115677714, -2.980576e-08, 1)
+bones/17/rotation = Quaternion(0.25184977, -0.05948836, 0.22197582, 0.9400849)
+bones/33/rotation = Quaternion(0.4193531, -0.51384926, 0.5803352, 0.47256017)
+bones/34/rotation = Quaternion(0.008637618, -0.0008798077, -0.10134822, 0.99481314)
+bones/36/rotation = Quaternion(4.772985e-12, -5.3584576e-05, 8.940537e-08, 1)
+bones/41/rotation = Quaternion(0.2518744, 0.059476495, -0.22194818, 0.94008565)
+bones/57/rotation = Quaternion(-3.3372849e-06, -0.0015365232, 0.99999595, 0.002383186)
+bones/58/rotation = Quaternion(-0.035844542, -3.0150115e-05, 0.0050147404, 0.9993449)
+bones/59/rotation = Quaternion(0.44507322, -0.019626278, 0.034769624, 0.89460367)
+bones/62/rotation = Quaternion(4.031827e-05, 0.011048188, 0.9999338, -0.0032380049)
+bones/63/rotation = Quaternion(-0.046335205, 1.789706e-05, -0.0067078145, 0.99890345)
+bones/64/rotation = Quaternion(0.4468175, 0.02294471, -0.039689604, 0.8934497)
 
 [node name="RightHandWeaponAttachment" type="BoneAttachment3D" parent="Player/Visual/Remy/Skeleton3D" index="7" unique_id=372434050]
-transform = Transform3D(-9.3877316e-07, -0.99999994, -7.8231096e-08, 1.5227124e-07, 2.9802322e-08, -1, 1, -8.6296353e-07, 8.986122e-08, -1.4574536, 2.9993963, -0.12103975)
+transform = Transform3D(9.5103815e-08, -0.99999994, 3.147768e-07, -0.00010688214, -3.20375e-07, -1.0000001, 0.99999994, 1.3359619e-07, -0.0001068781, -1.7024353, 2.9986477, -0.121040344)
 bone_name = "mixamorig_RightHand"
 bone_idx = 36
 script = ExtResource("54_weapon_attachment")

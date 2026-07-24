@@ -1,7 +1,7 @@
-[gd_resource type="Resource" script_class="WeaponAttachmentDefinition" load_steps=6 format=3]
+[gd_resource type="Resource" script_class="WeaponAttachmentDefinition" format=3 uid="uid://d0pwlndqvxydi"]
 
-[ext_resource type="Script" path="res://scripts/weapons/WeaponAttachmentDefinition.cs" id="1_definition"]
-[ext_resource type="Script" path="res://scripts/weapons/WeaponGripPose.cs" id="2_pose"]
+[ext_resource type="Script" uid="uid://bgrshlr8oykce" path="res://scripts/weapons/WeaponAttachmentDefinition.cs" id="1_definition"]
+[ext_resource type="Script" uid="uid://coymwcjsck7ss" path="res://scripts/weapons/WeaponGripPose.cs" id="2_pose"]
 [ext_resource type="PackedScene" uid="uid://2b74dkqcteu0" path="res://assets/weapons/baseball_bat.tscn" id="3_bat"]
 
 [sub_resource type="Resource" id="GripTwoHandIdle"]
@@ -26,5 +26,4 @@ BlendDuration = 0.06
 [resource]
 script = ExtResource("1_definition")
 WeaponScene = ExtResource("3_bat")
-Handedness = 1
 GripPoses = Array[ExtResource("2_pose")]([SubResource("GripTwoHandIdle"), SubResource("GripLocomotion"), SubResource("GripMeleeAttack")])
