@@ -12,17 +12,17 @@ public partial class PlayerAnimationController : AnimationTree
 	private const string WalkAnimationName = "Walk";
 	private const string RunAnimationName = "Run";
 	private const string TwoHandIdleAnimationName = "TwoHandIdle";
-	private const string MeleeDownwardAnimationName = "MeleeAttackDownward";
-	private const string MeleeBackhandAnimationName = "MeleeAttackBackhand";
-	private const string MeleeRunJumpAnimationName = "MeleeAttackRunJump";
+	private const string MeleeComboRightAnimationName = "MeleeComboRight";
+	private const string MeleeComboLeftAnimationName = "MeleeComboLeft";
+	private const string MeleeComboDownAnimationName = "MeleeComboDown";
 	private const string TwoHandIdlePath =
 	"res://assets/characters/player/2hand Idle.fbx";
-	private const string MeleeDownwardPath =
-		"res://assets/characters/player/anim/Standing Melee Attack Downward.fbx";
-	private const string MeleeBackhandPath =
-		"res://assets/characters/player/anim/Standing Melee Attack Backhand.fbx";
-	private const string MeleeRunJumpPath =
-		"res://assets/characters/player/anim/Standing Melee Run Jump Attack.fbx";
+	private const string MeleeComboRightPath =
+		"res://assets/characters/player/anim/comboright.fbx";
+	private const string MeleeComboLeftPath =
+		"res://assets/characters/player/anim/comboleft.fbx";
+	private const string MeleeComboDownPath =
+		"res://assets/characters/player/anim/combodown.fbx";
 	private const string IdlePath = "res://assets/characters/player/Idle.fbx";
 	private const string WalkPath = "res://assets/characters/player/Walking.fbx";
 	private const string RunPath = "res://assets/characters/player/Fast Run.fbx";
@@ -106,9 +106,9 @@ public partial class PlayerAnimationController : AnimationTree
 		Set($"parameters/Attack{attackIndex + 1}/request", 1);
 		LastMeleeAnimationName = attackIndex switch
 		{
-			1 => MeleeBackhandAnimationName,
-			2 => MeleeRunJumpAnimationName,
-			_ => MeleeDownwardAnimationName,
+			1 => MeleeComboLeftAnimationName,
+			2 => MeleeComboDownAnimationName,
+			_ => MeleeComboRightAnimationName,
 		};
 	}
 
@@ -193,9 +193,9 @@ public partial class PlayerAnimationController : AnimationTree
 
 		string[] attackNames =
 		{
-			MeleeDownwardAnimationName,
-			MeleeBackhandAnimationName,
-			MeleeRunJumpAnimationName,
+			MeleeComboRightAnimationName,
+			MeleeComboLeftAnimationName,
+			MeleeComboDownAnimationName,
 		};
 		string previousNode = "RunBlend";
 		for (int attack = 0; attack < attackNames.Length; attack++)
@@ -247,18 +247,18 @@ public partial class PlayerAnimationController : AnimationTree
 		AnimationLibrary library = animationPlayer.GetAnimationLibrary("");
 		_meleeAnimationLengths[0] = AddAnimation(
 			library,
-			MeleeDownwardAnimationName,
-			MeleeDownwardPath,
+			MeleeComboRightAnimationName,
+			MeleeComboRightPath,
 			shouldLoop: false);
 		_meleeAnimationLengths[1] = AddAnimation(
 			library,
-			MeleeBackhandAnimationName,
-			MeleeBackhandPath,
+			MeleeComboLeftAnimationName,
+			MeleeComboLeftPath,
 			shouldLoop: false);
 		_meleeAnimationLengths[2] = AddAnimation(
 			library,
-			MeleeRunJumpAnimationName,
-			MeleeRunJumpPath,
+			MeleeComboDownAnimationName,
+			MeleeComboDownPath,
 			shouldLoop: false);
 	}
 

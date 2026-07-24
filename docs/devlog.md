@@ -1818,8 +1818,8 @@ Validation:
 
 Completed:
 
-- Replaced the regular swing with the downloaded standing downward attack
-- Queued rapid clicks as three separate downward, backhand and run-jump attacks
+- Replaced the regular swing with the first authored combo stage
+- Queued rapid clicks as separate right, left and downward combo stages
 - Kept one damage event and recovery phase per animation
 - Removed the combined Combo Ver. 2 playback path
 - Changed the prototype's starting time to late morning for clearer evaluation
