@@ -1,7 +1,6 @@
 #nullable enable
 
 using System;
-using System.Collections.Generic;
 using Godot;
 
 namespace AshwoodCounty3DPrototype.Player;
@@ -13,13 +12,16 @@ public partial class PlayerAnimationController : AnimationTree
 	private const string WalkAnimationName = "Walk";
 	private const string RunAnimationName = "Run";
 	private const string TwoHandIdleAnimationName = "TwoHandIdle";
-	private const string MeleeAttackAnimationName = "MeleeAttack";
+	private const string MeleeAttackAnimationName = "MeleeAttackDownward";
+	private const string MeleeComboAnimationName = "MeleeComboAttack";
 	private const string TwoHandIdlePath =
 	"res://assets/characters/player/2hand Idle.fbx";
-	private const string UniversalAnimationLibraryPath =
-		"res://assets/characters/player/anim/UAL1_Standard.glb";
-	private const string UniversalMeleeAttackName = "Sword_Attack";
-	private const float UniversalMeleeAttackLength = 1.5333333f;
+	private const string MeleeAttackPath =
+		"res://assets/characters/player/anim/Standing Melee Attack Downward.fbx";
+	private const string MeleeComboPath =
+		"res://assets/characters/player/anim/Standing Melee Combo Attack Ver. 2.fbx";
+	private const float MeleeAttackLength = 1.3333333f;
+	private const float MeleeComboLength = 3.7666667f;
 	private const string IdlePath = "res://assets/characters/player/Idle.fbx";
 	private const string WalkPath = "res://assets/characters/player/Walking.fbx";
 	private const string RunPath = "res://assets/characters/player/Fast Run.fbx";
@@ -31,34 +33,8 @@ public partial class PlayerAnimationController : AnimationTree
 	private bool _isTwoHandedWeaponEquipped;
 	private float _twoHandIdleBlend;
 	private AnimationPlayer _animationPlayer = null!;
+	public StringName LastMeleeAnimationName { get; private set; } = new();
 
-	private static readonly Dictionary<string, string> UniversalToMixamoBones =
-		new(StringComparer.OrdinalIgnoreCase)
-		{
-			["pelvis"] = "mixamorig_Hips",
-			["spine_01"] = "mixamorig_Spine",
-			["spine_02"] = "mixamorig_Spine1",
-			["spine_03"] = "mixamorig_Spine2",
-			["neck_01"] = "mixamorig_Neck",
-			["head"] = "mixamorig_Head",
-			["clavicle_l"] = "mixamorig_LeftShoulder",
-			["upperarm_l"] = "mixamorig_LeftArm",
-			["lowerarm_l"] = "mixamorig_LeftForeArm",
-			["hand_l"] = "mixamorig_LeftHand",
-			["clavicle_r"] = "mixamorig_RightShoulder",
-			["upperarm_r"] = "mixamorig_RightArm",
-			["lowerarm_r"] = "mixamorig_RightForeArm",
-			["hand_r"] = "mixamorig_RightHand",
-			["thigh_l"] = "mixamorig_LeftUpLeg",
-			["calf_l"] = "mixamorig_LeftLeg",
-			["foot_l"] = "mixamorig_LeftFoot",
-			["ball_l"] = "mixamorig_LeftToeBase",
-			["thigh_r"] = "mixamorig_RightUpLeg",
-			["calf_r"] = "mixamorig_RightLeg",
-			["foot_r"] = "mixamorig_RightFoot",
-			["ball_r"] = "mixamorig_RightToeBase",
-		};
-	
 	public void SetTwoHandedWeaponEquipped(bool equipped)
 	{
 		_isTwoHandedWeaponEquipped = equipped;
@@ -71,7 +47,7 @@ public partial class PlayerAnimationController : AnimationTree
 			?? throw new InvalidOperationException("Remy is missing an AnimationPlayer.");
 
 		AddLocomotionAnimations(_animationPlayer);
-		AddUniversalMeleeAnimation(_animationPlayer);
+		AddMeleeAnimations(_animationPlayer);
 		ConfigureBlendTree(_animationPlayer);
 	}
 
@@ -129,8 +105,17 @@ public partial class PlayerAnimationController : AnimationTree
 		float duration = Mathf.Max(attackDuration, 0.05f);
 		Set(
 			"parameters/AttackSpeed/scale",
-			(UniversalMeleeAttackLength / duration) * comboSpeedScale);
+			(MeleeAttackLength / duration) * comboSpeedScale);
 		Set("parameters/MeleeAttack/request", 1);
+		LastMeleeAnimationName = MeleeAttackAnimationName;
+	}
+
+	public void PlayMeleeCombo(float comboDuration)
+	{
+		float duration = Mathf.Max(comboDuration, 0.05f);
+		Set("parameters/ComboAttackSpeed/scale", MeleeComboLength / duration);
+		Set("parameters/AuthoredCombo/request", 1);
+		LastMeleeAnimationName = MeleeComboAnimationName;
 	}
 
 	private void AddLocomotionAnimations(AnimationPlayer animationPlayer)
@@ -143,7 +128,11 @@ public partial class PlayerAnimationController : AnimationTree
 		AddAnimation(library, RunAnimationName, RunPath);
 	}
 
-	private static void AddAnimation(AnimationLibrary library, string name, string assetPath)
+	private static void AddAnimation(
+		AnimationLibrary library,
+		string name,
+		string assetPath,
+		bool shouldLoop = true)
 	{
 		PackedScene animationScene = ResourceLoader.Load<PackedScene>(assetPath);
 		Node sourceRoot = animationScene.Instantiate();
@@ -152,7 +141,9 @@ public partial class PlayerAnimationController : AnimationTree
 		Animation sourceAnimation = sourcePlayer.GetAnimation(SourceAnimationName);
 		Animation animation = (Animation)sourceAnimation.Duplicate(true);
 
-		animation.LoopMode = Animation.LoopModeEnum.Linear;
+		animation.LoopMode = shouldLoop
+			? Animation.LoopModeEnum.Linear
+			: Animation.LoopModeEnum.None;
 		KeepRootMotionInPlace(animation);
 		library.AddAnimation(name, animation);
 		sourceRoot.Free();
@@ -216,6 +207,18 @@ public partial class PlayerAnimationController : AnimationTree
 			new Vector2(180.0f, 180.0f)
 		);
 
+		blendTree.AddNode(
+			"ComboAttackClip",
+			CreateAnimationNode(MeleeComboAnimationName),
+			new Vector2(-40.0f, 300.0f)
+		);
+
+		blendTree.AddNode(
+			"ComboAttackSpeed",
+			new AnimationNodeTimeScale(),
+			new Vector2(180.0f, 300.0f)
+		);
+
 		AnimationNodeOneShot meleeAttack = new();
 		meleeAttack.Set("fadein_time", 0.08f);
 		meleeAttack.Set("fadeout_time", 0.14f);
@@ -223,6 +226,15 @@ public partial class PlayerAnimationController : AnimationTree
 			"MeleeAttack",
 			meleeAttack,
 			new Vector2(420.0f, 0.0f)
+		);
+
+		AnimationNodeOneShot authoredCombo = new();
+		authoredCombo.Set("fadein_time", 0.07f);
+		authoredCombo.Set("fadeout_time", 0.16f);
+		blendTree.AddNode(
+			"AuthoredCombo",
+			authoredCombo,
+			new Vector2(650.0f, 0.0f)
 		);
 
 		blendTree.ConnectNode("IdleType", 0, "Idle");
@@ -237,86 +249,31 @@ public partial class PlayerAnimationController : AnimationTree
 		blendTree.ConnectNode("AttackSpeed", 0, "AttackClip");
 		blendTree.ConnectNode("MeleeAttack", 0, "RunBlend");
 		blendTree.ConnectNode("MeleeAttack", 1, "AttackSpeed");
-		blendTree.ConnectNode("output", 0, "MeleeAttack");
+		blendTree.ConnectNode("ComboAttackSpeed", 0, "ComboAttackClip");
+		blendTree.ConnectNode("AuthoredCombo", 0, "MeleeAttack");
+		blendTree.ConnectNode("AuthoredCombo", 1, "ComboAttackSpeed");
+		blendTree.ConnectNode("output", 0, "AuthoredCombo");
 
 		AnimPlayer = GetPathTo(animationPlayer);
 		TreeRoot = blendTree;
 		Active = true;
 	}
 
-	private static void AddUniversalMeleeAnimation(AnimationPlayer animationPlayer)
+	private static void AddMeleeAnimations(AnimationPlayer animationPlayer)
 	{
-		PackedScene animationScene =
-			ResourceLoader.Load<PackedScene>(UniversalAnimationLibraryPath);
-		Node sourceRoot = animationScene.Instantiate();
-		AnimationPlayer sourcePlayer = FindDescendant<AnimationPlayer>(sourceRoot)
-			?? throw new InvalidOperationException(
-				$"{UniversalAnimationLibraryPath} is missing an AnimationPlayer.");
-		if (!sourcePlayer.HasAnimation(UniversalMeleeAttackName))
-		{
-			sourceRoot.Free();
-			throw new InvalidOperationException(
-				$"{UniversalAnimationLibraryPath} is missing {UniversalMeleeAttackName}.");
-		}
-
-		AnimationLibrary targetLibrary = animationPlayer.GetAnimationLibrary("");
-		string targetSkeletonPath = GetTargetSkeletonPath(
-			targetLibrary.GetAnimation(IdleAnimationName));
-		Animation animation = (Animation)sourcePlayer
-			.GetAnimation(UniversalMeleeAttackName)
-			.Duplicate(true);
-
-		for (int track = animation.GetTrackCount() - 1; track >= 0; track--)
-		{
-			if (animation.TrackGetType(track) != Animation.TrackType.Rotation3D)
-			{
-				animation.RemoveTrack(track);
-				continue;
-			}
-
-			string sourceBone = GetTrackBoneName(animation.TrackGetPath(track));
-			if (!UniversalToMixamoBones.TryGetValue(sourceBone, out string? targetBone))
-			{
-				animation.RemoveTrack(track);
-				continue;
-			}
-
-			animation.TrackSetPath(
-				track,
-				new NodePath($"{targetSkeletonPath}:{targetBone}"));
-		}
-
-		animation.LoopMode = Animation.LoopModeEnum.None;
-		targetLibrary.AddAnimation(
+		AnimationLibrary library = animationPlayer.GetAnimationLibrary("");
+		AddAnimation(
+			library,
 			MeleeAttackAnimationName,
-			animation);
-		sourceRoot.Free();
+			MeleeAttackPath,
+			shouldLoop: false);
+		AddAnimation(
+			library,
+			MeleeComboAnimationName,
+			MeleeComboPath,
+			shouldLoop: false);
 	}
 
-	private static string GetTargetSkeletonPath(Animation animation)
-	{
-		for (int track = 0; track < animation.GetTrackCount(); track++)
-		{
-			string path = animation.TrackGetPath(track).ToString();
-			if (!path.EndsWith(":mixamorig_Hips", StringComparison.Ordinal))
-			{
-				continue;
-			}
-
-			return path[..path.LastIndexOf(':')];
-		}
-
-		throw new InvalidOperationException(
-			"Remy's idle animation is missing its hips track.");
-	}
-
-	private static string GetTrackBoneName(NodePath path)
-	{
-		string value = path.ToString();
-		int separator = value.LastIndexOf(':');
-		return separator >= 0 ? value[(separator + 1)..] : value;
-	}
-	
 	private static AnimationNodeAnimation CreateAnimationNode(string animationName)
 	{
 		return new AnimationNodeAnimation

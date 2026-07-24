@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="WeaponAttachmentDefinition" load_steps=6 format=3]
+[gd_resource type="Resource" script_class="WeaponAttachmentDefinition" load_steps=7 format=3]
 
 [ext_resource type="Script" path="res://scripts/weapons/WeaponAttachmentDefinition.cs" id="1_definition"]
 [ext_resource type="Script" path="res://scripts/weapons/WeaponGripPose.cs" id="2_pose"]
@@ -23,8 +23,15 @@ Position = Vector3(0, 0.016, 0.045)
 RotationDegrees = Vector3(-4, 0, 4)
 BlendDuration = 0.06
 
+[sub_resource type="Resource" id="GripMeleeCombo"]
+script = ExtResource("2_pose")
+PoseName = &"MeleeCombo"
+Position = Vector3(0, 0.012, 0.038)
+RotationDegrees = Vector3(-2, 0, 2)
+BlendDuration = 0.06
+
 [resource]
 script = ExtResource("1_definition")
 WeaponScene = ExtResource("3_bat")
 Handedness = 1
-GripPoses = Array[ExtResource("2_pose")]([SubResource("GripTwoHandIdle"), SubResource("GripLocomotion"), SubResource("GripMeleeAttack")])
+GripPoses = Array[ExtResource("2_pose")]([SubResource("GripTwoHandIdle"), SubResource("GripLocomotion"), SubResource("GripMeleeAttack"), SubResource("GripMeleeCombo")])

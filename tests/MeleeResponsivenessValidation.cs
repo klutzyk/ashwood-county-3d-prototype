@@ -48,6 +48,7 @@ public partial class MeleeResponsivenessValidation : Node
 			combat.AttackDuration = 0.3f;
 			combat.HitMoment = 0.45f;
 			combat.ComboQueueOpenMoment = 0.38f;
+			combat.QuickComboInputWindow = 0.2f;
 			combat.MaximumComboAttacks = 3;
 			weapon.Cooldown = 0.2f;
 			weapon.Damage = 20.0f;

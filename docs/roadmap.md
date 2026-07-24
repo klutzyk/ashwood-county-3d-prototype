@@ -70,6 +70,7 @@ Completed except final polish.
 - [x] Zombie death
 - [x] Corpse loot
 - [x] Authored two-handed attack animation
+- [x] Mixamo downward strike and rapid-input authored combo
 - [x] Three-step melee combo with anticipation and recovery
 - [x] Visual impact timing and anti-spam input rules
 - [x] Authored zombie hit reactions with directional knockback and hit stun

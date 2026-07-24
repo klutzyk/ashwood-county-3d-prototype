@@ -1811,3 +1811,21 @@ Validation:
 
 - Melee-responsiveness and zombie-variant validations passed
 - C# build completed with no warnings or errors
+
+---
+
+## Mixamo Melee Animation Pass
+
+Completed:
+
+- Replaced the regular swing with the downloaded standing downward attack
+- Added rapid three-input detection that crossfades anticipation into Standing
+  Melee Combo Attack Ver. 2
+- Synchronized the combo's three damage events to its authored motion peaks
+- Added separate attachment correction for the authored combo without IK
+
+Validation:
+
+- Rendered downward and combo poses remained hand-bound without body clipping
+- Player-melee-animation, melee-responsiveness and weapon-attachment validations passed
+- C# build completed with no warnings or errors

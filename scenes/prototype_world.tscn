@@ -406,7 +406,7 @@ script = ExtResource("23_inventory")
 script = ExtResource("38_melee")
 WeaponDefinition = ExtResource("44_baseball_bat")
 AttackDuration = 0.68
-HitMoment = 0.72
+HitMoment = 0.4
 ComboQueueOpenMoment = 0.55
 
 [node name="WeaponPivot" type="Node3D" parent="Player/MeleeCombat" unique_id=372816950]
