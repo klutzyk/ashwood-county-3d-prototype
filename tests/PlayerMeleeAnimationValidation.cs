@@ -11,9 +11,7 @@ public partial class PlayerMeleeAnimationValidation : Node
 {
 	private static readonly string[] AssetPaths =
 	{
-		"res://assets/characters/player/anim/comboright.fbx",
-		"res://assets/characters/player/anim/comboleft.fbx",
-		"res://assets/characters/player/anim/combodown.fbx",
+		"res://assets/characters/player/anim/Standing Melee Attack Downward.fbx",
 	};
 
 	public override async void _Ready()
@@ -54,27 +52,15 @@ public partial class PlayerMeleeAnimationValidation : Node
 			combat.SetProcess(false);
 
 			Require(combat.TryAttack() &&
-				animationController.LastMeleeAnimationName == "MeleeComboRight",
-				"first input starts the authored right combo stage");
-			Require(combat.RequestAttack() && combat.RequestAttack() &&
-				combat.QueuedComboAttacks == 2,
-				"two additional quick inputs queue two separate attacks");
+				animationController.LastMeleeAnimationName == "MeleeAttackDownward",
+				"left click starts the standing downward attack");
 			Require(!combat.RequestAttack(),
-				"the three-click combo rejects further animation spam");
-
-			combat._Process(combat.AttackDuration);
-			Require(combat.ComboStep == 2 &&
-				animationController.LastMeleeAnimationName == "MeleeComboLeft",
-				"second click starts the authored left combo stage");
-			combat._Process(combat.AttackDuration);
-			Require(combat.ComboStep == 3 &&
-				animationController.LastMeleeAnimationName == "MeleeComboDown",
-				"third click starts the authored downward combo stage");
+				"additional clicks cannot queue a combo");
 			combat._Process(combat.AttackDuration);
 			Require(!combat.IsAttacking &&
 				attachment.CurrentPoseName ==
 					WeaponAttachmentController.TwoHandIdlePoseName,
-				"third attack recovers to the two-handed idle");
+				"downward attack recovers to the two-handed idle");
 
 			GD.Print("PLAYER_MELEE_ANIMATION_VALIDATION: PASS");
 			GetTree().Quit(0);

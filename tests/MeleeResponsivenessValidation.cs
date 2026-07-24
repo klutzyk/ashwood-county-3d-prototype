@@ -47,7 +47,7 @@ public partial class MeleeResponsivenessValidation : Node
 			target.SetPhysicsProcess(false);
 			combat.AttackDuration = 0.3f;
 			combat.HitMoment = 0.45f;
-			combat.MaximumComboAttacks = 3;
+			combat.MaximumComboAttacks = 1;
 			weapon.Cooldown = 0.2f;
 			weapon.Damage = 20.0f;
 			combat.InputBufferDuration = 0.18f;
@@ -65,10 +65,8 @@ public partial class MeleeResponsivenessValidation : Node
 			combat._Process(0.1);
 			Require(Mathf.IsEqualApprox(targetHealth.CurrentHealth, targetHealth.MaximumHealth),
 				"damage waits for the configured impact moment");
-			Require(combat.RequestAttack() && combat.RequestAttack(),
-				"two quick clicks queue separate second and third attacks");
 			Require(!combat.RequestAttack(),
-				"the queued three-step combo blocks further animation spam");
+				"additional clicks cannot queue a combo");
 			combat._Process(0.04);
 			Require(Mathf.IsEqualApprox(
 				targetHealth.CurrentHealth,
@@ -83,31 +81,13 @@ public partial class MeleeResponsivenessValidation : Node
 			Require(player.IsMeleeImpactFeedbackActive,
 				"camera feedback starts only after a confirmed hit");
 			combat._Process(0.16);
-			Require(attacksStarted == 2 && combat.ComboStep == 2,
-				"queued step two starts after the first follow-through");
-			combat._Process(0.14);
-			Require(Mathf.IsEqualApprox(
-				targetHealth.CurrentHealth,
-				targetHealth.MaximumHealth - (weapon.Damage * 2.0f)),
-				"combo step two applies one consistent hit");
-
-			combat._Process(0.16);
-			Require(attacksStarted == 3 && combat.ComboStep == 3,
-				"combo is capped at its authored third step");
-			combat._Process(0.14);
-			Require(Mathf.IsEqualApprox(
-				targetHealth.CurrentHealth,
-				targetHealth.MaximumHealth - (weapon.Damage * 3.0f)),
-				"third swing applies one consistent hit");
-			Require(!combat.RequestAttack(), "a fourth attack cannot be chained");
-			combat._Process(0.16);
 			Require(!combat.CanAttack && !combat.RequestAttack(),
 				"full recovery blocks immediate animation spam");
 			combat._Process(0.03);
 			Require(combat.RequestAttack(), "late recovery input uses the short buffer");
 			combat._Process(0.17);
-			Require(attacksStarted == 4 && combat.ComboStep == 1,
-				"a recovered attack starts a fresh combo");
+			Require(attacksStarted == 2 && combat.ComboStep == 1,
+				"a recovered click starts another downward attack");
 
 			GD.Print("MELEE_RESPONSIVENESS_VALIDATION: PASS");
 			GetTree().Quit(0);
