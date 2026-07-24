@@ -1,6 +1,7 @@
 #nullable enable
 
 using System;
+using System.Collections.Generic;
 using Godot;
 
 namespace AshwoodCounty3DPrototype.Player;
@@ -12,11 +13,14 @@ public partial class PlayerAnimationController : AnimationTree
 	private const string WalkAnimationName = "Walk";
 	private const string RunAnimationName = "Run";
 	private const string TwoHandIdleAnimationName = "TwoHandIdle";
-	private const string MeleeAttackAnimationName = "MeleeAttackDownward";
+	private const string MeleeAttackAnimationName = "MeleeAttack2H01";
+	private const string CombatDamageAnimationName = "CombatDamage01";
 	private const string TwoHandIdlePath =
-	"res://assets/characters/player/2hand Idle.fbx";
+		"res://assets/characters/player/anim/Animations/Male/Combat/2H/HumanM@CombatIdle2H01.fbx";
 	private const string MeleeAttackPath =
-		"res://assets/characters/player/anim/Standing Melee Attack Downward.fbx";
+		"res://assets/characters/player/anim/Animations/Male/Combat/2H/HumanM@Attack2H01.fbx";
+	private const string CombatDamagePath =
+		"res://assets/characters/player/anim/Animations/Male/Combat/HumanM@CombatDamage01.fbx";
 	private const string IdlePath = "res://assets/characters/player/Idle.fbx";
 	private const string WalkPath = "res://assets/characters/player/Walking.fbx";
 	private const string RunPath = "res://assets/characters/player/Fast Run.fbx";
@@ -28,6 +32,7 @@ public partial class PlayerAnimationController : AnimationTree
 	private bool _isTwoHandedWeaponEquipped;
 	private float _twoHandIdleBlend;
 	private AnimationPlayer _animationPlayer = null!;
+	private PlayerHealth _playerHealth = null!;
 	private float _meleeAnimationLength;
 	public StringName LastMeleeAnimationName { get; private set; } = new();
 
@@ -45,6 +50,16 @@ public partial class PlayerAnimationController : AnimationTree
 		AddLocomotionAnimations(_animationPlayer);
 		AddMeleeAnimations(_animationPlayer);
 		ConfigureBlendTree(_animationPlayer);
+		_playerHealth = _player.GetNode<PlayerHealth>("Health");
+		_playerHealth.Damaged += OnPlayerDamaged;
+	}
+
+	public override void _ExitTree()
+	{
+		if (IsInstanceValid(_playerHealth))
+		{
+			_playerHealth.Damaged -= OnPlayerDamaged;
+		}
 	}
 
 	public override void _Process(double delta)
@@ -103,7 +118,7 @@ public partial class PlayerAnimationController : AnimationTree
 		AnimationLibrary library = animationPlayer.GetAnimationLibrary("");
 
 		AddAnimation(library, IdleAnimationName, IdlePath);
-		AddAnimation(library, TwoHandIdleAnimationName, TwoHandIdlePath);
+		AddRetargetedAnimation(library, TwoHandIdleAnimationName, TwoHandIdlePath);
 		AddAnimation(library, WalkAnimationName, WalkPath);
 		AddAnimation(library, RunAnimationName, RunPath);
 	}
@@ -125,6 +140,30 @@ public partial class PlayerAnimationController : AnimationTree
 			? Animation.LoopModeEnum.Linear
 			: Animation.LoopModeEnum.None;
 		KeepRootMotionInPlace(animation);
+		library.AddAnimation(name, animation);
+		float animationLength = (float)animation.Length;
+		sourceRoot.Free();
+		return animationLength;
+	}
+
+	private static float AddRetargetedAnimation(
+		AnimationLibrary library,
+		string name,
+		string assetPath,
+		bool shouldLoop = true)
+	{
+		PackedScene animationScene = ResourceLoader.Load<PackedScene>(assetPath);
+		Node sourceRoot = animationScene.Instantiate();
+		AnimationPlayer sourcePlayer = FindDescendant<AnimationPlayer>(sourceRoot)
+			?? throw new InvalidOperationException($"{assetPath} is missing an AnimationPlayer.");
+		StringName sourceName = GetFirstAnimationName(sourcePlayer, assetPath);
+		Animation animation = (Animation)sourcePlayer.GetAnimation(sourceName).Duplicate(true);
+		Animation targetReference = library.GetAnimation(IdleAnimationName);
+
+		RetargetRotationTracks(animation, targetReference);
+		animation.LoopMode = shouldLoop
+			? Animation.LoopModeEnum.Linear
+			: Animation.LoopModeEnum.None;
 		library.AddAnimation(name, animation);
 		float animationLength = (float)animation.Length;
 		sourceRoot.Free();
@@ -192,6 +231,17 @@ public partial class PlayerAnimationController : AnimationTree
 			"MeleeAttack",
 			meleeAttack,
 			new Vector2(420.0f, 0.0f));
+		blendTree.AddNode(
+			"DamageClip",
+			CreateAnimationNode(CombatDamageAnimationName),
+			new Vector2(420.0f, 180.0f));
+		AnimationNodeOneShot damageReaction = new();
+		damageReaction.Set("fadein_time", 0.05f);
+		damageReaction.Set("fadeout_time", 0.12f);
+		blendTree.AddNode(
+			"DamageReaction",
+			damageReaction,
+			new Vector2(650.0f, 0.0f));
 
 		blendTree.ConnectNode("IdleType", 0, "Idle");
 		blendTree.ConnectNode("IdleType", 1, "TwoHandIdle");
@@ -205,7 +255,9 @@ public partial class PlayerAnimationController : AnimationTree
 		blendTree.ConnectNode("AttackSpeed", 0, "AttackClip");
 		blendTree.ConnectNode("MeleeAttack", 0, "RunBlend");
 		blendTree.ConnectNode("MeleeAttack", 1, "AttackSpeed");
-		blendTree.ConnectNode("output", 0, "MeleeAttack");
+		blendTree.ConnectNode("DamageReaction", 0, "MeleeAttack");
+		blendTree.ConnectNode("DamageReaction", 1, "DamageClip");
+		blendTree.ConnectNode("output", 0, "DamageReaction");
 
 		AnimPlayer = GetPathTo(animationPlayer);
 		TreeRoot = blendTree;
@@ -215,12 +267,128 @@ public partial class PlayerAnimationController : AnimationTree
 	private void AddMeleeAnimations(AnimationPlayer animationPlayer)
 	{
 		AnimationLibrary library = animationPlayer.GetAnimationLibrary("");
-		_meleeAnimationLength = AddAnimation(
+		_meleeAnimationLength = AddRetargetedAnimation(
 			library,
 			MeleeAttackAnimationName,
 			MeleeAttackPath,
 			shouldLoop: false);
+		AddRetargetedAnimation(
+			library,
+			CombatDamageAnimationName,
+			CombatDamagePath,
+			shouldLoop: false);
 	}
+
+	private void OnPlayerDamaged(float damageAmount)
+	{
+		Set("parameters/DamageReaction/request", 1);
+	}
+
+	private static StringName GetFirstAnimationName(
+		AnimationPlayer animationPlayer,
+		string assetPath)
+	{
+		foreach (StringName animationName in animationPlayer.GetAnimationList())
+		{
+			if (animationName != "RESET")
+			{
+				return animationName;
+			}
+		}
+
+		throw new InvalidOperationException($"{assetPath} contains no animation.");
+	}
+
+	private static void RetargetRotationTracks(
+		Animation animation,
+		Animation targetReference)
+	{
+		string targetSkeletonPath = GetTargetSkeletonPath(targetReference);
+		for (int track = animation.GetTrackCount() - 1; track >= 0; track--)
+		{
+			string sourcePath = animation.TrackGetPath(track).ToString();
+			int separator = sourcePath.LastIndexOf(':');
+			string? targetBone = separator >= 0
+				? GetTargetBoneName(sourcePath[(separator + 1)..])
+				: null;
+
+			if (animation.TrackGetType(track) != Animation.TrackType.Rotation3D ||
+				targetBone is null)
+			{
+				animation.RemoveTrack(track);
+				continue;
+			}
+
+			animation.TrackSetPath(
+				track,
+				new NodePath($"{targetSkeletonPath}:{targetBone}"));
+		}
+	}
+
+	private static string GetTargetSkeletonPath(Animation targetReference)
+	{
+		for (int track = 0; track < targetReference.GetTrackCount(); track++)
+		{
+			string path = targetReference.TrackGetPath(track).ToString();
+			if (path.EndsWith(":mixamorig_Hips", StringComparison.Ordinal))
+			{
+				return path[..path.LastIndexOf(':')];
+			}
+		}
+
+		throw new InvalidOperationException("Remy animation tracks do not target the hips.");
+	}
+
+	private static string? GetTargetBoneName(string sourceBone)
+	{
+		if (CoreBoneMap.TryGetValue(sourceBone, out string? targetBone))
+		{
+			return targetBone;
+		}
+
+		int sideSeparator = sourceBone.LastIndexOf('.');
+		if (sideSeparator < 0)
+		{
+			return null;
+		}
+
+		string side = sourceBone[(sideSeparator + 1)..] == "L" ? "Left" : "Right";
+		string finger = sourceBone[..sideSeparator]
+			.Replace("indexFinger0", "Index", StringComparison.Ordinal)
+			.Replace("middleFinger0", "Middle", StringComparison.Ordinal)
+			.Replace("ringFinger0", "Ring", StringComparison.Ordinal)
+			.Replace("pinky0", "Pinky", StringComparison.Ordinal)
+			.Replace("thumb0", "Thumb", StringComparison.Ordinal);
+		return finger == sourceBone[..sideSeparator]
+			? null
+			: $"mixamorig_{side}Hand{finger}";
+	}
+
+	private static readonly Dictionary<string, string> CoreBoneMap = new()
+	{
+		["hips"] = "mixamorig_Hips",
+		["spine"] = "mixamorig_Spine",
+		["spineProxy"] = "mixamorig_Spine1",
+		["chest"] = "mixamorig_Spine2",
+		["neck"] = "mixamorig_Neck",
+		["head"] = "mixamorig_Head",
+		["shoulder.L"] = "mixamorig_LeftShoulder",
+		["upperArm.L"] = "mixamorig_LeftArm",
+		["forearm.L"] = "mixamorig_LeftForeArm",
+		["hand.L"] = "mixamorig_LeftHand",
+		["shoulder.R"] = "mixamorig_RightShoulder",
+		["upperArm.R"] = "mixamorig_RightArm",
+		["forearm.R"] = "mixamorig_RightForeArm",
+		["hand.R"] = "mixamorig_RightHand",
+		["thigh.L"] = "mixamorig_LeftUpLeg",
+		["shin.L"] = "mixamorig_LeftLeg",
+		["foot.L"] = "mixamorig_LeftFoot",
+		["toe.L"] = "mixamorig_LeftToeBase",
+		["thigh.R"] = "mixamorig_RightUpLeg",
+		["shin.R"] = "mixamorig_RightLeg",
+		["foot.R"] = "mixamorig_RightFoot",
+		["toe.R"] = "mixamorig_RightToeBase",
+	};
 
 	private static AnimationNodeAnimation CreateAnimationNode(string animationName)
 	{
