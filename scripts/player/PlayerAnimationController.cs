@@ -341,6 +341,11 @@ public partial class PlayerAnimationController : AnimationTree
 
 	private static string? GetTargetBoneName(string sourceBone)
 	{
+		if (sourceBone.StartsWith("B-", StringComparison.Ordinal))
+		{
+			sourceBone = sourceBone[2..];
+		}
+
 		if (CoreBoneMap.TryGetValue(sourceBone, out string? targetBone))
 		{
 			return targetBone;
