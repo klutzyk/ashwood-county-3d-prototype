@@ -55,7 +55,11 @@ public partial class PlayerMeleeAnimationValidation : Node
 				animationController.LastMeleeAnimationName == "MeleeAttackDownward",
 				"left click starts the standing downward attack");
 			Require(!combat.RequestAttack(),
-				"additional clicks cannot queue a combo");
+				"clicks before frame 42 cannot restart the attack");
+			combat._Process((combat.AttackDuration * combat.AttackRestartMoment) + 0.01f);
+			Require(combat.RequestAttack() && combat.IsAttacking &&
+				animationController.LastMeleeAnimationName == "MeleeAttackDownward",
+				"clicks during recovery immediately restart the downward attack");
 			combat._Process(combat.AttackDuration);
 			Require(!combat.IsAttacking &&
 				attachment.CurrentPoseName ==

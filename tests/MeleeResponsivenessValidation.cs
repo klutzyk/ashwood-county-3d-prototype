@@ -80,13 +80,23 @@ public partial class MeleeResponsivenessValidation : Node
 				"knockback follows the attack direction");
 			Require(player.IsMeleeImpactFeedbackActive,
 				"camera feedback starts only after a confirmed hit");
+			Require(!combat.RequestAttack(),
+				"attack cannot restart before the recovery-cancel frame");
+			combat._Process(0.02);
+			Require(combat.RequestAttack() && attacksStarted == 2,
+				"recovery click immediately restarts the downward attack");
+			combat._Process(0.14);
+			Require(Mathf.IsEqualApprox(
+				targetHealth.CurrentHealth,
+				targetHealth.MaximumHealth - (weapon.Damage * 2.0f)),
+				"restarted attack applies its own impact");
 			combat._Process(0.16);
 			Require(!combat.CanAttack && !combat.RequestAttack(),
 				"full recovery blocks immediate animation spam");
 			combat._Process(0.03);
 			Require(combat.RequestAttack(), "late recovery input uses the short buffer");
 			combat._Process(0.17);
-			Require(attacksStarted == 2 && combat.ComboStep == 1,
+			Require(attacksStarted == 3 && combat.ComboStep == 1,
 				"a recovered click starts another downward attack");
 
 			GD.Print("MELEE_RESPONSIVENESS_VALIDATION: PASS");

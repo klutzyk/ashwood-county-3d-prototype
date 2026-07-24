@@ -19,6 +19,7 @@ public partial class PlayerMeleeCombat : Node3D
 	[Export] public MeleeWeaponDefinition? WeaponDefinition { get; set; }
 	[Export] public float AttackDuration { get; set; } = 0.68f;
 	[Export(PropertyHint.Range, "0,1,0.01")] public float HitMoment { get; set; } = 0.72f;
+	[Export(PropertyHint.Range, "0,1,0.01")] public float AttackRestartMoment { get; set; } = 0.53f;
 	[Export(PropertyHint.Range, "1,3,1")] public int MaximumComboAttacks { get; set; } = 1;
 	[Export(PropertyHint.Range, "0,0.3,0.01")] public float InputBufferDuration { get; set; } = 0.12f;
 	[Export] public float ReadyPoseBlendSpeed { get; set; } = 10.0f;
@@ -128,6 +129,19 @@ public partial class PlayerMeleeCombat : Node3D
 
 		if (IsAttacking)
 		{
+			float progress = _attackElapsed / Mathf.Max(AttackDuration, 0.05f);
+			if (MaximumComboAttacks <= 1)
+			{
+				if (progress < Mathf.Clamp(AttackRestartMoment, 0.0f, 1.0f))
+				{
+					return false;
+				}
+
+				ComboStep = 1;
+				StartAttackStep();
+				return true;
+			}
+
 			int maximumCombo = Mathf.Clamp(MaximumComboAttacks, 1, 3);
 			if (ComboStep + _queuedComboAttacks >= maximumCombo)
 			{
