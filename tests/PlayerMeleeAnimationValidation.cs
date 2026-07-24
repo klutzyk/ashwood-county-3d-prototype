@@ -48,7 +48,7 @@ public partial class PlayerMeleeAnimationValidation : Node
 				playerCharacter.GetNode<PlayerAnimationController>("AnimationTree");
 			WeaponAttachmentController attachment =
 				playerCharacter.GetNode<WeaponAttachmentController>(
-					"Visual/Testman/Skeleton3D/RightHandWeaponAttachment");
+					"Visual/Remy/Skeleton3D/RightHandWeaponAttachment");
 			combat.SetProcess(false);
 
 			Require(combat.TryAttack() &&

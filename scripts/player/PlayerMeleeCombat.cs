@@ -24,7 +24,7 @@ public partial class PlayerMeleeCombat : Node3D
 	[Export(PropertyHint.Range, "0,0.3,0.01")] public float InputBufferDuration { get; set; } = 0.12f;
 	[Export] public float ReadyPoseBlendSpeed { get; set; } = 10.0f;
 	[Export] public NodePath WeaponAttachmentPath { get; set; } =
-		new("../Visual/Testman/Skeleton3D/RightHandWeaponAttachment");
+		new("../Visual/Remy/Skeleton3D/RightHandWeaponAttachment");
 
 	private ThirdPersonPlayer _player = null!;
 	private PlayerAnimationController _animationController = null!;
