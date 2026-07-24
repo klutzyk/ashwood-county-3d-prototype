@@ -12,16 +12,17 @@ public partial class PlayerAnimationController : AnimationTree
 	private const string WalkAnimationName = "Walk";
 	private const string RunAnimationName = "Run";
 	private const string TwoHandIdleAnimationName = "TwoHandIdle";
-	private const string MeleeAttackAnimationName = "MeleeAttackDownward";
-	private const string MeleeComboAnimationName = "MeleeComboAttack";
+	private const string MeleeDownwardAnimationName = "MeleeAttackDownward";
+	private const string MeleeBackhandAnimationName = "MeleeAttackBackhand";
+	private const string MeleeRunJumpAnimationName = "MeleeAttackRunJump";
 	private const string TwoHandIdlePath =
 	"res://assets/characters/player/2hand Idle.fbx";
-	private const string MeleeAttackPath =
+	private const string MeleeDownwardPath =
 		"res://assets/characters/player/anim/Standing Melee Attack Downward.fbx";
-	private const string MeleeComboPath =
-		"res://assets/characters/player/anim/Standing Melee Combo Attack Ver. 2.fbx";
-	private const float MeleeAttackLength = 1.3333333f;
-	private const float MeleeComboLength = 3.7666667f;
+	private const string MeleeBackhandPath =
+		"res://assets/characters/player/anim/Standing Melee Attack Backhand.fbx";
+	private const string MeleeRunJumpPath =
+		"res://assets/characters/player/anim/Standing Melee Run Jump Attack.fbx";
 	private const string IdlePath = "res://assets/characters/player/Idle.fbx";
 	private const string WalkPath = "res://assets/characters/player/Walking.fbx";
 	private const string RunPath = "res://assets/characters/player/Fast Run.fbx";
@@ -33,6 +34,7 @@ public partial class PlayerAnimationController : AnimationTree
 	private bool _isTwoHandedWeaponEquipped;
 	private float _twoHandIdleBlend;
 	private AnimationPlayer _animationPlayer = null!;
+	private readonly float[] _meleeAnimationLengths = new float[3];
 	public StringName LastMeleeAnimationName { get; private set; } = new();
 
 	public void SetTwoHandedWeaponEquipped(bool equipped)
@@ -96,26 +98,18 @@ public partial class PlayerAnimationController : AnimationTree
 
 	public void PlayMeleeAttack(int comboStep, float attackDuration)
 	{
-		float comboSpeedScale = comboStep switch
-		{
-			2 => 1.04f,
-			3 => 0.98f,
-			_ => 1.0f,
-		};
+		int attackIndex = Mathf.Clamp(comboStep, 1, 3) - 1;
 		float duration = Mathf.Max(attackDuration, 0.05f);
 		Set(
-			"parameters/AttackSpeed/scale",
-			(MeleeAttackLength / duration) * comboSpeedScale);
-		Set("parameters/MeleeAttack/request", 1);
-		LastMeleeAnimationName = MeleeAttackAnimationName;
-	}
-
-	public void PlayMeleeCombo(float comboDuration)
-	{
-		float duration = Mathf.Max(comboDuration, 0.05f);
-		Set("parameters/ComboAttackSpeed/scale", MeleeComboLength / duration);
-		Set("parameters/AuthoredCombo/request", 1);
-		LastMeleeAnimationName = MeleeComboAnimationName;
+			$"parameters/Attack{attackIndex + 1}Speed/scale",
+			_meleeAnimationLengths[attackIndex] / duration);
+		Set($"parameters/Attack{attackIndex + 1}/request", 1);
+		LastMeleeAnimationName = attackIndex switch
+		{
+			1 => MeleeBackhandAnimationName,
+			2 => MeleeRunJumpAnimationName,
+			_ => MeleeDownwardAnimationName,
+		};
 	}
 
 	private void AddLocomotionAnimations(AnimationPlayer animationPlayer)
@@ -128,7 +122,7 @@ public partial class PlayerAnimationController : AnimationTree
 		AddAnimation(library, RunAnimationName, RunPath);
 	}
 
-	private static void AddAnimation(
+	private static float AddAnimation(
 		AnimationLibrary library,
 		string name,
 		string assetPath,
@@ -146,7 +140,9 @@ public partial class PlayerAnimationController : AnimationTree
 			: Animation.LoopModeEnum.None;
 		KeepRootMotionInPlace(animation);
 		library.AddAnimation(name, animation);
+		float animationLength = (float)animation.Length;
 		sourceRoot.Free();
+		return animationLength;
 	}
 
 	private void ConfigureBlendTree(AnimationPlayer animationPlayer)
@@ -195,47 +191,40 @@ public partial class PlayerAnimationController : AnimationTree
 			new Vector2(0.0f, 0.0f)
 		);
 
-		blendTree.AddNode(
-			"AttackClip",
-			CreateAnimationNode(MeleeAttackAnimationName),
-			new Vector2(-40.0f, 180.0f)
-		);
-
-		blendTree.AddNode(
-			"AttackSpeed",
-			new AnimationNodeTimeScale(),
-			new Vector2(180.0f, 180.0f)
-		);
-
-		blendTree.AddNode(
-			"ComboAttackClip",
-			CreateAnimationNode(MeleeComboAnimationName),
-			new Vector2(-40.0f, 300.0f)
-		);
-
-		blendTree.AddNode(
-			"ComboAttackSpeed",
-			new AnimationNodeTimeScale(),
-			new Vector2(180.0f, 300.0f)
-		);
-
-		AnimationNodeOneShot meleeAttack = new();
-		meleeAttack.Set("fadein_time", 0.08f);
-		meleeAttack.Set("fadeout_time", 0.14f);
-		blendTree.AddNode(
-			"MeleeAttack",
-			meleeAttack,
-			new Vector2(420.0f, 0.0f)
-		);
-
-		AnimationNodeOneShot authoredCombo = new();
-		authoredCombo.Set("fadein_time", 0.07f);
-		authoredCombo.Set("fadeout_time", 0.16f);
-		blendTree.AddNode(
-			"AuthoredCombo",
-			authoredCombo,
-			new Vector2(650.0f, 0.0f)
-		);
+		string[] attackNames =
+		{
+			MeleeDownwardAnimationName,
+			MeleeBackhandAnimationName,
+			MeleeRunJumpAnimationName,
+		};
+		string previousNode = "RunBlend";
+		for (int attack = 0; attack < attackNames.Length; attack++)
+		{
+			int step = attack + 1;
+			string clipNode = $"Attack{step}Clip";
+			string speedNode = $"Attack{step}Speed";
+			string oneShotNode = $"Attack{step}";
+			float verticalPosition = 160.0f + (attack * 120.0f);
+			blendTree.AddNode(
+				clipNode,
+				CreateAnimationNode(attackNames[attack]),
+				new Vector2(-40.0f, verticalPosition));
+			blendTree.AddNode(
+				speedNode,
+				new AnimationNodeTimeScale(),
+				new Vector2(180.0f, verticalPosition));
+			AnimationNodeOneShot attackOneShot = new();
+			attackOneShot.Set("fadein_time", 0.07f);
+			attackOneShot.Set("fadeout_time", 0.14f);
+			blendTree.AddNode(
+				oneShotNode,
+				attackOneShot,
+				new Vector2(420.0f + (attack * 220.0f), 0.0f));
+			blendTree.ConnectNode(speedNode, 0, clipNode);
+			blendTree.ConnectNode(oneShotNode, 0, previousNode);
+			blendTree.ConnectNode(oneShotNode, 1, speedNode);
+			previousNode = oneShotNode;
+		}
 
 		blendTree.ConnectNode("IdleType", 0, "Idle");
 		blendTree.ConnectNode("IdleType", 1, "TwoHandIdle");
@@ -246,31 +235,30 @@ public partial class PlayerAnimationController : AnimationTree
 		blendTree.ConnectNode("RunBlend", 0, "IdleWalk");
 		blendTree.ConnectNode("RunBlend", 1, "Run");
 
-		blendTree.ConnectNode("AttackSpeed", 0, "AttackClip");
-		blendTree.ConnectNode("MeleeAttack", 0, "RunBlend");
-		blendTree.ConnectNode("MeleeAttack", 1, "AttackSpeed");
-		blendTree.ConnectNode("ComboAttackSpeed", 0, "ComboAttackClip");
-		blendTree.ConnectNode("AuthoredCombo", 0, "MeleeAttack");
-		blendTree.ConnectNode("AuthoredCombo", 1, "ComboAttackSpeed");
-		blendTree.ConnectNode("output", 0, "AuthoredCombo");
+		blendTree.ConnectNode("output", 0, previousNode);
 
 		AnimPlayer = GetPathTo(animationPlayer);
 		TreeRoot = blendTree;
 		Active = true;
 	}
 
-	private static void AddMeleeAnimations(AnimationPlayer animationPlayer)
+	private void AddMeleeAnimations(AnimationPlayer animationPlayer)
 	{
 		AnimationLibrary library = animationPlayer.GetAnimationLibrary("");
-		AddAnimation(
+		_meleeAnimationLengths[0] = AddAnimation(
 			library,
-			MeleeAttackAnimationName,
-			MeleeAttackPath,
+			MeleeDownwardAnimationName,
+			MeleeDownwardPath,
 			shouldLoop: false);
-		AddAnimation(
+		_meleeAnimationLengths[1] = AddAnimation(
 			library,
-			MeleeComboAnimationName,
-			MeleeComboPath,
+			MeleeBackhandAnimationName,
+			MeleeBackhandPath,
+			shouldLoop: false);
+		_meleeAnimationLengths[2] = AddAnimation(
+			library,
+			MeleeRunJumpAnimationName,
+			MeleeRunJumpPath,
 			shouldLoop: false);
 	}
 

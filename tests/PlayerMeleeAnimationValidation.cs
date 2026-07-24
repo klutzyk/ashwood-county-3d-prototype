@@ -12,7 +12,8 @@ public partial class PlayerMeleeAnimationValidation : Node
 	private static readonly string[] AssetPaths =
 	{
 		"res://assets/characters/player/anim/Standing Melee Attack Downward.fbx",
-		"res://assets/characters/player/anim/Standing Melee Combo Attack Ver. 2.fbx",
+		"res://assets/characters/player/anim/Standing Melee Attack Backhand.fbx",
+		"res://assets/characters/player/anim/Standing Melee Run Jump Attack.fbx",
 	};
 
 	public override async void _Ready()
@@ -55,30 +56,25 @@ public partial class PlayerMeleeAnimationValidation : Node
 			Require(combat.TryAttack() &&
 				animationController.LastMeleeAnimationName == "MeleeAttackDownward",
 				"a single input starts the standing downward attack");
-			combat._Process(0.12f);
-			Require(combat.RequestAttack(),
-				"second quick input is buffered during downward anticipation");
-			combat._Process(0.12f);
-			Require(combat.RequestAttack() &&
-				combat.IsUsingAuthoredCombo &&
-				animationController.LastMeleeAnimationName == "MeleeComboAttack",
-				"three quick inputs crossfade into authored Combo Ver. 2");
-			Require(attachment.CurrentPoseName ==
-				WeaponAttachmentController.MeleeComboPoseName,
-				"authored combo selects its clipping-conscious bat grip");
+			Require(combat.RequestAttack() && combat.RequestAttack() &&
+				combat.QueuedComboAttacks == 2,
+				"two additional quick inputs queue two separate attacks");
+			Require(!combat.RequestAttack(),
+				"the three-click combo rejects further animation spam");
 
-			combat._Process(combat.AuthoredComboDuration * 0.36f);
-			Require(combat.AuthoredComboHitsApplied == 1,
-				"first combo hit follows the first authored motion peak");
-			combat._Process(combat.AuthoredComboDuration * 0.12f);
-			Require(combat.AuthoredComboHitsApplied == 2,
-				"second combo hit follows the backhand motion peak");
-			combat._Process(combat.AuthoredComboDuration * 0.13f);
-			Require(combat.AuthoredComboHitsApplied == 3,
-				"third combo hit follows the finishing motion peak");
-			combat._Process(combat.AuthoredComboDuration * 0.4f);
-			Require(!combat.IsAttacking && !combat.IsUsingAuthoredCombo,
-				"authored combo includes recovery and returns input control");
+			combat._Process(combat.AttackDuration);
+			Require(combat.ComboStep == 2 &&
+				animationController.LastMeleeAnimationName == "MeleeAttackBackhand",
+				"second click starts the standing backhand as a separate attack");
+			combat._Process(combat.AttackDuration);
+			Require(combat.ComboStep == 3 &&
+				animationController.LastMeleeAnimationName == "MeleeAttackRunJump",
+				"third click starts the standing run-jump attack separately");
+			combat._Process(combat.AttackDuration);
+			Require(!combat.IsAttacking &&
+				attachment.CurrentPoseName ==
+					WeaponAttachmentController.TwoHandIdlePoseName,
+				"third attack recovers to the two-handed idle");
 
 			GD.Print("PLAYER_MELEE_ANIMATION_VALIDATION: PASS");
 			GetTree().Quit(0);

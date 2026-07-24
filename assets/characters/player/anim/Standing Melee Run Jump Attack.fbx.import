@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://cwkaqimm7p8ys"
-path="res://.godot/imported/Standing Melee Combo Attack Ver. 2.fbx-d24d188f826e52511f5b5ef70c495950.scn"
+uid="uid://xsq04580e7vg"
+path="res://.godot/imported/Standing Melee Run Jump Attack.fbx-04582943c82c1d083dc97251d19573a1.scn"
 
 [deps]
 
-source_file="res://assets/characters/player/anim/Standing Melee Combo Attack Ver. 2.fbx"
-dest_files=["res://.godot/imported/Standing Melee Combo Attack Ver. 2.fbx-d24d188f826e52511f5b5ef70c495950.scn"]
+source_file="res://assets/characters/player/anim/Standing Melee Run Jump Attack.fbx"
+dest_files=["res://.godot/imported/Standing Melee Run Jump Attack.fbx-04582943c82c1d083dc97251d19573a1.scn"]
 
 [params]
 

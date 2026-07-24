@@ -47,8 +47,6 @@ public partial class MeleeResponsivenessValidation : Node
 			target.SetPhysicsProcess(false);
 			combat.AttackDuration = 0.3f;
 			combat.HitMoment = 0.45f;
-			combat.ComboQueueOpenMoment = 0.38f;
-			combat.QuickComboInputWindow = 0.2f;
 			combat.MaximumComboAttacks = 3;
 			weapon.Cooldown = 0.2f;
 			weapon.Damage = 20.0f;
@@ -67,8 +65,10 @@ public partial class MeleeResponsivenessValidation : Node
 			combat._Process(0.1);
 			Require(Mathf.IsEqualApprox(targetHealth.CurrentHealth, targetHealth.MaximumHealth),
 				"damage waits for the configured impact moment");
+			Require(combat.RequestAttack() && combat.RequestAttack(),
+				"two quick clicks queue separate second and third attacks");
 			Require(!combat.RequestAttack(),
-				"early mashing cannot queue before the anticipation completes");
+				"the queued three-step combo blocks further animation spam");
 			combat._Process(0.04);
 			Require(Mathf.IsEqualApprox(
 				targetHealth.CurrentHealth,
@@ -82,8 +82,6 @@ public partial class MeleeResponsivenessValidation : Node
 				"knockback follows the attack direction");
 			Require(player.IsMeleeImpactFeedbackActive,
 				"camera feedback starts only after a confirmed hit");
-			Require(combat.RequestAttack(), "input during follow-through queues combo step two");
-			Require(!combat.RequestAttack(), "only one attack can be queued at a time");
 			combat._Process(0.16);
 			Require(attacksStarted == 2 && combat.ComboStep == 2,
 				"queued step two starts after the first follow-through");
@@ -93,7 +91,6 @@ public partial class MeleeResponsivenessValidation : Node
 				targetHealth.MaximumHealth - (weapon.Damage * 2.0f)),
 				"combo step two applies one consistent hit");
 
-			Require(combat.RequestAttack(), "input during recovery queues combo step three");
 			combat._Process(0.16);
 			Require(attacksStarted == 3 && combat.ComboStep == 3,
 				"combo is capped at its authored third step");

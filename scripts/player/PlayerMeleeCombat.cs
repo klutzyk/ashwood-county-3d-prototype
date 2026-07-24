@@ -19,14 +19,8 @@ public partial class PlayerMeleeCombat : Node3D
 	[Export] public MeleeWeaponDefinition? WeaponDefinition { get; set; }
 	[Export] public float AttackDuration { get; set; } = 0.68f;
 	[Export(PropertyHint.Range, "0,1,0.01")] public float HitMoment { get; set; } = 0.72f;
-	[Export(PropertyHint.Range, "0,1,0.01")] public float ComboQueueOpenMoment { get; set; } = 0.55f;
 	[Export(PropertyHint.Range, "1,3,1")] public int MaximumComboAttacks { get; set; } = 3;
 	[Export(PropertyHint.Range, "0,0.3,0.01")] public float InputBufferDuration { get; set; } = 0.12f;
-	[Export(PropertyHint.Range, "0.1,0.6,0.01")] public float QuickComboInputWindow { get; set; } = 0.45f;
-	[Export(PropertyHint.Range, "0.8,2.5,0.05")] public float AuthoredComboDuration { get; set; } = 1.55f;
-	[Export(PropertyHint.Range, "0,1,0.01")] public float AuthoredComboFirstHitMoment { get; set; } = 0.35f;
-	[Export(PropertyHint.Range, "0,1,0.01")] public float AuthoredComboSecondHitMoment { get; set; } = 0.47f;
-	[Export(PropertyHint.Range, "0,1,0.01")] public float AuthoredComboThirdHitMoment { get; set; } = 0.60f;
 	[Export] public float ReadyPoseBlendSpeed { get; set; } = 10.0f;
 	[Export] public NodePath WeaponAttachmentPath { get; set; } =
 		new("../Visual/Remy/Skeleton3D/RightHandWeaponAttachment");
@@ -40,17 +34,13 @@ public partial class PlayerMeleeCombat : Node3D
 	private float _bufferedAttackRemaining;
 	private float _readyPoseBlend = 1.0f;
 	private bool _hasAppliedHit;
-	private bool _comboAttackQueued;
-	private bool _isUsingAuthoredCombo;
-	private int _quickComboInputCount;
-	private int _authoredComboHitsApplied;
+	private int _queuedComboAttacks;
 
 	public bool IsAttacking { get; private set; }
 	public bool CanAttack => !IsAttacking && _cooldownRemaining <= 0.0f;
 	public bool IsShowingReadyFeedback => !IsAttacking && _readyPoseBlend >= 0.95f;
 	public int ComboStep { get; private set; }
-	public bool IsUsingAuthoredCombo => _isUsingAuthoredCombo;
-	public int AuthoredComboHitsApplied => _authoredComboHitsApplied;
+	public int QueuedComboAttacks => _queuedComboAttacks;
 	private MeleeWeaponDefinition Weapon => WeaponDefinition
 		?? throw new System.InvalidOperationException("Melee combat requires a weapon definition.");
 
@@ -96,17 +86,11 @@ public partial class PlayerMeleeCombat : Node3D
 		}
 
 		_attackElapsed += deltaTime;
-		float duration = _isUsingAuthoredCombo
-			? Mathf.Max(AuthoredComboDuration, 0.05f)
-			: Mathf.Max(AttackDuration, 0.05f);
+		float duration = Mathf.Max(AttackDuration, 0.05f);
 		float progress = Mathf.Clamp(_attackElapsed / duration, 0.0f, 1.0f);
 		SetWeaponPose(progress);
 
-		if (_isUsingAuthoredCombo)
-		{
-			ApplyAuthoredComboHits(progress);
-		}
-		else if (!_hasAppliedHit && progress >= Mathf.Clamp(HitMoment, 0.0f, 1.0f))
+		if (!_hasAppliedHit && progress >= Mathf.Clamp(HitMoment, 0.0f, 1.0f))
 		{
 			_hasAppliedHit = true;
 			ApplyAttackHit();
@@ -114,14 +98,7 @@ public partial class PlayerMeleeCombat : Node3D
 
 		if (progress >= 1.0f)
 		{
-			if (_isUsingAuthoredCombo)
-			{
-				FinishAuthoredCombo();
-			}
-			else
-			{
-				FinishAttack();
-			}
+			FinishAttack();
 		}
 	}
 
@@ -151,34 +128,13 @@ public partial class PlayerMeleeCombat : Node3D
 
 		if (IsAttacking)
 		{
-			float progress = _attackElapsed / Mathf.Max(AttackDuration, 0.05f);
-			if (!_isUsingAuthoredCombo &&
-				ComboStep == 1 &&
-				progress <= Mathf.Clamp(QuickComboInputWindow, 0.1f, 0.6f) &&
-				_quickComboInputCount < 3)
-			{
-				_quickComboInputCount++;
-				_comboAttackQueued = true;
-				if (_quickComboInputCount == 3)
-				{
-					StartAuthoredCombo();
-				}
-				return true;
-			}
-
-			if (_isUsingAuthoredCombo)
+			int maximumCombo = Mathf.Clamp(MaximumComboAttacks, 1, 3);
+			if (ComboStep + _queuedComboAttacks >= maximumCombo)
 			{
 				return false;
 			}
 
-			if (_comboAttackQueued ||
-				ComboStep >= Mathf.Clamp(MaximumComboAttacks, 1, 3) ||
-				progress < Mathf.Clamp(ComboQueueOpenMoment, 0.0f, 1.0f))
-			{
-				return false;
-			}
-
-			_comboAttackQueued = true;
+			_queuedComboAttacks++;
 			return true;
 		}
 
@@ -238,9 +194,10 @@ public partial class PlayerMeleeCombat : Node3D
 
 	private void FinishAttack()
 	{
-		if (_comboAttackQueued &&
+		if (_queuedComboAttacks > 0 &&
 			ComboStep < Mathf.Clamp(MaximumComboAttacks, 1, 3))
 		{
+			_queuedComboAttacks--;
 			ComboStep++;
 			StartAttackStep();
 			return;
@@ -248,7 +205,7 @@ public partial class PlayerMeleeCombat : Node3D
 
 		IsAttacking = false;
 		_attackElapsed = 0.0f;
-		_comboAttackQueued = false;
+		_queuedComboAttacks = 0;
 		_cooldownRemaining = Mathf.Max(Weapon.Cooldown, 0.0f);
 		_readyPoseBlend = 0.0f;
 		UpdateRestGripPose();
@@ -261,64 +218,13 @@ public partial class PlayerMeleeCombat : Node3D
 		IsAttacking = true;
 		_attackElapsed = 0.0f;
 		_bufferedAttackRemaining = 0.0f;
-		_comboAttackQueued = false;
 		_hasAppliedHit = false;
-		_quickComboInputCount = ComboStep == 1 ? 1 : _quickComboInputCount;
 		SetWeaponPose(0.0f);
 		_weaponAttachment.SetGripPose(
 			WeaponAttachmentController.MeleeAttackPoseName);
 		_animationController.PlayMeleeAttack(ComboStep, AttackDuration);
 		_player.EmitMeleeAttackNoise(Weapon.NoiseRadius);
 		EmitSignal(SignalName.AttackStarted);
-	}
-
-	private void StartAuthoredCombo()
-	{
-		_isUsingAuthoredCombo = true;
-		_attackElapsed = 0.0f;
-		_authoredComboHitsApplied = 0;
-		_comboAttackQueued = false;
-		_hasAppliedHit = false;
-		ComboStep = 1;
-		_weaponAttachment.SetGripPose(
-			WeaponAttachmentController.MeleeComboPoseName);
-		_animationController.PlayMeleeCombo(AuthoredComboDuration);
-	}
-
-	private void ApplyAuthoredComboHits(float progress)
-	{
-		while (_authoredComboHitsApplied < 3)
-		{
-			float nextHitMoment = _authoredComboHitsApplied switch
-			{
-				0 => AuthoredComboFirstHitMoment,
-				1 => AuthoredComboSecondHitMoment,
-				_ => AuthoredComboThirdHitMoment,
-			};
-			if (progress < Mathf.Clamp(nextHitMoment, 0.0f, 1.0f))
-			{
-				break;
-			}
-
-			_authoredComboHitsApplied++;
-			ComboStep = _authoredComboHitsApplied;
-			ApplyAttackHit();
-		}
-	}
-
-	private void FinishAuthoredCombo()
-	{
-		_isUsingAuthoredCombo = false;
-		_authoredComboHitsApplied = 0;
-		_quickComboInputCount = 0;
-		IsAttacking = false;
-		_attackElapsed = 0.0f;
-		_comboAttackQueued = false;
-		_cooldownRemaining = Mathf.Max(Weapon.Cooldown, 0.0f);
-		_readyPoseBlend = 0.0f;
-		UpdateRestGripPose();
-		SetWeaponRestPose(_readyPoseBlend);
-		EmitSignal(SignalName.AttackFinished);
 	}
 
 	private void SetWeaponPose(float progress)

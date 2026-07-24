@@ -11,7 +11,6 @@ public partial class WeaponAttachmentController : BoneAttachment3D
 	public static readonly StringName TwoHandIdlePoseName = new("TwoHandIdle");
 	public static readonly StringName LocomotionPoseName = new("Locomotion");
 	public static readonly StringName MeleeAttackPoseName = new("MeleeAttack");
-	public static readonly StringName MeleeComboPoseName = new("MeleeCombo");
 
 	public WeaponAttachmentDefinition? Definition { get; private set; }
 	public Node3D? EquippedWeapon { get; private set; }

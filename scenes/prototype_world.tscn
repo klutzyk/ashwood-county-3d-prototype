@@ -201,6 +201,7 @@ script = ExtResource("46_supplies_objective")
 
 [node name="WorldTime" type="Node" parent="." unique_id=824017023]
 script = ExtResource("33_world_time")
+StartingHour = 11.0
 
 [node name="AtmosphereAudio" type="Node" parent="." unique_id=1024712090]
 script = ExtResource("40_atmosphere")
@@ -407,7 +408,6 @@ script = ExtResource("38_melee")
 WeaponDefinition = ExtResource("44_baseball_bat")
 AttackDuration = 0.68
 HitMoment = 0.4
-ComboQueueOpenMoment = 0.55
 
 [node name="WeaponPivot" type="Node3D" parent="Player/MeleeCombat" unique_id=372816950]
 transform = Transform3D(0.907437, 0.42018816, 0, -0.42018816, 0.907437, 0, 0, 0, 1, 0.48, 0.48000002, 0.21999979)

@@ -1819,13 +1819,13 @@ Validation:
 Completed:
 
 - Replaced the regular swing with the downloaded standing downward attack
-- Added rapid three-input detection that crossfades anticipation into Standing
-  Melee Combo Attack Ver. 2
-- Synchronized the combo's three damage events to its authored motion peaks
-- Added separate attachment correction for the authored combo without IK
+- Queued rapid clicks as three separate downward, backhand and run-jump attacks
+- Kept one damage event and recovery phase per animation
+- Removed the combined Combo Ver. 2 playback path
+- Changed the prototype's starting time to late morning for clearer evaluation
 
 Validation:
 
-- Rendered downward and combo poses remained hand-bound without body clipping
+- Separate combo animations remained hand-bound without body clipping
 - Player-melee-animation, melee-responsiveness and weapon-attachment validations passed
 - C# build completed with no warnings or errors
