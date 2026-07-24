@@ -56,6 +56,8 @@
 [ext_resource type="PackedScene" uid="uid://cxag0cl12kkfm" path="res://scenes/environment/town_road_network.tscn" id="51_road_network"]
 [ext_resource type="PackedScene" path="res://scenes/environment/town_atmosphere_pass.tscn" id="52_atmosphere_pass"]
 [ext_resource type="Script" uid="uid://busk2gnafli74" path="res://scripts/weapons/WeaponAttachmentController.cs" id="54_weapon_attachment"]
+[ext_resource type="PackedScene" uid="uid://ckcoblb768h7a" path="res://assets/characters/player/testman.fbx" id="55_testman"]
+[ext_resource type="Script" path="res://scripts/player/TestmanRetargetController.cs" id="56_testman_retarget"]
 
 [sub_resource type="BoxMesh" id="GrassMesh"]
 material = ExtResource("8_grass")
@@ -433,10 +435,33 @@ bones/62/rotation = Quaternion(4.031827e-05, 0.011048188, 0.9999338, -0.00323800
 bones/63/rotation = Quaternion(-0.046335205, 1.789706e-05, -0.0067078145, 0.99890345)
 bones/64/rotation = Quaternion(0.4468175, 0.02294471, -0.039689604, 0.8934497)
 
-[node name="RightHandWeaponAttachment" type="BoneAttachment3D" parent="Player/Visual/Remy/Skeleton3D" index="7" unique_id=372434050]
-transform = Transform3D(9.5103815e-08, -0.99999994, 3.147768e-07, -0.00010688214, -3.20375e-07, -1.0000001, 0.99999994, 1.3359619e-07, -0.0001068781, -1.7024353, 2.9986477, -0.121040344)
-bone_name = "mixamorig_RightHand"
-bone_idx = 36
+[node name="Shoes" parent="Player/Visual/Remy/Skeleton3D" index="0"]
+visible = false
+
+[node name="Tops" parent="Player/Visual/Remy/Skeleton3D" index="1"]
+visible = false
+
+[node name="Bottoms" parent="Player/Visual/Remy/Skeleton3D" index="2"]
+visible = false
+
+[node name="Hair" parent="Player/Visual/Remy/Skeleton3D" index="3"]
+visible = false
+
+[node name="Body" parent="Player/Visual/Remy/Skeleton3D" index="4"]
+visible = false
+
+[node name="Eyelashes" parent="Player/Visual/Remy/Skeleton3D" index="5"]
+visible = false
+
+[node name="Eyes" parent="Player/Visual/Remy/Skeleton3D" index="6"]
+visible = false
+
+[node name="Testman" parent="Player/Visual" instance=ExtResource("55_testman")]
+transform = Transform3D(1.875, 0, 0, 0, 1.875, 0, 0, 0, 1.875, 0, 0, 0)
+
+[node name="RightHandWeaponAttachment" type="BoneAttachment3D" parent="Player/Visual/Testman/Skeleton3D" index="2"]
+bone_name = "hand_r"
+bone_idx = 57
 script = ExtResource("54_weapon_attachment")
 
 [node name="CameraRig" type="Node3D" parent="Player" unique_id=947114645]
@@ -457,6 +482,11 @@ script = ExtResource("34_flashlight")
 
 [node name="AnimationTree" type="AnimationTree" parent="Player" unique_id=1211255373]
 script = ExtResource("4_animation")
+
+[node name="TestmanRetargetController" type="Node" parent="Player"]
+script = ExtResource("56_testman_retarget")
+SourceSkeletonPath = NodePath("../Visual/Remy/Skeleton3D")
+TargetSkeletonPath = NodePath("../Visual/Testman/Skeleton3D")
 
 [node name="Zombies" type="Node3D" parent="." unique_id=102466295]
 
@@ -1024,3 +1054,4 @@ horizontal_alignment = 1
 [node name="PauseMenu" parent="PerformanceUI" unique_id=354200872 instance=ExtResource("45_pause_menu")]
 
 [editable path="Player/Visual/Remy"]
+[editable path="Player/Visual/Testman"]
