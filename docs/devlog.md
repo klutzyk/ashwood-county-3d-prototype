@@ -1854,3 +1854,31 @@ Validation:
 - C# build completed with no warnings or errors
 - Godot editor import and prototype-world runtime load completed without scene
   or script errors
+
+---
+
+## Weapon Grip Authoring Tool
+
+Completed:
+
+- Added a dedicated editor-only scene using the visible Warrior skeleton and
+  the actual looping two-handed idle animation
+- Reused the runtime attachment definition, pose resources, right-hand bone
+  binding and weapon scene hierarchy
+- Added selectable TwoHandIdle, Locomotion and MeleeAttack pose previews
+- Added Inspector buttons to reload a saved pose or persist the current gizmo
+  position and rotation to the selected existing pose entry
+- Preserved saved pose scale during authoring and centralized the runtime/editor
+  transform multiplication in one shared helper
+
+Outcome:
+
+Weapon grip offsets can now be aligned visually with Godot's standard 3D gizmo
+and saved directly to an existing attachment resource without modifying other
+pose entries, base grip transforms, character scale or weapon-owned transforms.
+
+Validation:
+
+- Weapon grip authoring scene cold-loaded in the Godot editor without errors
+- Existing weapon-hand attachment validation passed
+- C# build completed with no warnings or errors

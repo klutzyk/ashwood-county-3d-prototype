@@ -75,6 +75,7 @@ Completed except final polish.
 - [x] Visual impact timing and anti-spam input rules
 - [x] Authored zombie hit reactions with directional knockback and hit stun
 - [x] Subtle camera feedback on confirmed melee impacts
+- [x] Editor-time weapon grip pose authoring scene
 
 Remaining
 

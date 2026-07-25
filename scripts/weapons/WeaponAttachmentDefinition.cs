@@ -10,13 +10,19 @@ public enum WeaponHandedness
 	TwoHanded,
 }
 
-[GlobalClass]
+[GlobalClass, Tool]
 public partial class WeaponAttachmentDefinition : Resource
 {
 	[Export] public PackedScene? WeaponScene { get; set; }
 	[Export] public WeaponHandedness Handedness { get; set; } = WeaponHandedness.TwoHanded;
 	[Export] public Transform3D DefaultGripTransform { get; set; } = Transform3D.Identity;
 	[Export] public Godot.Collections.Array<WeaponGripPose> GripPoses { get; set; } = new();
+
+	public Transform3D CreateGripTransform(WeaponGripPose? gripPose)
+	{
+		return DefaultGripTransform *
+			(gripPose?.CreateTransform() ?? Transform3D.Identity);
+	}
 
 	public bool TryGetGripPose(StringName poseName, out WeaponGripPose? gripPose)
 	{

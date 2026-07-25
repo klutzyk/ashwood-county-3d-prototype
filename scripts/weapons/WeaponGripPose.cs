@@ -4,7 +4,7 @@ using Godot;
 
 namespace AshwoodCounty3DPrototype.Weapons;
 
-[GlobalClass]
+[GlobalClass, Tool]
 public partial class WeaponGripPose : Resource
 {
 	[Export] public StringName PoseName { get; set; } = new("Default");

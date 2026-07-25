@@ -1,0 +1,23 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/tools/WeaponGripAuthoring.cs" id="1_tool"]
+[ext_resource type="PackedScene" uid="uid://bjo5opmx100eh" path="res://assets/characters/player/mix_anim/WarriorIdle_withskin.fbx" id="3_warrior"]
+
+[node name="WeaponGripAuthoring" type="Node3D"]
+script = ExtResource("1_tool")
+AttachmentDefinitionPath = "res://assets/weapons/baseball_bat_attachment.tres"
+
+[node name="PreviewCharacter" type="Node3D" parent="."]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0.120479465, -1.046915)
+
+[node name="Warrior" parent="PreviewCharacter" instance=ExtResource("3_warrior")]
+transform = Transform3D(3.75, 0, 0, 0, 3.75, 0, 0, 0, 3.75, 0, -0.244, 0)
+
+[node name="RightHandWeaponAttachment" type="BoneAttachment3D" parent="PreviewCharacter/Warrior/Skeleton3D" index="1"]
+transform = Transform3D(0.034227878, -0.99623996, 0.07958838, 0.14486793, -0.07384826, -0.9866911, 0.9888586, 0.045302056, 0.14179562, -0.38710058, 0.2263894, 0.50829417)
+bone_name = "mixamorig_RightHand"
+bone_idx = 34
+
+[node name="GripPoseOffset" type="Node3D" parent="PreviewCharacter/Warrior/Skeleton3D/RightHandWeaponAttachment"]
+
+[editable path="PreviewCharacter/Warrior"]

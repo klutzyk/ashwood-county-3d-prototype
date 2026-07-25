@@ -81,14 +81,14 @@ public partial class WeaponAttachmentController : BoneAttachment3D
 		}
 
 		CurrentPoseName = poseName;
-		Transform3D target = Definition.DefaultGripTransform;
+		WeaponGripPose? gripPose = null;
 		float duration = 0.0f;
-		if (Definition.TryGetGripPose(poseName, out WeaponGripPose? gripPose) &&
+		if (Definition.TryGetGripPose(poseName, out gripPose) &&
 			gripPose is not null)
 		{
-			target *= gripPose.CreateTransform();
 			duration = Mathf.Max(gripPose.BlendDuration, 0.0f);
 		}
+		Transform3D target = Definition.CreateGripTransform(gripPose);
 
 		if (_gripPivot is null)
 		{
