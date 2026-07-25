@@ -7,8 +7,8 @@
 [sub_resource type="Resource" id="GripTwoHandIdle"]
 script = ExtResource("2_pose")
 PoseName = &"TwoHandIdle"
-Position = Vector3(-0.23, 0.061, 0.699)
-RotationDegrees = Vector3(55.765, 26.587, 0)
+Position = Vector3(-0.07722554, 0.2502913, 0.19095357)
+RotationDegrees = Vector3(9.072246, -31.550503, 57.675613)
 BlendDuration = 0.12
 
 [sub_resource type="Resource" id="GripLocomotion"]
