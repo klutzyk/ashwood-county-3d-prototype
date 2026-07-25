@@ -412,7 +412,7 @@ HitMoment = 0.4
 transform = Transform3D(0.907437, 0.42018816, 0, -0.42018816, 0.907437, 0, 0, 0, 1, 0.48, 0.48000002, 0.21999979)
 
 [node name="Visual" type="Node3D" parent="Player" unique_id=517271585]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0.120479465, 0)
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0.120479465, -1.046915)
 
 [node name="Warrior" parent="Player/Visual" unique_id=615219697 instance=ExtResource("3_warrior")]
 transform = Transform3D(3.75, 0, 0, 0, 3.75, 0, 0, 0, 3.75, 0, -0.244, 0)

@@ -65,7 +65,7 @@ public partial class PlayerAnimationController : AnimationTree
 		float blendStep = BlendSpeed * (float)delta;
 
 		float twoHandTarget =
-			_isTwoHandedWeaponEquipped && horizontalSpeed < 0.1f
+			_isTwoHandedWeaponEquipped
 				? 1.0f
 				: 0.0f;
 
