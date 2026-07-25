@@ -1,23 +1,78 @@
-[gd_scene load_steps=3 format=3 uid="uid://chmtd3jgcmw84"]
+[gd_scene format=3 uid="uid://chmtd3jgcmw84"]
 
 [ext_resource type="Script" uid="uid://baqj7o4xaob4d" path="res://scripts/tools/WeaponGripAuthoring.cs" id="1_tool"]
 [ext_resource type="PackedScene" uid="uid://bjo5opmx100eh" path="res://assets/characters/player/mix_anim/WarriorIdle_withskin.fbx" id="3_warrior"]
 
-[node name="WeaponGripAuthoring" type="Node3D"]
+[node name="WeaponGripAuthoring" type="Node3D" unique_id=1258813632]
 script = ExtResource("1_tool")
-AttachmentDefinitionPath = "res://assets/weapons/baseball_bat_attachment.tres"
+SelectedPose = 3
 
-[node name="PreviewCharacter" type="Node3D" parent="."]
+[node name="PreviewCharacter" type="Node3D" parent="." unique_id=2130368914]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0.120479465, -1.046915)
 
-[node name="Warrior" parent="PreviewCharacter" instance=ExtResource("3_warrior")]
+[node name="Warrior" parent="PreviewCharacter" unique_id=2136585656 instance=ExtResource("3_warrior")]
 transform = Transform3D(3.75, 0, 0, 0, 3.75, 0, 0, 0, 3.75, 0, -0.244, 0)
 
-[node name="RightHandWeaponAttachment" type="BoneAttachment3D" parent="PreviewCharacter/Warrior/Skeleton3D" index="1"]
-transform = Transform3D(0.034227878, -0.99623996, 0.07958838, 0.14486793, -0.07384826, -0.9866911, 0.9888586, 0.045302056, 0.14179562, -0.38710058, 0.2263894, 0.50829417)
+[node name="Skeleton3D" parent="PreviewCharacter/Warrior" index="0" unique_id=1958704927]
+bones/0/rotation = Quaternion(0.12052659, 0.1855006, -0.044253416, 0.97422004)
+bones/1/rotation = Quaternion(0.08506519, 0.022130003, 0.008636989, 0.99609226)
+bones/2/rotation = Quaternion(0.15524095, 0.102071054, -0.059730884, 0.98077214)
+bones/3/rotation = Quaternion(0.113172, 0.107378095, -0.054491345, 0.9862519)
+bones/4/rotation = Quaternion(0.1337251, -0.011728099, -0.024550172, 0.990645)
+bones/5/rotation = Quaternion(-0.1465105, 0.010861512, 0.018154833, 0.9889829)
+bones/7/rotation = Quaternion(-0.4117787, -0.51939875, 0.59780586, -0.4508785)
+bones/8/rotation = Quaternion(0.5132826, 0.027247986, -0.12435218, 0.8487256)
+bones/9/rotation = Quaternion(0.15864992, 0.3429863, 0.1635889, 0.911279)
+bones/10/rotation = Quaternion(0.057302326, -0.030540781, -0.0066475924, 0.99786747)
+bones/11/rotation = Quaternion(0.2911177, -0.0068320753, 0.023155173, 0.95638263)
+bones/12/rotation = Quaternion(-0.063512996, -0.044540834, -0.05333452, 0.99555904)
+bones/13/rotation = Quaternion(-0.036477786, 0.17229752, 0.04612247, 0.98328817)
+bones/15/rotation = Quaternion(0.19337872, 0.11441823, -0.021345904, 0.9741959)
+bones/16/rotation = Quaternion(0.45368582, 0.015445636, -0.0031771911, 0.8910222)
+bones/17/rotation = Quaternion(0.5257073, -0.00096611993, 0.023678761, 0.8503355)
+bones/19/rotation = Quaternion(0.16603793, 0.13352326, -0.009250409, 0.9769941)
+bones/20/rotation = Quaternion(0.40022415, 0.0025188639, 0.020759085, 0.91617876)
+bones/21/rotation = Quaternion(0.4100535, 0.0035177192, 0.021723121, 0.91179603)
+bones/23/rotation = Quaternion(0.21928282, 0.047372594, -0.040681634, 0.9736612)
+bones/24/rotation = Quaternion(0.37819558, -0.008624088, 0.01820581, 0.9255065)
+bones/25/rotation = Quaternion(0.36978567, -0.0067395736, 0.017926717, 0.92891973)
+bones/27/rotation = Quaternion(0.19638307, 0.0610587, -0.058130056, 0.9768964)
+bones/28/rotation = Quaternion(0.37980306, -0.010133637, 0.018694935, 0.924823)
+bones/29/rotation = Quaternion(0.36493587, -0.013911974, 0.015976233, 0.9307917)
+bones/31/rotation = Quaternion(0.5822427, -0.4710485, 0.42950135, 0.5046142)
+bones/32/rotation = Quaternion(0.12822908, 0.09038773, -0.67530966, 0.7206555)
+bones/33/rotation = Quaternion(-0.0070637483, -0.17404887, -0.36093986, 0.91617656)
+bones/34/rotation = Quaternion(0.13897972, 0.27396652, 0.15433986, 0.9390454)
+bones/35/rotation = Quaternion(0.18024261, -0.42716354, -0.33954674, 0.8183839)
+bones/36/rotation = Quaternion(0.025020627, 0.092554934, 0.10061583, 0.99029493)
+bones/37/rotation = Quaternion(0.029527007, 0.004617814, 0.30735874, 0.9511243)
+bones/39/rotation = Quaternion(0.31803688, -0.0677271, -0.047105942, 0.9444822)
+bones/40/rotation = Quaternion(0.5655998, -0.026430659, -0.022393283, 0.8239521)
+bones/41/rotation = Quaternion(0.5164183, -0.01736971, -0.020413395, 0.8559169)
+bones/43/rotation = Quaternion(0.3826193, -0.0052851345, -0.015666246, 0.92375815)
+bones/44/rotation = Quaternion(0.5617227, -0.007286984, -0.02891688, 0.82678807)
+bones/45/rotation = Quaternion(0.35090783, 0.0020946243, -0.017724575, 0.9362399)
+bones/47/rotation = Quaternion(0.48770335, 0.03524419, -0.03194951, 0.87171245)
+bones/48/rotation = Quaternion(0.40668675, 2.0087668e-05, -0.015981961, 0.9134279)
+bones/49/rotation = Quaternion(0.45122218, -0.00089305267, -0.017596163, 0.89223784)
+bones/51/rotation = Quaternion(0.40367565, 0.09444526, 0.04764908, 0.908766)
+bones/52/rotation = Quaternion(0.38742232, -0.0009849336, -0.014229181, 0.9217921)
+bones/53/rotation = Quaternion(0.2162794, 0.0028131295, -0.007827831, 0.9762961)
+bones/55/rotation = Quaternion(-0.13067147, 0.49745488, 0.8549663, 0.06705496)
+bones/56/rotation = Quaternion(-0.3831518, 0.25043803, 0.007904819, 0.8890518)
+bones/57/rotation = Quaternion(0.3996514, -0.12123385, 0.01795228, 0.90843755)
+bones/58/rotation = Quaternion(0.36443207, 0.00668515, -0.07901443, 0.92784774)
+bones/60/rotation = Quaternion(-0.4039081, 0.019072799, 0.90881103, 0.102747574)
+bones/61/rotation = Quaternion(-0.38254023, -0.0007945233, -0.04068649, 0.92304224)
+bones/62/rotation = Quaternion(0.5235665, 0.04674733, 0.06581785, 0.84815145)
+bones/63/rotation = Quaternion(0.45576057, 0.21924263, 0.006568646, 0.86265403)
+
+[node name="RightHandWeaponAttachment" type="BoneAttachment3D" parent="PreviewCharacter/Warrior/Skeleton3D" index="1" unique_id=404409873]
+transform = Transform3D(0.6325282, 0.5016336, -0.5901452, 0.64489233, -0.7630867, 0.042570442, -0.42897713, -0.40750712, -0.8061737, 0.1918681, -0.016472165, 0.7150894)
 bone_name = "mixamorig_RightHand"
 bone_idx = 34
 
-[node name="GripPoseOffset" type="Node3D" parent="PreviewCharacter/Warrior/Skeleton3D/RightHandWeaponAttachment"]
+[node name="GripPoseOffset" type="Node3D" parent="PreviewCharacter/Warrior/Skeleton3D/RightHandWeaponAttachment" unique_id=998185600]
+transform = Transform3D(0.042539924, -0.2566304, -0.058672655, -0.12955338, 0.03133004, -0.23096675, 0.2291671, 0.065349475, -0.11967944, 0.028364658, 0.059955776, 0.033813998)
 
 [editable path="PreviewCharacter/Warrior"]

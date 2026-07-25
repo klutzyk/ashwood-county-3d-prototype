@@ -1,7 +1,7 @@
-[gd_resource type="Resource" script_class="WeaponAttachmentDefinition" load_steps=6 format=3]
+[gd_resource type="Resource" script_class="WeaponAttachmentDefinition" format=3 uid="uid://dajpbd60x5e5r"]
 
-[ext_resource type="Script" path="res://scripts/weapons/WeaponAttachmentDefinition.cs" id="1_definition"]
-[ext_resource type="Script" path="res://scripts/weapons/WeaponGripPose.cs" id="2_pose"]
+[ext_resource type="Script" uid="uid://bgrshlr8oykce" path="res://scripts/weapons/WeaponAttachmentDefinition.cs" id="1_definition"]
+[ext_resource type="Script" uid="uid://coymwcjsck7ss" path="res://scripts/weapons/WeaponGripPose.cs" id="2_pose"]
 [ext_resource type="PackedScene" path="res://assets/weapons/wooden_axe.tscn" id="3_weapon"]
 
 [sub_resource type="Resource" id="GripOneHandIdle"]

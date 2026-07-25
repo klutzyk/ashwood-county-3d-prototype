@@ -14,15 +14,15 @@ BlendDuration = 0.12
 [sub_resource type="Resource" id="GripLocomotion"]
 script = ExtResource("2_pose")
 PoseName = &"Locomotion"
-Position = Vector3(0.018, -0.012, 0.034)
-RotationDegrees = Vector3(0, 0, -7)
+Position = Vector3(0.13279463, 0.17594138, 0.021199763)
+RotationDegrees = Vector3(-5.43032, -82.38585, -23.171139)
 BlendDuration = 0.14
 
 [sub_resource type="Resource" id="GripMeleeAttack"]
 script = ExtResource("2_pose")
 PoseName = &"MeleeAttack"
-Position = Vector3(0, 0.016, 0.045)
-RotationDegrees = Vector3(-4, 0, 4)
+Position = Vector3(0.106367335, 0.22483388, 0.12680233)
+RotationDegrees = Vector3(60.011326, -153.88367, -76.405106)
 BlendDuration = 0.06
 
 [resource]
