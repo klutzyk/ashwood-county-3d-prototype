@@ -56,6 +56,9 @@
 [ext_resource type="PackedScene" uid="uid://cxag0cl12kkfm" path="res://scenes/environment/town_road_network.tscn" id="51_road_network"]
 [ext_resource type="PackedScene" path="res://scenes/environment/town_atmosphere_pass.tscn" id="52_atmosphere_pass"]
 [ext_resource type="Script" uid="uid://busk2gnafli74" path="res://scripts/weapons/WeaponAttachmentController.cs" id="54_weapon_attachment"]
+[ext_resource type="Resource" path="res://assets/weapons/wooden_axe.tres" id="55_wooden_axe"]
+[ext_resource type="Resource" path="res://assets/weapons/wooden_hammer.tres" id="56_wooden_hammer"]
+[ext_resource type="Script" path="res://scripts/items/MeleeWeaponDefinition.cs" id="57_melee_weapon"]
 
 [sub_resource type="BoxMesh" id="GrassMesh"]
 material = ExtResource("8_grass")
@@ -409,6 +412,7 @@ script = ExtResource("23_inventory")
 [node name="MeleeCombat" type="Node3D" parent="Player" unique_id=2129107630]
 script = ExtResource("38_melee")
 WeaponDefinition = ExtResource("44_baseball_bat")
+WeaponSlots = Array[ExtResource("57_melee_weapon")]([ExtResource("44_baseball_bat"), ExtResource("55_wooden_axe"), ExtResource("56_wooden_hammer")])
 HitMoment = 0.4
 
 [node name="WeaponPivot" type="Node3D" parent="Player/MeleeCombat" unique_id=372816950]

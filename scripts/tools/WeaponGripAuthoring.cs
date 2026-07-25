@@ -36,7 +36,6 @@ public partial class WeaponGripAuthoring : Node3D
 	private Node3D? _gripPoseOffset;
 	private AnimationPlayer? _animationPlayer;
 	private string _previewAnimationName = string.Empty;
-	private bool _previewReady;
 	private int _resourceLoadAttempts;
 
 	[Export(PropertyHint.File, "*.tres")]
@@ -78,9 +77,19 @@ public partial class WeaponGripAuthoring : Node3D
 		set
 		{
 			_playAnimationPreview = value;
-			if (!_playAnimationPreview)
+			if (_animationPlayer is null ||
+				string.IsNullOrEmpty(_previewAnimationName))
 			{
-				ApplyAnimationPreviewPose();
+				return;
+			}
+
+			if (_playAnimationPreview)
+			{
+				_animationPlayer.Play(_previewAnimationName);
+			}
+			else
+			{
+				_animationPlayer.Pause();
 			}
 		}
 	}
@@ -104,16 +113,6 @@ public partial class WeaponGripAuthoring : Node3D
 		CallDeferred(MethodName.RefreshPreview);
 	}
 
-	public override void _Process(double delta)
-	{
-		if (!_previewReady || _animationPlayer is null || !_playAnimationPreview)
-		{
-			return;
-		}
-
-		_animationPlayer.Advance(delta);
-	}
-
 	private void RefreshPreview()
 	{
 		if (!Engine.IsEditorHint() || !IsInsideTree())
@@ -121,7 +120,6 @@ public partial class WeaponGripAuthoring : Node3D
 			return;
 		}
 
-		_previewReady = false;
 		_gripPoseOffset = GetNodeOrNull<Node3D>(
 			"PreviewCharacter/Warrior/Skeleton3D/RightHandWeaponAttachment/GripPoseOffset");
 		_animationPlayer = GetNodeOrNull<AnimationPlayer>("GripAnimationPreview");
@@ -169,7 +167,6 @@ public partial class WeaponGripAuthoring : Node3D
 		ConfigureAnimationPreview();
 		RebuildWeaponPreview();
 		ReloadPose();
-		_previewReady = true;
 	}
 
 	private void RebuildWeaponPreview()
@@ -303,8 +300,7 @@ public partial class WeaponGripAuthoring : Node3D
 		_previewAnimationName = animationName;
 		if (_animationPlayer.HasAnimation(_previewAnimationName))
 		{
-			_animationPlayer.Play(_previewAnimationName);
-			ApplyAnimationPreviewPose();
+			StartSelectedAnimationPreview();
 			return;
 		}
 
@@ -330,16 +326,20 @@ public partial class WeaponGripAuthoring : Node3D
 			.AddAnimation(_previewAnimationName, animation);
 		sourceRoot.Free();
 
-		_animationPlayer.Play(_previewAnimationName);
-		ApplyAnimationPreviewPose();
+		StartSelectedAnimationPreview();
 	}
 
-	private void ApplyAnimationPreviewPose()
+	private void StartSelectedAnimationPreview()
 	{
 		if (!string.IsNullOrEmpty(_previewAnimationName) &&
 			_animationPlayer?.HasAnimation(_previewAnimationName) == true)
 		{
-			_animationPlayer.Seek(0.0, update: true);
+			_animationPlayer.SpeedScale = 1.0f;
+			_animationPlayer.Play(_previewAnimationName);
+			if (!_playAnimationPreview)
+			{
+				_animationPlayer.Pause();
+			}
 		}
 	}
 

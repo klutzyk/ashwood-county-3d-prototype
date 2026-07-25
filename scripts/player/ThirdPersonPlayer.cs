@@ -9,8 +9,10 @@ public partial class ThirdPersonPlayer : CharacterBody3D
 {
 	[Export] public float WalkSpeed { get; set; } = 4.0f;
 	[Export] public float SprintSpeed { get; set; } = 7.0f;
+	[Export] public float CrouchSpeed { get; set; } = 2.2f;
 	[Export] public float Acceleration { get; set; } = 18.0f;
 	[Export] public float Gravity { get; set; } = 24.0f;
+	[Export] public float JumpVelocity { get; set; } = 8.0f;
 	[Export] public float MouseSensitivity { get; set; } = 0.0025f;
 	[Export] public float SprintNoiseRadius { get; set; } = 9.0f;
 	[Export] public float SprintNoiseInterval { get; set; } = 0.6f;
@@ -24,6 +26,8 @@ public partial class ThirdPersonPlayer : CharacterBody3D
 
 	private Node3D _cameraRig = null!;
 	private SpringArm3D _springArm = null!;
+	private CollisionShape3D _collisionShape = null!;
+	private CapsuleShape3D _collisionCapsule = null!;
 	private PlayerHealth _health = null!;
 	private PlayerStamina _stamina = null!;
 	private PlayerInteraction _interaction = null!;
@@ -34,8 +38,12 @@ public partial class ThirdPersonPlayer : CharacterBody3D
 	private bool _wasSprinting;
 	private float _meleeImpactShakeRemaining;
 	private float _meleeImpactShakeElapsed;
+	private float _standingCollisionHeight;
+	private Vector3 _standingCollisionPosition;
 
 	public bool IsSprinting { get; private set; }
+	public bool IsCrouching { get; private set; }
+	public bool IsAirborne => !IsOnFloor();
 	public bool IsInventoryUiOpen => _inventoryUiOpen;
 	public bool IsMeleeImpactFeedbackActive => _meleeImpactShakeRemaining > 0.0f;
 	public bool CanUseWorldInteractions =>
@@ -45,6 +53,12 @@ public partial class ThirdPersonPlayer : CharacterBody3D
 	{
 		_cameraRig = GetNode<Node3D>("CameraRig");
 		_springArm = GetNode<SpringArm3D>("CameraRig/SpringArm3D");
+		_collisionShape = GetNode<CollisionShape3D>("CollisionShape3D");
+		_collisionCapsule =
+			(CapsuleShape3D)_collisionShape.Shape.Duplicate();
+		_collisionShape.Shape = _collisionCapsule;
+		_standingCollisionHeight = _collisionCapsule.Height;
+		_standingCollisionPosition = _collisionShape.Position;
 		_health = GetNode<PlayerHealth>("Health");
 		_stamina = GetNode<PlayerStamina>("Stamina");
 		_interaction = GetNode<PlayerInteraction>("Interaction");
@@ -78,6 +92,18 @@ public partial class ThirdPersonPlayer : CharacterBody3D
 		if (_inventoryUiOpen)
 		{
 			return;
+		}
+
+		string[] weaponActions =
+			{ "weapon_slot_1", "weapon_slot_2", "weapon_slot_3" };
+		for (int slot = 0; slot < weaponActions.Length; slot++)
+		{
+			if (@event.IsActionPressed(weaponActions[slot]) &&
+				_meleeCombat.TryEquipWeaponSlot(slot))
+			{
+				GetViewport().SetInputAsHandled();
+				return;
+			}
 		}
 
 		if (@event.IsActionPressed("melee_attack"))
@@ -123,7 +149,12 @@ public partial class ThirdPersonPlayer : CharacterBody3D
 		}
 
 		Vector3 movementDirection = GetMovementDirection();
-		bool wantsToSprint = Input.IsActionPressed("run") && !movementDirection.IsZeroApprox();
+		UpdateCrouch();
+		ApplyJump();
+		bool wantsToSprint =
+			Input.IsActionPressed("run") &&
+			!IsCrouching &&
+			!movementDirection.IsZeroApprox();
 		IsSprinting = wantsToSprint && _stamina.CanSprint;
 		_stamina.UpdateStamina(IsSprinting, deltaTime);
 		if (!_stamina.CanSprint)
@@ -131,7 +162,11 @@ public partial class ThirdPersonPlayer : CharacterBody3D
 			IsSprinting = false;
 		}
 		UpdateSprintNoise(deltaTime);
-		float targetSpeed = IsSprinting ? SprintSpeed : WalkSpeed;
+		float targetSpeed = IsCrouching
+			? CrouchSpeed
+			: IsSprinting
+				? SprintSpeed
+				: WalkSpeed;
 
 		ApplyHorizontalMovement(movementDirection, targetSpeed, deltaTime);
 		ApplyGravity(deltaTime);
@@ -231,6 +266,38 @@ public partial class ThirdPersonPlayer : CharacterBody3D
 		Vector3 velocity = Velocity;
 		velocity.Y -= Gravity * delta;
 		Velocity = velocity;
+	}
+
+	private void ApplyJump()
+	{
+		if (!IsCrouching &&
+			IsOnFloor() &&
+			Input.IsActionJustPressed("jump"))
+		{
+			Vector3 velocity = Velocity;
+			velocity.Y = JumpVelocity;
+			Velocity = velocity;
+		}
+	}
+
+	private void UpdateCrouch()
+	{
+		bool crouchRequested =
+			Input.IsActionPressed("crouch") && IsOnFloor();
+		if (IsCrouching == crouchRequested)
+		{
+			return;
+		}
+
+		IsCrouching = crouchRequested;
+		float crouchHeight = Mathf.Max(
+			_collisionCapsule.Radius * 2.0f,
+			_standingCollisionHeight * 0.62f);
+		_collisionCapsule.Height =
+			IsCrouching ? crouchHeight : _standingCollisionHeight;
+		_collisionShape.Position = _standingCollisionPosition +
+			(Vector3.Down *
+				((_standingCollisionHeight - _collisionCapsule.Height) * 0.5f));
 	}
 
 	private void RotateTowardMovement(Vector3 direction, float delta)

@@ -17,6 +17,10 @@ public partial class PlayerAnimationController : AnimationTree
 	private const string OneHandIdleAnimationName = "OneHandIdle";
 	private const string OneHandWalkAnimationName = "OneHandWalk";
 	private const string OneHandRunAnimationName = "OneHandRun";
+	private const string OneHandCrouchIdleAnimationName = "OneHandCrouchIdle";
+	private const string OneHandStandTransitionAnimationName =
+		"OneHandCrouchToStand";
+	private const string OneHandJumpAnimationName = "OneHandJump";
 	private const string TwoHandIdlePath =
 		"res://assets/characters/player/2hand Idle.fbx";
 	private const string MeleeAttackPath =
@@ -46,9 +50,13 @@ public partial class PlayerAnimationController : AnimationTree
 	private float _runBlend;
 	private float _twoHandIdleBlend;
 	private float _oneHandBlend;
+	private float _crouchBlend;
 	private WeaponHandedness _weaponHandedness = WeaponHandedness.TwoHanded;
+	private bool _wasCrouching;
+	private bool _wasAirborne;
 	private AnimationPlayer _animationPlayer = null!;
 	private float _meleeAnimationLength;
+	private float _oneHandJumpAnimationLength;
 	private readonly float[] _oneHandMeleeAnimationLengths = new float[3];
 	private AnimationNodeAnimation _attackClipNode = null!;
 	public StringName LastMeleeAnimationName { get; private set; } = new();
@@ -74,6 +82,7 @@ public partial class PlayerAnimationController : AnimationTree
 		AddLocomotionAnimations(_animationPlayer);
 		AddMeleeAnimations(_animationPlayer);
 		ConfigureBlendTree(_animationPlayer);
+		_wasAirborne = _player.IsAirborne;
 	}
 
 	public override void _Process(double delta)
@@ -109,6 +118,31 @@ public partial class PlayerAnimationController : AnimationTree
 			_oneHandBlend,
 			oneHandTarget,
 			blendStep);
+		bool isOneHanded =
+			_weaponHandedness == WeaponHandedness.OneHanded;
+		bool isCrouching = isOneHanded && _player.IsCrouching;
+		bool isAirborne = isOneHanded && _player.IsAirborne;
+		_crouchBlend = Mathf.MoveToward(
+			_crouchBlend,
+			isCrouching ? 1.0f : 0.0f,
+			blendStep);
+
+		if (_wasCrouching && !isCrouching)
+		{
+			Set("parameters/StandTransition/request", 1);
+		}
+		if (!_wasAirborne && isAirborne)
+		{
+			float airborneDuration =
+				(2.0f * Mathf.Max(_player.JumpVelocity, 0.1f)) /
+				Mathf.Max(_player.Gravity, 0.1f);
+			Set(
+				"parameters/JumpSpeed/scale",
+				_oneHandJumpAnimationLength / airborneDuration);
+			Set("parameters/JumpTransition/request", 1);
+		}
+		_wasCrouching = isCrouching;
+		_wasAirborne = isAirborne;
 
 		_idleWalkBlend = Mathf.MoveToward(
 			_idleWalkBlend,
@@ -126,6 +160,7 @@ public partial class PlayerAnimationController : AnimationTree
 		Set("parameters/WeaponIdle/blend_amount", _oneHandBlend);
 		Set("parameters/WeaponWalk/blend_amount", _oneHandBlend);
 		Set("parameters/WeaponRun/blend_amount", _oneHandBlend);
+		Set("parameters/CrouchBlend/blend_amount", _crouchBlend);
 		Set("parameters/IdleWalk/blend_amount", _idleWalkBlend);
 		Set("parameters/RunBlend/blend_amount", _runBlend);
 	}
@@ -168,6 +203,20 @@ public partial class PlayerAnimationController : AnimationTree
 			library,
 			OneHandRunAnimationName,
 			OneHandAnimationDirectory + "standing run forward.fbx");
+		AddAnimation(
+			library,
+			OneHandCrouchIdleAnimationName,
+			OneHandAnimationDirectory + "crouch idle.fbx");
+		AddAnimation(
+			library,
+			OneHandStandTransitionAnimationName,
+			OneHandAnimationDirectory + "crouch to standing idle.fbx",
+			shouldLoop: false);
+		_oneHandJumpAnimationLength = AddAnimation(
+			library,
+			OneHandJumpAnimationName,
+			OneHandAnimationDirectory + "standing jump.fbx",
+			shouldLoop: false);
 	}
 
 	private static float AddAnimation(
@@ -264,23 +313,59 @@ public partial class PlayerAnimationController : AnimationTree
 			new AnimationNodeBlend2(),
 			new Vector2(180.0f, 0.0f)
 		);
+		blendTree.AddNode(
+			"CrouchIdle",
+			CreateAnimationNode(OneHandCrouchIdleAnimationName),
+			new Vector2(-40.0f, 320.0f));
+		blendTree.AddNode(
+			"CrouchBlend",
+			new AnimationNodeBlend2(),
+			new Vector2(360.0f, 40.0f));
+
+		blendTree.AddNode(
+			"StandTransitionClip",
+			CreateAnimationNode(OneHandStandTransitionAnimationName),
+			new Vector2(140.0f, 360.0f));
+		AnimationNodeOneShot standTransition = new();
+		standTransition.Set("fadein_time", 0.08f);
+		standTransition.Set("fadeout_time", 0.12f);
+		blendTree.AddNode(
+			"StandTransition",
+			standTransition,
+			new Vector2(560.0f, 40.0f));
+
+		blendTree.AddNode(
+			"JumpClip",
+			CreateAnimationNode(OneHandJumpAnimationName),
+			new Vector2(360.0f, 360.0f));
+		blendTree.AddNode(
+			"JumpSpeed",
+			new AnimationNodeTimeScale(),
+			new Vector2(560.0f, 320.0f));
+		AnimationNodeOneShot jumpTransition = new();
+		jumpTransition.Set("fadein_time", 0.06f);
+		jumpTransition.Set("fadeout_time", 0.12f);
+		blendTree.AddNode(
+			"JumpTransition",
+			jumpTransition,
+			new Vector2(760.0f, 40.0f));
 
 		_attackClipNode = CreateAnimationNode(MeleeAttackAnimationName);
 		blendTree.AddNode(
 			"AttackClip",
 			_attackClipNode,
-			new Vector2(140.0f, 220.0f));
+			new Vector2(560.0f, 420.0f));
 		blendTree.AddNode(
 			"AttackSpeed",
 			new AnimationNodeTimeScale(),
-			new Vector2(360.0f, 220.0f));
+			new Vector2(760.0f, 360.0f));
 		AnimationNodeOneShot meleeAttack = new();
 		meleeAttack.Set("fadein_time", 0.07f);
 		meleeAttack.Set("fadeout_time", 0.14f);
 		blendTree.AddNode(
 			"MeleeAttack",
 			meleeAttack,
-			new Vector2(560.0f, 0.0f));
+			new Vector2(960.0f, 0.0f));
 
 		blendTree.ConnectNode("IdleType", 0, "Idle");
 		blendTree.ConnectNode("IdleType", 1, "TwoHandIdle");
@@ -296,9 +381,17 @@ public partial class PlayerAnimationController : AnimationTree
 		blendTree.ConnectNode("WeaponRun", 1, "OneHandRun");
 		blendTree.ConnectNode("RunBlend", 0, "IdleWalk");
 		blendTree.ConnectNode("RunBlend", 1, "WeaponRun");
+		blendTree.ConnectNode("CrouchBlend", 0, "RunBlend");
+		blendTree.ConnectNode("CrouchBlend", 1, "CrouchIdle");
+
+		blendTree.ConnectNode("StandTransition", 0, "CrouchBlend");
+		blendTree.ConnectNode("StandTransition", 1, "StandTransitionClip");
+		blendTree.ConnectNode("JumpSpeed", 0, "JumpClip");
+		blendTree.ConnectNode("JumpTransition", 0, "StandTransition");
+		blendTree.ConnectNode("JumpTransition", 1, "JumpSpeed");
 
 		blendTree.ConnectNode("AttackSpeed", 0, "AttackClip");
-		blendTree.ConnectNode("MeleeAttack", 0, "RunBlend");
+		blendTree.ConnectNode("MeleeAttack", 0, "JumpTransition");
 		blendTree.ConnectNode("MeleeAttack", 1, "AttackSpeed");
 		blendTree.ConnectNode("output", 0, "MeleeAttack");
 

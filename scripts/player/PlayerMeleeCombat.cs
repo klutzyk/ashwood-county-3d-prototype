@@ -16,7 +16,11 @@ public partial class PlayerMeleeCombat : Node3D
 	[Signal]
 	public delegate void AttackFinishedEventHandler();
 
+	[Signal]
+	public delegate void WeaponEquippedEventHandler(int slot, string displayName);
+
 	[Export] public MeleeWeaponDefinition? WeaponDefinition { get; set; }
+	[Export] public Godot.Collections.Array<MeleeWeaponDefinition> WeaponSlots { get; set; } = new();
 	[Export] public float AttackDuration { get; set; } = 0.68f;
 	[Export(PropertyHint.Range, "0,1,0.01")] public float HitMoment { get; set; } = 0.72f;
 	[Export(PropertyHint.Range, "0,1,0.01")] public float AttackRestartMoment { get; set; } = 0.53f;
@@ -42,6 +46,7 @@ public partial class PlayerMeleeCombat : Node3D
 	public bool IsShowingReadyFeedback => !IsAttacking && _readyPoseBlend >= 0.95f;
 	public int ComboStep { get; private set; }
 	public int QueuedComboAttacks => _queuedComboAttacks;
+	public int EquippedWeaponSlot { get; private set; }
 	private MeleeWeaponDefinition Weapon => WeaponDefinition
 		?? throw new System.InvalidOperationException("Melee combat requires a weapon definition.");
 
@@ -51,13 +56,7 @@ public partial class PlayerMeleeCombat : Node3D
 		_animationController = _player.GetNode<PlayerAnimationController>("AnimationTree");
 		_weaponPivot = GetNode<Node3D>("WeaponPivot");
 		_weaponAttachment = GetNode<WeaponAttachmentController>(WeaponAttachmentPath);
-		WeaponAttachmentDefinition attachment = Weapon.Attachment
-			?? throw new System.InvalidOperationException(
-				"Melee weapon requires an attachment definition.");
-		_weaponAttachment.Equip(attachment);
-		_animationController.SetWeaponHandedness(attachment.Handedness);
-		UpdateRestGripPose(immediate: true);
-		SetWeaponRestPose(1.0f);
+		EquipWeapon(Weapon, EquippedWeaponSlot, emitSignal: false);
 	}
 
 	public override void _Process(double delta)
@@ -111,6 +110,20 @@ public partial class PlayerMeleeCombat : Node3D
 
 		ComboStep = 1;
 		StartAttackStep();
+		return true;
+	}
+
+	public bool TryEquipWeaponSlot(int slot)
+	{
+		if (IsAttacking ||
+			slot < 0 ||
+			slot >= WeaponSlots.Count ||
+			WeaponSlots[slot] is not MeleeWeaponDefinition weapon)
+		{
+			return false;
+		}
+
+		EquipWeapon(weapon, slot, emitSignal: true);
 		return true;
 	}
 
@@ -294,5 +307,28 @@ public partial class PlayerMeleeCombat : Node3D
 		return Weapon.Attachment?.Handedness == WeaponHandedness.OneHanded
 			? 3
 			: Mathf.Clamp(MaximumComboAttacks, 1, 3);
+	}
+
+	private void EquipWeapon(
+		MeleeWeaponDefinition weapon,
+		int slot,
+		bool emitSignal)
+	{
+		WeaponAttachmentDefinition attachment = weapon.Attachment
+			?? throw new System.InvalidOperationException(
+				"Melee weapon requires an attachment definition.");
+		WeaponDefinition = weapon;
+		EquippedWeaponSlot = slot;
+		_weaponAttachment.Equip(attachment);
+		_animationController.SetWeaponHandedness(attachment.Handedness);
+		_bufferedAttackRemaining = 0.0f;
+		_queuedComboAttacks = 0;
+		ComboStep = 0;
+		UpdateRestGripPose(immediate: true);
+		SetWeaponRestPose(1.0f);
+		if (emitSignal)
+		{
+			EmitSignal(SignalName.WeaponEquipped, slot, weapon.DisplayName);
+		}
 	}
 }
