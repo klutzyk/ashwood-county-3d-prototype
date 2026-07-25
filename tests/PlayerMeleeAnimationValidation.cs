@@ -2,6 +2,7 @@
 
 using System;
 using Godot;
+using AshwoodCounty3DPrototype.Items;
 using AshwoodCounty3DPrototype.Player;
 using AshwoodCounty3DPrototype.Weapons;
 
@@ -12,6 +13,15 @@ public partial class PlayerMeleeAnimationValidation : Node
 	private static readonly string[] AssetPaths =
 	{
 		"res://assets/characters/player/anim/Standing Melee Attack Downward.fbx",
+	};
+	private static readonly string[] OneHandAssetPaths =
+	{
+		"res://assets/characters/player/mix_anim/1h/standing idle.fbx",
+		"res://assets/characters/player/mix_anim/1h/standing walk forward.fbx",
+		"res://assets/characters/player/mix_anim/1h/standing run forward.fbx",
+		"res://assets/characters/player/mix_anim/1h/standing melee combo attack ver. 1.fbx",
+		"res://assets/characters/player/mix_anim/1h/standing melee combo attack ver. 2.fbx",
+		"res://assets/characters/player/mix_anim/1h/standing melee combo attack ver. 3.fbx",
 	};
 
 	public override async void _Ready()
@@ -34,6 +44,15 @@ public partial class PlayerMeleeAnimationValidation : Node
 						animation.GetTrackCount() == 53,
 						$"{assetPath} imports the expected Mixamo animation tracks");
 				}
+				root.Free();
+			}
+			foreach (string assetPath in OneHandAssetPaths)
+			{
+				Node root = GD.Load<PackedScene>(assetPath).Instantiate();
+				AnimationPlayer player = FindAnimationPlayer(root)
+					?? throw new InvalidOperationException($"{assetPath} has no AnimationPlayer.");
+				Require(player.HasAnimation("mixamo_com"),
+					$"{assetPath} imports its Mixamo animation");
 				root.Free();
 			}
 
@@ -65,6 +84,41 @@ public partial class PlayerMeleeAnimationValidation : Node
 				attachment.CurrentPoseName ==
 					WeaponAttachmentController.TwoHandIdlePoseName,
 				"downward attack recovers to the two-handed idle");
+
+			MeleeWeaponDefinition axe = GD.Load<MeleeWeaponDefinition>(
+				"res://assets/weapons/wooden_axe.tres");
+			MeleeWeaponDefinition hammer = GD.Load<MeleeWeaponDefinition>(
+				"res://assets/weapons/wooden_hammer.tres");
+			Require(
+				axe.Attachment?.Handedness == WeaponHandedness.OneHanded &&
+				hammer.Attachment?.Handedness == WeaponHandedness.OneHanded,
+				"axe and hammer use one-handed attachment definitions");
+			Node3D axeScene = axe.Attachment!.WeaponScene!.Instantiate<Node3D>();
+			Node3D hammerScene = hammer.Attachment!.WeaponScene!.Instantiate<Node3D>();
+			Require(
+				axeScene.HasNode("GripOffset") &&
+				hammerScene.HasNode("GripOffset"),
+				"axe and hammer instantiate through the shared weapon scene hierarchy");
+			axeScene.Free();
+			hammerScene.Free();
+
+			animationController.SetWeaponHandedness(WeaponHandedness.OneHanded);
+			animationController._Process(0.2);
+			Require(
+				Mathf.IsEqualApprox(
+					animationController
+						.Get("parameters/WeaponIdle/blend_amount")
+						.AsSingle(),
+					1.0f),
+				"one-handed weapons select their authored locomotion set");
+			for (int comboStep = 1; comboStep <= 3; comboStep++)
+			{
+				animationController.PlayMeleeAttack(comboStep, combat.AttackDuration);
+				Require(
+					animationController.LastMeleeAnimationName ==
+						$"OneHandCombo{comboStep}",
+					$"one-handed combo step {comboStep} selects its authored clip");
+			}
 
 			GD.Print("PLAYER_MELEE_ANIMATION_VALIDATION: PASS");
 			GetTree().Quit(0);

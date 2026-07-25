@@ -1,0 +1,9 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://assets/weapons/hammer/wooden_hammer_01_1k.gltf" id="1_model"]
+
+[node name="WoodenHammer" type="Node3D"]
+
+[node name="GripOffset" type="Node3D" parent="."]
+
+[node name="Visual" parent="GripOffset" instance=ExtResource("1_model")]

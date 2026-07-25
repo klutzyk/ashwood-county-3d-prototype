@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="WeaponAttachmentDefinition" load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/WeaponAttachmentDefinition.cs" id="1_definition"]
+[ext_resource type="Script" path="res://scripts/weapons/WeaponGripPose.cs" id="2_pose"]
+[ext_resource type="PackedScene" path="res://assets/weapons/wooden_hammer.tscn" id="3_weapon"]
+
+[sub_resource type="Resource" id="GripOneHandIdle"]
+script = ExtResource("2_pose")
+PoseName = &"OneHandIdle"
+
+[sub_resource type="Resource" id="GripLocomotion"]
+script = ExtResource("2_pose")
+PoseName = &"Locomotion"
+
+[sub_resource type="Resource" id="GripMeleeAttack"]
+script = ExtResource("2_pose")
+PoseName = &"MeleeAttack"
+
+[resource]
+script = ExtResource("1_definition")
+WeaponScene = ExtResource("3_weapon")
+Handedness = 0
+GripPoses = Array[ExtResource("2_pose")]([SubResource("GripOneHandIdle"), SubResource("GripLocomotion"), SubResource("GripMeleeAttack")])

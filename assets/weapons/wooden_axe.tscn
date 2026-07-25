@@ -1,0 +1,9 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://assets/weapons/axe/wooden_axe_02_1k.gltf" id="1_model"]
+
+[node name="WoodenAxe" type="Node3D"]
+
+[node name="GripOffset" type="Node3D" parent="."]
+
+[node name="Visual" parent="GripOffset" instance=ExtResource("1_model")]

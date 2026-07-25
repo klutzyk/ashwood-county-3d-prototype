@@ -9,6 +9,7 @@ public partial class WeaponAttachmentController : BoneAttachment3D
 {
 	public static readonly StringName DefaultPoseName = new("Default");
 	public static readonly StringName TwoHandIdlePoseName = new("TwoHandIdle");
+	public static readonly StringName OneHandIdlePoseName = new("OneHandIdle");
 	public static readonly StringName LocomotionPoseName = new("Locomotion");
 	public static readonly StringName MeleeAttackPoseName = new("MeleeAttack");
 

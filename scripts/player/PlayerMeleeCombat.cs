@@ -55,8 +55,7 @@ public partial class PlayerMeleeCombat : Node3D
 			?? throw new System.InvalidOperationException(
 				"Melee weapon requires an attachment definition.");
 		_weaponAttachment.Equip(attachment);
-		_animationController.SetTwoHandedWeaponEquipped(
-			attachment.Handedness == WeaponHandedness.TwoHanded);
+		_animationController.SetWeaponHandedness(attachment.Handedness);
 		UpdateRestGripPose(immediate: true);
 		SetWeaponRestPose(1.0f);
 	}
@@ -130,7 +129,8 @@ public partial class PlayerMeleeCombat : Node3D
 		if (IsAttacking)
 		{
 			float progress = _attackElapsed / Mathf.Max(AttackDuration, 0.05f);
-			if (MaximumComboAttacks <= 1)
+			int maximumCombo = GetMaximumComboAttacks();
+			if (maximumCombo <= 1)
 			{
 				if (progress < Mathf.Clamp(AttackRestartMoment, 0.0f, 1.0f))
 				{
@@ -142,7 +142,6 @@ public partial class PlayerMeleeCombat : Node3D
 				return true;
 			}
 
-			int maximumCombo = Mathf.Clamp(MaximumComboAttacks, 1, 3);
 			if (ComboStep + _queuedComboAttacks >= maximumCombo)
 			{
 				return false;
@@ -209,7 +208,7 @@ public partial class PlayerMeleeCombat : Node3D
 	private void FinishAttack()
 	{
 		if (_queuedComboAttacks > 0 &&
-			ComboStep < Mathf.Clamp(MaximumComboAttacks, 1, 3))
+			ComboStep < GetMaximumComboAttacks())
 		{
 			_queuedComboAttacks--;
 			ComboStep++;
@@ -275,15 +274,25 @@ public partial class PlayerMeleeCombat : Node3D
 	private void UpdateRestGripPose(bool immediate = false)
 	{
 		float horizontalSpeed = new Vector2(_player.Velocity.X, _player.Velocity.Z).Length();
-		StringName targetPose = horizontalSpeed < 0.1f &&
-			Weapon.Attachment?.Handedness == WeaponHandedness.TwoHanded
+		WeaponHandedness handedness =
+			Weapon.Attachment?.Handedness ?? WeaponHandedness.TwoHanded;
+		StringName targetPose = horizontalSpeed >= 0.1f
+			? WeaponAttachmentController.LocomotionPoseName
+			: handedness == WeaponHandedness.TwoHanded
 				? WeaponAttachmentController.TwoHandIdlePoseName
-				: WeaponAttachmentController.LocomotionPoseName;
+				: WeaponAttachmentController.OneHandIdlePoseName;
 		if (_weaponAttachment.CurrentPoseName == targetPose && !immediate)
 		{
 			return;
 		}
 
 		_weaponAttachment.SetGripPose(targetPose, immediate);
+	}
+
+	private int GetMaximumComboAttacks()
+	{
+		return Weapon.Attachment?.Handedness == WeaponHandedness.OneHanded
+			? 3
+			: Mathf.Clamp(MaximumComboAttacks, 1, 3);
 	}
 }

@@ -12,14 +12,20 @@ public partial class WeaponGripAuthoring : Node3D
 	public enum GripPoseSelection
 	{
 		TwoHandIdle,
+		OneHandIdle,
 		Locomotion,
 		MeleeAttack,
 	}
 
 	private const string SourceAnimationName = "mixamo_com";
-	private const string PreviewAnimationName = "WeaponGripAuthoringTwoHandIdle";
 	private const string TwoHandIdlePath =
 		"res://assets/characters/player/2hand Idle.fbx";
+	private const string TwoHandLocomotionPath =
+		"res://assets/characters/player/Walking.fbx";
+	private const string TwoHandMeleeAttackPath =
+		"res://assets/characters/player/anim/Standing Melee Attack Downward.fbx";
+	private const string OneHandAnimationDirectory =
+		"res://assets/characters/player/mix_anim/1h/";
 	private const string DefaultAttachmentDefinitionPath =
 		"res://assets/weapons/baseball_bat_attachment.tres";
 
@@ -29,6 +35,7 @@ public partial class WeaponGripAuthoring : Node3D
 	private bool _playAnimationPreview = true;
 	private Node3D? _gripPoseOffset;
 	private AnimationPlayer? _animationPlayer;
+	private string _previewAnimationName = string.Empty;
 	private bool _previewReady;
 	private int _resourceLoadAttempts;
 
@@ -60,7 +67,7 @@ public partial class WeaponGripAuthoring : Node3D
 			}
 
 			_selectedPose = value;
-			QueuePoseReload();
+			QueuePreviewRefresh();
 		}
 	}
 
@@ -117,8 +124,17 @@ public partial class WeaponGripAuthoring : Node3D
 		_previewReady = false;
 		_gripPoseOffset = GetNodeOrNull<Node3D>(
 			"PreviewCharacter/Warrior/Skeleton3D/RightHandWeaponAttachment/GripPoseOffset");
-		_animationPlayer = FindDescendant<AnimationPlayer>(
-			GetNode("PreviewCharacter/Warrior"));
+		_animationPlayer = GetNodeOrNull<AnimationPlayer>("GripAnimationPreview");
+		if (_animationPlayer is null)
+		{
+			_animationPlayer = new AnimationPlayer
+			{
+				Name = "GripAnimationPreview",
+				RootNode = new NodePath("../PreviewCharacter/Warrior"),
+			};
+			AddChild(_animationPlayer);
+			_animationPlayer.AddAnimationLibrary("", new AnimationLibrary());
+		}
 		Resource? attachmentResource =
 			string.IsNullOrWhiteSpace(_attachmentDefinitionPath)
 				? null
@@ -282,21 +298,18 @@ public partial class WeaponGripAuthoring : Node3D
 			return;
 		}
 
-		if (_animationPlayer.HasAnimation(PreviewAnimationName))
+		(string animationName, string animationPath) =
+			GetSelectedPreviewAnimation();
+		_previewAnimationName = animationName;
+		if (_animationPlayer.HasAnimation(_previewAnimationName))
 		{
-			_animationPlayer.Play(PreviewAnimationName);
+			_animationPlayer.Play(_previewAnimationName);
 			ApplyAnimationPreviewPose();
 			return;
 		}
 
-		AnimationLibrary sourceLibrary = _animationPlayer.GetAnimationLibrary("");
-		AnimationLibrary previewLibrary =
-			(AnimationLibrary)sourceLibrary.Duplicate(true);
-		_animationPlayer.RemoveAnimationLibrary("");
-		_animationPlayer.AddAnimationLibrary("", previewLibrary);
-
 		PackedScene animationScene =
-			ResourceLoader.Load<PackedScene>(TwoHandIdlePath);
+			ResourceLoader.Load<PackedScene>(animationPath);
 		Node sourceRoot = animationScene.Instantiate();
 		AnimationPlayer? sourcePlayer =
 			FindDescendant<AnimationPlayer>(sourceRoot);
@@ -304,7 +317,7 @@ public partial class WeaponGripAuthoring : Node3D
 			!sourcePlayer.HasAnimation(SourceAnimationName))
 		{
 			sourceRoot.Free();
-			GD.PushError($"{TwoHandIdlePath} is missing {SourceAnimationName}.");
+			GD.PushError($"{animationPath} is missing {SourceAnimationName}.");
 			return;
 		}
 
@@ -312,19 +325,48 @@ public partial class WeaponGripAuthoring : Node3D
 			(Animation)sourcePlayer.GetAnimation(SourceAnimationName).Duplicate(true);
 		animation.LoopMode = Animation.LoopModeEnum.Linear;
 		RemoveHipsTranslation(animation);
-		previewLibrary.AddAnimation(PreviewAnimationName, animation);
+		_animationPlayer
+			.GetAnimationLibrary("")
+			.AddAnimation(_previewAnimationName, animation);
 		sourceRoot.Free();
 
-		_animationPlayer.Play(PreviewAnimationName);
+		_animationPlayer.Play(_previewAnimationName);
 		ApplyAnimationPreviewPose();
 	}
 
 	private void ApplyAnimationPreviewPose()
 	{
-		if (_animationPlayer?.HasAnimation(PreviewAnimationName) == true)
+		if (!string.IsNullOrEmpty(_previewAnimationName) &&
+			_animationPlayer?.HasAnimation(_previewAnimationName) == true)
 		{
 			_animationPlayer.Seek(0.0, update: true);
 		}
+	}
+
+	private (string Name, string Path) GetSelectedPreviewAnimation()
+	{
+		bool isOneHanded =
+			_attachmentDefinition?.Handedness == WeaponHandedness.OneHanded;
+		return _selectedPose switch
+		{
+			GripPoseSelection.OneHandIdle => (
+				"WeaponGripAuthoringOneHandIdle",
+				OneHandAnimationDirectory + "standing idle.fbx"),
+			GripPoseSelection.Locomotion when isOneHanded => (
+				"WeaponGripAuthoringOneHandWalk",
+				OneHandAnimationDirectory + "standing walk forward.fbx"),
+			GripPoseSelection.Locomotion => (
+				"WeaponGripAuthoringTwoHandWalk",
+				TwoHandLocomotionPath),
+			GripPoseSelection.MeleeAttack when isOneHanded => (
+				"WeaponGripAuthoringOneHandAttack",
+				OneHandAnimationDirectory +
+					"standing melee combo attack ver. 1.fbx"),
+			GripPoseSelection.MeleeAttack => (
+				"WeaponGripAuthoringTwoHandAttack",
+				TwoHandMeleeAttackPath),
+			_ => ("WeaponGripAuthoringTwoHandIdle", TwoHandIdlePath),
+		};
 	}
 
 	private void QueuePreviewRefresh()
@@ -332,14 +374,6 @@ public partial class WeaponGripAuthoring : Node3D
 		if (Engine.IsEditorHint() && IsInsideTree())
 		{
 			CallDeferred(MethodName.RefreshPreview);
-		}
-	}
-
-	private void QueuePoseReload()
-	{
-		if (Engine.IsEditorHint() && IsInsideTree())
-		{
-			CallDeferred(MethodName.ReloadPose);
 		}
 	}
 

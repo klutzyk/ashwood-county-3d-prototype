@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="MeleeWeaponDefinition" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/items/MeleeWeaponDefinition.cs" id="1_weapon"]
+[ext_resource type="Resource" path="res://assets/weapons/wooden_axe_attachment.tres" id="2_attachment"]
+
+[resource]
+script = ExtResource("1_weapon")
+Identifier = &"wooden_axe"
+DisplayName = "Wooden Axe"
+Attachment = ExtResource("2_attachment")
+Damage = 50.0
+Range = 2.0
+AttackArcDegrees = 80.0
+Cooldown = 0.32
+Knockback = 5.5
+NoiseRadius = 12.0
