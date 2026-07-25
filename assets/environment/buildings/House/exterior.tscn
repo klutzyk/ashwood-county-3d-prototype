@@ -93,6 +93,9 @@ uv1_scale = Vector3(8, 3, 1)
 material = ExtResource("2_roof")
 size = Vector3(8.4, 0.25, 10.4)
 
+[sub_resource type="BoxShape3D" id="RoofShape"]
+size = Vector3(8.4, 0.25, 10.4)
+
 [sub_resource type="StandardMaterial3D" id="WindowMaterial"]
 albedo_color = Color(0.12, 0.2, 0.21, 1)
 metallic = 0.15
@@ -165,6 +168,10 @@ shape = SubResource("SideShape")
 [node name="Roof" type="MeshInstance3D" parent="." unique_id=1956727159]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.13, 0)
 mesh = SubResource("RoofMesh")
+
+[node name="RoofCollision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 3.13, 0)
+shape = SubResource("RoofShape")
 
 [node name="SideWindow" type="MeshInstance3D" parent="." unique_id=1721119793]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 1.7, 1.55, 5.12)

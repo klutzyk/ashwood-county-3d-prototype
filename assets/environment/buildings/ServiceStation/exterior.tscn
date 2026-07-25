@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3]
+[gd_scene load_steps=19 format=3]
 
 [ext_resource type="Material" path="res://assets/materials/service_station_wall.tres" id="1_wall"]
 [ext_resource type="Material" path="res://assets/materials/building_fixture.tres" id="2_fixture"]
@@ -65,6 +65,9 @@ size = Vector3(7.5, 0.35, 8.2)
 material = ExtResource("4_roof")
 size = Vector3(5.4, 0.24, 9.4)
 
+[sub_resource type="BoxShape3D" id="RoofShape"]
+size = Vector3(5.4, 0.24, 9.4)
+
 [node name="ServiceStationExterior" type="StaticBody3D"]
 
 [node name="Forecourt" type="MeshInstance3D" parent="."]
@@ -128,6 +131,10 @@ shape = SubResource("SideShape")
 [node name="ShopRoof" type="MeshInstance3D" parent="."]
 position = Vector3(-3.9, 3.93, 0)
 mesh = SubResource("RoofMesh")
+
+[node name="ShopRoofCollision" type="CollisionShape3D" parent="."]
+position = Vector3(-3.9, 3.93, 0)
+shape = SubResource("RoofShape")
 
 [node name="ShopWindowNorth" type="MeshInstance3D" parent="."]
 position = Vector3(-1.28, 1.52, -2.65)

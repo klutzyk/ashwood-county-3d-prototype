@@ -194,6 +194,9 @@ public partial class PlayerAnimationController : AnimationTree
 	private void AddLocomotionAnimations(AnimationPlayer animationPlayer)
 	{
 		AnimationLibrary library = animationPlayer.GetAnimationLibrary("");
+		float oneHandStandingHipsHeight =
+			GetInitialHipsHeight(
+				OneHandAnimationDirectory + "standing idle.fbx");
 
 		AddAnimation(library, IdleAnimationName, IdlePath);
 		AddAnimation(library, TwoHandIdleAnimationName, TwoHandIdlePath);
@@ -211,18 +214,18 @@ public partial class PlayerAnimationController : AnimationTree
 			library,
 			OneHandCrouchIdleAnimationName,
 			OneHandAnimationDirectory + "crouch idle.fbx",
-			preserveVerticalHips: true);
+			hipsHeightReference: oneHandStandingHipsHeight);
 		AddAnimation(
 			library,
 			CrouchWalkAnimationName,
 			CrouchWalkPath,
-			preserveVerticalHips: true);
+			hipsHeightReference: oneHandStandingHipsHeight);
 		AddAnimation(
 			library,
 			OneHandStandTransitionAnimationName,
 			OneHandAnimationDirectory + "crouch to standing idle.fbx",
 			shouldLoop: false,
-			preserveVerticalHips: true);
+			hipsHeightReference: oneHandStandingHipsHeight);
 		_oneHandJumpAnimationLength = AddAnimation(
 			library,
 			OneHandJumpAnimationName,
@@ -235,7 +238,7 @@ public partial class PlayerAnimationController : AnimationTree
 		string name,
 		string assetPath,
 		bool shouldLoop = true,
-		bool preserveVerticalHips = false)
+		float? hipsHeightReference = null)
 	{
 		PackedScene animationScene = ResourceLoader.Load<PackedScene>(assetPath);
 		Node sourceRoot = animationScene.Instantiate();
@@ -247,7 +250,7 @@ public partial class PlayerAnimationController : AnimationTree
 		animation.LoopMode = shouldLoop
 			? Animation.LoopModeEnum.Linear
 			: Animation.LoopModeEnum.None;
-		MakeHipsTranslationInPlace(animation, preserveVerticalHips);
+		MakeHipsTranslationInPlace(animation, hipsHeightReference);
 		library.AddAnimation(name, animation);
 		float animationLength = (float)animation.Length;
 		sourceRoot.Free();
@@ -437,14 +440,14 @@ public partial class PlayerAnimationController : AnimationTree
 
 	private static void MakeHipsTranslationInPlace(
 		Animation animation,
-		bool preserveVerticalMotion)
+		float? hipsHeightReference)
 	{
 		for (int track = animation.GetTrackCount() - 1; track >= 0; track--)
 		{
 			if (animation.TrackGetType(track) == Animation.TrackType.Position3D &&
 				animation.TrackGetPath(track).ToString().EndsWith(":mixamorig_Hips"))
 			{
-				if (!preserveVerticalMotion)
+				if (!hipsHeightReference.HasValue)
 				{
 					animation.RemoveTrack(track);
 					continue;
@@ -463,11 +466,39 @@ public partial class PlayerAnimationController : AnimationTree
 					Vector3 position =
 						animation.TrackGetKeyValue(track, key).AsVector3();
 					position.X = referencePosition.X;
+					position.Y -= hipsHeightReference.Value;
 					position.Z = referencePosition.Z;
 					animation.TrackSetKeyValue(track, key, position);
 				}
 			}
 		}
+	}
+
+	private static float GetInitialHipsHeight(string assetPath)
+	{
+		PackedScene animationScene = ResourceLoader.Load<PackedScene>(assetPath);
+		Node sourceRoot = animationScene.Instantiate();
+		AnimationPlayer sourcePlayer = FindDescendant<AnimationPlayer>(sourceRoot)
+			?? throw new InvalidOperationException(
+				$"{assetPath} is missing an AnimationPlayer.");
+		Animation animation = sourcePlayer.GetAnimation(SourceAnimationName);
+		for (int track = 0; track < animation.GetTrackCount(); track++)
+		{
+			if (animation.TrackGetType(track) == Animation.TrackType.Position3D &&
+				animation.TrackGetPath(track).ToString()
+					.EndsWith(":mixamorig_Hips") &&
+				animation.TrackGetKeyCount(track) > 0)
+			{
+				float hipsHeight =
+					animation.TrackGetKeyValue(track, 0).AsVector3().Y;
+				sourceRoot.Free();
+				return hipsHeight;
+			}
+		}
+
+		sourceRoot.Free();
+		throw new InvalidOperationException(
+			$"{assetPath} is missing a hips position track.");
 	}
 
 	private static T? FindDescendant<T>(Node node) where T : Node

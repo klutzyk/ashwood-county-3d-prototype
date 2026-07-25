@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3]
+[gd_scene load_steps=15 format=3]
 
 [ext_resource type="Material" path="res://assets/materials/building_wall.tres" id="1_wall"]
 [ext_resource type="Material" path="res://assets/materials/building_fixture.tres" id="2_fixture"]
@@ -56,6 +56,9 @@ size = Vector3(2.4, 0.04, 9.8)
 
 [sub_resource type="BoxMesh" id="RoofMesh"]
 material = ExtResource("4_roof")
+size = Vector3(7.35, 0.24, 9.35)
+
+[sub_resource type="BoxShape3D" id="RoofShape"]
 size = Vector3(7.35, 0.24, 9.35)
 
 [node name="PharmacyExterior" type="StaticBody3D"]
@@ -117,6 +120,10 @@ shape = SubResource("SideShape")
 [node name="Roof" type="MeshInstance3D" parent="."]
 position = Vector3(0, 4.52, 0)
 mesh = SubResource("RoofMesh")
+
+[node name="RoofCollision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 4.52, 0)
+shape = SubResource("RoofShape")
 
 [node name="Pavement" type="MeshInstance3D" parent="."]
 position = Vector3(4.65, 0.02, 0)

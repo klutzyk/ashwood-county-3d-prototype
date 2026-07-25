@@ -79,6 +79,7 @@ public partial class PlayerMeleeAnimationValidation : Node
 			Animation crouchIdle =
 				visibleAnimationPlayer.GetAnimation("OneHandCrouchIdle");
 			bool hasCrouchHipsPosition = false;
+			float crouchHipsMaximumY = float.MinValue;
 			for (int track = 0; track < crouchIdle.GetTrackCount(); track++)
 			{
 				if (crouchIdle.TrackGetType(track) ==
@@ -87,11 +88,23 @@ public partial class PlayerMeleeAnimationValidation : Node
 						.EndsWith(":mixamorig_Hips"))
 				{
 					hasCrouchHipsPosition = true;
+					for (int key = 0;
+						key < crouchIdle.TrackGetKeyCount(track);
+						key++)
+					{
+						float hipsY = crouchIdle
+							.TrackGetKeyValue(track, key)
+							.AsVector3().Y;
+						crouchHipsMaximumY =
+							Mathf.Max(crouchHipsMaximumY, hipsY);
+					}
 					break;
 				}
 			}
 			Require(hasCrouchHipsPosition,
 				"crouch animation keeps vertical hip placement for grounded feet");
+			Require(crouchHipsMaximumY < 0.0f,
+				"crouch hips are lowered relative to standing instead of lifted");
 
 			Require(combat.TryAttack() &&
 				animationController.LastMeleeAnimationName == "MeleeAttackDownward",
