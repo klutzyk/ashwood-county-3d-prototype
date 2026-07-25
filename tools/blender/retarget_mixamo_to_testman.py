@@ -120,7 +120,9 @@ def find_action(
             for strip in track.strips:
                 if strip.action:
                     return strip.action
-    candidates = [action for action in bpy.data.actions if action not in newly_created_actions]
+    candidates = [
+        action for action in bpy.data.actions if action not in newly_created_actions
+    ]
     if len(candidates) == 1:
         return candidates[0]
     raise RuntimeError("Could not identify the imported Mixamo action.")
@@ -132,7 +134,11 @@ def validate_mapping(source: bpy.types.Object, target: bpy.types.Object) -> None
         for source_name, _ in BONE_MAP
         if blender_source_name(source_name) not in source.data.bones
     ]
-    missing_target = [target_name for _, target_name in BONE_MAP if target_name not in target.data.bones]
+    missing_target = [
+        target_name
+        for _, target_name in BONE_MAP
+        if target_name not in target.data.bones
+    ]
     if missing_source or missing_target:
         raise RuntimeError(
             "Retarget bone map is incomplete. "
@@ -309,27 +315,26 @@ def retarget_file(
     scene = bpy.context.scene
     scene.render.fps = fps
 
-    remy_objects = import_fbx(remy_path)
-    remy = find_armature(remy_objects, "mixamorig:Hips", "Remy")
-
     actions_before = set(bpy.data.actions)
+
     animation_objects = import_fbx(animation_path)
     animation_armature = find_armature(
         animation_objects,
         "mixamorig:Hips",
         "Mixamo animation",
     )
+
     source_action = find_action(animation_armature, actions_before)
-    remy.animation_data_create()
-    remy.animation_data.action = source_action
 
     testman_objects = import_fbx(testman_path)
     testman = find_armature(testman_objects, "pelvis", "Testman")
-    validate_mapping(remy, testman)
+
+    validate_mapping(animation_armature, testman)
 
     action_name = animation_path.stem.replace(" ", "_")
+
     bake_action(
-        remy,
+        animation_armature,
         testman,
         source_action,
         action_name,
