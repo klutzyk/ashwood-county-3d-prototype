@@ -26,8 +26,8 @@ public partial class PlayerMeleeCombat : Node3D
 	[Export(PropertyHint.Range, "0,1,0.01")] public float AttackRestartMoment { get; set; } = 0.53f;
 	[Export(PropertyHint.Range, "1,3,1")] public int MaximumComboAttacks { get; set; } = 1;
 	[Export(PropertyHint.Range, "0,0.3,0.01")] public float InputBufferDuration { get; set; } = 0.12f;
-	[Export(PropertyHint.Range, "0.1,0.6,0.01")]
-	public float OneHandComboClickWindow { get; set; } = 0.38f;
+	[Export(PropertyHint.Range, "0.2,0.9,0.01")]
+	public float OneHandAttackCancelMoment { get; set; } = 0.45f;
 	[Export] public float ReadyPoseBlendSpeed { get; set; } = 10.0f;
 	[Export] public NodePath WeaponAttachmentPath { get; set; } =
 		new("../Visual/Warrior/Skeleton3D/RightHandWeaponAttachment");
@@ -97,6 +97,14 @@ public partial class PlayerMeleeCombat : Node3D
 			ApplyAttackHit();
 		}
 
+		if (IsOneHandedWeapon() &&
+			_queuedComboAttacks > 0 &&
+			progress >= GetOneHandAttackCancelMoment())
+		{
+			StartNextOneHandAttack();
+			return;
+		}
+
 		if (progress >= 1.0f)
 		{
 			FinishAttack();
@@ -157,18 +165,18 @@ public partial class PlayerMeleeCombat : Node3D
 				return true;
 			}
 
-			if (ComboStep + _queuedComboAttacks >= maximumCombo)
+			if (_queuedComboAttacks > 0)
 			{
 				return false;
 			}
 
-			if (_attackElapsed >
-				Mathf.Max(OneHandComboClickWindow, 0.1f))
+			if (progress >= GetOneHandAttackCancelMoment())
 			{
-				return false;
+				StartNextOneHandAttack();
+				return true;
 			}
 
-			_queuedComboAttacks++;
+			_queuedComboAttacks = 1;
 			return true;
 		}
 
@@ -240,7 +248,9 @@ public partial class PlayerMeleeCombat : Node3D
 		IsAttacking = false;
 		_attackElapsed = 0.0f;
 		_queuedComboAttacks = 0;
-		_cooldownRemaining = Mathf.Max(Weapon.Cooldown, 0.0f);
+		_cooldownRemaining = IsOneHandedWeapon()
+			? 0.0f
+			: Mathf.Max(Weapon.Cooldown, 0.0f);
 		_readyPoseBlend = 0.0f;
 		UpdateRestGripPose();
 		SetWeaponRestPose(_readyPoseBlend);
@@ -312,9 +322,28 @@ public partial class PlayerMeleeCombat : Node3D
 
 	private int GetMaximumComboAttacks()
 	{
-		return Weapon.Attachment?.Handedness == WeaponHandedness.OneHanded
+		return IsOneHandedWeapon()
 			? 3
 			: Mathf.Clamp(MaximumComboAttacks, 1, 3);
+	}
+
+	private bool IsOneHandedWeapon()
+	{
+		return Weapon.Attachment?.Handedness == WeaponHandedness.OneHanded;
+	}
+
+	private float GetOneHandAttackCancelMoment()
+	{
+		return Mathf.Clamp(OneHandAttackCancelMoment, 0.2f, 0.9f);
+	}
+
+	private void StartNextOneHandAttack()
+	{
+		_queuedComboAttacks = 0;
+		ComboStep = ComboStep >= GetMaximumComboAttacks()
+			? 1
+			: ComboStep + 1;
+		StartAttackStep();
 	}
 
 	private void EquipWeapon(

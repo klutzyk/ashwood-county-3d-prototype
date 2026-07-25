@@ -67,10 +67,31 @@ public partial class PlayerMeleeAnimationValidation : Node
 				playerCharacter.GetNode<PlayerMeleeCombat>("MeleeCombat");
 			PlayerAnimationController animationController =
 				playerCharacter.GetNode<PlayerAnimationController>("AnimationTree");
+			AnimationPlayer visibleAnimationPlayer =
+				FindAnimationPlayer(playerCharacter)
+				?? throw new InvalidOperationException(
+					"visible character has no animation player");
 			WeaponAttachmentController attachment =
 				playerCharacter.GetNode<WeaponAttachmentController>(
 					"Visual/Warrior/Skeleton3D/RightHandWeaponAttachment");
 			combat.SetProcess(false);
+
+			Animation crouchIdle =
+				visibleAnimationPlayer.GetAnimation("OneHandCrouchIdle");
+			bool hasCrouchHipsPosition = false;
+			for (int track = 0; track < crouchIdle.GetTrackCount(); track++)
+			{
+				if (crouchIdle.TrackGetType(track) ==
+						Animation.TrackType.Position3D &&
+					crouchIdle.TrackGetPath(track).ToString()
+						.EndsWith(":mixamorig_Hips"))
+				{
+					hasCrouchHipsPosition = true;
+					break;
+				}
+			}
+			Require(hasCrouchHipsPosition,
+				"crouch animation keeps vertical hip placement for grounded feet");
 
 			Require(combat.TryAttack() &&
 				animationController.LastMeleeAnimationName == "MeleeAttackDownward",
@@ -130,24 +151,33 @@ public partial class PlayerMeleeAnimationValidation : Node
 				animationController.LastMeleeAnimationName ==
 					"OneHandHorizontal",
 				"a normal one-handed click starts the horizontal attack");
-			Require(combat.RequestAttack() && combat.RequestAttack() &&
-				combat.QueuedComboAttacks == 2,
-				"two rapid follow-up clicks queue the full combo");
-			combat._Process(combat.AttackDuration);
+			Require(combat.RequestAttack() && !combat.RequestAttack() &&
+				combat.QueuedComboAttacks == 1,
+				"only one rapid follow-up click is buffered at a time");
+			combat._Process(
+				combat.AttackDuration * combat.OneHandAttackCancelMoment);
 			Require(animationController.LastMeleeAnimationName ==
 				"OneHandDownward",
-				"the second combo attack is downward");
-			combat._Process(combat.AttackDuration);
+				"the buffered second attack starts at the cancel point");
+			Require(combat.RequestAttack(),
+				"the next click buffers against the visible second attack");
+			combat._Process(
+				combat.AttackDuration * combat.OneHandAttackCancelMoment);
 			Require(animationController.LastMeleeAnimationName ==
 				"OneHand360Low",
-				"the third combo attack is the low 360");
+				"the buffered third attack starts at the next cancel point");
+			Require(combat.RequestAttack(),
+				"a follow-up click can buffer during the third attack");
+			combat._Process(
+				combat.AttackDuration * combat.OneHandAttackCancelMoment);
+			Require(animationController.LastMeleeAnimationName ==
+				"OneHandHorizontal",
+				"the combo loops immediately back to horizontal");
 			combat._Process(combat.AttackDuration);
-			combat._Process(axe.Cooldown);
-			Require(combat.TryAttack(),
-				"a later click starts a fresh horizontal attack");
-			combat._Process(combat.OneHandComboClickWindow + 0.01f);
-			Require(!combat.RequestAttack(),
-				"a click outside the rapid combo window does not continue the combo");
+			Require(combat.TryAttack() &&
+				animationController.LastMeleeAnimationName ==
+					"OneHandHorizontal",
+				"one-handed attacks have no post-animation cooldown");
 
 			GD.Print("PLAYER_MELEE_ANIMATION_VALIDATION: PASS");
 			GetTree().Quit(0);

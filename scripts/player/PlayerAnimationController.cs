@@ -210,16 +210,19 @@ public partial class PlayerAnimationController : AnimationTree
 		AddAnimation(
 			library,
 			OneHandCrouchIdleAnimationName,
-			OneHandAnimationDirectory + "crouch idle.fbx");
+			OneHandAnimationDirectory + "crouch idle.fbx",
+			preserveVerticalHips: true);
 		AddAnimation(
 			library,
 			CrouchWalkAnimationName,
-			CrouchWalkPath);
+			CrouchWalkPath,
+			preserveVerticalHips: true);
 		AddAnimation(
 			library,
 			OneHandStandTransitionAnimationName,
 			OneHandAnimationDirectory + "crouch to standing idle.fbx",
-			shouldLoop: false);
+			shouldLoop: false,
+			preserveVerticalHips: true);
 		_oneHandJumpAnimationLength = AddAnimation(
 			library,
 			OneHandJumpAnimationName,
@@ -231,7 +234,8 @@ public partial class PlayerAnimationController : AnimationTree
 		AnimationLibrary library,
 		string name,
 		string assetPath,
-		bool shouldLoop = true)
+		bool shouldLoop = true,
+		bool preserveVerticalHips = false)
 	{
 		PackedScene animationScene = ResourceLoader.Load<PackedScene>(assetPath);
 		Node sourceRoot = animationScene.Instantiate();
@@ -243,7 +247,7 @@ public partial class PlayerAnimationController : AnimationTree
 		animation.LoopMode = shouldLoop
 			? Animation.LoopModeEnum.Linear
 			: Animation.LoopModeEnum.None;
-		RemoveHipsTranslation(animation);
+		MakeHipsTranslationInPlace(animation, preserveVerticalHips);
 		library.AddAnimation(name, animation);
 		float animationLength = (float)animation.Length;
 		sourceRoot.Free();
@@ -431,14 +435,37 @@ public partial class PlayerAnimationController : AnimationTree
 		};
 	}
 
-	private static void RemoveHipsTranslation(Animation animation)
+	private static void MakeHipsTranslationInPlace(
+		Animation animation,
+		bool preserveVerticalMotion)
 	{
 		for (int track = animation.GetTrackCount() - 1; track >= 0; track--)
 		{
 			if (animation.TrackGetType(track) == Animation.TrackType.Position3D &&
 				animation.TrackGetPath(track).ToString().EndsWith(":mixamorig_Hips"))
 			{
-				animation.RemoveTrack(track);
+				if (!preserveVerticalMotion)
+				{
+					animation.RemoveTrack(track);
+					continue;
+				}
+
+				int keyCount = animation.TrackGetKeyCount(track);
+				if (keyCount == 0)
+				{
+					continue;
+				}
+
+				Vector3 referencePosition =
+					animation.TrackGetKeyValue(track, 0).AsVector3();
+				for (int key = 0; key < keyCount; key++)
+				{
+					Vector3 position =
+						animation.TrackGetKeyValue(track, key).AsVector3();
+					position.X = referencePosition.X;
+					position.Z = referencePosition.Z;
+					animation.TrackSetKeyValue(track, key, position);
+				}
 			}
 		}
 	}
