@@ -64,6 +64,9 @@ size = Vector3(50, 0.2, 50)
 [sub_resource type="BoxShape3D" id="GrassShape"]
 size = Vector3(50, 0.2, 50)
 
+[sub_resource type="SphereShape3D" id="CameraCollisionShape"]
+radius = 0.2
+
 [sub_resource type="BoxMesh" id="RoadMesh"]
 material = ExtResource("5_asphalt")
 size = Vector3(8, 0.08, 48)
@@ -428,8 +431,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
 
 [node name="SpringArm3D" type="SpringArm3D" parent="Player/CameraRig" unique_id=476616506]
 transform = Transform3D(1, 0, 0, 0, 0.9799247, 0.19936793, 0, -0.19936793, 0.9799247, 0, 0, 0)
-spring_length = 5.0
-margin = 0.15
+spring_length = 3.25
+shape = SubResource("CameraCollisionShape")
+margin = 0.1
 
 [node name="Camera3D" type="Camera3D" parent="Player/CameraRig/SpringArm3D" unique_id=1834467021]
 current = true

@@ -94,6 +94,7 @@ Completed
 - [x] Door transition feedback and input locking
 - [x] Continuous interiors
 - [x] Searchable buildings
+- [x] Closer collision-aware camera framing for interiors
 
 Remaining
 

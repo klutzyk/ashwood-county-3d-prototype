@@ -16,8 +16,8 @@ public partial class ThirdPersonPlayer : CharacterBody3D
 	[Export] public float SprintNoiseInterval { get; set; } = 0.6f;
 	[Export] public float MeleeImpactShakeStrength { get; set; } = 0.035f;
 	[Export] public float MeleeImpactShakeDuration { get; set; } = 0.08f;
+	[Export] public float CameraHeight { get; set; } = 1.15f;
 
-	private const float CameraHeight = 0.75f;
 	private const float MinimumPitch = -1.05f;
 	private const float MaximumPitch = 0.65f;
 	private const float TurnSpeed = 12.0f;

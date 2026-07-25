@@ -1829,3 +1829,28 @@ Validation:
 - Separate combo animations remained hand-bound without body clipping
 - Player-melee-animation, melee-responsiveness and weapon-attachment validations passed
 - C# build completed with no warnings or errors
+
+---
+
+## Closer Interior Camera Framing
+
+Completed:
+
+- Shortened the third-person camera distance from five metres to 3.25 metres
+- Raised the camera pivot for a closer over-the-player view
+- Added a small spring-arm collision volume so walls pull the camera inside
+  cleanly instead of allowing it to remain outside or clip around wall edges
+- Preserved mouse-controlled pitch, movement-relative camera direction and
+  melee-impact camera feedback
+
+Outcome:
+
+The regular camera now has a closer survival-game framing. Existing building
+collision automatically brings it above and nearer to the player in interiors;
+the current building dimensions are sufficient and did not require enlargement.
+
+Validation:
+
+- C# build completed with no warnings or errors
+- Godot editor import and prototype-world runtime load completed without scene
+  or script errors
