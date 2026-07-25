@@ -26,4 +26,5 @@ BlendDuration = 0.06
 [resource]
 script = ExtResource("1_definition")
 WeaponScene = ExtResource("3_bat")
+DefaultGripTransform = Transform3D(0.266667, 0, 0, 0, 0.266667, 0, 0, 0, 0.266667, 0, 0, 0)
 GripPoses = Array[ExtResource("2_pose")]([SubResource("GripTwoHandIdle"), SubResource("GripLocomotion"), SubResource("GripMeleeAttack")])

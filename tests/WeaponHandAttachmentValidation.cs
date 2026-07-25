@@ -11,7 +11,7 @@ namespace AshwoodCounty3DPrototype.Tests;
 public partial class WeaponHandAttachmentValidation : Node
 {
 	private const string AttachmentPath =
-		"Player/Visual/Remy/Skeleton3D/RightHandWeaponAttachment";
+		"Player/Visual/Warrior/Skeleton3D/RightHandWeaponAttachment";
 
 	public override async void _Ready()
 	{
@@ -36,7 +36,7 @@ public partial class WeaponHandAttachmentValidation : Node
 				player.GetNode<WeaponAttachmentController>(
 				AttachmentPath["Player/".Length..]);
 			Require(attachment.BoneName == "mixamorig_RightHand",
-				"weapon attachment remains bound to Remy's right hand");
+				"weapon attachment remains bound to the warrior's right hand");
 			Require(attachment.Definition is not null &&
 				attachment.Definition.Handedness == WeaponHandedness.TwoHanded,
 				"baseball bat declares its reusable two-handed attachment profile");

@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://beokyixs6j764" path="res://scripts/player/ThirdPersonPlayer.cs" id="1_player"]
 [ext_resource type="Script" uid="uid://bonxghg7ovam5" path="res://scripts/ui/PerformanceDisplay.cs" id="2_fps"]
-[ext_resource type="PackedScene" uid="uid://djrqu67cg22bu" path="res://assets/characters/player/Remy.fbx" id="3_remy"]
+[ext_resource type="PackedScene" uid="uid://bjo5opmx100eh" path="res://assets/characters/player/mix_anim/WarriorIdle_withskin.fbx" id="3_warrior"]
 [ext_resource type="Script" uid="uid://yffxb2u2vsyt" path="res://scripts/player/PlayerAnimationController.cs" id="4_animation"]
 [ext_resource type="Material" path="res://assets/materials/asphalt_02.tres" id="5_asphalt"]
 [ext_resource type="PackedScene" path="res://assets/environment/nature/common_tree_1.tscn" id="6_tree_1"]
@@ -412,31 +412,15 @@ HitMoment = 0.4
 transform = Transform3D(0.907437, 0.42018816, 0, -0.42018816, 0.907437, 0, 0, 0, 1, 0.48, 0.48000002, 0.21999979)
 
 [node name="Visual" type="Node3D" parent="Player" unique_id=517271585]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, -1, 0)
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0.120479465, 0)
 
-[node name="Remy" parent="Player/Visual" unique_id=615219697 instance=ExtResource("3_remy")]
+[node name="Warrior" parent="Player/Visual" unique_id=615219697 instance=ExtResource("3_warrior")]
+transform = Transform3D(3.75, 0, 0, 0, 3.75, 0, 0, 0, 3.75, 0, -0.244, 0)
 
-[node name="Skeleton3D" parent="Player/Visual/Remy" index="0" unique_id=635193917]
-bones/0/position = Vector3(-0.00041841506, 2.0907955, -0.014165651)
-bones/9/rotation = Quaternion(-0.41797325, -0.51503944, 0.5575851, -0.49913093)
-bones/10/rotation = Quaternion(0.014758642, 0.0011320582, 0.07646946, 0.9969621)
-bones/12/rotation = Quaternion(2.9805765e-08, 0.000115677714, -2.980576e-08, 1)
-bones/17/rotation = Quaternion(0.25184977, -0.05948836, 0.22197582, 0.9400849)
-bones/33/rotation = Quaternion(0.4193531, -0.51384926, 0.5803352, 0.47256017)
-bones/34/rotation = Quaternion(0.008637618, -0.0008798077, -0.10134822, 0.99481314)
-bones/36/rotation = Quaternion(4.772985e-12, -5.3584576e-05, 8.940537e-08, 1)
-bones/41/rotation = Quaternion(0.2518744, 0.059476495, -0.22194818, 0.94008565)
-bones/57/rotation = Quaternion(-3.3372849e-06, -0.0015365232, 0.99999595, 0.002383186)
-bones/58/rotation = Quaternion(-0.035844542, -3.0150115e-05, 0.0050147404, 0.9993449)
-bones/59/rotation = Quaternion(0.44507322, -0.019626278, 0.034769624, 0.89460367)
-bones/62/rotation = Quaternion(4.031827e-05, 0.011048188, 0.9999338, -0.0032380049)
-bones/63/rotation = Quaternion(-0.046335205, 1.789706e-05, -0.0067078145, 0.99890345)
-bones/64/rotation = Quaternion(0.4468175, 0.02294471, -0.039689604, 0.8934497)
-
-[node name="RightHandWeaponAttachment" type="BoneAttachment3D" parent="Player/Visual/Remy/Skeleton3D" index="7" unique_id=372434050]
-transform = Transform3D(9.5103815e-08, -0.99999994, 3.147768e-07, -0.00010688214, -3.20375e-07, -1.0000001, 0.99999994, 1.3359619e-07, -0.0001068781, -1.7024353, 2.9986477, -0.121040344)
+[node name="RightHandWeaponAttachment" type="BoneAttachment3D" parent="Player/Visual/Warrior/Skeleton3D" parent_id_path=PackedInt32Array(615219697, 1958704927) index="1" unique_id=372434050]
+transform = Transform3D(0.034227878, -0.99623996, 0.07958838, 0.14486793, -0.07384826, -0.9866911, 0.9888586, 0.045302056, 0.14179562, -0.38710058, 0.2263894, 0.50829417)
 bone_name = "mixamorig_RightHand"
-bone_idx = 36
+bone_idx = 34
 script = ExtResource("54_weapon_attachment")
 
 [node name="CameraRig" type="Node3D" parent="Player" unique_id=947114645]
@@ -1023,4 +1007,4 @@ horizontal_alignment = 1
 
 [node name="PauseMenu" parent="PerformanceUI" unique_id=354200872 instance=ExtResource("45_pause_menu")]
 
-[editable path="Player/Visual/Remy"]
+[editable path="Player/Visual/Warrior"]

@@ -8,16 +8,17 @@ namespace AshwoodCounty3DPrototype.Player;
 public partial class PlayerAnimationController : AnimationTree
 {
 	private const string SourceAnimationName = "mixamo_com";
-	private const string IdleAnimationName = "Idle";
+	private const string IdleAnimationName = "WarriorIdle";
 	private const string WalkAnimationName = "Walk";
 	private const string RunAnimationName = "Run";
 	private const string TwoHandIdleAnimationName = "TwoHandIdle";
 	private const string MeleeAttackAnimationName = "MeleeAttackDownward";
 	private const string TwoHandIdlePath =
-	"res://assets/characters/player/2hand Idle.fbx";
+		"res://assets/characters/player/2hand Idle.fbx";
 	private const string MeleeAttackPath =
 		"res://assets/characters/player/anim/Standing Melee Attack Downward.fbx";
-	private const string IdlePath = "res://assets/characters/player/Idle.fbx";
+	private const string IdlePath =
+		"res://assets/characters/player/mix_anim/WarriorIdle_withskin.fbx";
 	private const string WalkPath = "res://assets/characters/player/Walking.fbx";
 	private const string RunPath = "res://assets/characters/player/Fast Run.fbx";
 	private const float BlendSpeed = 8.0f;
@@ -40,7 +41,8 @@ public partial class PlayerAnimationController : AnimationTree
 	{
 		_player = GetParent<ThirdPersonPlayer>();
 		_animationPlayer = FindDescendant<AnimationPlayer>(_player)
-			?? throw new InvalidOperationException("Remy is missing an AnimationPlayer.");
+			?? throw new InvalidOperationException(
+				"Visible player character is missing an AnimationPlayer.");
 
 		AddLocomotionAnimations(_animationPlayer);
 		AddMeleeAnimations(_animationPlayer);
@@ -124,7 +126,7 @@ public partial class PlayerAnimationController : AnimationTree
 		animation.LoopMode = shouldLoop
 			? Animation.LoopModeEnum.Linear
 			: Animation.LoopModeEnum.None;
-		KeepRootMotionInPlace(animation);
+		RemoveHipsTranslation(animation);
 		library.AddAnimation(name, animation);
 		float animationLength = (float)animation.Length;
 		sourceRoot.Free();
@@ -230,23 +232,14 @@ public partial class PlayerAnimationController : AnimationTree
 		};
 	}
 
-	private static void KeepRootMotionInPlace(Animation animation)
+	private static void RemoveHipsTranslation(Animation animation)
 	{
-		for (int track = 0; track < animation.GetTrackCount(); track++)
+		for (int track = animation.GetTrackCount() - 1; track >= 0; track--)
 		{
-			if (animation.TrackGetType(track) != Animation.TrackType.Position3D ||
-				!animation.TrackGetPath(track).ToString().EndsWith(":mixamorig_Hips"))
+			if (animation.TrackGetType(track) == Animation.TrackType.Position3D &&
+				animation.TrackGetPath(track).ToString().EndsWith(":mixamorig_Hips"))
 			{
-				continue;
-			}
-
-			Vector3 startingPosition = animation.TrackGetKeyValue(track, 0).AsVector3();
-			for (int key = 0; key < animation.TrackGetKeyCount(track); key++)
-			{
-				Vector3 position = animation.TrackGetKeyValue(track, key).AsVector3();
-				position.X = startingPosition.X;
-				position.Z = startingPosition.Z;
-				animation.TrackSetKeyValue(track, key, position);
+				animation.RemoveTrack(track);
 			}
 		}
 	}
