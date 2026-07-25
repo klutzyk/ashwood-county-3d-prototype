@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://djjtx1pobc7cj"
-path="res://.godot/imported/standing melee attack downward.fbx-d168f4317f8171af2ab3c71ef353bf1b.scn"
+uid="uid://f1vjonir8qof"
+path="res://.godot/imported/Crouched Walking.fbx-5b14c3ad455c2b4deee60b4242455ac1.scn"
 
 [deps]
 
-source_file="res://assets/characters/player/mix_anim/1h/standing melee attack downward.fbx"
-dest_files=["res://.godot/imported/standing melee attack downward.fbx-d168f4317f8171af2ab3c71ef353bf1b.scn"]
+source_file="res://assets/characters/player/Crouched Walking.fbx"
+dest_files=["res://.godot/imported/Crouched Walking.fbx-5b14c3ad455c2b4deee60b4242455ac1.scn"]
 
 [params]
 

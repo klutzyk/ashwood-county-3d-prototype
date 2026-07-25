@@ -282,14 +282,26 @@ public partial class ThirdPersonPlayer : CharacterBody3D
 
 	private void UpdateCrouch()
 	{
-		bool crouchRequested =
-			Input.IsActionPressed("crouch") && IsOnFloor();
-		if (IsCrouching == crouchRequested)
+		if (IsCrouching && Input.IsActionPressed("run"))
+		{
+			SetCrouching(false);
+			return;
+		}
+
+		if (IsOnFloor() && Input.IsActionJustPressed("crouch"))
+		{
+			SetCrouching(!IsCrouching);
+		}
+	}
+
+	private void SetCrouching(bool isCrouching)
+	{
+		if (IsCrouching == isCrouching)
 		{
 			return;
 		}
 
-		IsCrouching = crouchRequested;
+		IsCrouching = isCrouching;
 		float crouchHeight = Mathf.Max(
 			_collisionCapsule.Radius * 2.0f,
 			_standingCollisionHeight * 0.62f);

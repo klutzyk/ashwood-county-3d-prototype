@@ -16,8 +16,8 @@ public partial class PlayerAnimationController : AnimationTree
 	private const string MeleeAttackAnimationName = "MeleeAttackDownward";
 	private const string OneHandIdleAnimationName = "OneHandIdle";
 	private const string OneHandWalkAnimationName = "OneHandWalk";
-	private const string OneHandRunAnimationName = "OneHandRun";
 	private const string OneHandCrouchIdleAnimationName = "OneHandCrouchIdle";
+	private const string CrouchWalkAnimationName = "CrouchWalk";
 	private const string OneHandStandTransitionAnimationName =
 		"OneHandCrouchToStand";
 	private const string OneHandJumpAnimationName = "OneHandJump";
@@ -31,18 +31,20 @@ public partial class PlayerAnimationController : AnimationTree
 		"res://assets/characters/player/mix_anim/WarriorIdle_withskin.fbx";
 	private const string WalkPath = "res://assets/characters/player/Walking.fbx";
 	private const string RunPath = "res://assets/characters/player/Fast Run.fbx";
+	private const string CrouchWalkPath =
+		"res://assets/characters/player/Crouched Walking.fbx";
 	private const float BlendSpeed = 8.0f;
 	private static readonly string[] OneHandAttackAnimationNames =
 	{
-		"OneHandCombo1",
-		"OneHandCombo2",
-		"OneHandCombo3",
+		"OneHandHorizontal",
+		"OneHandDownward",
+		"OneHand360Low",
 	};
 	private static readonly string[] OneHandAttackPaths =
 	{
-		OneHandAnimationDirectory + "standing melee combo attack ver. 1.fbx",
-		OneHandAnimationDirectory + "standing melee combo attack ver. 2.fbx",
-		OneHandAnimationDirectory + "standing melee combo attack ver. 3.fbx",
+		OneHandAnimationDirectory + "Standing Melee Attack Horizontal.fbx",
+		OneHandAnimationDirectory + "Standing Melee Attack Downward.fbx",
+		OneHandAnimationDirectory + "Standing Melee Attack 360 Low.fbx",
 	};
 
 	private ThirdPersonPlayer _player = null!;
@@ -97,6 +99,12 @@ public partial class PlayerAnimationController : AnimationTree
 			_player.IsSprinting && horizontalSpeed > 0.1f
 				? 1.0f
 				: 0.0f;
+		float crouchMoveTarget = _player.IsCrouching
+			? Mathf.Clamp(
+				horizontalSpeed / Mathf.Max(_player.CrouchSpeed, 0.1f),
+				0.0f,
+				1.0f)
+			: 0.0f;
 
 		float blendStep = BlendSpeed * (float)delta;
 
@@ -159,7 +167,7 @@ public partial class PlayerAnimationController : AnimationTree
 		Set("parameters/IdleType/blend_amount", _twoHandIdleBlend);
 		Set("parameters/WeaponIdle/blend_amount", _oneHandBlend);
 		Set("parameters/WeaponWalk/blend_amount", _oneHandBlend);
-		Set("parameters/WeaponRun/blend_amount", _oneHandBlend);
+		Set("parameters/CrouchMove/blend_amount", crouchMoveTarget);
 		Set("parameters/CrouchBlend/blend_amount", _crouchBlend);
 		Set("parameters/IdleWalk/blend_amount", _idleWalkBlend);
 		Set("parameters/RunBlend/blend_amount", _runBlend);
@@ -201,12 +209,12 @@ public partial class PlayerAnimationController : AnimationTree
 			OneHandAnimationDirectory + "standing walk forward.fbx");
 		AddAnimation(
 			library,
-			OneHandRunAnimationName,
-			OneHandAnimationDirectory + "standing run forward.fbx");
-		AddAnimation(
-			library,
 			OneHandCrouchIdleAnimationName,
 			OneHandAnimationDirectory + "crouch idle.fbx");
+		AddAnimation(
+			library,
+			CrouchWalkAnimationName,
+			CrouchWalkPath);
 		AddAnimation(
 			library,
 			OneHandStandTransitionAnimationName,
@@ -298,17 +306,6 @@ public partial class PlayerAnimationController : AnimationTree
 			new Vector2(-260.0f, 160.0f)
 		);
 		blendTree.AddNode(
-			"OneHandRun",
-			CreateAnimationNode(OneHandRunAnimationName),
-			new Vector2(-260.0f, 260.0f)
-		);
-		blendTree.AddNode(
-			"WeaponRun",
-			new AnimationNodeBlend2(),
-			new Vector2(-40.0f, 180.0f)
-		);
-
-		blendTree.AddNode(
 			"RunBlend",
 			new AnimationNodeBlend2(),
 			new Vector2(180.0f, 0.0f)
@@ -317,6 +314,14 @@ public partial class PlayerAnimationController : AnimationTree
 			"CrouchIdle",
 			CreateAnimationNode(OneHandCrouchIdleAnimationName),
 			new Vector2(-40.0f, 320.0f));
+		blendTree.AddNode(
+			"CrouchWalk",
+			CreateAnimationNode(CrouchWalkAnimationName),
+			new Vector2(-40.0f, 440.0f));
+		blendTree.AddNode(
+			"CrouchMove",
+			new AnimationNodeBlend2(),
+			new Vector2(180.0f, 360.0f));
 		blendTree.AddNode(
 			"CrouchBlend",
 			new AnimationNodeBlend2(),
@@ -377,12 +382,12 @@ public partial class PlayerAnimationController : AnimationTree
 		blendTree.ConnectNode("IdleWalk", 0, "WeaponIdle");
 		blendTree.ConnectNode("IdleWalk", 1, "WeaponWalk");
 
-		blendTree.ConnectNode("WeaponRun", 0, "Run");
-		blendTree.ConnectNode("WeaponRun", 1, "OneHandRun");
 		blendTree.ConnectNode("RunBlend", 0, "IdleWalk");
-		blendTree.ConnectNode("RunBlend", 1, "WeaponRun");
+		blendTree.ConnectNode("RunBlend", 1, "Run");
+		blendTree.ConnectNode("CrouchMove", 0, "CrouchIdle");
+		blendTree.ConnectNode("CrouchMove", 1, "CrouchWalk");
 		blendTree.ConnectNode("CrouchBlend", 0, "RunBlend");
-		blendTree.ConnectNode("CrouchBlend", 1, "CrouchIdle");
+		blendTree.ConnectNode("CrouchBlend", 1, "CrouchMove");
 
 		blendTree.ConnectNode("StandTransition", 0, "CrouchBlend");
 		blendTree.ConnectNode("StandTransition", 1, "StandTransitionClip");

@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://b2eqjf5c6bc3p"
-path="res://.godot/imported/standing melee attack horizontal.fbx-a6bf8ea712515cafca03cdb5be4b1712.scn"
+uid="uid://ef38xkgsb2pk"
+path="res://.godot/imported/Standing Melee Attack 360 Low.fbx-ab499733cfe3c5a2e5c702d43240fb0d.scn"
 
 [deps]
 
-source_file="res://assets/characters/player/mix_anim/1h/standing melee attack horizontal.fbx"
-dest_files=["res://.godot/imported/standing melee attack horizontal.fbx-a6bf8ea712515cafca03cdb5be4b1712.scn"]
+source_file="res://assets/characters/player/mix_anim/1h/Standing Melee Attack 360 Low.fbx"
+dest_files=["res://.godot/imported/Standing Melee Attack 360 Low.fbx-ab499733cfe3c5a2e5c702d43240fb0d.scn"]
 
 [params]
 

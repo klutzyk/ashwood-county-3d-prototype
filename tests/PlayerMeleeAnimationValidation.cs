@@ -18,10 +18,12 @@ public partial class PlayerMeleeAnimationValidation : Node
 	{
 		"res://assets/characters/player/mix_anim/1h/standing idle.fbx",
 		"res://assets/characters/player/mix_anim/1h/standing walk forward.fbx",
-		"res://assets/characters/player/mix_anim/1h/standing run forward.fbx",
-		"res://assets/characters/player/mix_anim/1h/standing melee combo attack ver. 1.fbx",
-		"res://assets/characters/player/mix_anim/1h/standing melee combo attack ver. 2.fbx",
-		"res://assets/characters/player/mix_anim/1h/standing melee combo attack ver. 3.fbx",
+		"res://assets/characters/player/mix_anim/1h/crouch idle.fbx",
+		"res://assets/characters/player/mix_anim/1h/standing jump.fbx",
+		"res://assets/characters/player/Crouched Walking.fbx",
+		"res://assets/characters/player/mix_anim/1h/Standing Melee Attack Horizontal.fbx",
+		"res://assets/characters/player/mix_anim/1h/Standing Melee Attack Downward.fbx",
+		"res://assets/characters/player/mix_anim/1h/Standing Melee Attack 360 Low.fbx",
 	};
 
 	public override async void _Ready()
@@ -111,14 +113,41 @@ public partial class PlayerMeleeAnimationValidation : Node
 						.AsSingle(),
 					1.0f),
 				"one-handed weapons select their authored locomotion set");
+			string[] expectedComboAnimations =
+				{ "OneHandHorizontal", "OneHandDownward", "OneHand360Low" };
 			for (int comboStep = 1; comboStep <= 3; comboStep++)
 			{
 				animationController.PlayMeleeAttack(comboStep, combat.AttackDuration);
 				Require(
 					animationController.LastMeleeAnimationName ==
-						$"OneHandCombo{comboStep}",
+						expectedComboAnimations[comboStep - 1],
 					$"one-handed combo step {comboStep} selects its authored clip");
 			}
+
+			Require(combat.TryEquipWeaponSlot(1),
+				"slot 2 equips the one-handed axe");
+			Require(combat.TryAttack() &&
+				animationController.LastMeleeAnimationName ==
+					"OneHandHorizontal",
+				"a normal one-handed click starts the horizontal attack");
+			Require(combat.RequestAttack() && combat.RequestAttack() &&
+				combat.QueuedComboAttacks == 2,
+				"two rapid follow-up clicks queue the full combo");
+			combat._Process(combat.AttackDuration);
+			Require(animationController.LastMeleeAnimationName ==
+				"OneHandDownward",
+				"the second combo attack is downward");
+			combat._Process(combat.AttackDuration);
+			Require(animationController.LastMeleeAnimationName ==
+				"OneHand360Low",
+				"the third combo attack is the low 360");
+			combat._Process(combat.AttackDuration);
+			combat._Process(axe.Cooldown);
+			Require(combat.TryAttack(),
+				"a later click starts a fresh horizontal attack");
+			combat._Process(combat.OneHandComboClickWindow + 0.01f);
+			Require(!combat.RequestAttack(),
+				"a click outside the rapid combo window does not continue the combo");
 
 			GD.Print("PLAYER_MELEE_ANIMATION_VALIDATION: PASS");
 			GetTree().Quit(0);

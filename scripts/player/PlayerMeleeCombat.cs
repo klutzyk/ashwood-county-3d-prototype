@@ -26,6 +26,8 @@ public partial class PlayerMeleeCombat : Node3D
 	[Export(PropertyHint.Range, "0,1,0.01")] public float AttackRestartMoment { get; set; } = 0.53f;
 	[Export(PropertyHint.Range, "1,3,1")] public int MaximumComboAttacks { get; set; } = 1;
 	[Export(PropertyHint.Range, "0,0.3,0.01")] public float InputBufferDuration { get; set; } = 0.12f;
+	[Export(PropertyHint.Range, "0.1,0.6,0.01")]
+	public float OneHandComboClickWindow { get; set; } = 0.38f;
 	[Export] public float ReadyPoseBlendSpeed { get; set; } = 10.0f;
 	[Export] public NodePath WeaponAttachmentPath { get; set; } =
 		new("../Visual/Warrior/Skeleton3D/RightHandWeaponAttachment");
@@ -156,6 +158,12 @@ public partial class PlayerMeleeCombat : Node3D
 			}
 
 			if (ComboStep + _queuedComboAttacks >= maximumCombo)
+			{
+				return false;
+			}
+
+			if (_attackElapsed >
+				Mathf.Max(OneHandComboClickWindow, 0.1f))
 			{
 				return false;
 			}
@@ -321,6 +329,7 @@ public partial class PlayerMeleeCombat : Node3D
 		EquippedWeaponSlot = slot;
 		_weaponAttachment.Equip(attachment);
 		_animationController.SetWeaponHandedness(attachment.Handedness);
+		_cooldownRemaining = 0.0f;
 		_bufferedAttackRemaining = 0.0f;
 		_queuedComboAttacks = 0;
 		ComboStep = 0;
