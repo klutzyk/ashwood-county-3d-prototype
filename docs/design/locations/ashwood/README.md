@@ -2,9 +2,159 @@
 
 > *"The county's heart. A quiet rural town whose ordinary life was abruptly interrupted."*
 
-[← Back to World Guide](../README.md)
+[← Back to World Guide](../../README.md)
 
 ---
+
+![Ashwood Mood Board](images/ashwood_mood_board.png)
+
+---
+
+# Status
+
+| Stage | Status |
+|---------|--------|
+| World Concept | ✅ Approved |
+| Layout | ⏳ Planned |
+| Gameplay | ⏳ Planned |
+| Assets | ⏳ Planned |
+| Implementation | ⏳ Planned |
+
+---
+
+# Quick Navigation
+
+## Design
+
+- [Overview](#overview)
+- [Town Identity](#town-identity)
+- [Design Goals](#design-goals)
+- [History](#history)
+- [Districts](#districts)
+- [Town Layout](#town-layout)
+- [Architecture](#architecture)
+
+---
+
+## Gameplay
+
+- [Gameplay Design](#gameplay-design)
+- [Loot Economy](#loot-economy)
+- [Zombie Ecology](#zombie-ecology)
+
+---
+
+## Atmosphere
+
+- [Atmosphere](#atmosphere)
+- [Audio Design](#audio-design)
+- [Lighting](#lighting)
+
+---
+
+## Future
+
+- [Future Expansion](#future-expansion)
+- [Implementation Notes](#implementation-notes)
+
+---
+
+# Design Documents
+
+## Districts
+
+| District | Status |
+|----------|--------|
+| [Historic Downtown](districts/historic_downtown.md) | ⏳ |
+| [Civic District](districts/civic_district.md) | ⏳ |
+| [Medical District](districts/medical_district.md) | ⏳ |
+| [Highway Commercial Strip](districts/highway_commercial_strip.md) | ⏳ |
+| [Residential North](districts/residential_north.md) | ⏳ |
+| [Residential South](districts/residential_south.md) | ⏳ |
+
+---
+
+## Major Landmarks
+
+| Landmark | Status |
+|----------|--------|
+| [Sheriff's Office](landmarks/sheriff_office.md) | ⏳ |
+| [Regional Hospital](landmarks/regional_hospital.md) | ⏳ |
+| [Town Hall](landmarks/town_hall.md) | ⏳ |
+| [Library](landmarks/library.md) | ⏳ |
+| [Fire Station](landmarks/fire_station.md) | ⏳ |
+| [Church](landmarks/church.md) | ⏳ |
+| [Water Tower](landmarks/water_tower.md) | ⏳ |
+| [Blackwater River Bridge](landmarks/blackwater_river_bridge.md) | ⏳ |
+| [War Memorial](landmarks/war_memorial.md) | ⏳ |
+| [Main Street Clock](landmarks/main_street_clock.md) | ⏳ |
+
+---
+
+## Streets
+
+| Street | Status |
+|--------|--------|
+| [Main Street](streets/main_street.md) | ⏳ |
+| [River Road](streets/river_road.md) | ⏳ |
+| [Hospital Drive](streets/hospital_drive.md) | ⏳ |
+| [Highway 16](streets/highway_16.md) | ⏳ |
+
+---
+
+## Interiors
+
+| Interior | Status |
+|----------|--------|
+| [Regional Hospital](interiors/hospital.md) | ⏳ |
+| [Sheriff's Office](interiors/sheriff_office.md) | ⏳ |
+| [Diner](interiors/diner.md) | ⏳ |
+| [Pharmacy](interiors/pharmacy.md) | ⏳ |
+| [House Type A](interiors/house_type_a.md) | ⏳ |
+| [House Type B](interiors/house_type_b.md) | ⏳ |
+
+---
+
+## Visual References
+
+| Image | Description |
+|-------|-------------|
+| ![Mood Board](images/ashwood_mood_board.png) | Overall artistic direction for Ashwood. |
+| ![Town Layout](images/ashwood_town_layout.png) | Top-down planning layout showing districts, roads, and major landmarks. |
+
+---
+
+# Overview
+
+---
+
+⬇️ **Leave everything below exactly as you already have it.**
+
+From this point onward, keep your existing sections unchanged:
+
+- Overview
+- Town Identity
+- Design Goals
+- History
+- Districts
+- Town Layout
+- Architecture
+- Public Services
+- Commercial District
+- Residential Areas
+- Transportation
+- Landmarks
+- Gameplay Design
+- Environmental Storytelling
+- Loot Economy
+- Zombie Ecology
+- Atmosphere
+- Audio Design
+- Lighting
+- Future Expansion
+- Implementation Notes
+
+
 
 # Status
 
@@ -191,9 +341,8 @@ Playgrounds.
 
 # Town Layout
 
-> *(Concept map placeholder)*
 
-![Ashwood Layout](../images/ashwood_layout_concept.png)
+![Ashwood Layout](../images/ashwood_town_layout.png)
 
 The town is organised around a traditional Main Street.
 
