@@ -276,6 +276,20 @@ Once this checklist is complete, the prototype has achieved its purpose.
 
 ---
 
+# World Preproduction
+
+County layout
+Town locations
+Road hierarchy
+Landmarks
+Biome plan
+Building catalogue
+Interior catalogue
+Points of interest
+Environmental storytelling
+Loot economy
+Travel times
+
 # Phase 2 — Production Alpha
 
 The prototype becomes a real game.
