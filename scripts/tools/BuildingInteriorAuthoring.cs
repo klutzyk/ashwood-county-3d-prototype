@@ -232,6 +232,7 @@ public partial class BuildingInteriorAuthoring : Node3D
 		}
 
 		VerifySavedLayout(_layoutResource.ResourcePath, savedElements.Count);
+		ReloadLayout();
 	}
 
 	private void AddElement(BuildingInteriorElementType type)

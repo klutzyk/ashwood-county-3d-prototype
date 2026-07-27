@@ -4,32 +4,20 @@
 [ext_resource type="PackedScene" uid="uid://h6n55h4tnu3h" path="res://assets/third_party/props/doors/shop_front_door.glb" id="2_door"]
 [ext_resource type="Script" uid="uid://7pjn07w4xksy" path="res://scripts/interactions/DoorController.cs" id="3_controller"]
 [ext_resource type="Script" uid="uid://bwaot3gvfvo4b" path="res://scripts/interactions/Interactable.cs" id="4_interactable"]
-[ext_resource type="Script" path="res://scripts/tools/BuildingInteriorInstance.cs" id="14_interior_instance"]
+[ext_resource type="Script" uid="uid://b1umlngadxofp" path="res://scripts/tools/BuildingInteriorInstance.cs" id="14_interior_instance"]
 [ext_resource type="Resource" uid="uid://jhajwdqrgiri" path="res://assets/environment/buildings/ashwood/bakery_interior_layout.tres" id="15_interior_layout"]
 
 [sub_resource type="BoxShape3D" id="SideWallShape"]
 size = Vector3(4.8, 6.4, 0.3)
 
-[sub_resource type="BoxShape3D" id="BackDoorRearReturnShape"]
-size = Vector3(0.166118, 6.4, 0.3)
-
-[sub_resource type="BoxShape3D" id="BackDoorFrontReturnShape"]
-size = Vector3(3.427847, 6.4, 0.3)
-
-[sub_resource type="BoxShape3D" id="BackDoorLintelShape"]
-size = Vector3(1.206035, 3.485003, 0.3)
-
 [sub_resource type="BoxShape3D" id="RearWallShape"]
 size = Vector3(0.3, 6.4, 9.7)
 
 [sub_resource type="BoxShape3D" id="FrontLeftShape"]
-size = Vector3(0.3, 6.4, 4.224092)
+size = Vector3(0.3, 6.4, 2.4161916)
 
 [sub_resource type="BoxShape3D" id="FrontRightShape"]
-size = Vector3(0.3, 6.4, 3.836138)
-
-[sub_resource type="BoxShape3D" id="LintelShape"]
-size = Vector3(0.3, 3.754, 1.93977)
+size = Vector3(0.3, 6.4, 5.2144556)
 
 [sub_resource type="BoxShape3D" id="DoorShape"]
 size = Vector3(0.994, 1.86, 0.18)
@@ -46,50 +34,35 @@ AnimationDuration = 0.5
 [node name="BakeryExterior" parent="Exterior" unique_id=2070359624 instance=ExtResource("1_bakery")]
 transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 3.27161, 0)
 
-[node name="BuildingInteriorInstance" type="Node3D" parent="."]
+[node name="BuildingInteriorInstance" type="Node3D" parent="." unique_id=611070481]
 script = ExtResource("14_interior_instance")
 LayoutResource = ExtResource("15_interior_layout")
 
-[node name="GeneratedInteriorVisuals" type="Node3D" parent="BuildingInteriorInstance"]
+[node name="GeneratedInteriorVisuals" type="Node3D" parent="BuildingInteriorInstance" unique_id=2102967252]
 
-[node name="GeneratedInteriorCollision" type="Node3D" parent="BuildingInteriorInstance"]
+[node name="GeneratedInteriorCollision" type="Node3D" parent="BuildingInteriorInstance" unique_id=1587128421]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.7027199)
 
 [node name="Collision" type="Node3D" parent="." unique_id=1527332224]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.56707764, 0, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.56707764, 0, 0, 0.92150354)
 
 [node name="Shell" type="StaticBody3D" parent="Collision" unique_id=1110092560]
 
-[node name="BackDoorRearReturn" type="CollisionShape3D" parent="Collision/Shell"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.316941, 3.2, -4.85)
-shape = SubResource("BackDoorRearReturnShape")
-
-[node name="BackDoorFrontReturn" type="CollisionShape3D" parent="Collision/Shell"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6860765, 3.2, -4.85)
-shape = SubResource("BackDoorFrontReturnShape")
-
-[node name="BackDoorLintel" type="CollisionShape3D" parent="Collision/Shell"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6308645, 4.6574984, -4.85)
-shape = SubResource("BackDoorLintelShape")
-
 [node name="RightWall" type="CollisionShape3D" parent="Collision/Shell" unique_id=177020174]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.2, 4.85)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.2, 7.035193)
 shape = SubResource("SideWallShape")
 
 [node name="RearWall" type="CollisionShape3D" parent="Collision/Shell" unique_id=1055714835]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4, 3.2, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.4498682, 3.2, 0)
 shape = SubResource("RearWallShape")
 
 [node name="FrontLeft" type="CollisionShape3D" parent="Collision/Shell" unique_id=1289903770]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4, 3.2, -2.887954)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4, 3.2, -3.7919047)
 shape = SubResource("FrontLeftShape")
 
 [node name="FrontRight" type="CollisionShape3D" parent="Collision/Shell" unique_id=1153695372]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4, 3.2, 3.081931)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4, 3.2, 2.3927722)
 shape = SubResource("FrontRightShape")
-
-[node name="FrontLintel" type="CollisionShape3D" parent="Collision/Shell" unique_id=248882272]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4, 4.623, 0.193977)
-shape = SubResource("LintelShape")
 
 [node name="BackDoorModel" parent="." unique_id=890113662 instance=ExtResource("2_door")]
 transform = Transform3D(-0.0069699436, 0, -0.0001810416, 0, 0.007277815, 0, 0.00019976441, 0, -0.006316689, -1.6308643, 1.8000824, -2.658674)

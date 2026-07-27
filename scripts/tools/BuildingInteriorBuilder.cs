@@ -20,12 +20,12 @@ public static class BuildingInteriorBuilder
 			Name = element.Name,
 			Mesh = new BoxMesh
 			{
-				Size = Vector3.One,
+				Size = size,
 				Material = material ?? element.Material ?? CreateFallbackMaterial(),
 			},
 			Position = element.Position,
 			RotationDegrees = element.RotationDegrees,
-			Scale = size,
+			Scale = Vector3.One,
 			Visible = element.Enabled,
 		};
 		return visual;
@@ -34,6 +34,7 @@ public static class BuildingInteriorBuilder
 	public static BuildingInteriorPreviewElement CreatePreview(
 		BuildingInteriorElement element)
 	{
+		Vector3 size = SanitizeSize(element.Size);
 		BuildingInteriorPreviewElement preview = new()
 		{
 			Name = element.Name,
@@ -44,12 +45,12 @@ public static class BuildingInteriorBuilder
 			GenerateCollision = element.GenerateCollision,
 			Mesh = new BoxMesh
 			{
-				Size = Vector3.One,
+				Size = size,
 				Material = element.Material ?? CreateFallbackMaterial(),
 			},
 			Position = element.Position,
 			RotationDegrees = element.RotationDegrees,
-			Scale = SanitizeSize(element.Size),
+			Scale = Vector3.One,
 			Visible = element.Enabled,
 			CastShadow = GeometryInstance3D.ShadowCastingSetting.Off,
 		};
@@ -80,13 +81,21 @@ public static class BuildingInteriorBuilder
 	public static BuildingInteriorElement CreateElementFromPreview(
 		BuildingInteriorPreviewElement preview)
 	{
+		Vector3 meshSize = preview.Mesh is BoxMesh boxMesh
+			? boxMesh.Size
+			: preview.Mesh?.GetAabb().Size ?? Vector3.One;
+		Vector3 finalSize = SanitizeSize(new Vector3(
+			meshSize.X * Mathf.Abs(preview.Scale.X),
+			meshSize.Y * Mathf.Abs(preview.Scale.Y),
+			meshSize.Z * Mathf.Abs(preview.Scale.Z)));
+
 		return new BuildingInteriorElement
 		{
 			Name = preview.Name,
 			Type = preview.ElementType,
 			Position = preview.Position,
 			RotationDegrees = preview.RotationDegrees,
-			Size = SanitizeSize(preview.Scale),
+			Size = finalSize,
 			Material = preview.ElementMaterial,
 			Enabled = preview.ElementEnabled,
 			GenerateVisual = preview.GenerateVisual,

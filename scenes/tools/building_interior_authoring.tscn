@@ -3,20 +3,27 @@
 [ext_resource type="Script" uid="uid://mjrpbd1flasf" path="res://scripts/tools/BuildingInteriorAuthoring.cs" id="1_tool"]
 [ext_resource type="PackedScene" uid="uid://ce4xrjnsj33ke" path="res://scenes/world/ashwood/bakery.tscn" id="2_6o5hp"]
 [ext_resource type="Resource" uid="uid://jhajwdqrgiri" path="res://assets/environment/buildings/ashwood/bakery_interior_layout.tres" id="3_prknq"]
+[ext_resource type="Material" path="res://assets/materials/building_authoring/wood_floor_1k.tres" id="4_2aul6"]
 [ext_resource type="Script" uid="uid://cweja6m04pnpb" path="res://scripts/tools/BuildingInteriorPreviewElement.cs" id="4_preview"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6o5hp"]
-albedo_color = Color(0.65, 0.67, 0.7, 1)
-roughness = 0.85
-
-[sub_resource type="BoxMesh" id="BoxMesh_6o5hp"]
-material = SubResource("StandardMaterial3D_6o5hp")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ureo2"]
+[ext_resource type="Material" path="res://assets/materials/building_authoring/wood_planks_1k.tres" id="6_0xuqk"]
+[ext_resource type="Material" path="res://assets/materials/ashwood_bakery_ceiling.tres" id="7_ufoip"]
+[ext_resource type="Material" path="res://assets/materials/building_authoring/dark_wooden_planks_1k.tres" id="8_ufoip"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_2aul6"]
-material = SubResource("ShaderMaterial_ureo2")
-size = Vector3(1.3984375, 1, 0.9851074)
+material = ExtResource("4_2aul6")
+size = Vector3(1.7666626, 1, 1.0047607)
+
+[sub_resource type="BoxMesh" id="BoxMesh_62raq"]
+material = ExtResource("6_0xuqk")
+size = Vector3(1.6137695, 1, 1.7459717)
+
+[sub_resource type="BoxMesh" id="BoxMesh_v7dep"]
+material = ExtResource("7_ufoip")
+size = Vector3(1.059372, 2.1351929, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_di2jw"]
+material = ExtResource("8_ufoip")
+size = Vector3(2.296875, 1.4434814, 1)
 
 [sub_resource type="StandardMaterial3D" id="OriginRedMaterial"]
 shading_mode = 0
@@ -47,29 +54,42 @@ script = ExtResource("1_tool")
 ExteriorScene = ExtResource("2_6o5hp")
 LayoutResource = ExtResource("3_prknq")
 GhostExterior = true
-GhostExteriorOpacity = 0.35
+GhostExteriorOpacity = 0.8
 
 [node name="ExteriorPreview" type="Node3D" parent="." unique_id=30146543]
 
 [node name="LayoutPreviews" type="Node3D" parent="." unique_id=251691943]
 
-[node name="Wall 1" type="MeshInstance3D" parent="LayoutPreviews" unique_id=983904151]
-transform = Transform3D(3, 0, 0, 0, 2.5, 0, 0, 0, 0.15, 0, 1.7846751, 6.4985275)
-cast_shadow = 0
-mesh = SubResource("BoxMesh_6o5hp")
-script = ExtResource("4_preview")
-
 [node name="Floor 1" type="MeshInstance3D" parent="LayoutPreviews" unique_id=1110826732]
-transform = Transform3D(3.2506366, 0, 0, 0, 0.08336203, 0, 0, 0, 7.178153, -0.25, 0.6229873, 1.1342125)
+transform = Transform3D(3.2506366, 0, 0, 0, 0.08336203, 0, 0, 0, 7.178153, -0.352872, 0.5809964, 1.0636752)
 cast_shadow = 0
 mesh = SubResource("BoxMesh_2aul6")
 script = ExtResource("4_preview")
 ElementType = 2
-ElementMaterial = SubResource("ShaderMaterial_ureo2")
+ElementMaterial = ExtResource("4_2aul6")
 
-[node name="GeneratedCollision" type="Node3D" parent="." unique_id=1917051272]
+[node name="Ceiling 1" type="MeshInstance3D" parent="LayoutPreviews" unique_id=515587219]
+transform = Transform3D(4, 0, 0, 0, 0.1, 0, 0, 0, 4, -0.5029297, 5.406159, 1.0534668)
+cast_shadow = 0
+mesh = SubResource("BoxMesh_62raq")
+script = ExtResource("4_preview")
+ElementType = 3
+ElementMaterial = ExtResource("6_0xuqk")
 
-[node name="GeneratedSceneCollision" type="Node3D" parent="." unique_id=895603834]
+[node name="Wall 1" type="MeshInstance3D" parent="LayoutPreviews" unique_id=824040351]
+transform = Transform3D(3, 0, 0, 0, 2.5, 0, 0, 0, 0.15, 0.70893276, 2.668991, 2.953275)
+cast_shadow = 0
+mesh = SubResource("BoxMesh_v7dep")
+script = ExtResource("4_preview")
+ElementMaterial = ExtResource("7_ufoip")
+
+[node name="Counter 1" type="MeshInstance3D" parent="LayoutPreviews" unique_id=1332668113]
+transform = Transform3D(0.078378245, 0, -0.69904375, 0, 1, 0, 1.4979509, 0, 0.036576517, -0.5905847, 1.025932, -0.7767695)
+cast_shadow = 0
+mesh = SubResource("BoxMesh_di2jw")
+script = ExtResource("4_preview")
+ElementType = 1
+ElementMaterial = ExtResource("8_ufoip")
 
 [node name="OriginMarker" type="Node3D" parent="." unique_id=221175202]
 
