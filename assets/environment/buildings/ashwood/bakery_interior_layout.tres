@@ -2,14 +2,32 @@
 
 [ext_resource type="Script" uid="uid://bod76m4863mh4" path="res://scripts/tools/BuildingInteriorElement.cs" id="1_ei22t"]
 [ext_resource type="Script" uid="uid://5t8aix35hhp3" path="res://scripts/tools/BuildingInteriorLayout.cs" id="2_0ia2y"]
+[ext_resource type="Material" path="res://assets/materials/building_authoring/wood_floor_1k.tres" id="3_floor"]
+[ext_resource type="Material" path="res://assets/materials/building_authoring/worn_planks_1k.tres" id="4_ceiling"]
 
-[sub_resource type="Resource" id="Resource_ei22t"]
+[sub_resource type="Resource" id="Resource_tb3ga"]
 script = ExtResource("1_ei22t")
 Name = &"Wall 1"
 Position = Vector3(0, 1.7846751, 6.4985275)
 Size = Vector3(3, 2.5, 0.15)
 
+[sub_resource type="Resource" id="Resource_0s0le"]
+script = ExtResource("1_ei22t")
+Name = &"Bakery Floor"
+Type = 2
+Position = Vector3(0, 0.692, 0)
+Size = Vector3(4.5, 0.1, 5.2)
+Material = ExtResource("3_floor")
+
+[sub_resource type="Resource" id="Resource_p45k6"]
+script = ExtResource("1_ei22t")
+Name = &"Bakery Ceiling"
+Type = 3
+Position = Vector3(0, 3.2, 0)
+Size = Vector3(4.5, 0.1, 5.2)
+Material = ExtResource("4_ceiling")
+
 [resource]
 script = ExtResource("2_0ia2y")
-Elements = Array[ExtResource("1_ei22t")]([SubResource("Resource_ei22t")])
+Elements = Array[ExtResource("1_ei22t")]([SubResource("Resource_tb3ga"), SubResource("Resource_0s0le"), SubResource("Resource_p45k6")])
 metadata/_custom_type_script = "uid://5t8aix35hhp3"

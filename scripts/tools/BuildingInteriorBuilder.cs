@@ -21,7 +21,7 @@ public static class BuildingInteriorBuilder
 			Mesh = new BoxMesh
 			{
 				Size = Vector3.One,
-				Material = material ?? CreateRuntimeMaterial(element.Type),
+				Material = material ?? element.Material ?? CreateFallbackMaterial(),
 			},
 			Position = element.Position,
 			RotationDegrees = element.RotationDegrees,
@@ -29,6 +29,31 @@ public static class BuildingInteriorBuilder
 			Visible = element.Enabled,
 		};
 		return visual;
+	}
+
+	public static BuildingInteriorPreviewElement CreatePreview(
+		BuildingInteriorElement element)
+	{
+		BuildingInteriorPreviewElement preview = new()
+		{
+			Name = element.Name,
+			ElementType = element.Type,
+			ElementMaterial = element.Material,
+			ElementEnabled = element.Enabled,
+			GenerateVisual = element.GenerateVisual,
+			GenerateCollision = element.GenerateCollision,
+			Mesh = new BoxMesh
+			{
+				Size = Vector3.One,
+				Material = element.Material ?? CreateFallbackMaterial(),
+			},
+			Position = element.Position,
+			RotationDegrees = element.RotationDegrees,
+			Scale = SanitizeSize(element.Size),
+			Visible = element.Enabled,
+			CastShadow = GeometryInstance3D.ShadowCastingSetting.Off,
+		};
+		return preview;
 	}
 
 	public static StaticBody3D CreateCollision(BuildingInteriorElement element)
@@ -52,18 +77,20 @@ public static class BuildingInteriorBuilder
 		return body;
 	}
 
-	public static BuildingInteriorElement CreateElementFromVisual(
-		MeshInstance3D visual,
-		BuildingInteriorElementType type)
+	public static BuildingInteriorElement CreateElementFromPreview(
+		BuildingInteriorPreviewElement preview)
 	{
 		return new BuildingInteriorElement
 		{
-			Name = visual.Name,
-			Type = type,
-			Position = visual.Position,
-			RotationDegrees = visual.RotationDegrees,
-			Size = SanitizeSize(visual.Scale),
-			Enabled = visual.Visible,
+			Name = preview.Name,
+			Type = preview.ElementType,
+			Position = preview.Position,
+			RotationDegrees = preview.RotationDegrees,
+			Size = SanitizeSize(preview.Scale),
+			Material = preview.ElementMaterial,
+			Enabled = preview.ElementEnabled,
+			GenerateVisual = preview.GenerateVisual,
+			GenerateCollision = preview.GenerateCollision,
 		};
 	}
 
@@ -84,14 +111,11 @@ public static class BuildingInteriorBuilder
 			Mathf.Max(Mathf.Abs(size.Z), MinimumElementSize));
 	}
 
-	private static StandardMaterial3D CreateRuntimeMaterial(
-		BuildingInteriorElementType type)
+	public static StandardMaterial3D CreateFallbackMaterial()
 	{
 		return new StandardMaterial3D
 		{
-			AlbedoColor = type == BuildingInteriorElementType.Wall
-				? new Color(0.72f, 0.69f, 0.62f)
-				: new Color(0.36f, 0.2f, 0.1f),
+			AlbedoColor = new Color(0.65f, 0.67f, 0.7f),
 			Roughness = 0.85f,
 		};
 	}

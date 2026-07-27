@@ -3,14 +3,20 @@
 [ext_resource type="Script" uid="uid://mjrpbd1flasf" path="res://scripts/tools/BuildingInteriorAuthoring.cs" id="1_tool"]
 [ext_resource type="PackedScene" uid="uid://ce4xrjnsj33ke" path="res://scenes/world/ashwood/bakery.tscn" id="2_6o5hp"]
 [ext_resource type="Resource" uid="uid://jhajwdqrgiri" path="res://assets/environment/buildings/ashwood/bakery_interior_layout.tres" id="3_prknq"]
+[ext_resource type="Script" uid="uid://cweja6m04pnpb" path="res://scripts/tools/BuildingInteriorPreviewElement.cs" id="4_preview"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_prknq"]
-transparency = 1
-shading_mode = 0
-albedo_color = Color(0.22, 0.58, 0.9, 0.55)
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6o5hp"]
+albedo_color = Color(0.65, 0.67, 0.7, 1)
+roughness = 0.85
 
 [sub_resource type="BoxMesh" id="BoxMesh_6o5hp"]
-material = SubResource("StandardMaterial3D_prknq")
+material = SubResource("StandardMaterial3D_6o5hp")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ureo2"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_2aul6"]
+material = SubResource("ShaderMaterial_ureo2")
+size = Vector3(1.3984375, 1, 0.9851074)
 
 [sub_resource type="StandardMaterial3D" id="OriginRedMaterial"]
 shading_mode = 0
@@ -40,6 +46,7 @@ size = Vector3(0.04, 0.04, 1)
 script = ExtResource("1_tool")
 ExteriorScene = ExtResource("2_6o5hp")
 LayoutResource = ExtResource("3_prknq")
+GhostExterior = true
 GhostExteriorOpacity = 0.35
 
 [node name="ExteriorPreview" type="Node3D" parent="." unique_id=30146543]
@@ -50,7 +57,19 @@ GhostExteriorOpacity = 0.35
 transform = Transform3D(3, 0, 0, 0, 2.5, 0, 0, 0, 0.15, 0, 1.7846751, 6.4985275)
 cast_shadow = 0
 mesh = SubResource("BoxMesh_6o5hp")
-metadata/building_interior_element_type = 0
+script = ExtResource("4_preview")
+
+[node name="Floor 1" type="MeshInstance3D" parent="LayoutPreviews" unique_id=1110826732]
+transform = Transform3D(3.2506366, 0, 0, 0, 0.08336203, 0, 0, 0, 7.178153, -0.25, 0.6229873, 1.1342125)
+cast_shadow = 0
+mesh = SubResource("BoxMesh_2aul6")
+script = ExtResource("4_preview")
+ElementType = 2
+ElementMaterial = SubResource("ShaderMaterial_ureo2")
+
+[node name="GeneratedCollision" type="Node3D" parent="." unique_id=1917051272]
+
+[node name="GeneratedSceneCollision" type="Node3D" parent="." unique_id=895603834]
 
 [node name="OriginMarker" type="Node3D" parent="." unique_id=221175202]
 

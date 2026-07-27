@@ -12,20 +12,29 @@ public partial class BuildingInteriorAuthoring : Node3D
 	private const string PreviewRootPath = "LayoutPreviews";
 	private const string ExteriorRootPath = "ExteriorPreview";
 	private const string GeneratedCollisionRootPath = "GeneratedCollision";
-	private const string ElementTypeMetadata = "building_interior_element_type";
+	private const string GeneratedSceneCollisionRootPath =
+		"GeneratedSceneCollision";
 	private const string CollisionProxyMetadata =
 		"building_interior_collision_proxy";
 
 	private PackedScene? _exteriorScene;
 	private BuildingInteriorLayout? _layoutResource;
-	private StandardMaterial3D? _wallMaterial;
-	private StandardMaterial3D? _counterMaterial;
 	private bool _exteriorVisible = true;
 	private bool _ghostExterior;
 	private float _ghostExteriorOpacity = 0.3f;
 	private bool _collisionPreviewVisible = true;
 	private readonly Dictionary<ulong, PreviewMaterialState>
 		_exteriorMaterialStates = new();
+
+	[Export] public NodePath CollisionTargetRoot { get; set; } =
+		new("ExteriorPreview/ExteriorReference");
+	[Export] public BuildingSceneCollisionMode DefaultCollisionMode { get; set; } =
+		BuildingSceneCollisionMode.Auto;
+	[Export] public bool PreserveExistingCollision { get; set; } = true;
+	[Export] public bool IncludeHiddenObjects { get; set; }
+	[Export]
+	public Godot.Collections.Array<BuildingSceneCollisionOverride>
+		SceneCollisionOverrides { get; set; } = new();
 
 	[Export]
 	public PackedScene? ExteriorScene
@@ -104,9 +113,21 @@ public partial class BuildingInteriorAuthoring : Node3D
 	public Callable AddWallButton =>
 		Callable.From(() => AddElement(BuildingInteriorElementType.Wall));
 
+	[ExportToolButton("Add Floor", Icon = "Add")]
+	public Callable AddFloorButton =>
+		Callable.From(() => AddElement(BuildingInteriorElementType.Floor));
+
+	[ExportToolButton("Add Ceiling", Icon = "Add")]
+	public Callable AddCeilingButton =>
+		Callable.From(() => AddElement(BuildingInteriorElementType.Ceiling));
+
 	[ExportToolButton("Add Counter", Icon = "Add")]
 	public Callable AddCounterButton =>
 		Callable.From(() => AddElement(BuildingInteriorElementType.Counter));
+
+	[ExportToolButton("Add Fixture", Icon = "Add")]
+	public Callable AddFixtureButton =>
+		Callable.From(() => AddElement(BuildingInteriorElementType.Fixture));
 
 	[ExportToolButton("Generate Collision", Icon = "CollisionShape3D")]
 	public Callable GenerateCollisionButton => Callable.From(GenerateCollision);
@@ -114,6 +135,14 @@ public partial class BuildingInteriorAuthoring : Node3D
 	[ExportToolButton("Clear Generated Collision", Icon = "Clear")]
 	public Callable ClearGeneratedCollisionButton =>
 		Callable.From(ClearGeneratedCollision);
+
+	[ExportToolButton("Generate Scene Collision", Icon = "CollisionShape3D")]
+	public Callable GenerateSceneCollisionButton =>
+		Callable.From(GenerateSceneCollision);
+
+	[ExportToolButton("Clear Scene Collision", Icon = "Clear")]
+	public Callable ClearSceneCollisionButton =>
+		Callable.From(ClearSceneCollision);
 
 	[ExportToolButton("Toggle Exterior Visibility", Icon = "GuiVisibilityVisible")]
 	public Callable ToggleExteriorVisibilityButton =>
@@ -154,13 +183,7 @@ public partial class BuildingInteriorAuthoring : Node3D
 				continue;
 			}
 
-			CreatePreview(
-				element.Name,
-				element.Type,
-				element.Position,
-				element.RotationDegrees,
-				element.Size,
-				element.Enabled);
+			CreatePreview(element);
 		}
 
 		GD.Print($"Reloaded {_layoutResource.Elements.Count} interior layout elements.");
@@ -185,18 +208,13 @@ public partial class BuildingInteriorAuthoring : Node3D
 		Godot.Collections.Array<BuildingInteriorElement> savedElements = new();
 		foreach (Node child in previewRoot.GetChildren())
 		{
-			if (child is not MeshInstance3D preview ||
-				!preview.HasMeta(ElementTypeMetadata))
+			if (child is not BuildingInteriorPreviewElement preview)
 			{
 				continue;
 			}
 
-			BuildingInteriorElementType type =
-				(BuildingInteriorElementType)preview
-					.GetMeta(ElementTypeMetadata)
-					.AsInt32();
 			savedElements.Add(
-				BuildingInteriorBuilder.CreateElementFromVisual(preview, type));
+				BuildingInteriorBuilder.CreateElementFromPreview(preview));
 		}
 
 		_layoutResource.Elements = savedElements;
@@ -227,24 +245,32 @@ public partial class BuildingInteriorAuthoring : Node3D
 		int typeCount = 0;
 		foreach (Node child in previewRoot.GetChildren())
 		{
-			if (child is MeshInstance3D preview &&
-				preview.HasMeta(ElementTypeMetadata) &&
-				preview.GetMeta(ElementTypeMetadata).AsInt32() == (int)type)
+			if (child is BuildingInteriorPreviewElement preview &&
+				preview.ElementType == type)
 			{
 				typeCount++;
 			}
 		}
 
-		Vector3 defaultSize = type == BuildingInteriorElementType.Wall
-			? new Vector3(3.0f, 2.5f, 0.15f)
-			: new Vector3(1.5f, 1.0f, 0.7f);
-		CreatePreview(
-			new StringName($"{type} {typeCount + 1}"),
-			type,
-			Vector3.Zero,
-			Vector3.Zero,
-			defaultSize,
-			true);
+		(Vector3 position, Vector3 size) = type switch
+		{
+			BuildingInteriorElementType.Wall =>
+				(new Vector3(0, 1.25f, 0), new Vector3(3, 2.5f, 0.15f)),
+			BuildingInteriorElementType.Floor =>
+				(Vector3.Zero, new Vector3(4, 0.1f, 4)),
+			BuildingInteriorElementType.Ceiling =>
+				(new Vector3(0, 2.8f, 0), new Vector3(4, 0.1f, 4)),
+			BuildingInteriorElementType.Counter =>
+				(new Vector3(0, 0.5f, 0), new Vector3(1.5f, 1, 0.7f)),
+			_ => (new Vector3(0, 0.5f, 0), Vector3.One),
+		};
+		CreatePreview(new BuildingInteriorElement
+		{
+			Name = new StringName($"{type} {typeCount + 1}"),
+			Type = type,
+			Position = position,
+			Size = size,
+		});
 	}
 
 	private void GenerateCollision()
@@ -283,7 +309,9 @@ public partial class BuildingInteriorAuthoring : Node3D
 		int generatedCount = 0;
 		foreach (BuildingInteriorElement element in savedLayout.Elements)
 		{
-			if (element is null || !element.Enabled)
+			if (element is null ||
+				!element.Enabled ||
+				!element.GenerateCollision)
 			{
 				continue;
 			}
@@ -320,9 +348,9 @@ public partial class BuildingInteriorAuthoring : Node3D
 		}
 
 		GD.Print(
-			$"Generated {generatedCount} Wall/Counter collision bodies from " +
-			$"saved layout {layoutPath}. Collision does not include exterior " +
-			"or furniture meshes.");
+			$"Generated {generatedCount} layout-element collision bodies from " +
+			$"saved layout {layoutPath}. This action does not inspect arbitrary " +
+			"scene meshes.");
 	}
 
 	private void ClearGeneratedCollision()
@@ -338,44 +366,14 @@ public partial class BuildingInteriorAuthoring : Node3D
 		GD.Print($"Cleared {removedCount} tool-generated collision bodies.");
 	}
 
-	private void CreatePreview(
-		StringName elementName,
-		BuildingInteriorElementType type,
-		Vector3 position,
-		Vector3 rotationDegrees,
-		Vector3 size,
-		bool enabled)
+	private void CreatePreview(BuildingInteriorElement element)
 	{
-		BuildingInteriorElement element = new()
-		{
-			Name = elementName,
-			Type = type,
-			Position = position,
-			RotationDegrees = rotationDegrees,
-			Size = size,
-			Enabled = enabled,
-		};
-		MeshInstance3D preview = BuildingInteriorBuilder.CreateVisual(
-			element,
-			GetPreviewMaterial(type));
-		preview.CastShadow = GeometryInstance3D.ShadowCastingSetting.Off;
-		preview.SetMeta(ElementTypeMetadata, (int)type);
+		BuildingInteriorPreviewElement preview =
+			BuildingInteriorBuilder.CreatePreview(element);
 
 		Node3D previewRoot = GetRequiredRoot(PreviewRootPath);
 		previewRoot.AddChild(preview);
 		SetEditorOwner(preview);
-	}
-
-	private Material GetPreviewMaterial(BuildingInteriorElementType type)
-	{
-		if (type == BuildingInteriorElementType.Wall)
-		{
-			return _wallMaterial ??= CreatePreviewMaterial(
-				new Color(0.22f, 0.58f, 0.9f, 0.55f));
-		}
-
-		return _counterMaterial ??= CreatePreviewMaterial(
-			new Color(0.95f, 0.58f, 0.18f, 0.55f));
 	}
 
 	private static StandardMaterial3D CreatePreviewMaterial(Color color)
@@ -391,6 +389,120 @@ public partial class BuildingInteriorAuthoring : Node3D
 	private static StandardMaterial3D CreateCollisionProxyMaterial()
 	{
 		return CreatePreviewMaterial(new Color(0.2f, 1.0f, 0.35f, 0.3f));
+	}
+
+	private void GenerateSceneCollision()
+	{
+		if (!EnsureEditorContext())
+		{
+			return;
+		}
+
+		Node3D? target = GetNodeOrNull<Node3D>(CollisionTargetRoot);
+		if (target is null)
+		{
+			GD.PushError(
+				$"Collision Target Root '{CollisionTargetRoot}' was not found.");
+			return;
+		}
+
+		Node3D generatedRoot =
+			GetRequiredRoot(GeneratedSceneCollisionRootPath);
+		BuildingInteriorBuilder.ClearGeneratedChildren(generatedRoot);
+		int count = 0;
+		foreach (Node node in target.FindChildren(
+			"*", "MeshInstance3D", true, false))
+		{
+			if (node is not MeshInstance3D mesh ||
+				mesh.Mesh is null ||
+				(!IncludeHiddenObjects && !mesh.IsVisibleInTree()))
+			{
+				continue;
+			}
+
+			NodePath relativePath = target.GetPathTo(mesh);
+			BuildingSceneCollisionMode selectedMode =
+				GetSceneCollisionMode(relativePath);
+			if (selectedMode == BuildingSceneCollisionMode.None)
+			{
+				continue;
+			}
+			if (PreserveExistingCollision &&
+				BuildingSceneCollisionBuilder.HasExistingCollision(
+					mesh,
+					target))
+			{
+				continue;
+			}
+
+			try
+			{
+				BuildingSceneCollisionBuildResult result =
+					BuildingSceneCollisionBuilder.Build(
+						mesh,
+						generatedRoot,
+						selectedMode);
+				generatedRoot.AddChild(result.Body);
+				SetEditorOwnerRecursive(result.Body);
+				result.Preview.MaterialOverride =
+					CreateSceneCollisionPreviewMaterial(result.Mode);
+				result.Preview.Visible = _collisionPreviewVisible;
+				result.Preview.SetMeta(CollisionProxyMetadata, true);
+				generatedRoot.AddChild(result.Preview);
+				SetEditorOwner(result.Preview);
+				count++;
+			}
+			catch (Exception exception)
+			{
+				GD.PushError(
+					$"Scene collision failed for '{mesh.Name}' " +
+					$"(mode {selectedMode}): {exception.Message}");
+			}
+		}
+
+		GD.Print(
+			$"Generated scene collision for {count} mesh objects beneath " +
+			$"{CollisionTargetRoot}.");
+	}
+
+	private void ClearSceneCollision()
+	{
+		if (!EnsureEditorContext())
+		{
+			return;
+		}
+		Node3D root = GetRequiredRoot(GeneratedSceneCollisionRootPath);
+		int count = root.GetChildCount();
+		BuildingInteriorBuilder.ClearGeneratedChildren(root);
+		GD.Print($"Cleared {count} tool-generated scene collision nodes.");
+	}
+
+	private BuildingSceneCollisionMode GetSceneCollisionMode(NodePath path)
+	{
+		foreach (BuildingSceneCollisionOverride collisionOverride in
+			SceneCollisionOverrides)
+		{
+			if (collisionOverride is not null &&
+				collisionOverride.ObjectPath == path)
+			{
+				return collisionOverride.Mode;
+			}
+		}
+		return DefaultCollisionMode;
+	}
+
+	private static StandardMaterial3D CreateSceneCollisionPreviewMaterial(
+		BuildingSceneCollisionMode mode)
+	{
+		Color color = mode switch
+		{
+			BuildingSceneCollisionMode.Box =>
+				new Color(0.2f, 0.9f, 1.0f, 0.28f),
+			BuildingSceneCollisionMode.Convex =>
+				new Color(1.0f, 0.65f, 0.12f, 0.28f),
+			_ => new Color(0.9f, 0.2f, 1.0f, 0.24f),
+		};
+		return CreatePreviewMaterial(color);
 	}
 
 	private void QueueExteriorRefresh()
@@ -551,19 +663,22 @@ public partial class BuildingInteriorAuthoring : Node3D
 			return;
 		}
 
-		Node3D? collisionRoot =
-			GetNodeOrNull<Node3D>(GeneratedCollisionRootPath);
-		if (collisionRoot is null)
+		foreach (string rootPath in new[]
+			{ GeneratedCollisionRootPath, GeneratedSceneCollisionRootPath })
 		{
-			return;
-		}
-
-		foreach (Node child in collisionRoot.GetChildren())
-		{
-			if (child is MeshInstance3D proxy &&
-				proxy.HasMeta(CollisionProxyMetadata))
+			Node3D? collisionRoot = GetNodeOrNull<Node3D>(rootPath);
+			if (collisionRoot is null)
 			{
-				proxy.Visible = _collisionPreviewVisible;
+				continue;
+			}
+			foreach (Node child in collisionRoot.FindChildren(
+				"*", "MeshInstance3D", true, false))
+			{
+				if (child is MeshInstance3D proxy &&
+					proxy.HasMeta(CollisionProxyMetadata))
+				{
+					proxy.Visible = _collisionPreviewVisible;
+				}
 			}
 		}
 	}
@@ -622,6 +737,15 @@ public partial class BuildingInteriorAuthoring : Node3D
 		if (editedSceneRoot is not null)
 		{
 			node.Owner = editedSceneRoot;
+		}
+	}
+
+	private void SetEditorOwnerRecursive(Node node)
+	{
+		SetEditorOwner(node);
+		foreach (Node child in node.GetChildren())
+		{
+			SetEditorOwnerRecursive(child);
 		}
 	}
 

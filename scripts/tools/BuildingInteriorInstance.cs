@@ -128,13 +128,13 @@ public partial class BuildingInteriorInstance : Node3D
 
 			try
 			{
-				if (_generateVisuals)
+				if (_generateVisuals && element.GenerateVisual)
 				{
 					visualRoot.AddChild(
 						BuildingInteriorBuilder.CreateVisual(element));
 				}
 
-				if (_generateCollision)
+				if (_generateCollision && element.GenerateCollision)
 				{
 					collisionRoot.AddChild(
 						BuildingInteriorBuilder.CreateCollision(element));
