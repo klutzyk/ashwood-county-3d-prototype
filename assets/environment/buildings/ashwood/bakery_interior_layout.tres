@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="BuildingInteriorLayout" format=3 uid="uid://jhajwdqrgiri"]
+
+[ext_resource type="Script" uid="uid://bod76m4863mh4" path="res://scripts/tools/BuildingInteriorElement.cs" id="1_ei22t"]
+[ext_resource type="Script" uid="uid://5t8aix35hhp3" path="res://scripts/tools/BuildingInteriorLayout.cs" id="2_0ia2y"]
+
+[sub_resource type="Resource" id="Resource_ei22t"]
+script = ExtResource("1_ei22t")
+Name = &"Wall 1"
+Position = Vector3(0, 1.7846751, 6.4985275)
+Size = Vector3(3, 2.5, 0.15)
+
+[resource]
+script = ExtResource("2_0ia2y")
+Elements = Array[ExtResource("1_ei22t")]([SubResource("Resource_ei22t")])
+metadata/_custom_type_script = "uid://5t8aix35hhp3"

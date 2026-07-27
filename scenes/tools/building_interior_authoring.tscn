@@ -1,0 +1,70 @@
+[gd_scene format=3 uid="uid://djjtj3oukcub3"]
+
+[ext_resource type="Script" uid="uid://mjrpbd1flasf" path="res://scripts/tools/BuildingInteriorAuthoring.cs" id="1_tool"]
+[ext_resource type="PackedScene" uid="uid://ce4xrjnsj33ke" path="res://scenes/world/ashwood/bakery.tscn" id="2_6o5hp"]
+[ext_resource type="Resource" uid="uid://jhajwdqrgiri" path="res://assets/environment/buildings/ashwood/bakery_interior_layout.tres" id="3_prknq"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_prknq"]
+transparency = 1
+shading_mode = 0
+albedo_color = Color(0.22, 0.58, 0.9, 0.55)
+
+[sub_resource type="BoxMesh" id="BoxMesh_6o5hp"]
+material = SubResource("StandardMaterial3D_prknq")
+
+[sub_resource type="StandardMaterial3D" id="OriginRedMaterial"]
+shading_mode = 0
+albedo_color = Color(1, 0.12, 0.12, 1)
+
+[sub_resource type="BoxMesh" id="OriginXAxisMesh"]
+material = SubResource("OriginRedMaterial")
+size = Vector3(1, 0.04, 0.04)
+
+[sub_resource type="StandardMaterial3D" id="OriginGreenMaterial"]
+shading_mode = 0
+albedo_color = Color(0.15, 1, 0.2, 1)
+
+[sub_resource type="BoxMesh" id="OriginYAxisMesh"]
+material = SubResource("OriginGreenMaterial")
+size = Vector3(0.04, 1, 0.04)
+
+[sub_resource type="StandardMaterial3D" id="OriginBlueMaterial"]
+shading_mode = 0
+albedo_color = Color(0.15, 0.4, 1, 1)
+
+[sub_resource type="BoxMesh" id="OriginZAxisMesh"]
+material = SubResource("OriginBlueMaterial")
+size = Vector3(0.04, 0.04, 1)
+
+[node name="BuildingInteriorAuthoring" type="Node3D" unique_id=2067943292]
+script = ExtResource("1_tool")
+ExteriorScene = ExtResource("2_6o5hp")
+LayoutResource = ExtResource("3_prknq")
+GhostExteriorOpacity = 0.35
+
+[node name="ExteriorPreview" type="Node3D" parent="." unique_id=30146543]
+
+[node name="LayoutPreviews" type="Node3D" parent="." unique_id=251691943]
+
+[node name="Wall 1" type="MeshInstance3D" parent="LayoutPreviews" unique_id=983904151]
+transform = Transform3D(3, 0, 0, 0, 2.5, 0, 0, 0, 0.15, 0, 1.7846751, 6.4985275)
+cast_shadow = 0
+mesh = SubResource("BoxMesh_6o5hp")
+metadata/building_interior_element_type = 0
+
+[node name="OriginMarker" type="Node3D" parent="." unique_id=221175202]
+
+[node name="X" type="MeshInstance3D" parent="OriginMarker" unique_id=1066324660]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0, 0)
+cast_shadow = 0
+mesh = SubResource("OriginXAxisMesh")
+
+[node name="Y" type="MeshInstance3D" parent="OriginMarker" unique_id=465972336]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+cast_shadow = 0
+mesh = SubResource("OriginYAxisMesh")
+
+[node name="Z" type="MeshInstance3D" parent="OriginMarker" unique_id=329506212]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.5)
+cast_shadow = 0
+mesh = SubResource("OriginZAxisMesh")
