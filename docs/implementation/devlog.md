@@ -1882,3 +1882,99 @@ Validation:
 - Weapon grip authoring scene cold-loaded in the Godot editor without errors
 - Existing weapon-hand attachment validation passed
 - C# build completed with no warnings or errors
+
+---
+
+## Historic Downtown Main Street Phase 1
+
+Completed:
+
+- Added a separate 200 m production Main Street scene without changing the
+  prototype gameplay sandbox
+- Established the documented 17.6 m street profile with two 3.5 m traffic
+  lanes, 2.3 m parallel-parking lanes and 3 m sidewalks
+- Added two intersections, segmented curbs and fourteen varied placeholder
+  storefront plots using lightweight geometry
+- Added project-owned triplanar asphalt and concrete material wrappers using
+  the supplied third-party texture sets
+- Placed the final bakery exterior at a believable 9.02 m by 10 m footprint on
+  the west-end north corner and kept the imported mesh unchanged
+- Added the supplied shop-front door with existing interaction, hinge,
+  collision, prompt and gameplay-noise systems
+- Reused the existing player, camera, HUD, survival, melee, zombie, navigation
+  and version-1 save/load implementations
+- Kept the slice to two placed zombies and no interiors, loot, audio, decals,
+  vehicles, vegetation or later streetscape dressing
+
+Outcome:
+
+Historic Downtown now has a focused, independently testable production
+environment foundation while the original prototype world remains available as
+the gameplay sandbox.
+
+Validation:
+
+- Main Street Phase 1 validation passed dimensions, intersections, sidewalks,
+  storefront count, bakery scale/placement/grounding, door movement/collision,
+  gameplay composition, zombie count, navigation and save/load checks
+- Direct Main Street runtime cold-start completed without scene or script errors
+- C# build completed with no warnings or errors
+
+---
+
+## Main Street Phase 1 Placement and Visibility Correction
+
+Completed:
+
+- Restored the player capsule node to the established centred transform and
+  moved the Main Street spawn onto the north sidewalk
+- Rotated the bakery's real green-awning storefront toward Main Street and
+  aligned its facade with the sidewalk edge
+- Measured the imported doorway and door meshes, then fitted the shop door,
+  hinge, collision and interaction point to the actual opening
+- Realigned the bakery shell collision around the visible storefront doorway
+- Changed the Main Street start time to 09:00 and raised only the daytime
+  ambient, sky and directional energies for clear Phase 1 evaluation
+
+Validation:
+
+- Rendered player-camera, player side, closed-door, open-door, facade and wide
+  street views using the Compatibility renderer
+- Visual review confirmed visible feet above the sidewalk, storefront facing
+  Main Street, a naturally filled doorway, an outward door swing without heavy
+  wall clipping and readable morning lighting
+- Updated Main Street validation passed spawn floor offset, bakery orientation,
+  doorway-relative door bounds, hinge placement, open swing, lighting,
+  navigation and save/load checks
+- C# build completed with no warnings or errors
+
+---
+
+## Bakery Interior Phase 1
+
+Completed:
+
+- Built a project-owned modular architectural shell inside the unchanged
+  production bakery exterior
+- Added a 4.5 m by 9.4 m finished wood floor, painted plaster walls, painted
+  ceiling and 2.8 m clear interior height
+- Established a front retail zone, dark-wood counter with a 2.5 m staff
+  passage, rear kitchen/preparation zone and directly connected storage area
+- Kept the utility-partition module empty because another enclosed room would
+  make the 42.3 m² interior cramped
+- Kept the side and rear shell solid because the imported exterior does not
+  provide a traversable service opening; the rear door is explicitly deferred
+- Added a front threshold ramp to bridge the 0.742 m finished-floor elevation
+  without changing player or zombie movement
+- Added a bakery-local navigation region matched to the existing 0.45 m-radius,
+  1.8 m-high zombie agent and connected the interior to Main Street
+- Added two low-energy temporary interior lights for layout inspection only
+
+Validation:
+
+- Bakery Interior Phase 1 focused validation passed modular hierarchy, room
+  clearances, solid shell collision and synchronized front-entry navigation
+- Existing Main Street Phase 1 validation passed unchanged
+- Compatibility-rendered walkthrough covered the storefront entry, retail,
+  counter, kitchen and storage and drove a reduction in temporary light energy
+- C# build completed with no warnings or errors

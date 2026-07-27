@@ -1,0 +1,247 @@
+[gd_scene format=3 uid="uid://ce4xrjnsj33ke"]
+
+[ext_resource type="PackedScene" uid="uid://psxne6hrxooh" path="res://assets/environment/buildings/ashwood/bakery_open.glb" id="1_bakery"]
+[ext_resource type="PackedScene" uid="uid://h6n55h4tnu3h" path="res://assets/third_party/props/doors/shop_front_door.glb" id="2_door"]
+[ext_resource type="Script" uid="uid://7pjn07w4xksy" path="res://scripts/interactions/DoorController.cs" id="3_controller"]
+[ext_resource type="Script" uid="uid://bwaot3gvfvo4b" path="res://scripts/interactions/Interactable.cs" id="4_interactable"]
+[ext_resource type="Material" path="res://assets/materials/ashwood_bakery_floor.tres" id="5_floor"]
+[ext_resource type="Material" path="res://assets/materials/ashwood_bakery_counter.tres" id="6_counter"]
+[ext_resource type="Material" path="res://assets/materials/ashwood_bakery_kitchen_partition.tres" id="7_kitchen"]
+[ext_resource type="Material" path="res://assets/materials/ashwood_bakery_storage_partition.tres" id="8_storage"]
+[ext_resource type="Material" path="res://assets/materials/ashwood_bakery_painted_plaster.tres" id="9_plaster"]
+[ext_resource type="NavigationMesh" path="res://assets/navigation/ashwood_bakery_phase1_navmesh.tres" id="13_navigation"]
+
+[sub_resource type="BoxShape3D" id="SideWallShape"]
+size = Vector3(4.8, 6.4, 0.3)
+
+[sub_resource type="BoxShape3D" id="RearWallShape"]
+size = Vector3(0.3, 6.4, 9.7)
+
+[sub_resource type="BoxShape3D" id="FrontLeftShape"]
+size = Vector3(0.3, 6.4, 4.595)
+
+[sub_resource type="BoxShape3D" id="FrontRightShape"]
+size = Vector3(0.3, 6.4, 4.395)
+
+[sub_resource type="BoxShape3D" id="LintelShape"]
+size = Vector3(0.3, 3.754, 1.01)
+
+[sub_resource type="BoxShape3D" id="FloorShape"]
+size = Vector3(4.5, 0.12, 9.4)
+
+[sub_resource type="BoxShape3D" id="RearInteriorWallShape"]
+size = Vector3(0.15, 2.8, 9.4)
+
+[sub_resource type="BoxShape3D" id="SideInteriorWallShape"]
+size = Vector3(4.5, 2.8, 0.15)
+
+[sub_resource type="BoxShape3D" id="FrontInteriorLeftShape"]
+size = Vector3(0.15, 2.8, 4.295)
+
+[sub_resource type="BoxShape3D" id="FrontInteriorRightShape"]
+size = Vector3(0.15, 2.8, 4.095)
+
+[sub_resource type="BoxMesh" id="FrontInteriorLintelMesh"]
+material = ExtResource("9_plaster")
+size = Vector3(0.15, 0.9, 1.01)
+
+[sub_resource type="BoxShape3D" id="FrontInteriorLintelShape"]
+size = Vector3(0.15, 0.9, 1.01)
+
+[sub_resource type="BoxMesh" id="CounterMesh"]
+material = ExtResource("6_counter")
+size = Vector3(0.65, 1.05, 6.6)
+
+[sub_resource type="BoxShape3D" id="CounterShape"]
+size = Vector3(0.65, 1.05, 6.6)
+
+[sub_resource type="BoxMesh" id="KitchenPartitionMesh"]
+material = ExtResource("7_kitchen")
+size = Vector3(0.9, 2.8, 0.15)
+
+[sub_resource type="BoxShape3D" id="KitchenPartitionShape"]
+size = Vector3(0.9, 2.8, 0.15)
+
+[sub_resource type="BoxMesh" id="StoragePartitionMesh"]
+material = ExtResource("8_storage")
+size = Vector3(1.2, 2.8, 0.15)
+
+[sub_resource type="BoxShape3D" id="StoragePartitionShape"]
+size = Vector3(1.2, 2.8, 0.15)
+
+[sub_resource type="BoxMesh" id="EntranceRampMesh"]
+material = ExtResource("5_floor")
+size = Vector3(1.8, 0.12, 0.95)
+
+[sub_resource type="BoxShape3D" id="EntranceRampShape"]
+size = Vector3(1.8, 0.12, 0.95)
+
+[sub_resource type="BoxShape3D" id="DoorShape"]
+size = Vector3(0.994, 1.86, 0.18)
+
+[node name="BakeryRoot" type="Node3D" unique_id=1935746269]
+script = ExtResource("3_controller")
+HingePath = NodePath("FrontDoorPivot")
+InteractablePath = NodePath("DoorInteraction")
+OpenAngleDegrees = -100.0
+AnimationDuration = 0.5
+
+[node name="Exterior" type="Node3D" parent="." unique_id=1793809792]
+
+[node name="BakeryExterior" parent="Exterior" unique_id=2070359624 instance=ExtResource("1_bakery")]
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 3.27161, 0)
+
+[node name="Collision" type="Node3D" parent="." unique_id=1527332224]
+
+[node name="Shell" type="StaticBody3D" parent="Collision" unique_id=1110092560]
+
+[node name="LeftWall" type="CollisionShape3D" parent="Collision/Shell" unique_id=1198761956]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.2, -4.85)
+shape = SubResource("SideWallShape")
+
+[node name="RightWall" type="CollisionShape3D" parent="Collision/Shell" unique_id=177020174]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.2, 4.85)
+shape = SubResource("SideWallShape")
+
+[node name="RearWall" type="CollisionShape3D" parent="Collision/Shell" unique_id=1055714835]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4, 3.2, 0)
+shape = SubResource("RearWallShape")
+
+[node name="FrontLeft" type="CollisionShape3D" parent="Collision/Shell" unique_id=1289903770]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4, 3.2, -2.7025)
+shape = SubResource("FrontLeftShape")
+
+[node name="FrontRight" type="CollisionShape3D" parent="Collision/Shell" unique_id=1153695372]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4, 3.2, 2.8025)
+shape = SubResource("FrontRightShape")
+
+[node name="FrontLintel" type="CollisionShape3D" parent="Collision/Shell" unique_id=248882272]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4, 4.623, 0.1)
+shape = SubResource("LintelShape")
+
+[node name="Interior" type="Node3D" parent="." unique_id=1193495987]
+
+[node name="Floor" type="StaticBody3D" parent="Interior" unique_id=857004654]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.682, 0)
+
+[node name="Collision" type="CollisionShape3D" parent="Interior/Floor" unique_id=2036204780]
+shape = SubResource("FloorShape")
+
+[node name="Ceiling" type="StaticBody3D" parent="Interior" unique_id=1612281559]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.602, 0)
+
+[node name="Walls" type="Node3D" parent="Interior" unique_id=1523508231]
+
+[node name="RearWall" type="StaticBody3D" parent="Interior/Walls" unique_id=291490314]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.25, 2.142, 0)
+
+[node name="Collision" type="CollisionShape3D" parent="Interior/Walls/RearWall" unique_id=1258901537]
+shape = SubResource("RearInteriorWallShape")
+
+[node name="RightWall" type="StaticBody3D" parent="Interior/Walls" unique_id=1713701613]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.142, 4.7)
+
+[node name="Collision" type="CollisionShape3D" parent="Interior/Walls/RightWall" unique_id=21935136]
+shape = SubResource("SideInteriorWallShape")
+
+[node name="LeftWall" type="StaticBody3D" parent="Interior/Walls" unique_id=1144870139]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.142, -4.7)
+
+[node name="Collision" type="CollisionShape3D" parent="Interior/Walls/LeftWall" unique_id=2045129887]
+shape = SubResource("SideInteriorWallShape")
+
+[node name="FrontLeft" type="StaticBody3D" parent="Interior/Walls" unique_id=1742599771]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.25, 2.142, -2.5525)
+
+[node name="Collision" type="CollisionShape3D" parent="Interior/Walls/FrontLeft" unique_id=547170739]
+shape = SubResource("FrontInteriorLeftShape")
+
+[node name="FrontRight" type="StaticBody3D" parent="Interior/Walls" unique_id=1607232859]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.25, 2.142, 2.6525)
+
+[node name="Collision" type="CollisionShape3D" parent="Interior/Walls/FrontRight" unique_id=1150876913]
+shape = SubResource("FrontInteriorRightShape")
+
+[node name="FrontLintel" type="StaticBody3D" parent="Interior/Walls" unique_id=1539925600]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.25, 3.092, 0.1)
+
+[node name="Mesh" type="MeshInstance3D" parent="Interior/Walls/FrontLintel" unique_id=176141555]
+mesh = SubResource("FrontInteriorLintelMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="Interior/Walls/FrontLintel" unique_id=865761870]
+shape = SubResource("FrontInteriorLintelShape")
+
+[node name="Counter" type="StaticBody3D" parent="Interior" unique_id=1298210939]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.35, 1.267, 1.1)
+
+[node name="Mesh" type="MeshInstance3D" parent="Interior/Counter" unique_id=2137541554]
+mesh = SubResource("CounterMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="Interior/Counter" unique_id=1429742810]
+shape = SubResource("CounterShape")
+
+[node name="KitchenPartition" type="StaticBody3D" parent="Interior" unique_id=453083153]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.15, 2.142, -2.2)
+
+[node name="Mesh" type="MeshInstance3D" parent="Interior/KitchenPartition" unique_id=1546689553]
+mesh = SubResource("KitchenPartitionMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="Interior/KitchenPartition" unique_id=1755303620]
+shape = SubResource("KitchenPartitionShape")
+
+[node name="StoragePartition" type="StaticBody3D" parent="Interior" unique_id=462419841]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.65, 2.142, -1.35)
+
+[node name="Mesh" type="MeshInstance3D" parent="Interior/StoragePartition" unique_id=1394697370]
+mesh = SubResource("StoragePartitionMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="Interior/StoragePartition" unique_id=1797266151]
+shape = SubResource("StoragePartitionShape")
+
+[node name="UtilityPartition" type="Node3D" parent="Interior" unique_id=896303304]
+
+[node name="EntranceTransition" type="StaticBody3D" parent="Interior" unique_id=1615319514]
+transform = Transform3D(0.9244796, 0.3812315, 0, -0.3812315, 0.9244796, 0, 0, 0, 1, 3.15, 0.316, 0.1)
+
+[node name="Mesh" type="MeshInstance3D" parent="Interior/EntranceTransition" unique_id=270568497]
+mesh = SubResource("EntranceRampMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="Interior/EntranceTransition" unique_id=982733316]
+shape = SubResource("EntranceRampShape")
+
+[node name="TemporaryLighting" type="Node3D" parent="Interior" unique_id=310410148]
+
+[node name="RetailLight" type="OmniLight3D" parent="Interior/TemporaryLighting" unique_id=2113920303]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1, 3.15, 0.7)
+light_color = Color(1, 0.88, 0.7, 1)
+light_energy = 0.35
+shadow_enabled = true
+omni_range = 6.0
+
+[node name="WorkAreaLight" type="OmniLight3D" parent="Interior/TemporaryLighting" unique_id=516711949]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.25, 3.15, 0)
+light_color = Color(1, 0.9, 0.76, 1)
+light_energy = 0.3
+shadow_enabled = true
+omni_range = 5.5
+
+[node name="InteriorNavigationRegion" type="NavigationRegion3D" parent="." unique_id=78315613]
+navigation_mesh = ExtResource("13_navigation")
+
+[node name="FrontDoorPivot" type="Node3D" parent="." unique_id=1730121170]
+transform = Transform3D(3.1391647e-07, 0, 1, 0, 1, 0, -1, 0, 3.1391647e-07, 2.4, 0.742, 0.605)
+
+[node name="ShopFrontDoor" type="StaticBody3D" parent="FrontDoorPivot" unique_id=1094058995]
+
+[node name="DoorModel" parent="FrontDoorPivot/ShopFrontDoor" unique_id=303870537 instance=ExtResource("2_door")]
+transform = Transform3D(0.0063, 0, 0, 0, 0.0063, 0, 0, 0, 0.0063, 0.497, 0.922, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="FrontDoorPivot/ShopFrontDoor" unique_id=2003198468]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.497, 0.93, 0)
+shape = SubResource("DoorShape")
+
+[node name="DoorInteraction" type="Node3D" parent="." unique_id=231720918]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.7, 1.68, 0.1)
+script = ExtResource("4_interactable")
+InteractionName = "Bakery Door"
+InteractionPrompt = "Open"

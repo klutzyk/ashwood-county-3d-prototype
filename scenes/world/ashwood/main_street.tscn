@@ -1,0 +1,431 @@
+[gd_scene load_steps=34 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/player/third_person_player.tscn" id="1_player"]
+[ext_resource type="PackedScene" path="res://scenes/ui/gameplay_hud.tscn" id="2_hud"]
+[ext_resource type="PackedScene" path="res://scenes/world/ashwood/bakery.tscn" id="3_bakery"]
+[ext_resource type="PackedScene" path="res://scenes/zombies/prototype_zombie.tscn" id="4_zombie"]
+[ext_resource type="NavigationMesh" path="res://assets/navigation/ashwood_main_street_phase1_navmesh.tres" id="5_navmesh"]
+[ext_resource type="Material" path="res://assets/materials/ashwood_main_street_asphalt.tres" id="6_asphalt"]
+[ext_resource type="Material" path="res://assets/materials/ashwood_main_street_concrete.tres" id="7_concrete"]
+[ext_resource type="Script" path="res://scripts/objectives/AntibioticsObjective.cs" id="8_objective"]
+[ext_resource type="Script" path="res://scripts/objectives/ServiceStationSuppliesObjective.cs" id="9_supplies"]
+[ext_resource type="Script" path="res://scripts/world/WorldTime.cs" id="10_time"]
+[ext_resource type="Script" path="res://scripts/save/SaveGameManager.cs" id="11_save"]
+[ext_resource type="Resource" path="res://assets/zombies/walker.tres" id="12_walker"]
+[ext_resource type="Resource" path="res://assets/zombies/slow_walker.tres" id="13_slow"]
+
+[sub_resource type="StandardMaterial3D" id="GroundMaterial"]
+albedo_color = Color(0.19, 0.22, 0.16, 1)
+roughness = 1.0
+
+[sub_resource type="StandardMaterial3D" id="PlotBrick"]
+albedo_color = Color(0.38, 0.18, 0.13, 1)
+roughness = 0.92
+
+[sub_resource type="StandardMaterial3D" id="PlotPainted"]
+albedo_color = Color(0.31, 0.35, 0.31, 1)
+roughness = 0.92
+
+[sub_resource type="BoxMesh" id="GroundMesh"]
+material = SubResource("GroundMaterial")
+size = Vector3(220, 0.2, 80)
+
+[sub_resource type="BoxShape3D" id="GroundShape"]
+size = Vector3(220, 0.2, 80)
+
+[sub_resource type="BoxMesh" id="MainRoadMesh"]
+material = ExtResource("6_asphalt")
+size = Vector3(200, 0.1, 11.6)
+
+[sub_resource type="BoxShape3D" id="MainRoadShape"]
+size = Vector3(200, 0.1, 11.6)
+
+[sub_resource type="BoxMesh" id="CrossRoadMesh"]
+material = ExtResource("6_asphalt")
+size = Vector3(8, 0.1, 70)
+
+[sub_resource type="BoxShape3D" id="CrossRoadShape"]
+size = Vector3(8, 0.1, 70)
+
+[sub_resource type="BoxMesh" id="LongSidewalkMesh"]
+material = ExtResource("7_concrete")
+size = Vector3(132, 0.2, 3)
+
+[sub_resource type="BoxShape3D" id="LongSidewalkShape"]
+size = Vector3(132, 0.2, 3)
+
+[sub_resource type="BoxMesh" id="ShortSidewalkMesh"]
+material = ExtResource("7_concrete")
+size = Vector3(26, 0.2, 3)
+
+[sub_resource type="BoxShape3D" id="ShortSidewalkShape"]
+size = Vector3(26, 0.2, 3)
+
+[sub_resource type="BoxMesh" id="LongCurbMesh"]
+material = ExtResource("7_concrete")
+size = Vector3(132, 0.2, 0.25)
+
+[sub_resource type="BoxShape3D" id="LongCurbShape"]
+size = Vector3(132, 0.2, 0.25)
+
+[sub_resource type="BoxMesh" id="ShortCurbMesh"]
+material = ExtResource("7_concrete")
+size = Vector3(26, 0.2, 0.25)
+
+[sub_resource type="BoxShape3D" id="ShortCurbShape"]
+size = Vector3(26, 0.2, 0.25)
+
+[sub_resource type="BoxMesh" id="PlotMesh"]
+material = SubResource("PlotBrick")
+size = Vector3(1, 1, 1)
+
+[sub_resource type="BoxMesh" id="PlotPaintedMesh"]
+material = SubResource("PlotPainted")
+size = Vector3(1, 1, 1)
+
+[sub_resource type="BoxShape3D" id="PlotShape"]
+size = Vector3(1, 1, 1)
+
+[sub_resource type="ProceduralSkyMaterial" id="SkyMaterial"]
+sky_top_color = Color(0.32, 0.43, 0.57, 1)
+sky_horizon_color = Color(0.72, 0.67, 0.55, 1)
+ground_bottom_color = Color(0.12, 0.12, 0.1, 1)
+ground_horizon_color = Color(0.55, 0.5, 0.42, 1)
+
+[sub_resource type="Sky" id="Sky"]
+sky_material = SubResource("SkyMaterial")
+process_mode = 1
+
+[sub_resource type="Environment" id="Environment"]
+background_mode = 2
+background_energy_multiplier = 0.7
+sky = SubResource("Sky")
+ambient_light_source = 3
+ambient_light_energy = 0.8
+tonemap_mode = 2
+
+[node name="MainStreet" type="Node3D"]
+
+[node name="Gameplay" type="Node" parent="."]
+
+[node name="AntibioticsObjective" type="Node" parent="Gameplay"]
+script = ExtResource("8_objective")
+
+[node name="ServiceStationSuppliesObjective" type="Node" parent="Gameplay"]
+script = ExtResource("9_supplies")
+
+[node name="WorldTime" type="Node" parent="Gameplay"]
+script = ExtResource("10_time")
+StartingHour = 9.0
+DirectionalLightPath = NodePath("../../DirectionalLight3D")
+WorldEnvironmentPath = NodePath("../../WorldEnvironment")
+DayAmbientEnergy = 1.0
+DaySkyEnergy = 0.9
+DayDirectionalEnergy = 0.85
+
+[node name="SaveGameManager" type="Node" parent="Gameplay"]
+script = ExtResource("11_save")
+SaveFilePath = "user://ashwood_main_street_phase1_save_v1.json"
+MinimumContainerCount = 0
+MinimumZombieCount = 2
+
+[node name="Player" parent="Gameplay" instance=ExtResource("1_player")]
+position = Vector3(-88, 1.11, -7.3)
+rotation = Vector3(0, 1.570796, 0)
+
+[node name="Zombies" type="Node3D" parent="Gameplay"]
+
+[node name="MainStreetZombieWest" parent="Gameplay/Zombies" instance=ExtResource("4_zombie")]
+position = Vector3(-20, 1, 1.8)
+VariantProfile = ExtResource("13_slow")
+WanderRadius = 7.0
+
+[node name="MainStreetZombieEast" parent="Gameplay/Zombies" instance=ExtResource("4_zombie")]
+position = Vector3(46, 1, -2)
+VariantProfile = ExtResource("12_walker")
+WanderRadius = 8.0
+
+[node name="GameplayHUD" parent="Gameplay" instance=ExtResource("2_hud")]
+
+[node name="Environment" type="Node3D" parent="."]
+
+[node name="Ground" type="StaticBody3D" parent="Environment"]
+position = Vector3(0, -0.1, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="Environment/Ground"]
+mesh = SubResource("GroundMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="Environment/Ground"]
+shape = SubResource("GroundShape")
+
+[node name="RoadSurface" type="StaticBody3D" parent="Environment"]
+position = Vector3(0, 0.05, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="Environment/RoadSurface"]
+mesh = SubResource("MainRoadMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="Environment/RoadSurface"]
+shape = SubResource("MainRoadShape")
+
+[node name="Intersections" type="Node3D" parent="Environment"]
+
+[node name="WestIntersection" type="StaticBody3D" parent="Environment/Intersections"]
+position = Vector3(-70, 0.055, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="Environment/Intersections/WestIntersection"]
+mesh = SubResource("CrossRoadMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="Environment/Intersections/WestIntersection"]
+shape = SubResource("CrossRoadShape")
+
+[node name="EastIntersection" type="StaticBody3D" parent="Environment/Intersections"]
+position = Vector3(70, 0.055, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="Environment/Intersections/EastIntersection"]
+mesh = SubResource("CrossRoadMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="Environment/Intersections/EastIntersection"]
+shape = SubResource("CrossRoadShape")
+
+[node name="Sidewalks" type="Node3D" parent="Environment"]
+
+[node name="NorthWest" type="StaticBody3D" parent="Environment/Sidewalks"]
+position = Vector3(-87, 0.1, -7.3)
+
+[node name="Mesh" type="MeshInstance3D" parent="Environment/Sidewalks/NorthWest"]
+mesh = SubResource("ShortSidewalkMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="Environment/Sidewalks/NorthWest"]
+shape = SubResource("ShortSidewalkShape")
+
+[node name="NorthCentral" type="StaticBody3D" parent="Environment/Sidewalks"]
+position = Vector3(0, 0.1, -7.3)
+
+[node name="Mesh" type="MeshInstance3D" parent="Environment/Sidewalks/NorthCentral"]
+mesh = SubResource("LongSidewalkMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="Environment/Sidewalks/NorthCentral"]
+shape = SubResource("LongSidewalkShape")
+
+[node name="NorthEast" type="StaticBody3D" parent="Environment/Sidewalks"]
+position = Vector3(87, 0.1, -7.3)
+
+[node name="Mesh" type="MeshInstance3D" parent="Environment/Sidewalks/NorthEast"]
+mesh = SubResource("ShortSidewalkMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="Environment/Sidewalks/NorthEast"]
+shape = SubResource("ShortSidewalkShape")
+
+[node name="SouthWest" type="StaticBody3D" parent="Environment/Sidewalks"]
+position = Vector3(-87, 0.1, 7.3)
+
+[node name="Mesh" type="MeshInstance3D" parent="Environment/Sidewalks/SouthWest"]
+mesh = SubResource("ShortSidewalkMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="Environment/Sidewalks/SouthWest"]
+shape = SubResource("ShortSidewalkShape")
+
+[node name="SouthCentral" type="StaticBody3D" parent="Environment/Sidewalks"]
+position = Vector3(0, 0.1, 7.3)
+
+[node name="Mesh" type="MeshInstance3D" parent="Environment/Sidewalks/SouthCentral"]
+mesh = SubResource("LongSidewalkMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="Environment/Sidewalks/SouthCentral"]
+shape = SubResource("LongSidewalkShape")
+
+[node name="SouthEast" type="StaticBody3D" parent="Environment/Sidewalks"]
+position = Vector3(87, 0.1, 7.3)
+
+[node name="Mesh" type="MeshInstance3D" parent="Environment/Sidewalks/SouthEast"]
+mesh = SubResource("ShortSidewalkMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="Environment/Sidewalks/SouthEast"]
+shape = SubResource("ShortSidewalkShape")
+
+[node name="Curbs" type="Node3D" parent="Environment"]
+
+[node name="NorthCentral" type="StaticBody3D" parent="Environment/Curbs"]
+position = Vector3(0, 0.1, -5.925)
+
+[node name="Mesh" type="MeshInstance3D" parent="Environment/Curbs/NorthCentral"]
+mesh = SubResource("LongCurbMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="Environment/Curbs/NorthCentral"]
+shape = SubResource("LongCurbShape")
+
+[node name="SouthCentral" type="StaticBody3D" parent="Environment/Curbs"]
+position = Vector3(0, 0.1, 5.925)
+
+[node name="Mesh" type="MeshInstance3D" parent="Environment/Curbs/SouthCentral"]
+mesh = SubResource("LongCurbMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="Environment/Curbs/SouthCentral"]
+shape = SubResource("LongCurbShape")
+
+[node name="NorthWest" type="StaticBody3D" parent="Environment/Curbs"]
+position = Vector3(-87, 0.1, -5.925)
+
+[node name="Mesh" type="MeshInstance3D" parent="Environment/Curbs/NorthWest"]
+mesh = SubResource("ShortCurbMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="Environment/Curbs/NorthWest"]
+shape = SubResource("ShortCurbShape")
+
+[node name="SouthWest" type="StaticBody3D" parent="Environment/Curbs"]
+position = Vector3(-87, 0.1, 5.925)
+
+[node name="Mesh" type="MeshInstance3D" parent="Environment/Curbs/SouthWest"]
+mesh = SubResource("ShortCurbMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="Environment/Curbs/SouthWest"]
+shape = SubResource("ShortCurbShape")
+
+[node name="NorthEast" type="StaticBody3D" parent="Environment/Curbs"]
+position = Vector3(87, 0.1, -5.925)
+
+[node name="Mesh" type="MeshInstance3D" parent="Environment/Curbs/NorthEast"]
+mesh = SubResource("ShortCurbMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="Environment/Curbs/NorthEast"]
+shape = SubResource("ShortCurbShape")
+
+[node name="SouthEast" type="StaticBody3D" parent="Environment/Curbs"]
+position = Vector3(87, 0.1, 5.925)
+
+[node name="Mesh" type="MeshInstance3D" parent="Environment/Curbs/SouthEast"]
+mesh = SubResource("ShortCurbMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="Environment/Curbs/SouthEast"]
+shape = SubResource("ShortCurbShape")
+
+[node name="PlaceholderStorefrontPlots" type="Node3D" parent="Environment"]
+
+[node name="NorthPlot01" type="StaticBody3D" parent="Environment/PlaceholderStorefrontPlots"]
+position = Vector3(-87, 3.2, -13.8)
+scale = Vector3(18, 6.4, 10)
+[node name="Mesh" type="MeshInstance3D" parent="Environment/PlaceholderStorefrontPlots/NorthPlot01"]
+mesh = SubResource("PlotMesh")
+[node name="Collision" type="CollisionShape3D" parent="Environment/PlaceholderStorefrontPlots/NorthPlot01"]
+shape = SubResource("PlotShape")
+
+[node name="NorthPlot02" type="StaticBody3D" parent="Environment/PlaceholderStorefrontPlots"]
+position = Vector3(-45, 4.2, -14.8)
+scale = Vector3(16, 8.4, 12)
+[node name="Mesh" type="MeshInstance3D" parent="Environment/PlaceholderStorefrontPlots/NorthPlot02"]
+mesh = SubResource("PlotPaintedMesh")
+[node name="Collision" type="CollisionShape3D" parent="Environment/PlaceholderStorefrontPlots/NorthPlot02"]
+shape = SubResource("PlotShape")
+
+[node name="NorthPlot03" type="StaticBody3D" parent="Environment/PlaceholderStorefrontPlots"]
+position = Vector3(-25, 3.4, -14.3)
+scale = Vector3(18, 6.8, 11)
+[node name="Mesh" type="MeshInstance3D" parent="Environment/PlaceholderStorefrontPlots/NorthPlot03"]
+mesh = SubResource("PlotMesh")
+[node name="Collision" type="CollisionShape3D" parent="Environment/PlaceholderStorefrontPlots/NorthPlot03"]
+shape = SubResource("PlotShape")
+
+[node name="NorthPlot04" type="StaticBody3D" parent="Environment/PlaceholderStorefrontPlots"]
+position = Vector3(2, 4.5, -15.3)
+scale = Vector3(25, 9, 13)
+[node name="Mesh" type="MeshInstance3D" parent="Environment/PlaceholderStorefrontPlots/NorthPlot04"]
+mesh = SubResource("PlotPaintedMesh")
+[node name="Collision" type="CollisionShape3D" parent="Environment/PlaceholderStorefrontPlots/NorthPlot04"]
+shape = SubResource("PlotShape")
+
+[node name="NorthPlot05" type="StaticBody3D" parent="Environment/PlaceholderStorefrontPlots"]
+position = Vector3(31, 3.25, -14.3)
+scale = Vector3(21, 6.5, 11)
+[node name="Mesh" type="MeshInstance3D" parent="Environment/PlaceholderStorefrontPlots/NorthPlot05"]
+mesh = SubResource("PlotMesh")
+[node name="Collision" type="CollisionShape3D" parent="Environment/PlaceholderStorefrontPlots/NorthPlot05"]
+shape = SubResource("PlotShape")
+
+[node name="NorthPlot06" type="StaticBody3D" parent="Environment/PlaceholderStorefrontPlots"]
+position = Vector3(55, 4, -14.8)
+scale = Vector3(19, 8, 12)
+[node name="Mesh" type="MeshInstance3D" parent="Environment/PlaceholderStorefrontPlots/NorthPlot06"]
+mesh = SubResource("PlotPaintedMesh")
+[node name="Collision" type="CollisionShape3D" parent="Environment/PlaceholderStorefrontPlots/NorthPlot06"]
+shape = SubResource("PlotShape")
+
+[node name="NorthPlot07" type="StaticBody3D" parent="Environment/PlaceholderStorefrontPlots"]
+position = Vector3(86, 3.5, -14.3)
+scale = Vector3(20, 7, 11)
+[node name="Mesh" type="MeshInstance3D" parent="Environment/PlaceholderStorefrontPlots/NorthPlot07"]
+mesh = SubResource("PlotMesh")
+[node name="Collision" type="CollisionShape3D" parent="Environment/PlaceholderStorefrontPlots/NorthPlot07"]
+shape = SubResource("PlotShape")
+
+[node name="SouthPlot01" type="StaticBody3D" parent="Environment/PlaceholderStorefrontPlots"]
+position = Vector3(-88, 3.5, 14.3)
+scale = Vector3(17, 7, 11)
+[node name="Mesh" type="MeshInstance3D" parent="Environment/PlaceholderStorefrontPlots/SouthPlot01"]
+mesh = SubResource("PlotPaintedMesh")
+[node name="Collision" type="CollisionShape3D" parent="Environment/PlaceholderStorefrontPlots/SouthPlot01"]
+shape = SubResource("PlotShape")
+
+[node name="SouthPlot02" type="StaticBody3D" parent="Environment/PlaceholderStorefrontPlots"]
+position = Vector3(-55, 4.25, 15.3)
+scale = Vector3(20, 8.5, 13)
+[node name="Mesh" type="MeshInstance3D" parent="Environment/PlaceholderStorefrontPlots/SouthPlot02"]
+mesh = SubResource("PlotMesh")
+[node name="Collision" type="CollisionShape3D" parent="Environment/PlaceholderStorefrontPlots/SouthPlot02"]
+shape = SubResource("PlotShape")
+
+[node name="SouthPlot03" type="StaticBody3D" parent="Environment/PlaceholderStorefrontPlots"]
+position = Vector3(-31, 3.1, 14.3)
+scale = Vector3(21, 6.2, 11)
+[node name="Mesh" type="MeshInstance3D" parent="Environment/PlaceholderStorefrontPlots/SouthPlot03"]
+mesh = SubResource("PlotPaintedMesh")
+[node name="Collision" type="CollisionShape3D" parent="Environment/PlaceholderStorefrontPlots/SouthPlot03"]
+shape = SubResource("PlotShape")
+
+[node name="SouthPlot04" type="StaticBody3D" parent="Environment/PlaceholderStorefrontPlots"]
+position = Vector3(-2, 4, 14.8)
+scale = Vector3(26, 8, 12)
+[node name="Mesh" type="MeshInstance3D" parent="Environment/PlaceholderStorefrontPlots/SouthPlot04"]
+mesh = SubResource("PlotMesh")
+[node name="Collision" type="CollisionShape3D" parent="Environment/PlaceholderStorefrontPlots/SouthPlot04"]
+shape = SubResource("PlotShape")
+
+[node name="SouthPlot05" type="StaticBody3D" parent="Environment/PlaceholderStorefrontPlots"]
+position = Vector3(27, 3.45, 14.3)
+scale = Vector3(22, 6.9, 11)
+[node name="Mesh" type="MeshInstance3D" parent="Environment/PlaceholderStorefrontPlots/SouthPlot05"]
+mesh = SubResource("PlotPaintedMesh")
+[node name="Collision" type="CollisionShape3D" parent="Environment/PlaceholderStorefrontPlots/SouthPlot05"]
+shape = SubResource("PlotShape")
+
+[node name="SouthPlot06" type="StaticBody3D" parent="Environment/PlaceholderStorefrontPlots"]
+position = Vector3(54, 4.5, 15.3)
+scale = Vector3(23, 9, 13)
+[node name="Mesh" type="MeshInstance3D" parent="Environment/PlaceholderStorefrontPlots/SouthPlot06"]
+mesh = SubResource("PlotMesh")
+[node name="Collision" type="CollisionShape3D" parent="Environment/PlaceholderStorefrontPlots/SouthPlot06"]
+shape = SubResource("PlotShape")
+
+[node name="SouthPlot07" type="StaticBody3D" parent="Environment/PlaceholderStorefrontPlots"]
+position = Vector3(87, 3.3, 14.3)
+scale = Vector3(21, 6.6, 11)
+[node name="Mesh" type="MeshInstance3D" parent="Environment/PlaceholderStorefrontPlots/SouthPlot07"]
+mesh = SubResource("PlotPaintedMesh")
+[node name="Collision" type="CollisionShape3D" parent="Environment/PlaceholderStorefrontPlots/SouthPlot07"]
+shape = SubResource("PlotShape")
+
+[node name="BakeryRoot" parent="." instance=ExtResource("3_bakery")]
+position = Vector3(-59.5, 0.2, -11.2)
+rotation = Vector3(0, -1.570796, 0)
+
+[node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
+navigation_mesh = ExtResource("5_navmesh")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-48, -28, 0)
+light_color = Color(0.83, 0.85, 0.88, 1)
+light_energy = 0.65
+shadow_enabled = true
+directional_shadow_max_distance = 70.0
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment")

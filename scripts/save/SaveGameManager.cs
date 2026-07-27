@@ -20,13 +20,19 @@ namespace AshwoodCounty3DPrototype.Save;
 public partial class SaveGameManager : Node
 {
 	public const string DefaultSaveFilePath = "user://ashwood_county_save_v1.json";
-	private const int VersionOneMinimumContainerCount = 4;
-	private const int VersionOneMinimumZombieCount = 5;
+	private const int DefaultVersionOneMinimumContainerCount = 4;
+	private const int DefaultVersionOneMinimumZombieCount = 5;
 
 	[Signal]
 	public delegate void StatusMessageRequestedEventHandler(string message);
 
 	[Export] public string SaveFilePath { get; set; } = DefaultSaveFilePath;
+	[Export(PropertyHint.Range, "0,100,1")]
+	public int MinimumContainerCount { get; set; } =
+		DefaultVersionOneMinimumContainerCount;
+	[Export(PropertyHint.Range, "0,100,1")]
+	public int MinimumZombieCount { get; set; } =
+		DefaultVersionOneMinimumZombieCount;
 	[Export] public NodePath PlayerPath { get; set; } = new("../Player");
 	[Export] public NodePath ObjectivePath { get; set; } = new("../AntibioticsObjective");
 	[Export] public NodePath SuppliesObjectivePath { get; set; } =
@@ -139,8 +145,8 @@ public partial class SaveGameManager : Node
 			data.WorldTimeHours >= 24.0f ||
 			!IsFinite(data.PlayerTransform.Position) ||
 			!IsFinite(data.PlayerTransform.Rotation) ||
-			data.Containers.Count < VersionOneMinimumContainerCount ||
-			data.Zombies.Count < VersionOneMinimumZombieCount ||
+			data.Containers.Count < DefaultVersionOneMinimumContainerCount ||
+			data.Zombies.Count < DefaultVersionOneMinimumZombieCount ||
 			!HasValidItemStacks(data.PlayerInventory))
 		{
 			return false;
@@ -349,9 +355,9 @@ public partial class SaveGameManager : Node
 		Node worldRoot = GetParent();
 		List<SearchableContainer> existingContainers = GetContainers();
 		List<PrototypeZombie> existingZombies = GetZombies();
-		if (data.Containers.Count < VersionOneMinimumContainerCount ||
+		if (data.Containers.Count < MinimumContainerCount ||
 			data.Containers.Count > existingContainers.Count ||
-			data.Zombies.Count < VersionOneMinimumZombieCount ||
+			data.Zombies.Count < MinimumZombieCount ||
 			data.Zombies.Count > existingZombies.Count)
 		{
 			return false;

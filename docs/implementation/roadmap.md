@@ -296,6 +296,24 @@ The prototype becomes a real game.
 
 World
 
+- [x] Historic Downtown Main Street Phase 1 foundation
+  - 200 m two-lane street with parallel parking
+  - Two intersections, curbs and 3 m sidewalks
+  - Placeholder storefront plots
+  - Production bakery exterior and interactive shop door, visually aligned
+  - Focused player, HUD, survival, combat, zombie, navigation and save/load reuse
+- [x] Bakery Interior Phase 1 architectural shell
+  - Modular floor, ceiling, walls, counter and working-area partitions
+  - Retail, kitchen/preparation and connected storage circulation
+  - Front threshold transition without altering character movement
+  - Player collision and zombie navigation through the interior route
+  - Temporary inspection lighting only
+- [ ] Historic Downtown Main Street later production passes
+  - Bakery furnishing, loot and final interior art
+  - Rear service opening and door when the exterior mesh supports one
+  - Final storefronts
+  - Lighting and atmosphere polish
+  - Street furniture, vehicles, vegetation and environmental storytelling
 - [ ] Replace all placeholder buildings
 - [ ] Replace all placeholder props
 - [ ] High-quality terrain

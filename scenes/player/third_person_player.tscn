@@ -1,0 +1,87 @@
+[gd_scene load_steps=19 format=3]
+
+[ext_resource type="Script" path="res://scripts/player/ThirdPersonPlayer.cs" id="1_player"]
+[ext_resource type="Script" path="res://scripts/player/PlayerHealth.cs" id="2_health"]
+[ext_resource type="Script" path="res://scripts/player/PlayerStamina.cs" id="3_stamina"]
+[ext_resource type="Script" path="res://scripts/player/PlayerNeeds.cs" id="4_needs"]
+[ext_resource type="Script" path="res://scripts/interactions/PlayerInteraction.cs" id="5_interaction"]
+[ext_resource type="Script" path="res://scripts/items/PlayerInventory.cs" id="6_inventory"]
+[ext_resource type="Script" path="res://scripts/player/PlayerMeleeCombat.cs" id="7_melee"]
+[ext_resource type="Script" path="res://scripts/player/PlayerAnimationController.cs" id="8_animation"]
+[ext_resource type="Script" path="res://scripts/player/PlayerFlashlight.cs" id="9_flashlight"]
+[ext_resource type="PackedScene" path="res://assets/characters/player/mix_anim/WarriorIdle_withskin.fbx" id="10_warrior"]
+[ext_resource type="Script" path="res://scripts/weapons/WeaponAttachmentController.cs" id="11_attachment"]
+[ext_resource type="Resource" path="res://assets/weapons/baseball_bat.tres" id="12_bat"]
+[ext_resource type="Resource" path="res://assets/weapons/wooden_axe.tres" id="13_axe"]
+[ext_resource type="Resource" path="res://assets/weapons/wooden_hammer.tres" id="14_hammer"]
+[ext_resource type="Resource" path="res://scripts/items/MeleeWeaponDefinition.cs" id="15_weapon_type"]
+
+[sub_resource type="CapsuleShape3D" id="PlayerShape"]
+radius = 0.45
+height = 1.8
+
+[sub_resource type="SphereShape3D" id="CameraCollisionShape"]
+radius = 0.2
+
+[node name="Player" type="CharacterBody3D"]
+script = ExtResource("1_player")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("PlayerShape")
+
+[node name="Health" type="Node" parent="."]
+script = ExtResource("2_health")
+
+[node name="Stamina" type="Node" parent="."]
+script = ExtResource("3_stamina")
+
+[node name="Needs" type="Node" parent="."]
+script = ExtResource("4_needs")
+
+[node name="Interaction" type="Node" parent="."]
+script = ExtResource("5_interaction")
+
+[node name="Inventory" type="Node" parent="."]
+script = ExtResource("6_inventory")
+
+[node name="MeleeCombat" type="Node3D" parent="."]
+script = ExtResource("7_melee")
+WeaponDefinition = ExtResource("12_bat")
+WeaponSlots = Array[ExtResource("15_weapon_type")]([ExtResource("12_bat"), ExtResource("13_axe"), ExtResource("14_hammer")])
+HitMoment = 0.4
+
+[node name="WeaponPivot" type="Node3D" parent="MeleeCombat"]
+transform = Transform3D(0.907437, 0.42018816, 0, -0.42018816, 0.907437, 0, 0, 0, 1, 0.48, 0.48, 0.22)
+
+[node name="Visual" type="Node3D" parent="."]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0.120479, -1.046915)
+
+[node name="Warrior" parent="Visual" instance=ExtResource("10_warrior")]
+transform = Transform3D(3.75, 0, 0, 0, 3.75, 0, 0, 0, 3.75, 0, -0.244, 0)
+
+[node name="RightHandWeaponAttachment" type="BoneAttachment3D" parent="Visual/Warrior/Skeleton3D" index="1"]
+bone_name = "mixamorig_RightHand"
+bone_idx = 34
+script = ExtResource("11_attachment")
+
+[node name="CameraRig" type="Node3D" parent="."]
+position = Vector3(0, 0.75, 0)
+
+[node name="SpringArm3D" type="SpringArm3D" parent="CameraRig"]
+rotation = Vector3(-0.2, 0, 0)
+shape = SubResource("CameraCollisionShape")
+spring_length = 3.25
+margin = 0.1
+
+[node name="Camera3D" type="Camera3D" parent="CameraRig/SpringArm3D"]
+current = true
+fov = 70.0
+
+[node name="Flashlight" type="SpotLight3D" parent="CameraRig/SpringArm3D/Camera3D"]
+light_color = Color(1, 0.94, 0.82, 1)
+script = ExtResource("9_flashlight")
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+script = ExtResource("8_animation")
+
+[editable path="Visual/Warrior"]

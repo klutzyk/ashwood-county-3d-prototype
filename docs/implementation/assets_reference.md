@@ -218,6 +218,9 @@ of each downloaded asset and its license information with project records.
 ## Shop door
 **credits** - "Shop_front_door" (https://skfb.ly/onyJN) by harrycrowe2001 is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 
+## White door
+**credits** - "white_door_1" (https://skfb.ly/pI8vM) by Ledeyer is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+
 ## Project-Owned Prototype Town Geometry
 
 ### Roadside Dressing, Service Station, Pharmacy, and Small Bush

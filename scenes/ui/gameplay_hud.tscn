@@ -1,0 +1,390 @@
+[gd_scene load_steps=14 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/PlayerStatusDisplay.cs" id="1_status"]
+[ext_resource type="Script" path="res://scripts/ui/PerformanceDisplay.cs" id="2_fps"]
+[ext_resource type="Script" path="res://scripts/ui/WorldClockDisplay.cs" id="3_clock"]
+[ext_resource type="Script" path="res://scripts/ui/InteractionPromptDisplay.cs" id="4_prompt"]
+[ext_resource type="Script" path="res://scripts/ui/InventoryDisplay.cs" id="5_inventory"]
+[ext_resource type="PackedScene" path="res://scenes/ui/pause_menu.tscn" id="6_pause"]
+[ext_resource type="Script" path="res://scripts/ui/ContainerInventoryDisplay.cs" id="7_container"]
+
+[sub_resource type="StyleBoxFlat" id="Panel"]
+bg_color = Color(0.02, 0.03, 0.04, 0.78)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="BarBackground"]
+bg_color = Color(0.025, 0.035, 0.03, 0.82)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="StaminaFill"]
+bg_color = Color(0.68, 0.72, 0.28, 1)
+
+[sub_resource type="StyleBoxFlat" id="HungerFill"]
+bg_color = Color(0.72, 0.5, 0.2, 0.95)
+
+[sub_resource type="StyleBoxFlat" id="ThirstFill"]
+bg_color = Color(0.25, 0.58, 0.82, 0.95)
+
+[sub_resource type="StyleBoxFlat" id="Slot"]
+bg_color = Color(0.02, 0.03, 0.035, 0.86)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.34, 0.36, 0.32, 0.9)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="GameplayHUD" type="CanvasLayer"]
+script = ExtResource("1_status")
+
+[node name="WorldClock" type="Label" parent="."]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -116.0
+offset_top = 12.0
+offset_right = -12.0
+offset_bottom = 50.0
+grow_horizontal = 0
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("Panel")
+text = "17:00"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("3_clock")
+
+[node name="FpsLabel" type="Label" parent="."]
+offset_left = 12.0
+offset_top = 12.0
+offset_right = 112.0
+offset_bottom = 44.0
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("Panel")
+text = "FPS: --"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("2_fps")
+
+[node name="HealthLabel" type="Label" parent="."]
+offset_left = 12.0
+offset_top = 52.0
+offset_right = 196.0
+offset_bottom = 84.0
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("Panel")
+text = "Health: 100 / 100"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="StaminaLabel" type="Label" parent="."]
+offset_left = 12.0
+offset_top = 92.0
+offset_right = 104.0
+offset_bottom = 112.0
+theme_override_font_sizes/font_size = 14
+text = "Stamina"
+
+[node name="StaminaBar" type="ProgressBar" parent="."]
+offset_left = 106.0
+offset_top = 93.0
+offset_right = 196.0
+offset_bottom = 111.0
+theme_override_styles/background = SubResource("BarBackground")
+theme_override_styles/fill = SubResource("StaminaFill")
+value = 100.0
+show_percentage = false
+
+[node name="HungerLabel" type="Label" parent="."]
+offset_left = 210.0
+offset_top = 52.0
+offset_right = 298.0
+offset_bottom = 72.0
+theme_override_font_sizes/font_size = 14
+text = "Hunger"
+
+[node name="HungerBar" type="ProgressBar" parent="."]
+offset_left = 300.0
+offset_top = 53.0
+offset_right = 392.0
+offset_bottom = 71.0
+theme_override_styles/background = SubResource("BarBackground")
+theme_override_styles/fill = SubResource("HungerFill")
+value = 100.0
+show_percentage = false
+
+[node name="ThirstLabel" type="Label" parent="."]
+offset_left = 210.0
+offset_top = 92.0
+offset_right = 298.0
+offset_bottom = 112.0
+theme_override_font_sizes/font_size = 14
+text = "Thirst"
+
+[node name="ThirstBar" type="ProgressBar" parent="."]
+offset_left = 300.0
+offset_top = 93.0
+offset_right = 392.0
+offset_bottom = 111.0
+theme_override_styles/background = SubResource("BarBackground")
+theme_override_styles/fill = SubResource("ThirstFill")
+value = 100.0
+show_percentage = false
+
+[node name="InteractionPrompt" type="Label" parent="."]
+visible = false
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -150.0
+offset_top = -142.0
+offset_right = 150.0
+offset_bottom = -106.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 17
+theme_override_styles/normal = SubResource("Panel")
+text = "Press [E] to interact"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("4_prompt")
+
+[node name="InteractionProgress" type="ProgressBar" parent="."]
+visible = false
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -150.0
+offset_top = -100.0
+offset_right = 150.0
+offset_bottom = -86.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/background = SubResource("BarBackground")
+theme_override_styles/fill = SubResource("StaminaFill")
+max_value = 1.0
+step = 0.001
+show_percentage = false
+
+[node name="InventorySlots" type="HBoxContainer" parent="."]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -159.0
+offset_top = -70.0
+offset_right = 159.0
+offset_bottom = -16.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 6
+script = ExtResource("5_inventory")
+
+[node name="Slot1" type="Label" parent="InventorySlots"]
+custom_minimum_size = Vector2(75, 54)
+layout_mode = 2
+theme_override_styles/normal = SubResource("Slot")
+text = "1\nEmpty"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Slot2" type="Label" parent="InventorySlots"]
+custom_minimum_size = Vector2(75, 54)
+layout_mode = 2
+theme_override_styles/normal = SubResource("Slot")
+text = "2\nEmpty"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Slot3" type="Label" parent="InventorySlots"]
+custom_minimum_size = Vector2(75, 54)
+layout_mode = 2
+theme_override_styles/normal = SubResource("Slot")
+text = "3\nEmpty"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Slot4" type="Label" parent="InventorySlots"]
+custom_minimum_size = Vector2(75, 54)
+layout_mode = 2
+theme_override_styles/normal = SubResource("Slot")
+text = "4\nEmpty"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DamageFlash" type="ColorRect" parent="."]
+modulate = Color(1, 1, 1, 0)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.75, 0.02, 0.02, 1)
+
+[node name="DeathOverlay" type="ColorRect" parent="."]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.015, 0.01, 0.01, 0.72)
+
+[node name="DeathText" type="VBoxContainer" parent="DeathOverlay"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -160.0
+offset_top = -55.0
+offset_right = 160.0
+offset_bottom = 55.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Title" type="Label" parent="DeathOverlay/DeathText"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 34
+text = "You Died"
+horizontal_alignment = 1
+
+[node name="Restart" type="Label" parent="DeathOverlay/DeathText"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Press R to Restart"
+horizontal_alignment = 1
+
+[node name="ContainerInventoryWindow" type="Control" parent="."]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("7_container")
+
+[node name="Panel" type="PanelContainer" parent="ContainerInventoryWindow"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -350.0
+offset_top = -260.0
+offset_right = 350.0
+offset_bottom = 260.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Layout" type="VBoxContainer" parent="ContainerInventoryWindow/Panel"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="ContainerInventoryWindow/Panel/Layout"]
+layout_mode = 2
+text = "Container"
+horizontal_alignment = 1
+
+[node name="Columns" type="HBoxContainer" parent="ContainerInventoryWindow/Panel/Layout"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ContainerColumn" type="VBoxContainer" parent="ContainerInventoryWindow/Panel/Layout/Columns"]
+custom_minimum_size = Vector2(270, 0)
+layout_mode = 2
+
+[node name="ContainerLabel" type="Label" parent="ContainerInventoryWindow/Panel/Layout/Columns/ContainerColumn"]
+layout_mode = 2
+text = "Container Items"
+
+[node name="ContainerItems" type="ItemList" parent="ContainerInventoryWindow/Panel/Layout/Columns/ContainerColumn"]
+custom_minimum_size = Vector2(270, 260)
+layout_mode = 2
+
+[node name="Actions" type="VBoxContainer" parent="ContainerInventoryWindow/Panel/Layout/Columns"]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+alignment = 1
+
+[node name="Take" type="Button" parent="ContainerInventoryWindow/Panel/Layout/Columns/Actions"]
+layout_mode = 2
+text = "Take >"
+
+[node name="Store" type="Button" parent="ContainerInventoryWindow/Panel/Layout/Columns/Actions"]
+layout_mode = 2
+text = "< Store"
+
+[node name="TakeQuantity" type="Button" parent="ContainerInventoryWindow/Panel/Layout/Columns/Actions"]
+layout_mode = 2
+text = "Take Qty >"
+
+[node name="StoreQuantity" type="Button" parent="ContainerInventoryWindow/Panel/Layout/Columns/Actions"]
+layout_mode = 2
+text = "< Store Qty"
+
+[node name="Split" type="Button" parent="ContainerInventoryWindow/Panel/Layout/Columns/Actions"]
+layout_mode = 2
+text = "Split"
+
+[node name="Use" type="Button" parent="ContainerInventoryWindow/Panel/Layout/Columns/Actions"]
+layout_mode = 2
+text = "Use"
+
+[node name="PlayerColumn" type="VBoxContainer" parent="ContainerInventoryWindow/Panel/Layout/Columns"]
+custom_minimum_size = Vector2(270, 0)
+layout_mode = 2
+
+[node name="PlayerLabel" type="Label" parent="ContainerInventoryWindow/Panel/Layout/Columns/PlayerColumn"]
+layout_mode = 2
+text = "Player Inventory"
+
+[node name="PlayerItems" type="ItemList" parent="ContainerInventoryWindow/Panel/Layout/Columns/PlayerColumn"]
+custom_minimum_size = Vector2(270, 260)
+layout_mode = 2
+
+[node name="Details" type="Label" parent="ContainerInventoryWindow/Panel/Layout"]
+layout_mode = 2
+text = "Select an item to view its details."
+horizontal_alignment = 1
+
+[node name="Status" type="Label" parent="ContainerInventoryWindow/Panel/Layout"]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+horizontal_alignment = 1
+
+[node name="Close" type="Button" parent="ContainerInventoryWindow/Panel/Layout"]
+layout_mode = 2
+text = "Close"
+
+[node name="QuantityDialog" type="ConfirmationDialog" parent="ContainerInventoryWindow"]
+title = "Choose Quantity"
+size = Vector2i(340, 170)
+dialog_text = "Choose a quantity."
+
+[node name="Quantity" type="SpinBox" parent="ContainerInventoryWindow/QuantityDialog"]
+offset_left = 35.0
+offset_top = 58.0
+offset_right = 305.0
+offset_bottom = 94.0
+min_value = 1.0
+max_value = 1.0
+value = 1.0
+
+[node name="PauseMenu" parent="." instance=ExtResource("6_pause")]
