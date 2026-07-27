@@ -5,6 +5,7 @@
 [← Back to Historic Downtown](../districts/historic_downtown.md)
 
 ---
+![cocnetp](../images/main_street_concept.png)
 
 # Overview
 

@@ -215,6 +215,9 @@ of each downloaded asset and its license information with project records.
 ## Road Signs
 **credits** - "Road Signs" (https://skfb.ly/oFIJX) by FrodoUndead is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 
+## Shop door
+**credits** - "Shop_front_door" (https://skfb.ly/onyJN) by harrycrowe2001 is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+
 ## Project-Owned Prototype Town Geometry
 
 ### Roadside Dressing, Service Station, Pharmacy, and Small Bush

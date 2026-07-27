@@ -58,7 +58,8 @@
 [ext_resource type="Script" uid="uid://busk2gnafli74" path="res://scripts/weapons/WeaponAttachmentController.cs" id="54_weapon_attachment"]
 [ext_resource type="Resource" path="res://assets/weapons/wooden_axe.tres" id="55_wooden_axe"]
 [ext_resource type="Resource" path="res://assets/weapons/wooden_hammer.tres" id="56_wooden_hammer"]
-[ext_resource type="Script" path="res://scripts/items/MeleeWeaponDefinition.cs" id="57_melee_weapon"]
+[ext_resource type="Script" uid="uid://dbncjdqr4dl6c" path="res://scripts/items/MeleeWeaponDefinition.cs" id="57_melee_weapon"]
+[ext_resource type="PackedScene" uid="uid://c0q1bo60x3ced" path="res://assets/environment/buildings/ashwood/bakery.glb" id="60_klgig"]
 
 [sub_resource type="BoxMesh" id="GrassMesh"]
 material = ExtResource("8_grass")
@@ -66,9 +67,6 @@ size = Vector3(50, 0.2, 50)
 
 [sub_resource type="BoxShape3D" id="GrassShape"]
 size = Vector3(50, 0.2, 50)
-
-[sub_resource type="SphereShape3D" id="CameraCollisionShape"]
-radius = 0.2
 
 [sub_resource type="BoxMesh" id="RoadMesh"]
 material = ExtResource("5_asphalt")
@@ -121,6 +119,9 @@ tonemap_exposure = 0.5
 
 [sub_resource type="CapsuleShape3D" id="PlayerShape"]
 radius = 0.45
+
+[sub_resource type="SphereShape3D" id="CameraCollisionShape"]
+radius = 0.2
 
 [sub_resource type="StyleBoxFlat" id="FpsBackground"]
 bg_color = Color(0.02, 0.03, 0.04, 0.72)
@@ -196,6 +197,8 @@ corner_radius_top_left = 4
 corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_kgutl"]
 
 [node name="PrototypeWorld" type="Node3D" unique_id=390521270]
 
@@ -435,8 +438,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
 
 [node name="SpringArm3D" type="SpringArm3D" parent="Player/CameraRig" unique_id=476616506]
 transform = Transform3D(1, 0, 0, 0, 0.9799247, 0.19936793, 0, -0.19936793, 0.9799247, 0, 0, 0)
-spring_length = 3.25
 shape = SubResource("CameraCollisionShape")
+spring_length = 3.25
 margin = 0.1
 
 [node name="Camera3D" type="Camera3D" parent="Player/CameraRig/SpringArm3D" unique_id=1834467021]
@@ -1014,5 +1017,12 @@ text = "Press R to Restart"
 horizontal_alignment = 1
 
 [node name="PauseMenu" parent="PerformanceUI" unique_id=354200872 instance=ExtResource("45_pause_menu")]
+
+[node name="bakery" parent="." unique_id=1301676236 instance=ExtResource("60_klgig")]
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, -10.707914, 3.5184705, 19.42582)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="bakery" unique_id=1692330301]
+transform = Transform3D(1.5111799, 0, 0, 0, 0.6838229, 0, 0, 0, 1.6816206, 0, -0.24745235, 0.10582805)
+shape = SubResource("BoxShape3D_kgutl")
 
 [editable path="Player/Visual/Warrior"]
