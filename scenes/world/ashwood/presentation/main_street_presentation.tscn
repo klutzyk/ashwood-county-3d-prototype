@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=3]
+[gd_scene load_steps=63 format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/world/ashwood/presentation/buildings/historic_brick_storefront.tscn" id="1_store"]
 [ext_resource type="PackedScene" path="res://assets/environment/props/poly_haven_street_lamp.tscn" id="2_light"]
@@ -22,6 +22,18 @@
 [ext_resource type="PackedScene" path="res://assets/environment/props/poly_haven_utility_box_02.tscn" id="20_utility"]
 [ext_resource type="PackedScene" path="res://assets/environment/props/home_us_mailbox.tscn" id="21_mailbox"]
 [ext_resource type="PackedScene" path="res://assets/environment/nature/yughues_bush_02.tscn" id="22_shrub_autumn"]
+[ext_resource type="PackedScene" path="res://assets/environment/buildings/ashwood/antiques.glb" id="23_antiques"]
+[ext_resource type="PackedScene" path="res://assets/environment/buildings/ashwood/attorney.glb" id="24_attorney"]
+[ext_resource type="PackedScene" path="res://assets/environment/buildings/ashwood/barber.glb" id="25_barber"]
+[ext_resource type="PackedScene" path="res://assets/environment/buildings/ashwood/bookstore.glb" id="26_bookstore"]
+[ext_resource type="PackedScene" path="res://assets/environment/buildings/ashwood/dentist.glb" id="27_dentist"]
+[ext_resource type="PackedScene" path="res://assets/environment/buildings/ashwood/florist.gltf" id="28_florist"]
+[ext_resource type="PackedScene" path="res://assets/environment/buildings/ashwood/insurance.glb" id="29_insurance"]
+[ext_resource type="PackedScene" path="res://assets/environment/buildings/ashwood/musicstore.glb" id="30_musicstore"]
+[ext_resource type="PackedScene" path="res://assets/environment/buildings/ashwood/realtor.glb" id="31_realtor"]
+[ext_resource type="PackedScene" path="res://assets/third_party/buildings/lowpoly industrial building/lowpoly_industrial_building.glb" id="32_industrial"]
+[ext_resource type="PackedScene" path="res://assets/third_party/buildings/lowpoly industrial building/old_building.glb" id="33_old_building"]
+[ext_resource type="PackedScene" path="res://assets/third_party/props/signs/welcome_sign_restaurant.glb" id="34_restaurant_sign"]
 
 [sub_resource type="StandardMaterial3D" id="WhitePaint"]
 albedo_color = Color(0.82, 0.8, 0.68, 1)
@@ -113,6 +125,39 @@ radial_segments = 6
 [sub_resource type="CylinderShape3D" id="HydrantShape"]
 radius = 0.33
 height = 1.1
+
+[sub_resource type="BoxShape3D" id="RealtorShape"]
+size = Vector3(9.1, 4.4, 7.1)
+
+[sub_resource type="BoxShape3D" id="BookstoreShape"]
+size = Vector3(8.9, 7.5, 4.8)
+
+[sub_resource type="BoxShape3D" id="DentistShape"]
+size = Vector3(8, 5, 4.9)
+
+[sub_resource type="BoxShape3D" id="AttorneyShape"]
+size = Vector3(9.5, 6.9, 5.9)
+
+[sub_resource type="BoxShape3D" id="InsuranceShape"]
+size = Vector3(14.8, 6.9, 5)
+
+[sub_resource type="BoxShape3D" id="FloristShape"]
+size = Vector3(5.7, 4.8, 4.9)
+
+[sub_resource type="BoxShape3D" id="BarberShape"]
+size = Vector3(7.55, 4.9, 5.55)
+
+[sub_resource type="BoxShape3D" id="AntiquesShape"]
+size = Vector3(7.65, 6.9, 5)
+
+[sub_resource type="BoxShape3D" id="MusicStoreShape"]
+size = Vector3(7.45, 5.1, 4.65)
+
+[sub_resource type="BoxShape3D" id="IndustrialShape"]
+size = Vector3(10.9, 9.5, 10)
+
+[sub_resource type="BoxShape3D" id="OldBuildingShape"]
+size = Vector3(8.55, 11.5, 6.4)
 
 [node name="MainStreetPresentation" type="Node3D"]
 
@@ -361,20 +406,55 @@ mesh = SubResource("MarkingMesh")
 
 [node name="Storefronts" type="Node3D" parent="."]
 
-[node name="NorthCornerMarket" parent="Storefronts" instance=ExtResource("1_store")]
-position = Vector3(-90, 0.2, -13.05)
+[node name="NorthRealtor" type="StaticBody3D" parent="Storefronts"]
+position = Vector3(-90, 0.2, -8.75)
 
-[node name="NorthCafe" parent="Storefronts" instance=ExtResource("14_laundry")]
-position = Vector3(-42, 0.2, -12.95)
+[node name="Visual" parent="Storefronts/NorthRealtor" instance=ExtResource("31_realtor")]
+transform = Transform3D(0, 0, -9.6, 0, 9.6, 0, 9.6, 0, 0, -0.0064, -0.6918, -4.2001)
 
-[node name="NorthBookstore" parent="Storefronts" instance=ExtResource("1_store")]
-position = Vector3(-27, 0.2, -13.05)
+[node name="Collision" type="CollisionShape3D" parent="Storefronts/NorthRealtor"]
+position = Vector3(0, 2.2, -4.35)
+shape = SubResource("RealtorShape")
 
-[node name="NorthBank" parent="Storefronts" instance=ExtResource("12_bank")]
-position = Vector3(-11, 0.2, -13.85)
+[node name="NorthBookstore" type="StaticBody3D" parent="Storefronts"]
+position = Vector3(-42, 0.2, -8.75)
 
-[node name="NorthHardware" parent="Storefronts" instance=ExtResource("13_hardware")]
-position = Vector3(6, 0.2, -13.35)
+[node name="Visual" parent="Storefronts/NorthBookstore" instance=ExtResource("26_bookstore")]
+transform = Transform3D(0, 0, -9.35, 0, 9.35, 0, 9.35, 0, 0, 0.0097, 0, -2.7865)
+
+[node name="Collision" type="CollisionShape3D" parent="Storefronts/NorthBookstore"]
+position = Vector3(0, 3.75, -2.94)
+shape = SubResource("BookstoreShape")
+
+[node name="NorthDentist" type="StaticBody3D" parent="Storefronts"]
+position = Vector3(-27, 0.2, -8.75)
+
+[node name="Visual" parent="Storefronts/NorthDentist" instance=ExtResource("27_dentist")]
+transform = Transform3D(8.3, 0, 0, 0, 8.3, 0, 0, 0, 8.3, -0.0021, 0, -2.8459)
+
+[node name="Collision" type="CollisionShape3D" parent="Storefronts/NorthDentist"]
+position = Vector3(0, 2.5, -3.01)
+shape = SubResource("DentistShape")
+
+[node name="NorthAttorney" type="StaticBody3D" parent="Storefronts"]
+position = Vector3(-11, 0.2, -8.75)
+
+[node name="Visual" parent="Storefronts/NorthAttorney" instance=ExtResource("24_attorney")]
+transform = Transform3D(0, 0, -9.9, 0, 9.9, 0, 9.9, 0, 0, -0.0011, 0, -3.4496)
+
+[node name="Collision" type="CollisionShape3D" parent="Storefronts/NorthAttorney"]
+position = Vector3(0, 3.45, -3.6)
+shape = SubResource("AttorneyShape")
+
+[node name="NorthInsurance" type="StaticBody3D" parent="Storefronts"]
+position = Vector3(6, 0.2, -8.75)
+
+[node name="Visual" parent="Storefronts/NorthInsurance" instance=ExtResource("29_insurance")]
+transform = Transform3D(15.2, 0, 0, 0, 15.2, 0, 0, 0, 15.2, 0.0077, 0, -2.917)
+
+[node name="Collision" type="CollisionShape3D" parent="Storefronts/NorthInsurance"]
+position = Vector3(0, 3.45, -3.07)
+shape = SubResource("InsuranceShape")
 
 [node name="NorthPharmacy" parent="Storefronts" instance=ExtResource("8_pharmacy")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 44, 0.2, -13.2)
@@ -382,17 +462,45 @@ transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 44, 
 [node name="NorthOffice" parent="Storefronts" instance=ExtResource("11_office")]
 position = Vector3(88, 0.2, -13.55)
 
-[node name="SouthFlorist" parent="Storefronts" instance=ExtResource("10_corner")]
-transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, -90, 0.2, 12.85)
+[node name="SouthFlorist" type="StaticBody3D" parent="Storefronts"]
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, -90, 0.2, 8.75)
 
-[node name="SouthBarber" parent="Storefronts" instance=ExtResource("1_store")]
-transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, -59, 0.2, 13.05)
+[node name="Visual" parent="Storefronts/SouthFlorist" instance=ExtResource("28_florist")]
+transform = Transform3D(0, 0, -6, 0, 6, 0, 6, 0, 0, 0.0062, 0, -2.8907)
 
-[node name="SouthHardware" parent="Storefronts" instance=ExtResource("13_hardware")]
-transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, -44, 0.2, 13.35)
+[node name="Collision" type="CollisionShape3D" parent="Storefronts/SouthFlorist"]
+position = Vector3(0, 2.4, -3.04)
+shape = SubResource("FloristShape")
 
-[node name="SouthAntiques" parent="Storefronts" instance=ExtResource("11_office")]
-transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, -27, 0.2, 13.55)
+[node name="SouthBarber" type="StaticBody3D" parent="Storefronts"]
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, -59, 0.2, 8.75)
+
+[node name="Visual" parent="Storefronts/SouthBarber" instance=ExtResource("25_barber")]
+transform = Transform3D(0, 0, -8.65, 0, 8.65, 0, 8.65, 0, 0, -0.235, -0.2058, -4.3256)
+
+[node name="Collision" type="CollisionShape3D" parent="Storefronts/SouthBarber"]
+position = Vector3(0, 2.45, -3.41)
+shape = SubResource("BarberShape")
+
+[node name="SouthAntiques" type="StaticBody3D" parent="Storefronts"]
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, -44, 0.2, 8.75)
+
+[node name="Visual" parent="Storefronts/SouthAntiques" instance=ExtResource("23_antiques")]
+transform = Transform3D(0, 0, -8, 0, 8, 0, 8, 0, 0, -0.0059, 0, -2.966)
+
+[node name="Collision" type="CollisionShape3D" parent="Storefronts/SouthAntiques"]
+position = Vector3(0, 3.45, -3.115)
+shape = SubResource("AntiquesShape")
+
+[node name="SouthMusicStore" type="StaticBody3D" parent="Storefronts"]
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, -27, 0.2, 8.75)
+
+[node name="Visual" parent="Storefronts/SouthMusicStore" instance=ExtResource("30_musicstore")]
+transform = Transform3D(0, 0, -7.75, 0, 7.75, 0, 7.75, 0, 0, -0.0011, 0, -2.7333)
+
+[node name="Collision" type="CollisionShape3D" parent="Storefronts/SouthMusicStore"]
+position = Vector3(0, 2.55, -2.88)
+shape = SubResource("MusicStoreShape")
 
 [node name="SouthSportingGoods" parent="Storefronts" instance=ExtResource("10_corner")]
 transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, -13, 0.2, 12.85)
@@ -412,69 +520,33 @@ transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 54, 
 [node name="SouthOffices" parent="Storefronts" instance=ExtResource("11_office")]
 transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 88, 0.2, 13.55)
 
+[node name="BackgroundBuildings" type="Node3D" parent="."]
+
+[node name="EastIndustrialWorks" type="StaticBody3D" parent="BackgroundBuildings"]
+position = Vector3(93, 0.2, -20)
+
+[node name="Visual" parent="BackgroundBuildings/EastIndustrialWorks" instance=ExtResource("32_industrial")]
+transform = Transform3D(3.4, 0, 0, 0, 3.4, 0, 0, 0, 3.4, -0.0313, 0, -8.1245)
+
+[node name="Collision" type="CollisionShape3D" parent="BackgroundBuildings/EastIndustrialWorks"]
+position = Vector3(0, 4.75, -6.015)
+shape = SubResource("IndustrialShape")
+
+[node name="EastCarpetWarehouse" type="StaticBody3D" parent="BackgroundBuildings"]
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 94, 0.2, 20)
+
+[node name="Visual" parent="BackgroundBuildings/EastCarpetWarehouse" instance=ExtResource("33_old_building")]
+transform = Transform3D(0.0197, 0, 0, 0, 0.0197, 0, 0, 0, 0.0197, 0.4452, 0, -3.7499)
+
+[node name="Collision" type="CollisionShape3D" parent="BackgroundBuildings/EastCarpetWarehouse"]
+position = Vector3(0, 5.75, -3.906)
+shape = SubResource("OldBuildingShape")
+
 [node name="BusinessSigns" type="Node3D" parent="."]
-
-[node name="CornerMarket" type="Label3D" parent="BusinessSigns"]
-position = Vector3(-90, 3.35, -8.5)
-text = "ASHWOOD MARKET"
-font_size = 42
-outline_size = 8
-
-[node name="Cafe" type="Label3D" parent="BusinessSigns"]
-position = Vector3(-42, 3.85, -8.55)
-text = "MAPLE CAFE"
-font_size = 44
-outline_size = 8
-
-[node name="Bookstore" type="Label3D" parent="BusinessSigns"]
-position = Vector3(-27, 3.35, -8.5)
-text = "COUNTY BOOKS"
-font_size = 42
-outline_size = 8
-
-[node name="Bank" type="Label3D" parent="BusinessSigns"]
-position = Vector3(-11, 4.55, -8.45)
-text = "ASHWOOD BANK"
-font_size = 44
-outline_size = 8
-
-[node name="HardwareNorth" type="Label3D" parent="BusinessSigns"]
-position = Vector3(6, 3.95, -8.45)
-text = "MILLER HARDWARE"
-font_size = 40
-outline_size = 8
 
 [node name="OfficesNorth" type="Label3D" parent="BusinessSigns"]
 position = Vector3(88, 3.75, -8.45)
 text = "MAIN STREET OFFICES"
-font_size = 38
-outline_size = 8
-
-[node name="Florist" type="Label3D" parent="BusinessSigns"]
-position = Vector3(-90, 3.7, 8.45)
-rotation = Vector3(0, 3.1415927, 0)
-text = "ASHWOOD FLORIST"
-font_size = 40
-outline_size = 8
-
-[node name="Barber" type="Label3D" parent="BusinessSigns"]
-position = Vector3(-59, 3.35, 8.5)
-rotation = Vector3(0, 3.1415927, 0)
-text = "COUNTY BARBER"
-font_size = 40
-outline_size = 8
-
-[node name="Hardware" type="Label3D" parent="BusinessSigns"]
-position = Vector3(-44, 3.95, 8.45)
-rotation = Vector3(0, 3.1415927, 0)
-text = "ASHWOOD HARDWARE"
-font_size = 38
-outline_size = 8
-
-[node name="Antiques" type="Label3D" parent="BusinessSigns"]
-position = Vector3(-27, 3.75, 8.45)
-rotation = Vector3(0, 3.1415927, 0)
-text = "OLD MILL ANTIQUES"
 font_size = 38
 outline_size = 8
 
@@ -896,6 +968,9 @@ rotation = Vector3(0, 0.12, 0)
 [node name="MailboxEastEdge" parent="StreetDetails" instance=ExtResource("21_mailbox")]
 position = Vector3(103, 0, 10.2)
 rotation = Vector3(0, 3.02, 0)
+
+[node name="DinerWelcomeBoard" parent="StreetDetails" instance=ExtResource("34_restaurant_sign")]
+transform = Transform3D(0, 0, -0.95, 0, 0.95, 0, 0.95, 0, 0, 48.5, 0.2, 7.25)
 
 [node name="BusStop" type="StaticBody3D" parent="."]
 position = Vector3(12, 0.2, 8.35)

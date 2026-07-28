@@ -1,0 +1,44 @@
+[remap]
+
+importer="texture"
+type="CompressedTexture2D"
+uid="uid://ct41niv1yxm7e"
+path.s3tc="res://.godot/imported/florist_tripo_node_2dd42e89-2ef2-42ef-91d4-74d6c57fbe1e_Normal_Bake.png-43d67e913c87fa5d45d9be1e23338c5e.s3tc.ctex"
+metadata={
+"imported_formats": ["s3tc_bptc"],
+"vram_texture": true
+}
+generator_parameters={
+"md5": "03db554c5e92da02dda33cc6b37b553c"
+}
+
+[deps]
+
+source_file="res://assets/environment/buildings/ashwood/florist_tripo_node_2dd42e89-2ef2-42ef-91d4-74d6c57fbe1e_Normal_Bake.png"
+dest_files=["res://.godot/imported/florist_tripo_node_2dd42e89-2ef2-42ef-91d4-74d6c57fbe1e_Normal_Bake.png-43d67e913c87fa5d45d9be1e23338c5e.s3tc.ctex"]
+
+[params]
+
+compress/mode=2
+compress/high_quality=false
+compress/lossy_quality=0.7
+compress/uastc_level=0
+compress/rdo_quality_loss=0.0
+compress/hdr_compression=1
+compress/normal_map=1
+compress/channel_pack=0
+mipmaps/generate=true
+mipmaps/limit=-1
+roughness/mode=1
+roughness/src_normal="res://assets/environment/buildings/ashwood/florist_tripo_node_2dd42e89-2ef2-42ef-91d4-74d6c57fbe1e_Normal_Bake.png"
+process/channel_remap/red=0
+process/channel_remap/green=1
+process/channel_remap/blue=2
+process/channel_remap/alpha=3
+process/fix_alpha_border=true
+process/premult_alpha=false
+process/normal_map_invert_y=false
+process/hdr_as_srgb=false
+process/hdr_clamp_exposure=false
+process/size_limit=0
+detect_3d/compress_to=0

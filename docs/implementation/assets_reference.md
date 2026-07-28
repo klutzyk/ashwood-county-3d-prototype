@@ -164,7 +164,112 @@ of each downloaded asset and its license information with project records.
 - **Local location:** `assets/environment/roads/`
 - **Status:** Planned for prototype use
 
+## Main Street Visual Pass Assets
+
+The following assets were downloaded or newly integrated for the Main Street
+visual-quality pass on 28 July 2026.
+
+### Red Brick, Factory Brick, and Painted Brick
+
+- **Asset type:** Seamless PBR building-façade materials
+- **Creator/provider:** Poly Haven
+- **Sources:** [Red Brick](https://polyhaven.com/a/red_brick),
+  [Factory Brick](https://polyhaven.com/a/factory_brick), and
+  [Painted Brick](https://polyhaven.com/a/painted_brick)
+- **License:** [CC0 1.0 Universal](https://polyhaven.com/license)
+- **Asset details:** The project retains each material's 2K diffuse, OpenGL
+  normal, and packed ARM maps.
+- **Attribution requirement:** None; provider and sources are recorded for
+  provenance.
+- **Prototype use:** Shared project-owned triplanar materials on the modular
+  Main Street storefront façades
+- **Downloaded location:** `assets/third_party/materials/building_facades/poly_haven/`
+- **Project materials:** `assets/materials/ashwood_main_street/`
+- **Status:** In use
+
+### Bushes
+
+- **Asset type:** Optimized bush models and textures
+- **Creator:** Nobiax / Yughues
+- **Source:** [Bushes on OpenGameArt](https://opengameart.org/content/bushes)
+- **License:** [CC0 1.0 Universal](https://creativecommons.org/publicdomain/zero/1.0/)
+- **Asset details:** Selected FBX variants 01, 02, and 05 with their diffuse and
+  normal textures; approximately 556, 384, and 880 triangles respectively
+- **Attribution requirement:** None; creator and source are recorded for
+  provenance.
+- **Prototype use:** Main Street shrubs and planter vegetation
+- **Downloaded location:** `assets/third_party/nature/yughues_bushes/`
+- **Project wrappers:** `assets/environment/nature/yughues_bush_01.tscn`,
+  `assets/environment/nature/yughues_bush_02.tscn`, and
+  `assets/environment/nature/yughues_bush_05.tscn`
+- **Status:** In use
+
+### Utility Box 02
+
+- **Asset type:** Street-side electrical utility box
+- **Creator/provider:** Poly Haven
+- **Source:** [Utility Box 02 on Poly Haven](https://polyhaven.com/a/utility_box_02)
+- **License:** [CC0 1.0 Universal](https://polyhaven.com/license)
+- **Asset details:** glTF model with 1K diffuse, ARM, and OpenGL normal textures
+- **Attribution requirement:** None; provider and source are recorded for
+  provenance.
+- **Prototype use:** Main Street utility dressing
+- **Downloaded location:** `assets/third_party/props/utilities/utility_box_02_1k.gltf/`
+- **Project wrapper:** `assets/environment/props/poly_haven_utility_box_02.tscn`
+- **Status:** In use
+
 ## Vehicles
+
+### 1975 Chevrolet Impala 4-Door Sedan
+
+- **Asset type:** Parked vehicle model
+- **Creator:** Alexander Malygin
+- **Source:** [1975 Chevrolet Impala on Sketchfab](https://sketchfab.com/3d-models/1975-chevrolet-impala-4-door-sedan-d969afad185a48f9b51823d8b3306d47)
+- **License:** [Creative Commons Attribution 4.0 International](https://creativecommons.org/licenses/by/4.0/)
+- **Asset details:** Approximately 6,211 triangles
+- **Attribution requirement:** Credit the creator, asset title, source, license,
+  and modifications.
+- **Credit text:** "1975 Chevrolet Impala 4-door sedan" by Alexander Malygin,
+  licensed under CC BY 4.0, via Sketchfab. Instantiated through a project-owned
+  wrapper with adjusted scale, orientation, and simplified static collision.
+- **Prototype use:** Parked Main Street vehicle
+- **Downloaded location:** `assets/third_party/vehicles/1975_chevrolet_impala/`
+- **Project wrapper:** `assets/environment/vehicles/parked_1975_impala.tscn`
+- **Status:** In use
+
+### Chevrolet C10 Pickup 1963
+
+- **Asset type:** Parked pickup-truck model
+- **Creator:** ROH3D
+- **Source:** [Chevrolet C10 Pickup 1963 on Sketchfab](https://sketchfab.com/3d-models/low-poly-car-chevrolet-c10-pickup-1963-679354c151984747bb74310ec5af8995)
+- **License:** [Creative Commons Attribution 4.0 International](https://creativecommons.org/licenses/by/4.0/)
+- **Asset details:** Approximately 16,527 triangles
+- **Attribution requirement:** Credit the creator, asset title, source, license,
+  and modifications.
+- **Credit text:** "Low-poly Chevrolet C10 Pickup 1963" by ROH3D, licensed under
+  CC BY 4.0, via Sketchfab. Instantiated through a project-owned wrapper with
+  adjusted scale, orientation, and simplified static collision.
+- **Prototype use:** Parked Main Street pickup
+- **Downloaded location:** `assets/third_party/vehicles/1963_chevrolet_c10/`
+- **Project wrapper:** `assets/environment/vehicles/parked_1963_c10.tscn`
+- **Status:** In use
+
+### Shvan '92 American Panel Van
+
+- **Asset type:** Generic American panel-van model
+- **Creator:** Daniel Zhabotinsky
+- **Source:** [Shvan '92 on Sketchfab](https://sketchfab.com/3d-models/shvan-92-low-poly-model-09d718c9cf72401b8534d265a06a803f)
+- **License:** [Creative Commons Attribution 4.0 International](https://creativecommons.org/licenses/by/4.0/)
+- **Asset details:** Approximately 23,000 triangles
+- **Attribution requirement:** Credit the creator, asset title, source, license,
+  and modifications.
+- **Credit text:** "Shvan '92 - Low poly model" by Daniel Zhabotinsky, licensed
+  under CC BY 4.0, via Sketchfab. Instantiated through a project-owned wrapper
+  with adjusted scale, orientation, and simplified static collision.
+- **Prototype use:** Parked Main Street commercial vehicle
+- **Downloaded location:** `assets/third_party/vehicles/american_panel_van/`
+- **Project wrapper:** `assets/environment/vehicles/parked_american_panel_van.tscn`
+- **Status:** In use
 
 ### Rusted Alfa Romeo Old Car
 
@@ -221,12 +326,22 @@ of each downloaded asset and its license information with project records.
 ## White door
 **credits** - "white_door_1" (https://skfb.ly/pI8vM) by Ledeyer is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 
+## Restrauant menu sign
+**credits** - "Welcome Sign Restaurant" (https://skfb.ly/oQIJv) by Yudhist.K.A is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+
+## Industrial building
+**credits** - "industrial building" (https://skfb.ly/o9T9T) by spicybamer is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+
+## Old building (carpets)
+**credits** - "old building" (https://skfb.ly/6TEFI) by Helindu is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+
 ## Project-Owned Prototype Town Geometry
 
 ## Main Street CC0 Street Furniture
 
 The following assets were downloaded and integrated on 28 July 2026. Only the
 1K texture variants were retained where available.
+
 
 ### Street Lamp 01
 
