@@ -1,0 +1,12 @@
+Assets:
+- Red Brick: https://polyhaven.com/a/red_brick
+- Factory Brick: https://polyhaven.com/a/factory_brick
+- Painted Brick: https://polyhaven.com/a/painted_brick
+
+Creator/source: Poly Haven
+License: CC0 1.0 Universal Public Domain Dedication
+License information: https://polyhaven.com/license
+
+Project changes: Only the 2K diffuse, OpenGL normal, and packed ARM maps are
+included. Project-owned Godot materials configure triplanar mapping and reuse
+these textures across the modular Main Street façades.

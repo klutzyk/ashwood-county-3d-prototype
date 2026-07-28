@@ -1,0 +1,9 @@
+Asset: Bushes (five-model pack)
+Creator: Nobiax / Yughues
+Original source: https://opengameart.org/content/bushes
+License: CC0 1.0 Universal Public Domain Dedication
+License text: https://creativecommons.org/publicdomain/zero/1.0/
+
+Project changes: Selected FBX models are instantiated through project-owned
+Godot wrappers with alpha-cutout PBR-compatible materials, adjusted scale, and
+simple collision where needed. The original source files remain unmodified.

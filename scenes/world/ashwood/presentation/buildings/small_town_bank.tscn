@@ -1,0 +1,146 @@
+[gd_scene load_steps=13 format=3]
+
+[ext_resource type="Material" path="res://assets/materials/ashwood_main_street/red_brick_2k.tres" id="1_brick"]
+[ext_resource type="Material" path="res://assets/materials/ashwood_main_street/facade_trim_cream.tres" id="2_trim"]
+[ext_resource type="Material" path="res://assets/materials/ashwood_main_street/facade_stone.tres" id="3_stone"]
+[ext_resource type="Material" path="res://assets/materials/ashwood_main_street/facade_glass.tres" id="4_glass"]
+[ext_resource type="Material" path="res://assets/materials/ashwood_main_street/facade_roof.tres" id="5_roof"]
+
+[sub_resource type="BoxMesh" id="BrickMesh"]
+material = ExtResource("1_brick")
+[sub_resource type="BoxMesh" id="TrimMesh"]
+material = ExtResource("2_trim")
+[sub_resource type="BoxMesh" id="StoneMesh"]
+material = ExtResource("3_stone")
+[sub_resource type="BoxMesh" id="GlassMesh"]
+material = ExtResource("4_glass")
+[sub_resource type="BoxMesh" id="RoofMesh"]
+material = ExtResource("5_roof")
+[sub_resource type="CylinderMesh" id="ColumnMesh"]
+material = ExtResource("3_stone")
+top_radius = 0.28
+bottom_radius = 0.34
+height = 4.2
+radial_segments = 16
+[sub_resource type="CylinderShape3D" id="ColumnShape"]
+radius = 0.34
+height = 4.2
+[sub_resource type="BoxShape3D" id="Collision"]
+size = Vector3(14, 7.5, 10)
+
+[node name="SmallTownBank" type="StaticBody3D"]
+
+[node name="Collision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 3.75, 0)
+shape = SubResource("Collision")
+
+[node name="Shell" type="MeshInstance3D" parent="."]
+position = Vector3(0, 3.75, 0)
+scale = Vector3(14, 7.5, 10)
+mesh = SubResource("BrickMesh")
+
+[node name="Roof" type="MeshInstance3D" parent="."]
+position = Vector3(0, 7.58, 0)
+scale = Vector3(14.35, 0.18, 10.35)
+mesh = SubResource("RoofMesh")
+
+[node name="StoneGroundFacade" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.75, 5.08)
+scale = Vector3(13.2, 3.35, 0.25)
+mesh = SubResource("StoneMesh")
+
+[node name="EntryRecess" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.65, 5.25)
+scale = Vector3(2.9, 3.3, 0.18)
+mesh = SubResource("TrimMesh")
+
+[node name="DoorLeft" type="MeshInstance3D" parent="."]
+position = Vector3(-0.62, 1.55, 5.38)
+scale = Vector3(1.05, 2.8, 0.08)
+mesh = SubResource("GlassMesh")
+
+[node name="DoorRight" type="MeshInstance3D" parent="."]
+position = Vector3(0.62, 1.55, 5.38)
+scale = Vector3(1.05, 2.8, 0.08)
+mesh = SubResource("GlassMesh")
+
+[node name="WindowLeftFrame" type="MeshInstance3D" parent="."]
+position = Vector3(-4.65, 1.7, 5.25)
+scale = Vector3(3.45, 2.55, 0.16)
+mesh = SubResource("TrimMesh")
+
+[node name="WindowLeft" type="MeshInstance3D" parent="."]
+position = Vector3(-4.65, 1.7, 5.35)
+scale = Vector3(3.1, 2.2, 0.04)
+mesh = SubResource("GlassMesh")
+
+[node name="WindowRightFrame" type="MeshInstance3D" parent="."]
+position = Vector3(4.65, 1.7, 5.25)
+scale = Vector3(3.45, 2.55, 0.16)
+mesh = SubResource("TrimMesh")
+
+[node name="WindowRight" type="MeshInstance3D" parent="."]
+position = Vector3(4.65, 1.7, 5.35)
+scale = Vector3(3.1, 2.2, 0.04)
+mesh = SubResource("GlassMesh")
+
+[node name="PorticoRoof" type="MeshInstance3D" parent="."]
+position = Vector3(0, 4.18, 5.55)
+scale = Vector3(7.8, 0.42, 1.25)
+mesh = SubResource("StoneMesh")
+
+[node name="ColumnLeftOuter" type="MeshInstance3D" parent="."]
+position = Vector3(-3.35, 2.1, 5.55)
+mesh = SubResource("ColumnMesh")
+[node name="ColumnLeftInner" type="MeshInstance3D" parent="."]
+position = Vector3(-1.45, 2.1, 5.55)
+mesh = SubResource("ColumnMesh")
+[node name="ColumnRightInner" type="MeshInstance3D" parent="."]
+position = Vector3(1.45, 2.1, 5.55)
+mesh = SubResource("ColumnMesh")
+[node name="ColumnRightOuter" type="MeshInstance3D" parent="."]
+position = Vector3(3.35, 2.1, 5.55)
+mesh = SubResource("ColumnMesh")
+
+[node name="ColumnLeftOuterCollision" type="CollisionShape3D" parent="."]
+position = Vector3(-3.35, 2.1, 5.55)
+shape = SubResource("ColumnShape")
+[node name="ColumnLeftInnerCollision" type="CollisionShape3D" parent="."]
+position = Vector3(-1.45, 2.1, 5.55)
+shape = SubResource("ColumnShape")
+[node name="ColumnRightInnerCollision" type="CollisionShape3D" parent="."]
+position = Vector3(1.45, 2.1, 5.55)
+shape = SubResource("ColumnShape")
+[node name="ColumnRightOuterCollision" type="CollisionShape3D" parent="."]
+position = Vector3(3.35, 2.1, 5.55)
+shape = SubResource("ColumnShape")
+
+[node name="UpperWindowLeftFrame" type="MeshInstance3D" parent="."]
+position = Vector3(-4.2, 5.85, 5.08)
+scale = Vector3(2.2, 2.25, 0.16)
+mesh = SubResource("TrimMesh")
+[node name="UpperWindowLeft" type="MeshInstance3D" parent="."]
+position = Vector3(-4.2, 5.85, 5.18)
+scale = Vector3(1.85, 1.9, 0.04)
+mesh = SubResource("GlassMesh")
+[node name="UpperWindowCentreFrame" type="MeshInstance3D" parent="."]
+position = Vector3(0, 5.85, 5.08)
+scale = Vector3(2.2, 2.25, 0.16)
+mesh = SubResource("TrimMesh")
+[node name="UpperWindowCentre" type="MeshInstance3D" parent="."]
+position = Vector3(0, 5.85, 5.18)
+scale = Vector3(1.85, 1.9, 0.04)
+mesh = SubResource("GlassMesh")
+[node name="UpperWindowRightFrame" type="MeshInstance3D" parent="."]
+position = Vector3(4.2, 5.85, 5.08)
+scale = Vector3(2.2, 2.25, 0.16)
+mesh = SubResource("TrimMesh")
+[node name="UpperWindowRight" type="MeshInstance3D" parent="."]
+position = Vector3(4.2, 5.85, 5.18)
+scale = Vector3(1.85, 1.9, 0.04)
+mesh = SubResource("GlassMesh")
+
+[node name="Cornice" type="MeshInstance3D" parent="."]
+position = Vector3(0, 7.32, 5.02)
+scale = Vector3(14.55, 0.4, 0.7)
+mesh = SubResource("StoneMesh")

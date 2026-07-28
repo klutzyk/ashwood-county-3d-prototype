@@ -1,0 +1,217 @@
+[gd_scene load_steps=12 format=3]
+
+[ext_resource type="Material" path="res://assets/materials/ashwood_main_street/red_brick_2k.tres" id="1_brick"]
+[ext_resource type="Material" path="res://assets/materials/ashwood_main_street/facade_trim_cream.tres" id="2_trim"]
+[ext_resource type="Material" path="res://assets/materials/ashwood_main_street/facade_trim_green.tres" id="3_green"]
+[ext_resource type="Material" path="res://assets/materials/ashwood_main_street/facade_glass.tres" id="4_glass"]
+[ext_resource type="Material" path="res://assets/materials/ashwood_main_street/facade_awning_red.tres" id="5_awning"]
+[ext_resource type="Material" path="res://assets/materials/ashwood_main_street/facade_roof.tres" id="6_roof"]
+
+[sub_resource type="BoxMesh" id="BrickMesh"]
+material = ExtResource("1_brick")
+
+[sub_resource type="BoxMesh" id="TrimMesh"]
+material = ExtResource("2_trim")
+
+[sub_resource type="BoxMesh" id="GreenMesh"]
+material = ExtResource("3_green")
+
+[sub_resource type="BoxMesh" id="GlassMesh"]
+material = ExtResource("4_glass")
+
+[sub_resource type="BoxMesh" id="AwningMesh"]
+material = ExtResource("5_awning")
+
+[sub_resource type="BoxMesh" id="RoofMesh"]
+material = ExtResource("6_roof")
+
+[sub_resource type="BoxShape3D" id="Collision"]
+size = Vector3(12, 7.4, 8.4)
+
+[node name="HistoricBrickStorefront" type="StaticBody3D"]
+
+[node name="Collision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 3.7, 0)
+shape = SubResource("Collision")
+
+[node name="BuildingShell" type="MeshInstance3D" parent="."]
+position = Vector3(0, 3.7, 0)
+scale = Vector3(12, 7.4, 8.4)
+mesh = SubResource("BrickMesh")
+
+[node name="Roof" type="MeshInstance3D" parent="."]
+position = Vector3(0, 7.45, 0)
+scale = Vector3(12.3, 0.18, 8.7)
+mesh = SubResource("RoofMesh")
+
+[node name="GroundStorefront" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.55, 4.26)
+scale = Vector3(11.35, 2.75, 0.18)
+mesh = SubResource("GreenMesh")
+
+[node name="WindowFrameLeft" type="MeshInstance3D" parent="."]
+position = Vector3(-3.35, 1.55, 4.39)
+scale = Vector3(3.45, 2.25, 0.13)
+mesh = SubResource("TrimMesh")
+
+[node name="WindowLeft" type="MeshInstance3D" parent="."]
+position = Vector3(-3.35, 1.55, 4.47)
+scale = Vector3(3.12, 1.94, 0.045)
+mesh = SubResource("GlassMesh")
+
+[node name="WindowFrameRight" type="MeshInstance3D" parent="."]
+position = Vector3(3.35, 1.55, 4.39)
+scale = Vector3(3.45, 2.25, 0.13)
+mesh = SubResource("TrimMesh")
+
+[node name="WindowRight" type="MeshInstance3D" parent="."]
+position = Vector3(3.35, 1.55, 4.47)
+scale = Vector3(3.12, 1.94, 0.045)
+mesh = SubResource("GlassMesh")
+
+[node name="DoorFrame" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.4, 4.43)
+scale = Vector3(1.42, 2.8, 0.18)
+mesh = SubResource("TrimMesh")
+
+[node name="Door" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.38, 4.54)
+scale = Vector3(1.12, 2.55, 0.08)
+mesh = SubResource("GreenMesh")
+
+[node name="DoorGlass" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.65, 4.59)
+scale = Vector3(0.78, 1.45, 0.025)
+mesh = SubResource("GlassMesh")
+
+[node name="SignBand" type="MeshInstance3D" parent="."]
+position = Vector3(0, 3.15, 4.4)
+scale = Vector3(10.8, 0.72, 0.2)
+mesh = SubResource("GreenMesh")
+
+[node name="AwningLeft" type="MeshInstance3D" parent="."]
+position = Vector3(-3.35, 2.75, 4.7)
+rotation = Vector3(-0.16, 0, 0)
+scale = Vector3(3.6, 0.13, 1.05)
+mesh = SubResource("AwningMesh")
+
+[node name="AwningRight" type="MeshInstance3D" parent="."]
+position = Vector3(3.35, 2.75, 4.7)
+rotation = Vector3(-0.16, 0, 0)
+scale = Vector3(3.6, 0.13, 1.05)
+mesh = SubResource("AwningMesh")
+
+[node name="LeftPilaster" type="MeshInstance3D" parent="."]
+position = Vector3(-5.65, 3.35, 4.42)
+scale = Vector3(0.48, 6.55, 0.42)
+mesh = SubResource("TrimMesh")
+
+[node name="RightPilaster" type="MeshInstance3D" parent="."]
+position = Vector3(5.65, 3.35, 4.42)
+scale = Vector3(0.48, 6.55, 0.42)
+mesh = SubResource("TrimMesh")
+
+[node name="BeltCourse" type="MeshInstance3D" parent="."]
+position = Vector3(0, 3.72, 4.38)
+scale = Vector3(11.7, 0.18, 0.25)
+mesh = SubResource("TrimMesh")
+
+[node name="UpperWindow01Frame" type="MeshInstance3D" parent="."]
+position = Vector3(-4.25, 5.35, 4.32)
+scale = Vector3(1.75, 2.2, 0.16)
+mesh = SubResource("TrimMesh")
+
+[node name="UpperWindow01" type="MeshInstance3D" parent="."]
+position = Vector3(-4.25, 5.35, 4.42)
+scale = Vector3(1.42, 1.85, 0.04)
+mesh = SubResource("GlassMesh")
+
+[node name="UpperWindow02Frame" type="MeshInstance3D" parent="."]
+position = Vector3(-1.42, 5.35, 4.32)
+scale = Vector3(1.75, 2.2, 0.16)
+mesh = SubResource("TrimMesh")
+
+[node name="UpperWindow02" type="MeshInstance3D" parent="."]
+position = Vector3(-1.42, 5.35, 4.42)
+scale = Vector3(1.42, 1.85, 0.04)
+mesh = SubResource("GlassMesh")
+
+[node name="UpperWindow03Frame" type="MeshInstance3D" parent="."]
+position = Vector3(1.42, 5.35, 4.32)
+scale = Vector3(1.75, 2.2, 0.16)
+mesh = SubResource("TrimMesh")
+
+[node name="UpperWindow03" type="MeshInstance3D" parent="."]
+position = Vector3(1.42, 5.35, 4.42)
+scale = Vector3(1.42, 1.85, 0.04)
+mesh = SubResource("GlassMesh")
+
+[node name="UpperWindow04Frame" type="MeshInstance3D" parent="."]
+position = Vector3(4.25, 5.35, 4.32)
+scale = Vector3(1.75, 2.2, 0.16)
+mesh = SubResource("TrimMesh")
+
+[node name="UpperWindow04" type="MeshInstance3D" parent="."]
+position = Vector3(4.25, 5.35, 4.42)
+scale = Vector3(1.42, 1.85, 0.04)
+mesh = SubResource("GlassMesh")
+
+[node name="SideWindows" type="Node3D" parent="."]
+
+[node name="WestFrame01" type="MeshInstance3D" parent="SideWindows"]
+position = Vector3(-6.08, 5.35, -2.35)
+rotation = Vector3(0, 1.5707963, 0)
+scale = Vector3(1.7, 2.15, 0.16)
+mesh = SubResource("TrimMesh")
+
+[node name="WestGlass01" type="MeshInstance3D" parent="SideWindows"]
+position = Vector3(-6.18, 5.35, -2.35)
+rotation = Vector3(0, 1.5707963, 0)
+scale = Vector3(1.38, 1.82, 0.04)
+mesh = SubResource("GlassMesh")
+
+[node name="WestFrame02" type="MeshInstance3D" parent="SideWindows"]
+position = Vector3(-6.08, 5.35, 1.0)
+rotation = Vector3(0, 1.5707963, 0)
+scale = Vector3(1.7, 2.15, 0.16)
+mesh = SubResource("TrimMesh")
+
+[node name="WestGlass02" type="MeshInstance3D" parent="SideWindows"]
+position = Vector3(-6.18, 5.35, 1.0)
+rotation = Vector3(0, 1.5707963, 0)
+scale = Vector3(1.38, 1.82, 0.04)
+mesh = SubResource("GlassMesh")
+
+[node name="EastFrame01" type="MeshInstance3D" parent="SideWindows"]
+position = Vector3(6.08, 5.35, -2.35)
+rotation = Vector3(0, 1.5707963, 0)
+scale = Vector3(1.7, 2.15, 0.16)
+mesh = SubResource("TrimMesh")
+
+[node name="EastGlass01" type="MeshInstance3D" parent="SideWindows"]
+position = Vector3(6.18, 5.35, -2.35)
+rotation = Vector3(0, 1.5707963, 0)
+scale = Vector3(1.38, 1.82, 0.04)
+mesh = SubResource("GlassMesh")
+
+[node name="EastFrame02" type="MeshInstance3D" parent="SideWindows"]
+position = Vector3(6.08, 5.35, 1.0)
+rotation = Vector3(0, 1.5707963, 0)
+scale = Vector3(1.7, 2.15, 0.16)
+mesh = SubResource("TrimMesh")
+
+[node name="EastGlass02" type="MeshInstance3D" parent="SideWindows"]
+position = Vector3(6.18, 5.35, 1.0)
+rotation = Vector3(0, 1.5707963, 0)
+scale = Vector3(1.38, 1.82, 0.04)
+mesh = SubResource("GlassMesh")
+
+[node name="CorniceLower" type="MeshInstance3D" parent="."]
+position = Vector3(0, 6.85, 4.25)
+scale = Vector3(12.3, 0.24, 0.48)
+mesh = SubResource("TrimMesh")
+
+[node name="CorniceUpper" type="MeshInstance3D" parent="."]
+position = Vector3(0, 7.18, 4.2)
+scale = Vector3(12.65, 0.35, 0.62)
+mesh = SubResource("BrickMesh")

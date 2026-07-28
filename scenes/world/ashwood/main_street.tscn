@@ -14,12 +14,10 @@
 [ext_resource type="Resource" path="res://assets/zombies/walker.tres" id="12_walker"]
 [ext_resource type="Resource" path="res://assets/zombies/slow_walker.tres" id="13_slow"]
 [ext_resource type="PackedScene" path="res://scenes/world/ashwood/presentation/main_street_presentation.tscn" id="14_presentation"]
-
-[sub_resource type="StandardMaterial3D" id="GroundMaterial"]
-albedo_color = Color(0.19, 0.22, 0.16, 1)
+[ext_resource type="Material" path="res://assets/materials/ashwood_main_street_grass.tres" id="15_grass"]
 
 [sub_resource type="BoxMesh" id="GroundMesh"]
-material = SubResource("GroundMaterial")
+material = ExtResource("15_grass")
 size = Vector3(220, 0.2, 80)
 
 [sub_resource type="BoxShape3D" id="GroundShape"]
@@ -27,10 +25,10 @@ size = Vector3(220, 0.2, 80)
 
 [sub_resource type="BoxMesh" id="MainRoadMesh"]
 material = ExtResource("6_asphalt")
-size = Vector3(200, 0.1, 11.6)
+size = Vector3(220, 0.1, 11.6)
 
 [sub_resource type="BoxShape3D" id="MainRoadShape"]
-size = Vector3(200, 0.1, 11.6)
+size = Vector3(220, 0.1, 11.6)
 
 [sub_resource type="BoxMesh" id="CrossRoadMesh"]
 material = ExtResource("6_asphalt")
@@ -87,7 +85,7 @@ material = SubResource("PlotPainted")
 sky_top_color = Color(0.32, 0.43, 0.57, 1)
 sky_horizon_color = Color(0.72, 0.67, 0.55, 1)
 ground_bottom_color = Color(0.12, 0.12, 0.1, 1)
-ground_horizon_color = Color(0.55, 0.5, 0.42, 1)
+ground_horizon_color = Color(0.72, 0.67, 0.55, 1)
 
 [sub_resource type="Sky" id="Sky"]
 sky_material = SubResource("SkyMaterial")

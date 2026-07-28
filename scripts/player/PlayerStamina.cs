@@ -10,7 +10,7 @@ public partial class PlayerStamina : Node
 	public delegate void StaminaChangedEventHandler(float currentStamina, float maximumStamina);
 
 	[Export] public float MaximumStamina { get; set; } = 100.0f;
-	[Export] public float DrainRate { get; set; } = 25.0f;
+	[Export] public float DrainRate { get; set; } = 0.0f;
 	[Export] public float RegenerationRate { get; set; } = 20.0f;
 	[Export] public float RegenerationDelay { get; set; } = 1.0f;
 	[Export] public float RecoveryThreshold { get; set; } = 20.0f;

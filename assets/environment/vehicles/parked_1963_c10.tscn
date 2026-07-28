@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/third_party/vehicles/1963_chevrolet_c10/1963_chevrolet_c10.glb" id="1_vehicle"]
+
+[sub_resource type="BoxShape3D" id="VehicleShape"]
+size = Vector3(4.86, 1.78, 2.08)
+
+[node name="Parked1963C10" type="StaticBody3D"]
+
+[node name="Visual" parent="." instance=ExtResource("1_vehicle")]
+position = Vector3(0.156, -0.013, -0.424)
+rotation = Vector3(0, 1.5707963, 0)
+scale = Vector3(0.01, 0.01, 0.01)
+
+[node name="Collision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.9, 0)
+shape = SubResource("VehicleShape")

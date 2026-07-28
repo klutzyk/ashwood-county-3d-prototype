@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/third_party/props/utilities/utility_box_02_1k.gltf/utility_box_02_1k.gltf" id="1_visual"]
+
+[sub_resource type="BoxShape3D" id="Collision"]
+size = Vector3(0.92, 1.12, 0.43)
+
+[node name="PolyHavenUtilityBox02" type="StaticBody3D"]
+
+[node name="Visual" parent="." instance=ExtResource("1_visual")]
+
+[node name="Collision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.56, 0)
+shape = SubResource("Collision")

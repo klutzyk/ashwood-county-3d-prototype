@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/third_party/vehicles/american_panel_van/american_panel_van.glb" id="1_vehicle"]
+
+[sub_resource type="BoxShape3D" id="VehicleShape"]
+size = Vector3(4.9, 2.06, 2.34)
+
+[node name="ParkedAmericanPanelVan" type="StaticBody3D"]
+
+[node name="Visual" parent="." instance=ExtResource("1_vehicle")]
+position = Vector3(-0.13, 2.053, -0.002)
+
+[node name="Collision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 1.03, 0)
+shape = SubResource("VehicleShape")

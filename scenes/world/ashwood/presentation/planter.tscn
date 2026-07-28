@@ -1,12 +1,10 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/environment/nature/yughues_bush_05.tscn" id="1_shrub"]
 
 [sub_resource type="StandardMaterial3D" id="Pot"]
 albedo_color = Color(0.36, 0.15, 0.09, 1)
 roughness = 0.92
-
-[sub_resource type="StandardMaterial3D" id="Leaves"]
-albedo_color = Color(0.16, 0.3, 0.11, 1)
-roughness = 0.9
 
 [sub_resource type="CylinderMesh" id="PotMesh"]
 material = SubResource("Pot")
@@ -14,13 +12,8 @@ top_radius = 0.52
 bottom_radius = 0.4
 height = 0.62
 
-[sub_resource type="SphereMesh" id="LeavesMesh"]
-material = SubResource("Leaves")
-radius = 0.66
-height = 1.05
-
 [sub_resource type="CylinderShape3D" id="Collision"]
-radius = 0.52
+radius = 0.48
 height = 0.7
 
 [sub_resource type="CylinderMesh" id="RimMesh"]
@@ -28,6 +21,16 @@ material = SubResource("Pot")
 top_radius = 0.58
 bottom_radius = 0.58
 height = 0.12
+
+[sub_resource type="StandardMaterial3D" id="Soil"]
+albedo_color = Color(0.075, 0.05, 0.03, 1)
+roughness = 1.0
+
+[sub_resource type="CylinderMesh" id="SoilMesh"]
+material = SubResource("Soil")
+top_radius = 0.48
+bottom_radius = 0.48
+height = 0.04
 
 [node name="Planter" type="StaticBody3D"]
 
@@ -43,6 +46,11 @@ mesh = SubResource("PotMesh")
 position = Vector3(0, 0.62, 0)
 mesh = SubResource("RimMesh")
 
-[node name="Plant" type="MeshInstance3D" parent="."]
-position = Vector3(0, 1.05, 0)
-mesh = SubResource("LeavesMesh")
+[node name="Soil" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.67, 0)
+mesh = SubResource("SoilMesh")
+
+[node name="Plant" parent="." instance=ExtResource("1_shrub")]
+position = Vector3(0, 0.69, 0)
+rotation = Vector3(0, 0.35, 0)
+scale = Vector3(0.95, 0.95, 0.95)

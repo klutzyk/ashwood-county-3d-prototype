@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/third_party/props/mailbox/home_us_mailbox.glb" id="1_visual"]
+
+[sub_resource type="BoxShape3D" id="Collision"]
+size = Vector3(0.32, 1.42, 0.6)
+
+[node name="HomeUSMailbox" type="StaticBody3D"]
+
+[node name="Visual" parent="." instance=ExtResource("1_visual")]
+rotation = Vector3(0, -1.6951513, 0)
+scale = Vector3(0.4, 0.4, 0.4)
+
+[node name="Collision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.71, 0)
+shape = SubResource("Collision")

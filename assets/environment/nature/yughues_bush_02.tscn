@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/third_party/nature/yughues_bushes/02/bush_02.FBX" id="1_bush"]
+[ext_resource type="Material" path="res://assets/materials/ashwood_main_street/yughues_bush_02.tres" id="2_material"]
+
+[node name="YughuesBush02" type="Node3D"]
+
+[node name="Visual" parent="." instance=ExtResource("1_bush")]
+position = Vector3(0.023, 0.1, 0.094)
+scale = Vector3(0.6, 0.6, 0.6)
+
+[node name="bush_02" parent="Visual" index="0"]
+surface_material_override/0 = ExtResource("2_material")
+
+[editable path="Visual"]

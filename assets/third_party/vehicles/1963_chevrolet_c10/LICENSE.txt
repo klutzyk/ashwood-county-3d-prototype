@@ -1,0 +1,10 @@
+Asset: Low-poly Chevrolet C10 Pickup 1963
+Creator: ROH3D
+Original source: https://sketchfab.com/3d-models/low-poly-car-chevrolet-c10-pickup-1963-679354c151984747bb74310ec5af8995
+License: Creative Commons Attribution 4.0 International (CC BY 4.0)
+License text: https://creativecommons.org/licenses/by/4.0/
+Download transport: AllenAI Objaverse
+
+Project changes: The original GLB is unmodified. It is instantiated by a
+project-owned Godot wrapper that adjusts scale/orientation and adds simplified
+static collision for use as a parked background vehicle.

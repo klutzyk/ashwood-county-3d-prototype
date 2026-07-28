@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/third_party/vehicles/1975_chevrolet_impala/1975_chevrolet_impala.glb" id="1_vehicle"]
+
+[sub_resource type="BoxShape3D" id="VehicleShape"]
+size = Vector3(5.45, 1.32, 1.82)
+
+[node name="Parked1975Impala" type="StaticBody3D"]
+
+[node name="Visual" parent="." instance=ExtResource("1_vehicle")]
+position = Vector3(0.045, -0.0005, 0.012)
+rotation = Vector3(0, 1.5707963, 0)
+scale = Vector3(0.008, 0.008, 0.008)
+
+[node name="Collision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.66, 0)
+shape = SubResource("VehicleShape")

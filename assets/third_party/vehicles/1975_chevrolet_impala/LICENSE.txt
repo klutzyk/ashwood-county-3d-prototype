@@ -1,0 +1,10 @@
+Asset: 1975 Chevrolet Impala 4-door sedan
+Creator: Alexander Malygin
+Original source: https://sketchfab.com/3d-models/1975-chevrolet-impala-4-door-sedan-d969afad185a48f9b51823d8b3306d47
+License: Creative Commons Attribution 4.0 International (CC BY 4.0)
+License text: https://creativecommons.org/licenses/by/4.0/
+Download transport: AllenAI Objaverse
+
+Project changes: The original GLB is unmodified. It is instantiated by a
+project-owned Godot wrapper that adjusts scale/orientation and adds simplified
+static collision for use as a parked background vehicle.

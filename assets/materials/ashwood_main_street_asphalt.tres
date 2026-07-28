@@ -5,6 +5,7 @@
 [ext_resource type="Texture2D" path="res://assets/third_party/materials/asphalt/white_asphalt_04_1k.gltf/textures/asphalt_04_arm_1k.jpg" id="3_arm"]
 
 [resource]
+albedo_color = Color(0.42, 0.44, 0.46, 1)
 albedo_texture = ExtResource("1_diffuse")
 metallic_texture = ExtResource("3_arm")
 metallic_texture_channel = 2
