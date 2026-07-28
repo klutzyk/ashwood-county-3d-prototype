@@ -1,0 +1,48 @@
+[gd_scene load_steps=7 format=3]
+
+[sub_resource type="StandardMaterial3D" id="Pot"]
+albedo_color = Color(0.36, 0.15, 0.09, 1)
+roughness = 0.92
+
+[sub_resource type="StandardMaterial3D" id="Leaves"]
+albedo_color = Color(0.16, 0.3, 0.11, 1)
+roughness = 0.9
+
+[sub_resource type="CylinderMesh" id="PotMesh"]
+material = SubResource("Pot")
+top_radius = 0.52
+bottom_radius = 0.4
+height = 0.62
+
+[sub_resource type="SphereMesh" id="LeavesMesh"]
+material = SubResource("Leaves")
+radius = 0.66
+height = 1.05
+
+[sub_resource type="CylinderShape3D" id="Collision"]
+radius = 0.52
+height = 0.7
+
+[sub_resource type="CylinderMesh" id="RimMesh"]
+material = SubResource("Pot")
+top_radius = 0.58
+bottom_radius = 0.58
+height = 0.12
+
+[node name="Planter" type="StaticBody3D"]
+
+[node name="Collision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.35, 0)
+shape = SubResource("Collision")
+
+[node name="Pot" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.31, 0)
+mesh = SubResource("PotMesh")
+
+[node name="Rim" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.62, 0)
+mesh = SubResource("RimMesh")
+
+[node name="Plant" type="MeshInstance3D" parent="."]
+position = Vector3(0, 1.05, 0)
+mesh = SubResource("LeavesMesh")

@@ -1,0 +1,810 @@
+[gd_scene load_steps=27 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/world/ashwood/presentation/storefront_shell.tscn" id="1_store"]
+[ext_resource type="PackedScene" path="res://assets/environment/props/poly_haven_street_lamp.tscn" id="2_light"]
+[ext_resource type="PackedScene" path="res://assets/environment/props/cc0_park_bench.tscn" id="3_bench"]
+[ext_resource type="PackedScene" path="res://scenes/world/ashwood/presentation/planter.tscn" id="4_planter"]
+[ext_resource type="PackedScene" path="res://assets/environment/props/poly_haven_metal_trash_can.tscn" id="5_bin"]
+[ext_resource type="PackedScene" path="res://assets/environment/nature/common_tree_1.tscn" id="6_tree1"]
+[ext_resource type="PackedScene" path="res://assets/environment/nature/common_tree_2.tscn" id="7_tree2"]
+[ext_resource type="PackedScene" path="res://assets/environment/buildings/Pharmacy/exterior.tscn" id="8_pharmacy"]
+[ext_resource type="PackedScene" path="res://assets/environment/buildings/Diner/exterior.tscn" id="9_diner"]
+
+[sub_resource type="StandardMaterial3D" id="WhitePaint"]
+albedo_color = Color(0.82, 0.8, 0.68, 1)
+roughness = 0.86
+
+[sub_resource type="StandardMaterial3D" id="YellowPaint"]
+albedo_color = Color(0.92, 0.66, 0.12, 1)
+roughness = 0.82
+
+[sub_resource type="BoxMesh" id="MarkingMesh"]
+material = SubResource("WhitePaint")
+
+[sub_resource type="BoxMesh" id="CenterMarkingMesh"]
+material = SubResource("YellowPaint")
+
+[sub_resource type="StandardMaterial3D" id="CarRed"]
+albedo_color = Color(0.3, 0.055, 0.04, 1)
+metallic = 0.5
+roughness = 0.5
+
+[sub_resource type="StandardMaterial3D" id="CarBlue"]
+albedo_color = Color(0.055, 0.12, 0.2, 1)
+metallic = 0.5
+roughness = 0.45
+
+[sub_resource type="StandardMaterial3D" id="CarCream"]
+albedo_color = Color(0.55, 0.52, 0.4, 1)
+metallic = 0.35
+roughness = 0.62
+
+[sub_resource type="StandardMaterial3D" id="VehicleGlass"]
+albedo_color = Color(0.035, 0.07, 0.09, 1)
+metallic = 0.25
+roughness = 0.18
+
+[sub_resource type="StandardMaterial3D" id="Tyre"]
+albedo_color = Color(0.025, 0.025, 0.022, 1)
+roughness = 0.95
+
+[sub_resource type="BoxMesh" id="SedanBody"]
+material = SubResource("CarRed")
+size = Vector3(4.3, 0.62, 1.72)
+
+[sub_resource type="BoxMesh" id="SedanBodyBlue"]
+material = SubResource("CarBlue")
+size = Vector3(4.3, 0.62, 1.72)
+
+[sub_resource type="BoxMesh" id="SedanBodyCream"]
+material = SubResource("CarCream")
+size = Vector3(4.3, 0.62, 1.72)
+
+[sub_resource type="BoxMesh" id="SedanCabin"]
+material = SubResource("VehicleGlass")
+size = Vector3(2.15, 0.62, 1.48)
+
+[sub_resource type="BoxMesh" id="VanBody"]
+material = SubResource("CarCream")
+size = Vector3(5.2, 2.15, 2)
+
+[sub_resource type="BoxShape3D" id="SedanShape"]
+size = Vector3(4.4, 1.35, 1.82)
+
+[sub_resource type="BoxShape3D" id="VanShape"]
+size = Vector3(5.25, 2.2, 2.05)
+
+[sub_resource type="StandardMaterial3D" id="BusStopMetal"]
+albedo_color = Color(0.08, 0.11, 0.1, 1)
+metallic = 0.6
+roughness = 0.48
+
+[sub_resource type="BoxMesh" id="BusStopMesh"]
+material = SubResource("BusStopMetal")
+
+[sub_resource type="BoxShape3D" id="BusStopPostShape"]
+size = Vector3(0.16, 2.6, 0.16)
+
+[sub_resource type="StandardMaterial3D" id="HydrantRed"]
+albedo_color = Color(0.56, 0.05, 0.035, 1)
+roughness = 0.7
+
+[sub_resource type="CylinderMesh" id="HydrantMesh"]
+material = SubResource("HydrantRed")
+top_radius = 0.22
+bottom_radius = 0.28
+height = 0.72
+
+[sub_resource type="CylinderShape3D" id="HydrantShape"]
+radius = 0.28
+height = 0.75
+
+[node name="MainStreetPresentation" type="Node3D"]
+
+[node name="RoadMarkings" type="Node3D" parent="."]
+
+[node name="Centre01" type="MeshInstance3D" parent="RoadMarkings"]
+position = Vector3(-94, 0.115, 0)
+scale = Vector3(5, 0.02, 0.12)
+mesh = SubResource("CenterMarkingMesh")
+
+[node name="Centre02" type="MeshInstance3D" parent="RoadMarkings"]
+position = Vector3(-82, 0.115, 0)
+scale = Vector3(5, 0.02, 0.12)
+mesh = SubResource("CenterMarkingMesh")
+
+[node name="Centre03" type="MeshInstance3D" parent="RoadMarkings"]
+position = Vector3(-58, 0.115, 0)
+scale = Vector3(5, 0.02, 0.12)
+mesh = SubResource("CenterMarkingMesh")
+
+[node name="Centre04" type="MeshInstance3D" parent="RoadMarkings"]
+position = Vector3(-46, 0.115, 0)
+scale = Vector3(5, 0.02, 0.12)
+mesh = SubResource("CenterMarkingMesh")
+
+[node name="Centre05" type="MeshInstance3D" parent="RoadMarkings"]
+position = Vector3(-34, 0.115, 0)
+scale = Vector3(5, 0.02, 0.12)
+mesh = SubResource("CenterMarkingMesh")
+
+[node name="Centre06" type="MeshInstance3D" parent="RoadMarkings"]
+position = Vector3(-22, 0.115, 0)
+scale = Vector3(5, 0.02, 0.12)
+mesh = SubResource("CenterMarkingMesh")
+
+[node name="Centre07" type="MeshInstance3D" parent="RoadMarkings"]
+position = Vector3(-10, 0.115, 0)
+scale = Vector3(5, 0.02, 0.12)
+mesh = SubResource("CenterMarkingMesh")
+
+[node name="Centre08" type="MeshInstance3D" parent="RoadMarkings"]
+position = Vector3(2, 0.115, 0)
+scale = Vector3(5, 0.02, 0.12)
+mesh = SubResource("CenterMarkingMesh")
+
+[node name="Centre09" type="MeshInstance3D" parent="RoadMarkings"]
+position = Vector3(14, 0.115, 0)
+scale = Vector3(5, 0.02, 0.12)
+mesh = SubResource("CenterMarkingMesh")
+
+[node name="Centre10" type="MeshInstance3D" parent="RoadMarkings"]
+position = Vector3(26, 0.115, 0)
+scale = Vector3(5, 0.02, 0.12)
+mesh = SubResource("CenterMarkingMesh")
+
+[node name="Centre11" type="MeshInstance3D" parent="RoadMarkings"]
+position = Vector3(38, 0.115, 0)
+scale = Vector3(5, 0.02, 0.12)
+mesh = SubResource("CenterMarkingMesh")
+
+[node name="Centre12" type="MeshInstance3D" parent="RoadMarkings"]
+position = Vector3(50, 0.115, 0)
+scale = Vector3(5, 0.02, 0.12)
+mesh = SubResource("CenterMarkingMesh")
+
+[node name="Centre13" type="MeshInstance3D" parent="RoadMarkings"]
+position = Vector3(58, 0.115, 0)
+scale = Vector3(3, 0.02, 0.12)
+mesh = SubResource("CenterMarkingMesh")
+
+[node name="Centre14" type="MeshInstance3D" parent="RoadMarkings"]
+position = Vector3(82, 0.115, 0)
+scale = Vector3(5, 0.02, 0.12)
+mesh = SubResource("CenterMarkingMesh")
+
+[node name="Centre15" type="MeshInstance3D" parent="RoadMarkings"]
+position = Vector3(94, 0.115, 0)
+scale = Vector3(5, 0.02, 0.12)
+mesh = SubResource("CenterMarkingMesh")
+
+[node name="ParkingNorth" type="Node3D" parent="RoadMarkings"]
+
+[node name="Line01" type="MeshInstance3D" parent="RoadMarkings/ParkingNorth"]
+position = Vector3(-93, 0.12, -4.35)
+scale = Vector3(0.1, 0.02, 2.2)
+mesh = SubResource("MarkingMesh")
+
+[node name="Line02" type="MeshInstance3D" parent="RoadMarkings/ParkingNorth"]
+position = Vector3(-82, 0.12, -4.35)
+scale = Vector3(0.1, 0.02, 2.2)
+mesh = SubResource("MarkingMesh")
+
+[node name="Line03" type="MeshInstance3D" parent="RoadMarkings/ParkingNorth"]
+position = Vector3(-58, 0.12, -4.35)
+scale = Vector3(0.1, 0.02, 2.2)
+mesh = SubResource("MarkingMesh")
+
+[node name="Line04" type="MeshInstance3D" parent="RoadMarkings/ParkingNorth"]
+position = Vector3(-46, 0.12, -4.35)
+scale = Vector3(0.1, 0.02, 2.2)
+mesh = SubResource("MarkingMesh")
+
+[node name="Line05" type="MeshInstance3D" parent="RoadMarkings/ParkingNorth"]
+position = Vector3(-30, 0.12, -4.35)
+scale = Vector3(0.1, 0.02, 2.2)
+mesh = SubResource("MarkingMesh")
+
+[node name="Line06" type="MeshInstance3D" parent="RoadMarkings/ParkingNorth"]
+position = Vector3(-14, 0.12, -4.35)
+scale = Vector3(0.1, 0.02, 2.2)
+mesh = SubResource("MarkingMesh")
+
+[node name="Line07" type="MeshInstance3D" parent="RoadMarkings/ParkingNorth"]
+position = Vector3(4, 0.12, -4.35)
+scale = Vector3(0.1, 0.02, 2.2)
+mesh = SubResource("MarkingMesh")
+
+[node name="Line08" type="MeshInstance3D" parent="RoadMarkings/ParkingNorth"]
+position = Vector3(22, 0.12, -4.35)
+scale = Vector3(0.1, 0.02, 2.2)
+mesh = SubResource("MarkingMesh")
+
+[node name="Line09" type="MeshInstance3D" parent="RoadMarkings/ParkingNorth"]
+position = Vector3(40, 0.12, -4.35)
+scale = Vector3(0.1, 0.02, 2.2)
+mesh = SubResource("MarkingMesh")
+
+[node name="Line10" type="MeshInstance3D" parent="RoadMarkings/ParkingNorth"]
+position = Vector3(58, 0.12, -4.35)
+scale = Vector3(0.1, 0.02, 2.2)
+mesh = SubResource("MarkingMesh")
+
+[node name="ParkingSouth" type="Node3D" parent="RoadMarkings"]
+
+[node name="Line01" type="MeshInstance3D" parent="RoadMarkings/ParkingSouth"]
+position = Vector3(-93, 0.12, 4.35)
+scale = Vector3(0.1, 0.02, 2.2)
+mesh = SubResource("MarkingMesh")
+
+[node name="Line02" type="MeshInstance3D" parent="RoadMarkings/ParkingSouth"]
+position = Vector3(-82, 0.12, 4.35)
+scale = Vector3(0.1, 0.02, 2.2)
+mesh = SubResource("MarkingMesh")
+
+[node name="Line03" type="MeshInstance3D" parent="RoadMarkings/ParkingSouth"]
+position = Vector3(-58, 0.12, 4.35)
+scale = Vector3(0.1, 0.02, 2.2)
+mesh = SubResource("MarkingMesh")
+
+[node name="Line04" type="MeshInstance3D" parent="RoadMarkings/ParkingSouth"]
+position = Vector3(-46, 0.12, 4.35)
+scale = Vector3(0.1, 0.02, 2.2)
+mesh = SubResource("MarkingMesh")
+
+[node name="Line05" type="MeshInstance3D" parent="RoadMarkings/ParkingSouth"]
+position = Vector3(-30, 0.12, 4.35)
+scale = Vector3(0.1, 0.02, 2.2)
+mesh = SubResource("MarkingMesh")
+
+[node name="Line06" type="MeshInstance3D" parent="RoadMarkings/ParkingSouth"]
+position = Vector3(-14, 0.12, 4.35)
+scale = Vector3(0.1, 0.02, 2.2)
+mesh = SubResource("MarkingMesh")
+
+[node name="Line07" type="MeshInstance3D" parent="RoadMarkings/ParkingSouth"]
+position = Vector3(4, 0.12, 4.35)
+scale = Vector3(0.1, 0.02, 2.2)
+mesh = SubResource("MarkingMesh")
+
+[node name="Line08" type="MeshInstance3D" parent="RoadMarkings/ParkingSouth"]
+position = Vector3(22, 0.12, 4.35)
+scale = Vector3(0.1, 0.02, 2.2)
+mesh = SubResource("MarkingMesh")
+
+[node name="Line09" type="MeshInstance3D" parent="RoadMarkings/ParkingSouth"]
+position = Vector3(40, 0.12, 4.35)
+scale = Vector3(0.1, 0.02, 2.2)
+mesh = SubResource("MarkingMesh")
+
+[node name="Line10" type="MeshInstance3D" parent="RoadMarkings/ParkingSouth"]
+position = Vector3(58, 0.12, 4.35)
+scale = Vector3(0.1, 0.02, 2.2)
+mesh = SubResource("MarkingMesh")
+
+[node name="Crosswalks" type="Node3D" parent="RoadMarkings"]
+
+[node name="West01" type="MeshInstance3D" parent="RoadMarkings/Crosswalks"]
+position = Vector3(-76, 0.125, -5)
+scale = Vector3(2.2, 0.025, 0.48)
+mesh = SubResource("MarkingMesh")
+
+[node name="West02" type="MeshInstance3D" parent="RoadMarkings/Crosswalks"]
+position = Vector3(-76, 0.125, -3)
+scale = Vector3(2.2, 0.025, 0.48)
+mesh = SubResource("MarkingMesh")
+
+[node name="West03" type="MeshInstance3D" parent="RoadMarkings/Crosswalks"]
+position = Vector3(-76, 0.125, -1)
+scale = Vector3(2.2, 0.025, 0.48)
+mesh = SubResource("MarkingMesh")
+
+[node name="West04" type="MeshInstance3D" parent="RoadMarkings/Crosswalks"]
+position = Vector3(-76, 0.125, 1)
+scale = Vector3(2.2, 0.025, 0.48)
+mesh = SubResource("MarkingMesh")
+
+[node name="West05" type="MeshInstance3D" parent="RoadMarkings/Crosswalks"]
+position = Vector3(-76, 0.125, 3)
+scale = Vector3(2.2, 0.025, 0.48)
+mesh = SubResource("MarkingMesh")
+
+[node name="West06" type="MeshInstance3D" parent="RoadMarkings/Crosswalks"]
+position = Vector3(-76, 0.125, 5)
+scale = Vector3(2.2, 0.025, 0.48)
+mesh = SubResource("MarkingMesh")
+
+[node name="East01" type="MeshInstance3D" parent="RoadMarkings/Crosswalks"]
+position = Vector3(76, 0.125, -5)
+scale = Vector3(2.2, 0.025, 0.48)
+mesh = SubResource("MarkingMesh")
+
+[node name="East02" type="MeshInstance3D" parent="RoadMarkings/Crosswalks"]
+position = Vector3(76, 0.125, -3)
+scale = Vector3(2.2, 0.025, 0.48)
+mesh = SubResource("MarkingMesh")
+
+[node name="East03" type="MeshInstance3D" parent="RoadMarkings/Crosswalks"]
+position = Vector3(76, 0.125, -1)
+scale = Vector3(2.2, 0.025, 0.48)
+mesh = SubResource("MarkingMesh")
+
+[node name="East04" type="MeshInstance3D" parent="RoadMarkings/Crosswalks"]
+position = Vector3(76, 0.125, 1)
+scale = Vector3(2.2, 0.025, 0.48)
+mesh = SubResource("MarkingMesh")
+
+[node name="East05" type="MeshInstance3D" parent="RoadMarkings/Crosswalks"]
+position = Vector3(76, 0.125, 3)
+scale = Vector3(2.2, 0.025, 0.48)
+mesh = SubResource("MarkingMesh")
+
+[node name="East06" type="MeshInstance3D" parent="RoadMarkings/Crosswalks"]
+position = Vector3(76, 0.125, 5)
+scale = Vector3(2.2, 0.025, 0.48)
+mesh = SubResource("MarkingMesh")
+
+[node name="Storefronts" type="Node3D" parent="."]
+
+[node name="NorthCornerMarket" parent="Storefronts" instance=ExtResource("1_store")]
+transform = Transform3D(16, 0, 0, 0, 7.2, 0, 0, 0, 10, -88, 3.6, -14.5)
+
+[node name="NorthCafe" parent="Storefronts" instance=ExtResource("1_store")]
+transform = Transform3D(17, 0, 0, 0, 6.4, 0, 0, 0, 10, -40, 3.2, -14.5)
+
+[node name="NorthBookstore" parent="Storefronts" instance=ExtResource("1_store")]
+transform = Transform3D(18, 0, 0, 0, 8.2, 0, 0, 0, 11, -15, 4.1, -15)
+
+[node name="NorthBank" parent="Storefronts" instance=ExtResource("1_store")]
+transform = Transform3D(20, 0, 0, 0, 9.4, 0, 0, 0, 12, 15, 4.7, -15.5)
+
+[node name="NorthPharmacy" parent="Storefronts" instance=ExtResource("8_pharmacy")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 44, 0.2, -13.2)
+
+[node name="NorthOffice" parent="Storefronts" instance=ExtResource("1_store")]
+transform = Transform3D(18, 0, 0, 0, 7.6, 0, 0, 0, 11, 87, 3.8, -15)
+
+[node name="SouthFlorist" parent="Storefronts" instance=ExtResource("1_store")]
+transform = Transform3D(-17, 0, 1.486187e-06, 0, 7, 0, -9.616506e-07, 0, -11, -88, 3.5, 15)
+
+[node name="SouthBarber" parent="Storefronts" instance=ExtResource("1_store")]
+transform = Transform3D(-20, 0, 1.7484556e-06, 0, 8.4, 0, -1.136496e-06, 0, -13, -55, 4.2, 16)
+
+[node name="SouthHardware" parent="Storefronts" instance=ExtResource("1_store")]
+transform = Transform3D(-18, 0, 1.57361e-06, 0, 6.6, 0, -9.616506e-07, 0, -11, -31, 3.3, 15)
+
+[node name="SouthAntiques" parent="Storefronts" instance=ExtResource("1_store")]
+transform = Transform3D(-22, 0, 1.923301e-06, 0, 8.2, 0, -1.048415e-06, 0, -12, -3, 4.1, 15.5)
+
+[node name="SouthSportingGoods" parent="Storefronts" instance=ExtResource("1_store")]
+transform = Transform3D(-20, 0, 1.7484556e-06, 0, 7, 0, -9.616506e-07, 0, -11, 27, 3.5, 15)
+
+[node name="SouthDiner" parent="Storefronts" instance=ExtResource("9_diner")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 54, 0.2, 14)
+
+[node name="SouthOffices" parent="Storefronts" instance=ExtResource("1_store")]
+transform = Transform3D(-18, 0, 1.57361e-06, 0, 7.4, 0, -9.616506e-07, 0, -11, 87, 3.7, 15)
+
+[node name="BusinessSigns" type="Node3D" parent="."]
+
+[node name="CornerMarket" type="Label3D" parent="BusinessSigns"]
+position = Vector3(-88, 4.25, -9.35)
+text = "ASHWOOD MARKET"
+font_size = 42
+outline_size = 8
+
+[node name="Cafe" type="Label3D" parent="BusinessSigns"]
+position = Vector3(-40, 3.8, -9.35)
+text = "MAPLE CAFE"
+font_size = 44
+outline_size = 8
+
+[node name="Bookstore" type="Label3D" parent="BusinessSigns"]
+position = Vector3(-15, 4.9, -9.35)
+text = "COUNTY BOOKS"
+font_size = 42
+outline_size = 8
+
+[node name="Bank" type="Label3D" parent="BusinessSigns"]
+position = Vector3(15, 5.55, -9.35)
+text = "ASHWOOD BANK"
+font_size = 44
+outline_size = 8
+
+[node name="OfficesNorth" type="Label3D" parent="BusinessSigns"]
+position = Vector3(87, 4.5, -9.35)
+text = "MAIN STREET OFFICES"
+font_size = 38
+outline_size = 8
+
+[node name="Florist" type="Label3D" parent="BusinessSigns"]
+position = Vector3(-88, 4.15, 9.35)
+rotation = Vector3(0, 3.1415927, 0)
+text = "ASHWOOD FLORIST"
+font_size = 40
+outline_size = 8
+
+[node name="Barber" type="Label3D" parent="BusinessSigns"]
+position = Vector3(-55, 4.95, 9.35)
+rotation = Vector3(0, 3.1415927, 0)
+text = "COUNTY BARBER"
+font_size = 40
+outline_size = 8
+
+[node name="Hardware" type="Label3D" parent="BusinessSigns"]
+position = Vector3(-31, 3.95, 9.35)
+rotation = Vector3(0, 3.1415927, 0)
+text = "ASHWOOD HARDWARE"
+font_size = 38
+outline_size = 8
+
+[node name="Antiques" type="Label3D" parent="BusinessSigns"]
+position = Vector3(-3, 4.85, 9.35)
+rotation = Vector3(0, 3.1415927, 0)
+text = "OLD MILL ANTIQUES"
+font_size = 38
+outline_size = 8
+
+[node name="SportingGoods" type="Label3D" parent="BusinessSigns"]
+position = Vector3(27, 4.15, 9.35)
+rotation = Vector3(0, 3.1415927, 0)
+text = "TRAIL & FIELD"
+font_size = 40
+outline_size = 8
+
+[node name="OfficesSouth" type="Label3D" parent="BusinessSigns"]
+position = Vector3(87, 4.35, 9.35)
+rotation = Vector3(0, 3.1415927, 0)
+text = "PROFESSIONAL OFFICES"
+font_size = 36
+outline_size = 8
+
+[node name="Streetlights" type="Node3D" parent="."]
+
+[node name="North01" parent="Streetlights" instance=ExtResource("2_light")]
+position = Vector3(-94, 0.2, -6.25)
+
+[node name="North02" parent="Streetlights" instance=ExtResource("2_light")]
+position = Vector3(-64, 0.2, -6.25)
+
+[node name="North03" parent="Streetlights" instance=ExtResource("2_light")]
+position = Vector3(-43, 0.2, -6.25)
+
+[node name="North04" parent="Streetlights" instance=ExtResource("2_light")]
+position = Vector3(-18, 0.2, -6.25)
+
+[node name="North05" parent="Streetlights" instance=ExtResource("2_light")]
+position = Vector3(8, 0.2, -6.25)
+
+[node name="North06" parent="Streetlights" instance=ExtResource("2_light")]
+position = Vector3(35, 0.2, -6.25)
+
+[node name="North07" parent="Streetlights" instance=ExtResource("2_light")]
+position = Vector3(64, 0.2, -6.25)
+
+[node name="North08" parent="Streetlights" instance=ExtResource("2_light")]
+position = Vector3(94, 0.2, -6.25)
+
+[node name="South01" parent="Streetlights" instance=ExtResource("2_light")]
+position = Vector3(-94, 0.2, 6.25)
+
+[node name="South02" parent="Streetlights" instance=ExtResource("2_light")]
+position = Vector3(-64, 0.2, 6.25)
+
+[node name="South03" parent="Streetlights" instance=ExtResource("2_light")]
+position = Vector3(-43, 0.2, 6.25)
+
+[node name="South04" parent="Streetlights" instance=ExtResource("2_light")]
+position = Vector3(-18, 0.2, 6.25)
+
+[node name="South05" parent="Streetlights" instance=ExtResource("2_light")]
+position = Vector3(8, 0.2, 6.25)
+
+[node name="South06" parent="Streetlights" instance=ExtResource("2_light")]
+position = Vector3(35, 0.2, 6.25)
+
+[node name="South07" parent="Streetlights" instance=ExtResource("2_light")]
+position = Vector3(64, 0.2, 6.25)
+
+[node name="South08" parent="Streetlights" instance=ExtResource("2_light")]
+position = Vector3(94, 0.2, 6.25)
+
+[node name="Trees" type="Node3D" parent="."]
+
+[node name="North01" parent="Trees" instance=ExtResource("6_tree1")]
+position = Vector3(-81, 0.2, -8.45)
+
+[node name="North02" parent="Trees" instance=ExtResource("7_tree2")]
+position = Vector3(-49, 0.2, -8.45)
+
+[node name="North03" parent="Trees" instance=ExtResource("6_tree1")]
+position = Vector3(-27, 0.2, -8.45)
+
+[node name="North04" parent="Trees" instance=ExtResource("7_tree2")]
+position = Vector3(-2, 0.2, -8.45)
+
+[node name="North05" parent="Trees" instance=ExtResource("6_tree1")]
+position = Vector3(26, 0.2, -8.45)
+
+[node name="North06" parent="Trees" instance=ExtResource("7_tree2")]
+position = Vector3(55, 0.2, -8.45)
+
+[node name="North07" parent="Trees" instance=ExtResource("6_tree1")]
+position = Vector3(84, 0.2, -8.45)
+
+[node name="South01" parent="Trees" instance=ExtResource("7_tree2")]
+position = Vector3(-82, 0.2, 8.45)
+
+[node name="South02" parent="Trees" instance=ExtResource("6_tree1")]
+position = Vector3(-51, 0.2, 8.45)
+
+[node name="South03" parent="Trees" instance=ExtResource("7_tree2")]
+position = Vector3(-27, 0.2, 8.45)
+
+[node name="South04" parent="Trees" instance=ExtResource("6_tree1")]
+position = Vector3(-2, 0.2, 8.45)
+
+[node name="South05" parent="Trees" instance=ExtResource("7_tree2")]
+position = Vector3(26, 0.2, 8.45)
+
+[node name="South06" parent="Trees" instance=ExtResource("6_tree1")]
+position = Vector3(55, 0.2, 8.45)
+
+[node name="South07" parent="Trees" instance=ExtResource("7_tree2")]
+position = Vector3(84, 0.2, 8.45)
+
+[node name="Furniture" type="Node3D" parent="."]
+
+[node name="BenchNorth01" parent="Furniture" instance=ExtResource("3_bench")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -51, 0.2, -8.25)
+
+[node name="BenchNorth02" parent="Furniture" instance=ExtResource("3_bench")]
+position = Vector3(-5, 0.2, -8.25)
+
+[node name="BenchNorth03" parent="Furniture" instance=ExtResource("3_bench")]
+position = Vector3(51, 0.2, -8.25)
+
+[node name="BenchNorth04" parent="Furniture" instance=ExtResource("3_bench")]
+position = Vector3(89, 0.2, -8.25)
+
+[node name="BenchSouth01" parent="Furniture" instance=ExtResource("3_bench")]
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, -53, 0.2, 8.25)
+
+[node name="BenchSouth02" parent="Furniture" instance=ExtResource("3_bench")]
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, -8, 0.2, 8.25)
+
+[node name="BenchSouth03" parent="Furniture" instance=ExtResource("3_bench")]
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 48, 0.2, 8.25)
+
+[node name="BenchSouth04" parent="Furniture" instance=ExtResource("3_bench")]
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 90, 0.2, 8.25)
+
+[node name="PlanterNorth01" parent="Furniture" instance=ExtResource("4_planter")]
+position = Vector3(-46, 0.2, -8.45)
+
+[node name="PlanterNorth02" parent="Furniture" instance=ExtResource("4_planter")]
+position = Vector3(-34, 0.2, -8.45)
+
+[node name="PlanterNorth03" parent="Furniture" instance=ExtResource("4_planter")]
+position = Vector3(-10, 0.2, -8.45)
+
+[node name="PlanterNorth04" parent="Furniture" instance=ExtResource("4_planter")]
+position = Vector3(20, 0.2, -8.45)
+
+[node name="PlanterNorth05" parent="Furniture" instance=ExtResource("4_planter")]
+position = Vector3(40, 0.2, -8.45)
+
+[node name="PlanterNorth06" parent="Furniture" instance=ExtResource("4_planter")]
+position = Vector3(91, 0.2, -8.45)
+
+[node name="PlanterSouth01" parent="Furniture" instance=ExtResource("4_planter")]
+position = Vector3(-92, 0.2, 8.45)
+
+[node name="PlanterSouth02" parent="Furniture" instance=ExtResource("4_planter")]
+position = Vector3(-59, 0.2, 8.45)
+
+[node name="PlanterSouth03" parent="Furniture" instance=ExtResource("4_planter")]
+position = Vector3(-36, 0.2, 8.45)
+
+[node name="PlanterSouth04" parent="Furniture" instance=ExtResource("4_planter")]
+position = Vector3(15, 0.2, 8.45)
+
+[node name="PlanterSouth05" parent="Furniture" instance=ExtResource("4_planter")]
+position = Vector3(43, 0.2, 8.45)
+
+[node name="PlanterSouth06" parent="Furniture" instance=ExtResource("4_planter")]
+position = Vector3(92, 0.2, 8.45)
+
+[node name="BinNorth01" parent="Furniture" instance=ExtResource("5_bin")]
+position = Vector3(-78, 0.2, -6.3)
+
+[node name="BinNorth02" parent="Furniture" instance=ExtResource("5_bin")]
+position = Vector3(-38, 0.2, -6.3)
+
+[node name="BinNorth03" parent="Furniture" instance=ExtResource("5_bin")]
+position = Vector3(3, 0.2, -6.3)
+
+[node name="BinNorth04" parent="Furniture" instance=ExtResource("5_bin")]
+position = Vector3(46, 0.2, -6.3)
+
+[node name="BinNorth05" parent="Furniture" instance=ExtResource("5_bin")]
+position = Vector3(82, 0.2, -6.3)
+
+[node name="BinSouth01" parent="Furniture" instance=ExtResource("5_bin")]
+position = Vector3(-78, 0.2, 6.3)
+
+[node name="BinSouth02" parent="Furniture" instance=ExtResource("5_bin")]
+position = Vector3(-38, 0.2, 6.3)
+
+[node name="BinSouth03" parent="Furniture" instance=ExtResource("5_bin")]
+position = Vector3(3, 0.2, 6.3)
+
+[node name="BinSouth04" parent="Furniture" instance=ExtResource("5_bin")]
+position = Vector3(46, 0.2, 6.3)
+
+[node name="BinSouth05" parent="Furniture" instance=ExtResource("5_bin")]
+position = Vector3(82, 0.2, 6.3)
+
+[node name="Vehicles" type="Node3D" parent="."]
+
+[node name="SedanRedWest" type="StaticBody3D" parent="Vehicles"]
+position = Vector3(-87, 0.2, -3.9)
+
+[node name="Body" type="MeshInstance3D" parent="Vehicles/SedanRedWest"]
+position = Vector3(0, 0.62, 0)
+mesh = SubResource("SedanBody")
+
+[node name="Cabin" type="MeshInstance3D" parent="Vehicles/SedanRedWest"]
+position = Vector3(0.2, 1.15, 0)
+mesh = SubResource("SedanCabin")
+
+[node name="Collision" type="CollisionShape3D" parent="Vehicles/SedanRedWest"]
+position = Vector3(0, 0.75, 0)
+shape = SubResource("SedanShape")
+
+[node name="SedanBlueWest" type="StaticBody3D" parent="Vehicles"]
+position = Vector3(-50, 0.2, 3.9)
+
+[node name="Body" type="MeshInstance3D" parent="Vehicles/SedanBlueWest"]
+position = Vector3(0, 0.62, 0)
+mesh = SubResource("SedanBodyBlue")
+
+[node name="Cabin" type="MeshInstance3D" parent="Vehicles/SedanBlueWest"]
+position = Vector3(-0.15, 1.15, 0)
+mesh = SubResource("SedanCabin")
+
+[node name="Collision" type="CollisionShape3D" parent="Vehicles/SedanBlueWest"]
+position = Vector3(0, 0.75, 0)
+shape = SubResource("SedanShape")
+
+[node name="SedanCreamCentre" type="StaticBody3D" parent="Vehicles"]
+position = Vector3(-18, 0.2, -3.9)
+
+[node name="Body" type="MeshInstance3D" parent="Vehicles/SedanCreamCentre"]
+position = Vector3(0, 0.62, 0)
+mesh = SubResource("SedanBodyCream")
+
+[node name="Cabin" type="MeshInstance3D" parent="Vehicles/SedanCreamCentre"]
+position = Vector3(0.25, 1.15, 0)
+mesh = SubResource("SedanCabin")
+
+[node name="Collision" type="CollisionShape3D" parent="Vehicles/SedanCreamCentre"]
+position = Vector3(0, 0.75, 0)
+shape = SubResource("SedanShape")
+
+[node name="SedanBlueEast" type="StaticBody3D" parent="Vehicles"]
+position = Vector3(26, 0.2, 3.9)
+
+[node name="Body" type="MeshInstance3D" parent="Vehicles/SedanBlueEast"]
+position = Vector3(0, 0.62, 0)
+mesh = SubResource("SedanBodyBlue")
+
+[node name="Cabin" type="MeshInstance3D" parent="Vehicles/SedanBlueEast"]
+position = Vector3(-0.2, 1.15, 0)
+mesh = SubResource("SedanCabin")
+
+[node name="Collision" type="CollisionShape3D" parent="Vehicles/SedanBlueEast"]
+position = Vector3(0, 0.75, 0)
+shape = SubResource("SedanShape")
+
+[node name="SedanRedEast" type="StaticBody3D" parent="Vehicles"]
+transform = Transform3D(0.997564, 0, -0.0697565, 0, 1, 0, 0.0697565, 0, 0.997564, 50, 0.2, -3.8)
+
+[node name="Body" type="MeshInstance3D" parent="Vehicles/SedanRedEast"]
+position = Vector3(0, 0.62, 0)
+mesh = SubResource("SedanBody")
+
+[node name="Cabin" type="MeshInstance3D" parent="Vehicles/SedanRedEast"]
+position = Vector3(0.1, 1.15, 0)
+mesh = SubResource("SedanCabin")
+
+[node name="Collision" type="CollisionShape3D" parent="Vehicles/SedanRedEast"]
+position = Vector3(0, 0.75, 0)
+shape = SubResource("SedanShape")
+
+[node name="DeliveryVan" type="StaticBody3D" parent="Vehicles"]
+position = Vector3(89, 0.2, 3.85)
+
+[node name="Body" type="MeshInstance3D" parent="Vehicles/DeliveryVan"]
+position = Vector3(0, 1.12, 0)
+mesh = SubResource("VanBody")
+
+[node name="CabinGlass" type="MeshInstance3D" parent="Vehicles/DeliveryVan"]
+position = Vector3(-1.9, 1.45, 0)
+scale = Vector3(0.08, 0.75, 1.72)
+mesh = SubResource("SedanCabin")
+
+[node name="Collision" type="CollisionShape3D" parent="Vehicles/DeliveryVan"]
+position = Vector3(0, 1.12, 0)
+shape = SubResource("VanShape")
+
+[node name="BusStop" type="StaticBody3D" parent="."]
+position = Vector3(12, 0.2, 8.35)
+
+[node name="PostLeft" type="MeshInstance3D" parent="BusStop"]
+position = Vector3(-1.45, 1.3, 0)
+scale = Vector3(0.14, 2.6, 0.14)
+mesh = SubResource("BusStopMesh")
+
+[node name="PostRight" type="MeshInstance3D" parent="BusStop"]
+position = Vector3(1.45, 1.3, 0)
+scale = Vector3(0.14, 2.6, 0.14)
+mesh = SubResource("BusStopMesh")
+
+[node name="Roof" type="MeshInstance3D" parent="BusStop"]
+position = Vector3(0, 2.65, 0)
+scale = Vector3(3.25, 0.14, 1.2)
+mesh = SubResource("BusStopMesh")
+
+[node name="PostLeftCollision" type="CollisionShape3D" parent="BusStop"]
+position = Vector3(-1.45, 1.3, 0)
+shape = SubResource("BusStopPostShape")
+
+[node name="PostRightCollision" type="CollisionShape3D" parent="BusStop"]
+position = Vector3(1.45, 1.3, 0)
+shape = SubResource("BusStopPostShape")
+
+[node name="Bench" parent="BusStop" instance=ExtResource("3_bench")]
+position = Vector3(0, 0, 0.3)
+
+[node name="Sign" type="Label3D" parent="BusStop"]
+position = Vector3(0, 2.15, 0.06)
+rotation = Vector3(0, 3.1415927, 0)
+text = "MAIN STREET"
+font_size = 30
+outline_size = 6
+
+[node name="Hydrants" type="Node3D" parent="."]
+
+[node name="WestNorth" type="StaticBody3D" parent="Hydrants"]
+position = Vector3(-66, 0.2, -8.35)
+
+[node name="Mesh" type="MeshInstance3D" parent="Hydrants/WestNorth"]
+position = Vector3(0, 0.36, 0)
+mesh = SubResource("HydrantMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="Hydrants/WestNorth"]
+position = Vector3(0, 0.375, 0)
+shape = SubResource("HydrantShape")
+
+[node name="CentreSouth" type="StaticBody3D" parent="Hydrants"]
+position = Vector3(34, 0.2, 8.35)
+
+[node name="Mesh" type="MeshInstance3D" parent="Hydrants/CentreSouth"]
+position = Vector3(0, 0.36, 0)
+mesh = SubResource("HydrantMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="Hydrants/CentreSouth"]
+position = Vector3(0, 0.375, 0)
+shape = SubResource("HydrantShape")
+
+[node name="EastNorth" type="StaticBody3D" parent="Hydrants"]
+position = Vector3(66, 0.2, -8.35)
+
+[node name="Mesh" type="MeshInstance3D" parent="Hydrants/EastNorth"]
+position = Vector3(0, 0.36, 0)
+mesh = SubResource("HydrantMesh")
+
+[node name="Collision" type="CollisionShape3D" parent="Hydrants/EastNorth"]
+position = Vector3(0, 0.375, 0)
+shape = SubResource("HydrantShape")

@@ -1,0 +1,26 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Mesh" path="res://assets/third_party/props/street_furniture/opengameart/park_bench/parkbench_lowpoly.obj" id="1_mesh"]
+
+[sub_resource type="StandardMaterial3D" id="BenchMaterial"]
+albedo_color = Color(0.19, 0.105, 0.055, 1)
+metallic = 0.18
+roughness = 0.78
+
+[sub_resource type="BoxShape3D" id="Collision"]
+size = Vector3(2, 1.18, 0.9)
+
+[node name="CC0ParkBench" type="StaticBody3D"]
+
+[node name="Visual" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.558, 0.32)
+rotation = Vector3(0, 1.5707964, 0)
+scale = Vector3(0.08, 0.08, 0.08)
+mesh = ExtResource("1_mesh")
+material_override = SubResource("BenchMaterial")
+visibility_range_end = 100.0
+visibility_range_end_margin = 10.0
+
+[node name="Collision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.59, 0)
+shape = SubResource("Collision")

@@ -223,6 +223,59 @@ of each downloaded asset and its license information with project records.
 
 ## Project-Owned Prototype Town Geometry
 
+## Main Street CC0 Street Furniture
+
+The following assets were downloaded and integrated on 28 July 2026. Only the
+1K texture variants were retained where available.
+
+### Street Lamp 01
+
+- **Asset type:** Ornate cast-iron street lamp
+- **Creator:** Josh Dean
+- **Source:** [Street Lamp 01 on Poly Haven](https://polyhaven.com/a/street_lamp_01)
+- **License:** [CC0 1.0 Universal](https://polyhaven.com/license)
+- **Asset details:** Approximately 31K triangles; 3.9 metres tall; glTF with 1K
+  diffuse, ARM, and OpenGL normal textures
+- **Attribution requirement:** None; creator and source are recorded for
+  provenance.
+- **Prototype use:** Replaces the project-owned placeholder heritage lamps
+  throughout Main Street
+- **Downloaded location:** `assets/third_party/environment/street_furniture/poly_haven/street_lamp_01/`
+- **Project wrapper:** `assets/environment/props/poly_haven_street_lamp.tscn`
+- **Status:** In use
+
+### Metal Trash Can
+
+- **Asset type:** Weathered metal street trash can
+- **Creator:** GurJas Studios
+- **Source:** [Metal Trash Can on Poly Haven](https://polyhaven.com/a/metal_trash_can)
+- **License:** [CC0 1.0 Universal](https://polyhaven.com/license)
+- **Asset details:** Approximately 14K triangles across the supplied variants;
+  glTF with 1K PBR textures. The project wrapper uses the rusted body variant
+  and simplified cylinder collision.
+- **Attribution requirement:** None; creator and source are recorded for
+  provenance.
+- **Prototype use:** Replaces the cylindrical placeholder bins on Main Street
+- **Downloaded location:** `assets/third_party/props/street_furniture/poly_haven/metal_trash_can/`
+- **Project wrapper:** `assets/environment/props/poly_haven_metal_trash_can.tscn`
+- **Status:** In use
+
+### Park Bench
+
+- **Asset type:** Cast-iron park bench
+- **Creator:** Teh_Bucket
+- **Source:** [Park Bench on OpenGameArt](https://opengameart.org/content/park-bench)
+- **License:** [CC0 1.0 Universal](https://creativecommons.org/publicdomain/zero/1.0/)
+- **Asset details:** Low-poly OBJ variant; approximately 900 triangles; wrapper
+  applies a project-owned neutral weathered material and box collision
+- **Attribution requirement:** None; creator and source are recorded for
+  provenance.
+- **Prototype use:** Replaces the primitive wooden benches on Main Street,
+  including the bus-stop bench
+- **Downloaded location:** `assets/third_party/props/street_furniture/opengameart/park_bench/`
+- **Project wrapper:** `assets/environment/props/cc0_park_bench.tscn`
+- **Status:** In use
+
 ### Roadside Dressing, Service Station, Pharmacy, and Small Bush
 
 - **Asset type:** Lightweight Godot-native environment geometry

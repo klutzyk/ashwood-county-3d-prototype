@@ -1,0 +1,61 @@
+[gd_scene load_steps=8 format=3]
+
+[sub_resource type="StandardMaterial3D" id="Metal"]
+albedo_color = Color(0.055, 0.065, 0.06, 1)
+metallic = 0.75
+roughness = 0.42
+
+[sub_resource type="StandardMaterial3D" id="Glass"]
+albedo_color = Color(0.9, 0.74, 0.45, 1)
+emission_enabled = true
+emission = Color(0.2, 0.14, 0.06, 1)
+emission_energy_multiplier = 0.35
+roughness = 0.28
+
+[sub_resource type="CylinderMesh" id="BaseMesh"]
+material = SubResource("Metal")
+top_radius = 0.22
+bottom_radius = 0.32
+height = 0.6
+
+[sub_resource type="CylinderMesh" id="PoleMesh"]
+material = SubResource("Metal")
+top_radius = 0.07
+bottom_radius = 0.11
+height = 3.8
+
+[sub_resource type="BoxMesh" id="LanternMesh"]
+material = SubResource("Glass")
+size = Vector3(0.42, 0.62, 0.42)
+
+[sub_resource type="CylinderMesh" id="CapMesh"]
+material = SubResource("Metal")
+top_radius = 0.08
+bottom_radius = 0.32
+height = 0.2
+
+[sub_resource type="CylinderShape3D" id="Collision"]
+radius = 0.3
+height = 4.9
+
+[node name="HeritageStreetlight" type="StaticBody3D"]
+
+[node name="Collision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 2.45, 0)
+shape = SubResource("Collision")
+
+[node name="Base" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.3, 0)
+mesh = SubResource("BaseMesh")
+
+[node name="Pole" type="MeshInstance3D" parent="."]
+position = Vector3(0, 2.2, 0)
+mesh = SubResource("PoleMesh")
+
+[node name="Lantern" type="MeshInstance3D" parent="."]
+position = Vector3(0, 4.35, 0)
+mesh = SubResource("LanternMesh")
+
+[node name="Cap" type="MeshInstance3D" parent="."]
+position = Vector3(0, 4.76, 0)
+mesh = SubResource("CapMesh")

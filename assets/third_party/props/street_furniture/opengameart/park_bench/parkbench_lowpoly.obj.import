@@ -1,0 +1,25 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://dmckc3j8tgfu1"
+path="res://.godot/imported/parkbench_lowpoly.obj-e5cf8f51e70542df7f9a7e482596c02f.mesh"
+
+[deps]
+
+files=["res://.godot/imported/parkbench_lowpoly.obj-e5cf8f51e70542df7f9a7e482596c02f.mesh"]
+
+source_file="res://assets/third_party/props/street_furniture/opengameart/park_bench/parkbench_lowpoly.obj"
+dest_files=["res://.godot/imported/parkbench_lowpoly.obj-e5cf8f51e70542df7f9a7e482596c02f.mesh", "res://.godot/imported/parkbench_lowpoly.obj-e5cf8f51e70542df7f9a7e482596c02f.mesh"]
+
+[params]
+
+generate_tangents=true
+generate_lods=true
+generate_shadow_mesh=true
+generate_lightmap_uv2=false
+generate_lightmap_uv2_texel_size=0.2
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+force_disable_mesh_compression=false

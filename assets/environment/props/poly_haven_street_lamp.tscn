@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/third_party/environment/street_furniture/poly_haven/street_lamp_01/street_lamp_01_1k.gltf" id="1_model"]
+
+[sub_resource type="CylinderShape3D" id="Collision"]
+radius = 0.28
+height = 3.86
+
+[node name="PolyHavenStreetLamp" type="StaticBody3D"]
+
+[node name="Visual" parent="." instance=ExtResource("1_model")]
+
+[node name="street_lamp_01" parent="Visual" index="0"]
+visibility_range_end = 120.0
+visibility_range_end_margin = 10.0
+
+[node name="Collision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 1.93, 0)
+shape = SubResource("Collision")
+
+[editable path="Visual"]
