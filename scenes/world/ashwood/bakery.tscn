@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://bwaot3gvfvo4b" path="res://scripts/interactions/Interactable.cs" id="4_interactable"]
 [ext_resource type="Script" uid="uid://b1umlngadxofp" path="res://scripts/tools/BuildingInteriorInstance.cs" id="14_interior_instance"]
 [ext_resource type="Resource" uid="uid://jhajwdqrgiri" path="res://assets/environment/buildings/ashwood/bakery_interior_layout.tres" id="15_interior_layout"]
+[ext_resource type="PackedScene" path="res://scenes/world/ashwood/presentation/storefronts/bakery_window_display.tscn" id="16_window_display"]
 
 [sub_resource type="BoxShape3D" id="SideWallShape"]
 size = Vector3(4.8, 6.4, 0.3)
@@ -42,6 +43,8 @@ LayoutResource = ExtResource("15_interior_layout")
 
 [node name="GeneratedInteriorCollision" type="Node3D" parent="BuildingInteriorInstance" unique_id=1587128421]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.7027199)
+
+[node name="WindowDisplay" parent="." instance=ExtResource("16_window_display")]
 
 [node name="Collision" type="Node3D" parent="." unique_id=1527332224]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.56707764, 0, 0, 0.92150354)

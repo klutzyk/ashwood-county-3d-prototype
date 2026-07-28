@@ -36,12 +36,12 @@
 [ext_resource type="PackedScene" path="res://assets/third_party/props/signs/welcome_sign_restaurant.glb" id="34_restaurant_sign"]
 
 [sub_resource type="StandardMaterial3D" id="WhitePaint"]
-albedo_color = Color(0.82, 0.8, 0.68, 1)
-roughness = 0.86
+albedo_color = Color(0.57, 0.55, 0.46, 1)
+roughness = 0.94
 
 [sub_resource type="StandardMaterial3D" id="YellowPaint"]
-albedo_color = Color(0.92, 0.66, 0.12, 1)
-roughness = 0.82
+albedo_color = Color(0.67, 0.46, 0.08, 1)
+roughness = 0.92
 
 [sub_resource type="BoxMesh" id="MarkingMesh"]
 material = SubResource("WhitePaint")

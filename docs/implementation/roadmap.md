@@ -309,11 +309,13 @@ World
   - Player collision and zombie navigation through the interior route
   - Temporary inspection lighting only
 - [ ] Historic Downtown Main Street later production passes
-  - Bakery furnishing, loot and final interior art
-  - Rear service opening and door when the exterior mesh supports one
-  - Final storefronts
-  - Lighting and atmosphere polish
-  - Street furniture, vehicles, vegetation and environmental storytelling
+  - [x] Final storefront exteriors and window-visible business dressing
+  - [x] Damaged road, sidewalk, curb and drainage art pass
+  - [x] Street furniture, parked vehicles, utilities and power lines
+  - [x] Reclaiming vegetation, litter and environmental storytelling
+  - [x] Daytime lighting, materials and atmosphere polish
+  - [ ] Bakery loot and final full-interior art
+  - [ ] Rear service opening and door when the exterior mesh supports one
 - [ ] Replace all placeholder buildings
 - [ ] Replace all placeholder props
 - [ ] High-quality terrain

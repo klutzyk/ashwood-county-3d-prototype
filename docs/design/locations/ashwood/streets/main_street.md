@@ -7,6 +7,8 @@
 ---
 ![cocnetp](../images/main_street_concept.png)
 
+![Main Street abandonment and streetscape direction](../images/mainstreet_concepts.png)
+
 # Overview
 
 Main Street is the commercial heart of Ashwood County.

@@ -1,0 +1,43 @@
+[gd_scene load_steps=3 format=3]
+
+[sub_resource type="StandardMaterial3D" id="WeedMaterial"]
+albedo_color = Color(0.18, 0.27, 0.075, 1)
+roughness = 1.0
+cull_mode = 2
+
+[sub_resource type="PrismMesh" id="BladeMesh"]
+material = SubResource("WeedMaterial")
+size = Vector3(0.055, 0.32, 0.13)
+
+[node name="WeedClump" type="Node3D"]
+
+[node name="Blade01" type="MeshInstance3D" parent="."]
+position = Vector3(-0.07, 0.16, 0)
+rotation = Vector3(0.08, 0.12, -0.18)
+cast_shadow = 0
+visibility_range_end = 42.0
+mesh = SubResource("BladeMesh")
+
+[node name="Blade02" type="MeshInstance3D" parent="."]
+position = Vector3(0.065, 0.13, 0.025)
+rotation = Vector3(-0.12, 1.2, 0.2)
+scale = Vector3(0.8, 0.78, 0.8)
+cast_shadow = 0
+visibility_range_end = 42.0
+mesh = SubResource("BladeMesh")
+
+[node name="Blade03" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.18, -0.06)
+rotation = Vector3(0.18, 2.1, -0.08)
+scale = Vector3(0.9, 1.15, 0.9)
+cast_shadow = 0
+visibility_range_end = 42.0
+mesh = SubResource("BladeMesh")
+
+[node name="Blade04" type="MeshInstance3D" parent="."]
+position = Vector3(-0.015, 0.115, 0.07)
+rotation = Vector3(-0.1, 2.85, 0.24)
+scale = Vector3(0.72, 0.7, 0.72)
+cast_shadow = 0
+visibility_range_end = 42.0
+mesh = SubResource("BladeMesh")

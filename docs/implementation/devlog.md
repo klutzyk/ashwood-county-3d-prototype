@@ -1978,3 +1978,41 @@ Validation:
 - Compatibility-rendered walkthrough covered the storefront entry, retail,
   counter, kitchen and storage and drove a reduction in temporary light energy
 - C# build completed with no warnings or errors
+
+---
+
+## Main Street Environment Art Pass
+
+Completed:
+
+- Replaced the clean road read with damaged PBR asphalt, faded markings,
+  hand-placed repairs, cracks, oil staining and curb drainage
+- Broke up sidewalks with darker repairs, seam weeds, clustered leaves, papers
+  and restrained litter rather than uniform procedural scatter
+- Added reusable parking meters, newspaper boxes, dumpsters, bike racks,
+  utility poles, transformers, power lines and 25 mph street signage
+- Preserved the varied storefront row and six-vehicle parking composition while
+  adding distinct bakery, bookstore, bank, diner, delivery and alley clusters
+- Added bread shelves, cakes and coffee equipment visible through the bakery
+  windows without creating a full interior
+- Reused existing licensed vehicles, vegetation, street furniture and PBR
+  assets, with distance culling on small repeated props
+- Kept the entire abandonment layer under the environment hierarchy without
+  changing player, zombie, combat, save or interaction code
+
+Outcome:
+
+Main Street now reads as a hand-dressed, recently abandoned rural American
+downtown from street level, with stronger period identity, surface age,
+reclaiming vegetation and overhead utility depth while remaining a daytime
+Compatibility-renderer scene.
+
+Validation:
+
+- Main Street art-pass validation passed surface, prop-density, business,
+  vehicle-variety, collision and culling checks
+- Multi-angle Compatibility-rendered review covered both street ends, the road,
+  north sidewalk and bakery windows
+- Direct Main Street runtime completed a 180-frame cold start without scene,
+  import or script errors
+- C# build completed with no warnings or errors

@@ -1,0 +1,70 @@
+[gd_scene load_steps=8 format=3]
+
+[sub_resource type="StandardMaterial3D" id="Paint"]
+albedo_color = Color(0.08, 0.19, 0.29, 1)
+metallic = 0.18
+roughness = 0.74
+
+[sub_resource type="StandardMaterial3D" id="Paper"]
+albedo_color = Color(0.78, 0.72, 0.56, 1)
+roughness = 0.9
+
+[sub_resource type="BoxMesh" id="BodyMesh"]
+material = SubResource("Paint")
+size = Vector3(0.56, 0.72, 0.44)
+
+[sub_resource type="BoxMesh" id="DoorMesh"]
+material = SubResource("Paper")
+size = Vector3(0.42, 0.36, 0.035)
+
+[sub_resource type="BoxMesh" id="LegMesh"]
+material = SubResource("Paint")
+size = Vector3(0.09, 0.38, 0.09)
+
+[sub_resource type="BoxMesh" id="FootMesh"]
+material = SubResource("Paint")
+size = Vector3(0.68, 0.08, 0.5)
+
+[sub_resource type="BoxShape3D" id="Collision"]
+size = Vector3(0.62, 1.18, 0.5)
+
+[node name="NewspaperBox" type="StaticBody3D"]
+
+[node name="Collision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.6, 0)
+shape = SubResource("Collision")
+
+[node name="Foot" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.04, 0)
+visibility_range_end = 65.0
+mesh = SubResource("FootMesh")
+
+[node name="LegLeft" type="MeshInstance3D" parent="."]
+position = Vector3(-0.18, 0.25, 0)
+visibility_range_end = 65.0
+mesh = SubResource("LegMesh")
+
+[node name="LegRight" type="MeshInstance3D" parent="."]
+position = Vector3(0.18, 0.25, 0)
+visibility_range_end = 65.0
+mesh = SubResource("LegMesh")
+
+[node name="Body" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.78, 0)
+visibility_range_end = 65.0
+mesh = SubResource("BodyMesh")
+
+[node name="Window" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.83, -0.238)
+visibility_range_end = 65.0
+mesh = SubResource("DoorMesh")
+
+[node name="Name" type="Label3D" parent="."]
+position = Vector3(0, 1.03, -0.27)
+rotation = Vector3(0, 3.1415927, 0)
+text = "ASHWOOD
+GAZETTE"
+font_size = 22
+outline_size = 4
+modulate = Color(0.88, 0.8, 0.55, 1)
+pixel_size = 0.0028

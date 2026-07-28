@@ -427,6 +427,48 @@ The following assets were downloaded and integrated on 28 July 2026. Only the
 - **Status:** In use
 - **Download note:** No external audio files were downloaded for this slice.
 
+## Main Street Abandonment Art Pass
+
+### Road Damaged
+
+- **Asset type:** Seamless damaged-asphalt PBR material
+- **Creator:** Dimitrios Savva
+- **Source:** [Road Damaged on Poly Haven](https://polyhaven.com/a/road_damaged)
+- **License:** [CC0 1.0 Universal](https://polyhaven.com/license)
+- **Asset details:** 2.2-metre surface; the project uses the existing 1K
+  diffuse, packed ARM and OpenGL normal maps.
+- **Attribution requirement:** None; creator and source are recorded for
+  provenance.
+- **Prototype use:** Main Street base asphalt beneath project-owned patch,
+  crack, oil and litter overlays
+- **Local location:** `assets/third_party/materials/asphalt/road_damaged_1k.gltf/`
+- **Status:** In use
+
+### Project-Owned Main Street Dressing
+
+- **Asset type:** Modular street props and hand-authored environment composition
+- **Creator/provider:** Ashwood County project
+- **Source:** Original Godot-native geometry; no external downloads were needed
+  for the abandonment layer.
+- **Licence:** Project-owned
+- **Prototype use:** Parking meters, newspaper boxes, dumpsters, bike racks,
+  weeds, drainage grates, asphalt repairs, cracks, oil stains, litter, utility
+  wires, transformers, street signs and bakery window-display props
+- **Local locations:** `scenes/world/ashwood/presentation/props/`,
+  `scenes/world/ashwood/presentation/storefronts/`, and
+  `scenes/world/ashwood/presentation/main_street_abandonment.tscn`
+- **Status:** In use
+
+### Main Street Concept Sheet
+
+- **Asset type:** Non-runtime art-direction reference
+- **Creator/provider:** User supplied
+- **Prototype use:** Density, abandonment, streetscape and daytime atmosphere
+  direction for the Main Street art pass; not copied as scene layout or content
+- **Local location:**
+  `docs/design/locations/ashwood/images/mainstreet_concepts.png`
+- **Status:** Design reference only
+
 ## Release Checklist
 
 - [x] Record source and license links for all listed assets.

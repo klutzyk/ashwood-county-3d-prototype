@@ -5,7 +5,7 @@
 [ext_resource type="Texture2D" path="res://assets/third_party/materials/pavement/concrete_pavement_02_1k.gltf/textures/concrete_pavement_02_arm_1k.jpg" id="3_arm"]
 
 [resource]
-albedo_color = Color(0.72, 0.7, 0.66, 1)
+albedo_color = Color(0.56, 0.54, 0.49, 1)
 albedo_texture = ExtResource("1_diffuse")
 metallic_texture = ExtResource("3_arm")
 metallic_texture_channel = 2
@@ -15,6 +15,6 @@ normal_enabled = true
 normal_texture = ExtResource("2_normal")
 ao_enabled = true
 ao_texture = ExtResource("3_arm")
-uv1_scale = Vector3(0.35, 0.35, 0.35)
+uv1_scale = Vector3(0.28, 0.28, 0.28)
 uv1_triplanar = true
 texture_filter = 1

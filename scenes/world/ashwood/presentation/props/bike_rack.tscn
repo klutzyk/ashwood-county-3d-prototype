@@ -1,0 +1,40 @@
+[gd_scene load_steps=4 format=3]
+
+[sub_resource type="StandardMaterial3D" id="Metal"]
+albedo_color = Color(0.12, 0.13, 0.12, 1)
+metallic = 0.75
+roughness = 0.62
+
+[sub_resource type="TorusMesh" id="HoopMesh"]
+material = SubResource("Metal")
+inner_radius = 0.48
+outer_radius = 0.54
+rings = 12
+ring_segments = 8
+
+[sub_resource type="BoxShape3D" id="Collision"]
+size = Vector3(1.9, 1.1, 0.2)
+
+[node name="BikeRack" type="StaticBody3D"]
+
+[node name="Collision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.54, 0)
+shape = SubResource("Collision")
+
+[node name="Hoop01" type="MeshInstance3D" parent="."]
+position = Vector3(-0.65, 0.55, 0)
+rotation = Vector3(1.5707963, 0, 0)
+visibility_range_end = 65.0
+mesh = SubResource("HoopMesh")
+
+[node name="Hoop02" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.55, 0)
+rotation = Vector3(1.5707963, 0, 0)
+visibility_range_end = 65.0
+mesh = SubResource("HoopMesh")
+
+[node name="Hoop03" type="MeshInstance3D" parent="."]
+position = Vector3(0.65, 0.55, 0)
+rotation = Vector3(1.5707963, 0, 0)
+visibility_range_end = 65.0
+mesh = SubResource("HoopMesh")
