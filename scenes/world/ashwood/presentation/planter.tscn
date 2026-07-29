@@ -1,56 +1,26 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene load_steps=4 format=3]
 
-[ext_resource type="PackedScene" path="res://assets/environment/nature/yughues_bush_05.tscn" id="1_shrub"]
+[ext_resource type="PackedScene" path="res://assets/third_party/environment/main_street_dressing/poly_haven/planter_box_01/planter_box_01_1k.gltf" id="1_box"]
+[ext_resource type="PackedScene" path="res://assets/environment/nature/yughues_bush_05.tscn" id="2_shrub"]
 
-[sub_resource type="StandardMaterial3D" id="Pot"]
-albedo_color = Color(0.36, 0.15, 0.09, 1)
-roughness = 0.92
-
-[sub_resource type="CylinderMesh" id="PotMesh"]
-material = SubResource("Pot")
-top_radius = 0.52
-bottom_radius = 0.4
-height = 0.62
-
-[sub_resource type="CylinderShape3D" id="Collision"]
-radius = 0.48
-height = 0.7
-
-[sub_resource type="CylinderMesh" id="RimMesh"]
-material = SubResource("Pot")
-top_radius = 0.58
-bottom_radius = 0.58
-height = 0.12
-
-[sub_resource type="StandardMaterial3D" id="Soil"]
-albedo_color = Color(0.075, 0.05, 0.03, 1)
-roughness = 1.0
-
-[sub_resource type="CylinderMesh" id="SoilMesh"]
-material = SubResource("Soil")
-top_radius = 0.48
-bottom_radius = 0.48
-height = 0.04
+[sub_resource type="BoxShape3D" id="Collision"]
+size = Vector3(0.94, 0.44, 0.46)
 
 [node name="Planter" type="StaticBody3D"]
 
 [node name="Collision" type="CollisionShape3D" parent="."]
-position = Vector3(0, 0.35, 0)
+position = Vector3(0, 0.22, 0)
 shape = SubResource("Collision")
 
-[node name="Pot" type="MeshInstance3D" parent="."]
-position = Vector3(0, 0.31, 0)
-mesh = SubResource("PotMesh")
+[node name="Box" parent="." instance=ExtResource("1_box")]
 
-[node name="Rim" type="MeshInstance3D" parent="."]
-position = Vector3(0, 0.62, 0)
-mesh = SubResource("RimMesh")
+[node name="planter_box_01" parent="Box" index="0"]
+visibility_range_end = 72.0
+visibility_range_end_margin = 8.0
 
-[node name="Soil" type="MeshInstance3D" parent="."]
-position = Vector3(0, 0.67, 0)
-mesh = SubResource("SoilMesh")
-
-[node name="Plant" parent="." instance=ExtResource("1_shrub")]
-position = Vector3(0, 0.69, 0)
+[node name="Plant" parent="." instance=ExtResource("2_shrub")]
+position = Vector3(0, 0.38, 0)
 rotation = Vector3(0, 0.35, 0)
-scale = Vector3(0.95, 0.95, 0.95)
+scale = Vector3(0.64, 0.72, 0.64)
+
+[editable path="Box"]

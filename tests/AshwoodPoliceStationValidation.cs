@@ -112,6 +112,21 @@ public partial class AshwoodPoliceStationValidation : Node
 			"Bathroom has a dedicated imported door.");
 		Require(FindByName(station, "ArmorySecurityDoor") != null,
 			"Armory has a dedicated security door.");
+		foreach (string doorName in new[]
+		{
+			"ChiefOfficeDoor",
+			"InterviewDoor",
+			"EvidenceDoor",
+			"BathroomDoor",
+			"ArmorySecurityDoor",
+		})
+		{
+			Node3D? door = FindByName(station, doorName) as Node3D;
+			Require(door != null &&
+				door.Scale.X >= 0.22f &&
+				door.Position.Y <= 0.1f,
+				$"{doorName} is a grounded, full-size imported door.");
+		}
 	}
 
 	private void ValidateTexturedArchitecture(Node3D station)

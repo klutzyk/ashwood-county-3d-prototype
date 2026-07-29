@@ -132,15 +132,17 @@ with project records.
 ### Old Tyre
 
 - **Asset type:** Worn vehicle-tyre model and material set
-- **Creator:** MP
+- **Creator:** James Ray Cock
 - **Source:** [Old Tyre on Poly Haven](https://polyhaven.com/a/old_tyre)
 - **License:** [CC0 1.0 Universal](https://polyhaven.com/license)
 - **Attribution requirement:** Not required; the author and source are credited
   here for provenance.
-- **Prototype use:** Diffuse texture applied to a lightweight primitive tyre
-  proxy; the original model geometry is not currently present in the project.
-- **Local location:** `assets/third_party/materials/scrap/`
-- **Status:** Partially integrated
+- **Prototype use:** Full authored 1K glTF model and PBR material set used for
+  discarded tyres in the Main Street abandonment dressing.
+- **Local location:**
+  `assets/third_party/environment/main_street_dressing/poly_haven/old_tyre/`
+- **Project wrapper:** `assets/environment/vehicles/old_tyre.tscn`
+- **Status:** In use; replaces the former project-authored torus proxy
 
 ### Asphalt 02
 
@@ -337,6 +339,101 @@ visual-quality pass on 28 July 2026.
 ## Old building (carpets)
 **credits** - "old building" (https://skfb.ly/6TEFI) by Helindu is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 
+## Hospital door
+**credits** - "HospitalDoor" (https://skfb.ly/o8n9o) by azizcharfeddine1997 is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+
+## House door
+**credits** - "House Door" (https://skfb.ly/o8xPn) by Mário Mendes is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+
+## House door(A)
+**credits** - "House_[Door A]" (https://skfb.ly/oyzFN) by Comicaroid is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+
+## Door wood
+**credits** - "Door Wood" (https://skfb.ly/6zXE8) by ArtCarmesi is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+
+## Window
+**credits** - "Window" (https://skfb.ly/oS7yr) by Mehdi Shahsavan is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+
+## Weathered Picnic Table
+**credits** - "Weathered Picnic Table | GameReady" (https://skfb.ly/oUQ9B) by Mark Peters is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+
+## Low poly sofa
+**credits** - "Low Poly  Sofa" (https://skfb.ly/pEoxI) by Ngngan is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+
+## Wooden stairs
+**credits** - "Wooden Stairs_5_MB" (https://skfb.ly/p9CYU) by Mehdi Shahsavan is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+
+## Corkboard
+**credits** - "Corkboard" (https://skfb.ly/pttBM) by XIN is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+
+## Window
+**credits** - "Window" (https://skfb.ly/6TBZw) by JeanLescano is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+
+## paper debris
+"Paper debris" (https://skfb.ly/oDAYx) by Sousinho is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+
+## Paper
+"Paper - 3MB" (https://skfb.ly/oXLrv) by Mehdi Shahsavan is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+
+## File cabinet
+"File Cabinet" (https://skfb.ly/ouwXU) by Siberia is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+
+## Antiique globe
+"Antique Globe" (https://skfb.ly/ov8UO) by Matthew Collings is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+
+## trash can
+"trash can" (https://skfb.ly/o7ODJ) by Gleg3002 is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+
+## OFfice chair
+"Office Chair Game Model Download" (https://skfb.ly/6tH8U) by RanPro is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+
+## Rusty cabinet
+"Rust Cabinet-Freepoly.org" (https://skfb.ly/orDIW) by Freepoly.org is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+
+## Variety of books
+"Variety of Books" (https://skfb.ly/osEsy) by Spookyghostboo is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+
+## Whiteboard
+"Whiteboard" (https://skfb.ly/6WHrD) by tboiston is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+
+## Post it notes
+"Post it notes" (https://skfb.ly/oFrKV) by Sousinho is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+
+## Coffee mug
+"Coffee Mug (School Project)" (https://skfb.ly/6toBy) by Ole Gunnar Isager is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+
+## Old metal table
+"Old Metal Table (Low Poly)" (https://skfb.ly/6Runw) by Berk Gedik is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+
+## Basketball hoop panel
+"Basketball Hoop Panel" (https://skfb.ly/ovYBR) by Nimrod Assaf is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+
+## Door classroom
+"Door Classroom_9 MB" (https://skfb.ly/ppCRU) by Mehdi Shahsavan is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+
+## Bulletin board
+"Bulletin Board" (https://skfb.ly/oQTvP) by lydia.la is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+
+## Cabinet (lockers)
+"Cabinet" (https://skfb.ly/oJNSU) by Jinhong Jeong is licensed under Creative Commons Attribution-NonCommercial (http://creativecommons.org/licenses/by-nc/4.0/).
+
+## Cobwebs asset pack
+"Cobwebs Asset Pack" (https://skfb.ly/owIso) by Em Marshall is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+
+## Office drawers
+"Office Drawer" (https://skfb.ly/oCPt9) by Mkky is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+
+## Basketball
+"Basketball" (https://skfb.ly/Funv) by Marek Picheta is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+
+## Picnic table
+"Picnic Table" (https://skfb.ly/oBFGQ) by exiS7-Gs is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+
+## old school cabinet (lockers)
+"Old School Cabinet" (https://skfb.ly/oxY6U) by NghiaNguyeen is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+
+
+
 ## Project-Owned Prototype Town Geometry
 
 ## Main Street CC0 Street Furniture
@@ -387,11 +484,11 @@ The following assets were downloaded and integrated on 28 July 2026. Only the
   applies a project-owned neutral weathered material and box collision
 - **Attribution requirement:** None; creator and source are recorded for
   provenance.
-- **Prototype use:** Replaces the primitive wooden benches on Main Street,
-  including the bus-stop bench
+- **Prototype use:** Retained as a reusable legacy prop, but no longer used by
+  the Main Street presentation after the detailed Painted Wooden Bench upgrade
 - **Downloaded location:** `assets/third_party/props/street_furniture/opengameart/park_bench/`
 - **Project wrapper:** `assets/environment/props/cc0_park_bench.tscn`
-- **Status:** In use
+- **Status:** Retained, not used on Main Street
 
 ### Roadside Dressing, Service Station, Pharmacy, and Small Bush
 
@@ -448,17 +545,64 @@ The following assets were downloaded and integrated on 28 July 2026. Only the
 
 ### Project-Owned Main Street Dressing
 
-- **Asset type:** Modular street props and hand-authored environment composition
+- **Asset type:** Surface treatment, utilities, signage, and hand-authored
+  environment composition
 - **Creator/provider:** Ashwood County project
-- **Source:** Original Godot-native geometry; no external downloads were needed
-  for the abandonment layer.
+- **Source:** Original Godot-native supporting geometry combined with the
+  licensed asset library documented below.
 - **Licence:** Project-owned
-- **Prototype use:** Parking meters, newspaper boxes, dumpsters, bike racks,
-  weeds, drainage grates, asphalt repairs, cracks, oil stains, litter, utility
-  wires, transformers, street signs and bakery window-display props
+- **Prototype use:** Drainage grates, PBR asphalt repairs, cracks, oil stains,
+  utility poles and wires, street signs, placement composition, distance
+  culling, and bakery window-display composition. The former primitive parking
+  meters, newspaper boxes, dumpsters, bike racks, weeds, transformer cylinders,
+  paper rectangles, leaf discs, and concrete patch slabs are no longer present
+  in the live Main Street scene.
 - **Local locations:** `scenes/world/ashwood/presentation/props/`,
   `scenes/world/ashwood/presentation/storefronts/`, and
   `scenes/world/ashwood/presentation/main_street_abandonment.tscn`
+- **PBR patch wrapper:**
+  `assets/materials/ashwood_main_street_asphalt_patch.tres`, which reuses the
+  already-credited Road Damaged diffuse, normal, and ARM maps
+- **Status:** In use
+
+### Dense Main Street Apocalypse Dressing
+
+The following compact 1K glTF assets were downloaded from Poly Haven's
+official API on 29 July 2026. All are licensed under
+[CC0 1.0 Universal](https://polyhaven.com/license). Attribution is not
+required, but author, source, local path, and API-provided MD5 records are
+preserved for provenance.
+
+| Asset | Author | Source | Local path | Main Street use |
+| --- | --- | --- | --- | --- |
+| Painted Wooden Bench | Kirill Sannikov | [Poly Haven](https://polyhaven.com/a/painted_wooden_bench) | `assets/third_party/environment/main_street_dressing/poly_haven/painted_wooden_bench/` | Weathered sidewalk and bus-stop seating |
+| Fire Hydrant | Gonçalo Felício | [Poly Haven](https://polyhaven.com/a/fire_hydrant) | `assets/third_party/environment/main_street_dressing/poly_haven/fire_hydrant/` | Aged municipal hydrants |
+| Hand Truck | Mutanzom3D | [Poly Haven](https://polyhaven.com/a/hand_truck) | `assets/third_party/environment/main_street_dressing/poly_haven/hand_truck/` | Abandoned deliveries and scavenging |
+| Barrel 03 | Serhii Khromov | [Poly Haven](https://polyhaven.com/a/barrel_03) | `assets/third_party/environment/main_street_dressing/poly_haven/barrel_03/` | Curbside and service clutter |
+| Wooden Broom | Balen | [Poly Haven](https://polyhaven.com/a/wooden_broom) | `assets/third_party/environment/main_street_dressing/poly_haven/wooden_broom/` | Fallen storefront detail |
+| Cement Bag | PierreB3D | [Poly Haven](https://polyhaven.com/a/cement_bag) | `assets/third_party/environment/main_street_dressing/poly_haven/cement_bag/` | Interrupted repair-work stories |
+| Industrial Storage Cart | Jule Bielitz | [Poly Haven](https://polyhaven.com/a/industrial_storage_cart) | `assets/third_party/environment/main_street_dressing/poly_haven/industrial_storage_cart/` | Looted service and delivery clusters |
+| Old Tyre | James Ray Cock | [Poly Haven](https://polyhaven.com/a/old_tyre) | `assets/third_party/environment/main_street_dressing/poly_haven/old_tyre/` | Detailed replacement for the former tyre proxy |
+| Planter Box 01 | James Ray Cock | [Poly Haven](https://polyhaven.com/a/planter_box_01) | `assets/third_party/environment/main_street_dressing/poly_haven/planter_box_01/` | Detailed replacement for cylinder planters |
+
+- **Format:** 1K glTF models with 1K JPG diffuse, OpenGL-normal, and packed ARM
+  textures; approximately 23.4 MB including import metadata and source records
+- **Local source and checksum record:**
+  `assets/third_party/environment/main_street_dressing/SOURCES.md`
+- **Project composition:**
+  `scenes/world/ashwood/presentation/main_street_apocalypse_dressing.tscn`
+- **Project wrappers:**
+  `scenes/world/ashwood/presentation/props/apocalypse_park_bench.tscn`,
+  `scenes/world/ashwood/presentation/props/apocalypse_fire_hydrant.tscn`,
+  `assets/environment/vehicles/old_tyre.tscn`, and
+  `scenes/world/ashwood/presentation/planter.tscn`
+- **Prototype use:** 190 individually composed placements across vegetation,
+  refuse, service clutter, damaged street furniture, and environmental-story
+  clusters. The scene also reuses previously documented licensed bushes,
+  containers, barriers, bins, mailboxes, tents, furniture, and utility props.
+- **Performance treatment:** Shared scenes are instanced, imported sources
+  remain unmodified, simple collision is limited to substantial obstacles, and
+  project-owned distance-culling ranges are applied by category.
 - **Status:** In use
 
 ### Main Street Concept Sheet

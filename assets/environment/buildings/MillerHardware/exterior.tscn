@@ -63,6 +63,9 @@ size = Vector3(0.08, 2.44, 2.34)
 [sub_resource type="BoxShape3D" id="LoadingDoorShape"]
 size = Vector3(0.18, 3.18, 3.62)
 
+[sub_resource type="BoxShape3D" id="EntryRampShape"]
+size = Vector3(1.2, 0.06, 1.45)
+
 [node name="MillerHardwareExterior" type="StaticBody3D"]
 
 [node name="Shell" type="Node3D" parent="."]
@@ -395,9 +398,15 @@ pixel_size = 0.0054
 modulate = Color(0.84, 0.78, 0.59, 1)
 
 [node name="EntranceStep" type="MeshInstance3D" parent="."]
-position = Vector3(-7.16, 0.055, -6.65)
-scale = Vector3(0.48, 0.11, 1.48)
+position = Vector3(-7.1, 0.035, -6.65)
+rotation = Vector3(0, 0, 0.055)
+scale = Vector3(1.2, 0.06, 1.45)
 mesh = SubResource("ConcreteMesh")
+
+[node name="EntranceRampCollision" type="CollisionShape3D" parent="."]
+position = Vector3(-7.1, 0.035, -6.65)
+rotation = Vector3(0, 0, 0.055)
+shape = SubResource("EntryRampShape")
 
 [node name="Hours" type="Label3D" parent="."]
 position = Vector3(-7.28, 1.82, -5.18)

@@ -216,6 +216,21 @@ position = Vector3(7.225, 2.18, 8.20)
 scale = Vector3(1.25, 4.35, 0.14)
 mesh = SubResource("WallMesh")
 
+[node name="StorageDoorHeader" type="MeshInstance3D" parent="Architecture"]
+position = Vector3(3.10, 3.28, -6.05)
+scale = Vector3(1, 2.15, 0.14)
+mesh = SubResource("WallMesh")
+
+[node name="OfficeDoorHeader" type="MeshInstance3D" parent="Architecture"]
+position = Vector3(5.10, 3.28, 6.05)
+scale = Vector3(1, 2.15, 0.14)
+mesh = SubResource("WallMesh")
+
+[node name="RestroomDoorHeader" type="MeshInstance3D" parent="Architecture"]
+position = Vector3(6.10, 3.28, 8.20)
+scale = Vector3(1, 2.15, 0.14)
+mesh = SubResource("TileMesh")
+
 [node name="BathroomFloor" type="MeshInstance3D" parent="Architecture"]
 position = Vector3(6.02, 0.09, 9.25)
 scale = Vector3(3.58, 0.045, 2.02)
@@ -237,19 +252,27 @@ scale = Vector3(0.025, 0.78, 0.62)
 mesh = SubResource("GlassMesh")
 
 [node name="StorageDoor" parent="Architecture" instance=ExtResource("33_door")]
-position = Vector3(3.58, 1.20, -6.0)
-rotation = Vector3(0, 3.1415927, 0)
-scale = Vector3(0.027, 0.027, 0.027)
+position = Vector3(3.10, 0.05, -6.0)
+scale = Vector3(0.235, 0.235, 0.235)
+
+[node name="Empty_13" parent="Architecture/StorageDoor/Sketchfab_model/root/GLTF_SceneRootNode" index="1"]
+rotation = Vector3(0, -1.35, 0)
 
 [node name="OfficeDoor" parent="Architecture" instance=ExtResource("33_door")]
-position = Vector3(5.58, 1.20, 6.0)
+position = Vector3(5.10, 0.05, 6.0)
 rotation = Vector3(0, 3.1415927, 0)
-scale = Vector3(0.027, 0.027, 0.027)
+scale = Vector3(0.235, 0.235, 0.235)
+
+[node name="Empty_13" parent="Architecture/OfficeDoor/Sketchfab_model/root/GLTF_SceneRootNode" index="1"]
+rotation = Vector3(0, -1.35, 0)
 
 [node name="RestroomDoor" parent="Architecture" instance=ExtResource("33_door")]
-position = Vector3(6.58, 1.20, 8.15)
+position = Vector3(6.10, 0.05, 8.15)
 rotation = Vector3(0, 3.1415927, 0)
-scale = Vector3(0.027, 0.027, 0.027)
+scale = Vector3(0.235, 0.235, 0.235)
+
+[node name="Empty_13" parent="Architecture/RestroomDoor/Sketchfab_model/root/GLTF_SceneRootNode" index="1"]
+rotation = Vector3(0, -1.35, 0)
 
 [node name="FloorCollision" type="CollisionShape3D" parent="."]
 position = Vector3(0, 0, 0)
@@ -1045,7 +1068,6 @@ outline_size = 6
 
 [node name="StorageLabel" type="Label3D" parent="Signage"]
 position = Vector3(3.58, 2.56, -5.96)
-rotation = Vector3(0, 3.1415927, 0)
 modulate = Color(0.18, 0.28, 0.12, 1)
 text = "STORAGE"
 font_size = 27
@@ -1053,6 +1075,7 @@ outline_size = 5
 
 [node name="OfficeLabel" type="Label3D" parent="Signage"]
 position = Vector3(5.08, 2.56, 5.96)
+rotation = Vector3(0, 3.1415927, 0)
 modulate = Color(0.18, 0.28, 0.12, 1)
 text = "OFFICE"
 font_size = 27
@@ -1147,3 +1170,7 @@ light_color = Color(0.90, 0.84, 0.72, 1)
 light_energy = 0.50
 omni_range = 3.6
 shadow_enabled = false
+
+[editable path="Architecture/StorageDoor"]
+[editable path="Architecture/OfficeDoor"]
+[editable path="Architecture/RestroomDoor"]

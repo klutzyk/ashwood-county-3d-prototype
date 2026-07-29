@@ -81,6 +81,11 @@ public partial class AshwoodGroceryValidation : Node
 			exterior.HasNode("LoadingLabel") &&
 			exterior.HasNode("LoadingLamp"),
 			"rear elevation contains a dressed receiving entrance");
+		Node3D loadingDoor = exterior.GetNode<Node3D>("LoadingDoor");
+		Require(loadingDoor.Position.Y <= 0.1f &&
+			loadingDoor.Scale.X >= 0.4f &&
+			loadingDoor.Scale.Y >= 0.3f,
+			"receiving door visibly closes and grounds the rear loading opening");
 	}
 
 	private static void ValidateArchitecture(Node3D grocery)
@@ -116,6 +121,13 @@ public partial class AshwoodGroceryValidation : Node
 			interior.HasNode("Restroom/Sink") &&
 			interior.HasNode("Architecture/BathroomMirror"),
 			"enclosed restroom has sanitary fixtures and mirror");
+		Label3D storageLabel =
+			interior.GetNode<Label3D>("Signage/StorageLabel");
+		Label3D officeLabel =
+			interior.GetNode<Label3D>("Signage/OfficeLabel");
+		Require((storageLabel.Basis * Vector3.Back).Dot(Vector3.Back) >= 0.99f &&
+			(officeLabel.Basis * Vector3.Back).Dot(Vector3.Forward) >= 0.99f,
+			"storage and office labels face their sales-floor approaches");
 	}
 
 	private static void ValidateDepartments(Node3D grocery)

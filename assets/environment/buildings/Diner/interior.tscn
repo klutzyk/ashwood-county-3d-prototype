@@ -117,6 +117,9 @@ size = Vector3(1.8, 3.55, 0.12)
 [sub_resource type="BoxShape3D" id="RoomDividerShape"]
 size = Vector3(0.12, 3.55, 2.35)
 
+[sub_resource type="BoxShape3D" id="RoomWestWallShape"]
+size = Vector3(0.12, 3.55, 2.5)
+
 [sub_resource type="BoxShape3D" id="ToiletShape"]
 size = Vector3(0.72, 0.9, 0.86)
 
@@ -189,6 +192,11 @@ position = Vector3(5.2, 1.78, -5.475)
 scale = Vector3(0.12, 3.55, 2.35)
 mesh = SubResource("MeshWall")
 
+[node name="NorthRoomWestWall" type="MeshInstance3D" parent="Architecture"]
+position = Vector3(0.55, 1.78, -5.45)
+scale = Vector3(0.12, 3.55, 2.5)
+mesh = SubResource("MeshWall")
+
 [node name="SouthPartitionWestStub" type="MeshInstance3D" parent="Architecture"]
 position = Vector3(0.975, 1.78, 4.2)
 scale = Vector3(0.85, 3.55, 0.12)
@@ -207,6 +215,31 @@ mesh = SubResource("MeshTile")
 [node name="SouthRoomDivider" type="MeshInstance3D" parent="Architecture"]
 position = Vector3(5.2, 1.78, 5.475)
 scale = Vector3(0.12, 3.55, 2.35)
+mesh = SubResource("MeshTile")
+
+[node name="SouthRoomWestWall" type="MeshInstance3D" parent="Architecture"]
+position = Vector3(0.55, 1.78, 5.45)
+scale = Vector3(0.12, 3.55, 2.5)
+mesh = SubResource("MeshTile")
+
+[node name="OfficeDoorHeader" type="MeshInstance3D" parent="Architecture"]
+position = Vector3(1.9, 2.875, -4.2)
+scale = Vector3(1, 1.35, 0.12)
+mesh = SubResource("MeshWall")
+
+[node name="PantryDoorHeader" type="MeshInstance3D" parent="Architecture"]
+position = Vector3(6.7, 2.875, -4.2)
+scale = Vector3(1, 1.35, 0.12)
+mesh = SubResource("MeshWall")
+
+[node name="RestroomDoorHeader" type="MeshInstance3D" parent="Architecture"]
+position = Vector3(1.9, 2.875, 4.2)
+scale = Vector3(1, 1.35, 0.12)
+mesh = SubResource("MeshTile")
+
+[node name="ColdStorageDoorHeader" type="MeshInstance3D" parent="Architecture"]
+position = Vector3(6.7, 2.875, 4.2)
+scale = Vector3(1, 1.35, 0.12)
 mesh = SubResource("MeshTile")
 
 [node name="KitchenBacksplash" type="MeshInstance3D" parent="Architecture"]
@@ -255,24 +288,34 @@ scale = Vector3(0.06, 0.05, 0.68)
 mesh = SubResource("MeshChrome")
 
 [node name="OfficeDoor" parent="Architecture" instance=ExtResource("45_white_door")]
-position = Vector3(1.45, 1.2, -4.18)
-rotation = Vector3(0, -0.78, 0)
-scale = Vector3(0.027, 0.027, 0.027)
+position = Vector3(1.9, 0.05, -4.18)
+scale = Vector3(0.235, 0.235, 0.235)
+
+[node name="Empty_13" parent="Architecture/OfficeDoor/Sketchfab_model/root/GLTF_SceneRootNode" index="1"]
+rotation = Vector3(0, -1.35, 0)
 
 [node name="PantryDoor" parent="Architecture" instance=ExtResource("45_white_door")]
-position = Vector3(6.25, 1.2, -4.18)
-rotation = Vector3(0, 0.72, 0)
-scale = Vector3(0.027, 0.027, 0.027)
+position = Vector3(6.7, 0.05, -4.18)
+scale = Vector3(0.235, 0.235, 0.235)
+
+[node name="Empty_13" parent="Architecture/PantryDoor/Sketchfab_model/root/GLTF_SceneRootNode" index="1"]
+rotation = Vector3(0, -1.35, 0)
 
 [node name="RestroomDoor" parent="Architecture" instance=ExtResource("45_white_door")]
-position = Vector3(1.45, 1.2, 4.18)
+position = Vector3(1.9, 0.05, 4.18)
 rotation = Vector3(0, 3.1415927, 0)
-scale = Vector3(0.027, 0.027, 0.027)
+scale = Vector3(0.235, 0.235, 0.235)
+
+[node name="Empty_13" parent="Architecture/RestroomDoor/Sketchfab_model/root/GLTF_SceneRootNode" index="1"]
+rotation = Vector3(0, -1.35, 0)
 
 [node name="ColdStorageDoor" parent="Architecture" instance=ExtResource("45_white_door")]
-position = Vector3(6.25, 1.2, 4.18)
-rotation = Vector3(0, -2.4, 0)
-scale = Vector3(0.027, 0.027, 0.027)
+position = Vector3(6.7, 0.05, 4.18)
+rotation = Vector3(0, 3.1415927, 0)
+scale = Vector3(0.235, 0.235, 0.235)
+
+[node name="Empty_13" parent="Architecture/ColdStorageDoor/Sketchfab_model/root/GLTF_SceneRootNode" index="1"]
+rotation = Vector3(0, -1.35, 0)
 
 [node name="FloorCollision" type="CollisionShape3D" parent="."]
 position = Vector3(2.5, 0.0, 0)
@@ -294,6 +337,10 @@ shape = SubResource("PartitionEndShape")
 position = Vector3(5.2, 1.78, -5.475)
 shape = SubResource("RoomDividerShape")
 
+[node name="NorthRoomWestWallCollision" type="CollisionShape3D" parent="."]
+position = Vector3(0.55, 1.78, -5.45)
+shape = SubResource("RoomWestWallShape")
+
 [node name="SouthPartitionWestCollision" type="CollisionShape3D" parent="."]
 position = Vector3(0.975, 1.78, 4.2)
 shape = SubResource("PartitionStubShape")
@@ -310,6 +357,9 @@ shape = SubResource("PartitionEndShape")
 position = Vector3(5.2, 1.78, 5.475)
 shape = SubResource("RoomDividerShape")
 
+[node name="SouthRoomWestWallCollision" type="CollisionShape3D" parent="."]
+position = Vector3(0.55, 1.78, 5.45)
+shape = SubResource("RoomWestWallShape")
 [node name="DiningRoom" type="Node3D" parent="."]
 
 [node name="Booths" type="Node3D" parent="DiningRoom"]
@@ -740,3 +790,8 @@ light_color = Color(0.82, 0.89, 1, 1)
 light_energy = 0.46
 omni_range = 5.3
 shadow_enabled = false
+
+[editable path="Architecture/OfficeDoor"]
+[editable path="Architecture/PantryDoor"]
+[editable path="Architecture/RestroomDoor"]
+[editable path="Architecture/ColdStorageDoor"]

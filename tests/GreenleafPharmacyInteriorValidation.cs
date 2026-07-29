@@ -107,6 +107,21 @@ public partial class GreenleafPharmacyInteriorValidation : Node
 		Require(interior.HasNode("Restroom/Toilet") &&
 			interior.HasNode("Restroom/Sink"),
 			"staff bathroom contains the expected sanitary fixtures");
+		Require(interior.GetNode<Node3D>("RxWorkspace").Position.X <= -3.0f,
+			"prescription worktable and tabletop props clear the staff-office approach");
+		Node3D storageDoor =
+			interior.GetNode<Node3D>("Architecture/StorageDoor");
+		foreach (string boxPath in new[]
+		{
+			"Storage/CardboardBoxA",
+			"Storage/CardboardBoxB",
+		})
+		{
+			Node3D box = interior.GetNode<Node3D>(boxPath);
+			Require(Mathf.Abs(box.GlobalPosition.Z -
+					storageDoor.GlobalPosition.Z) >= 1.5f,
+				$"{boxPath} is stored clear of the stock-room threshold");
+		}
 	}
 
 	private static void ValidateExpandedTexturedShell(StaticBody3D interior)
@@ -122,6 +137,17 @@ public partial class GreenleafPharmacyInteriorValidation : Node
 			wallMaterial.NormalEnabled &&
 			wallMaterial.NormalTexture is not null,
 			"every pharmacy wall uses a textured PBR plaster material");
+		MeshInstance3D rearTile = interior.GetNode<MeshInstance3D>(
+			"Architecture/BathroomRearTile");
+		MeshInstance3D southTile = interior.GetNode<MeshInstance3D>(
+			"Architecture/BathroomSouthTile");
+		MeshInstance3D rearWall = interior.GetNode<MeshInstance3D>(
+			"Architecture/RearWallLiner");
+		MeshInstance3D southWall = interior.GetNode<MeshInstance3D>(
+			"Architecture/SouthWallLiner");
+		Require(rearTile.Position.X - rearWall.Position.X >= 0.10f &&
+			southWall.Position.Z - southTile.Position.Z >= 0.10f,
+			"bathroom tile liners sit clear of the plaster shell without z-fighting");
 	}
 
 	private static void ValidateImportedFocalAssets(StaticBody3D interior)
@@ -328,8 +354,13 @@ public partial class GreenleafPharmacyInteriorValidation : Node
 		Vector3 globalPoint = pharmacy.ToGlobal(pharmacyLocalPoint);
 		foreach (CollisionShape3D collisionShape in authoredBoxes)
 		{
-			if (collisionShape.Name.ToString().Contains(
-				"Floor", StringComparison.OrdinalIgnoreCase))
+			string shapeName = collisionShape.Name.ToString();
+			if (shapeName.Contains(
+					"Floor", StringComparison.OrdinalIgnoreCase) ||
+				shapeName.Contains(
+					"Ramp", StringComparison.OrdinalIgnoreCase) ||
+				shapeName.Contains(
+					"Threshold", StringComparison.OrdinalIgnoreCase))
 			{
 				continue;
 			}

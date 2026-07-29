@@ -11,4 +11,4 @@
 [node name="Interior" parent="." instance=ExtResource("2_interior")]
 
 [node name="FrontDoor" parent="." instance=ExtResource("3_door")]
-position = Vector3(-7.11, 0.03, -6.65)
+position = Vector3(-7.11, 0.03, -7.19)

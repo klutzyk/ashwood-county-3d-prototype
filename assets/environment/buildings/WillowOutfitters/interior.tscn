@@ -202,6 +202,21 @@ position = Vector3(4.2, 1.88, 4.08)
 scale = Vector3(3.58, 3.76, 0.15)
 mesh = SubResource("WallMesh")
 
+[node name="StorageDoorHeader" type="MeshInstance3D" parent="Architecture"]
+position = Vector3(2.4, 2.98, -1.315)
+scale = Vector3(0.15, 1.56, 1.03)
+mesh = SubResource("WallMesh")
+
+[node name="FittingDoorAHeader" type="MeshInstance3D" parent="Architecture"]
+position = Vector3(2.4, 2.98, 2.775)
+scale = Vector3(0.15, 1.56, 0.95)
+mesh = SubResource("WallMesh")
+
+[node name="FittingDoorBHeader" type="MeshInstance3D" parent="Architecture"]
+position = Vector3(2.4, 2.98, 4.57)
+scale = Vector3(0.15, 1.56, 0.96)
+mesh = SubResource("WallMesh")
+
 [node name="PartitionChairRailNorth" type="MeshInstance3D" parent="Architecture"]
 position = Vector3(2.29, 1.08, -3.86)
 scale = Vector3(0.05, 0.1, 4.0)
@@ -213,19 +228,28 @@ scale = Vector3(0.05, 0.1, 2.46)
 mesh = SubResource("GreenMesh")
 
 [node name="FittingDoorA" parent="Architecture" instance=ExtResource("31_door")]
-position = Vector3(2.36, 1.2, 2.3)
-rotation = Vector3(0, 0.9, 0)
-scale = Vector3(0.027, 0.027, 0.027)
+position = Vector3(2.36, 0.05, 2.775)
+rotation = Vector3(0, 1.5707964, 0)
+scale = Vector3(0.235, 0.235, 0.235)
+
+[node name="Empty_13" parent="Architecture/FittingDoorA/Sketchfab_model/root/GLTF_SceneRootNode" index="1"]
+rotation = Vector3(0, 1.3, 0)
 
 [node name="FittingDoorB" parent="Architecture" instance=ExtResource("31_door")]
-position = Vector3(2.36, 1.2, 4.1)
-rotation = Vector3(0, 1.02, 0)
-scale = Vector3(0.027, 0.027, 0.027)
+position = Vector3(2.36, 0.05, 4.57)
+rotation = Vector3(0, 1.5707964, 0)
+scale = Vector3(0.235, 0.235, 0.235)
+
+[node name="Empty_13" parent="Architecture/FittingDoorB/Sketchfab_model/root/GLTF_SceneRootNode" index="1"]
+rotation = Vector3(0, 1.3, 0)
 
 [node name="StorageDoor" parent="Architecture" instance=ExtResource("31_door")]
-position = Vector3(2.36, 1.2, -1.8)
-rotation = Vector3(0, 0.74, 0)
-scale = Vector3(0.027, 0.027, 0.027)
+position = Vector3(2.36, 0.05, -1.315)
+rotation = Vector3(0, 1.5707964, 0)
+scale = Vector3(0.235, 0.235, 0.235)
+
+[node name="Empty_13" parent="Architecture/StorageDoor/Sketchfab_model/root/GLTF_SceneRootNode" index="1"]
+rotation = Vector3(0, 1.3, 0)
 
 [node name="FloorCollision" type="CollisionShape3D" parent="."]
 position = Vector3(0, 0, 0)
@@ -559,7 +583,7 @@ rotation = Vector3(0, 0.1, 0)
 scale = Vector3(0.82, 0.82, 0.82)
 
 [node name="StoredHat" parent="Storage" instance=ExtResource("17_hat")]
-position = Vector3(4.03, 0.82, -5.43)
+position = Vector3(5.48, 0.89, -4.7)
 rotation = Vector3(0.05, 0.28, -0.03)
 scale = Vector3(0.8, 0.8, 0.8)
 
@@ -577,6 +601,26 @@ scale = Vector3(0.82, 0.82, 0.82)
 position = Vector3(4.5, 0.82, 1.05)
 rotation = Vector3(0.02, 0.45, -0.02)
 scale = Vector3(0.72, 0.72, 0.72)
+
+[node name="StoredBinoculars" parent="Storage" instance=ExtResource("20_binoculars")]
+position = Vector3(3.55, 1.43, -5.43)
+rotation = Vector3(0.04, -0.55, -0.03)
+scale = Vector3(0.78, 0.78, 0.78)
+
+[node name="StoredLantern" parent="Storage" instance=ExtResource("21_lantern")]
+position = Vector3(5.32, 1.72, -3.93)
+rotation = Vector3(0, 0.24, 0)
+scale = Vector3(0.72, 0.72, 0.72)
+
+[node name="StoredCompass" parent="Storage" instance=ExtResource("24_compass")]
+position = Vector3(4.58, 0.92, -5.43)
+rotation = Vector3(0.02, 0.38, -0.02)
+scale = Vector3(0.82, 0.82, 0.82)
+
+[node name="StoredAxe" parent="Storage" instance=ExtResource("25_axe")]
+position = Vector3(5.72, 0.22, -1.02)
+rotation = Vector3(0.08, 0.16, -1.22)
+scale = Vector3(0.88, 0.88, 0.88)
 
 [node name="Abandonment" type="Node3D" parent="."]
 
@@ -678,6 +722,10 @@ scale = Vector3(0.74, 0.74, 0.74)
 position = Vector3(4.25, 3.86, -2.2)
 rotation = Vector3(0, 1.5707964, 0)
 scale = Vector3(0.88, 0.88, 0.88)
+
+[editable path="Architecture/FittingDoorA"]
+[editable path="Architecture/FittingDoorB"]
+[editable path="Architecture/StorageDoor"]
 
 [node name="SalesLightFront" type="OmniLight3D" parent="Lighting"]
 position = Vector3(-3.45, 3.08, 0)

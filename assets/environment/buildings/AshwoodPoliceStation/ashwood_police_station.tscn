@@ -2109,23 +2109,33 @@ mesh = SubResource("BoxMesh_y6iua")
 shape = SubResource("BoxShape3D_6e1dk")
 
 [node name="ChiefOfficeDoor" type="Node3D" parent="AuthoredEnvironment/MainFloor/Architecture" unique_id=430565317 instance=ExtResource("13_y60so")]
-transform = Transform3D(0.02369473, 0, 0.01294449, 0, 0.027, 0, -0.01294449, 0, 0.02369473, 1.5, 1.2, 5.72)
+position = Vector3(1.5, 0.05, 5.72)
+rotation = Vector3(0, 1.25, 0)
+scale = Vector3(0.235, 0.235, 0.235)
 metadata/source_path = "res://assets/third_party/props/doors/white_door_1.glb"
 
 [node name="InterviewDoor" type="Node3D" parent="AuthoredEnvironment/MainFloor/Architecture" unique_id=1656279073 instance=ExtResource("13_y60so")]
-transform = Transform3D(0.013434419, 0, 0.023420427, 0, 0.027, 0, -0.023420427, 0, 0.013434419, 5.02, 1.2, 2.2)
+position = Vector3(5.02, 0.05, 2.2)
+rotation = Vector3(0, 0.32, 0)
+scale = Vector3(0.235, 0.235, 0.235)
 metadata/source_path = "res://assets/third_party/props/doors/white_door_1.glb"
 
 [node name="EvidenceDoor" type="Node3D" parent="AuthoredEnvironment/MainFloor/Architecture" unique_id=1397488877 instance=ExtResource("13_y60so")]
-transform = Transform3D(0.017203081, 0, 0.02080995, 0, 0.027, 0, -0.02080995, 0, 0.017203081, 5.02, 1.2, 7.3)
+position = Vector3(5.02, 0.05, 7.3)
+rotation = Vector3(0, 0.32, 0)
+scale = Vector3(0.235, 0.235, 0.235)
 metadata/source_path = "res://assets/third_party/props/doors/white_door_1.glb"
 
 [node name="BathroomDoor" type="Node3D" parent="AuthoredEnvironment/MainFloor/Architecture" unique_id=1463303832 instance=ExtResource("13_y60so")]
-transform = Transform3D(0.020994464, 0, -0.01697741, 0, 0.027, 0, 0.01697741, 0, 0.020994464, 3.1, 1.2, 6.08)
+position = Vector3(3.1, 0.05, 6.08)
+rotation = Vector3(0, -1.25, 0)
+scale = Vector3(0.235, 0.235, 0.235)
 metadata/source_path = "res://assets/third_party/props/doors/white_door_1.glb"
 
 [node name="ArmorySecurityDoor" type="Node3D" parent="AuthoredEnvironment/MainFloor/Architecture" unique_id=319565595 instance=ExtResource("13_y60so")]
-transform = Transform3D(0.023431119, 0, -0.013415763, 0, 0.027, 0, 0.013415763, 0, 0.023431119, 7.45, 1.2, -6.22)
+position = Vector3(7.45, 0.05, -6.22)
+rotation = Vector3(0, -1.25, 0)
+scale = Vector3(0.235, 0.235, 0.235)
 metadata/source_path = "res://assets/third_party/props/doors/white_door_1.glb"
 
 [node name="ChiefLabel" type="Label3D" parent="AuthoredEnvironment/MainFloor/Architecture" unique_id=1462543943]

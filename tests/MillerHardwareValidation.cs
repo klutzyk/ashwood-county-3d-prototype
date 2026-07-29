@@ -116,6 +116,11 @@ public partial class MillerHardwareValidation : Node
 		Require(bathroomDoor.SceneFilePath.EndsWith(
 				"/white_door_1.glb", StringComparison.Ordinal),
 			"bathroom uses a full imported textured door");
+		Require(bathroomDoor.Scale.X >= 0.22f &&
+			bathroomDoor.Position.Y <= 0.1f &&
+			interior.HasNode("Architecture/BathroomDoorHeader") &&
+			interior.HasNode("Architecture/WarehouseDoorHeader"),
+			"warehouse and bathroom doorways have grounded full-size leaves and wall headers");
 		Require(interior.HasNode("Bathroom/Toilet") &&
 			interior.HasNode("Bathroom/Sink") &&
 			interior.HasNode("Bathroom/Mirror"),
@@ -304,8 +309,15 @@ public partial class MillerHardwareValidation : Node
 	{
 		DoorController door = miller.GetNode<DoorController>("FrontDoor");
 		Require(IsNear(door.Position.X, -7.11f) &&
-			IsNear(door.Position.Z, -6.65f),
+			IsNear(door.Position.Z, -7.19f),
 			"entrance sits on the required local street facade");
+		CollisionShape3D doorLeaf = door.GetNode<CollisionShape3D>(
+			"Hinge/DoorBody/CollisionShape3D");
+		Require(IsNear(
+				door.Position.Z + doorLeaf.Position.Z,
+				-6.69f,
+				0.04f),
+			"door leaf is centred in the authored storefront opening");
 		Require(door.HasNode("Hinge/DoorBody/DoorModel") &&
 			door.HasNode("Hinge/DoorBody/CollisionShape3D") &&
 			door.HasNode("Interactable"),

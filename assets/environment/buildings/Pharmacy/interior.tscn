@@ -72,10 +72,13 @@ size = Vector3(0.1, 3.4, 2.8)
 size = Vector3(0.1, 3.4, 2.8)
 
 [sub_resource type="BoxShape3D" id="CrossPartitionShape"]
-size = Vector3(1.2, 3.4, 0.1)
+size = Vector3(1.55, 3.4, 0.1)
 
 [sub_resource type="BoxShape3D" id="CrossPartitionShortShape"]
-size = Vector3(1.25, 3.4, 0.1)
+size = Vector3(1.6, 3.4, 0.1)
+
+[sub_resource type="BoxShape3D" id="OfficePartitionSideShape"]
+size = Vector3(0.1, 3.4, 2.55)
 
 [sub_resource type="BoxShape3D" id="ShelfBankShape"]
 size = Vector3(3.7, 2.14, 0.58)
@@ -164,19 +167,39 @@ transform = Transform3D(0.1, 0, 0, 0, 3.4, 0, 0, 0, 2.8, -4.25, 1.7, 4.55)
 mesh = SubResource("MeshTile")
 
 [node name="StorageCrossWallWest" type="MeshInstance3D" parent="Architecture" unique_id=466306667]
-transform = Transform3D(1.2, 0, 0, 0, 3.4, 0, 0, 0, 0.1, -7.9, 1.7, -3.1)
+transform = Transform3D(1.55, 0, 0, 0, 3.4, 0, 0, 0, 0.1, -7.725, 1.7, -3.1)
 mesh = SubResource("MeshWall")
 
 [node name="StorageCrossWallEast" type="MeshInstance3D" parent="Architecture" unique_id=1440164212]
-transform = Transform3D(1.25, 0, 0, 0, 3.4, 0, 0, 0, 0.1, -4.875, 1.7, -3.1)
+transform = Transform3D(1.6, 0, 0, 0, 3.4, 0, 0, 0, 0.1, -5.05, 1.7, -3.1)
 mesh = SubResource("MeshWall")
 
 [node name="BathroomCrossWallWest" type="MeshInstance3D" parent="Architecture" unique_id=835847872]
-transform = Transform3D(1.2, 0, 0, 0, 3.4, 0, 0, 0, 0.1, -7.9, 1.7, 3.1)
+transform = Transform3D(1.55, 0, 0, 0, 3.4, 0, 0, 0, 0.1, -7.725, 1.7, 3.1)
 mesh = SubResource("MeshTile")
 
 [node name="BathroomCrossWallEast" type="MeshInstance3D" parent="Architecture" unique_id=1824261792]
-transform = Transform3D(1.25, 0, 0, 0, 3.4, 0, 0, 0, 0.1, -4.875, 1.7, 3.1)
+transform = Transform3D(1.6, 0, 0, 0, 3.4, 0, 0, 0, 0.1, -5.05, 1.7, 3.1)
+mesh = SubResource("MeshTile")
+
+[node name="StaffOfficeFrontNorth" type="MeshInstance3D" parent="Architecture"]
+transform = Transform3D(0.1, 0, 0, 0, 3.4, 0, 0, 0, 2.55, -4.25, 1.7, -1.825)
+mesh = SubResource("MeshWall")
+
+[node name="StaffOfficeFrontSouth" type="MeshInstance3D" parent="Architecture"]
+transform = Transform3D(0.1, 0, 0, 0, 3.4, 0, 0, 0, 2.55, -4.25, 1.7, 1.825)
+mesh = SubResource("MeshWall")
+
+[node name="StorageDoorHeader" type="MeshInstance3D" parent="Architecture"]
+transform = Transform3D(1.1, 0, 0, 0, 1.2, 0, 0, 0, 0.1, -6.4, 2.8, -3.1)
+mesh = SubResource("MeshWall")
+
+[node name="StaffOfficeDoorHeader" type="MeshInstance3D" parent="Architecture"]
+transform = Transform3D(0.1, 0, 0, 0, 1.2, 0, 0, 0, 1.1, -4.25, 2.8, 0)
+mesh = SubResource("MeshWall")
+
+[node name="RestroomDoorHeader" type="MeshInstance3D" parent="Architecture"]
+transform = Transform3D(1.1, 0, 0, 0, 1.2, 0, 0, 0, 0.1, -6.4, 2.8, 3.1)
 mesh = SubResource("MeshTile")
 
 [node name="BathroomFloor" type="MeshInstance3D" parent="Architecture" unique_id=1517473213]
@@ -184,11 +207,11 @@ transform = Transform3D(4.1, 0, 0, 0, 0.045, 0, 0, 0, 2.75, -6.35, 0.085, 4.55)
 mesh = SubResource("MeshTile")
 
 [node name="BathroomRearTile" type="MeshInstance3D" parent="Architecture" unique_id=1205368176]
-transform = Transform3D(0.04, 0, 0, 0, 1.7, 0, 0, 0, 2.75, -8.42, 0.85, 4.55)
+transform = Transform3D(0.04, 0, 0, 0, 1.7, 0, 0, 0, 2.75, -8.38, 0.85, 4.55)
 mesh = SubResource("MeshTile")
 
 [node name="BathroomSouthTile" type="MeshInstance3D" parent="Architecture" unique_id=1389938510]
-transform = Transform3D(4.1, 0, 0, 0, 1.7, 0, 0, 0, 0.04, -6.35, 0.85, 5.92)
+transform = Transform3D(4.1, 0, 0, 0, 1.7, 0, 0, 0, 0.04, -6.35, 0.85, 5.88)
 mesh = SubResource("MeshTile")
 
 [node name="BathroomMirror" type="MeshInstance3D" parent="Architecture" unique_id=88463734]
@@ -212,10 +235,27 @@ transform = Transform3D(0.05, 0, 0, 0, 0.8, 0, 0, 0, 0.04, -4.27, 1.82, 4.98)
 mesh = SubResource("MeshGreenMetal")
 
 [node name="StorageDoor" parent="Architecture" unique_id=1291202485 instance=ExtResource("36_white_door")]
-transform = Transform3D(0.020298755, 0, -0.017803386, 0, 0.027, 0, 0.017803386, 0, 0.020298755, -6.4, 1.2, -3.07)
+position = Vector3(-6.4, 0.05, -3.07)
+scale = Vector3(0.235, 0.235, 0.235)
+
+[node name="Empty_13" parent="Architecture/StorageDoor/Sketchfab_model/root/GLTF_SceneRootNode" index="1"]
+rotation = Vector3(0, -1.35, 0)
+
+[node name="StaffOfficeDoor" parent="Architecture" instance=ExtResource("36_white_door")]
+position = Vector3(-4.21, 0.05, 0)
+rotation = Vector3(0, 1.5707964, 0)
+scale = Vector3(0.235, 0.235, 0.235)
+
+[node name="Empty_13" parent="Architecture/StaffOfficeDoor/Sketchfab_model/root/GLTF_SceneRootNode" index="1"]
+rotation = Vector3(0, -1.35, 0)
 
 [node name="RestroomDoor" parent="Architecture" unique_id=1923624936 instance=ExtResource("36_white_door")]
-transform = Transform3D(0.027, 0, 0, 0, 0.027, 0, 0, 0, 0.027, -6.4, 1.2, 3.07)
+position = Vector3(-6.4, 0.05, 3.07)
+rotation = Vector3(0, 3.1415927, 0)
+scale = Vector3(0.235, 0.235, 0.235)
+
+[node name="Empty_13" parent="Architecture/RestroomDoor/Sketchfab_model/root/GLTF_SceneRootNode" index="1"]
+rotation = Vector3(0, -1.35, 0)
 
 [node name="FloorCollision" type="CollisionShape3D" parent="." unique_id=429732280]
 position = Vector3(-2.5, 0, 0)
@@ -242,20 +282,28 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.25, 1.7, 4.55)
 shape = SubResource("PartitionBathroomShape")
 
 [node name="StorageCrossWestCollision" type="CollisionShape3D" parent="." unique_id=1304980892]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.9, 1.7, -3.1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.725, 1.7, -3.1)
 shape = SubResource("CrossPartitionShape")
 
 [node name="StorageCrossEastCollision" type="CollisionShape3D" parent="." unique_id=1711616034]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.875, 1.7, -3.1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.05, 1.7, -3.1)
 shape = SubResource("CrossPartitionShortShape")
 
 [node name="BathroomCrossWestCollision" type="CollisionShape3D" parent="." unique_id=748064785]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.9, 1.7, 3.1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.725, 1.7, 3.1)
 shape = SubResource("CrossPartitionShape")
 
 [node name="BathroomCrossEastCollision" type="CollisionShape3D" parent="." unique_id=1168564555]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.875, 1.7, 3.1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.05, 1.7, 3.1)
 shape = SubResource("CrossPartitionShortShape")
+
+[node name="StaffOfficeFrontNorthCollision" type="CollisionShape3D" parent="."]
+position = Vector3(-4.25, 1.7, -1.825)
+shape = SubResource("OfficePartitionSideShape")
+
+[node name="StaffOfficeFrontSouthCollision" type="CollisionShape3D" parent="."]
+position = Vector3(-4.25, 1.7, 1.825)
+shape = SubResource("OfficePartitionSideShape")
 
 [node name="RetailFloor" type="Node3D" parent="." unique_id=865246354]
 
@@ -443,7 +491,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.13, 0.54, -0.2)
 shape = SubResource("CounterShape")
 
 [node name="RxWorkspace" type="Node3D" parent="." unique_id=1722809374]
-position = Vector3(-2.2, 0, 0)
+position = Vector3(-3.15, 0, 0)
 
 [node name="WorkTable" parent="RxWorkspace" unique_id=287817369 instance=ExtResource("22_table")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -2.15, 0, -0.72)
@@ -525,10 +573,10 @@ transform = Transform3D(-6.338151e-08, 0, 1, 0, 1, 0, -1.45, 0, -4.371139e-08, -
 transform = Transform3D(-3.715468e-09, 0, 0.085, 0, 0.085, 0, -0.085, 0, -3.715468e-09, -3.08, 0, -3.08)
 
 [node name="CardboardBoxA" parent="Storage" unique_id=1739489950 instance=ExtResource("32_cardboard")]
-transform = Transform3D(0.96069753, 0.027507596, 0.27623132, -0.019989667, 0.9993502, -0.0299955, -0.2768769, 0.023294829, 0.960623, -1.68, 0.19, -3.84)
+transform = Transform3D(0.96069753, 0.027507596, 0.27623132, -0.019989667, 0.9993502, -0.0299955, -0.2768769, 0.023294829, 0.960623, -0.85, 0.19, -5.0)
 
 [node name="CardboardBoxB" parent="Storage" unique_id=566559610 instance=ExtResource("32_cardboard")]
-transform = Transform3D(0.74853504, -0.01991995, -0.3342131, 0.032776497, 0.8189754, 0.02459631, 0.333198, -0.03581163, 0.748396, -1.9, 0.18, -3.3)
+transform = Transform3D(0.74853504, -0.01991995, -0.3342131, 0.032776497, 0.8189754, 0.02459631, 0.333198, -0.03581163, 0.748396, -1.55, 0.18, -5.15)
 
 [node name="MedicalBox" parent="Storage" unique_id=1789155373 instance=ExtResource("16_medical_box")]
 transform = Transform3D(0.09313981, 0.018386165, 0.6126883, 0, 0.61972106, -0.01859721, -0.6129641, 0.0027937752, 0.09309791, -2.75, 0.55, -3.87)
@@ -695,3 +743,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.35, 2.8, 4.55)
 light_color = Color(0.78, 0.84, 0.9, 1)
 light_energy = 0.18
 omni_range = 2.1
+
+[editable path="Architecture/StorageDoor"]
+[editable path="Architecture/StaffOfficeDoor"]
+[editable path="Architecture/RestroomDoor"]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=69 format=3]
+[gd_scene load_steps=71 format=3]
 
 [ext_resource type="Material" path="res://assets/materials/miller_hardware_floor.tres" id="1_floor"]
 [ext_resource type="Material" path="res://assets/materials/miller_hardware_wall.tres" id="2_wall"]
@@ -8,7 +8,7 @@
 [ext_resource type="Material" path="res://assets/materials/ashwood_bakery_aged_brass.tres" id="6_brass"]
 [ext_resource type="Material" path="res://assets/materials/silver_spoon_blackboard.tres" id="7_blackboard"]
 [ext_resource type="Material" path="res://assets/materials/miller_hardware_glass.tres" id="8_glass"]
-[ext_resource type="Material" path="res://assets/materials/greenleaf_pharmacy_bathroom_tile.tres" id="9_tile"]
+[ext_resource type="Material" path="res://assets/materials/miller_hardware_bathroom_tile.tres" id="9_tile"]
 [ext_resource type="PackedScene" path="res://assets/environment/buildings/MillerHardware/fixtures/miller_gondola_aisle.glb" id="10_gondola"]
 [ext_resource type="PackedScene" path="res://assets/environment/buildings/MillerHardware/fixtures/miller_checkout_counter.glb" id="11_counter"]
 [ext_resource type="PackedScene" path="res://assets/environment/buildings/MillerHardware/fixtures/miller_pegboard_tool_wall.glb" id="12_pegboard"]
@@ -43,6 +43,7 @@
 [ext_resource type="PackedScene" path="res://assets/third_party/interiors/pharmacy/poly_haven/office_notepads/office_notepads_1k.gltf" id="41_notepads"]
 [ext_resource type="PackedScene" path="res://assets/environment/buildings/MillerHardware/fixtures/miller_gondola_fasteners.glb" id="42_gondola_fasteners"]
 [ext_resource type="PackedScene" path="res://assets/environment/buildings/MillerHardware/fixtures/miller_gondola_general.glb" id="43_gondola_general"]
+[ext_resource type="Material" path="res://assets/materials/ashwood_bakery_stainless.tres" id="44_mirror"]
 
 [sub_resource type="BoxMesh" id="FloorMesh"]
 material = ExtResource("1_floor")
@@ -68,6 +69,9 @@ material = ExtResource("7_blackboard")
 [sub_resource type="BoxMesh" id="GlassMesh"]
 material = ExtResource("8_glass")
 
+[sub_resource type="BoxMesh" id="MirrorMesh"]
+material = ExtResource("44_mirror")
+
 [sub_resource type="BoxMesh" id="TileMesh"]
 material = ExtResource("9_tile")
 
@@ -85,6 +89,9 @@ size = Vector3(0.15, 4.18, 2.75)
 
 [sub_resource type="BoxShape3D" id="BathroomDividerShape"]
 size = Vector3(3.30, 4.18, 0.15)
+
+[sub_resource type="BoxShape3D" id="DoorHeaderShape"]
+size = Vector3(0.15, 2.08, 1.30)
 
 [sub_resource type="BoxShape3D" id="AisleShape"]
 size = Vector3(3.82, 2.18, 1.50)
@@ -190,29 +197,45 @@ scale = Vector3(3.30, 4.18, 0.15)
 mesh = SubResource("TileMesh")
 
 [node name="BathroomRearTile" type="MeshInstance3D" parent="Architecture"]
-position = Vector3(6.76, 1.35, 6.82)
-scale = Vector3(0.055, 2.62, 3.82)
+position = Vector3(6.79, 1.35, 6.82)
+scale = Vector3(0.035, 2.62, 3.74)
 mesh = SubResource("TileMesh")
 
 [node name="BathroomSouthTile" type="MeshInstance3D" parent="Architecture"]
-position = Vector3(5.20, 1.35, 8.76)
-scale = Vector3(3.18, 2.62, 0.055)
+position = Vector3(5.20, 1.35, 8.79)
+scale = Vector3(3.10, 2.62, 0.035)
 mesh = SubResource("TileMesh")
 
 [node name="BathroomFrontTile" type="MeshInstance3D" parent="Architecture"]
-position = Vector3(3.64, 1.35, 7.47)
-scale = Vector3(0.055, 2.62, 2.55)
+position = Vector3(3.67, 1.35, 7.47)
+scale = Vector3(0.035, 2.62, 2.47)
+mesh = SubResource("TileMesh")
+
+[node name="WarehouseDoorHeader" type="MeshInstance3D" parent="Architecture"]
+position = Vector3(3.55, 3.14, -4.20)
+scale = Vector3(0.15, 2.08, 1.30)
+mesh = SubResource("WallMesh")
+
+[node name="BathroomDoorHeader" type="MeshInstance3D" parent="Architecture"]
+position = Vector3(3.55, 3.14, 5.45)
+scale = Vector3(0.15, 2.08, 1.30)
 mesh = SubResource("TileMesh")
 
 [node name="WarehouseDoor" parent="Architecture" instance=ExtResource("34_door")]
-position = Vector3(3.48, 1.20, -4.18)
-rotation = Vector3(0, 0.88, 0)
-scale = Vector3(0.027, 0.027, 0.027)
+position = Vector3(3.48, 0.05, -4.18)
+rotation = Vector3(0, 1.5707964, 0)
+scale = Vector3(0.235, 0.235, 0.235)
+
+[node name="Empty_13" parent="Architecture/WarehouseDoor/Sketchfab_model/root/GLTF_SceneRootNode" index="1"]
+rotation = Vector3(0, -1.35, 0)
 
 [node name="BathroomDoor" parent="Architecture" instance=ExtResource("34_door")]
-position = Vector3(3.48, 1.20, 5.42)
-rotation = Vector3(0, 0.82, 0)
-scale = Vector3(0.027, 0.027, 0.027)
+position = Vector3(3.48, 0.05, 5.42)
+rotation = Vector3(0, 1.5707964, 0)
+scale = Vector3(0.235, 0.235, 0.235)
+
+[node name="Empty_13" parent="Architecture/BathroomDoor/Sketchfab_model/root/GLTF_SceneRootNode" index="1"]
+rotation = Vector3(0, -1.35, 0)
 
 [node name="FloorCollision" type="CollisionShape3D" parent="."]
 shape = SubResource("FloorShape")
@@ -232,6 +255,14 @@ shape = SubResource("RearPartitionSouthShape")
 [node name="BathroomDividerCollision" type="CollisionShape3D" parent="."]
 position = Vector3(5.20, 2.09, 4.80)
 shape = SubResource("BathroomDividerShape")
+
+[node name="WarehouseDoorHeaderCollision" type="CollisionShape3D" parent="."]
+position = Vector3(3.55, 3.14, -4.20)
+shape = SubResource("DoorHeaderShape")
+
+[node name="BathroomDoorHeaderCollision" type="CollisionShape3D" parent="."]
+position = Vector3(3.55, 3.14, 5.45)
+shape = SubResource("DoorHeaderShape")
 
 [node name="SalesFloorZones" type="Node3D" parent="."]
 
@@ -691,19 +722,39 @@ transform = Transform3D(0.64, 0, 0, 0, 0.64, 0, 0, 0, 0.64, 4.66, 0.75, -3.16)
 [node name="Bathroom" type="Node3D" parent="."]
 
 [node name="Toilet" parent="Bathroom" instance=ExtResource("36_toilet")]
-position = Vector3(5.72, 0, 7.82)
+position = Vector3(5.72, 0.11, 7.82)
 rotation = Vector3(0, 3.1415927, 0)
-scale = Vector3(0.84, 0.84, 0.84)
+scale = Vector3(1, 1, 1)
 
 [node name="Sink" parent="Bathroom" instance=ExtResource("35_sink")]
-position = Vector3(6.34, 0.88, 5.44)
+position = Vector3(6.34, 1.02, 5.44)
 rotation = Vector3(0, -1.5707964, 0)
-scale = Vector3(0.74, 0.74, 0.74)
+scale = Vector3(1.2, 1.2, 1.2)
 
 [node name="Mirror" type="MeshInstance3D" parent="Bathroom"]
 position = Vector3(6.70, 1.96, 5.48)
-scale = Vector3(0.035, 1.02, 1.18)
-mesh = SubResource("GlassMesh")
+scale = Vector3(0.025, 0.92, 1.05)
+mesh = SubResource("MirrorMesh")
+
+[node name="MirrorFrameTop" type="MeshInstance3D" parent="Bathroom"]
+position = Vector3(6.68, 2.48, 5.48)
+scale = Vector3(0.06, 0.10, 1.27)
+mesh = SubResource("WoodMesh")
+
+[node name="MirrorFrameBottom" type="MeshInstance3D" parent="Bathroom"]
+position = Vector3(6.68, 1.44, 5.48)
+scale = Vector3(0.06, 0.10, 1.27)
+mesh = SubResource("WoodMesh")
+
+[node name="MirrorFrameNorth" type="MeshInstance3D" parent="Bathroom"]
+position = Vector3(6.68, 1.96, 4.90)
+scale = Vector3(0.06, 0.94, 0.11)
+mesh = SubResource("WoodMesh")
+
+[node name="MirrorFrameSouth" type="MeshInstance3D" parent="Bathroom"]
+position = Vector3(6.68, 1.96, 6.06)
+scale = Vector3(0.06, 0.94, 0.11)
+mesh = SubResource("WoodMesh")
 
 [node name="PrivacySign" type="Label3D" parent="Bathroom"]
 position = Vector3(3.42, 1.74, 5.42)

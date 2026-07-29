@@ -330,6 +330,11 @@ World
   - [x] Bakery final full-interior art
   - [x] Pharmacy, diner, outfitters, hardware, grocery, and police enterable
     interiors
+  - [x] Street-facing entrances and forward-only curb, threshold, and basement
+    stair traversal
+  - [x] Full-height back-room and restroom enclosure with usable imported doors
+  - [x] Dense hand-authored apocalypse dressing with licensed detailed props,
+    entrance clear zones, instancing, and distance culling
   - [ ] Bakery loot
   - [ ] Rear service opening and door when the exterior mesh supports one
 - [ ] Replace all placeholder buildings

@@ -1,20 +1,12 @@
-[gd_scene load_steps=25 format=3]
+[gd_scene load_steps=19 format=3]
 
-[ext_resource type="PackedScene" path="res://scenes/world/ashwood/presentation/props/weed_clump.tscn" id="1_weed"]
-[ext_resource type="PackedScene" path="res://scenes/world/ashwood/presentation/props/parking_meter.tscn" id="2_meter"]
-[ext_resource type="PackedScene" path="res://scenes/world/ashwood/presentation/props/newspaper_box.tscn" id="3_news"]
-[ext_resource type="PackedScene" path="res://scenes/world/ashwood/presentation/props/dumpster.tscn" id="4_dumpster"]
-[ext_resource type="PackedScene" path="res://scenes/world/ashwood/presentation/props/bike_rack.tscn" id="5_rack"]
 [ext_resource type="PackedScene" path="res://assets/environment/roads/utility_pole.tscn" id="6_pole"]
 [ext_resource type="PackedScene" path="res://assets/environment/props/barrel_crate.tscn" id="8_crates"]
 [ext_resource type="PackedScene" path="res://assets/environment/vehicles/old_tyre.tscn" id="9_tyre"]
-
-[sub_resource type="StandardMaterial3D" id="PatchMaterial"]
-albedo_color = Color(0.105, 0.105, 0.095, 1)
-roughness = 0.97
+[ext_resource type="Material" path="res://assets/materials/ashwood_main_street_asphalt_patch.tres" id="10_patch_material"]
 
 [sub_resource type="CylinderMesh" id="PatchMesh"]
-material = SubResource("PatchMaterial")
+material = ExtResource("10_patch_material")
 top_radius = 0.5
 bottom_radius = 0.5
 height = 0.02
@@ -38,13 +30,6 @@ bottom_radius = 1.0
 height = 0.012
 radial_segments = 18
 
-[sub_resource type="StandardMaterial3D" id="ConcretePatchMaterial"]
-albedo_color = Color(0.34, 0.33, 0.3, 1)
-roughness = 1.0
-
-[sub_resource type="BoxMesh" id="ConcretePatchMesh"]
-material = SubResource("ConcretePatchMaterial")
-
 [sub_resource type="StandardMaterial3D" id="GrateMaterial"]
 albedo_color = Color(0.075, 0.068, 0.055, 1)
 metallic = 0.68
@@ -52,24 +37,6 @@ roughness = 0.76
 
 [sub_resource type="BoxMesh" id="GrateMesh"]
 material = SubResource("GrateMaterial")
-
-[sub_resource type="StandardMaterial3D" id="PaperMaterial"]
-albedo_color = Color(0.68, 0.64, 0.53, 1)
-roughness = 0.96
-
-[sub_resource type="BoxMesh" id="PaperMesh"]
-material = SubResource("PaperMaterial")
-
-[sub_resource type="StandardMaterial3D" id="LeafMaterial"]
-albedo_color = Color(0.29, 0.13, 0.045, 1)
-roughness = 1.0
-
-[sub_resource type="CylinderMesh" id="LeafMesh"]
-material = SubResource("LeafMaterial")
-top_radius = 0.16
-bottom_radius = 0.16
-height = 0.012
-radial_segments = 7
 
 [sub_resource type="StandardMaterial3D" id="CableMaterial"]
 albedo_color = Color(0.018, 0.018, 0.016, 1)
@@ -81,18 +48,6 @@ top_radius = 0.018
 bottom_radius = 0.018
 height = 1.0
 radial_segments = 6
-
-[sub_resource type="StandardMaterial3D" id="TransformerMaterial"]
-albedo_color = Color(0.25, 0.28, 0.22, 1)
-metallic = 0.56
-roughness = 0.66
-
-[sub_resource type="CylinderMesh" id="TransformerMesh"]
-material = SubResource("TransformerMaterial")
-top_radius = 0.34
-bottom_radius = 0.34
-height = 0.78
-radial_segments = 12
 
 [sub_resource type="StandardMaterial3D" id="SignMetal"]
 albedo_color = Color(0.09, 0.13, 0.11, 1)
@@ -240,48 +195,6 @@ mesh = SubResource("CrackMesh")
 
 [node name="SidewalkWear" type="Node3D" parent="."]
 
-[node name="NorthPatch01" type="MeshInstance3D" parent="SidewalkWear"]
-position = Vector3(-84, 0.212, -7.28)
-rotation = Vector3(0, 0.06, 0)
-scale = Vector3(4.8, 0.025, 2.35)
-cast_shadow = 0
-mesh = SubResource("ConcretePatchMesh")
-
-[node name="NorthPatch02" type="MeshInstance3D" parent="SidewalkWear"]
-position = Vector3(-24, 0.212, -7.3)
-rotation = Vector3(0, -0.08, 0)
-scale = Vector3(5.5, 0.025, 2.45)
-cast_shadow = 0
-mesh = SubResource("ConcretePatchMesh")
-
-[node name="NorthPatch03" type="MeshInstance3D" parent="SidewalkWear"]
-position = Vector3(38, 0.212, -7.32)
-rotation = Vector3(0, 0.04, 0)
-scale = Vector3(4.2, 0.025, 2.4)
-cast_shadow = 0
-mesh = SubResource("ConcretePatchMesh")
-
-[node name="SouthPatch01" type="MeshInstance3D" parent="SidewalkWear"]
-position = Vector3(-51, 0.212, 7.3)
-rotation = Vector3(0, -0.05, 0)
-scale = Vector3(5.2, 0.025, 2.4)
-cast_shadow = 0
-mesh = SubResource("ConcretePatchMesh")
-
-[node name="SouthPatch02" type="MeshInstance3D" parent="SidewalkWear"]
-position = Vector3(7, 0.212, 7.3)
-rotation = Vector3(0, 0.07, 0)
-scale = Vector3(4.6, 0.025, 2.45)
-cast_shadow = 0
-mesh = SubResource("ConcretePatchMesh")
-
-[node name="SouthPatch03" type="MeshInstance3D" parent="SidewalkWear"]
-position = Vector3(72, 0.212, 7.28)
-rotation = Vector3(0, -0.06, 0)
-scale = Vector3(5.8, 0.025, 2.38)
-cast_shadow = 0
-mesh = SubResource("ConcretePatchMesh")
-
 [node name="NorthCrack01" type="MeshInstance3D" parent="SidewalkWear"]
 position = Vector3(-61, 0.226, -7.25)
 rotation = Vector3(0, 0.58, 0)
@@ -363,188 +276,6 @@ cast_shadow = 0
 mesh = SubResource("GrateMesh")
 
 [node name="ReclaimingVegetation" type="Node3D" parent="."]
-
-[node name="North01" parent="ReclaimingVegetation" instance=ExtResource("1_weed")]
-position = Vector3(-98, 0.21, -5.82)
-rotation = Vector3(0, 0.32, 0)
-scale = Vector3(0.8, 0.8, 0.8)
-
-[node name="North02" parent="ReclaimingVegetation" instance=ExtResource("1_weed")]
-position = Vector3(-83, 0.21, -5.83)
-rotation = Vector3(0, 1.1, 0)
-
-[node name="North03" parent="ReclaimingVegetation" instance=ExtResource("1_weed")]
-position = Vector3(-68, 0.21, -8.65)
-rotation = Vector3(0, 2.4, 0)
-scale = Vector3(0.72, 0.72, 0.72)
-
-[node name="North04" parent="ReclaimingVegetation" instance=ExtResource("1_weed")]
-position = Vector3(-53, 0.21, -5.82)
-rotation = Vector3(0, 0.8, 0)
-scale = Vector3(1.25, 1.25, 1.25)
-
-[node name="North05" parent="ReclaimingVegetation" instance=ExtResource("1_weed")]
-position = Vector3(-38, 0.21, -8.7)
-rotation = Vector3(0, 1.7, 0)
-
-[node name="North06" parent="ReclaimingVegetation" instance=ExtResource("1_weed")]
-position = Vector3(-22, 0.21, -5.82)
-rotation = Vector3(0, 2.8, 0)
-scale = Vector3(0.7, 0.7, 0.7)
-
-[node name="North07" parent="ReclaimingVegetation" instance=ExtResource("1_weed")]
-position = Vector3(-4, 0.21, -8.62)
-rotation = Vector3(0, 0.45, 0)
-scale = Vector3(1.2, 1.2, 1.2)
-
-[node name="North08" parent="ReclaimingVegetation" instance=ExtResource("1_weed")]
-position = Vector3(17, 0.21, -5.82)
-rotation = Vector3(0, 2.1, 0)
-
-[node name="North09" parent="ReclaimingVegetation" instance=ExtResource("1_weed")]
-position = Vector3(37, 0.21, -8.67)
-rotation = Vector3(0, 1.35, 0)
-scale = Vector3(0.78, 0.78, 0.78)
-
-[node name="North10" parent="ReclaimingVegetation" instance=ExtResource("1_weed")]
-position = Vector3(54, 0.21, -5.82)
-rotation = Vector3(0, 2.7, 0)
-scale = Vector3(1.18, 1.18, 1.18)
-
-[node name="North11" parent="ReclaimingVegetation" instance=ExtResource("1_weed")]
-position = Vector3(73, 0.21, -8.68)
-rotation = Vector3(0, 0.2, 0)
-
-[node name="North12" parent="ReclaimingVegetation" instance=ExtResource("1_weed")]
-position = Vector3(93, 0.21, -5.82)
-rotation = Vector3(0, 1.9, 0)
-scale = Vector3(0.82, 0.82, 0.82)
-
-[node name="South01" parent="ReclaimingVegetation" instance=ExtResource("1_weed")]
-position = Vector3(-95, 0.21, 5.82)
-rotation = Vector3(0, 2.8, 0)
-
-[node name="South02" parent="ReclaimingVegetation" instance=ExtResource("1_weed")]
-position = Vector3(-79, 0.21, 8.66)
-rotation = Vector3(0, 1.3, 0)
-scale = Vector3(0.72, 0.72, 0.72)
-
-[node name="South03" parent="ReclaimingVegetation" instance=ExtResource("1_weed")]
-position = Vector3(-62, 0.21, 5.82)
-rotation = Vector3(0, 0.5, 0)
-scale = Vector3(1.2, 1.2, 1.2)
-
-[node name="South04" parent="ReclaimingVegetation" instance=ExtResource("1_weed")]
-position = Vector3(-44, 0.21, 8.67)
-rotation = Vector3(0, 2.1, 0)
-
-[node name="South05" parent="ReclaimingVegetation" instance=ExtResource("1_weed")]
-position = Vector3(-29, 0.21, 5.82)
-rotation = Vector3(0, 1.0, 0)
-scale = Vector3(0.8, 0.8, 0.8)
-
-[node name="South06" parent="ReclaimingVegetation" instance=ExtResource("1_weed")]
-position = Vector3(-10, 0.21, 8.68)
-rotation = Vector3(0, 2.6, 0)
-scale = Vector3(1.16, 1.16, 1.16)
-
-[node name="South07" parent="ReclaimingVegetation" instance=ExtResource("1_weed")]
-position = Vector3(9, 0.21, 5.82)
-rotation = Vector3(0, 0.15, 0)
-
-[node name="South08" parent="ReclaimingVegetation" instance=ExtResource("1_weed")]
-position = Vector3(27, 0.21, 8.66)
-rotation = Vector3(0, 1.8, 0)
-scale = Vector3(0.74, 0.74, 0.74)
-
-[node name="South09" parent="ReclaimingVegetation" instance=ExtResource("1_weed")]
-position = Vector3(45, 0.21, 5.82)
-rotation = Vector3(0, 2.4, 0)
-scale = Vector3(1.25, 1.25, 1.25)
-
-[node name="South10" parent="ReclaimingVegetation" instance=ExtResource("1_weed")]
-position = Vector3(63, 0.21, 8.68)
-rotation = Vector3(0, 0.7, 0)
-
-[node name="South11" parent="ReclaimingVegetation" instance=ExtResource("1_weed")]
-position = Vector3(82, 0.21, 5.82)
-rotation = Vector3(0, 1.55, 0)
-scale = Vector3(0.82, 0.82, 0.82)
-
-[node name="South12" parent="ReclaimingVegetation" instance=ExtResource("1_weed")]
-position = Vector3(98, 0.21, 8.64)
-rotation = Vector3(0, 2.9, 0)
-scale = Vector3(1.12, 1.12, 1.12)
-
-[node name="StreetFurniture" type="Node3D" parent="."]
-
-[node name="MeterNorth01" parent="StreetFurniture" instance=ExtResource("2_meter")]
-position = Vector3(-88, 0.2, -5.78)
-
-[node name="MeterNorth02" parent="StreetFurniture" instance=ExtResource("2_meter")]
-position = Vector3(-42, 0.2, -5.78)
-
-[node name="MeterNorth03" parent="StreetFurniture" instance=ExtResource("2_meter")]
-position = Vector3(-13, 0.2, -5.78)
-
-[node name="MeterNorth04" parent="StreetFurniture" instance=ExtResource("2_meter")]
-position = Vector3(21, 0.2, -5.78)
-
-[node name="MeterNorth05" parent="StreetFurniture" instance=ExtResource("2_meter")]
-position = Vector3(51, 0.2, -5.78)
-
-[node name="MeterNorth06" parent="StreetFurniture" instance=ExtResource("2_meter")]
-position = Vector3(84, 0.2, -5.78)
-
-[node name="MeterSouth01" parent="StreetFurniture" instance=ExtResource("2_meter")]
-position = Vector3(-74, 0.2, 5.78)
-rotation = Vector3(0, 3.1415927, 0)
-
-[node name="MeterSouth02" parent="StreetFurniture" instance=ExtResource("2_meter")]
-position = Vector3(-49, 0.2, 5.78)
-rotation = Vector3(0, 3.1415927, 0)
-
-[node name="MeterSouth03" parent="StreetFurniture" instance=ExtResource("2_meter")]
-position = Vector3(-20, 0.2, 5.78)
-rotation = Vector3(0, 3.1415927, 0)
-
-[node name="MeterSouth04" parent="StreetFurniture" instance=ExtResource("2_meter")]
-position = Vector3(29, 0.2, 5.78)
-rotation = Vector3(0, 3.1415927, 0)
-
-[node name="MeterSouth05" parent="StreetFurniture" instance=ExtResource("2_meter")]
-position = Vector3(58, 0.2, 5.78)
-rotation = Vector3(0, 3.1415927, 0)
-
-[node name="MeterSouth06" parent="StreetFurniture" instance=ExtResource("2_meter")]
-position = Vector3(92, 0.2, 5.78)
-rotation = Vector3(0, 3.1415927, 0)
-
-[node name="GazetteBakery" parent="StreetFurniture" instance=ExtResource("3_news")]
-position = Vector3(-64.2, 0.2, -7.6)
-rotation = Vector3(0, 0.08, 0)
-
-[node name="GazetteBookstore" parent="StreetFurniture" instance=ExtResource("3_news")]
-position = Vector3(-36.5, 0.2, -7.75)
-rotation = Vector3(0, -0.08, 0)
-scale = Vector3(0.92, 0.92, 0.92)
-
-[node name="GazetteBank" parent="StreetFurniture" instance=ExtResource("3_news")]
-position = Vector3(18.5, 0.2, 7.7)
-rotation = Vector3(0, 3.08, 0)
-
-[node name="GazetteDiner" parent="StreetFurniture" instance=ExtResource("3_news")]
-position = Vector3(61.5, 0.2, 7.72)
-rotation = Vector3(0, 3.22, 0)
-scale = Vector3(0.95, 0.95, 0.95)
-
-[node name="BookstoreRack" parent="StreetFurniture" instance=ExtResource("5_rack")]
-position = Vector3(-32.5, 0.2, -7.5)
-rotation = Vector3(0, 1.5707963, 0)
-
-[node name="BankRack" parent="StreetFurniture" instance=ExtResource("5_rack")]
-position = Vector3(22.5, 0.2, 7.52)
-rotation = Vector3(0, 1.5707963, 0)
 
 [node name="UtilityInfrastructure" type="Node3D" parent="."]
 
@@ -632,20 +363,10 @@ rotation = Vector3(0, 0, 1.5707963)
 scale = Vector3(1, 41, 1)
 mesh = SubResource("CableMesh")
 
-[node name="TransformerWest" type="MeshInstance3D" parent="UtilityInfrastructure"]
-position = Vector3(-62, 5.82, -10.7)
-rotation = Vector3(1.5707963, 0, 0)
-mesh = SubResource("TransformerMesh")
-
-[node name="TransformerEast" type="MeshInstance3D" parent="UtilityInfrastructure"]
-position = Vector3(61, 5.82, -10.7)
-rotation = Vector3(1.5707963, 0, 0)
-mesh = SubResource("TransformerMesh")
-
 [node name="StreetStoryClusters" type="Node3D" parent="."]
 
 [node name="BakeryTyre" parent="StreetStoryClusters" instance=ExtResource("9_tyre")]
-position = Vector3(-54.5, 0.22, -6.45)
+position = Vector3(-54.5, 0.48, -6.45)
 rotation = Vector3(0.1, 0.55, 1.36)
 scale = Vector3(0.76, 0.76, 0.76)
 
@@ -653,142 +374,6 @@ scale = Vector3(0.76, 0.76, 0.76)
 position = Vector3(85.5, 0.2, 5.85)
 rotation = Vector3(0, -0.2, 0)
 scale = Vector3(0.8, 0.8, 0.8)
-
-[node name="DinerDumpster" parent="StreetStoryClusters" instance=ExtResource("4_dumpster")]
-position = Vector3(70.8, 0.2, 10.1)
-rotation = Vector3(0, 2.96, 0)
-
-[node name="WestAlleyDumpster" parent="StreetStoryClusters" instance=ExtResource("4_dumpster")]
-position = Vector3(-71.5, 0.2, -10.2)
-rotation = Vector3(0, 0.16, 0)
-scale = Vector3(0.92, 0.92, 0.92)
-
-[node name="Litter" type="Node3D" parent="."]
-
-[node name="Paper01" type="MeshInstance3D" parent="Litter"]
-position = Vector3(-64.8, 0.235, -7.1)
-rotation = Vector3(0.03, 0.38, -0.02)
-scale = Vector3(0.42, 0.012, 0.28)
-cast_shadow = 0
-mesh = SubResource("PaperMesh")
-
-[node name="Paper02" type="MeshInstance3D" parent="Litter"]
-position = Vector3(-58.4, 0.235, -6.4)
-rotation = Vector3(-0.02, -0.66, 0.03)
-scale = Vector3(0.32, 0.012, 0.24)
-cast_shadow = 0
-mesh = SubResource("PaperMesh")
-
-[node name="Paper03" type="MeshInstance3D" parent="Litter"]
-position = Vector3(-37.8, 0.235, -7.65)
-rotation = Vector3(0.02, 0.82, 0)
-scale = Vector3(0.48, 0.012, 0.3)
-cast_shadow = 0
-mesh = SubResource("PaperMesh")
-
-[node name="Paper04" type="MeshInstance3D" parent="Litter"]
-position = Vector3(-15.5, 0.235, 7.25)
-rotation = Vector3(-0.03, -0.31, 0.02)
-scale = Vector3(0.38, 0.012, 0.26)
-cast_shadow = 0
-mesh = SubResource("PaperMesh")
-
-[node name="Paper05" type="MeshInstance3D" parent="Litter"]
-position = Vector3(8.5, 0.235, -6.8)
-rotation = Vector3(0.04, 0.55, -0.02)
-scale = Vector3(0.45, 0.012, 0.31)
-cast_shadow = 0
-mesh = SubResource("PaperMesh")
-
-[node name="Paper06" type="MeshInstance3D" parent="Litter"]
-position = Vector3(32.2, 0.235, 7.75)
-rotation = Vector3(-0.02, -0.74, 0.01)
-scale = Vector3(0.34, 0.012, 0.25)
-cast_shadow = 0
-mesh = SubResource("PaperMesh")
-
-[node name="Paper07" type="MeshInstance3D" parent="Litter"]
-position = Vector3(56.4, 0.235, -7.0)
-rotation = Vector3(0.03, 0.24, 0.02)
-scale = Vector3(0.5, 0.012, 0.3)
-cast_shadow = 0
-mesh = SubResource("PaperMesh")
-
-[node name="Paper08" type="MeshInstance3D" parent="Litter"]
-position = Vector3(87.8, 0.235, 6.7)
-rotation = Vector3(-0.04, -0.48, 0)
-scale = Vector3(0.4, 0.012, 0.29)
-cast_shadow = 0
-mesh = SubResource("PaperMesh")
-
-[node name="LeavesWest" type="Node3D" parent="Litter"]
-
-[node name="Leaf01" type="MeshInstance3D" parent="Litter/LeavesWest"]
-position = Vector3(-81.2, 0.13, -5.7)
-rotation = Vector3(0, 0.4, 0)
-scale = Vector3(1.4, 1, 0.65)
-cast_shadow = 0
-mesh = SubResource("LeafMesh")
-
-[node name="Leaf02" type="MeshInstance3D" parent="Litter/LeavesWest"]
-position = Vector3(-80.8, 0.131, -5.54)
-rotation = Vector3(0, -0.8, 0)
-scale = Vector3(1.1, 1, 0.72)
-cast_shadow = 0
-mesh = SubResource("LeafMesh")
-
-[node name="Leaf03" type="MeshInstance3D" parent="Litter/LeavesWest"]
-position = Vector3(-80.5, 0.132, -5.74)
-rotation = Vector3(0, 1.2, 0)
-scale = Vector3(0.9, 1, 0.55)
-cast_shadow = 0
-mesh = SubResource("LeafMesh")
-
-[node name="LeavesCentre" type="Node3D" parent="Litter"]
-
-[node name="Leaf01" type="MeshInstance3D" parent="Litter/LeavesCentre"]
-position = Vector3(4.1, 0.13, 5.72)
-rotation = Vector3(0, 0.7, 0)
-scale = Vector3(1.3, 1, 0.65)
-cast_shadow = 0
-mesh = SubResource("LeafMesh")
-
-[node name="Leaf02" type="MeshInstance3D" parent="Litter/LeavesCentre"]
-position = Vector3(4.45, 0.131, 5.56)
-rotation = Vector3(0, -0.5, 0)
-scale = Vector3(0.95, 1, 0.7)
-cast_shadow = 0
-mesh = SubResource("LeafMesh")
-
-[node name="Leaf03" type="MeshInstance3D" parent="Litter/LeavesCentre"]
-position = Vector3(4.75, 0.132, 5.75)
-rotation = Vector3(0, 1.5, 0)
-scale = Vector3(1.05, 1, 0.58)
-cast_shadow = 0
-mesh = SubResource("LeafMesh")
-
-[node name="LeavesEast" type="Node3D" parent="Litter"]
-
-[node name="Leaf01" type="MeshInstance3D" parent="Litter/LeavesEast"]
-position = Vector3(76.2, 0.13, -5.72)
-rotation = Vector3(0, -0.4, 0)
-scale = Vector3(1.35, 1, 0.62)
-cast_shadow = 0
-mesh = SubResource("LeafMesh")
-
-[node name="Leaf02" type="MeshInstance3D" parent="Litter/LeavesEast"]
-position = Vector3(76.55, 0.131, -5.55)
-rotation = Vector3(0, 0.9, 0)
-scale = Vector3(1.0, 1, 0.73)
-cast_shadow = 0
-mesh = SubResource("LeafMesh")
-
-[node name="Leaf03" type="MeshInstance3D" parent="Litter/LeavesEast"]
-position = Vector3(76.9, 0.132, -5.73)
-rotation = Vector3(0, -1.3, 0)
-scale = Vector3(0.9, 1, 0.55)
-cast_shadow = 0
-mesh = SubResource("LeafMesh")
 
 [node name="StreetSigns" type="Node3D" parent="."]
 

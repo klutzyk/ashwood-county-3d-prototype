@@ -39,8 +39,11 @@ public partial class MainStreetArtPassValidation : Node
 	private static void ValidateEnvironmentSeparation(Node3D world)
 	{
 		Node abandonment = world.GetNode("Environment/Abandonment");
+		Node dressing = world.GetNode("Environment/ApocalypseDressing");
 		Require(abandonment.GetParent() == world.GetNode("Environment"),
-			"art pass remains isolated under the environment hierarchy");
+			"legacy surface treatment remains isolated under the environment hierarchy");
+		Require(dressing.GetParent() == world.GetNode("Environment"),
+			"dense apocalypse dressing is integrated under the environment hierarchy");
 		Require(world.HasNode("Gameplay/Player") &&
 			world.GetNode("Gameplay/Zombies").GetChildCount() == 2,
 			"player and zombie composition remains unchanged");
@@ -53,12 +56,14 @@ public partial class MainStreetArtPassValidation : Node
 		Node art = world.GetNode("Environment/Abandonment");
 		Require(art.GetNode("RoadWear").GetChildCount() >= 17,
 			"road has layered patches, cracks, and oil staining");
-		Require(art.GetNode("SidewalkWear").GetChildCount() >= 12,
-			"sidewalks have authored repairs and cracking");
+		Require(art.GetNode("SidewalkWear").GetChildCount() >= 6,
+			"sidewalks retain subtle authored cracking without flat patch slabs");
 		Require(art.GetNode("Drainage").GetChildCount() == 6,
 			"both curbs have repeated drainage grates");
-		Require(art.GetNode("ReclaimingVegetation").GetChildCount() >= 24,
-			"weeds reclaim curb and storefront seams along the full walk");
+
+		Node dressing = world.GetNode("Environment/ApocalypseDressing");
+		Require(dressing.GetNode("VegetationReclaim").GetChildCount() >= 64,
+			"imported vegetation reclaims curb and storefront seams along the full walk");
 
 		StandardMaterial3D asphalt = GD.Load<StandardMaterial3D>(
 			"res://assets/materials/ashwood_main_street_asphalt.tres");
@@ -69,28 +74,25 @@ public partial class MainStreetArtPassValidation : Node
 	private static void ValidateStreetLife(Node3D world)
 	{
 		Node art = world.GetNode("Environment/Abandonment");
-		Node furniture = art.GetNode("StreetFurniture");
-		Require(furniture.FindChildren("Meter*", string.Empty, false, false).Count == 12,
-			"parking meters cover both sides without filling every bay");
-		Require(furniture.FindChildren("Gazette*", string.Empty, false, false).Count == 4,
-			"newspaper boxes anchor distinct business clusters");
-		Require(furniture.FindChildren("*Rack", string.Empty, false, false).Count == 2,
-			"bike racks support the walkable downtown character");
-
 		Node utilities = art.GetNode("UtilityInfrastructure");
 		Require(utilities.FindChildren("Pole*", string.Empty, false, false).Count == 6,
 			"utility poles frame the full street");
 		Require(utilities.FindChildren("Wire*", string.Empty, false, false).Count == 10,
 			"two restrained power runs connect every pole");
-		Require(utilities.FindChildren("Transformer*", string.Empty, false, false).Count == 2,
-			"pole-mounted transformers break repetition");
 
 		Node stories = art.GetNode("StreetStoryClusters");
-		Require(stories.HasNode("DeliveryCrates") && stories.HasNode("DinerDumpster") &&
-			stories.HasNode("WestAlleyDumpster") && stories.HasNode("BakeryTyre"),
-			"delivery, service-alley, and roadside abandonment clusters are distinct");
-		Require(art.GetNode("Litter").GetChildCount() >= 11,
-			"litter and leaf accumulation is authored in local clusters");
+		Require(stories.HasNode("DeliveryCrates") && stories.HasNode("BakeryTyre"),
+			"retained imported roadside props remain distinct");
+
+		Node dressing = world.GetNode("Environment/ApocalypseDressing");
+		Require(dressing.GetNode("RefuseDebris").GetChildCount() >= 52,
+			"imported refuse and debris form varied sidewalk clusters");
+		Require(dressing.GetNode("ServiceClutter").GetChildCount() >= 30,
+			"service clutter spans both storefront rows");
+		Require(dressing.GetNode("DamagedStreetFurniture").GetChildCount() >= 12,
+			"detailed street furniture adds human-scale history");
+		Require(dressing.GetNode("StoryClusters").GetChildCount() >= 16,
+			"hand-authored apocalypse vignettes anchor both street ends");
 	}
 
 	private static void ValidateCommercialIdentity(Node3D world)
@@ -102,10 +104,15 @@ public partial class MainStreetArtPassValidation : Node
 			"NorthBookstore",
 			"NorthAttorney",
 			"NorthInsurance",
+			"NorthGrocery",
+			"NorthPharmacy",
 			"SouthFlorist",
 			"SouthBarber",
 			"SouthMusicStore",
+			"SouthSportingGoods",
+			"SouthMillerHardware",
 			"SouthDiner",
+			"SouthPoliceStation",
 		};
 		foreach (string business in requiredBusinesses)
 			Require(storefronts.HasNode(business), $"{business} has a unique storefront");
@@ -129,18 +136,20 @@ public partial class MainStreetArtPassValidation : Node
 
 	private static void ValidatePerformanceIntent(Node3D world)
 	{
-		Node art = world.GetNode("Environment/Abandonment");
-		Node firstWeed = art.GetNode("ReclaimingVegetation/North01");
-		IEnumerable<GeometryInstance3D> weedGeometry =
-			firstWeed.FindChildren("*", string.Empty, true, false)
-				.OfType<GeometryInstance3D>();
-		Require(weedGeometry.All(geometry => geometry.VisibilityRangeEnd > 0.0f),
-			"small reclaiming vegetation uses distance culling");
+		Node dressing = world.GetNode("Environment/ApocalypseDressing");
+		GeometryInstance3D[] geometry = dressing
+			.FindChildren("*", string.Empty, true, false)
+			.OfType<GeometryInstance3D>()
+			.ToArray();
+		Require(geometry.Length >= 170,
+			"integrated apocalypse dressing instantiates dense visible geometry");
+		Require(geometry.All(instance => instance.VisibilityRangeEnd > 0.0f),
+			"all dense imported dressing uses distance culling");
 
-		int collisionBodies = art.FindChildren("*", string.Empty, true, false)
+		int collisionBodies = dressing.FindChildren("*", string.Empty, true, false)
 			.Count(node => node is CollisionObject3D);
-		Require(collisionBodies >= 20 && collisionBodies <= 30,
-			"only substantial street props receive simple collision");
+		Require(collisionBodies <= 24,
+			"only substantial sidewalk props retain simple collision");
 	}
 
 	private static void Require(bool condition, string message)

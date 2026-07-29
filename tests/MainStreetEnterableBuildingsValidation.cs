@@ -52,6 +52,10 @@ public partial class MainStreetEnterableBuildingsValidation : Node
 			"/AshwoodGrocery/ashwood_grocery.tscn");
 		RequireScene(
 			storefronts,
+			"SouthSportingGoods",
+			"/WillowOutfitters/willow_outfitters.tscn");
+		RequireScene(
+			storefronts,
 			"SouthMillerHardware",
 			"/MillerHardware/miller_hardware.tscn");
 		RequireScene(
@@ -63,6 +67,7 @@ public partial class MainStreetEnterableBuildingsValidation : Node
 		{
 			"NorthGrocery",
 			"NorthPharmacy",
+			"SouthSportingGoods",
 			"SouthMillerHardware",
 			"SouthDiner",
 			"SouthPoliceStation",
@@ -100,6 +105,11 @@ public partial class MainStreetEnterableBuildingsValidation : Node
 			-8.4f,
 			"Greenleaf Pharmacy");
 		AssertEntranceBand(
+			storefronts.GetNode<Node3D>("SouthSportingGoods/FrontDoor"),
+			8.4f,
+			10.0f,
+			"Willow Outfitters");
+		AssertEntranceBand(
 			storefronts.GetNode<Node3D>("SouthMillerHardware/FrontDoor"),
 			8.4f,
 			10.0f,
@@ -115,6 +125,31 @@ public partial class MainStreetEnterableBuildingsValidation : Node
 			8.4f,
 			10.0f,
 			"Ashwood Police Station");
+
+		AssertFacadeDirection(
+			storefronts.GetNode<Node3D>("NorthGrocery"),
+			Vector3.Left,
+			Vector3.Back,
+			"Ashwood Grocery");
+		AssertFacadeDirection(
+			storefronts.GetNode<Node3D>("NorthPharmacy"),
+			Vector3.Right,
+			Vector3.Back,
+			"Greenleaf Pharmacy");
+		foreach (string path in new[]
+		{
+			"SouthSportingGoods",
+			"SouthMillerHardware",
+			"SouthDiner",
+			"SouthPoliceStation",
+		})
+		{
+			AssertFacadeDirection(
+				storefronts.GetNode<Node3D>(path),
+				Vector3.Left,
+				Vector3.Forward,
+				path);
+		}
 	}
 
 	private static void AssertEntranceBand(
@@ -126,6 +161,17 @@ public partial class MainStreetEnterableBuildingsValidation : Node
 		Require(entrance.GlobalPosition.Z >= minimumZ &&
 			entrance.GlobalPosition.Z <= maximumZ,
 			$"{buildingName} entrance faces and meets the Main Street sidewalk");
+	}
+
+	private static void AssertFacadeDirection(
+		Node3D building,
+		Vector3 localOutward,
+		Vector3 expectedWorldOutward,
+		string buildingName)
+	{
+		Vector3 worldOutward = (building.GlobalBasis * localOutward).Normalized();
+		Require(worldOutward.Dot(expectedWorldOutward) >= 0.99f,
+			$"{buildingName} facade points toward the road, not the back lot");
 	}
 
 	private static void ValidateObsoleteFacadesRemoved(Node3D presentation)

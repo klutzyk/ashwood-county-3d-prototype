@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/third_party/environment/main_street_dressing/poly_haven/painted_wooden_bench/painted_wooden_bench_1k.gltf" id="1_bench"]
+
+[sub_resource type="BoxShape3D" id="Collision"]
+size = Vector3(1.16, 0.89, 0.5)
+
+[node name="ApocalypseParkBench" type="StaticBody3D"]
+
+[node name="Visual" parent="." instance=ExtResource("1_bench")]
+
+[node name="painted_wooden_bench" parent="Visual" index="0"]
+visibility_range_end = 92.0
+visibility_range_end_margin = 8.0
+
+[node name="Collision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.445, 0)
+shape = SubResource("Collision")
+
+[editable path="Visual"]

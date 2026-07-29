@@ -107,6 +107,19 @@ public partial class WillowOutfittersValidation : Node
 		Require(interior.GetNode("FittingRooms").GetChildCount() >= 4 &&
 			interior.GetNode("Storage").GetChildCount() >= 8,
 			"both rear fitting rooms and the stock room are fully dressed");
+		Require(interior.HasNode("Storage/StoredBinoculars") &&
+			interior.HasNode("Storage/StoredLantern") &&
+			interior.HasNode("Storage/StoredCompass") &&
+			interior.HasNode("Storage/StoredAxe"),
+			"stock room includes a restrained mix of imported outdoor-goods inventory");
+		Node3D storedHat = interior.GetNode<Node3D>("Storage/StoredHat");
+		Node3D supportBox = interior.GetNode<Node3D>("Storage/BoxC");
+		Require(storedHat.Position.Y <= 0.90f &&
+			new Vector2(storedHat.Position.X, storedHat.Position.Z)
+				.DistanceTo(new Vector2(
+					supportBox.Position.X,
+					supportBox.Position.Z)) <= 0.05f,
+			"stored hat is visibly supported by the delivery box");
 
 		Vector3 entryCentre = new(-6.2f, 0.0f, -4.12f);
 		Vector3 rackPosition = interior

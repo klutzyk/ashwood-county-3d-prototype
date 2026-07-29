@@ -51,6 +51,9 @@ size = Vector3(0.07, 2.18, 8.36)
 [sub_resource type="BoxShape3D" id="RoofShape"]
 size = Vector3(16.4, 0.24, 21.4)
 
+[sub_resource type="BoxShape3D" id="EntryRampShape"]
+size = Vector3(1.2, 0.06, 1.5)
+
 [node name="AshwoodGroceryExterior" type="StaticBody3D"]
 
 [node name="Shell" type="Node3D" parent="."]
@@ -342,9 +345,9 @@ modulate = Color(0.82, 0.76, 0.52, 1)
 outline_modulate = Color(0.07, 0.14, 0.07, 1)
 
 [node name="LoadingDoor" parent="." instance=ExtResource("7_door")]
-position = Vector3(8.08, 1.35, -8.0)
+position = Vector3(8.08, 0.05, -8.0)
 rotation = Vector3(0, -1.5707964, 0)
-scale = Vector3(0.032, 0.032, 0.032)
+scale = Vector3(0.42, 0.32, 0.235)
 
 [node name="LoadingLabel" type="Label3D" parent="."]
 position = Vector3(7.92, 3.05, -8)
@@ -355,9 +358,15 @@ outline_size = 7
 modulate = Color(0.74, 0.68, 0.43, 1)
 
 [node name="EntryThreshold" type="MeshInstance3D" parent="."]
-position = Vector3(-8.38, 0.04, 0)
-scale = Vector3(0.72, 0.08, 1.30)
+position = Vector3(-8.1, 0.035, 0)
+rotation = Vector3(0, 0, 0.055)
+scale = Vector3(1.2, 0.06, 1.5)
 mesh = SubResource("ConcreteMesh")
+
+[node name="EntryRampCollision" type="CollisionShape3D" parent="."]
+position = Vector3(-8.1, 0.035, 0)
+rotation = Vector3(0, 0, 0.055)
+shape = SubResource("EntryRampShape")
 
 [node name="NorthWallLamp" parent="." instance=ExtResource("6_lamp")]
 position = Vector3(-8.27, 3.42, -9.45)

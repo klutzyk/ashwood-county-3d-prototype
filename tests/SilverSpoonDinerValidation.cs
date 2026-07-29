@@ -528,6 +528,12 @@ public partial class SilverSpoonDinerValidation : Node
 					"Floor",
 					StringComparison.OrdinalIgnoreCase) ||
 				shapeName.Contains(
+					"Ramp",
+					StringComparison.OrdinalIgnoreCase) ||
+				shapeName.Contains(
+					"Threshold",
+					StringComparison.OrdinalIgnoreCase) ||
+				shapeName.Contains(
 					"Roof",
 					StringComparison.OrdinalIgnoreCase) ||
 				shapeName.Contains(

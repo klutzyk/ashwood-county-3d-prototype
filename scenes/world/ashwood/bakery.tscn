@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://bwaot3gvfvo4b" path="res://scripts/interactions/Interactable.cs" id="4_interactable"]
 [ext_resource type="PackedScene" path="res://scenes/world/ashwood/presentation/storefronts/bakery_window_display.tscn" id="16_window_display"]
 [ext_resource type="PackedScene" path="res://scenes/world/ashwood/interiors/glens_bakery_interior.tscn" id="17_production_interior"]
+[ext_resource type="Material" path="res://assets/materials/ashwood_main_street_concrete.tres" id="18_concrete"]
 
 [sub_resource type="BoxShape3D" id="SideWallShape"]
 size = Vector3(4.8, 6.4, 0.3)
@@ -22,6 +23,18 @@ size = Vector3(0.3, 6.4, 5.2144556)
 [sub_resource type="BoxShape3D" id="DoorShape"]
 size = Vector3(0.994, 1.86, 0.18)
 
+[sub_resource type="BoxMesh" id="EntryStepMesh"]
+material = ExtResource("18_concrete")
+
+[sub_resource type="BoxShape3D" id="EntryStepLowShape"]
+size = Vector3(0.55, 0.2, 1.6)
+
+[sub_resource type="BoxShape3D" id="EntryStepMidShape"]
+size = Vector3(0.55, 0.4, 1.6)
+
+[sub_resource type="BoxShape3D" id="EntryStepHighShape"]
+size = Vector3(0.55, 0.6, 1.6)
+
 [node name="BakeryRoot" type="Node3D" unique_id=1935746269]
 script = ExtResource("3_controller")
 HingePath = NodePath("FrontDoorPivot")
@@ -35,6 +48,35 @@ AnimationDuration = 0.5
 transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 3.27161, 0)
 
 [node name="ProductionInterior" parent="." instance=ExtResource("17_production_interior")]
+
+[node name="EntrySteps" type="StaticBody3D" parent="."]
+
+[node name="LowVisual" type="MeshInstance3D" parent="EntrySteps"]
+position = Vector3(3.775, 0.1, 0.1)
+scale = Vector3(0.55, 0.2, 1.6)
+mesh = SubResource("EntryStepMesh")
+
+[node name="LowCollision" type="CollisionShape3D" parent="EntrySteps"]
+position = Vector3(3.775, 0.1, 0.1)
+shape = SubResource("EntryStepLowShape")
+
+[node name="MidVisual" type="MeshInstance3D" parent="EntrySteps"]
+position = Vector3(3.225, 0.2, 0.1)
+scale = Vector3(0.55, 0.4, 1.6)
+mesh = SubResource("EntryStepMesh")
+
+[node name="MidCollision" type="CollisionShape3D" parent="EntrySteps"]
+position = Vector3(3.225, 0.2, 0.1)
+shape = SubResource("EntryStepMidShape")
+
+[node name="HighVisual" type="MeshInstance3D" parent="EntrySteps"]
+position = Vector3(2.675, 0.3, 0.1)
+scale = Vector3(0.55, 0.6, 1.6)
+mesh = SubResource("EntryStepMesh")
+
+[node name="HighCollision" type="CollisionShape3D" parent="EntrySteps"]
+position = Vector3(2.675, 0.3, 0.1)
+shape = SubResource("EntryStepHighShape")
 
 [node name="WindowDisplay" parent="." instance=ExtResource("16_window_display")]
 

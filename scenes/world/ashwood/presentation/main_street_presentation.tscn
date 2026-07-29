@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" path="res://scenes/world/ashwood/presentation/buildings/historic_brick_storefront.tscn" id="1_store"]
 [ext_resource type="PackedScene" path="res://assets/environment/props/poly_haven_street_lamp.tscn" id="2_light"]
-[ext_resource type="PackedScene" path="res://assets/environment/props/cc0_park_bench.tscn" id="3_bench"]
+[ext_resource type="PackedScene" path="res://scenes/world/ashwood/presentation/props/apocalypse_park_bench.tscn" id="3_bench"]
 [ext_resource type="PackedScene" path="res://scenes/world/ashwood/presentation/planter.tscn" id="4_planter"]
 [ext_resource type="PackedScene" path="res://assets/environment/props/poly_haven_metal_trash_can.tscn" id="5_bin"]
 [ext_resource type="PackedScene" path="res://assets/environment/nature/main_street_tree_1.tscn" id="6_tree1"]
@@ -412,10 +412,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.45, -3.07)
 shape = SubResource("InsuranceShape")
 
 [node name="NorthGrocery" parent="Storefronts" instance=ExtResource("35_grocery")]
-transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 26, 0.2, -17)
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 26, 0.2, -17)
 
 [node name="NorthPharmacy" parent="Storefronts" unique_id=1672649885 instance=ExtResource("8_pharmacy")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 44, 0.2, -12.6)
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 44, 0.2, -12.6)
 
 [node name="NorthOffice" parent="Storefronts" unique_id=1942571544 instance=ExtResource("11_office")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 88, 0.2, -13.55)
@@ -470,13 +470,13 @@ transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 0, 0
 transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 15, 0.2, 13.85)
 
 [node name="SouthMillerHardware" parent="Storefronts" instance=ExtResource("36_hardware")]
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 29, 0.2, 16)
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 29, 0.2, 16)
 
 [node name="SouthDiner" parent="Storefronts" unique_id=732950737 instance=ExtResource("9_diner")]
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 54, 0.2, 13.2)
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 54, 0.2, 13.2)
 
 [node name="SouthPoliceStation" parent="Storefronts" instance=ExtResource("37_police")]
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 88, 0.2, 18)
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 88, 0.2, 18)
 
 [node name="BackgroundBuildings" type="Node3D" parent="." unique_id=994429708]
 
