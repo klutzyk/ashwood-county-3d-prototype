@@ -3,9 +3,10 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://drbjq81vj8ipn"
-path="res://.godot/imported/basketball_hoop_panel_0.jpg-7600bbdaf11e1d735fc2df2ef1d7f6b8.ctex"
+path.s3tc="res://.godot/imported/basketball_hoop_panel_0.jpg-7600bbdaf11e1d735fc2df2ef1d7f6b8.s3tc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc"],
+"vram_texture": true
 }
 generator_parameters={
 "md5": "3a640d55a9c2316dbd7c7090c710d69c"
@@ -14,11 +15,11 @@ generator_parameters={
 [deps]
 
 source_file="res://assets/third_party/user_supplied/ashwood_2026_07_29/basketball_hoop_panel_0.jpg"
-dest_files=["res://.godot/imported/basketball_hoop_panel_0.jpg-7600bbdaf11e1d735fc2df2ef1d7f6b8.ctex"]
+dest_files=["res://.godot/imported/basketball_hoop_panel_0.jpg-7600bbdaf11e1d735fc2df2ef1d7f6b8.s3tc.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0
@@ -40,4 +41,4 @@ process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
-detect_3d/compress_to=1
+detect_3d/compress_to=0

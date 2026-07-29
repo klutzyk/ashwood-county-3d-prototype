@@ -3,9 +3,10 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://b84breduxpu0m"
-path="res://.godot/imported/2001_crown_victoria_police_interceptor_game_prop_19.png-c505f3f90fdae24718d00641436b063f.ctex"
+path.s3tc="res://.godot/imported/2001_crown_victoria_police_interceptor_game_prop_19.png-c505f3f90fdae24718d00641436b063f.s3tc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc"],
+"vram_texture": true
 }
 generator_parameters={
 "md5": "c94d04a75cee6dc728c23610ef8687b1"
@@ -14,11 +15,11 @@ generator_parameters={
 [deps]
 
 source_file="res://assets/third_party/user_supplied/ashwood_2026_07_29/2001_crown_victoria_police_interceptor_game_prop_19.png"
-dest_files=["res://.godot/imported/2001_crown_victoria_police_interceptor_game_prop_19.png-c505f3f90fdae24718d00641436b063f.ctex"]
+dest_files=["res://.godot/imported/2001_crown_victoria_police_interceptor_game_prop_19.png-c505f3f90fdae24718d00641436b063f.s3tc.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0
@@ -40,4 +41,4 @@ process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
-detect_3d/compress_to=1
+detect_3d/compress_to=0
