@@ -1,4 +1,4 @@
-[gd_scene load_steps=63 format=3]
+[gd_scene format=3 uid="uid://d0k8joa8puqmt"]
 
 [ext_resource type="PackedScene" path="res://scenes/world/ashwood/presentation/buildings/historic_brick_storefront.tscn" id="1_store"]
 [ext_resource type="PackedScene" path="res://assets/environment/props/poly_haven_street_lamp.tscn" id="2_light"]
@@ -8,11 +8,10 @@
 [ext_resource type="PackedScene" path="res://assets/environment/nature/main_street_tree_1.tscn" id="6_tree1"]
 [ext_resource type="PackedScene" path="res://assets/environment/nature/main_street_tree_2.tscn" id="7_tree2"]
 [ext_resource type="PackedScene" path="res://assets/environment/buildings/Pharmacy/pharmacy.tscn" id="8_pharmacy"]
-[ext_resource type="PackedScene" path="res://assets/environment/buildings/Diner/diner.tscn" id="9_diner"]
+[ext_resource type="PackedScene" uid="uid://b83nc4eh3isht" path="res://assets/environment/buildings/Diner/diner.tscn" id="9_diner"]
 [ext_resource type="PackedScene" path="res://scenes/world/ashwood/presentation/buildings/painted_corner_shop.tscn" id="10_corner"]
 [ext_resource type="PackedScene" path="res://scenes/world/ashwood/presentation/buildings/historic_office_block.tscn" id="11_office"]
 [ext_resource type="PackedScene" path="res://scenes/world/ashwood/presentation/buildings/small_town_bank.tscn" id="12_bank"]
-[ext_resource type="PackedScene" path="res://scenes/world/ashwood/presentation/buildings/wide_hardware_store.tscn" id="13_hardware"]
 [ext_resource type="PackedScene" path="res://scenes/world/ashwood/presentation/buildings/midcentury_laundromat.tscn" id="14_laundry"]
 [ext_resource type="PackedScene" path="res://assets/environment/vehicles/parked_1975_impala.tscn" id="15_impala"]
 [ext_resource type="PackedScene" path="res://assets/environment/vehicles/parked_1963_c10.tscn" id="16_c10"]
@@ -22,109 +21,32 @@
 [ext_resource type="PackedScene" path="res://assets/environment/props/poly_haven_utility_box_02.tscn" id="20_utility"]
 [ext_resource type="PackedScene" path="res://assets/environment/props/home_us_mailbox.tscn" id="21_mailbox"]
 [ext_resource type="PackedScene" path="res://assets/environment/nature/yughues_bush_02.tscn" id="22_shrub_autumn"]
-[ext_resource type="PackedScene" path="res://assets/environment/buildings/ashwood/antiques.glb" id="23_antiques"]
-[ext_resource type="PackedScene" path="res://assets/environment/buildings/ashwood/attorney.glb" id="24_attorney"]
-[ext_resource type="PackedScene" path="res://assets/environment/buildings/ashwood/barber.glb" id="25_barber"]
-[ext_resource type="PackedScene" path="res://assets/environment/buildings/ashwood/bookstore.glb" id="26_bookstore"]
-[ext_resource type="PackedScene" path="res://assets/environment/buildings/ashwood/dentist.glb" id="27_dentist"]
-[ext_resource type="PackedScene" path="res://assets/environment/buildings/ashwood/florist.gltf" id="28_florist"]
-[ext_resource type="PackedScene" path="res://assets/environment/buildings/ashwood/insurance.glb" id="29_insurance"]
-[ext_resource type="PackedScene" path="res://assets/environment/buildings/ashwood/musicstore.glb" id="30_musicstore"]
-[ext_resource type="PackedScene" path="res://assets/environment/buildings/ashwood/realtor.glb" id="31_realtor"]
-[ext_resource type="PackedScene" path="res://assets/third_party/buildings/lowpoly industrial building/lowpoly_industrial_building.glb" id="32_industrial"]
-[ext_resource type="PackedScene" path="res://assets/third_party/buildings/lowpoly industrial building/old_building.glb" id="33_old_building"]
-[ext_resource type="PackedScene" path="res://assets/third_party/props/signs/welcome_sign_restaurant.glb" id="34_restaurant_sign"]
-
-[sub_resource type="StandardMaterial3D" id="WhitePaint"]
-albedo_color = Color(0.57, 0.55, 0.46, 1)
-roughness = 0.94
+[ext_resource type="PackedScene" uid="uid://c1fi0gmmrycid" path="res://assets/environment/buildings/ashwood/antiques.glb" id="23_antiques"]
+[ext_resource type="PackedScene" uid="uid://cpn6qppdy8g6s" path="res://assets/environment/buildings/ashwood/attorney.glb" id="24_attorney"]
+[ext_resource type="PackedScene" uid="uid://ckayllkgfv358" path="res://assets/environment/buildings/ashwood/barber.glb" id="25_barber"]
+[ext_resource type="PackedScene" uid="uid://dmd6li4jevtb5" path="res://assets/environment/buildings/ashwood/bookstore.glb" id="26_bookstore"]
+[ext_resource type="PackedScene" uid="uid://dig8aawlcvnk2" path="res://assets/environment/buildings/ashwood/dentist.glb" id="27_dentist"]
+[ext_resource type="PackedScene" uid="uid://brqartme5jako" path="res://assets/environment/buildings/ashwood/florist.gltf" id="28_florist"]
+[ext_resource type="PackedScene" uid="uid://dege5whru3cq2" path="res://assets/environment/buildings/ashwood/insurance.glb" id="29_insurance"]
+[ext_resource type="PackedScene" uid="uid://8iuk4pq0ic08" path="res://assets/environment/buildings/ashwood/musicstore.glb" id="30_musicstore"]
+[ext_resource type="PackedScene" uid="uid://d0qutyi2bifyk" path="res://assets/environment/buildings/ashwood/realtor.glb" id="31_realtor"]
+[ext_resource type="PackedScene" uid="uid://bivilksa3u228" path="res://assets/third_party/buildings/lowpoly industrial building/lowpoly_industrial_building.glb" id="32_industrial"]
+[ext_resource type="PackedScene" uid="uid://cu02iban0n6hl" path="res://assets/third_party/buildings/lowpoly industrial building/old_building.glb" id="33_old_building"]
+[ext_resource type="PackedScene" uid="uid://knag5b8wjtmw" path="res://assets/third_party/props/signs/welcome_sign_restaurant.glb" id="34_restaurant_sign"]
 
 [sub_resource type="StandardMaterial3D" id="YellowPaint"]
 albedo_color = Color(0.67, 0.46, 0.08, 1)
 roughness = 0.92
 
-[sub_resource type="BoxMesh" id="MarkingMesh"]
-material = SubResource("WhitePaint")
-
 [sub_resource type="BoxMesh" id="CenterMarkingMesh"]
 material = SubResource("YellowPaint")
 
-[sub_resource type="StandardMaterial3D" id="BusStopMetal"]
-albedo_color = Color(0.08, 0.11, 0.1, 1)
-metallic = 0.6
-roughness = 0.48
+[sub_resource type="StandardMaterial3D" id="WhitePaint"]
+albedo_color = Color(0.57, 0.55, 0.46, 1)
+roughness = 0.94
 
-[sub_resource type="CylinderMesh" id="BusStopPostMesh"]
-material = SubResource("BusStopMetal")
-top_radius = 0.055
-bottom_radius = 0.055
-height = 2.5
-radial_segments = 12
-
-[sub_resource type="BoxMesh" id="BusStopSignMesh"]
-material = SubResource("BusStopMetal")
-size = Vector3(0.68, 0.8, 0.06)
-
-[sub_resource type="CylinderShape3D" id="BusStopPostShape"]
-radius = 0.08
-height = 2.5
-
-[sub_resource type="StandardMaterial3D" id="HydrantRed"]
-albedo_color = Color(0.56, 0.05, 0.035, 1)
-roughness = 0.7
-
-[sub_resource type="CylinderMesh" id="HydrantBodyMesh"]
-material = SubResource("HydrantRed")
-top_radius = 0.22
-bottom_radius = 0.25
-height = 0.65
-radial_segments = 16
-
-[sub_resource type="CylinderMesh" id="HydrantBaseMesh"]
-material = SubResource("HydrantRed")
-top_radius = 0.31
-bottom_radius = 0.33
-height = 0.18
-radial_segments = 16
-
-[sub_resource type="CylinderMesh" id="HydrantRingMesh"]
-material = SubResource("HydrantRed")
-top_radius = 0.29
-bottom_radius = 0.29
-height = 0.12
-radial_segments = 16
-
-[sub_resource type="SphereMesh" id="HydrantDomeMesh"]
-material = SubResource("HydrantRed")
-radius = 0.27
-height = 0.38
-radial_segments = 16
-rings = 8
-
-[sub_resource type="CylinderMesh" id="HydrantNozzleMesh"]
-material = SubResource("HydrantRed")
-top_radius = 0.105
-bottom_radius = 0.125
-height = 0.3
-radial_segments = 12
-
-[sub_resource type="CylinderMesh" id="HydrantCapMesh"]
-material = SubResource("HydrantRed")
-top_radius = 0.14
-bottom_radius = 0.14
-height = 0.08
-radial_segments = 12
-
-[sub_resource type="CylinderMesh" id="HydrantNutMesh"]
-material = SubResource("HydrantRed")
-top_radius = 0.065
-bottom_radius = 0.075
-height = 0.1
-radial_segments = 6
-
-[sub_resource type="CylinderShape3D" id="HydrantShape"]
-radius = 0.33
-height = 1.1
+[sub_resource type="BoxMesh" id="MarkingMesh"]
+material = SubResource("WhitePaint")
 
 [sub_resource type="BoxShape3D" id="RealtorShape"]
 size = Vector3(9.1, 4.4, 7.1)
@@ -159,986 +81,915 @@ size = Vector3(10.9, 9.5, 10)
 [sub_resource type="BoxShape3D" id="OldBuildingShape"]
 size = Vector3(8.55, 11.5, 6.4)
 
-[node name="MainStreetPresentation" type="Node3D"]
+[sub_resource type="StandardMaterial3D" id="BusStopMetal"]
+albedo_color = Color(0.08, 0.11, 0.1, 1)
+metallic = 0.6
+roughness = 0.48
 
-[node name="RoadMarkings" type="Node3D" parent="."]
+[sub_resource type="CylinderMesh" id="BusStopPostMesh"]
+material = SubResource("BusStopMetal")
+top_radius = 0.055
+bottom_radius = 0.055
+height = 2.5
+radial_segments = 12
 
-[node name="Centre01" type="MeshInstance3D" parent="RoadMarkings"]
-position = Vector3(-94, 0.115, 0)
-scale = Vector3(5, 0.02, 0.12)
+[sub_resource type="BoxMesh" id="BusStopSignMesh"]
+material = SubResource("BusStopMetal")
+size = Vector3(0.68, 0.8, 0.06)
+
+[sub_resource type="CylinderShape3D" id="BusStopPostShape"]
+height = 2.5
+radius = 0.08
+
+[sub_resource type="StandardMaterial3D" id="HydrantRed"]
+albedo_color = Color(0.56, 0.05, 0.035, 1)
+roughness = 0.7
+
+[sub_resource type="CylinderMesh" id="HydrantBaseMesh"]
+material = SubResource("HydrantRed")
+top_radius = 0.31
+bottom_radius = 0.33
+height = 0.18
+radial_segments = 16
+
+[sub_resource type="CylinderMesh" id="HydrantBodyMesh"]
+material = SubResource("HydrantRed")
+top_radius = 0.22
+bottom_radius = 0.25
+height = 0.65
+radial_segments = 16
+
+[sub_resource type="CylinderMesh" id="HydrantRingMesh"]
+material = SubResource("HydrantRed")
+top_radius = 0.29
+bottom_radius = 0.29
+height = 0.12
+radial_segments = 16
+
+[sub_resource type="SphereMesh" id="HydrantDomeMesh"]
+material = SubResource("HydrantRed")
+radius = 0.27
+height = 0.38
+radial_segments = 16
+rings = 8
+
+[sub_resource type="CylinderMesh" id="HydrantNutMesh"]
+material = SubResource("HydrantRed")
+top_radius = 0.065
+bottom_radius = 0.075
+height = 0.1
+radial_segments = 6
+
+[sub_resource type="CylinderMesh" id="HydrantNozzleMesh"]
+material = SubResource("HydrantRed")
+top_radius = 0.105
+bottom_radius = 0.125
+height = 0.3
+radial_segments = 12
+
+[sub_resource type="CylinderMesh" id="HydrantCapMesh"]
+material = SubResource("HydrantRed")
+top_radius = 0.14
+bottom_radius = 0.14
+height = 0.08
+radial_segments = 12
+
+[sub_resource type="CylinderShape3D" id="HydrantShape"]
+height = 1.1
+radius = 0.33
+
+[node name="MainStreetPresentation" type="Node3D" unique_id=926575327]
+
+[node name="RoadMarkings" type="Node3D" parent="." unique_id=641236682]
+
+[node name="Centre01" type="MeshInstance3D" parent="RoadMarkings" unique_id=25681485]
+transform = Transform3D(5, 0, 0, 0, 0.02, 0, 0, 0, 0.12, -94, 0.115, 0)
 mesh = SubResource("CenterMarkingMesh")
 
-[node name="Centre02" type="MeshInstance3D" parent="RoadMarkings"]
-position = Vector3(-82, 0.115, 0)
-scale = Vector3(5, 0.02, 0.12)
+[node name="Centre02" type="MeshInstance3D" parent="RoadMarkings" unique_id=1513615956]
+transform = Transform3D(5, 0, 0, 0, 0.02, 0, 0, 0, 0.12, -82, 0.115, 0)
 mesh = SubResource("CenterMarkingMesh")
 
-[node name="Centre03" type="MeshInstance3D" parent="RoadMarkings"]
-position = Vector3(-58, 0.115, 0)
-scale = Vector3(5, 0.02, 0.12)
+[node name="Centre03" type="MeshInstance3D" parent="RoadMarkings" unique_id=1719405266]
+transform = Transform3D(5, 0, 0, 0, 0.02, 0, 0, 0, 0.12, -58, 0.115, 0)
 mesh = SubResource("CenterMarkingMesh")
 
-[node name="Centre04" type="MeshInstance3D" parent="RoadMarkings"]
-position = Vector3(-46, 0.115, 0)
-scale = Vector3(5, 0.02, 0.12)
+[node name="Centre04" type="MeshInstance3D" parent="RoadMarkings" unique_id=2066051048]
+transform = Transform3D(5, 0, 0, 0, 0.02, 0, 0, 0, 0.12, -46, 0.115, 0)
 mesh = SubResource("CenterMarkingMesh")
 
-[node name="Centre05" type="MeshInstance3D" parent="RoadMarkings"]
-position = Vector3(-34, 0.115, 0)
-scale = Vector3(5, 0.02, 0.12)
+[node name="Centre05" type="MeshInstance3D" parent="RoadMarkings" unique_id=445177557]
+transform = Transform3D(5, 0, 0, 0, 0.02, 0, 0, 0, 0.12, -34, 0.115, 0)
 mesh = SubResource("CenterMarkingMesh")
 
-[node name="Centre06" type="MeshInstance3D" parent="RoadMarkings"]
-position = Vector3(-22, 0.115, 0)
-scale = Vector3(5, 0.02, 0.12)
+[node name="Centre06" type="MeshInstance3D" parent="RoadMarkings" unique_id=927965421]
+transform = Transform3D(5, 0, 0, 0, 0.02, 0, 0, 0, 0.12, -22, 0.115, 0)
 mesh = SubResource("CenterMarkingMesh")
 
-[node name="Centre07" type="MeshInstance3D" parent="RoadMarkings"]
-position = Vector3(-10, 0.115, 0)
-scale = Vector3(5, 0.02, 0.12)
+[node name="Centre07" type="MeshInstance3D" parent="RoadMarkings" unique_id=2047432854]
+transform = Transform3D(5, 0, 0, 0, 0.02, 0, 0, 0, 0.12, -10, 0.115, 0)
 mesh = SubResource("CenterMarkingMesh")
 
-[node name="Centre08" type="MeshInstance3D" parent="RoadMarkings"]
-position = Vector3(2, 0.115, 0)
-scale = Vector3(5, 0.02, 0.12)
+[node name="Centre08" type="MeshInstance3D" parent="RoadMarkings" unique_id=121362329]
+transform = Transform3D(5, 0, 0, 0, 0.02, 0, 0, 0, 0.12, 2, 0.115, 0)
 mesh = SubResource("CenterMarkingMesh")
 
-[node name="Centre09" type="MeshInstance3D" parent="RoadMarkings"]
-position = Vector3(14, 0.115, 0)
-scale = Vector3(5, 0.02, 0.12)
+[node name="Centre09" type="MeshInstance3D" parent="RoadMarkings" unique_id=558482113]
+transform = Transform3D(5, 0, 0, 0, 0.02, 0, 0, 0, 0.12, 14, 0.115, 0)
 mesh = SubResource("CenterMarkingMesh")
 
-[node name="Centre10" type="MeshInstance3D" parent="RoadMarkings"]
-position = Vector3(26, 0.115, 0)
-scale = Vector3(5, 0.02, 0.12)
+[node name="Centre10" type="MeshInstance3D" parent="RoadMarkings" unique_id=1058732862]
+transform = Transform3D(5, 0, 0, 0, 0.02, 0, 0, 0, 0.12, 26, 0.115, 0)
 mesh = SubResource("CenterMarkingMesh")
 
-[node name="Centre11" type="MeshInstance3D" parent="RoadMarkings"]
-position = Vector3(38, 0.115, 0)
-scale = Vector3(5, 0.02, 0.12)
+[node name="Centre11" type="MeshInstance3D" parent="RoadMarkings" unique_id=828981283]
+transform = Transform3D(5, 0, 0, 0, 0.02, 0, 0, 0, 0.12, 38, 0.115, 0)
 mesh = SubResource("CenterMarkingMesh")
 
-[node name="Centre12" type="MeshInstance3D" parent="RoadMarkings"]
-position = Vector3(50, 0.115, 0)
-scale = Vector3(5, 0.02, 0.12)
+[node name="Centre12" type="MeshInstance3D" parent="RoadMarkings" unique_id=1472193218]
+transform = Transform3D(5, 0, 0, 0, 0.02, 0, 0, 0, 0.12, 50, 0.115, 0)
 mesh = SubResource("CenterMarkingMesh")
 
-[node name="Centre13" type="MeshInstance3D" parent="RoadMarkings"]
-position = Vector3(58, 0.115, 0)
-scale = Vector3(3, 0.02, 0.12)
+[node name="Centre13" type="MeshInstance3D" parent="RoadMarkings" unique_id=1929134428]
+transform = Transform3D(3, 0, 0, 0, 0.02, 0, 0, 0, 0.12, 58, 0.115, 0)
 mesh = SubResource("CenterMarkingMesh")
 
-[node name="Centre14" type="MeshInstance3D" parent="RoadMarkings"]
-position = Vector3(82, 0.115, 0)
-scale = Vector3(5, 0.02, 0.12)
+[node name="Centre14" type="MeshInstance3D" parent="RoadMarkings" unique_id=1091048110]
+transform = Transform3D(5, 0, 0, 0, 0.02, 0, 0, 0, 0.12, 82, 0.115, 0)
 mesh = SubResource("CenterMarkingMesh")
 
-[node name="Centre15" type="MeshInstance3D" parent="RoadMarkings"]
-position = Vector3(94, 0.115, 0)
-scale = Vector3(5, 0.02, 0.12)
+[node name="Centre15" type="MeshInstance3D" parent="RoadMarkings" unique_id=305964326]
+transform = Transform3D(5, 0, 0, 0, 0.02, 0, 0, 0, 0.12, 94, 0.115, 0)
 mesh = SubResource("CenterMarkingMesh")
 
-[node name="ParkingNorth" type="Node3D" parent="RoadMarkings"]
+[node name="ParkingNorth" type="Node3D" parent="RoadMarkings" unique_id=2039891623]
 
-[node name="Line01" type="MeshInstance3D" parent="RoadMarkings/ParkingNorth"]
-position = Vector3(-93, 0.12, -4.35)
-scale = Vector3(0.1, 0.02, 2.2)
+[node name="Line01" type="MeshInstance3D" parent="RoadMarkings/ParkingNorth" unique_id=381755797]
+transform = Transform3D(0.1, 0, 0, 0, 0.02, 0, 0, 0, 2.2, -93, 0.12, -4.35)
 mesh = SubResource("MarkingMesh")
 
-[node name="Line02" type="MeshInstance3D" parent="RoadMarkings/ParkingNorth"]
-position = Vector3(-82, 0.12, -4.35)
-scale = Vector3(0.1, 0.02, 2.2)
+[node name="Line02" type="MeshInstance3D" parent="RoadMarkings/ParkingNorth" unique_id=1681457568]
+transform = Transform3D(0.1, 0, 0, 0, 0.02, 0, 0, 0, 2.2, -82, 0.12, -4.35)
 mesh = SubResource("MarkingMesh")
 
-[node name="Line03" type="MeshInstance3D" parent="RoadMarkings/ParkingNorth"]
-position = Vector3(-58, 0.12, -4.35)
-scale = Vector3(0.1, 0.02, 2.2)
+[node name="Line03" type="MeshInstance3D" parent="RoadMarkings/ParkingNorth" unique_id=1191640963]
+transform = Transform3D(0.1, 0, 0, 0, 0.02, 0, 0, 0, 2.2, -58, 0.12, -4.35)
 mesh = SubResource("MarkingMesh")
 
-[node name="Line04" type="MeshInstance3D" parent="RoadMarkings/ParkingNorth"]
-position = Vector3(-46, 0.12, -4.35)
-scale = Vector3(0.1, 0.02, 2.2)
+[node name="Line04" type="MeshInstance3D" parent="RoadMarkings/ParkingNorth" unique_id=173713390]
+transform = Transform3D(0.1, 0, 0, 0, 0.02, 0, 0, 0, 2.2, -46, 0.12, -4.35)
 mesh = SubResource("MarkingMesh")
 
-[node name="Line05" type="MeshInstance3D" parent="RoadMarkings/ParkingNorth"]
-position = Vector3(-30, 0.12, -4.35)
-scale = Vector3(0.1, 0.02, 2.2)
+[node name="Line05" type="MeshInstance3D" parent="RoadMarkings/ParkingNorth" unique_id=279548892]
+transform = Transform3D(0.1, 0, 0, 0, 0.02, 0, 0, 0, 2.2, -30, 0.12, -4.35)
 mesh = SubResource("MarkingMesh")
 
-[node name="Line06" type="MeshInstance3D" parent="RoadMarkings/ParkingNorth"]
-position = Vector3(-14, 0.12, -4.35)
-scale = Vector3(0.1, 0.02, 2.2)
+[node name="Line06" type="MeshInstance3D" parent="RoadMarkings/ParkingNorth" unique_id=1555627659]
+transform = Transform3D(0.1, 0, 0, 0, 0.02, 0, 0, 0, 2.2, -14, 0.12, -4.35)
 mesh = SubResource("MarkingMesh")
 
-[node name="Line07" type="MeshInstance3D" parent="RoadMarkings/ParkingNorth"]
-position = Vector3(4, 0.12, -4.35)
-scale = Vector3(0.1, 0.02, 2.2)
+[node name="Line07" type="MeshInstance3D" parent="RoadMarkings/ParkingNorth" unique_id=118399858]
+transform = Transform3D(0.1, 0, 0, 0, 0.02, 0, 0, 0, 2.2, 4, 0.12, -4.35)
 mesh = SubResource("MarkingMesh")
 
-[node name="Line08" type="MeshInstance3D" parent="RoadMarkings/ParkingNorth"]
-position = Vector3(22, 0.12, -4.35)
-scale = Vector3(0.1, 0.02, 2.2)
+[node name="Line08" type="MeshInstance3D" parent="RoadMarkings/ParkingNorth" unique_id=377486024]
+transform = Transform3D(0.1, 0, 0, 0, 0.02, 0, 0, 0, 2.2, 22, 0.12, -4.35)
 mesh = SubResource("MarkingMesh")
 
-[node name="Line09" type="MeshInstance3D" parent="RoadMarkings/ParkingNorth"]
-position = Vector3(40, 0.12, -4.35)
-scale = Vector3(0.1, 0.02, 2.2)
+[node name="Line09" type="MeshInstance3D" parent="RoadMarkings/ParkingNorth" unique_id=1528157096]
+transform = Transform3D(0.1, 0, 0, 0, 0.02, 0, 0, 0, 2.2, 40, 0.12, -4.35)
 mesh = SubResource("MarkingMesh")
 
-[node name="Line10" type="MeshInstance3D" parent="RoadMarkings/ParkingNorth"]
-position = Vector3(58, 0.12, -4.35)
-scale = Vector3(0.1, 0.02, 2.2)
+[node name="Line10" type="MeshInstance3D" parent="RoadMarkings/ParkingNorth" unique_id=870646051]
+transform = Transform3D(0.1, 0, 0, 0, 0.02, 0, 0, 0, 2.2, 58, 0.12, -4.35)
 mesh = SubResource("MarkingMesh")
 
-[node name="ParkingSouth" type="Node3D" parent="RoadMarkings"]
+[node name="ParkingSouth" type="Node3D" parent="RoadMarkings" unique_id=1666381579]
 
-[node name="Line01" type="MeshInstance3D" parent="RoadMarkings/ParkingSouth"]
-position = Vector3(-93, 0.12, 4.35)
-scale = Vector3(0.1, 0.02, 2.2)
+[node name="Line01" type="MeshInstance3D" parent="RoadMarkings/ParkingSouth" unique_id=1558901835]
+transform = Transform3D(0.1, 0, 0, 0, 0.02, 0, 0, 0, 2.2, -93, 0.12, 4.35)
 mesh = SubResource("MarkingMesh")
 
-[node name="Line02" type="MeshInstance3D" parent="RoadMarkings/ParkingSouth"]
-position = Vector3(-82, 0.12, 4.35)
-scale = Vector3(0.1, 0.02, 2.2)
+[node name="Line02" type="MeshInstance3D" parent="RoadMarkings/ParkingSouth" unique_id=1405432672]
+transform = Transform3D(0.1, 0, 0, 0, 0.02, 0, 0, 0, 2.2, -82, 0.12, 4.35)
 mesh = SubResource("MarkingMesh")
 
-[node name="Line03" type="MeshInstance3D" parent="RoadMarkings/ParkingSouth"]
-position = Vector3(-58, 0.12, 4.35)
-scale = Vector3(0.1, 0.02, 2.2)
+[node name="Line03" type="MeshInstance3D" parent="RoadMarkings/ParkingSouth" unique_id=1705246341]
+transform = Transform3D(0.1, 0, 0, 0, 0.02, 0, 0, 0, 2.2, -58, 0.12, 4.35)
 mesh = SubResource("MarkingMesh")
 
-[node name="Line04" type="MeshInstance3D" parent="RoadMarkings/ParkingSouth"]
-position = Vector3(-46, 0.12, 4.35)
-scale = Vector3(0.1, 0.02, 2.2)
+[node name="Line04" type="MeshInstance3D" parent="RoadMarkings/ParkingSouth" unique_id=533273128]
+transform = Transform3D(0.1, 0, 0, 0, 0.02, 0, 0, 0, 2.2, -46, 0.12, 4.35)
 mesh = SubResource("MarkingMesh")
 
-[node name="Line05" type="MeshInstance3D" parent="RoadMarkings/ParkingSouth"]
-position = Vector3(-30, 0.12, 4.35)
-scale = Vector3(0.1, 0.02, 2.2)
+[node name="Line05" type="MeshInstance3D" parent="RoadMarkings/ParkingSouth" unique_id=1124470508]
+transform = Transform3D(0.1, 0, 0, 0, 0.02, 0, 0, 0, 2.2, -30, 0.12, 4.35)
 mesh = SubResource("MarkingMesh")
 
-[node name="Line06" type="MeshInstance3D" parent="RoadMarkings/ParkingSouth"]
-position = Vector3(-14, 0.12, 4.35)
-scale = Vector3(0.1, 0.02, 2.2)
+[node name="Line06" type="MeshInstance3D" parent="RoadMarkings/ParkingSouth" unique_id=574078619]
+transform = Transform3D(0.1, 0, 0, 0, 0.02, 0, 0, 0, 2.2, -14, 0.12, 4.35)
 mesh = SubResource("MarkingMesh")
 
-[node name="Line07" type="MeshInstance3D" parent="RoadMarkings/ParkingSouth"]
-position = Vector3(4, 0.12, 4.35)
-scale = Vector3(0.1, 0.02, 2.2)
+[node name="Line07" type="MeshInstance3D" parent="RoadMarkings/ParkingSouth" unique_id=140499099]
+transform = Transform3D(0.1, 0, 0, 0, 0.02, 0, 0, 0, 2.2, 4, 0.12, 4.35)
 mesh = SubResource("MarkingMesh")
 
-[node name="Line08" type="MeshInstance3D" parent="RoadMarkings/ParkingSouth"]
-position = Vector3(22, 0.12, 4.35)
-scale = Vector3(0.1, 0.02, 2.2)
+[node name="Line08" type="MeshInstance3D" parent="RoadMarkings/ParkingSouth" unique_id=755662484]
+transform = Transform3D(0.1, 0, 0, 0, 0.02, 0, 0, 0, 2.2, 22, 0.12, 4.35)
 mesh = SubResource("MarkingMesh")
 
-[node name="Line09" type="MeshInstance3D" parent="RoadMarkings/ParkingSouth"]
-position = Vector3(40, 0.12, 4.35)
-scale = Vector3(0.1, 0.02, 2.2)
+[node name="Line09" type="MeshInstance3D" parent="RoadMarkings/ParkingSouth" unique_id=2007054027]
+transform = Transform3D(0.1, 0, 0, 0, 0.02, 0, 0, 0, 2.2, 40, 0.12, 4.35)
 mesh = SubResource("MarkingMesh")
 
-[node name="Line10" type="MeshInstance3D" parent="RoadMarkings/ParkingSouth"]
-position = Vector3(58, 0.12, 4.35)
-scale = Vector3(0.1, 0.02, 2.2)
+[node name="Line10" type="MeshInstance3D" parent="RoadMarkings/ParkingSouth" unique_id=210369225]
+transform = Transform3D(0.1, 0, 0, 0, 0.02, 0, 0, 0, 2.2, 58, 0.12, 4.35)
 mesh = SubResource("MarkingMesh")
 
-[node name="Crosswalks" type="Node3D" parent="RoadMarkings"]
+[node name="Crosswalks" type="Node3D" parent="RoadMarkings" unique_id=1641405105]
 
-[node name="West01" type="MeshInstance3D" parent="RoadMarkings/Crosswalks"]
-position = Vector3(-76, 0.125, -5)
-scale = Vector3(2.2, 0.025, 0.48)
+[node name="West01" type="MeshInstance3D" parent="RoadMarkings/Crosswalks" unique_id=1818235510]
+transform = Transform3D(2.2, 0, 0, 0, 0.025, 0, 0, 0, 0.48, -76, 0.125, -5)
 mesh = SubResource("MarkingMesh")
 
-[node name="West02" type="MeshInstance3D" parent="RoadMarkings/Crosswalks"]
-position = Vector3(-76, 0.125, -3)
-scale = Vector3(2.2, 0.025, 0.48)
+[node name="West02" type="MeshInstance3D" parent="RoadMarkings/Crosswalks" unique_id=788428172]
+transform = Transform3D(2.2, 0, 0, 0, 0.025, 0, 0, 0, 0.48, -76, 0.125, -3)
 mesh = SubResource("MarkingMesh")
 
-[node name="West03" type="MeshInstance3D" parent="RoadMarkings/Crosswalks"]
-position = Vector3(-76, 0.125, -1)
-scale = Vector3(2.2, 0.025, 0.48)
+[node name="West03" type="MeshInstance3D" parent="RoadMarkings/Crosswalks" unique_id=1096504680]
+transform = Transform3D(2.2, 0, 0, 0, 0.025, 0, 0, 0, 0.48, -76, 0.125, -1)
 mesh = SubResource("MarkingMesh")
 
-[node name="West04" type="MeshInstance3D" parent="RoadMarkings/Crosswalks"]
-position = Vector3(-76, 0.125, 1)
-scale = Vector3(2.2, 0.025, 0.48)
+[node name="West04" type="MeshInstance3D" parent="RoadMarkings/Crosswalks" unique_id=789148596]
+transform = Transform3D(2.2, 0, 0, 0, 0.025, 0, 0, 0, 0.48, -76, 0.125, 1)
 mesh = SubResource("MarkingMesh")
 
-[node name="West05" type="MeshInstance3D" parent="RoadMarkings/Crosswalks"]
-position = Vector3(-76, 0.125, 3)
-scale = Vector3(2.2, 0.025, 0.48)
+[node name="West05" type="MeshInstance3D" parent="RoadMarkings/Crosswalks" unique_id=1584328989]
+transform = Transform3D(2.2, 0, 0, 0, 0.025, 0, 0, 0, 0.48, -76, 0.125, 3)
 mesh = SubResource("MarkingMesh")
 
-[node name="West06" type="MeshInstance3D" parent="RoadMarkings/Crosswalks"]
-position = Vector3(-76, 0.125, 5)
-scale = Vector3(2.2, 0.025, 0.48)
+[node name="West06" type="MeshInstance3D" parent="RoadMarkings/Crosswalks" unique_id=329381563]
+transform = Transform3D(2.2, 0, 0, 0, 0.025, 0, 0, 0, 0.48, -76, 0.125, 5)
 mesh = SubResource("MarkingMesh")
 
-[node name="East01" type="MeshInstance3D" parent="RoadMarkings/Crosswalks"]
-position = Vector3(76, 0.125, -5)
-scale = Vector3(2.2, 0.025, 0.48)
+[node name="East01" type="MeshInstance3D" parent="RoadMarkings/Crosswalks" unique_id=62108561]
+transform = Transform3D(2.2, 0, 0, 0, 0.025, 0, 0, 0, 0.48, 76, 0.125, -5)
 mesh = SubResource("MarkingMesh")
 
-[node name="East02" type="MeshInstance3D" parent="RoadMarkings/Crosswalks"]
-position = Vector3(76, 0.125, -3)
-scale = Vector3(2.2, 0.025, 0.48)
+[node name="East02" type="MeshInstance3D" parent="RoadMarkings/Crosswalks" unique_id=338202287]
+transform = Transform3D(2.2, 0, 0, 0, 0.025, 0, 0, 0, 0.48, 76, 0.125, -3)
 mesh = SubResource("MarkingMesh")
 
-[node name="East03" type="MeshInstance3D" parent="RoadMarkings/Crosswalks"]
-position = Vector3(76, 0.125, -1)
-scale = Vector3(2.2, 0.025, 0.48)
+[node name="East03" type="MeshInstance3D" parent="RoadMarkings/Crosswalks" unique_id=1643791765]
+transform = Transform3D(2.2, 0, 0, 0, 0.025, 0, 0, 0, 0.48, 76, 0.125, -1)
 mesh = SubResource("MarkingMesh")
 
-[node name="East04" type="MeshInstance3D" parent="RoadMarkings/Crosswalks"]
-position = Vector3(76, 0.125, 1)
-scale = Vector3(2.2, 0.025, 0.48)
+[node name="East04" type="MeshInstance3D" parent="RoadMarkings/Crosswalks" unique_id=1318192630]
+transform = Transform3D(2.2, 0, 0, 0, 0.025, 0, 0, 0, 0.48, 76, 0.125, 1)
 mesh = SubResource("MarkingMesh")
 
-[node name="East05" type="MeshInstance3D" parent="RoadMarkings/Crosswalks"]
-position = Vector3(76, 0.125, 3)
-scale = Vector3(2.2, 0.025, 0.48)
+[node name="East05" type="MeshInstance3D" parent="RoadMarkings/Crosswalks" unique_id=1257913412]
+transform = Transform3D(2.2, 0, 0, 0, 0.025, 0, 0, 0, 0.48, 76, 0.125, 3)
 mesh = SubResource("MarkingMesh")
 
-[node name="East06" type="MeshInstance3D" parent="RoadMarkings/Crosswalks"]
-position = Vector3(76, 0.125, 5)
-scale = Vector3(2.2, 0.025, 0.48)
+[node name="East06" type="MeshInstance3D" parent="RoadMarkings/Crosswalks" unique_id=1077494336]
+transform = Transform3D(2.2, 0, 0, 0, 0.025, 0, 0, 0, 0.48, 76, 0.125, 5)
 mesh = SubResource("MarkingMesh")
 
-[node name="Storefronts" type="Node3D" parent="."]
+[node name="Storefronts" type="Node3D" parent="." unique_id=1047700350]
 
-[node name="NorthRealtor" type="StaticBody3D" parent="Storefronts"]
-position = Vector3(-90, 0.2, -8.75)
+[node name="NorthRealtor" type="StaticBody3D" parent="Storefronts" unique_id=1334459035]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -90, 0.2, -8.75)
 
-[node name="Visual" parent="Storefronts/NorthRealtor" instance=ExtResource("31_realtor")]
+[node name="Visual" parent="Storefronts/NorthRealtor" unique_id=1069141175 instance=ExtResource("31_realtor")]
 transform = Transform3D(0, 0, -9.6, 0, 9.6, 0, 9.6, 0, 0, -0.0064, -0.6918, -4.2001)
 
-[node name="Collision" type="CollisionShape3D" parent="Storefronts/NorthRealtor"]
-position = Vector3(0, 2.2, -4.35)
+[node name="Collision" type="CollisionShape3D" parent="Storefronts/NorthRealtor" unique_id=224906959]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2, -4.35)
 shape = SubResource("RealtorShape")
 
-[node name="NorthBookstore" type="StaticBody3D" parent="Storefronts"]
-position = Vector3(-42, 0.2, -8.75)
+[node name="NorthBookstore" type="StaticBody3D" parent="Storefronts" unique_id=1127700168]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -42, 0.2, -8.75)
 
-[node name="Visual" parent="Storefronts/NorthBookstore" instance=ExtResource("26_bookstore")]
+[node name="Visual" parent="Storefronts/NorthBookstore" unique_id=387342371 instance=ExtResource("26_bookstore")]
 transform = Transform3D(0, 0, -9.35, 0, 9.35, 0, 9.35, 0, 0, 0.0097, 0, -2.7865)
 
-[node name="Collision" type="CollisionShape3D" parent="Storefronts/NorthBookstore"]
-position = Vector3(0, 3.75, -2.94)
+[node name="Collision" type="CollisionShape3D" parent="Storefronts/NorthBookstore" unique_id=1674379532]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.75, -2.94)
 shape = SubResource("BookstoreShape")
 
-[node name="NorthDentist" type="StaticBody3D" parent="Storefronts"]
-position = Vector3(-27, 0.2, -8.75)
+[node name="NorthDentist" type="StaticBody3D" parent="Storefronts" unique_id=1633468418]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27, 0.2, -8.75)
 
-[node name="Visual" parent="Storefronts/NorthDentist" instance=ExtResource("27_dentist")]
+[node name="Visual" parent="Storefronts/NorthDentist" unique_id=543641616 instance=ExtResource("27_dentist")]
 transform = Transform3D(8.3, 0, 0, 0, 8.3, 0, 0, 0, 8.3, -0.0021, 0, -2.8459)
 
-[node name="Collision" type="CollisionShape3D" parent="Storefronts/NorthDentist"]
-position = Vector3(0, 2.5, -3.01)
+[node name="Collision" type="CollisionShape3D" parent="Storefronts/NorthDentist" unique_id=1764889314]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, -3.01)
 shape = SubResource("DentistShape")
 
-[node name="NorthAttorney" type="StaticBody3D" parent="Storefronts"]
-position = Vector3(-11, 0.2, -8.75)
+[node name="NorthAttorney" type="StaticBody3D" parent="Storefronts" unique_id=2004393952]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11, 0.2, -8.75)
 
-[node name="Visual" parent="Storefronts/NorthAttorney" instance=ExtResource("24_attorney")]
+[node name="Visual" parent="Storefronts/NorthAttorney" unique_id=2117492887 instance=ExtResource("24_attorney")]
 transform = Transform3D(0, 0, -9.9, 0, 9.9, 0, 9.9, 0, 0, -0.0011, 0, -3.4496)
 
-[node name="Collision" type="CollisionShape3D" parent="Storefronts/NorthAttorney"]
-position = Vector3(0, 3.45, -3.6)
+[node name="Collision" type="CollisionShape3D" parent="Storefronts/NorthAttorney" unique_id=427441590]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.45, -3.6)
 shape = SubResource("AttorneyShape")
 
-[node name="NorthInsurance" type="StaticBody3D" parent="Storefronts"]
-position = Vector3(6, 0.2, -8.75)
+[node name="NorthInsurance" type="StaticBody3D" parent="Storefronts" unique_id=2129124330]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0.2, -8.75)
 
-[node name="Visual" parent="Storefronts/NorthInsurance" instance=ExtResource("29_insurance")]
+[node name="Visual" parent="Storefronts/NorthInsurance" unique_id=1418402137 instance=ExtResource("29_insurance")]
 transform = Transform3D(15.2, 0, 0, 0, 15.2, 0, 0, 0, 15.2, 0.0077, 0, -2.917)
 
-[node name="Collision" type="CollisionShape3D" parent="Storefronts/NorthInsurance"]
-position = Vector3(0, 3.45, -3.07)
+[node name="Collision" type="CollisionShape3D" parent="Storefronts/NorthInsurance" unique_id=853583094]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.45, -3.07)
 shape = SubResource("InsuranceShape")
 
-[node name="NorthPharmacy" parent="Storefronts" instance=ExtResource("8_pharmacy")]
+[node name="NorthPharmacy" parent="Storefronts" unique_id=1672649885 instance=ExtResource("8_pharmacy")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 44, 0.2, -13.2)
 
-[node name="NorthOffice" parent="Storefronts" instance=ExtResource("11_office")]
-position = Vector3(88, 0.2, -13.55)
+[node name="NorthOffice" parent="Storefronts" unique_id=1942571544 instance=ExtResource("11_office")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 88, 0.2, -13.55)
 
-[node name="SouthFlorist" type="StaticBody3D" parent="Storefronts"]
+[node name="SouthFlorist" type="StaticBody3D" parent="Storefronts" unique_id=1769633255]
 transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, -90, 0.2, 8.75)
 
-[node name="Visual" parent="Storefronts/SouthFlorist" instance=ExtResource("28_florist")]
+[node name="Visual" parent="Storefronts/SouthFlorist" unique_id=1611674043 instance=ExtResource("28_florist")]
 transform = Transform3D(0, 0, -6, 0, 6, 0, 6, 0, 0, 0.0062, 0, -2.8907)
 
-[node name="Collision" type="CollisionShape3D" parent="Storefronts/SouthFlorist"]
-position = Vector3(0, 2.4, -3.04)
+[node name="Collision" type="CollisionShape3D" parent="Storefronts/SouthFlorist" unique_id=655946090]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4, -3.04)
 shape = SubResource("FloristShape")
 
-[node name="SouthBarber" type="StaticBody3D" parent="Storefronts"]
+[node name="SouthBarber" type="StaticBody3D" parent="Storefronts" unique_id=1449951329]
 transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, -59, 0.2, 8.75)
 
-[node name="Visual" parent="Storefronts/SouthBarber" instance=ExtResource("25_barber")]
+[node name="Visual" parent="Storefronts/SouthBarber" unique_id=2111184159 instance=ExtResource("25_barber")]
 transform = Transform3D(0, 0, -8.65, 0, 8.65, 0, 8.65, 0, 0, -0.235, -0.2058, -4.3256)
 
-[node name="Collision" type="CollisionShape3D" parent="Storefronts/SouthBarber"]
-position = Vector3(0, 2.45, -3.41)
+[node name="Collision" type="CollisionShape3D" parent="Storefronts/SouthBarber" unique_id=1212421590]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.45, -3.41)
 shape = SubResource("BarberShape")
 
-[node name="SouthAntiques" type="StaticBody3D" parent="Storefronts"]
+[node name="SouthAntiques" type="StaticBody3D" parent="Storefronts" unique_id=1430692248]
 transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, -44, 0.2, 8.75)
 
-[node name="Visual" parent="Storefronts/SouthAntiques" instance=ExtResource("23_antiques")]
+[node name="Visual" parent="Storefronts/SouthAntiques" unique_id=1790420145 instance=ExtResource("23_antiques")]
 transform = Transform3D(0, 0, -8, 0, 8, 0, 8, 0, 0, -0.0059, 0, -2.966)
 
-[node name="Collision" type="CollisionShape3D" parent="Storefronts/SouthAntiques"]
-position = Vector3(0, 3.45, -3.115)
+[node name="Collision" type="CollisionShape3D" parent="Storefronts/SouthAntiques" unique_id=856639399]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.45, -3.115)
 shape = SubResource("AntiquesShape")
 
-[node name="SouthMusicStore" type="StaticBody3D" parent="Storefronts"]
+[node name="SouthMusicStore" type="StaticBody3D" parent="Storefronts" unique_id=1408594307]
 transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, -27, 0.2, 8.75)
 
-[node name="Visual" parent="Storefronts/SouthMusicStore" instance=ExtResource("30_musicstore")]
+[node name="Visual" parent="Storefronts/SouthMusicStore" unique_id=914019374 instance=ExtResource("30_musicstore")]
 transform = Transform3D(0, 0, -7.75, 0, 7.75, 0, 7.75, 0, 0, -0.0011, 0, -2.7333)
 
-[node name="Collision" type="CollisionShape3D" parent="Storefronts/SouthMusicStore"]
-position = Vector3(0, 2.55, -2.88)
+[node name="Collision" type="CollisionShape3D" parent="Storefronts/SouthMusicStore" unique_id=1803872466]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.55, -2.88)
 shape = SubResource("MusicStoreShape")
 
-[node name="SouthSportingGoods" parent="Storefronts" instance=ExtResource("10_corner")]
+[node name="SouthSportingGoods" parent="Storefronts" unique_id=1633568354 instance=ExtResource("10_corner")]
 transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, -13, 0.2, 12.85)
 
-[node name="SouthLaundromat" parent="Storefronts" instance=ExtResource("14_laundry")]
+[node name="SouthLaundromat" parent="Storefronts" unique_id=929428039 instance=ExtResource("14_laundry")]
 transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 0, 0.2, 12.95)
 
-[node name="SouthBank" parent="Storefronts" instance=ExtResource("12_bank")]
+[node name="SouthBank" parent="Storefronts" unique_id=1607024982 instance=ExtResource("12_bank")]
 transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 15, 0.2, 13.85)
 
-[node name="SouthSportingAnnex" parent="Storefronts" instance=ExtResource("1_store")]
+[node name="SouthSportingAnnex" parent="Storefronts" unique_id=1988398051 instance=ExtResource("1_store")]
 transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 29, 0.2, 13.05)
 
-[node name="SouthDiner" parent="Storefronts" instance=ExtResource("9_diner")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 54, 0.2, 14)
+[node name="SouthDiner" parent="Storefronts" unique_id=732950737 instance=ExtResource("9_diner")]
+transform = Transform3D(-0.027724572, 0, -0.9996156, 0, 1, 0, 0.9996156, 0, -0.027724572, 54, 0.2, 14)
 
-[node name="SouthOffices" parent="Storefronts" instance=ExtResource("11_office")]
+[node name="SouthOffices" parent="Storefronts" unique_id=1208540232 instance=ExtResource("11_office")]
 transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 88, 0.2, 13.55)
 
-[node name="BackgroundBuildings" type="Node3D" parent="."]
+[node name="BackgroundBuildings" type="Node3D" parent="." unique_id=994429708]
 
-[node name="EastIndustrialWorks" type="StaticBody3D" parent="BackgroundBuildings"]
-position = Vector3(93, 0.2, -20)
+[node name="EastIndustrialWorks" type="StaticBody3D" parent="BackgroundBuildings" unique_id=417023383]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 93, 0.2, -20)
 
-[node name="Visual" parent="BackgroundBuildings/EastIndustrialWorks" instance=ExtResource("32_industrial")]
+[node name="Visual" parent="BackgroundBuildings/EastIndustrialWorks" unique_id=1022983564 instance=ExtResource("32_industrial")]
 transform = Transform3D(3.4, 0, 0, 0, 3.4, 0, 0, 0, 3.4, -0.0313, 0, -8.1245)
 
-[node name="Collision" type="CollisionShape3D" parent="BackgroundBuildings/EastIndustrialWorks"]
-position = Vector3(0, 4.75, -6.015)
+[node name="Collision" type="CollisionShape3D" parent="BackgroundBuildings/EastIndustrialWorks" unique_id=926326761]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.75, -6.015)
 shape = SubResource("IndustrialShape")
 
-[node name="EastCarpetWarehouse" type="StaticBody3D" parent="BackgroundBuildings"]
+[node name="EastCarpetWarehouse" type="StaticBody3D" parent="BackgroundBuildings" unique_id=1456317937]
 transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 94, 0.2, 20)
 
-[node name="Visual" parent="BackgroundBuildings/EastCarpetWarehouse" instance=ExtResource("33_old_building")]
+[node name="Visual" parent="BackgroundBuildings/EastCarpetWarehouse" unique_id=1109305055 instance=ExtResource("33_old_building")]
 transform = Transform3D(0.0197, 0, 0, 0, 0.0197, 0, 0, 0, 0.0197, 0.4452, 0, -3.7499)
 
-[node name="Collision" type="CollisionShape3D" parent="BackgroundBuildings/EastCarpetWarehouse"]
-position = Vector3(0, 5.75, -3.906)
+[node name="Collision" type="CollisionShape3D" parent="BackgroundBuildings/EastCarpetWarehouse" unique_id=1143499774]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.75, -3.906)
 shape = SubResource("OldBuildingShape")
 
-[node name="BusinessSigns" type="Node3D" parent="."]
+[node name="BusinessSigns" type="Node3D" parent="." unique_id=1778970311]
 
-[node name="OfficesNorth" type="Label3D" parent="BusinessSigns"]
-position = Vector3(88, 3.75, -8.45)
+[node name="OfficesNorth" type="Label3D" parent="BusinessSigns" unique_id=2086663891]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 88, 3.75, -8.45)
 text = "MAIN STREET OFFICES"
 font_size = 38
 outline_size = 8
 
-[node name="SportingGoods" type="Label3D" parent="BusinessSigns"]
-position = Vector3(-13, 3.7, 8.45)
-rotation = Vector3(0, 3.1415927, 0)
+[node name="SportingGoods" type="Label3D" parent="BusinessSigns" unique_id=1950065764]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -13, 3.7, 8.45)
 text = "TRAIL & FIELD"
 font_size = 40
 outline_size = 8
 
-[node name="Laundromat" type="Label3D" parent="BusinessSigns"]
-position = Vector3(0, 3.85, 8.45)
-rotation = Vector3(0, 3.1415927, 0)
+[node name="Laundromat" type="Label3D" parent="BusinessSigns" unique_id=1825668996]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 3.85, 8.45)
 text = "WASH-O-MATIC"
 font_size = 40
 outline_size = 8
 
-[node name="BankSouth" type="Label3D" parent="BusinessSigns"]
-position = Vector3(15, 4.55, 8.45)
-rotation = Vector3(0, 3.1415927, 0)
+[node name="BankSouth" type="Label3D" parent="BusinessSigns" unique_id=1610631486]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 15, 4.55, 8.45)
 text = "FIRST COUNTY SAVINGS"
 font_size = 38
 outline_size = 8
 
-[node name="SportingAnnex" type="Label3D" parent="BusinessSigns"]
-position = Vector3(29, 3.35, 8.5)
-rotation = Vector3(0, 3.1415927, 0)
+[node name="SportingAnnex" type="Label3D" parent="BusinessSigns" unique_id=1792293043]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 29, 3.35, 8.5)
 text = "TRAIL & FIELD"
 font_size = 38
 outline_size = 8
 
-[node name="OfficesSouth" type="Label3D" parent="BusinessSigns"]
-position = Vector3(88, 3.75, 8.45)
-rotation = Vector3(0, 3.1415927, 0)
+[node name="OfficesSouth" type="Label3D" parent="BusinessSigns" unique_id=270188560]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 88, 3.75, 8.45)
 text = "PROFESSIONAL OFFICES"
 font_size = 36
 outline_size = 8
 
-[node name="Streetlights" type="Node3D" parent="."]
+[node name="Streetlights" type="Node3D" parent="." unique_id=1805111897]
 
-[node name="North01" parent="Streetlights" instance=ExtResource("2_light")]
-position = Vector3(-94, 0.2, -6.25)
+[node name="North01" parent="Streetlights" unique_id=322017857 instance=ExtResource("2_light")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -94, 0.2, -6.25)
 
-[node name="North02" parent="Streetlights" instance=ExtResource("2_light")]
-position = Vector3(-64, 0.2, -6.25)
+[node name="North02" parent="Streetlights" unique_id=1868427908 instance=ExtResource("2_light")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -64, 0.2, -6.25)
 
-[node name="North03" parent="Streetlights" instance=ExtResource("2_light")]
-position = Vector3(-43, 0.2, -6.25)
+[node name="North03" parent="Streetlights" unique_id=619784868 instance=ExtResource("2_light")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -43, 0.2, -6.25)
 
-[node name="North04" parent="Streetlights" instance=ExtResource("2_light")]
-position = Vector3(-18, 0.2, -6.25)
+[node name="North04" parent="Streetlights" unique_id=1448768979 instance=ExtResource("2_light")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18, 0.2, -6.25)
 
-[node name="North05" parent="Streetlights" instance=ExtResource("2_light")]
-position = Vector3(8, 0.2, -6.25)
+[node name="North05" parent="Streetlights" unique_id=163471922 instance=ExtResource("2_light")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0.2, -6.25)
 
-[node name="North06" parent="Streetlights" instance=ExtResource("2_light")]
-position = Vector3(35, 0.2, -6.25)
+[node name="North06" parent="Streetlights" unique_id=592248611 instance=ExtResource("2_light")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 35, 0.2, -6.25)
 
-[node name="North07" parent="Streetlights" instance=ExtResource("2_light")]
-position = Vector3(64, 0.2, -6.25)
+[node name="North07" parent="Streetlights" unique_id=1058571 instance=ExtResource("2_light")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 64, 0.2, -6.25)
 
-[node name="North08" parent="Streetlights" instance=ExtResource("2_light")]
-position = Vector3(94, 0.2, -6.25)
+[node name="North08" parent="Streetlights" unique_id=1066992393 instance=ExtResource("2_light")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 94, 0.2, -6.25)
 
-[node name="South01" parent="Streetlights" instance=ExtResource("2_light")]
-position = Vector3(-94, 0.2, 6.25)
+[node name="South01" parent="Streetlights" unique_id=986135399 instance=ExtResource("2_light")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -94, 0.2, 6.25)
 
-[node name="South02" parent="Streetlights" instance=ExtResource("2_light")]
-position = Vector3(-64, 0.2, 6.25)
+[node name="South02" parent="Streetlights" unique_id=1884434385 instance=ExtResource("2_light")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -64, 0.2, 6.25)
 
-[node name="South03" parent="Streetlights" instance=ExtResource("2_light")]
-position = Vector3(-43, 0.2, 6.25)
+[node name="South03" parent="Streetlights" unique_id=1358283491 instance=ExtResource("2_light")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -43, 0.2, 6.25)
 
-[node name="South04" parent="Streetlights" instance=ExtResource("2_light")]
-position = Vector3(-18, 0.2, 6.25)
+[node name="South04" parent="Streetlights" unique_id=641433954 instance=ExtResource("2_light")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18, 0.2, 6.25)
 
-[node name="South05" parent="Streetlights" instance=ExtResource("2_light")]
-position = Vector3(8, 0.2, 6.25)
+[node name="South05" parent="Streetlights" unique_id=2056577882 instance=ExtResource("2_light")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0.2, 6.25)
 
-[node name="South06" parent="Streetlights" instance=ExtResource("2_light")]
-position = Vector3(35, 0.2, 6.25)
+[node name="South06" parent="Streetlights" unique_id=1511721288 instance=ExtResource("2_light")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 35, 0.2, 6.25)
 
-[node name="South07" parent="Streetlights" instance=ExtResource("2_light")]
-position = Vector3(64, 0.2, 6.25)
+[node name="South07" parent="Streetlights" unique_id=880653141 instance=ExtResource("2_light")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 64, 0.2, 6.25)
 
-[node name="South08" parent="Streetlights" instance=ExtResource("2_light")]
-position = Vector3(94, 0.2, 6.25)
+[node name="South08" parent="Streetlights" unique_id=122973816 instance=ExtResource("2_light")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 94, 0.2, 6.25)
 
-[node name="Trees" type="Node3D" parent="."]
+[node name="Trees" type="Node3D" parent="." unique_id=946330816]
 
-[node name="North01" parent="Trees" instance=ExtResource("6_tree1")]
-position = Vector3(-81, 0.2, -8.45)
-rotation = Vector3(0, 0.18, 0)
-scale = Vector3(0.9, 0.9, 0.9)
+[node name="North01" parent="Trees" unique_id=1788815086 instance=ExtResource("6_tree1")]
+transform = Transform3D(0.8854593, 0, 0.16112663, 0, 0.9, 0, -0.16112663, 0, 0.8854593, -81, 0.2, -8.45)
 
-[node name="North02" parent="Trees" instance=ExtResource("7_tree2")]
-position = Vector3(-49.5, 0.2, -8.35)
-rotation = Vector3(0, -0.42, 0)
-scale = Vector3(0.78, 0.78, 0.78)
+[node name="North02" parent="Trees" unique_id=411961853 instance=ExtResource("7_tree2")]
+transform = Transform3D(0.71220934, 0, -0.31805313, 0, 0.78, 0, 0.31805313, 0, 0.71220934, -49.5, 0.2, -8.35)
 
-[node name="North03" parent="Trees" instance=ExtResource("6_tree1")]
-position = Vector3(-34.5, 0.2, -8.52)
-rotation = Vector3(0, 0.7, 0)
-scale = Vector3(1.04, 1.04, 1.04)
+[node name="North03" parent="Trees" unique_id=928933816 instance=ExtResource("6_tree1")]
+transform = Transform3D(0.79543585, 0, 0.66998637, 0, 1.04, 0, -0.66998637, 0, 0.79543585, -34.5, 0.2, -8.52)
 
-[node name="North04" parent="Trees" instance=ExtResource("7_tree2")]
-position = Vector3(-3, 0.2, -8.35)
-rotation = Vector3(0, -0.2, 0)
-scale = Vector3(0.82, 0.82, 0.82)
+[node name="North04" parent="Trees" unique_id=1959885392 instance=ExtResource("7_tree2")]
+transform = Transform3D(0.8036546, 0, -0.16290885, 0, 0.82, 0, 0.16290885, 0, 0.8036546, -3, 0.2, -8.35)
 
-[node name="North05" parent="Trees" instance=ExtResource("6_tree1")]
-position = Vector3(24.5, 0.2, -8.55)
-rotation = Vector3(0, 1.08, 0)
-scale = Vector3(0.94, 0.94, 0.94)
+[node name="North05" parent="Trees" unique_id=191775325 instance=ExtResource("6_tree1")]
+transform = Transform3D(0.44304863, 0, 0.82904035, 0, 0.94, 0, -0.82904035, 0, 0.44304863, 24.5, 0.2, -8.55)
 
-[node name="North06" parent="Trees" instance=ExtResource("7_tree2")]
-position = Vector3(57, 0.2, -8.38)
-rotation = Vector3(0, -0.83, 0)
-scale = Vector3(0.73, 0.73, 0.73)
+[node name="North06" parent="Trees" unique_id=2013519005 instance=ExtResource("7_tree2")]
+transform = Transform3D(0.49265933, 0, -0.5386899, 0, 0.73, 0, 0.5386899, 0, 0.49265933, 57, 0.2, -8.38)
 
-[node name="North07" parent="Trees" instance=ExtResource("6_tree1")]
-position = Vector3(80.5, 0.2, -8.5)
-rotation = Vector3(0, 0.48, 0)
-scale = Vector3(1.08, 1.08, 1.08)
+[node name="North07" parent="Trees" unique_id=146808655 instance=ExtResource("6_tree1")]
+transform = Transform3D(0.9579545, 0, 0.49872154, 0, 1.08, 0, -0.49872154, 0, 0.9579545, 80.5, 0.2, -8.5)
 
-[node name="South01" parent="Trees" instance=ExtResource("7_tree2")]
-position = Vector3(-81.5, 0.2, 8.4)
-rotation = Vector3(0, 0.58, 0)
-scale = Vector3(0.8, 0.8, 0.8)
+[node name="South01" parent="Trees" unique_id=1459949940 instance=ExtResource("7_tree2")]
+transform = Transform3D(0.66917014, 0, 0.43841916, 0, 0.8, 0, -0.43841916, 0, 0.66917014, -81.5, 0.2, 8.4)
 
-[node name="South02" parent="Trees" instance=ExtResource("6_tree1")]
-position = Vector3(-52, 0.2, 8.55)
-rotation = Vector3(0, -0.35, 0)
-scale = Vector3(0.96, 0.96, 0.96)
+[node name="South02" parent="Trees" unique_id=1508466663 instance=ExtResource("6_tree1")]
+transform = Transform3D(0.9017978, 0, -0.32918188, 0, 0.96, 0, 0.32918188, 0, 0.9017978, -52, 0.2, 8.55)
 
-[node name="South03" parent="Trees" instance=ExtResource("7_tree2")]
-position = Vector3(-35.5, 0.2, 8.38)
-rotation = Vector3(0, 0.98, 0)
-scale = Vector3(0.74, 0.74, 0.74)
+[node name="South03" parent="Trees" unique_id=411079845 instance=ExtResource("7_tree2")]
+transform = Transform3D(0.41219667, 0, 0.61456805, 0, 0.74, 0, -0.61456805, 0, 0.41219667, -35.5, 0.2, 8.38)
 
-[node name="South04" parent="Trees" instance=ExtResource("6_tree1")]
-position = Vector3(-7, 0.2, 8.52)
-rotation = Vector3(0, -0.65, 0)
-scale = Vector3(1.02, 1.02, 1.02)
+[node name="South04" parent="Trees" unique_id=306049597 instance=ExtResource("6_tree1")]
+transform = Transform3D(0.81200546, 0, -0.61729014, 0, 1.02, 0, 0.61729014, 0, 0.81200546, -7, 0.2, 8.52)
 
-[node name="South05" parent="Trees" instance=ExtResource("7_tree2")]
-position = Vector3(23, 0.2, 8.4)
-rotation = Vector3(0, 0.3, 0)
-scale = Vector3(0.8, 0.8, 0.8)
+[node name="South05" parent="Trees" unique_id=1446869771 instance=ExtResource("7_tree2")]
+transform = Transform3D(0.76426923, 0, 0.23641618, 0, 0.8, 0, -0.23641618, 0, 0.76426923, 23, 0.2, 8.4)
 
-[node name="South06" parent="Trees" instance=ExtResource("6_tree1")]
-position = Vector3(58, 0.2, 8.55)
-rotation = Vector3(0, -0.92, 0)
-scale = Vector3(0.92, 0.92, 0.92)
+[node name="South06" parent="Trees" unique_id=1474935575 instance=ExtResource("6_tree1")]
+transform = Transform3D(0.5573545, 0, -0.7319535, 0, 0.92, 0, 0.7319535, 0, 0.5573545, 60.935055, 0.2, 8.55)
 
-[node name="South07" parent="Trees" instance=ExtResource("7_tree2")]
-position = Vector3(81.5, 0.2, 8.38)
-rotation = Vector3(0, 0.78, 0)
-scale = Vector3(0.76, 0.76, 0.76)
+[node name="South07" parent="Trees" unique_id=169918644 instance=ExtResource("7_tree2")]
+transform = Transform3D(0.5402943, 0, 0.5344923, 0, 0.76, 0, -0.5344923, 0, 0.5402943, 81.5, 0.2, 8.38)
 
-[node name="Shrubs" type="Node3D" parent="."]
+[node name="Shrubs" type="Node3D" parent="." unique_id=1501210485]
 
-[node name="NorthWest01" parent="Shrubs" instance=ExtResource("19_shrub")]
-position = Vector3(-96, 0.2, -8.62)
-rotation = Vector3(0, 0.16, 0)
-scale = Vector3(1.2, 1.2, 1.2)
+[node name="NorthWest01" parent="Shrubs" unique_id=1607479298 instance=ExtResource("19_shrub")]
+transform = Transform3D(1.1846727, 0, 0.19118185, 0, 1.2, 0, -0.19118185, 0, 1.1846727, -96, 0.2, -8.62)
 
-[node name="NorthWest02" parent="Shrubs" instance=ExtResource("22_shrub_autumn")]
-position = Vector3(-77.5, 0.2, -8.48)
-rotation = Vector3(0, -0.28, 0)
-scale = Vector3(0.85, 0.85, 0.85)
+[node name="NorthWest02" parent="Shrubs" unique_id=1106401732 instance=ExtResource("22_shrub_autumn")]
+transform = Transform3D(0.81689715, 0, -0.2349023, 0, 0.85, 0, 0.2349023, 0, 0.81689715, -77.5, 0.2, -8.48)
 
-[node name="NorthBakery" parent="Shrubs" instance=ExtResource("19_shrub")]
-position = Vector3(-51.5, 0.2, -8.62)
-rotation = Vector3(0, 0.36, 0)
+[node name="NorthBakery" parent="Shrubs" unique_id=1008880081 instance=ExtResource("19_shrub")]
+transform = Transform3D(0.9358968, 0, 0.35227424, 0, 1, 0, -0.35227424, 0, 0.9358968, -51.5, 0.2, -8.62)
 
-[node name="NorthCentre01" parent="Shrubs" instance=ExtResource("19_shrub")]
-position = Vector3(-20, 0.2, -8.55)
-rotation = Vector3(0, -0.18, 0)
-scale = Vector3(1.15, 1.15, 1.15)
+[node name="NorthCentre01" parent="Shrubs" unique_id=677274287 instance=ExtResource("19_shrub")]
+transform = Transform3D(1.1314203, 0, -0.20588402, 0, 1.15, 0, 0.20588402, 0, 1.1314203, -20, 0.2, -8.55)
 
-[node name="NorthCentre02" parent="Shrubs" instance=ExtResource("22_shrub_autumn")]
-position = Vector3(16.5, 0.2, -8.48)
-rotation = Vector3(0, 0.22, 0)
-scale = Vector3(0.9, 0.9, 0.9)
+[node name="NorthCentre02" parent="Shrubs" unique_id=1587976448 instance=ExtResource("22_shrub_autumn")]
+transform = Transform3D(0.87830764, 0, 0.19640665, 0, 0.9, 0, -0.19640665, 0, 0.87830764, 16.5, 0.2, -8.48)
 
-[node name="NorthEast01" parent="Shrubs" instance=ExtResource("19_shrub")]
-position = Vector3(63, 0.2, -8.58)
-rotation = Vector3(0, -0.32, 0)
-scale = Vector3(1.1, 1.1, 1.1)
+[node name="NorthEast01" parent="Shrubs" unique_id=1526558586 instance=ExtResource("19_shrub")]
+transform = Transform3D(1.044159, 0, -0.3460232, 0, 1.1, 0, 0.3460232, 0, 1.044159, 63, 0.2, -8.58)
 
-[node name="NorthEast02" parent="Shrubs" instance=ExtResource("22_shrub_autumn")]
-position = Vector3(96, 0.2, -8.52)
-rotation = Vector3(0, 0.28, 0)
-scale = Vector3(0.8, 0.8, 0.8)
+[node name="NorthEast02" parent="Shrubs" unique_id=16214141 instance=ExtResource("22_shrub_autumn")]
+transform = Transform3D(0.76884437, 0, 0.22108452, 0, 0.8, 0, -0.22108452, 0, 0.76884437, 96, 0.2, -8.52)
 
-[node name="SouthWest01" parent="Shrubs" instance=ExtResource("22_shrub_autumn")]
-position = Vector3(-96, 0.2, 8.58)
-rotation = Vector3(0, 2.95, 0)
-scale = Vector3(0.9, 0.9, 0.9)
+[node name="SouthWest01" parent="Shrubs" unique_id=253258123 instance=ExtResource("22_shrub_autumn")]
+transform = Transform3D(-0.883532, 0, 0.17138033, 0, 0.9, 0, -0.17138033, 0, -0.883532, -96, 0.2, 8.58)
 
-[node name="SouthWest02" parent="Shrubs" instance=ExtResource("19_shrub")]
-position = Vector3(-66, 0.2, 8.5)
-rotation = Vector3(0, 3.35, 0)
-scale = Vector3(1.15, 1.15, 1.15)
+[node name="SouthWest02" parent="Shrubs" unique_id=67962425 instance=ExtResource("19_shrub")]
+transform = Transform3D(-1.125116, 0, -0.23793715, 0, 1.15, 0, 0.23793715, 0, -1.125116, -66, 0.2, 8.5)
 
-[node name="SouthCentre01" parent="Shrubs" instance=ExtResource("19_shrub")]
-position = Vector3(-19, 0.2, 8.58)
-rotation = Vector3(0, 2.84, 0)
+[node name="SouthCentre01" parent="Shrubs" unique_id=1697725378 instance=ExtResource("19_shrub")]
+transform = Transform3D(-0.95486456, 0, 0.29704145, 0, 1, 0, -0.29704145, 0, -0.95486456, -19, 0.2, 8.58)
 
-[node name="SouthCentre02" parent="Shrubs" instance=ExtResource("22_shrub_autumn")]
-position = Vector3(9, 0.2, 8.48)
-rotation = Vector3(0, 3.26, 0)
-scale = Vector3(0.82, 0.82, 0.82)
+[node name="SouthCentre02" parent="Shrubs" unique_id=49726507 instance=ExtResource("22_shrub_autumn")]
+transform = Transform3D(-0.8142584, 0, -0.09686729, 0, 0.82, 0, 0.09686729, 0, -0.8142584, 9, 0.2, 8.48)
 
-[node name="SouthCentre03" parent="Shrubs" instance=ExtResource("19_shrub")]
-position = Vector3(36, 0.2, 8.56)
-rotation = Vector3(0, 2.9, 0)
-scale = Vector3(1.2, 1.2, 1.2)
+[node name="SouthCentre03" parent="Shrubs" unique_id=84783479 instance=ExtResource("19_shrub")]
+transform = Transform3D(-1.1651498, 0, 0.2870991, 0, 1.2, 0, -0.2870991, 0, -1.1651498, 36, 0.2, 8.56)
 
-[node name="SouthEast01" parent="Shrubs" instance=ExtResource("22_shrub_autumn")]
-position = Vector3(66, 0.2, 8.5)
-rotation = Vector3(0, 3.42, 0)
-scale = Vector3(0.88, 0.88, 0.88)
+[node name="SouthEast01" parent="Shrubs" unique_id=1135927059 instance=ExtResource("22_shrub_autumn")]
+transform = Transform3D(-0.846115, 0, -0.24184577, 0, 0.88, 0, 0.24184577, 0, -0.846115, 66, 0.2, 8.5)
 
-[node name="SouthEast02" parent="Shrubs" instance=ExtResource("19_shrub")]
-position = Vector3(96, 0.2, 8.58)
-rotation = Vector3(0, 2.88, 0)
-scale = Vector3(1.05, 1.05, 1.05)
+[node name="SouthEast02" parent="Shrubs" unique_id=911312361 instance=ExtResource("19_shrub")]
+transform = Transform3D(-1.0142783, 0, 0.2715502, 0, 1.05, 0, -0.2715502, 0, -1.0142783, 96, 0.2, 8.58)
 
-[node name="TownEdgeTrees" type="Node3D" parent="."]
+[node name="TownEdgeTrees" type="Node3D" parent="." unique_id=305136660]
 
-[node name="EastNorthFront" parent="TownEdgeTrees" instance=ExtResource("6_tree1")]
-position = Vector3(104, 0.2, -17)
-rotation = Vector3(0, 0.36, 0)
-scale = Vector3(1.15, 1.15, 1.15)
+[node name="EastNorthFront" parent="TownEdgeTrees" unique_id=1548483872 instance=ExtResource("6_tree1")]
+transform = Transform3D(1.0762813, 0, 0.40511537, 0, 1.15, 0, -0.40511537, 0, 1.0762813, 104, 0.2, -17)
 
-[node name="EastNorthRear" parent="TownEdgeTrees" instance=ExtResource("7_tree2")]
-position = Vector3(107, 0.2, -27)
-rotation = Vector3(0, -0.72, 0)
-scale = Vector3(1.28, 1.28, 1.28)
+[node name="EastNorthRear" parent="TownEdgeTrees" unique_id=2101873684 instance=ExtResource("7_tree2")]
+transform = Transform3D(0.9623113, 0, -0.8440124, 0, 1.28, 0, 0.8440124, 0, 0.9623113, 107, 0.2, -27)
 
-[node name="EastSouthFront" parent="TownEdgeTrees" instance=ExtResource("7_tree2")]
-position = Vector3(104, 0.2, 17)
-rotation = Vector3(0, 0.92, 0)
-scale = Vector3(1.08, 1.08, 1.08)
+[node name="EastSouthFront" parent="TownEdgeTrees" unique_id=801269584 instance=ExtResource("7_tree2")]
+transform = Transform3D(0.6542857, 0, 0.8592498, 0, 1.08, 0, -0.8592498, 0, 0.6542857, 104, 0.2, 17)
 
-[node name="EastSouthRear" parent="TownEdgeTrees" instance=ExtResource("6_tree1")]
-position = Vector3(108, 0.2, 27)
-rotation = Vector3(0, -0.48, 0)
-scale = Vector3(1.22, 1.22, 1.22)
+[node name="EastSouthRear" parent="TownEdgeTrees" unique_id=358422968 instance=ExtResource("6_tree1")]
+transform = Transform3D(1.0821338, 0, -0.5633706, 0, 1.22, 0, 0.5633706, 0, 1.0821338, 108, 0.2, 27)
 
-[node name="EastRoadNorth" parent="TownEdgeTrees" instance=ExtResource("7_tree2")]
-position = Vector3(107, 0.2, -8.2)
-rotation = Vector3(0, 0.42, 0)
-scale = Vector3(1.18, 1.18, 1.18)
+[node name="EastRoadNorth" parent="TownEdgeTrees" unique_id=558948416 instance=ExtResource("7_tree2")]
+transform = Transform3D(1.0774449, 0, 0.4811573, 0, 1.18, 0, -0.4811573, 0, 1.0774449, 107, 0.2, -8.2)
 
-[node name="EastRoadSouth" parent="TownEdgeTrees" instance=ExtResource("6_tree1")]
-position = Vector3(108, 0.2, 8.4)
-rotation = Vector3(0, -0.62, 0)
-scale = Vector3(1.12, 1.12, 1.12)
+[node name="EastRoadSouth" parent="TownEdgeTrees" unique_id=162504318 instance=ExtResource("6_tree1")]
+transform = Transform3D(0.9115439, 0, -0.65075934, 0, 1.12, 0, 0.65075934, 0, 0.9115439, 108, 0.2, 8.4)
 
-[node name="WestNorthFront" parent="TownEdgeTrees" instance=ExtResource("7_tree2")]
-position = Vector3(-104, 0.2, -17)
-rotation = Vector3(0, -0.38, 0)
-scale = Vector3(1.12, 1.12, 1.12)
+[node name="WestNorthFront" parent="TownEdgeTrees" unique_id=1442699908 instance=ExtResource("7_tree2")]
+transform = Transform3D(1.0401044, 0, -0.41543093, 0, 1.12, 0, 0.41543093, 0, 1.0401044, -104, 0.2, -17)
 
-[node name="WestNorthRear" parent="TownEdgeTrees" instance=ExtResource("6_tree1")]
-position = Vector3(-108, 0.2, -27)
-rotation = Vector3(0, 0.74, 0)
-scale = Vector3(1.25, 1.25, 1.25)
+[node name="WestNorthRear" parent="TownEdgeTrees" unique_id=2123523579 instance=ExtResource("6_tree1")]
+transform = Transform3D(0.9230857, 0, 0.84285986, 0, 1.25, 0, -0.84285986, 0, 0.9230857, -108, 0.2, -27)
 
-[node name="WestSouthFront" parent="TownEdgeTrees" instance=ExtResource("6_tree1")]
-position = Vector3(-104, 0.2, 17)
-rotation = Vector3(0, -0.88, 0)
-scale = Vector3(1.05, 1.05, 1.05)
+[node name="WestSouthFront" parent="TownEdgeTrees" unique_id=1068530779 instance=ExtResource("6_tree1")]
+transform = Transform3D(0.6690087, 0, -0.8092758, 0, 1.05, 0, 0.8092758, 0, 0.6690087, -104, 0.2, 17)
 
-[node name="WestSouthRear" parent="TownEdgeTrees" instance=ExtResource("7_tree2")]
-position = Vector3(-108, 0.2, 27)
-rotation = Vector3(0, 0.52, 0)
-scale = Vector3(1.3, 1.3, 1.3)
+[node name="WestSouthRear" parent="TownEdgeTrees" unique_id=1660927098 instance=ExtResource("7_tree2")]
+transform = Transform3D(1.1281649, 0, 0.6459441, 0, 1.3, 0, -0.6459441, 0, 1.1281649, -108, 0.2, 27)
 
-[node name="WestRoadNorth" parent="TownEdgeTrees" instance=ExtResource("6_tree1")]
-position = Vector3(-107, 0.2, -8.3)
-rotation = Vector3(0, -0.45, 0)
-scale = Vector3(1.14, 1.14, 1.14)
+[node name="WestRoadNorth" parent="TownEdgeTrees" unique_id=1353558286 instance=ExtResource("6_tree1")]
+transform = Transform3D(1.0265098, 0, -0.4958607, 0, 1.14, 0, 0.4958607, 0, 1.0265098, -107, 0.2, -8.3)
 
-[node name="WestRoadSouth" parent="TownEdgeTrees" instance=ExtResource("7_tree2")]
-position = Vector3(-108, 0.2, 8.1)
-rotation = Vector3(0, 0.68, 0)
-scale = Vector3(1.2, 1.2, 1.2)
+[node name="WestRoadSouth" parent="TownEdgeTrees" unique_id=1021426237 instance=ExtResource("7_tree2")]
+transform = Transform3D(0.9330873, 0, 0.75455165, 0, 1.2, 0, -0.75455165, 0, 0.9330873, -108, 0.2, 8.1)
 
-[node name="Furniture" type="Node3D" parent="."]
+[node name="Furniture" type="Node3D" parent="." unique_id=1731449235]
 
-[node name="BenchNorth01" parent="Furniture" instance=ExtResource("3_bench")]
+[node name="BenchNorth01" parent="Furniture" unique_id=1235389438 instance=ExtResource("3_bench")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -51, 0.2, -8.25)
 
-[node name="BenchNorth02" parent="Furniture" instance=ExtResource("3_bench")]
-position = Vector3(-5, 0.2, -8.25)
+[node name="BenchNorth02" parent="Furniture" unique_id=571964480 instance=ExtResource("3_bench")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0.2, -8.25)
 
-[node name="BenchNorth03" parent="Furniture" instance=ExtResource("3_bench")]
-position = Vector3(51, 0.2, -8.25)
+[node name="BenchNorth03" parent="Furniture" unique_id=2053812620 instance=ExtResource("3_bench")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 51, 0.2, -8.25)
 
-[node name="BenchNorth04" parent="Furniture" instance=ExtResource("3_bench")]
-position = Vector3(89, 0.2, -8.25)
+[node name="BenchNorth04" parent="Furniture" unique_id=1736042321 instance=ExtResource("3_bench")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 89, 0.2, -8.25)
 
-[node name="BenchSouth01" parent="Furniture" instance=ExtResource("3_bench")]
+[node name="BenchSouth01" parent="Furniture" unique_id=1335394036 instance=ExtResource("3_bench")]
 transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, -53, 0.2, 8.25)
 
-[node name="BenchSouth02" parent="Furniture" instance=ExtResource("3_bench")]
+[node name="BenchSouth02" parent="Furniture" unique_id=462838108 instance=ExtResource("3_bench")]
 transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, -8, 0.2, 8.25)
 
-[node name="BenchSouth03" parent="Furniture" instance=ExtResource("3_bench")]
+[node name="BenchSouth03" parent="Furniture" unique_id=1298437907 instance=ExtResource("3_bench")]
 transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 48, 0.2, 8.25)
 
-[node name="BenchSouth04" parent="Furniture" instance=ExtResource("3_bench")]
+[node name="BenchSouth04" parent="Furniture" unique_id=1626053737 instance=ExtResource("3_bench")]
 transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 90, 0.2, 8.25)
 
-[node name="PlanterNorth01" parent="Furniture" instance=ExtResource("4_planter")]
-position = Vector3(-46, 0.2, -8.45)
+[node name="PlanterNorth01" parent="Furniture" unique_id=1894207698 instance=ExtResource("4_planter")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -46, 0.2, -8.45)
 
-[node name="PlanterNorth02" parent="Furniture" instance=ExtResource("4_planter")]
-position = Vector3(-34, 0.2, -8.45)
+[node name="PlanterNorth02" parent="Furniture" unique_id=429424193 instance=ExtResource("4_planter")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -34, 0.2, -8.45)
 
-[node name="PlanterNorth03" parent="Furniture" instance=ExtResource("4_planter")]
-position = Vector3(-10, 0.2, -8.45)
+[node name="PlanterNorth03" parent="Furniture" unique_id=613915433 instance=ExtResource("4_planter")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0.2, -8.45)
 
-[node name="PlanterNorth04" parent="Furniture" instance=ExtResource("4_planter")]
-position = Vector3(20, 0.2, -8.45)
+[node name="PlanterNorth04" parent="Furniture" unique_id=318090141 instance=ExtResource("4_planter")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0.2, -8.45)
 
-[node name="PlanterNorth05" parent="Furniture" instance=ExtResource("4_planter")]
-position = Vector3(40, 0.2, -8.45)
+[node name="PlanterNorth05" parent="Furniture" unique_id=1179727457 instance=ExtResource("4_planter")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 40, 0.2, -8.45)
 
-[node name="PlanterNorth06" parent="Furniture" instance=ExtResource("4_planter")]
-position = Vector3(91, 0.2, -8.45)
+[node name="PlanterNorth06" parent="Furniture" unique_id=1604226515 instance=ExtResource("4_planter")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 91, 0.2, -8.45)
 
-[node name="PlanterSouth01" parent="Furniture" instance=ExtResource("4_planter")]
-position = Vector3(-92, 0.2, 8.45)
+[node name="PlanterSouth01" parent="Furniture" unique_id=600614625 instance=ExtResource("4_planter")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -92, 0.2, 8.45)
 
-[node name="PlanterSouth02" parent="Furniture" instance=ExtResource("4_planter")]
-position = Vector3(-59, 0.2, 8.45)
+[node name="PlanterSouth02" parent="Furniture" unique_id=26261804 instance=ExtResource("4_planter")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -59, 0.2, 8.45)
 
-[node name="PlanterSouth03" parent="Furniture" instance=ExtResource("4_planter")]
-position = Vector3(-36, 0.2, 8.45)
+[node name="PlanterSouth03" parent="Furniture" unique_id=1219820838 instance=ExtResource("4_planter")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -36, 0.2, 8.45)
 
-[node name="PlanterSouth04" parent="Furniture" instance=ExtResource("4_planter")]
-position = Vector3(15, 0.2, 8.45)
+[node name="PlanterSouth04" parent="Furniture" unique_id=1378858156 instance=ExtResource("4_planter")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 0.2, 8.45)
 
-[node name="PlanterSouth05" parent="Furniture" instance=ExtResource("4_planter")]
-position = Vector3(43, 0.2, 8.45)
+[node name="PlanterSouth05" parent="Furniture" unique_id=1003006752 instance=ExtResource("4_planter")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 43, 0.2, 8.45)
 
-[node name="PlanterSouth06" parent="Furniture" instance=ExtResource("4_planter")]
-position = Vector3(92, 0.2, 8.45)
+[node name="PlanterSouth06" parent="Furniture" unique_id=1814396669 instance=ExtResource("4_planter")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 92, 0.2, 8.45)
 
-[node name="BinNorth01" parent="Furniture" instance=ExtResource("5_bin")]
-position = Vector3(-78, 0.2, -6.3)
+[node name="BinNorth01" parent="Furniture" unique_id=1666213292 instance=ExtResource("5_bin")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -78, 0.2, -6.3)
 
-[node name="BinNorth02" parent="Furniture" instance=ExtResource("5_bin")]
-position = Vector3(-38, 0.2, -6.3)
+[node name="BinNorth02" parent="Furniture" unique_id=1668569443 instance=ExtResource("5_bin")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -38, 0.2, -6.3)
 
-[node name="BinNorth03" parent="Furniture" instance=ExtResource("5_bin")]
-position = Vector3(3, 0.2, -6.3)
+[node name="BinNorth03" parent="Furniture" unique_id=61112165 instance=ExtResource("5_bin")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0.2, -6.3)
 
-[node name="BinNorth04" parent="Furniture" instance=ExtResource("5_bin")]
-position = Vector3(46, 0.2, -6.3)
+[node name="BinNorth04" parent="Furniture" unique_id=1965875113 instance=ExtResource("5_bin")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 46, 0.2, -6.3)
 
-[node name="BinNorth05" parent="Furniture" instance=ExtResource("5_bin")]
-position = Vector3(82, 0.2, -6.3)
+[node name="BinNorth05" parent="Furniture" unique_id=1985308458 instance=ExtResource("5_bin")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 82, 0.2, -6.3)
 
-[node name="BinSouth01" parent="Furniture" instance=ExtResource("5_bin")]
-position = Vector3(-78, 0.2, 6.3)
+[node name="BinSouth01" parent="Furniture" unique_id=977126981 instance=ExtResource("5_bin")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -78, 0.2, 6.3)
 
-[node name="BinSouth02" parent="Furniture" instance=ExtResource("5_bin")]
-position = Vector3(-38, 0.2, 6.3)
+[node name="BinSouth02" parent="Furniture" unique_id=1635317811 instance=ExtResource("5_bin")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -38, 0.2, 6.3)
 
-[node name="BinSouth03" parent="Furniture" instance=ExtResource("5_bin")]
-position = Vector3(3, 0.2, 6.3)
+[node name="BinSouth03" parent="Furniture" unique_id=1397594279 instance=ExtResource("5_bin")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0.2, 6.3)
 
-[node name="BinSouth04" parent="Furniture" instance=ExtResource("5_bin")]
-position = Vector3(46, 0.2, 6.3)
+[node name="BinSouth04" parent="Furniture" unique_id=860823519 instance=ExtResource("5_bin")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 46, 0.2, 6.3)
 
-[node name="BinSouth05" parent="Furniture" instance=ExtResource("5_bin")]
-position = Vector3(82, 0.2, 6.3)
+[node name="BinSouth05" parent="Furniture" unique_id=1429608935 instance=ExtResource("5_bin")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 82, 0.2, 6.3)
 
-[node name="Vehicles" type="Node3D" parent="."]
+[node name="Vehicles" type="Node3D" parent="." unique_id=586413779]
 
-[node name="ImpalaWest" parent="Vehicles" instance=ExtResource("15_impala")]
-position = Vector3(-87, 0.2, -3.9)
+[node name="ImpalaWest" parent="Vehicles" unique_id=1709842064 instance=ExtResource("15_impala")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -87, 0.2, -3.9)
 
-[node name="PickupWest" parent="Vehicles" instance=ExtResource("16_c10")]
+[node name="PickupWest" parent="Vehicles" unique_id=740851393 instance=ExtResource("16_c10")]
 transform = Transform3D(-0.999848, 0, 0.0174524, 0, 1, 0, -0.0174524, 0, -0.999848, -50, 0.2, 3.9)
 
-[node name="AlfaCentre" parent="Vehicles" instance=ExtResource("18_alfa")]
-position = Vector3(-18, 0.2, -3.9)
+[node name="AlfaCentre" parent="Vehicles" unique_id=1704408295 instance=ExtResource("18_alfa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18, 0.2, -3.9)
 
-[node name="ImpalaEast" parent="Vehicles" instance=ExtResource("15_impala")]
+[node name="ImpalaEast" parent="Vehicles" unique_id=1593458423 instance=ExtResource("15_impala")]
 transform = Transform3D(-0.999391, 0, -0.0348995, 0, 1, 0, 0.0348995, 0, -0.999391, 26, 0.2, 3.9)
 
-[node name="PickupEast" parent="Vehicles" instance=ExtResource("16_c10")]
+[node name="PickupEast" parent="Vehicles" unique_id=725111733 instance=ExtResource("16_c10")]
 transform = Transform3D(0.997564, 0, -0.0697565, 0, 1, 0, 0.0697565, 0, 0.997564, 50, 0.2, -3.8)
 
-[node name="DeliveryVan" parent="Vehicles" instance=ExtResource("17_van")]
+[node name="DeliveryVan" parent="Vehicles" unique_id=354267551 instance=ExtResource("17_van")]
 transform = Transform3D(-0.999848, 0, 0.0174524, 0, 1, 0, -0.0174524, 0, -0.999848, 89, 0.2, 3.85)
 
-[node name="StreetDetails" type="Node3D" parent="."]
+[node name="StreetDetails" type="Node3D" parent="." unique_id=712847829]
 
-[node name="UtilityWest" parent="StreetDetails" instance=ExtResource("20_utility")]
-position = Vector3(-75.2, 0.2, -8.45)
-rotation = Vector3(0, 0.12, 0)
+[node name="UtilityWest" parent="StreetDetails" unique_id=2139379920 instance=ExtResource("20_utility")]
+transform = Transform3D(0.99280864, 0, 0.119712204, 0, 1, 0, -0.119712204, 0, 0.99280864, -75.2, 0.2, -8.45)
 
-[node name="UtilityEast" parent="StreetDetails" instance=ExtResource("20_utility")]
-position = Vector3(75.2, 0.2, 8.45)
-rotation = Vector3(0, 3.02, 0)
+[node name="UtilityEast" parent="StreetDetails" unique_id=2142373085 instance=ExtResource("20_utility")]
+transform = Transform3D(-0.9926167, 0, 0.12129328, 0, 1, 0, -0.12129328, 0, -0.9926167, 75.2, 0.2, 8.45)
 
-[node name="MailboxWestEdge" parent="StreetDetails" instance=ExtResource("21_mailbox")]
-position = Vector3(-103, 0, -10.2)
-rotation = Vector3(0, 0.12, 0)
+[node name="MailboxWestEdge" parent="StreetDetails" unique_id=484195527 instance=ExtResource("21_mailbox")]
+transform = Transform3D(0.99280864, 0, 0.119712204, 0, 1, 0, -0.119712204, 0, 0.99280864, -103, 0, -10.2)
 
-[node name="MailboxEastEdge" parent="StreetDetails" instance=ExtResource("21_mailbox")]
-position = Vector3(103, 0, 10.2)
-rotation = Vector3(0, 3.02, 0)
+[node name="MailboxEastEdge" parent="StreetDetails" unique_id=981356854 instance=ExtResource("21_mailbox")]
+transform = Transform3D(-0.9926167, 0, 0.12129328, 0, 1, 0, -0.12129328, 0, -0.9926167, 103, 0, 10.2)
 
-[node name="DinerWelcomeBoard" parent="StreetDetails" instance=ExtResource("34_restaurant_sign")]
+[node name="DinerWelcomeBoard" parent="StreetDetails" unique_id=1651532532 instance=ExtResource("34_restaurant_sign")]
 transform = Transform3D(0, 0, -0.95, 0, 0.95, 0, 0.95, 0, 0, 48.5, 0.2, 7.25)
 
-[node name="BusStop" type="StaticBody3D" parent="."]
-position = Vector3(12, 0.2, 8.35)
+[node name="BusStop" type="StaticBody3D" parent="." unique_id=1433141967]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0.2, 8.35)
 
-[node name="Post" type="MeshInstance3D" parent="BusStop"]
-position = Vector3(0, 1.25, 0)
+[node name="Post" type="MeshInstance3D" parent="BusStop" unique_id=1700535352]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0)
 mesh = SubResource("BusStopPostMesh")
 
-[node name="SignPlate" type="MeshInstance3D" parent="BusStop"]
-position = Vector3(0, 2.25, 0)
+[node name="SignPlate" type="MeshInstance3D" parent="BusStop" unique_id=1759697074]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.25, 0)
 mesh = SubResource("BusStopSignMesh")
 
-[node name="PostCollision" type="CollisionShape3D" parent="BusStop"]
-position = Vector3(0, 1.25, 0)
+[node name="PostCollision" type="CollisionShape3D" parent="BusStop" unique_id=1695035389]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0)
 shape = SubResource("BusStopPostShape")
 
-[node name="Bench" parent="BusStop" instance=ExtResource("3_bench")]
-position = Vector3(-1.45, 0, 0.2)
-rotation = Vector3(0, 3.1415927, 0)
+[node name="Bench" parent="BusStop" unique_id=1871265332 instance=ExtResource("3_bench")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -1.45, 0, 0.2)
 
-[node name="Sign" type="Label3D" parent="BusStop"]
-position = Vector3(0, 2.25, -0.04)
-rotation = Vector3(0, 3.1415927, 0)
+[node name="Sign" type="Label3D" parent="BusStop" unique_id=1341328202]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 2.25, -0.04)
+pixel_size = 0.0045
 text = "BUS STOP
 MAIN STREET"
 font_size = 24
 outline_size = 5
-pixel_size = 0.0045
 
-[node name="Hydrants" type="Node3D" parent="."]
+[node name="Hydrants" type="Node3D" parent="." unique_id=515164807]
 
-[node name="WestNorth" type="StaticBody3D" parent="Hydrants"]
-position = Vector3(-66, 0.2, -8.35)
+[node name="WestNorth" type="StaticBody3D" parent="Hydrants" unique_id=1402522583]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -66, 0.2, -8.35)
 
-[node name="Base" type="MeshInstance3D" parent="Hydrants/WestNorth"]
-position = Vector3(0, 0.09, 0)
+[node name="Base" type="MeshInstance3D" parent="Hydrants/WestNorth" unique_id=507720032]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.09, 0)
 mesh = SubResource("HydrantBaseMesh")
 
-[node name="Body" type="MeshInstance3D" parent="Hydrants/WestNorth"]
-position = Vector3(0, 0.4, 0)
+[node name="Body" type="MeshInstance3D" parent="Hydrants/WestNorth" unique_id=1060923910]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
 mesh = SubResource("HydrantBodyMesh")
 
-[node name="TopRing" type="MeshInstance3D" parent="Hydrants/WestNorth"]
-position = Vector3(0, 0.75, 0)
+[node name="TopRing" type="MeshInstance3D" parent="Hydrants/WestNorth" unique_id=262980453]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
 mesh = SubResource("HydrantRingMesh")
 
-[node name="Dome" type="MeshInstance3D" parent="Hydrants/WestNorth"]
-position = Vector3(0, 0.94, 0)
+[node name="Dome" type="MeshInstance3D" parent="Hydrants/WestNorth" unique_id=777654653]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.94, 0)
 mesh = SubResource("HydrantDomeMesh")
 
-[node name="TopNut" type="MeshInstance3D" parent="Hydrants/WestNorth"]
-position = Vector3(0, 1.16, 0)
+[node name="TopNut" type="MeshInstance3D" parent="Hydrants/WestNorth" unique_id=751840971]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.16, 0)
 mesh = SubResource("HydrantNutMesh")
 
-[node name="LeftNozzle" type="MeshInstance3D" parent="Hydrants/WestNorth"]
-position = Vector3(-0.27, 0.52, 0)
-rotation = Vector3(0, 0, 1.5707963)
+[node name="LeftNozzle" type="MeshInstance3D" parent="Hydrants/WestNorth" unique_id=19901359]
+transform = Transform3D(7.54979e-08, -1, 0, 1, 7.54979e-08, 0, 0, 0, 1, -0.27, 0.52, 0)
 mesh = SubResource("HydrantNozzleMesh")
 
-[node name="LeftCap" type="MeshInstance3D" parent="Hydrants/WestNorth"]
-position = Vector3(-0.43, 0.52, 0)
-rotation = Vector3(0, 0, 1.5707963)
+[node name="LeftCap" type="MeshInstance3D" parent="Hydrants/WestNorth" unique_id=866390750]
+transform = Transform3D(7.54979e-08, -1, 0, 1, 7.54979e-08, 0, 0, 0, 1, -0.43, 0.52, 0)
 mesh = SubResource("HydrantCapMesh")
 
-[node name="RightNozzle" type="MeshInstance3D" parent="Hydrants/WestNorth"]
-position = Vector3(0.27, 0.52, 0)
-rotation = Vector3(0, 0, 1.5707963)
+[node name="RightNozzle" type="MeshInstance3D" parent="Hydrants/WestNorth" unique_id=1226203876]
+transform = Transform3D(7.54979e-08, -1, 0, 1, 7.54979e-08, 0, 0, 0, 1, 0.27, 0.52, 0)
 mesh = SubResource("HydrantNozzleMesh")
 
-[node name="RightCap" type="MeshInstance3D" parent="Hydrants/WestNorth"]
-position = Vector3(0.43, 0.52, 0)
-rotation = Vector3(0, 0, 1.5707963)
+[node name="RightCap" type="MeshInstance3D" parent="Hydrants/WestNorth" unique_id=1308599734]
+transform = Transform3D(7.54979e-08, -1, 0, 1, 7.54979e-08, 0, 0, 0, 1, 0.43, 0.52, 0)
 mesh = SubResource("HydrantCapMesh")
 
-[node name="Collision" type="CollisionShape3D" parent="Hydrants/WestNorth"]
-position = Vector3(0, 0.55, 0)
+[node name="Collision" type="CollisionShape3D" parent="Hydrants/WestNorth" unique_id=1370786563]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.55, 0)
 shape = SubResource("HydrantShape")
 
-[node name="CentreSouth" type="StaticBody3D" parent="Hydrants"]
-position = Vector3(34, 0.2, 8.35)
+[node name="CentreSouth" type="StaticBody3D" parent="Hydrants" unique_id=1476783155]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 34, 0.2, 8.35)
 
-[node name="Base" type="MeshInstance3D" parent="Hydrants/CentreSouth"]
-position = Vector3(0, 0.09, 0)
+[node name="Base" type="MeshInstance3D" parent="Hydrants/CentreSouth" unique_id=827063843]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.09, 0)
 mesh = SubResource("HydrantBaseMesh")
 
-[node name="Body" type="MeshInstance3D" parent="Hydrants/CentreSouth"]
-position = Vector3(0, 0.4, 0)
+[node name="Body" type="MeshInstance3D" parent="Hydrants/CentreSouth" unique_id=213100064]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
 mesh = SubResource("HydrantBodyMesh")
 
-[node name="TopRing" type="MeshInstance3D" parent="Hydrants/CentreSouth"]
-position = Vector3(0, 0.75, 0)
+[node name="TopRing" type="MeshInstance3D" parent="Hydrants/CentreSouth" unique_id=11712878]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
 mesh = SubResource("HydrantRingMesh")
 
-[node name="Dome" type="MeshInstance3D" parent="Hydrants/CentreSouth"]
-position = Vector3(0, 0.94, 0)
+[node name="Dome" type="MeshInstance3D" parent="Hydrants/CentreSouth" unique_id=1650559154]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.94, 0)
 mesh = SubResource("HydrantDomeMesh")
 
-[node name="TopNut" type="MeshInstance3D" parent="Hydrants/CentreSouth"]
-position = Vector3(0, 1.16, 0)
+[node name="TopNut" type="MeshInstance3D" parent="Hydrants/CentreSouth" unique_id=12541585]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.16, 0)
 mesh = SubResource("HydrantNutMesh")
 
-[node name="LeftNozzle" type="MeshInstance3D" parent="Hydrants/CentreSouth"]
-position = Vector3(-0.27, 0.52, 0)
-rotation = Vector3(0, 0, 1.5707963)
+[node name="LeftNozzle" type="MeshInstance3D" parent="Hydrants/CentreSouth" unique_id=975856808]
+transform = Transform3D(7.54979e-08, -1, 0, 1, 7.54979e-08, 0, 0, 0, 1, -0.27, 0.52, 0)
 mesh = SubResource("HydrantNozzleMesh")
 
-[node name="LeftCap" type="MeshInstance3D" parent="Hydrants/CentreSouth"]
-position = Vector3(-0.43, 0.52, 0)
-rotation = Vector3(0, 0, 1.5707963)
+[node name="LeftCap" type="MeshInstance3D" parent="Hydrants/CentreSouth" unique_id=871882111]
+transform = Transform3D(7.54979e-08, -1, 0, 1, 7.54979e-08, 0, 0, 0, 1, -0.43, 0.52, 0)
 mesh = SubResource("HydrantCapMesh")
 
-[node name="RightNozzle" type="MeshInstance3D" parent="Hydrants/CentreSouth"]
-position = Vector3(0.27, 0.52, 0)
-rotation = Vector3(0, 0, 1.5707963)
+[node name="RightNozzle" type="MeshInstance3D" parent="Hydrants/CentreSouth" unique_id=1459012892]
+transform = Transform3D(7.54979e-08, -1, 0, 1, 7.54979e-08, 0, 0, 0, 1, 0.27, 0.52, 0)
 mesh = SubResource("HydrantNozzleMesh")
 
-[node name="RightCap" type="MeshInstance3D" parent="Hydrants/CentreSouth"]
-position = Vector3(0.43, 0.52, 0)
-rotation = Vector3(0, 0, 1.5707963)
+[node name="RightCap" type="MeshInstance3D" parent="Hydrants/CentreSouth" unique_id=526191070]
+transform = Transform3D(7.54979e-08, -1, 0, 1, 7.54979e-08, 0, 0, 0, 1, 0.43, 0.52, 0)
 mesh = SubResource("HydrantCapMesh")
 
-[node name="Collision" type="CollisionShape3D" parent="Hydrants/CentreSouth"]
-position = Vector3(0, 0.55, 0)
+[node name="Collision" type="CollisionShape3D" parent="Hydrants/CentreSouth" unique_id=950992603]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.55, 0)
 shape = SubResource("HydrantShape")
 
-[node name="EastNorth" type="StaticBody3D" parent="Hydrants"]
-position = Vector3(66, 0.2, -8.35)
+[node name="EastNorth" type="StaticBody3D" parent="Hydrants" unique_id=1584593417]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 66, 0.2, -8.35)
 
-[node name="Base" type="MeshInstance3D" parent="Hydrants/EastNorth"]
-position = Vector3(0, 0.09, 0)
+[node name="Base" type="MeshInstance3D" parent="Hydrants/EastNorth" unique_id=894186500]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.09, 0)
 mesh = SubResource("HydrantBaseMesh")
 
-[node name="Body" type="MeshInstance3D" parent="Hydrants/EastNorth"]
-position = Vector3(0, 0.4, 0)
+[node name="Body" type="MeshInstance3D" parent="Hydrants/EastNorth" unique_id=1823497754]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
 mesh = SubResource("HydrantBodyMesh")
 
-[node name="TopRing" type="MeshInstance3D" parent="Hydrants/EastNorth"]
-position = Vector3(0, 0.75, 0)
+[node name="TopRing" type="MeshInstance3D" parent="Hydrants/EastNorth" unique_id=452079653]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
 mesh = SubResource("HydrantRingMesh")
 
-[node name="Dome" type="MeshInstance3D" parent="Hydrants/EastNorth"]
-position = Vector3(0, 0.94, 0)
+[node name="Dome" type="MeshInstance3D" parent="Hydrants/EastNorth" unique_id=1857564529]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.94, 0)
 mesh = SubResource("HydrantDomeMesh")
 
-[node name="TopNut" type="MeshInstance3D" parent="Hydrants/EastNorth"]
-position = Vector3(0, 1.16, 0)
+[node name="TopNut" type="MeshInstance3D" parent="Hydrants/EastNorth" unique_id=791398298]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.16, 0)
 mesh = SubResource("HydrantNutMesh")
 
-[node name="LeftNozzle" type="MeshInstance3D" parent="Hydrants/EastNorth"]
-position = Vector3(-0.27, 0.52, 0)
-rotation = Vector3(0, 0, 1.5707963)
+[node name="LeftNozzle" type="MeshInstance3D" parent="Hydrants/EastNorth" unique_id=73775929]
+transform = Transform3D(7.54979e-08, -1, 0, 1, 7.54979e-08, 0, 0, 0, 1, -0.27, 0.52, 0)
 mesh = SubResource("HydrantNozzleMesh")
 
-[node name="LeftCap" type="MeshInstance3D" parent="Hydrants/EastNorth"]
-position = Vector3(-0.43, 0.52, 0)
-rotation = Vector3(0, 0, 1.5707963)
+[node name="LeftCap" type="MeshInstance3D" parent="Hydrants/EastNorth" unique_id=742486453]
+transform = Transform3D(7.54979e-08, -1, 0, 1, 7.54979e-08, 0, 0, 0, 1, -0.43, 0.52, 0)
 mesh = SubResource("HydrantCapMesh")
 
-[node name="RightNozzle" type="MeshInstance3D" parent="Hydrants/EastNorth"]
-position = Vector3(0.27, 0.52, 0)
-rotation = Vector3(0, 0, 1.5707963)
+[node name="RightNozzle" type="MeshInstance3D" parent="Hydrants/EastNorth" unique_id=719678043]
+transform = Transform3D(7.54979e-08, -1, 0, 1, 7.54979e-08, 0, 0, 0, 1, 0.27, 0.52, 0)
 mesh = SubResource("HydrantNozzleMesh")
 
-[node name="RightCap" type="MeshInstance3D" parent="Hydrants/EastNorth"]
-position = Vector3(0.43, 0.52, 0)
-rotation = Vector3(0, 0, 1.5707963)
+[node name="RightCap" type="MeshInstance3D" parent="Hydrants/EastNorth" unique_id=1389995629]
+transform = Transform3D(7.54979e-08, -1, 0, 1, 7.54979e-08, 0, 0, 0, 1, 0.43, 0.52, 0)
 mesh = SubResource("HydrantCapMesh")
 
-[node name="Collision" type="CollisionShape3D" parent="Hydrants/EastNorth"]
-position = Vector3(0, 0.55, 0)
+[node name="Collision" type="CollisionShape3D" parent="Hydrants/EastNorth" unique_id=1428221008]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.55, 0)
 shape = SubResource("HydrantShape")
