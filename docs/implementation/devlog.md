@@ -2055,3 +2055,59 @@ Validation:
 - Direct Main Street runtime completed a 120-frame cold start without scene or
   script errors
 - C# build completed with no warnings or errors
+
+---
+
+## Greenleaf Pharmacy Production Interior
+
+Completed:
+
+- Rebuilt the pharmacy exterior as an aged painted-brick storefront with real
+  glazing, framed display windows, a rusted green awning and sign band,
+  readable period identity, external wall fixtures, and a working imported
+  shop-front door
+- Replaced the prototype room with distinct retail aisles, stocked window
+  displays, checkout, waiting area, prescription counter and workspace, staff
+  office, enclosed storage, and a furnished restroom based on the supplied
+  concept reference
+- Integrated 23 compact Poly Haven CC0 models, five Poly Haven CC0 PBR surface
+  sets, and a trimmed CC0 OpenGameArt toilet-and-sink subset at 1K resolution;
+  the retained third-party source payload is approximately 57.3 MiB
+- Used textured project-owned architecture and counter work only where modular
+  construction was required; all furniture, sanitary fixtures, equipment,
+  retail shelving, lighting, and focal clutter use authored external models
+- Added aged linoleum, painted plaster, distressed metal, bathroom tile,
+  ceiling plaster, double-sided aisle signs, cool fluorescent fixtures,
+  looted product spacing, office paperwork, cartons, and restrained discarded
+  clutter
+- Widened the storage and restroom openings to 1.2 m and moved the office desk
+  cluster so the existing 0.45 m-radius player capsule has a verified route
+  through every customer and staff destination
+- Kept the concept-appropriate single-storey plan; this shell does not require
+  a staircase
+- Preserved the established
+  `Interior/MedicineCabinet/SearchableContainer` path, loot table, inventory,
+  objective, and interaction behaviour
+- Replaced the Main Street facade-only pharmacy instance with the assembled
+  enterable building while keeping combat, player, zombie, save, and gameplay
+  code unchanged
+- Corrected two existing environment-resource links to the tracked asphalt
+  textures and current `bakery_open.glb`, restoring prototype-world regression
+  loading without changing behaviour
+
+Validation:
+
+- Focused Greenleaf Pharmacy validation passed storefront identity, concept
+  zones, curated asset density, medicine-cabinet preservation, major-only
+  collision, working door movement, lighting limits, node bounds, and live
+  player-radius clearance checks
+- Main Street art-pass and Glen's Bakery production-interior regressions passed
+- Day/night flashlight, inventory UI, loot placement, objective flow,
+  gameplay notification, weighted loot, save/load, and town-composition
+  regressions passed
+- Five-angle Compatibility-rendered review covered the exterior, sales floor,
+  cross aisle, prescription workspace, and restroom approach
+- Full prototype Compatibility benchmark at 1280 by 720 averaged 161.99 FPS
+  with 9.41 ms p95 frame time; the scene retained simplified collision and
+  shadowless interior fill lights
+- C# build completed with no warnings or errors

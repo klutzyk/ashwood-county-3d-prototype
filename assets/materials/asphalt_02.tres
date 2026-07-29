@@ -1,7 +1,7 @@
 [gd_resource type="StandardMaterial3D" format=3]
 
-[ext_resource type="Texture2D" uid="uid://bpbsd5mnsjg5u" path="res://assets/third_party/materials/asphalt/asphalt_02_diff_1k.jpg" id="1_albedo"]
-[ext_resource type="Texture2D" uid="uid://cns3q5j62h25m" path="res://assets/third_party/materials/asphalt/asphalt_02_rough_1k.jpg" id="2_roughness"]
+[ext_resource type="Texture2D" uid="uid://di485lm54u55n" path="res://assets/third_party/materials/asphalt/broken_grayasphalt_02_1k.gltf/textures/asphalt_02_diff_1k.jpg" id="1_albedo"]
+[ext_resource type="Texture2D" uid="uid://bmgs83acdqydv" path="res://assets/third_party/materials/asphalt/broken_grayasphalt_02_1k.gltf/textures/asphalt_02_rough_1k.jpg" id="2_roughness"]
 
 [resource]
 albedo_texture = ExtResource("1_albedo")

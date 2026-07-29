@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" path="res://assets/environment/buildings/Pharmacy/exterior.tscn" id="1_exterior"]
 [ext_resource type="PackedScene" path="res://assets/environment/buildings/Pharmacy/interior.tscn" id="2_interior"]
-[ext_resource type="PackedScene" path="res://assets/environment/buildings/shared/door.tscn" id="3_door"]
+[ext_resource type="PackedScene" path="res://assets/environment/buildings/Pharmacy/front_door.tscn" id="3_door"]
 
 [node name="Pharmacy" type="Node3D"]
 
@@ -12,4 +12,4 @@
 
 [node name="FrontDoor" parent="." instance=ExtResource("3_door")]
 position = Vector3(3.38, 0.03, -0.7)
-OpenAngleDegrees = -95.0
+OpenAngleDegrees = -100.0

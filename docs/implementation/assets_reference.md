@@ -505,6 +505,86 @@ The existing licensed plastic crates and project-owned PBR wood, brick,
 plaster, glass, enamel, brass, and stainless-steel materials are reused around
 the downloaded focal assets. Imported sources remain unmodified.
 
+## Greenleaf Pharmacy Production Interior
+
+The following 1K assets were downloaded from Poly Haven on 29 July 2026 for
+the Greenleaf Pharmacy production-interior pass. Every asset in the two tables
+below is licensed under
+[CC0 1.0 Universal](https://polyhaven.com/license); attribution is not
+required, but authors and source pages are retained for provenance.
+
+### Pharmacy Models
+
+| Asset | Author(s) | Source | Local path | License |
+| --- | --- | --- | --- | --- |
+| All Purpose Cleaner | Kuutti Siitonen | [Poly Haven](https://polyhaven.com/a/all_purpose_cleaner) | `assets/third_party/interiors/pharmacy/poly_haven/all_purpose_cleaner/all_purpose_cleaner_1k.gltf` | CC0 1.0 |
+| Bleach Bottle | James Ray Cock | [Poly Haven](https://polyhaven.com/a/bleach_bottle) | `assets/third_party/interiors/pharmacy/poly_haven/bleach_bottle/bleach_bottle_1k.gltf` | CC0 1.0 |
+| Cardboard Box 01 | Rahul Chaudhary | [Poly Haven](https://polyhaven.com/a/cardboard_box_01) | `assets/third_party/interiors/pharmacy/poly_haven/cardboard_box_01/cardboard_box_01_1k.gltf` | CC0 1.0 |
+| Chemistry Set | Jiří Ptáček | [Poly Haven](https://polyhaven.com/a/chemistry_set) | `assets/third_party/interiors/pharmacy/poly_haven/chemistry_set/chemistry_set_1k.gltf` | CC0 1.0 |
+| Clipboard | ProgrammerOnCoffee | [Poly Haven](https://polyhaven.com/a/clipboard) | `assets/third_party/interiors/pharmacy/poly_haven/clipboard/clipboard_1k.gltf` | CC0 1.0 |
+| Desk Lamp Arm 01 | Yann Kervran and Kuutti Siitonen | [Poly Haven](https://polyhaven.com/a/desk_lamp_arm_01) | `assets/third_party/interiors/pharmacy/poly_haven/desk_lamp_arm_01/desk_lamp_arm_01_1k.gltf` | CC0 1.0 |
+| Drawer Cabinet | Ulan Cabanilla | [Poly Haven](https://polyhaven.com/a/drawer_cabinet) | `assets/third_party/interiors/pharmacy/poly_haven/drawer_cabinet/drawer_cabinet_1k.gltf` | CC0 1.0 |
+| Industrial Wall Lamp | Kuutti Siitonen | [Poly Haven](https://polyhaven.com/a/industrial_wall_lamp) | `assets/third_party/interiors/pharmacy/poly_haven/industrial_wall_lamp/industrial_wall_lamp_1k.gltf` | CC0 1.0 |
+| Long Life Food | Mia Pecina Zorko | [Poly Haven](https://polyhaven.com/a/long_life_food) | `assets/third_party/interiors/pharmacy/poly_haven/long_life_food/long_life_food_1k.gltf` | CC0 1.0 |
+| Medical Box | Ulan Cabanilla | [Poly Haven](https://polyhaven.com/a/medical_box) | `assets/third_party/interiors/pharmacy/poly_haven/medical_box/medical_box_1k.gltf` | CC0 1.0 |
+| Medical Tape | Miroslav Turura | [Poly Haven](https://polyhaven.com/a/medical_tape) | `assets/third_party/interiors/pharmacy/poly_haven/medical_tape/medical_tape_1k.gltf` | CC0 1.0 |
+| Metal Office Desk | Ulan Cabanilla | [Poly Haven](https://polyhaven.com/a/metal_office_desk) | `assets/third_party/interiors/pharmacy/poly_haven/metal_office_desk/metal_office_desk_1k.gltf` | CC0 1.0 |
+| Mounted Fluorescent Lights | Ulan Cabanilla | [Poly Haven](https://polyhaven.com/a/mounted_fluorescent_lights) | `assets/third_party/interiors/pharmacy/poly_haven/mounted_fluorescent_lights/mounted_fluorescent_lights_1k.gltf` | CC0 1.0 |
+| Office Notepads | Ulan Cabanilla | [Poly Haven](https://polyhaven.com/a/office_notepads) | `assets/third_party/interiors/pharmacy/poly_haven/office_notepads/office_notepads_1k.gltf` | CC0 1.0 |
+| School Chair 01 | Ethan Place | [Poly Haven](https://polyhaven.com/a/SchoolChair_01) | `assets/third_party/interiors/pharmacy/poly_haven/SchoolChair_01/SchoolChair_01_1k.gltf` | CC0 1.0 |
+| Stationery Supplies | Mateusz Sadek | [Poly Haven](https://polyhaven.com/a/stationery_supplies) | `assets/third_party/interiors/pharmacy/poly_haven/stationery_supplies/stationery_supplies_1k.gltf` | CC0 1.0 |
+| Steel Frame Shelves 02 | James Ray Cock | [Poly Haven](https://polyhaven.com/a/steel_frame_shelves_02) | `assets/third_party/interiors/pharmacy/poly_haven/steel_frame_shelves_02/steel_frame_shelves_02_1k.gltf` | CC0 1.0 |
+| Trashbag | Benny Weimer | [Poly Haven](https://polyhaven.com/a/trashbag) | `assets/third_party/interiors/pharmacy/poly_haven/trashbag/trashbag_1k.gltf` | CC0 1.0 |
+| Vintage Crutches 01 | James Ray Cock | [Poly Haven](https://polyhaven.com/a/vintage_crutches_01) | `assets/third_party/interiors/pharmacy/poly_haven/vintage_crutches_01/vintage_crutches_01_1k.gltf` | CC0 1.0 |
+| Vintage Wooden Drawer 01 | James Ray Cock | [Poly Haven](https://polyhaven.com/a/vintage_wooden_drawer_01) | `assets/third_party/interiors/pharmacy/poly_haven/vintage_wooden_drawer_01/vintage_wooden_drawer_01_1k.gltf` | CC0 1.0 |
+| Wall Clock | PierreB3D | [Poly Haven](https://polyhaven.com/a/wall_clock) | `assets/third_party/interiors/pharmacy/poly_haven/wall_clock/wall_clock_1k.gltf` | CC0 1.0 |
+| Wheelchair 01 | Garreth Dean | [Poly Haven](https://polyhaven.com/a/wheelchair_01) | `assets/third_party/interiors/pharmacy/poly_haven/wheelchair_01/wheelchair_01_1k.gltf` | CC0 1.0 |
+| Wooden Display Shelves 01 | James Ray Cock | [Poly Haven](https://polyhaven.com/a/wooden_display_shelves_01) | `assets/third_party/interiors/pharmacy/poly_haven/wooden_display_shelves_01/wooden_display_shelves_01_1k.gltf` | CC0 1.0 |
+
+### Pharmacy PBR Surfaces
+
+| Asset | Author(s) | Source | Downloaded location | Project material | License |
+| --- | --- | --- | --- | --- | --- |
+| Beige Wall 001 | Dimitrios Savva and Rico Cilliers | [Poly Haven](https://polyhaven.com/a/beige_wall_001) | `assets/third_party/interiors/pharmacy/materials/poly_haven/beige_wall_001/` | `assets/materials/greenleaf_pharmacy_wall.tres` | CC0 1.0 |
+| Ceiling Interior | Dimitrios Savva | [Poly Haven](https://polyhaven.com/a/ceiling_interior) | `assets/third_party/interiors/pharmacy/materials/poly_haven/ceiling_interior/` | `assets/materials/greenleaf_pharmacy_ceiling.tres` | CC0 1.0 |
+| Green Metal Rust | Rob Tuytel | [Poly Haven](https://polyhaven.com/a/green_metal_rust) | `assets/third_party/interiors/pharmacy/materials/poly_haven/green_metal_rust/` | `assets/materials/greenleaf_pharmacy_green_metal.tres` and `assets/materials/greenleaf_pharmacy_sign.tres` | CC0 1.0 |
+| Interior Tiles | Charlotte Baglioni | [Poly Haven](https://polyhaven.com/a/interior_tiles) | `assets/third_party/interiors/pharmacy/materials/poly_haven/interior_tiles/` | `assets/materials/greenleaf_pharmacy_bathroom_tile.tres` | CC0 1.0 |
+| Old Linoleum Flooring 01 | Charlotte Baglioni | [Poly Haven](https://polyhaven.com/a/old_linoleum_flooring_01) | `assets/third_party/interiors/pharmacy/materials/poly_haven/old_linoleum_flooring_01/` | `assets/materials/greenleaf_pharmacy_linoleum.tres` | CC0 1.0 |
+
+### Toilets Sanitary Fixtures
+
+- **Asset:** [Toilets](https://opengameart.org/content/toilets)
+- **Creator:** `loafbrr_1`
+- **Provider:** OpenGameArt
+- **License:** [CC0 1.0 Universal](https://creativecommons.org/publicdomain/zero/1.0/)
+- **Attribution requirement:** None; creator and source are recorded for
+  provenance.
+- **Retained subset:** One UV-mapped sink, one UV-mapped round toilet, their
+  required authored 1K diffuse, normal and packed AoRM maps, and the supplied
+  license readme. Unused pack contents were not retained.
+- **Downloaded location:**
+  `assets/third_party/interiors/shared/open_game_art/loafbrr_toilets/`
+- **Project scene wrappers:**
+  `assets/third_party/interiors/shared/open_game_art/loafbrr_toilets/objects/sink_a.tscn`
+  and
+  `assets/third_party/interiors/shared/open_game_art/loafbrr_toilets/objects/toilet_round_a.tscn`
+- **Project material wrappers:**
+  `assets/third_party/interiors/shared/open_game_art/loafbrr_toilets/materials/sink_a.tres`,
+  `assets/third_party/interiors/shared/open_game_art/loafbrr_toilets/materials/toilet_flush_box.tres`,
+  `assets/third_party/interiors/shared/open_game_art/loafbrr_toilets/materials/toilet_round.tres`,
+  and
+  `assets/third_party/interiors/shared/open_game_art/loafbrr_toilets/materials/toilet_round_seat.tres`
+- **Local license record:**
+  `assets/third_party/interiors/shared/open_game_art/loafbrr_toilets/README.txt`
+- **Status:** In use
+
+Greenleaf Pharmacy also reuses the already documented Poly Haven Cash Register
+01, Steel Frame Shelves 01, and Wooden Table 02 from the Glen's Bakery pack.
+No new door model was downloaded: the existing CC BY 4.0 Shop Front Door is
+instanced through
+`assets/environment/buildings/Pharmacy/front_door.tscn`; its full credit
+remains in the earlier door-assets entry.
+
 ## Release Checklist
 
 - [x] Record source and license links for all listed assets.

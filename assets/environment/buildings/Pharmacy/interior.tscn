@@ -1,110 +1,848 @@
-[gd_scene load_steps=12 format=3]
+[gd_scene load_steps=59 format=3]
 
-[ext_resource type="Material" path="res://assets/materials/building_floor.tres" id="1_floor"]
-[ext_resource type="Material" path="res://assets/materials/building_partition.tres" id="2_partition"]
-[ext_resource type="Material" path="res://assets/materials/building_fixture.tres" id="3_fixture"]
-[ext_resource type="PackedScene" path="res://assets/environment/props/pharmacy_medicine_cabinet.tscn" id="4_medicine_cabinet"]
-[ext_resource type="PackedScene" uid="uid://0lxnuv6mf8s4" path="res://assets/third_party/common/containers/shelves/rusted_metal_shelf.glb" id="5_shelf"]
+[ext_resource type="Material" path="res://assets/materials/greenleaf_pharmacy_linoleum.tres" id="1_floor"]
+[ext_resource type="Material" path="res://assets/materials/greenleaf_pharmacy_wall.tres" id="2_wall"]
+[ext_resource type="Material" path="res://assets/materials/greenleaf_pharmacy_bathroom_tile.tres" id="3_tile"]
+[ext_resource type="Material" path="res://assets/materials/greenleaf_pharmacy_ceiling.tres" id="4_ceiling"]
+[ext_resource type="Material" path="res://assets/materials/greenleaf_pharmacy_green_metal.tres" id="5_green"]
+[ext_resource type="Material" path="res://assets/materials/ashwood_bakery_counter.tres" id="6_wood"]
+[ext_resource type="Material" path="res://assets/materials/ashwood_bakery_glass.tres" id="7_glass"]
+[ext_resource type="PackedScene" path="res://assets/environment/props/pharmacy_medicine_cabinet.tscn" id="8_medicine"]
+[ext_resource type="PackedScene" path="res://assets/third_party/interiors/bakery/poly_haven/CashRegister_01/CashRegister_01_1k.gltf" id="9_register"]
+[ext_resource type="PackedScene" path="res://assets/third_party/interiors/bakery/poly_haven/steel_frame_shelves_01/steel_frame_shelves_01_1k.gltf" id="10_shelf_a"]
+[ext_resource type="PackedScene" path="res://assets/third_party/interiors/pharmacy/poly_haven/steel_frame_shelves_02/steel_frame_shelves_02_1k.gltf" id="11_shelf_b"]
+[ext_resource type="PackedScene" path="res://assets/third_party/interiors/pharmacy/poly_haven/wooden_display_shelves_01/wooden_display_shelves_01_1k.gltf" id="12_display"]
+[ext_resource type="PackedScene" path="res://assets/third_party/interiors/pharmacy/poly_haven/long_life_food/long_life_food_1k.gltf" id="13_food"]
+[ext_resource type="PackedScene" path="res://assets/third_party/interiors/pharmacy/poly_haven/all_purpose_cleaner/all_purpose_cleaner_1k.gltf" id="14_cleaner"]
+[ext_resource type="PackedScene" path="res://assets/third_party/interiors/pharmacy/poly_haven/bleach_bottle/bleach_bottle_1k.gltf" id="15_bleach"]
+[ext_resource type="PackedScene" path="res://assets/third_party/interiors/pharmacy/poly_haven/medical_box/medical_box_1k.gltf" id="16_medical_box"]
+[ext_resource type="PackedScene" path="res://assets/third_party/interiors/pharmacy/poly_haven/medical_tape/medical_tape_1k.gltf" id="17_medical_tape"]
+[ext_resource type="PackedScene" path="res://assets/third_party/interiors/pharmacy/poly_haven/chemistry_set/chemistry_set_1k.gltf" id="18_chemistry"]
+[ext_resource type="PackedScene" path="res://assets/third_party/interiors/pharmacy/poly_haven/wheelchair_01/wheelchair_01_1k.gltf" id="19_wheelchair"]
+[ext_resource type="PackedScene" path="res://assets/third_party/interiors/pharmacy/poly_haven/vintage_crutches_01/vintage_crutches_01_1k.gltf" id="20_crutches"]
+[ext_resource type="PackedScene" path="res://assets/third_party/interiors/pharmacy/poly_haven/SchoolChair_01/SchoolChair_01_1k.gltf" id="21_chair"]
+[ext_resource type="PackedScene" path="res://assets/third_party/interiors/bakery/poly_haven/wooden_table_02/wooden_table_02_1k.gltf" id="22_table"]
+[ext_resource type="PackedScene" path="res://assets/third_party/interiors/pharmacy/poly_haven/metal_office_desk/metal_office_desk_1k.gltf" id="23_desk"]
+[ext_resource type="PackedScene" path="res://assets/third_party/interiors/pharmacy/poly_haven/vintage_wooden_drawer_01/vintage_wooden_drawer_01_1k.gltf" id="24_vintage_drawer"]
+[ext_resource type="PackedScene" path="res://assets/third_party/interiors/pharmacy/poly_haven/drawer_cabinet/drawer_cabinet_1k.gltf" id="25_drawer"]
+[ext_resource type="PackedScene" path="res://assets/third_party/interiors/pharmacy/poly_haven/clipboard/clipboard_1k.gltf" id="26_clipboard"]
+[ext_resource type="PackedScene" path="res://assets/third_party/interiors/pharmacy/poly_haven/office_notepads/office_notepads_1k.gltf" id="27_notepads"]
+[ext_resource type="PackedScene" path="res://assets/third_party/interiors/pharmacy/poly_haven/stationery_supplies/stationery_supplies_1k.gltf" id="28_stationery"]
+[ext_resource type="PackedScene" path="res://assets/third_party/interiors/pharmacy/poly_haven/wall_clock/wall_clock_1k.gltf" id="29_clock"]
+[ext_resource type="PackedScene" path="res://assets/third_party/interiors/pharmacy/poly_haven/mounted_fluorescent_lights/mounted_fluorescent_lights_1k.gltf" id="30_fluorescent"]
+[ext_resource type="PackedScene" path="res://assets/third_party/interiors/pharmacy/poly_haven/desk_lamp_arm_01/desk_lamp_arm_01_1k.gltf" id="31_desk_lamp"]
+[ext_resource type="PackedScene" path="res://assets/third_party/interiors/pharmacy/poly_haven/cardboard_box_01/cardboard_box_01_1k.gltf" id="32_cardboard"]
+[ext_resource type="PackedScene" path="res://assets/third_party/interiors/pharmacy/poly_haven/trashbag/trashbag_1k.gltf" id="33_trashbag"]
+[ext_resource type="PackedScene" path="res://assets/third_party/interiors/shared/open_game_art/loafbrr_toilets/objects/sink_a.tscn" id="34_sink"]
+[ext_resource type="PackedScene" path="res://assets/third_party/interiors/shared/open_game_art/loafbrr_toilets/objects/toilet_round_a.tscn" id="35_toilet"]
+[ext_resource type="PackedScene" path="res://assets/third_party/props/doors/white_door_1.glb" id="36_white_door"]
+[ext_resource type="Material" path="res://assets/materials/greenleaf_pharmacy_sign.tres" id="37_sign"]
 
-[sub_resource type="BoxMesh" id="FloorMesh"]
+[sub_resource type="BoxMesh" id="MeshFloor"]
 material = ExtResource("1_floor")
-size = Vector3(6.8, 0.03, 8.8)
 
-[sub_resource type="BoxMesh" id="PartitionMesh"]
-material = ExtResource("2_partition")
-size = Vector3(1, 1, 1)
+[sub_resource type="BoxMesh" id="MeshCeiling"]
+material = ExtResource("4_ceiling")
 
-[sub_resource type="BoxMesh" id="FixtureMesh"]
-material = ExtResource("3_fixture")
-size = Vector3(1, 1, 1)
+[sub_resource type="BoxMesh" id="MeshWall"]
+material = ExtResource("2_wall")
 
-[sub_resource type="BoxShape3D" id="PartitionLongShape"]
-size = Vector3(0.12, 3.2, 3.65)
+[sub_resource type="BoxMesh" id="MeshTile"]
+material = ExtResource("3_tile")
+
+[sub_resource type="BoxMesh" id="MeshWood"]
+material = ExtResource("6_wood")
+
+[sub_resource type="BoxMesh" id="MeshGreenMetal"]
+material = ExtResource("5_green")
+
+[sub_resource type="BoxMesh" id="MeshSign"]
+material = ExtResource("37_sign")
+
+[sub_resource type="BoxMesh" id="MeshGlass"]
+material = ExtResource("7_glass")
+
+[sub_resource type="BoxShape3D" id="FloorShape"]
+size = Vector3(6.8, 0.1, 8.8)
+
+[sub_resource type="BoxShape3D" id="RearWallShape"]
+size = Vector3(0.12, 3.4, 8.8)
+
+[sub_resource type="BoxShape3D" id="SideWallShape"]
+size = Vector3(6.8, 3.4, 0.12)
 
 [sub_resource type="BoxShape3D" id="CounterShape"]
-size = Vector3(0.72, 1.05, 3.0)
+size = Vector3(0.72, 1.08, 4.25)
 
-[sub_resource type="BoxShape3D" id="ShelfShape"]
-size = Vector3(2.2, 1.65, 0.42)
+[sub_resource type="BoxShape3D" id="ShelfBankShape"]
+size = Vector3(3.7, 2.14, 0.58)
 
-[sub_resource type="BoxShape3D" id="BackShelfShape"]
-size = Vector3(0.55, 1.8, 2.6)
+[sub_resource type="BoxShape3D" id="CheckoutShape"]
+size = Vector3(0.95, 0.8, 2.0)
+
+[sub_resource type="BoxShape3D" id="PartitionLongShape"]
+size = Vector3(0.1, 3.4, 1.8)
+
+[sub_resource type="BoxShape3D" id="PartitionBathroomShape"]
+size = Vector3(0.1, 3.4, 1.4)
+
+[sub_resource type="BoxShape3D" id="CrossPartitionShape"]
+size = Vector3(0.75, 3.4, 0.1)
+
+[sub_resource type="BoxShape3D" id="CrossPartitionShortShape"]
+size = Vector3(0.45, 3.4, 0.1)
+
+[sub_resource type="BoxShape3D" id="ChairShape"]
+size = Vector3(0.58, 1.0, 0.66)
+
+[sub_resource type="BoxShape3D" id="WheelchairShape"]
+size = Vector3(0.84, 1.1, 1.0)
+
+[sub_resource type="BoxShape3D" id="OfficeDeskShape"]
+size = Vector3(2.0, 0.8, 0.95)
+
+[sub_resource type="BoxShape3D" id="StorageShelfShape"]
+size = Vector3(0.55, 2.14, 1.45)
+
+[sub_resource type="BoxShape3D" id="BathroomFixtureShape"]
+size = Vector3(0.62, 0.75, 0.82)
 
 [node name="PharmacyInterior" type="StaticBody3D"]
 
-[node name="Floor" type="MeshInstance3D" parent="."]
-position = Vector3(0, 0.015, 0)
-mesh = SubResource("FloorMesh")
+[node name="Architecture" type="Node3D" parent="."]
 
-[node name="BackRoomWallNorth" type="MeshInstance3D" parent="."]
-position = Vector3(-1.25, 1.6, -2.575)
-scale = Vector3(0.12, 3.2, 3.65)
-mesh = SubResource("PartitionMesh")
+[node name="LinoleumFloor" type="MeshInstance3D" parent="Architecture"]
+position = Vector3(0, 0.04, 0)
+scale = Vector3(6.8, 0.08, 8.8)
+mesh = SubResource("MeshFloor")
 
-[node name="BackRoomWallNorthCollision" type="CollisionShape3D" parent="."]
-position = Vector3(-1.25, 1.6, -2.575)
+[node name="DropCeiling" type="MeshInstance3D" parent="Architecture"]
+position = Vector3(0, 3.4, 0)
+scale = Vector3(6.8, 0.08, 8.8)
+mesh = SubResource("MeshCeiling")
+
+[node name="RearWallLiner" type="MeshInstance3D" parent="Architecture"]
+position = Vector3(-3.41, 1.7, 0)
+scale = Vector3(0.1, 3.4, 8.8)
+mesh = SubResource("MeshWall")
+
+[node name="NorthWallLiner" type="MeshInstance3D" parent="Architecture"]
+position = Vector3(0, 1.7, -4.41)
+scale = Vector3(6.8, 3.4, 0.1)
+mesh = SubResource("MeshWall")
+
+[node name="SouthWallLiner" type="MeshInstance3D" parent="Architecture"]
+position = Vector3(0, 1.7, 4.41)
+scale = Vector3(6.8, 3.4, 0.1)
+mesh = SubResource("MeshWall")
+
+[node name="FrontNorthSill" type="MeshInstance3D" parent="Architecture"]
+position = Vector3(3.41, 0.35, -2.65)
+scale = Vector3(0.1, 0.7, 3.5)
+mesh = SubResource("MeshWall")
+
+[node name="FrontSouthSill" type="MeshInstance3D" parent="Architecture"]
+position = Vector3(3.41, 0.35, 2.65)
+scale = Vector3(0.1, 0.7, 3.5)
+mesh = SubResource("MeshWall")
+
+[node name="FrontHeader" type="MeshInstance3D" parent="Architecture"]
+position = Vector3(3.41, 3.08, 0)
+scale = Vector3(0.1, 0.64, 8.8)
+mesh = SubResource("MeshWall")
+
+[node name="DoorJambNorth" type="MeshInstance3D" parent="Architecture"]
+position = Vector3(3.4, 1.7, -0.84)
+scale = Vector3(0.16, 2.76, 0.18)
+mesh = SubResource("MeshGreenMetal")
+
+[node name="DoorJambSouth" type="MeshInstance3D" parent="Architecture"]
+position = Vector3(3.4, 1.7, 0.84)
+scale = Vector3(0.16, 2.76, 0.18)
+mesh = SubResource("MeshGreenMetal")
+
+[node name="DoorJambTop" type="MeshInstance3D" parent="Architecture"]
+position = Vector3(3.4, 2.98, 0)
+scale = Vector3(0.16, 0.18, 1.86)
+mesh = SubResource("MeshGreenMetal")
+
+[node name="StoragePartitionRear" type="MeshInstance3D" parent="Architecture"]
+position = Vector3(-1.0, 1.7, -3.5)
+scale = Vector3(0.1, 3.4, 1.8)
+mesh = SubResource("MeshWall")
+
+[node name="BathroomPartitionRear" type="MeshInstance3D" parent="Architecture"]
+position = Vector3(-1.0, 1.7, 3.7)
+scale = Vector3(0.1, 3.4, 1.4)
+mesh = SubResource("MeshTile")
+
+[node name="StorageCrossWallWest" type="MeshInstance3D" parent="Architecture"]
+position = Vector3(-3.025, 1.7, -2.55)
+scale = Vector3(0.75, 3.4, 0.1)
+mesh = SubResource("MeshWall")
+
+[node name="StorageCrossWallEast" type="MeshInstance3D" parent="Architecture"]
+position = Vector3(-1.225, 1.7, -2.55)
+scale = Vector3(0.45, 3.4, 0.1)
+mesh = SubResource("MeshWall")
+
+[node name="BathroomCrossWallWest" type="MeshInstance3D" parent="Architecture"]
+position = Vector3(-3.025, 1.7, 3.0)
+scale = Vector3(0.75, 3.4, 0.1)
+mesh = SubResource("MeshTile")
+
+[node name="BathroomCrossWallEast" type="MeshInstance3D" parent="Architecture"]
+position = Vector3(-1.225, 1.7, 3.0)
+scale = Vector3(0.45, 3.4, 0.1)
+mesh = SubResource("MeshTile")
+
+[node name="BathroomFloor" type="MeshInstance3D" parent="Architecture"]
+position = Vector3(-2.2, 0.085, 3.7)
+scale = Vector3(2.3, 0.045, 1.3)
+mesh = SubResource("MeshTile")
+
+[node name="BathroomRearTile" type="MeshInstance3D" parent="Architecture"]
+position = Vector3(-3.35, 0.85, 3.7)
+scale = Vector3(0.04, 1.7, 1.3)
+mesh = SubResource("MeshTile")
+
+[node name="BathroomSouthTile" type="MeshInstance3D" parent="Architecture"]
+position = Vector3(-2.2, 0.85, 4.35)
+scale = Vector3(2.3, 1.7, 0.04)
+mesh = SubResource("MeshTile")
+
+[node name="BathroomMirror" type="MeshInstance3D" parent="Architecture"]
+position = Vector3(-1.045, 1.82, 3.75)
+scale = Vector3(0.025, 0.72, 0.52)
+mesh = SubResource("MeshGlass")
+
+[node name="BathroomMirrorTop" type="MeshInstance3D" parent="Architecture"]
+position = Vector3(-1.02, 2.2, 3.75)
+scale = Vector3(0.05, 0.04, 0.6)
+mesh = SubResource("MeshGreenMetal")
+
+[node name="BathroomMirrorBottom" type="MeshInstance3D" parent="Architecture"]
+position = Vector3(-1.02, 1.44, 3.75)
+scale = Vector3(0.05, 0.04, 0.6)
+mesh = SubResource("MeshGreenMetal")
+
+[node name="BathroomMirrorSideA" type="MeshInstance3D" parent="Architecture"]
+position = Vector3(-1.02, 1.82, 3.47)
+scale = Vector3(0.05, 0.8, 0.04)
+mesh = SubResource("MeshGreenMetal")
+
+[node name="BathroomMirrorSideB" type="MeshInstance3D" parent="Architecture"]
+position = Vector3(-1.02, 1.82, 4.03)
+scale = Vector3(0.05, 0.8, 0.04)
+mesh = SubResource("MeshGreenMetal")
+
+[node name="StorageDoor" parent="Architecture" instance=ExtResource("36_white_door")]
+position = Vector3(-2.05, 1.2, -2.52)
+rotation = Vector3(0, -0.72, 0)
+scale = Vector3(0.027, 0.027, 0.027)
+
+[node name="RestroomDoor" parent="Architecture" instance=ExtResource("36_white_door")]
+position = Vector3(-2.05, 1.2, 3.03)
+rotation = Vector3(0, 0.82, 0)
+scale = Vector3(0.027, 0.027, 0.027)
+
+[node name="FloorCollision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.0, 0)
+shape = SubResource("FloorShape")
+
+[node name="RearWallCollision" type="CollisionShape3D" parent="."]
+position = Vector3(-3.41, 1.7, 0)
+shape = SubResource("RearWallShape")
+
+[node name="NorthWallCollision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 1.7, -4.41)
+shape = SubResource("SideWallShape")
+
+[node name="SouthWallCollision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 1.7, 4.41)
+shape = SubResource("SideWallShape")
+
+[node name="StoragePartitionCollision" type="CollisionShape3D" parent="."]
+position = Vector3(-1.0, 1.7, -3.5)
 shape = SubResource("PartitionLongShape")
 
-[node name="BackRoomWallSouth" type="MeshInstance3D" parent="."]
-position = Vector3(-1.25, 1.6, 2.575)
-scale = Vector3(0.12, 3.2, 3.65)
-mesh = SubResource("PartitionMesh")
+[node name="BathroomPartitionCollision" type="CollisionShape3D" parent="."]
+position = Vector3(-1.0, 1.7, 3.7)
+shape = SubResource("PartitionBathroomShape")
 
-[node name="BackRoomWallSouthCollision" type="CollisionShape3D" parent="."]
-position = Vector3(-1.25, 1.6, 2.575)
-shape = SubResource("PartitionLongShape")
+[node name="StorageCrossWestCollision" type="CollisionShape3D" parent="."]
+position = Vector3(-3.025, 1.7, -2.55)
+shape = SubResource("CrossPartitionShape")
 
-[node name="CheckoutCounter" type="MeshInstance3D" parent="."]
-position = Vector3(1.8, 0.53, 3.3)
-scale = Vector3(0.72, 1.05, 3.0)
-mesh = SubResource("FixtureMesh")
+[node name="StorageCrossEastCollision" type="CollisionShape3D" parent="."]
+position = Vector3(-1.225, 1.7, -2.55)
+shape = SubResource("CrossPartitionShortShape")
 
-[node name="CheckoutCounterCollision" type="CollisionShape3D" parent="."]
-position = Vector3(1.8, 0.53, 3.3)
+[node name="BathroomCrossWestCollision" type="CollisionShape3D" parent="."]
+position = Vector3(-3.025, 1.7, 3.0)
+shape = SubResource("CrossPartitionShape")
+
+[node name="BathroomCrossEastCollision" type="CollisionShape3D" parent="."]
+position = Vector3(-1.225, 1.7, 3.0)
+shape = SubResource("CrossPartitionShortShape")
+
+[node name="RetailFloor" type="Node3D" parent="."]
+
+[node name="NorthAisle" type="Node3D" parent="RetailFloor"]
+
+[node name="ShelfFront" parent="RetailFloor/NorthAisle" instance=ExtResource("10_shelf_a")]
+position = Vector3(2.3, 0, -1.2)
+scale = Vector3(0.1, 0.1, 0.1)
+
+[node name="ShelfMiddle" parent="RetailFloor/NorthAisle" instance=ExtResource("11_shelf_b")]
+position = Vector3(1.15, 0, -1.2)
+scale = Vector3(1.55, 1, 1)
+
+[node name="ShelfRear" parent="RetailFloor/NorthAisle" instance=ExtResource("10_shelf_a")]
+position = Vector3(0.05, 0, -1.2)
+scale = Vector3(0.1, 0.1, 0.1)
+
+[node name="SouthAisle" type="Node3D" parent="RetailFloor"]
+
+[node name="ShelfFront" parent="RetailFloor/SouthAisle" instance=ExtResource("11_shelf_b")]
+position = Vector3(2.35, 0, 1.2)
+rotation = Vector3(0, 3.1415927, 0)
+scale = Vector3(1.55, 1, 1)
+
+[node name="ShelfMiddle" parent="RetailFloor/SouthAisle" instance=ExtResource("10_shelf_a")]
+position = Vector3(1.2, 0, 1.2)
+rotation = Vector3(0, 3.1415927, 0)
+scale = Vector3(0.1, 0.1, 0.1)
+
+[node name="ShelfRear" parent="RetailFloor/SouthAisle" instance=ExtResource("11_shelf_b")]
+position = Vector3(0.08, 0, 1.2)
+rotation = Vector3(0, 3.1415927, 0)
+scale = Vector3(1.55, 1, 1)
+
+[node name="NorthShelfCollision" type="CollisionShape3D" parent="."]
+position = Vector3(1.18, 1.07, -1.2)
+shape = SubResource("ShelfBankShape")
+
+[node name="SouthShelfCollision" type="CollisionShape3D" parent="."]
+position = Vector3(1.18, 1.07, 1.2)
+shape = SubResource("ShelfBankShape")
+
+[node name="NorthStock" type="Node3D" parent="RetailFloor"]
+
+[node name="FoodFrontLow" parent="RetailFloor/NorthStock" instance=ExtResource("13_food")]
+position = Vector3(2.58, 0.42, -0.88)
+rotation = Vector3(0.03, 0.08, -0.02)
+
+[node name="FoodFrontMid" parent="RetailFloor/NorthStock" instance=ExtResource("13_food")]
+position = Vector3(2.29, 1.0, -0.88)
+rotation = Vector3(-0.03, -0.14, 0.03)
+scale = Vector3(0.96, 1.03, 0.96)
+
+[node name="FoodFrontHigh" parent="RetailFloor/NorthStock" instance=ExtResource("13_food")]
+position = Vector3(2.5, 1.55, -0.88)
+rotation = Vector3(0, 0.16, 0.02)
+scale = Vector3(1.05, 0.94, 1.05)
+
+[node name="CleanerMiddleLow" parent="RetailFloor/NorthStock" instance=ExtResource("14_cleaner")]
+position = Vector3(1.35, 0.36, -0.89)
+rotation = Vector3(0, -0.11, 0)
+
+[node name="BleachMiddleLow" parent="RetailFloor/NorthStock" instance=ExtResource("15_bleach")]
+position = Vector3(1.02, 0.37, -0.89)
+rotation = Vector3(0, 0.18, 0)
+scale = Vector3(1.05, 1.05, 1.05)
+
+[node name="CleanerMiddleHigh" parent="RetailFloor/NorthStock" instance=ExtResource("14_cleaner")]
+position = Vector3(1.2, 1.18, -0.89)
+rotation = Vector3(0.04, 0.28, -0.03)
+scale = Vector3(0.94, 0.94, 0.94)
+
+[node name="MedicalBoxRear" parent="RetailFloor/NorthStock" instance=ExtResource("16_medical_box")]
+position = Vector3(0.12, 0.5, -0.9)
+rotation = Vector3(0.05, -0.08, 0.06)
+scale = Vector3(0.72, 0.72, 0.72)
+
+[node name="MedicalTapeRear" parent="RetailFloor/NorthStock" instance=ExtResource("17_medical_tape")]
+position = Vector3(-0.1, 1.08, -0.88)
+rotation = Vector3(0.1, 0.4, 0.08)
+scale = Vector3(2.2, 2.2, 2.2)
+
+[node name="FoodRearHigh" parent="RetailFloor/NorthStock" instance=ExtResource("13_food")]
+position = Vector3(0.3, 1.55, -0.88)
+rotation = Vector3(-0.04, -0.2, 0)
+
+[node name="SouthStock" type="Node3D" parent="RetailFloor"]
+
+[node name="BleachFrontLow" parent="RetailFloor/SouthStock" instance=ExtResource("15_bleach")]
+position = Vector3(2.55, 0.37, 0.89)
+rotation = Vector3(0, -0.15, 0)
+
+[node name="CleanerFrontMid" parent="RetailFloor/SouthStock" instance=ExtResource("14_cleaner")]
+position = Vector3(2.28, 1.08, 0.89)
+rotation = Vector3(0.02, 0.14, 0)
+
+[node name="FoodFrontHigh" parent="RetailFloor/SouthStock" instance=ExtResource("13_food")]
+position = Vector3(2.55, 1.56, 0.89)
+rotation = Vector3(0.03, -0.28, -0.02)
+scale = Vector3(0.94, 1.06, 0.94)
+
+[node name="MedicalBoxMiddle" parent="RetailFloor/SouthStock" instance=ExtResource("16_medical_box")]
+position = Vector3(1.15, 0.52, 0.9)
+rotation = Vector3(-0.02, 0.17, 0.04)
+scale = Vector3(0.68, 0.68, 0.68)
+
+[node name="FoodMiddleMid" parent="RetailFloor/SouthStock" instance=ExtResource("13_food")]
+position = Vector3(1.38, 1.05, 0.89)
+rotation = Vector3(0.02, 0.25, 0)
+
+[node name="TapeMiddleHigh" parent="RetailFloor/SouthStock" instance=ExtResource("17_medical_tape")]
+position = Vector3(1.02, 1.53, 0.89)
+rotation = Vector3(0.12, -0.5, 0.08)
+scale = Vector3(2, 2, 2)
+
+[node name="FoodRearLow" parent="RetailFloor/SouthStock" instance=ExtResource("13_food")]
+position = Vector3(0.24, 0.43, 0.89)
+rotation = Vector3(0.02, -0.1, 0)
+
+[node name="CleanerRearHigh" parent="RetailFloor/SouthStock" instance=ExtResource("14_cleaner")]
+position = Vector3(-0.05, 1.18, 0.89)
+rotation = Vector3(0, 0.32, 0)
+
+[node name="NorthWindowDisplay" parent="RetailFloor" instance=ExtResource("12_display")]
+position = Vector3(2.98, 0, -2.5)
+
+[node name="SouthWindowDisplay" parent="RetailFloor" instance=ExtResource("12_display")]
+position = Vector3(2.98, 0, 2.35)
+rotation = Vector3(0, 3.1415927, 0)
+
+[node name="NorthDisplayMedicalBox" parent="RetailFloor" instance=ExtResource("16_medical_box")]
+position = Vector3(2.78, 0.72, -2.58)
+rotation = Vector3(0.04, -0.16, 0.02)
+scale = Vector3(0.68, 0.68, 0.68)
+
+[node name="NorthDisplayCleaner" parent="RetailFloor" instance=ExtResource("14_cleaner")]
+position = Vector3(2.82, 1.18, -2.25)
+rotation = Vector3(0, 0.24, 0)
+
+[node name="SouthDisplayFoodA" parent="RetailFloor" instance=ExtResource("13_food")]
+position = Vector3(2.78, 0.62, 2.08)
+rotation = Vector3(0, 0.1, 0)
+
+[node name="SouthDisplayFoodB" parent="RetailFloor" instance=ExtResource("13_food")]
+position = Vector3(2.8, 1.15, 2.48)
+rotation = Vector3(0.04, -0.23, -0.02)
+
+[node name="Checkout" type="Node3D" parent="RetailFloor"]
+
+[node name="Desk" parent="RetailFloor/Checkout" instance=ExtResource("23_desk")]
+position = Vector3(1.76, 0, -3.28)
+rotation = Vector3(0, 1.5707964, 0)
+
+[node name="Register" parent="RetailFloor/Checkout" instance=ExtResource("9_register")]
+position = Vector3(1.68, 0.79, -3.28)
+rotation = Vector3(0, 1.5707964, 0)
+
+[node name="Clipboard" parent="RetailFloor/Checkout" instance=ExtResource("26_clipboard")]
+position = Vector3(1.72, 0.815, -2.66)
+rotation = Vector3(0.02, 0.24, -0.04)
+scale = Vector3(0.82, 0.82, 0.82)
+
+[node name="Stationery" parent="RetailFloor/Checkout" instance=ExtResource("28_stationery")]
+position = Vector3(1.73, 0.825, -3.88)
+rotation = Vector3(0, -0.18, 0)
+
+[node name="CheckoutCollision" type="CollisionShape3D" parent="."]
+position = Vector3(1.76, 0.4, -3.28)
+shape = SubResource("CheckoutShape")
+
+[node name="WaitingArea" type="Node3D" parent="RetailFloor"]
+
+[node name="ChairA" parent="RetailFloor/WaitingArea" instance=ExtResource("21_chair")]
+position = Vector3(2.52, 0, 2.73)
+rotation = Vector3(0, -1.5707964, 0)
+
+[node name="ChairB" parent="RetailFloor/WaitingArea" instance=ExtResource("21_chair")]
+position = Vector3(2.48, 0, 3.45)
+rotation = Vector3(0, -1.49, 0)
+
+[node name="ChairC" parent="RetailFloor/WaitingArea" instance=ExtResource("21_chair")]
+position = Vector3(2.54, 0, 4.03)
+rotation = Vector3(0, -1.66, 0)
+
+[node name="SideTable" parent="RetailFloor/WaitingArea" instance=ExtResource("22_table")]
+position = Vector3(1.12, 0, 3.52)
+rotation = Vector3(0, 0.05, 0)
+scale = Vector3(0.64, 0.64, 0.64)
+
+[node name="Wheelchair" parent="RetailFloor/WaitingArea" instance=ExtResource("19_wheelchair")]
+position = Vector3(0.24, 0, 3.45)
+rotation = Vector3(0, -1.28, 0)
+
+[node name="Crutches" parent="RetailFloor/WaitingArea" instance=ExtResource("20_crutches")]
+position = Vector3(3.2, 0.02, 3.92)
+rotation = Vector3(0.04, 0.1, -0.14)
+
+[node name="ChairACollision" type="CollisionShape3D" parent="."]
+position = Vector3(2.52, 0.5, 2.73)
+shape = SubResource("ChairShape")
+
+[node name="ChairBCollision" type="CollisionShape3D" parent="."]
+position = Vector3(2.48, 0.5, 3.45)
+shape = SubResource("ChairShape")
+
+[node name="ChairCCollision" type="CollisionShape3D" parent="."]
+position = Vector3(2.54, 0.5, 4.03)
+shape = SubResource("ChairShape")
+
+[node name="WheelchairCollision" type="CollisionShape3D" parent="."]
+position = Vector3(0.24, 0.55, 3.45)
+shape = SubResource("WheelchairShape")
+
+[node name="PrescriptionCounter" type="Node3D" parent="."]
+
+[node name="CabinetRun" type="MeshInstance3D" parent="PrescriptionCounter"]
+position = Vector3(-0.63, 0.5, -0.2)
+scale = Vector3(0.68, 1.0, 4.25)
+mesh = SubResource("MeshWood")
+
+[node name="Worktop" type="MeshInstance3D" parent="PrescriptionCounter"]
+position = Vector3(-0.58, 1.035, -0.2)
+scale = Vector3(0.88, 0.08, 4.45)
+mesh = SubResource("MeshGreenMetal")
+
+[node name="FrontInset" type="MeshInstance3D" parent="PrescriptionCounter"]
+position = Vector3(-0.277, 0.55, -0.2)
+scale = Vector3(0.035, 0.58, 3.9)
+mesh = SubResource("MeshGreenMetal")
+
+[node name="FrontKick" type="MeshInstance3D" parent="PrescriptionCounter"]
+position = Vector3(-0.265, 0.12, -0.2)
+scale = Vector3(0.06, 0.16, 4.05)
+mesh = SubResource("MeshGreenMetal")
+
+[node name="CounterCollision" type="CollisionShape3D" parent="."]
+position = Vector3(-0.63, 0.54, -0.2)
 shape = SubResource("CounterShape")
 
-[node name="ShelfNorth" type="Node3D" parent="."]
-position = Vector3(1.2, 0, -1.6)
+[node name="RxWorkspace" type="Node3D" parent="."]
 
-[node name="Visual" parent="ShelfNorth" instance=ExtResource("5_shelf")]
-transform = Transform3D(0.0434258, -0.13379319, 0.9900572, -0.21376635, 0.96679646, 0.14002615, -0.9759191, -0.21772164, 0.013383269, 0, 0.7908021, 0)
+[node name="WorkTable" parent="RxWorkspace" instance=ExtResource("22_table")]
+position = Vector3(-2.15, 0, -0.72)
+rotation = Vector3(0, 1.5707964, 0)
 
-[node name="ShelfNorthCollision" type="CollisionShape3D" parent="."]
-position = Vector3(1.2, 0.83, -1.6)
-shape = SubResource("ShelfShape")
+[node name="ChemistrySet" parent="RxWorkspace" instance=ExtResource("18_chemistry")]
+position = Vector3(-2.15, 0.8, -0.72)
+rotation = Vector3(0, -0.1, 0)
 
-[node name="ShelfSouth" type="Node3D" parent="."]
-position = Vector3(1.2, 0, 0.8)
+[node name="MedicalBox" parent="RxWorkspace" instance=ExtResource("16_medical_box")]
+position = Vector3(-2.13, 0.81, -0.22)
+rotation = Vector3(0.03, 0.18, 0)
+scale = Vector3(0.68, 0.68, 0.68)
 
-[node name="Visual" parent="ShelfSouth" instance=ExtResource("5_shelf")]
-transform = Transform3D(0.0434258, -0.13379319, 0.9900572, -0.21376635, 0.96679646, 0.14002615, -0.9759191, -0.21772164, 0.013383269, 0, 0.7908021, 0)
+[node name="Clipboard" parent="RxWorkspace" instance=ExtResource("26_clipboard")]
+position = Vector3(-2.05, 0.82, -1.16)
+rotation = Vector3(0.02, -0.22, 0.04)
+scale = Vector3(0.8, 0.8, 0.8)
 
-[node name="ShelfSouthCollision" type="CollisionShape3D" parent="."]
-position = Vector3(1.2, 0.83, 0.8)
-shape = SubResource("ShelfShape")
+[node name="RearShelfNorth" parent="RxWorkspace" instance=ExtResource("10_shelf_a")]
+position = Vector3(-3.18, 0, -1.62)
+rotation = Vector3(0, 1.5707964, 0)
+scale = Vector3(0.085, 0.085, 0.085)
 
-[node name="BackRoomShelf" type="MeshInstance3D" parent="."]
-position = Vector3(-2.8, 0.9, -2.6)
-scale = Vector3(0.55, 1.8, 2.6)
-mesh = SubResource("FixtureMesh")
+[node name="RearShelfCenter" parent="RxWorkspace" instance=ExtResource("11_shelf_b")]
+position = Vector3(-3.16, 0, 0)
+rotation = Vector3(0, 1.5707964, 0)
+scale = Vector3(1.45, 1, 1)
 
-[node name="BackRoomShelfCollision" type="CollisionShape3D" parent="."]
-position = Vector3(-2.8, 0.9, -2.6)
-shape = SubResource("BackShelfShape")
+[node name="RearShelfSouth" parent="RxWorkspace" instance=ExtResource("10_shelf_a")]
+position = Vector3(-3.18, 0, 1.12)
+rotation = Vector3(0, 1.5707964, 0)
+scale = Vector3(0.085, 0.085, 0.085)
 
-[node name="MedicineCabinet" parent="." instance=ExtResource("4_medicine_cabinet")]
-position = Vector3(-2.65, 0, 2.7)
+[node name="RearStockFoodA" parent="RxWorkspace" instance=ExtResource("13_food")]
+position = Vector3(-2.9, 0.46, -1.62)
+rotation = Vector3(0.02, 1.45, 0)
+
+[node name="RearStockFoodB" parent="RxWorkspace" instance=ExtResource("13_food")]
+position = Vector3(-2.9, 1.06, -1.36)
+rotation = Vector3(-0.02, 1.76, 0.03)
+
+[node name="RearStockMedicalBox" parent="RxWorkspace" instance=ExtResource("16_medical_box")]
+position = Vector3(-2.88, 0.54, 0)
+rotation = Vector3(0, 1.57, 0.05)
+scale = Vector3(0.64, 0.64, 0.64)
+
+[node name="RearStockTape" parent="RxWorkspace" instance=ExtResource("17_medical_tape")]
+position = Vector3(-2.88, 1.14, 0.08)
+rotation = Vector3(0.12, 1.3, 0.06)
+scale = Vector3(2.1, 2.1, 2.1)
+
+[node name="RearStockCleaner" parent="RxWorkspace" instance=ExtResource("14_cleaner")]
+position = Vector3(-2.9, 0.4, 1.06)
+rotation = Vector3(0, 1.72, 0)
+
+[node name="RearStockBleach" parent="RxWorkspace" instance=ExtResource("15_bleach")]
+position = Vector3(-2.9, 1.05, 1.24)
+rotation = Vector3(0, 1.4, 0)
+
+[node name="MedicineCabinet" parent="." instance=ExtResource("8_medicine")]
+position = Vector3(-2.92, 0, 0.62)
+rotation = Vector3(0, 1.5707964, 0)
+
+[node name="StaffOffice" type="Node3D" parent="."]
+
+[node name="Desk" parent="StaffOffice" instance=ExtResource("23_desk")]
+position = Vector3(-2.18, 0, 1.35)
+rotation = Vector3(0, 3.1415927, 0)
+
+[node name="DeskLamp" parent="StaffOffice" instance=ExtResource("31_desk_lamp")]
+position = Vector3(-2.7, 0.79, 1.28)
+rotation = Vector3(0, 2.75, 0)
+scale = Vector3(0.72, 0.72, 0.72)
+
+[node name="Notepads" parent="StaffOffice" instance=ExtResource("27_notepads")]
+position = Vector3(-1.72, 0.8, 1.25)
+rotation = Vector3(0.03, 0.15, 0.02)
+
+[node name="Stationery" parent="StaffOffice" instance=ExtResource("28_stationery")]
+position = Vector3(-2.08, 0.82, 1.31)
+rotation = Vector3(0, -0.2, 0)
+
+[node name="WoodenDrawer" parent="StaffOffice" instance=ExtResource("24_vintage_drawer")]
+position = Vector3(-3.05, 0.11, 2.32)
+rotation = Vector3(0, 1.5707964, 0)
+scale = Vector3(0.86, 0.86, 0.86)
+
+[node name="FileCabinet" parent="StaffOffice" instance=ExtResource("25_drawer")]
+position = Vector3(-3.08, 0, 1.02)
+rotation = Vector3(0, 1.5707964, 0)
+scale = Vector3(0.72, 0.72, 0.72)
+
+[node name="WallClock" parent="StaffOffice" instance=ExtResource("29_clock")]
+position = Vector3(-3.31, 2.38, 2.02)
+rotation = Vector3(0, 1.5707964, 0)
+scale = Vector3(1.18, 1.18, 1.18)
+
+[node name="OfficeDeskCollision" type="CollisionShape3D" parent="."]
+position = Vector3(-2.18, 0.4, 1.35)
+shape = SubResource("OfficeDeskShape")
+
+[node name="Storage" type="Node3D" parent="."]
+
+[node name="ShelfA" parent="Storage" instance=ExtResource("11_shelf_b")]
+position = Vector3(-3.05, 0, -3.83)
+rotation = Vector3(0, 1.5707964, 0)
+scale = Vector3(1.45, 1, 1)
+
+[node name="ShelfB" parent="Storage" instance=ExtResource("10_shelf_a")]
+position = Vector3(-3.08, 0, -3.08)
+rotation = Vector3(0, 1.5707964, 0)
+scale = Vector3(0.085, 0.085, 0.085)
+
+[node name="ShelfCollision" type="CollisionShape3D" parent="."]
+position = Vector3(-3.02, 1.07, -3.48)
+shape = SubResource("StorageShelfShape")
+
+[node name="CardboardBoxA" parent="Storage" instance=ExtResource("32_cardboard")]
+position = Vector3(-1.68, 0.19, -3.84)
+rotation = Vector3(0.03, 0.28, -0.02)
+
+[node name="CardboardBoxB" parent="Storage" instance=ExtResource("32_cardboard")]
+position = Vector3(-1.9, 0.18, -3.3)
+rotation = Vector3(-0.03, -0.42, 0.04)
+scale = Vector3(0.82, 0.82, 0.82)
+
+[node name="MedicalBox" parent="Storage" instance=ExtResource("16_medical_box")]
+position = Vector3(-2.75, 0.55, -3.87)
+rotation = Vector3(0.03, 1.42, 0)
+scale = Vector3(0.62, 0.62, 0.62)
+
+[node name="Cleaner" parent="Storage" instance=ExtResource("14_cleaner")]
+position = Vector3(-2.75, 1.12, -3.5)
+rotation = Vector3(0, 1.66, 0)
+
+[node name="Bleach" parent="Storage" instance=ExtResource("15_bleach")]
+position = Vector3(-2.76, 0.4, -3.12)
+rotation = Vector3(0, 1.38, 0)
+
+[node name="Restroom" type="Node3D" parent="."]
+
+[node name="Toilet" parent="Restroom" instance=ExtResource("35_toilet")]
+position = Vector3(-2.73, 0.12, 3.78)
+rotation = Vector3(0, -1.5707964, 0)
+
+[node name="Sink" parent="Restroom" instance=ExtResource("34_sink")]
+position = Vector3(-1.18, 1.04, 3.75)
+rotation = Vector3(0, -1.5707964, 0)
+scale = Vector3(1.35, 1.35, 1.35)
+
+[node name="BathroomFixtureCollision" type="CollisionShape3D" parent="."]
+position = Vector3(-2.73, 0.48, 3.78)
+shape = SubResource("BathroomFixtureShape")
+
+[node name="Abandonment" type="Node3D" parent="."]
+
+[node name="TrashBag" parent="Abandonment" instance=ExtResource("33_trashbag")]
+position = Vector3(3.02, 0, -3.92)
+rotation = Vector3(0.03, -0.38, -0.04)
+scale = Vector3(0.78, 0.78, 0.78)
+
+[node name="ToppledBox" parent="Abandonment" instance=ExtResource("32_cardboard")]
+position = Vector3(0.05, 0.19, -2.63)
+rotation = Vector3(0.12, 0.62, 0.18)
+scale = Vector3(0.74, 0.74, 0.74)
+
+[node name="DroppedClipboard" parent="Abandonment" instance=ExtResource("26_clipboard")]
+position = Vector3(1.12, 0.075, 2.34)
+rotation = Vector3(0.04, -0.42, 0.08)
+scale = Vector3(0.92, 0.92, 0.92)
+
+[node name="DroppedNotepads" parent="Abandonment" instance=ExtResource("27_notepads")]
+position = Vector3(-0.08, 0.065, 2.5)
+rotation = Vector3(0.08, 0.7, -0.05)
+
+[node name="PrescriptionsSign" type="Label3D" parent="."]
+position = Vector3(-3.29, 2.62, -0.1)
+rotation = Vector3(0, 1.5707964, 0)
+text = "PRESCRIPTIONS"
+font_size = 54
+outline_size = 9
+modulate = Color(0.12, 0.38, 0.2, 1)
+
+[node name="HouseholdSignBoard" type="MeshInstance3D" parent="."]
+position = Vector3(0.65, 2.73, -1.2)
+scale = Vector3(0.06, 0.34, 1.28)
+mesh = SubResource("MeshSign")
+
+[node name="HouseholdSignSupportNorth" type="MeshInstance3D" parent="."]
+position = Vector3(0.65, 3.11, -1.62)
+scale = Vector3(0.06, 0.6, 0.045)
+mesh = SubResource("MeshSign")
+
+[node name="HouseholdSignSupportSouth" type="MeshInstance3D" parent="."]
+position = Vector3(0.65, 3.11, -0.78)
+scale = Vector3(0.06, 0.6, 0.045)
+mesh = SubResource("MeshSign")
+
+[node name="HouseholdSign" type="Label3D" parent="."]
+position = Vector3(0.686, 2.73, -1.2)
+rotation = Vector3(0, 1.5707964, 0)
+text = "HOUSEHOLD"
+font_size = 18
+outline_size = 3
+modulate = Color(0.86, 0.81, 0.62, 1)
+outline_modulate = Color(0.03, 0.08, 0.045, 1)
+
+[node name="HouseholdSignRear" type="Label3D" parent="."]
+position = Vector3(0.614, 2.73, -1.2)
+rotation = Vector3(0, -1.5707964, 0)
+text = "HOUSEHOLD"
+font_size = 18
+outline_size = 3
+modulate = Color(0.86, 0.81, 0.62, 1)
+outline_modulate = Color(0.03, 0.08, 0.045, 1)
+
+[node name="HealthSignBoard" type="MeshInstance3D" parent="."]
+position = Vector3(0.65, 2.73, 1.2)
+scale = Vector3(0.06, 0.34, 1.28)
+mesh = SubResource("MeshSign")
+
+[node name="HealthSignSupportNorth" type="MeshInstance3D" parent="."]
+position = Vector3(0.65, 3.11, 0.78)
+scale = Vector3(0.06, 0.6, 0.045)
+mesh = SubResource("MeshSign")
+
+[node name="HealthSignSupportSouth" type="MeshInstance3D" parent="."]
+position = Vector3(0.65, 3.11, 1.62)
+scale = Vector3(0.06, 0.6, 0.045)
+mesh = SubResource("MeshSign")
+
+[node name="HealthSign" type="Label3D" parent="."]
+position = Vector3(0.686, 2.73, 1.2)
+rotation = Vector3(0, 1.5707964, 0)
+text = "HEALTH & CARE"
+font_size = 18
+outline_size = 3
+modulate = Color(0.86, 0.81, 0.62, 1)
+outline_modulate = Color(0.03, 0.08, 0.045, 1)
+
+[node name="HealthSignRear" type="Label3D" parent="."]
+position = Vector3(0.614, 2.73, 1.2)
+rotation = Vector3(0, -1.5707964, 0)
+text = "HEALTH & CARE"
+font_size = 18
+outline_size = 3
+modulate = Color(0.86, 0.81, 0.62, 1)
+outline_modulate = Color(0.03, 0.08, 0.045, 1)
+
+[node name="StaffOnlySign" type="Label3D" parent="."]
+position = Vector3(-2.02, 2.06, 2.95)
+rotation = Vector3(0, 3.1415927, 0)
+text = "STAFF ONLY"
+font_size = 28
+outline_size = 6
+modulate = Color(0.22, 0.35, 0.23, 1)
+
+[node name="CeilingFixtures" type="Node3D" parent="."]
+
+[node name="RetailNorthFront" parent="CeilingFixtures" instance=ExtResource("30_fluorescent")]
+position = Vector3(2.1, 3.34, -2.35)
+
+[node name="RetailSouthFront" parent="CeilingFixtures" instance=ExtResource("30_fluorescent")]
+position = Vector3(2.1, 3.34, 2.35)
+
+[node name="RetailCenterA" parent="CeilingFixtures" instance=ExtResource("30_fluorescent")]
+position = Vector3(1.15, 3.34, -0.55)
+rotation = Vector3(0, 1.5707964, 0)
+
+[node name="RetailCenterB" parent="CeilingFixtures" instance=ExtResource("30_fluorescent")]
+position = Vector3(1.15, 3.34, 0.55)
+rotation = Vector3(0, 1.5707964, 0)
+
+[node name="PrescriptionA" parent="CeilingFixtures" instance=ExtResource("30_fluorescent")]
+position = Vector3(-1.8, 3.34, -1.2)
+
+[node name="PrescriptionB" parent="CeilingFixtures" instance=ExtResource("30_fluorescent")]
+position = Vector3(-1.8, 3.34, 1.2)
+
+[node name="StorageLight" parent="CeilingFixtures" instance=ExtResource("30_fluorescent")]
+position = Vector3(-2.25, 3.34, -3.5)
+rotation = Vector3(0, 1.5707964, 0)
+
+[node name="RestroomLight" parent="CeilingFixtures" instance=ExtResource("30_fluorescent")]
+position = Vector3(-2.2, 3.34, 3.7)
 
 [node name="RetailLight" type="OmniLight3D" parent="."]
-position = Vector3(1.1, 3.35, 0)
-light_color = Color(1, 0.78, 0.55, 1)
-light_energy = 0.58
+position = Vector3(1.2, 3.08, 0)
+light_color = Color(0.8, 0.9, 1, 1)
+light_energy = 0.64
 omni_range = 6.2
 shadow_enabled = false
 
 [node name="BackRoomLight" type="OmniLight3D" parent="."]
-position = Vector3(-2.45, 3.1, 0)
-light_color = Color(1, 0.7, 0.42, 1)
-light_energy = 0.38
-omni_range = 4.0
+position = Vector3(-2.1, 3.02, -0.2)
+light_color = Color(0.77, 0.86, 0.96, 1)
+light_energy = 0.44
+omni_range = 4.5
+shadow_enabled = false
+
+[node name="WaitingAreaLight" type="OmniLight3D" parent="."]
+position = Vector3(1.8, 3.0, 3.1)
+light_color = Color(0.86, 0.9, 1, 1)
+light_energy = 0.28
+omni_range = 3.2
+shadow_enabled = false
+
+[node name="StorageRoomLight" type="OmniLight3D" parent="."]
+position = Vector3(-2.2, 3.0, -3.5)
+light_color = Color(0.7, 0.78, 0.88, 1)
+light_energy = 0.22
+omni_range = 2.4
+shadow_enabled = false
+
+[node name="RestroomFillLight" type="OmniLight3D" parent="."]
+position = Vector3(-2.2, 2.8, 3.7)
+light_color = Color(0.78, 0.84, 0.9, 1)
+light_energy = 0.18
+omni_range = 2.1
 shadow_enabled = false

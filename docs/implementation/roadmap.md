@@ -195,6 +195,8 @@ Pharmacy
 - [x] Medicine cabinets
 - [x] Checkout area
 - [x] Storage room
+- [x] Production PBR interior and licensed prop dressing
+- [x] Waiting area, prescription workspace, staff office, and restroom
 
 Residential Houses
 
