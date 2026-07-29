@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/third_party/user_supplied/ashwood_2026_07_29/rust_filingcabinet-freepoly.org.glb" id="1_model"]
+[ext_resource type="Script" path="res://scripts/world/MainStreetDressingCuller.cs" id="2_culler"]
+
+[sub_resource type="BoxShape3D" id="Collision"]
+size = Vector3(0.54, 1.22, 0.57)
+
+[node name="RustyCabinet" type="StaticBody3D"]
+script = ExtResource("2_culler")
+PropRange = 42.0
+metadata/source_path = "res://assets/third_party/user_supplied/ashwood_2026_07_29/rust_filingcabinet-freepoly.org.glb"
+
+[node name="Visual" parent="." instance=ExtResource("1_model")]
+position = Vector3(-0.043, 0.048, 0.021)
+
+[node name="Collision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.61, 0)
+shape = SubResource("Collision")

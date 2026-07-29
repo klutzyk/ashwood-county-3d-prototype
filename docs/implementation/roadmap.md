@@ -168,6 +168,8 @@ Buildings
 - [x] Better service station
 - [x] Expanded pharmacy and diner interiors with clear circulation
 - [x] Textured PBR walls across enterable Main Street interiors
+- [x] Two-storey Ashwood County High School with furnished classrooms,
+  library, cafeteria, gym, enclosed restrooms, and forward-only stair traversal
 
 Props
 
@@ -179,6 +181,8 @@ Props
 - [x] Garbage
 - [x] Tyres
 - [x] Crates
+- [x] Curated 34-model user-supplied CC BY 4.0 library with normalized,
+  reusable wrappers and retained source attribution
 - [ ] Pallets
 
 Lighting
@@ -310,7 +314,7 @@ The prototype becomes a real game.
 World
 
 - [x] Historic Downtown Main Street Phase 1 foundation
-  - 200 m two-lane street with parallel parking
+  - 220 m two-lane street with parallel parking
   - Two intersections, curbs and 3 m sidewalks
   - Placeholder storefront plots
   - Production bakery exterior and interactive shop door, visually aligned

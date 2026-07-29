@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/third_party/user_supplied/ashwood_2026_07_29/doublewindow.glb" id="1_model"]
+[ext_resource type="Script" path="res://scripts/world/MainStreetDressingCuller.cs" id="2_culler"]
+
+[node name="DoubleWindow" type="Node3D"]
+script = ExtResource("2_culler")
+PropRange = 90.0
+metadata/source_path = "res://assets/third_party/user_supplied/ashwood_2026_07_29/doublewindow.glb"
+
+[node name="Visual" parent="." instance=ExtResource("1_model")]
+position = Vector3(0, 0, -0.019)
+scale = Vector3(0.75, 0.75, 0.75)

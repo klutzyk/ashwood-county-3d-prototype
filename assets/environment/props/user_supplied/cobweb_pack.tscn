@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/third_party/user_supplied/ashwood_2026_07_29/cobwebs_asset_pack.glb" id="1_model"]
+[ext_resource type="Script" path="res://scripts/world/MainStreetDressingCuller.cs" id="2_culler"]
+
+[node name="CobwebPack" type="Node3D"]
+script = ExtResource("2_culler")
+PropRange = 30.0
+metadata/source_path = "res://assets/third_party/user_supplied/ashwood_2026_07_29/cobwebs_asset_pack.glb"
+
+[node name="Visual" parent="." instance=ExtResource("1_model")]
+position = Vector3(-3.2, -0.018, 0.148)
+scale = Vector3(0.01, 0.01, 0.01)

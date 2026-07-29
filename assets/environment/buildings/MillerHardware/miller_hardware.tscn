@@ -1,8 +1,15 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=11 format=3]
 
 [ext_resource type="PackedScene" path="res://assets/environment/buildings/MillerHardware/exterior.tscn" id="1_exterior"]
 [ext_resource type="PackedScene" path="res://assets/environment/buildings/MillerHardware/interior.tscn" id="2_interior"]
 [ext_resource type="PackedScene" path="res://assets/environment/buildings/MillerHardware/front_door.tscn" id="3_door"]
+[ext_resource type="PackedScene" path="res://assets/environment/props/user_supplied/file_cabinet.tscn" id="4_user_file_cabinet"]
+[ext_resource type="PackedScene" path="res://assets/environment/props/user_supplied/corkboard.tscn" id="5_user_corkboard"]
+[ext_resource type="PackedScene" path="res://assets/environment/props/user_supplied/books_cluster.tscn" id="6_user_books"]
+[ext_resource type="PackedScene" path="res://assets/environment/props/user_supplied/paper_debris.tscn" id="7_user_paper_debris"]
+[ext_resource type="PackedScene" path="res://assets/environment/props/user_supplied/coffee_mug.tscn" id="8_user_mug"]
+[ext_resource type="PackedScene" path="res://assets/environment/props/user_supplied/paper_stack.tscn" id="9_user_paper_stack"]
+[ext_resource type="PackedScene" path="res://assets/environment/props/user_supplied/post_it_notes.tscn" id="10_user_post_its"]
 
 [node name="MillerHardware" type="Node3D"]
 
@@ -12,3 +19,37 @@
 
 [node name="FrontDoor" parent="." instance=ExtResource("3_door")]
 position = Vector3(-7.11, 0.03, -7.19)
+
+[node name="UserSuppliedEnrichment" type="Node3D" parent="."]
+
+[node name="WarehouseFileCabinet" parent="UserSuppliedEnrichment" instance=ExtResource("4_user_file_cabinet")]
+position = Vector3(6.48, 0, -4.05)
+rotation = Vector3(0, 0.04, 0)
+
+[node name="WarehouseStaffCorkboard" parent="UserSuppliedEnrichment" instance=ExtResource("5_user_corkboard")]
+position = Vector3(3.72, 1.35, -1.2)
+rotation = Vector3(0, 1.5707964, 0)
+
+[node name="WarehouseShelfManuals" parent="UserSuppliedEnrichment" instance=ExtResource("6_user_books")]
+position = Vector3(6.03, 1.25, -6.72)
+rotation = Vector3(0, -0.08, 0)
+
+[node name="WarehouseDroppedPaper" parent="UserSuppliedEnrichment" instance=ExtResource("7_user_paper_debris")]
+position = Vector3(4.04, 0.025, -7.92)
+rotation = Vector3(0, -0.31, 0)
+
+[node name="CheckoutCoffeeMug" parent="UserSuppliedEnrichment" instance=ExtResource("8_user_mug")]
+position = Vector3(-5.22, 1.035, -4.54)
+rotation = Vector3(0, 0.22, 0)
+
+[node name="CheckoutInvoiceStack" parent="UserSuppliedEnrichment" instance=ExtResource("9_user_paper_stack")]
+position = Vector3(-5.12, 1.035, -4.98)
+rotation = Vector3(0, -0.12, 0)
+
+[node name="StaffCoffeeMug" parent="UserSuppliedEnrichment" instance=ExtResource("8_user_mug")]
+position = Vector3(4.98, 0.765, -3.34)
+rotation = Vector3(0, -0.38, 0)
+
+[node name="StaffPostItNotes" parent="UserSuppliedEnrichment" instance=ExtResource("10_user_post_its")]
+position = Vector3(5.1, 0.765, -3.66)
+rotation = Vector3(0, 0.1, 0)

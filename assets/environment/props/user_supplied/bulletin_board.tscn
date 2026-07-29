@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/third_party/user_supplied/ashwood_2026_07_29/bulletin_board.glb" id="1_model"]
+[ext_resource type="Script" path="res://scripts/world/MainStreetDressingCuller.cs" id="2_culler"]
+
+[node name="BulletinBoard" type="Node3D"]
+script = ExtResource("2_culler")
+PropRange = 42.0
+metadata/source_path = "res://assets/third_party/user_supplied/ashwood_2026_07_29/bulletin_board.glb"
+
+[node name="Visual" parent="." instance=ExtResource("1_model")]
+position = Vector3(0, 0.002, -0.009)

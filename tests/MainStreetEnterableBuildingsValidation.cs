@@ -33,6 +33,8 @@ public partial class MainStreetEnterableBuildingsValidation : Node
 			ValidatePoliceBasementGroundCut(world);
 			ValidateGameplayCompositionUnchanged(world);
 
+			GC.Collect();
+			GC.WaitForPendingFinalizers();
 			GD.Print("MAIN_STREET_ENTERABLE_BUILDINGS_VALIDATION: PASS");
 			GetTree().Quit(0);
 		}

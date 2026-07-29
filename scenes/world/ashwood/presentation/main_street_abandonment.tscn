@@ -280,85 +280,85 @@ mesh = SubResource("GrateMesh")
 [node name="UtilityInfrastructure" type="Node3D" parent="."]
 
 [node name="PoleWestEnd" parent="UtilityInfrastructure" instance=ExtResource("6_pole")]
-position = Vector3(-103, 0, -10.7)
+position = Vector3(-103, 0, -6.75)
 rotation = Vector3(0, 1.5707963, 0)
 
 [node name="PoleWest" parent="UtilityInfrastructure" instance=ExtResource("6_pole")]
-position = Vector3(-62, 0, -10.7)
+position = Vector3(-62, 0, -6.75)
 rotation = Vector3(0, 1.5707963, 0)
 
 [node name="PoleCentreWest" parent="UtilityInfrastructure" instance=ExtResource("6_pole")]
-position = Vector3(-21, 0, -10.7)
+position = Vector3(-21, 0, -6.75)
 rotation = Vector3(0, 1.5707963, 0)
 
 [node name="PoleCentreEast" parent="UtilityInfrastructure" instance=ExtResource("6_pole")]
-position = Vector3(20, 0, -10.7)
+position = Vector3(20, 0, -6.75)
 rotation = Vector3(0, 1.5707963, 0)
 
 [node name="PoleEast" parent="UtilityInfrastructure" instance=ExtResource("6_pole")]
-position = Vector3(61, 0, -10.7)
+position = Vector3(61, 0, -6.75)
 rotation = Vector3(0, 1.5707963, 0)
 
 [node name="PoleEastEnd" parent="UtilityInfrastructure" instance=ExtResource("6_pole")]
-position = Vector3(102, 0, -10.7)
+position = Vector3(102, 0, -6.75)
 rotation = Vector3(0, 1.5707963, 0)
 
 [node name="WireNorth01" type="MeshInstance3D" parent="UtilityInfrastructure"]
-position = Vector3(-82.5, 7.03, -10.16)
+position = Vector3(-82.5, 7.03, -6.21)
 rotation = Vector3(0, 0, 1.5707963)
 scale = Vector3(1, 41, 1)
 mesh = SubResource("CableMesh")
 
 [node name="WireNorth02" type="MeshInstance3D" parent="UtilityInfrastructure"]
-position = Vector3(-41.5, 7.03, -10.16)
+position = Vector3(-41.5, 7.03, -6.21)
 rotation = Vector3(0, 0, 1.5707963)
 scale = Vector3(1, 41, 1)
 mesh = SubResource("CableMesh")
 
 [node name="WireNorth03" type="MeshInstance3D" parent="UtilityInfrastructure"]
-position = Vector3(-0.5, 7.03, -10.16)
+position = Vector3(-0.5, 7.03, -6.21)
 rotation = Vector3(0, 0, 1.5707963)
 scale = Vector3(1, 41, 1)
 mesh = SubResource("CableMesh")
 
 [node name="WireNorth04" type="MeshInstance3D" parent="UtilityInfrastructure"]
-position = Vector3(40.5, 7.03, -10.16)
+position = Vector3(40.5, 7.03, -6.21)
 rotation = Vector3(0, 0, 1.5707963)
 scale = Vector3(1, 41, 1)
 mesh = SubResource("CableMesh")
 
 [node name="WireNorth05" type="MeshInstance3D" parent="UtilityInfrastructure"]
-position = Vector3(81.5, 7.03, -10.16)
+position = Vector3(81.5, 7.03, -6.21)
 rotation = Vector3(0, 0, 1.5707963)
 scale = Vector3(1, 41, 1)
 mesh = SubResource("CableMesh")
 
 [node name="WireSouth01" type="MeshInstance3D" parent="UtilityInfrastructure"]
-position = Vector3(-82.5, 7.03, -11.24)
+position = Vector3(-82.5, 7.03, -7.29)
 rotation = Vector3(0, 0, 1.5707963)
 scale = Vector3(1, 41, 1)
 mesh = SubResource("CableMesh")
 
 [node name="WireSouth02" type="MeshInstance3D" parent="UtilityInfrastructure"]
-position = Vector3(-41.5, 7.03, -11.24)
+position = Vector3(-41.5, 7.03, -7.29)
 rotation = Vector3(0, 0, 1.5707963)
 scale = Vector3(1, 41, 1)
 mesh = SubResource("CableMesh")
 
 [node name="WireSouth03" type="MeshInstance3D" parent="UtilityInfrastructure"]
-position = Vector3(-0.5, 7.03, -11.24)
+position = Vector3(-0.5, 7.03, -7.29)
 rotation = Vector3(0, 0, 1.5707963)
 scale = Vector3(1, 41, 1)
 mesh = SubResource("CableMesh")
 
 [node name="WireSouth04" type="MeshInstance3D" parent="UtilityInfrastructure"]
-position = Vector3(40.5, 7.03, -11.24)
+position = Vector3(40.5, 7.03, -7.29)
 rotation = Vector3(0, 0, 1.5707963)
 scale = Vector3(1, 41, 1)
 mesh = SubResource("CableMesh")
 
 [node name="WireSouth05" type="MeshInstance3D" parent="UtilityInfrastructure"]
-position = Vector3(81.5, 7.03, -11.24)
+position = Vector3(81.5, 7.03, -7.29)
 rotation = Vector3(0, 0, 1.5707963)
 scale = Vector3(1, 41, 1)
 mesh = SubResource("CableMesh")

@@ -1,0 +1,35 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/third_party/user_supplied/ashwood_2026_07_29/abandoned_childrens_slide.glb" id="1_model"]
+[ext_resource type="Script" path="res://scripts/world/MainStreetDressingCuller.cs" id="2_culler"]
+
+[sub_resource type="BoxShape3D" id="SlideShape"]
+size = Vector3(2.45, 0.14, 0.52)
+
+[sub_resource type="BoxShape3D" id="LadderShape"]
+size = Vector3(0.34, 1.82, 0.52)
+
+[sub_resource type="BoxShape3D" id="PlatformShape"]
+size = Vector3(0.62, 0.16, 0.56)
+
+[node name="AbandonedSlide" type="StaticBody3D"]
+script = ExtResource("2_culler")
+PropRange = 85.0
+metadata/source_path = "res://assets/third_party/user_supplied/ashwood_2026_07_29/abandoned_childrens_slide.glb"
+
+[node name="Visual" parent="." instance=ExtResource("1_model")]
+position = Vector3(1.116, 0.006, 1.576)
+scale = Vector3(0.95, 0.95, 0.95)
+
+[node name="SlideCollision" type="CollisionShape3D" parent="."]
+position = Vector3(0.28, 0.88, 0)
+rotation = Vector3(0, 0, -0.55)
+shape = SubResource("SlideShape")
+
+[node name="LadderCollision" type="CollisionShape3D" parent="."]
+position = Vector3(-1.22, 0.91, 0)
+shape = SubResource("LadderShape")
+
+[node name="PlatformCollision" type="CollisionShape3D" parent="."]
+position = Vector3(-0.96, 1.82, 0)
+shape = SubResource("PlatformShape")

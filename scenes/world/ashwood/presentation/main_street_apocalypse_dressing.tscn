@@ -683,7 +683,7 @@ rotation = Vector3(0, 0.16, 0)
 scale = Vector3(0.82, 0.82, 0.82)
 
 [node name="NorthUtility002" parent="ServiceClutter" instance=ExtResource("13_utility")]
-position = Vector3(85.6, 0.2, -8.91)
+position = Vector3(104.2, 0.2, -8.72)
 rotation = Vector3(0, -0.22, 0)
 scale = Vector3(0.94, 0.94, 0.94)
 

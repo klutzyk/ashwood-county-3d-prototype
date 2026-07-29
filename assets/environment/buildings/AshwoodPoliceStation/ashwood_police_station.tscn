@@ -42,6 +42,14 @@
 [ext_resource type="PackedScene" path="res://assets/third_party/interiors/pharmacy/poly_haven/desk_lamp_arm_01/desk_lamp_arm_01_1k.gltf" id="40_desk_lamp"]
 [ext_resource type="PackedScene" path="res://assets/third_party/interiors/pharmacy/poly_haven/stationery_supplies/stationery_supplies_1k.gltf" id="41_stationery"]
 [ext_resource type="PackedScene" path="res://assets/third_party/interiors/pharmacy/poly_haven/clipboard/clipboard_1k.gltf" id="42_clipboard"]
+[ext_resource type="PackedScene" path="res://assets/environment/props/user_supplied/crown_victoria_police.tscn" id="43_user_police_car"]
+[ext_resource type="PackedScene" path="res://assets/environment/props/user_supplied/coffee_mug.tscn" id="44_user_mug"]
+[ext_resource type="PackedScene" path="res://assets/environment/props/user_supplied/paper_stack.tscn" id="45_user_paper_stack"]
+[ext_resource type="PackedScene" path="res://assets/environment/props/user_supplied/post_it_notes.tscn" id="46_user_post_its"]
+[ext_resource type="PackedScene" path="res://assets/environment/props/user_supplied/file_cabinet.tscn" id="47_user_file_cabinet"]
+[ext_resource type="PackedScene" path="res://assets/environment/props/user_supplied/corkboard.tscn" id="48_user_corkboard"]
+[ext_resource type="PackedScene" path="res://assets/environment/props/user_supplied/books_cluster.tscn" id="49_user_books"]
+[ext_resource type="PackedScene" path="res://assets/environment/props/user_supplied/paper_debris.tscn" id="50_user_paper_debris"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_1jaso"]
 material = ExtResource("4_4hdmn")
@@ -4184,3 +4192,41 @@ metadata/source_path = "res://assets/third_party/interiors/ashwood_police_statio
 [node name="DroppedCaseClipboard" parent="AuthoredEnvironment/MainFloor/OpenOffices" instance=ExtResource("42_clipboard")]
 transform = Transform3D(0.62, -0.04, 0.48, 0.03, 0.78, 0.03, -0.48, -0.01, 0.62, 2.7, 0.052, 2.7)
 metadata/source_path = "res://assets/third_party/interiors/pharmacy/poly_haven/clipboard/clipboard_1k.gltf"
+
+[node name="UserSuppliedEnrichment" type="Node3D" parent="."]
+
+[node name="RetiredPatrolCrownVictoria" parent="UserSuppliedEnrichment" instance=ExtResource("43_user_police_car")]
+position = Vector3(-13, 0, 6.3)
+rotation = Vector3(0, 0.04, 0)
+
+[node name="ReceptionCoffeeMug" parent="UserSuppliedEnrichment" instance=ExtResource("44_user_mug")]
+position = Vector3(-4.04, 1.1, -0.63)
+rotation = Vector3(0, -0.22, 0)
+
+[node name="ReceptionIntakeForms" parent="UserSuppliedEnrichment" instance=ExtResource("45_user_paper_stack")]
+position = Vector3(-4.04, 1.1, 0.38)
+rotation = Vector3(0, 0.08, 0)
+
+[node name="ChiefCoffeeMug" parent="UserSuppliedEnrichment" instance=ExtResource("44_user_mug")]
+position = Vector3(0.04, 0.87, 8.35)
+rotation = Vector3(0, 0.31, 0)
+
+[node name="ChiefPostItNotes" parent="UserSuppliedEnrichment" instance=ExtResource("46_user_post_its")]
+position = Vector3(-0.43, 0.87, 8.46)
+rotation = Vector3(0, -0.08, 0)
+
+[node name="GarageRecordsCabinet" parent="UserSuppliedEnrichment" instance=ExtResource("47_user_file_cabinet")]
+position = Vector3(8.48, 0, -0.2)
+rotation = Vector3(0, 1.5707964, 0)
+
+[node name="BookingCorkboard" parent="UserSuppliedEnrichment" instance=ExtResource("48_user_corkboard")]
+position = Vector3(-8.69, -2.38, -1.78)
+rotation = Vector3(0, 1.5707964, 0)
+
+[node name="BasementEvidenceLedgerBooks" parent="UserSuppliedEnrichment" instance=ExtResource("49_user_books")]
+position = Vector3(-4.12, -2.43, 8.86)
+rotation = Vector3(0, -0.09, 0)
+
+[node name="BookingDroppedPaper" parent="UserSuppliedEnrichment" instance=ExtResource("50_user_paper_debris")]
+position = Vector3(-8.06, -3.575, -2.1)
+rotation = Vector3(0, 0.38, 0)

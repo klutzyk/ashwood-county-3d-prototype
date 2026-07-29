@@ -10,7 +10,6 @@
 [ext_resource type="PackedScene" path="res://assets/environment/buildings/Pharmacy/pharmacy.tscn" id="8_pharmacy"]
 [ext_resource type="PackedScene" uid="uid://b83nc4eh3isht" path="res://assets/environment/buildings/Diner/diner.tscn" id="9_diner"]
 [ext_resource type="PackedScene" path="res://assets/environment/buildings/WillowOutfitters/willow_outfitters.tscn" id="10_corner"]
-[ext_resource type="PackedScene" path="res://scenes/world/ashwood/presentation/buildings/historic_office_block.tscn" id="11_office"]
 [ext_resource type="PackedScene" path="res://scenes/world/ashwood/presentation/buildings/small_town_bank.tscn" id="12_bank"]
 [ext_resource type="PackedScene" path="res://scenes/world/ashwood/presentation/buildings/midcentury_laundromat.tscn" id="14_laundry"]
 [ext_resource type="PackedScene" path="res://assets/environment/vehicles/parked_1975_impala.tscn" id="15_impala"]
@@ -30,7 +29,6 @@
 [ext_resource type="PackedScene" uid="uid://dege5whru3cq2" path="res://assets/environment/buildings/ashwood/insurance.glb" id="29_insurance"]
 [ext_resource type="PackedScene" uid="uid://8iuk4pq0ic08" path="res://assets/environment/buildings/ashwood/musicstore.glb" id="30_musicstore"]
 [ext_resource type="PackedScene" uid="uid://d0qutyi2bifyk" path="res://assets/environment/buildings/ashwood/realtor.glb" id="31_realtor"]
-[ext_resource type="PackedScene" uid="uid://bivilksa3u228" path="res://assets/third_party/buildings/lowpoly industrial building/lowpoly_industrial_building.glb" id="32_industrial"]
 [ext_resource type="PackedScene" uid="uid://cu02iban0n6hl" path="res://assets/third_party/buildings/lowpoly industrial building/old_building.glb" id="33_old_building"]
 [ext_resource type="PackedScene" uid="uid://knag5b8wjtmw" path="res://assets/third_party/props/signs/welcome_sign_restaurant.glb" id="34_restaurant_sign"]
 [ext_resource type="PackedScene" path="res://assets/environment/buildings/AshwoodGrocery/ashwood_grocery.tscn" id="35_grocery"]
@@ -77,9 +75,6 @@ size = Vector3(7.65, 6.9, 5)
 
 [sub_resource type="BoxShape3D" id="MusicStoreShape"]
 size = Vector3(7.45, 5.1, 4.65)
-
-[sub_resource type="BoxShape3D" id="IndustrialShape"]
-size = Vector3(10.9, 9.5, 10)
 
 [sub_resource type="BoxShape3D" id="OldBuildingShape"]
 size = Vector3(8.55, 11.5, 6.4)
@@ -417,9 +412,6 @@ transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 26, 0.2, -17)
 [node name="NorthPharmacy" parent="Storefronts" unique_id=1672649885 instance=ExtResource("8_pharmacy")]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 44, 0.2, -12.6)
 
-[node name="NorthOffice" parent="Storefronts" unique_id=1942571544 instance=ExtResource("11_office")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 88, 0.2, -13.55)
-
 [node name="SouthFlorist" type="StaticBody3D" parent="Storefronts" unique_id=1769633255]
 transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, -90, 0.2, 8.75)
 
@@ -480,23 +472,7 @@ transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 88, 0.2, 18)
 
 [node name="BackgroundBuildings" type="Node3D" parent="." unique_id=994429708]
 
-[node name="EastIndustrialWorks" type="StaticBody3D" parent="BackgroundBuildings" unique_id=417023383]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 93, 0.2, -20)
-
-[node name="Visual" parent="BackgroundBuildings/EastIndustrialWorks" unique_id=1022983564 instance=ExtResource("32_industrial")]
-transform = Transform3D(3.4, 0, 0, 0, 3.4, 0, 0, 0, 3.4, -0.0313, 0, -8.1245)
-
-[node name="Collision" type="CollisionShape3D" parent="BackgroundBuildings/EastIndustrialWorks" unique_id=926326761]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.75, -6.015)
-shape = SubResource("IndustrialShape")
-
 [node name="BusinessSigns" type="Node3D" parent="." unique_id=1778970311]
-
-[node name="OfficesNorth" type="Label3D" parent="BusinessSigns" unique_id=2086663891]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 88, 3.75, -8.45)
-text = "MAIN STREET OFFICES"
-font_size = 38
-outline_size = 8
 
 [node name="Laundromat" type="Label3D" parent="BusinessSigns" unique_id=1825668996]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 3.85, 8.45)
@@ -698,7 +674,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0.2, -8.25)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 51, 0.2, -8.25)
 
 [node name="BenchNorth04" parent="Furniture" unique_id=1736042321 instance=ExtResource("3_bench")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 89, 0.2, -8.25)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 104.8, 0.2, -8.25)
 
 [node name="BenchSouth01" parent="Furniture" unique_id=1335394036 instance=ExtResource("3_bench")]
 transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, -53, 0.2, 8.25)
@@ -728,7 +704,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 35.2, 0.2, -8.45)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 40, 0.2, -8.45)
 
 [node name="PlanterNorth06" parent="Furniture" unique_id=1604226515 instance=ExtResource("4_planter")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 91, 0.2, -8.45)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 75.7, 0.2, -8.45)
 
 [node name="PlanterSouth01" parent="Furniture" unique_id=600614625 instance=ExtResource("4_planter")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -92, 0.2, 8.45)

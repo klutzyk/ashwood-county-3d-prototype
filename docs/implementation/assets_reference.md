@@ -432,7 +432,36 @@ visual-quality pass on 28 July 2026.
 ## old school cabinet (lockers)
 "Old School Cabinet" (https://skfb.ly/oxY6U) by NghiaNguyeen is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 
+## User-Supplied Sketchfab Batch (29 July 2026)
 
+The user supplied 42 downloaded GLBs for this environment-art slice. The
+project retained 34 models whose embedded Sketchfab metadata identifies a
+[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) license. The complete
+title, creator, source URL, license URL, and MD5 record is preserved in
+`assets/third_party/user_supplied/ashwood_2026_07_29/SOURCES.md`; that manifest
+also records why eight unsuitable, redundant, or redistribution-restricted
+files were excluded. Retained models were renamed, normalized, selectively
+given simple collision, and wrapped with project distance culling where useful.
+
+The existing credit entries above cover 24 retained sources. These are the ten
+retained sources that were previously missing from this central register:
+
+| Asset | Creator | Source | Retained file | Prototype use |
+| --- | --- | --- | --- | --- |
+| 2001 Crown Victoria Police Interceptor Game Prop | 8sianDude | [Sketchfab](https://sketchfab.com/3d-models/2001-crown-victoria-police-interceptor-game-prop-9f30d360cee343efb5a441978ddb57bd) | `2001_crown_victoria_police_interceptor_game_prop.glb` | Police-station exterior |
+| Abandoned children's slide | sergeilihandristov | [Sketchfab](https://sketchfab.com/3d-models/abandoned-childrens-slide-11de2b21ec264c0a814ac024c45ab425) | `abandoned_childrens_slide.glb` | School activity yard |
+| Bike | krichwow | [Sketchfab](https://sketchfab.com/3d-models/bike-f256203558c24ea09385a861b917c75a) | `bike.glb` | School and Main Street dressing |
+| Bookshelf | Idmenthal | [Sketchfab](https://sketchfab.com/3d-models/bookshelf-8df6adc634bd4004894a5e70565dc52a) | `bookshelf.glb` | School library |
+| Manhole | Sirenko | [Sketchfab](https://sketchfab.com/3d-models/manhole-a657396d68fa43f0ac7da12a6403d59f) | `manhole.glb` | Main Street road dressing |
+| Pencil Low | Artieee | [Sketchfab](https://sketchfab.com/3d-models/pencil-low-0f0a907cb9dd4705a84c85ca2f9db760) | `pencil_low.glb` | School classroom dressing |
+| School Desk | barism09 | [Sketchfab](https://sketchfab.com/3d-models/school-desk-a74180ee97bb4917b24cd48580663b44) | `school_desk.glb` | School classrooms |
+| School Cabinet (Damaged) | gozdemrl | [Sketchfab](https://sketchfab.com/3d-models/school-cabinet-damaged-81eed9f7c9194fa4ab7ceadc6171dbda) | `school_lockers_damaged.glb` | School corridors and gym |
+| Some eraser two | Artieee | [Sketchfab](https://sketchfab.com/3d-models/some-eraser-two-0bdd6e5a1a0845759357b5564e588f5c) | `some_eraser_two.glb` | School classroom dressing |
+| The Pen | Artieee | [Sketchfab](https://sketchfab.com/3d-models/the-pen-0501227aa9d64cca9b5df390a489ab38) | `the_pen.glb` | School and office dressing |
+
+The Sketchfab description for `bookshelf.glb` also identifies the work as
+based on Brandon Westlake's "Chocolate Beech Bookshelf (FREE)", under CC BY.
+Preserve that upstream credit alongside Idmenthal's embedded attribution.
 
 ## Project-Owned Prototype Town Geometry
 

@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/AshwoodSchoolEnvironment.cs" id="1_builder"]
+[ext_resource type="PackedScene" path="res://assets/environment/buildings/AshwoodSchool/ashwood_school_area_dressing.tscn" id="2_dressing"]
+
+[node name="AshwoodSchool" type="Node3D"]
+script = ExtResource("1_builder")
+metadata/building_name = "Ashwood County High School"
+metadata/storeys = 2
+metadata/environment_art_only = true
+
+[node name="AreaDressing" parent="." instance=ExtResource("2_dressing")]

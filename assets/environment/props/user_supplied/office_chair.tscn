@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/third_party/user_supplied/ashwood_2026_07_29/office_chair_game_model_download.glb" id="1_model"]
+[ext_resource type="Script" path="res://scripts/world/MainStreetDressingCuller.cs" id="2_culler"]
+
+[sub_resource type="BoxShape3D" id="Collision"]
+size = Vector3(0.62, 0.9, 0.66)
+
+[node name="OfficeChair" type="StaticBody3D"]
+script = ExtResource("2_culler")
+PropRange = 38.0
+metadata/source_path = "res://assets/third_party/user_supplied/ashwood_2026_07_29/office_chair_game_model_download.glb"
+
+[node name="Visual" parent="." instance=ExtResource("1_model")]
+position = Vector3(0.035, 100.186, -0.542)
+
+[node name="Collision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.45, 0)
+shape = SubResource("Collision")

@@ -1,0 +1,152 @@
+[gd_scene load_steps=15 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/environment/props/user_supplied/bicycle.tscn" id="1_bicycle"]
+[ext_resource type="PackedScene" path="res://assets/environment/props/user_supplied/picnic_table.tscn" id="2_picnic"]
+[ext_resource type="PackedScene" path="res://assets/environment/props/user_supplied/abandoned_slide.tscn" id="3_slide"]
+[ext_resource type="PackedScene" path="res://assets/environment/props/user_supplied/basketball_hoop.tscn" id="4_hoop"]
+[ext_resource type="PackedScene" path="res://assets/environment/props/user_supplied/basketball.tscn" id="5_ball"]
+[ext_resource type="PackedScene" path="res://assets/environment/props/user_supplied/trash_can.tscn" id="6_trash"]
+[ext_resource type="PackedScene" path="res://assets/environment/props/user_supplied/paper_debris.tscn" id="7_paper_debris"]
+[ext_resource type="PackedScene" path="res://assets/environment/props/user_supplied/paper_stack.tscn" id="8_paper_stack"]
+[ext_resource type="PackedScene" path="res://assets/environment/props/user_supplied/cobweb_pack.tscn" id="9_cobweb"]
+[ext_resource type="PackedScene" path="res://scenes/world/ashwood/presentation/props/apocalypse_park_bench.tscn" id="10_bench"]
+[ext_resource type="PackedScene" path="res://scenes/world/ashwood/presentation/planter.tscn" id="11_planter"]
+[ext_resource type="PackedScene" path="res://assets/environment/nature/yughues_bush_01.tscn" id="12_bush_01"]
+[ext_resource type="PackedScene" path="res://assets/environment/nature/yughues_bush_02.tscn" id="13_bush_02"]
+[ext_resource type="PackedScene" path="res://assets/environment/nature/yughues_bush_05.tscn" id="14_bush_05"]
+
+[node name="AshwoodSchoolAreaDressing" type="Node3D"]
+metadata/_environment_art = "Hand-authored exterior school approach and activity-yard dressing"
+metadata/_building_footprint = AABB(-14, 0, -13, 35.2, 8.4, 26)
+metadata/_facade_outward = Vector3(0, 0, 1)
+metadata/_entrance_clear_zone = AABB(-2, 0, 10, 4, 3, 5)
+metadata/_minimum_clear_corridor_width = 1.8
+
+[node name="EntranceApproach" type="Node3D" parent="."]
+
+[node name="LeftPlanter" parent="EntranceApproach" instance=ExtResource("11_planter")]
+position = Vector3(-3.8, 0, 13.35)
+rotation = Vector3(0, -0.08, 0)
+
+[node name="RightPlanter" parent="EntranceApproach" instance=ExtResource("11_planter")]
+position = Vector3(3.8, 0, 13.35)
+rotation = Vector3(0, 0.1, 0)
+
+[node name="WeatheredEntranceBench" parent="EntranceApproach" instance=ExtResource("10_bench")]
+position = Vector3(-8.4, 0, 13.3)
+rotation = Vector3(0, 3.1415927, 0)
+
+[node name="EntranceTrashCan" parent="EntranceApproach" instance=ExtResource("6_trash")]
+position = Vector3(5.8, 0, 14.15)
+rotation = Vector3(0, 0.24, 0)
+
+[node name="DiscardedNoticesEast" parent="EntranceApproach" instance=ExtResource("7_paper_debris")]
+position = Vector3(3.15, 0.02, 14.72)
+rotation = Vector3(0, 0.38, 0)
+
+[node name="DiscardedNoticesWest" parent="EntranceApproach" instance=ExtResource("7_paper_debris")]
+position = Vector3(-3.25, 0.02, 14.45)
+rotation = Vector3(0, -0.64, 0)
+scale = Vector3(0.82, 0.82, 0.82)
+
+[node name="RainSoakedPaperStack" parent="EntranceApproach" instance=ExtResource("8_paper_stack")]
+position = Vector3(6.45, 0.015, 13.45)
+rotation = Vector3(0.03, -0.42, -0.02)
+scale = Vector3(0.78, 0.78, 0.78)
+
+[node name="FacadeCornerCobwebs" parent="EntranceApproach" instance=ExtResource("9_cobweb")]
+position = Vector3(-11.65, 1.45, 13.04)
+rotation = Vector3(0, 3.1415927, 0)
+scale = Vector3(0.88, 0.88, 0.88)
+
+[node name="BicycleCluster" type="Node3D" parent="."]
+
+[node name="StandingBicycle" parent="BicycleCluster" instance=ExtResource("1_bicycle")]
+position = Vector3(-6.1, 0, 14.18)
+rotation = Vector3(0, 1.42, 0)
+
+[node name="FallenBicycle" parent="BicycleCluster" instance=ExtResource("1_bicycle")]
+position = Vector3(-10.55, 0.48, 14.05)
+rotation = Vector3(0.06, -0.55, 1.36)
+
+[node name="BicycleLitter" parent="BicycleCluster" instance=ExtResource("7_paper_debris")]
+position = Vector3(-11.8, 0.025, 14.75)
+rotation = Vector3(0, 0.92, 0)
+scale = Vector3(0.72, 0.72, 0.72)
+
+[node name="ActivityYard" type="Node3D" parent="."]
+
+[node name="PicnicTableNorth" parent="ActivityYard" instance=ExtResource("2_picnic")]
+position = Vector3(17.25, 0, 7.15)
+rotation = Vector3(0, 0.18, 0)
+
+[node name="PicnicTableSouth" parent="ActivityYard" instance=ExtResource("2_picnic")]
+position = Vector3(18.2, 0, 2.75)
+rotation = Vector3(0, -0.23, 0)
+
+[node name="AbandonedPlaygroundSlide" parent="ActivityYard" instance=ExtResource("3_slide")]
+position = Vector3(17.45, 0, 10.65)
+rotation = Vector3(0, 3.02, 0)
+
+[node name="WeatheredBasketballHoop" parent="ActivityYard" instance=ExtResource("4_hoop")]
+position = Vector3(18.05, 0, 0.15)
+rotation = Vector3(0, -1.5707964, 0)
+
+[node name="AbandonedBasketball" parent="ActivityYard" instance=ExtResource("5_ball")]
+position = Vector3(16.25, 0.02, 1.25)
+rotation = Vector3(0.11, 0.34, -0.08)
+
+[node name="YardTrashCan" parent="ActivityYard" instance=ExtResource("6_trash")]
+position = Vector3(19.45, 0, 5.05)
+rotation = Vector3(0, -0.34, 0)
+
+[node name="LunchPapers" parent="ActivityYard" instance=ExtResource("7_paper_debris")]
+position = Vector3(15.5, 0.025, 5.55)
+rotation = Vector3(0, 1.12, 0)
+
+[node name="WindblownWorksheet" parent="ActivityYard" instance=ExtResource("8_paper_stack")]
+position = Vector3(18.8, 0.02, -0.85)
+rotation = Vector3(0.05, 0.66, 0.02)
+scale = Vector3(0.72, 0.72, 0.72)
+
+[node name="ReclaimAndLitter" type="Node3D" parent="."]
+
+[node name="EastWallBushNorth" parent="ReclaimAndLitter" instance=ExtResource("12_bush_01")]
+position = Vector3(14.85, 0, 10.25)
+rotation = Vector3(0, 0.35, 0)
+scale = Vector3(0.88, 0.92, 0.88)
+
+[node name="EastWallBushCentre" parent="ReclaimAndLitter" instance=ExtResource("13_bush_02")]
+position = Vector3(15.05, 0, -0.85)
+rotation = Vector3(0, -0.52, 0)
+scale = Vector3(0.78, 0.84, 0.78)
+
+[node name="EastWallBushSouth" parent="ReclaimAndLitter" instance=ExtResource("14_bush_05")]
+position = Vector3(21.45, 0, -11.2)
+rotation = Vector3(0, 0.72, 0)
+scale = Vector3(0.84, 0.9, 0.84)
+
+[node name="RearBushWest" parent="ReclaimAndLitter" instance=ExtResource("13_bush_02")]
+position = Vector3(-10.35, 0, -14.1)
+rotation = Vector3(0, 0.28, 0)
+scale = Vector3(0.88, 0.94, 0.88)
+
+[node name="RearBushEast" parent="ReclaimAndLitter" instance=ExtResource("12_bush_01")]
+position = Vector3(8.45, 0, -14.18)
+rotation = Vector3(0, -0.84, 0)
+scale = Vector3(0.82, 0.88, 0.82)
+
+[node name="FenceLinePaperDebris" parent="ReclaimAndLitter" instance=ExtResource("7_paper_debris")]
+position = Vector3(21.35, 0.025, -11.85)
+rotation = Vector3(0, -0.92, 0)
+scale = Vector3(0.68, 0.68, 0.68)
+
+[node name="RearWindblownPapers" parent="ReclaimAndLitter" instance=ExtResource("7_paper_debris")]
+position = Vector3(-7.6, 0.025, -14.65)
+rotation = Vector3(0, 0.48, 0)
+scale = Vector3(0.76, 0.76, 0.76)
+
+[node name="YardCornerCobwebs" parent="ReclaimAndLitter" instance=ExtResource("9_cobweb")]
+position = Vector3(13.72, 1.15, -11.85)
+rotation = Vector3(0, -1.5707964, 0)
+scale = Vector3(0.72, 0.72, 0.72)

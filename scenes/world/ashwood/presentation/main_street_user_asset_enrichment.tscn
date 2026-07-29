@@ -1,0 +1,58 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/environment/props/user_supplied/manhole.tscn" id="1_manhole"]
+[ext_resource type="PackedScene" path="res://assets/environment/props/user_supplied/trash_can.tscn" id="2_trash_can"]
+[ext_resource type="PackedScene" path="res://assets/environment/props/user_supplied/paper_debris.tscn" id="3_paper_debris"]
+[ext_resource type="PackedScene" path="res://assets/environment/props/user_supplied/paper_stack.tscn" id="4_paper_stack"]
+
+[node name="MainStreetUserAssetEnrichment" type="Node3D"]
+metadata/_environment_art = true
+metadata/coordinate_space = "main_street_world"
+metadata/placement_note = "Standalone enrichment layer; solid sidewalk props remain against building-side edges."
+
+[node name="RoadFixtures" type="Node3D" parent="."]
+metadata/dressing_category = "road_fixtures"
+
+[node name="WestLaneManhole" parent="RoadFixtures" instance=ExtResource("1_manhole")]
+position = Vector3(-63, 0.101, 1.7)
+rotation = Vector3(0, 0.34, 0)
+
+[node name="CentreLaneManhole" parent="RoadFixtures" instance=ExtResource("1_manhole")]
+position = Vector3(7, 0.101, -2.1)
+rotation = Vector3(0, -0.48, 0)
+
+[node name="EastIntersectionManhole" parent="RoadFixtures" instance=ExtResource("1_manhole")]
+position = Vector3(70, 0.106, 1.9)
+rotation = Vector3(0, 0.73, 0)
+
+[node name="NorthSidewalkServiceCluster" type="Node3D" parent="."]
+metadata/dressing_category = "sidewalk_refuse"
+metadata/clear_walkway_width_metres = 2.33
+
+[node name="NorthWeatheredTrashCan" parent="NorthSidewalkServiceCluster" instance=ExtResource("2_trash_can")]
+position = Vector3(-15, 0.201, -8.35)
+rotation = Vector3(0, 0.18, 0)
+
+[node name="NorthWindblownNotices" parent="NorthSidewalkServiceCluster" instance=ExtResource("3_paper_debris")]
+position = Vector3(-16.2, 0.201, -8.57)
+rotation = Vector3(0, -0.67, 0)
+
+[node name="NorthDiscardedPaperStack" parent="NorthSidewalkServiceCluster" instance=ExtResource("4_paper_stack")]
+position = Vector3(-14.22, 0.201, -8.12)
+rotation = Vector3(0, 1.04, 0)
+
+[node name="SouthSidewalkServiceCluster" type="Node3D" parent="."]
+metadata/dressing_category = "sidewalk_refuse"
+metadata/clear_walkway_width_metres = 2.33
+
+[node name="SouthWeatheredTrashCan" parent="SouthSidewalkServiceCluster" instance=ExtResource("2_trash_can")]
+position = Vector3(31, 0.201, 8.35)
+rotation = Vector3(0, -2.91, 0)
+
+[node name="SouthWindblownNotices" parent="SouthSidewalkServiceCluster" instance=ExtResource("3_paper_debris")]
+position = Vector3(29.82, 0.201, 8.56)
+rotation = Vector3(0, 2.36, 0)
+
+[node name="SouthDiscardedPaperStack" parent="SouthSidewalkServiceCluster" instance=ExtResource("4_paper_stack")]
+position = Vector3(31.82, 0.201, 8.08)
+rotation = Vector3(0, -1.27, 0)

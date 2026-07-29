@@ -2180,3 +2180,49 @@ Validation:
   167.13 FPS with 5.40 ms median and 9.69 ms p95 frame time, 474 draw calls,
   and approximately 646 visible objects
 - C# build completed with no warnings or errors
+
+---
+
+## User-Supplied Asset Integration and Ashwood County High School (2026-07-29)
+
+Completed:
+
+- Audited the user-supplied Sketchfab download set, retained 34 CC BY 4.0 GLBs,
+  and preserved embedded titles, creators, source and license links, and MD5
+  hashes in a local source manifest
+- Excluded eight assets with redistribution, ShareAlike-duplication,
+  performance, quality, or redundancy concerns instead of importing the batch
+  indiscriminately
+- Added normalized reusable wrappers with sensible grounding, selective simple
+  collision, and distance culling, then integrated the detailed props into
+  Main Street, Pharmacy, Diner, Willow Outfitters, Miller Hardware, Ashwood
+  Grocery, Ashwood Police Station, and the school grounds and interiors
+- Built and placed the two-storey Ashwood County High School with a
+  street-facing double entrance, shallow threshold, continuous walkable
+  staircase, five furnished classrooms, library, cafeteria, offices, two
+  enclosed restrooms, and a dedicated double-height gymnasium
+- Dressed the school with 45 licensed student desks, lockers, boards, books,
+  classroom supplies, furniture, sports equipment, papers, cobwebs, bicycles,
+  playground and lunch-yard props while preserving broad circulation and a
+  1.8-metre exterior entrance route
+- Kept the work environment-art-only and reused the established player and
+  traversal systems without changing combat, zombies, inventory, or save data
+
+Validation:
+
+- User-supplied asset-library validation passed all 34 retained files and their
+  curated wrapper bounds
+- School validation passed with 311 textured architectural pieces, 201 sourced
+  prop instances, 29 distinct sourced models, and 45 student desks
+- Real-player school entrance validation passed from the actual sidewalk
+  through the double entrance using only forward movement and no jump
+- Real-player staircase validation passed ascent and descent between both
+  storeys using only forward movement and no jump
+- Compatibility-rendered school-approach benchmark at 1280 by 720 averaged
+  97.76 FPS with 9.88 ms median, 16.63 ms p95, 2,613 draw calls, and 2,612
+  visible objects after room-scale interior-prop distance culling while
+  retaining the full exterior window set at street-view distance
+- Pharmacy, Diner, Willow Outfitters, Miller Hardware, Ashwood Grocery, and
+  Ashwood Police Station validators passed after the asset-placement pass;
+  Main Street storefront traversal, room enclosure, wall-material, art-pass,
+  player-step, and police-basement-stair regressions also passed

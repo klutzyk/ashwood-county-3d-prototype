@@ -1,0 +1,27 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/third_party/user_supplied/ashwood_2026_07_29/basketball_hoop_panel.glb" id="1_model"]
+[ext_resource type="Script" path="res://scripts/world/MainStreetDressingCuller.cs" id="2_culler"]
+
+[sub_resource type="BoxShape3D" id="PoleShape"]
+size = Vector3(0.18, 3.0, 0.18)
+
+[sub_resource type="BoxShape3D" id="BoardShape"]
+size = Vector3(1.32, 0.82, 0.12)
+
+[node name="BasketballHoop" type="StaticBody3D"]
+script = ExtResource("2_culler")
+PropRange = 65.0
+metadata/source_path = "res://assets/third_party/user_supplied/ashwood_2026_07_29/basketball_hoop_panel.glb"
+
+[node name="Visual" parent="." instance=ExtResource("1_model")]
+position = Vector3(0, 0, -0.605)
+scale = Vector3(0.75, 0.75, 0.75)
+
+[node name="PoleCollision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 1.5, 0.55)
+shape = SubResource("PoleShape")
+
+[node name="BoardCollision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 2.58, -0.05)
+shape = SubResource("BoardShape")
