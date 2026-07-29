@@ -9,7 +9,7 @@
 [ext_resource type="PackedScene" path="res://assets/environment/nature/main_street_tree_2.tscn" id="7_tree2"]
 [ext_resource type="PackedScene" path="res://assets/environment/buildings/Pharmacy/pharmacy.tscn" id="8_pharmacy"]
 [ext_resource type="PackedScene" uid="uid://b83nc4eh3isht" path="res://assets/environment/buildings/Diner/diner.tscn" id="9_diner"]
-[ext_resource type="PackedScene" path="res://scenes/world/ashwood/presentation/buildings/painted_corner_shop.tscn" id="10_corner"]
+[ext_resource type="PackedScene" path="res://assets/environment/buildings/WillowOutfitters/willow_outfitters.tscn" id="10_corner"]
 [ext_resource type="PackedScene" path="res://scenes/world/ashwood/presentation/buildings/historic_office_block.tscn" id="11_office"]
 [ext_resource type="PackedScene" path="res://scenes/world/ashwood/presentation/buildings/small_town_bank.tscn" id="12_bank"]
 [ext_resource type="PackedScene" path="res://scenes/world/ashwood/presentation/buildings/midcentury_laundromat.tscn" id="14_laundry"]
@@ -455,7 +455,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.55, -2.88)
 shape = SubResource("MusicStoreShape")
 
 [node name="SouthSportingGoods" parent="Storefronts" unique_id=1633568354 instance=ExtResource("10_corner")]
-transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, -13, 0.2, 12.85)
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -13, 0.2, 15)
 
 [node name="SouthLaundromat" parent="Storefronts" unique_id=929428039 instance=ExtResource("14_laundry")]
 transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 0, 0.2, 12.95)
@@ -500,12 +500,6 @@ shape = SubResource("OldBuildingShape")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 88, 3.75, -8.45)
 text = "MAIN STREET OFFICES"
 font_size = 38
-outline_size = 8
-
-[node name="SportingGoods" type="Label3D" parent="BusinessSigns" unique_id=1950065764]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -13, 3.7, 8.45)
-text = "TRAIL & FIELD"
-font_size = 40
 outline_size = 8
 
 [node name="Laundromat" type="Label3D" parent="BusinessSigns" unique_id=1825668996]
@@ -615,7 +609,7 @@ transform = Transform3D(0.9017978, 0, -0.32918188, 0, 0.96, 0, 0.32918188, 0, 0.
 transform = Transform3D(0.41219667, 0, 0.61456805, 0, 0.74, 0, -0.61456805, 0, 0.41219667, -35.5, 0.2, 8.38)
 
 [node name="South04" parent="Trees" unique_id=306049597 instance=ExtResource("6_tree1")]
-transform = Transform3D(0.81200546, 0, -0.61729014, 0, 1.02, 0, 0.61729014, 0, 0.81200546, -7, 0.2, 8.52)
+transform = Transform3D(0.81200546, 0, -0.61729014, 0, 1.02, 0, 0.61729014, 0, 0.81200546, -6.3226104, 0.2, 7.5779343)
 
 [node name="South05" parent="Trees" unique_id=1446869771 instance=ExtResource("7_tree2")]
 transform = Transform3D(0.76426923, 0, 0.23641618, 0, 0.8, 0, -0.23641618, 0, 0.76426923, 23, 0.2, 8.4)
@@ -726,7 +720,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 89, 0.2, -8.25)
 transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, -53, 0.2, 8.25)
 
 [node name="BenchSouth02" parent="Furniture" unique_id=462838108 instance=ExtResource("3_bench")]
-transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, -8, 0.2, 8.25)
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, -12.739407, 0.2, 8.25)
 
 [node name="BenchSouth03" parent="Furniture" unique_id=1298437907 instance=ExtResource("3_bench")]
 transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 48, 0.2, 8.25)
