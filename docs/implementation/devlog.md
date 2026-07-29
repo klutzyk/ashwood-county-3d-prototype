@@ -2148,5 +2148,35 @@ and a multi-level civic interior.
 
 Validation:
 
-- Final integrated scene, traversal, regression, build, and visual-review
-  validation remained pending when this entry was written
+- Corrected the real world-space transforms for all seven enterable storefronts
+  so their doors and display windows face the Main Street sidewalk
+- Replaced the remaining live primitive street blockouts with detailed imported
+  benches, aged hydrants, tyres, planter boxes, delivery equipment, barrels,
+  repair bags, brooms, and storage carts while retaining only supporting
+  project-owned road wear, drainage, utilities, and signage
+- Added 190 individually composed vegetation, refuse, service-clutter, damaged
+  street-furniture, and environmental-story placements. Shared scenes are
+  instanced, entrance approaches stay clear, substantial collision remains
+  sparse, and category-specific distance culling protects the Compatibility
+  renderer
+- Completed full-height wall, doorway-header, and imported-door enclosure for
+  the Pharmacy, Diner, Willow Outfitters, Grocery, Miller Hardware, and Police
+  back rooms and restrooms; corrected the final Miller bathroom fixture scale
+  and grounding
+- Added production-scene traversal regressions that drive the real player
+  through all seven storefront thresholds and both directions of the police
+  basement stairs using forward movement only, with no jump input
+- All 18 focused Godot checks passed, covering storefront traversal, player
+  step handling, police stairs, room enclosure, every affected building,
+  Main Street art and dressing, melee responsiveness, melee animation, and
+  save/load
+- Compatibility visual reviews confirmed that Bakery, Grocery, Pharmacy,
+  Willow Outfitters, Miller Hardware, Silver Spoon Diner, and Ashwood Police
+  entrances face their actual sidewalks and that the dense dressing remains
+  outside the entry routes and travel lanes
+- The nine new Poly Haven 1K source packs occupy approximately 23.4 MB; all 49
+  retained files match the MD5 records preserved in the local source manifest
+- Compatibility-rendered full-prototype benchmark at 1280 by 720 averaged
+  167.13 FPS with 5.40 ms median and 9.69 ms p95 frame time, 474 draw calls,
+  and approximately 646 visible objects
+- C# build completed with no warnings or errors
