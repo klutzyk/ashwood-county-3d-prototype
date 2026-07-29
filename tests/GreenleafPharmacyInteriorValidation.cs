@@ -31,6 +31,7 @@ public partial class GreenleafPharmacyInteriorValidation : Node
 
 			ValidateAssembly(exterior, interior, frontDoor);
 			ValidateConceptZones(interior);
+			ValidateExpandedTexturedShell(interior);
 			ValidateImportedFocalAssets(interior);
 			ValidateMedicineCabinet(interior);
 			ValidateMajorOnlyCollision(interior);
@@ -106,6 +107,21 @@ public partial class GreenleafPharmacyInteriorValidation : Node
 		Require(interior.HasNode("Restroom/Toilet") &&
 			interior.HasNode("Restroom/Sink"),
 			"staff bathroom contains the expected sanitary fixtures");
+	}
+
+	private static void ValidateExpandedTexturedShell(StaticBody3D interior)
+	{
+		BoxShape3D floor = (BoxShape3D)interior
+			.GetNode<CollisionShape3D>("FloorCollision").Shape;
+		Require(floor.Size.X >= 11.9f && floor.Size.Z >= 11.9f,
+			"expanded pharmacy provides a generous 12 m by 12 m traversable floor");
+
+		StandardMaterial3D wallMaterial = GD.Load<StandardMaterial3D>(
+			"res://assets/materials/greenleaf_pharmacy_wall.tres");
+		Require(wallMaterial.AlbedoTexture is not null &&
+			wallMaterial.NormalEnabled &&
+			wallMaterial.NormalTexture is not null,
+			"every pharmacy wall uses a textured PBR plaster material");
 	}
 
 	private static void ValidateImportedFocalAssets(StaticBody3D interior)
@@ -259,11 +275,11 @@ public partial class GreenleafPharmacyInteriorValidation : Node
 
 		ValidateClearRoute(pharmacy, authoredBoxes, "front entrance", new[]
 		{
-			new Vector3(4.35f, 0.9f, 0.0f),
-			new Vector3(3.9f, 0.9f, 0.0f),
-			new Vector3(3.5f, 0.9f, 0.0f),
-			new Vector3(3.15f, 0.9f, 0.0f),
-			new Vector3(2.75f, 0.9f, 0.0f),
+			new Vector3(4.35f, 0.9f, 0.25f),
+			new Vector3(3.9f, 0.9f, 0.25f),
+			new Vector3(3.5f, 0.9f, 0.25f),
+			new Vector3(3.15f, 0.9f, 0.25f),
+			new Vector3(2.75f, 0.9f, 0.25f),
 		});
 		ValidateClearRoute(pharmacy, authoredBoxes, "central sales aisle", new[]
 		{
@@ -275,18 +291,19 @@ public partial class GreenleafPharmacyInteriorValidation : Node
 		});
 		ValidateClearRoute(pharmacy, authoredBoxes, "storage-room doorway", new[]
 		{
-			new Vector3(-3.27f, 0.9f, -2.68f),
-			new Vector3(-3.27f, 0.9f, -2.93f),
-			new Vector3(-3.27f, 0.9f, -3.11f),
-			new Vector3(-3.27f, 0.9f, -3.32f),
-			new Vector3(-3.27f, 0.9f, -3.51f),
+			new Vector3(-6.4f, 0.9f, -2.65f),
+			new Vector3(-6.4f, 0.9f, -2.92f),
+			new Vector3(-6.4f, 0.9f, -3.16f),
+			new Vector3(-6.4f, 0.9f, -3.42f),
+			new Vector3(-6.4f, 0.9f, -3.72f),
 		});
 		ValidateClearRoute(pharmacy, authoredBoxes, "restroom doorway", new[]
 		{
-			new Vector3(-3.14f, 0.9f, 3.36f),
-			new Vector3(-3.14f, 0.9f, 3.54f),
-			new Vector3(-3.14f, 0.9f, 3.72f),
-			new Vector3(-3.14f, 0.9f, 3.88f),
+			new Vector3(-6.4f, 0.9f, 2.65f),
+			new Vector3(-6.4f, 0.9f, 2.92f),
+			new Vector3(-6.4f, 0.9f, 3.16f),
+			new Vector3(-6.4f, 0.9f, 3.42f),
+			new Vector3(-6.4f, 0.9f, 3.72f),
 		});
 	}
 

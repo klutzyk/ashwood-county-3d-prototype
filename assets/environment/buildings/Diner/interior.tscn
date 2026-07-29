@@ -79,7 +79,7 @@ material = ExtResource("9_ceiling")
 material = ExtResource("10_blackboard")
 
 [sub_resource type="BoxShape3D" id="FloorShape"]
-size = Vector3(7.8, 0.08, 11.8)
+size = Vector3(13, 0.08, 13.4)
 
 [sub_resource type="BoxShape3D" id="BoothShape"]
 size = Vector3(1.76, 1.12, 1.52)
@@ -106,16 +106,16 @@ size = Vector3(1.58, 0.8, 0.76)
 size = Vector3(0.54, 2.15, 0.62)
 
 [sub_resource type="BoxShape3D" id="PartitionStubShape"]
-size = Vector3(0.25, 3.55, 0.12)
+size = Vector3(0.85, 3.55, 0.12)
 
 [sub_resource type="BoxShape3D" id="PartitionMiddleShape"]
-size = Vector3(0.3, 3.55, 0.12)
+size = Vector3(3.8, 3.55, 0.12)
 
 [sub_resource type="BoxShape3D" id="PartitionEndShape"]
-size = Vector3(0.12, 3.55, 0.12)
+size = Vector3(1.8, 3.55, 0.12)
 
 [sub_resource type="BoxShape3D" id="RoomDividerShape"]
-size = Vector3(0.12, 3.55, 2.18)
+size = Vector3(0.12, 3.55, 2.35)
 
 [sub_resource type="BoxShape3D" id="ToiletShape"]
 size = Vector3(0.72, 0.9, 0.86)
@@ -125,189 +125,189 @@ size = Vector3(0.72, 0.9, 0.86)
 [node name="Architecture" type="Node3D" parent="."]
 
 [node name="DiningFloor" type="MeshInstance3D" parent="Architecture"]
-position = Vector3(-1.5, 0.04, 0)
-scale = Vector3(4.8, 0.08, 11.8)
+position = Vector3(-1.75, 0.04, 0)
+scale = Vector3(4.5, 0.08, 13.4)
 mesh = SubResource("MeshFloor")
 
 [node name="KitchenFloor" type="MeshInstance3D" parent="Architecture"]
-position = Vector3(2.4, 0.045, 0)
-scale = Vector3(3.0, 0.09, 11.8)
+position = Vector3(4.75, 0.045, 0)
+scale = Vector3(8.5, 0.09, 13.4)
 mesh = SubResource("MeshTile")
 
 [node name="Ceiling" type="MeshInstance3D" parent="Architecture"]
-position = Vector3(0, 3.76, 0)
-scale = Vector3(7.8, 0.08, 11.8)
+position = Vector3(2.5, 3.76, 0)
+scale = Vector3(13, 0.08, 13.4)
 mesh = SubResource("MeshCeiling")
 
 [node name="RearWallLiner" type="MeshInstance3D" parent="Architecture"]
-position = Vector3(3.91, 1.88, 0)
-scale = Vector3(0.08, 3.68, 11.8)
+position = Vector3(9.01, 1.88, 0)
+scale = Vector3(0.08, 3.68, 13.4)
 mesh = SubResource("MeshTile")
 
 [node name="NorthWallLiner" type="MeshInstance3D" parent="Architecture"]
-position = Vector3(0, 1.88, -5.91)
-scale = Vector3(7.8, 3.68, 0.08)
+position = Vector3(2.5, 1.88, -6.71)
+scale = Vector3(13, 3.68, 0.08)
 mesh = SubResource("MeshWall")
 
 [node name="SouthWallLiner" type="MeshInstance3D" parent="Architecture"]
-position = Vector3(0, 1.88, 5.91)
-scale = Vector3(7.8, 3.68, 0.08)
+position = Vector3(2.5, 1.88, 6.71)
+scale = Vector3(13, 3.68, 0.08)
 mesh = SubResource("MeshWall")
 
 [node name="FrontNorthSill" type="MeshInstance3D" parent="Architecture"]
-position = Vector3(-3.91, 0.35, -3.75)
-scale = Vector3(0.08, 0.68, 3.65)
+position = Vector3(-4.01, 0.35, -4.275)
+scale = Vector3(0.08, 0.68, 4.75)
 mesh = SubResource("MeshWall")
 
 [node name="FrontSouthSill" type="MeshInstance3D" parent="Architecture"]
-position = Vector3(-3.91, 0.35, 2.85)
-scale = Vector3(0.08, 0.68, 5.35)
+position = Vector3(-4.01, 0.35, 3.45)
+scale = Vector3(0.08, 0.68, 6.4)
 mesh = SubResource("MeshWall")
 
 [node name="FrontHeader" type="MeshInstance3D" parent="Architecture"]
-position = Vector3(-3.91, 3.23, 0)
-scale = Vector3(0.08, 1.02, 11.8)
+position = Vector3(-4.01, 3.23, 0)
+scale = Vector3(0.08, 1.02, 13.4)
 mesh = SubResource("MeshWall")
 
 [node name="NorthPartitionWestStub" type="MeshInstance3D" parent="Architecture"]
-position = Vector3(0.875, 1.78, -3.7)
-scale = Vector3(0.25, 3.55, 0.12)
+position = Vector3(0.975, 1.78, -4.2)
+scale = Vector3(0.85, 3.55, 0.12)
 mesh = SubResource("MeshWall")
 
 [node name="NorthPartitionMiddle" type="MeshInstance3D" parent="Architecture"]
-position = Vector3(2.4, 1.78, -3.7)
-scale = Vector3(0.3, 3.55, 0.12)
+position = Vector3(4.3, 1.78, -4.2)
+scale = Vector3(3.8, 3.55, 0.12)
 mesh = SubResource("MeshWall")
 
 [node name="NorthPartitionEastEnd" type="MeshInstance3D" parent="Architecture"]
-position = Vector3(3.84, 1.78, -3.7)
-scale = Vector3(0.12, 3.55, 0.12)
+position = Vector3(8.1, 1.78, -4.2)
+scale = Vector3(1.8, 3.55, 0.12)
 mesh = SubResource("MeshWall")
 
 [node name="NorthRoomDivider" type="MeshInstance3D" parent="Architecture"]
-position = Vector3(2.4, 1.78, -4.79)
-scale = Vector3(0.12, 3.55, 2.18)
+position = Vector3(5.2, 1.78, -5.475)
+scale = Vector3(0.12, 3.55, 2.35)
 mesh = SubResource("MeshWall")
 
 [node name="SouthPartitionWestStub" type="MeshInstance3D" parent="Architecture"]
-position = Vector3(0.875, 1.78, 3.7)
-scale = Vector3(0.25, 3.55, 0.12)
+position = Vector3(0.975, 1.78, 4.2)
+scale = Vector3(0.85, 3.55, 0.12)
 mesh = SubResource("MeshTile")
 
 [node name="SouthPartitionMiddle" type="MeshInstance3D" parent="Architecture"]
-position = Vector3(2.4, 1.78, 3.7)
-scale = Vector3(0.3, 3.55, 0.12)
+position = Vector3(4.3, 1.78, 4.2)
+scale = Vector3(3.8, 3.55, 0.12)
 mesh = SubResource("MeshTile")
 
 [node name="SouthPartitionEastEnd" type="MeshInstance3D" parent="Architecture"]
-position = Vector3(3.84, 1.78, 3.7)
-scale = Vector3(0.12, 3.55, 0.12)
+position = Vector3(8.1, 1.78, 4.2)
+scale = Vector3(1.8, 3.55, 0.12)
 mesh = SubResource("MeshTile")
 
 [node name="SouthRoomDivider" type="MeshInstance3D" parent="Architecture"]
-position = Vector3(2.4, 1.78, 4.79)
-scale = Vector3(0.12, 3.55, 2.18)
+position = Vector3(5.2, 1.78, 5.475)
+scale = Vector3(0.12, 3.55, 2.35)
 mesh = SubResource("MeshTile")
 
 [node name="KitchenBacksplash" type="MeshInstance3D" parent="Architecture"]
-position = Vector3(3.82, 1.48, 0)
-scale = Vector3(0.05, 2.55, 7.18)
+position = Vector3(8.88, 1.48, 0)
+scale = Vector3(0.05, 2.55, 8.2)
 mesh = SubResource("MeshTile")
 
 [node name="DiningRedChairRailNorth" type="MeshInstance3D" parent="Architecture"]
-position = Vector3(-1.55, 1.18, -5.84)
+position = Vector3(-1.55, 1.18, -6.64)
 scale = Vector3(4.65, 0.12, 0.08)
 mesh = SubResource("MeshRed")
 
 [node name="DiningRedChairRailSouth" type="MeshInstance3D" parent="Architecture"]
-position = Vector3(-1.55, 1.18, 5.84)
+position = Vector3(-1.55, 1.18, 6.64)
 scale = Vector3(4.65, 0.12, 0.08)
 mesh = SubResource("MeshRed")
 
 [node name="DiningChromeBaseboardNorth" type="MeshInstance3D" parent="Architecture"]
-position = Vector3(-1.55, 0.12, -5.84)
+position = Vector3(-1.55, 0.12, -6.64)
 scale = Vector3(4.65, 0.16, 0.06)
 mesh = SubResource("MeshChrome")
 
 [node name="DiningChromeBaseboardSouth" type="MeshInstance3D" parent="Architecture"]
-position = Vector3(-1.55, 0.12, 5.84)
+position = Vector3(-1.55, 0.12, 6.64)
 scale = Vector3(4.65, 0.16, 0.06)
 mesh = SubResource("MeshChrome")
 
 [node name="RestroomFloor" type="MeshInstance3D" parent="Architecture"]
-position = Vector3(1.62, 0.095, 4.8)
-scale = Vector3(1.5, 0.04, 2.1)
+position = Vector3(2.85, 0.095, 5.45)
+scale = Vector3(4.5, 0.04, 2.35)
 mesh = SubResource("MeshTile")
 
 [node name="RestroomMirror" type="MeshInstance3D" parent="Architecture"]
-position = Vector3(0.83, 1.92, 4.38)
+position = Vector3(0.62, 1.92, 5.1)
 scale = Vector3(0.035, 0.82, 0.58)
 mesh = SubResource("MeshGlass")
 
 [node name="RestroomMirrorTop" type="MeshInstance3D" parent="Architecture"]
-position = Vector3(0.8, 2.35, 4.38)
+position = Vector3(0.59, 2.35, 5.1)
 scale = Vector3(0.06, 0.05, 0.68)
 mesh = SubResource("MeshChrome")
 
 [node name="RestroomMirrorBottom" type="MeshInstance3D" parent="Architecture"]
-position = Vector3(0.8, 1.49, 4.38)
+position = Vector3(0.59, 1.49, 5.1)
 scale = Vector3(0.06, 0.05, 0.68)
 mesh = SubResource("MeshChrome")
 
 [node name="OfficeDoor" parent="Architecture" instance=ExtResource("45_white_door")]
-position = Vector3(1.06, 1.2, -3.68)
+position = Vector3(1.45, 1.2, -4.18)
 rotation = Vector3(0, -0.78, 0)
 scale = Vector3(0.027, 0.027, 0.027)
 
 [node name="PantryDoor" parent="Architecture" instance=ExtResource("45_white_door")]
-position = Vector3(2.68, 1.2, -3.68)
+position = Vector3(6.25, 1.2, -4.18)
 rotation = Vector3(0, 0.72, 0)
 scale = Vector3(0.027, 0.027, 0.027)
 
 [node name="RestroomDoor" parent="Architecture" instance=ExtResource("45_white_door")]
-position = Vector3(1.06, 1.2, 3.68)
+position = Vector3(1.45, 1.2, 4.18)
 rotation = Vector3(0, 3.1415927, 0)
 scale = Vector3(0.027, 0.027, 0.027)
 
 [node name="ColdStorageDoor" parent="Architecture" instance=ExtResource("45_white_door")]
-position = Vector3(2.68, 1.2, 3.68)
+position = Vector3(6.25, 1.2, 4.18)
 rotation = Vector3(0, -2.4, 0)
 scale = Vector3(0.027, 0.027, 0.027)
 
 [node name="FloorCollision" type="CollisionShape3D" parent="."]
-position = Vector3(0, 0.0, 0)
+position = Vector3(2.5, 0.0, 0)
 shape = SubResource("FloorShape")
 
 [node name="NorthPartitionWestCollision" type="CollisionShape3D" parent="."]
-position = Vector3(0.875, 1.78, -3.7)
+position = Vector3(0.975, 1.78, -4.2)
 shape = SubResource("PartitionStubShape")
 
 [node name="NorthPartitionMiddleCollision" type="CollisionShape3D" parent="."]
-position = Vector3(2.4, 1.78, -3.7)
+position = Vector3(4.3, 1.78, -4.2)
 shape = SubResource("PartitionMiddleShape")
 
 [node name="NorthPartitionEastCollision" type="CollisionShape3D" parent="."]
-position = Vector3(3.84, 1.78, -3.7)
+position = Vector3(8.1, 1.78, -4.2)
 shape = SubResource("PartitionEndShape")
 
 [node name="NorthRoomDividerCollision" type="CollisionShape3D" parent="."]
-position = Vector3(2.4, 1.78, -4.79)
+position = Vector3(5.2, 1.78, -5.475)
 shape = SubResource("RoomDividerShape")
 
 [node name="SouthPartitionWestCollision" type="CollisionShape3D" parent="."]
-position = Vector3(0.875, 1.78, 3.7)
+position = Vector3(0.975, 1.78, 4.2)
 shape = SubResource("PartitionStubShape")
 
 [node name="SouthPartitionMiddleCollision" type="CollisionShape3D" parent="."]
-position = Vector3(2.4, 1.78, 3.7)
+position = Vector3(4.3, 1.78, 4.2)
 shape = SubResource("PartitionMiddleShape")
 
 [node name="SouthPartitionEastCollision" type="CollisionShape3D" parent="."]
-position = Vector3(3.84, 1.78, 3.7)
+position = Vector3(8.1, 1.78, 4.2)
 shape = SubResource("PartitionEndShape")
 
 [node name="SouthRoomDividerCollision" type="CollisionShape3D" parent="."]
-position = Vector3(2.4, 1.78, 4.79)
+position = Vector3(5.2, 1.78, 5.475)
 shape = SubResource("RoomDividerShape")
 
 [node name="DiningRoom" type="Node3D" parent="."]
@@ -419,11 +419,11 @@ rotation = Vector3(0, -1.5707964, 0)
 scale = Vector3(0.74, 0.74, 0.74)
 
 [node name="CoffeeCart" parent="ServiceCounter" instance=ExtResource("19_coffee")]
-position = Vector3(2.35, 0, -0.18)
+position = Vector3(3.2, 0, -0.18)
 rotation = Vector3(0, 1.5707964, 0)
 
 [node name="CoffeeCartCollision" type="CollisionShape3D" parent="."]
-position = Vector3(2.35, 0.86, -0.18)
+position = Vector3(3.2, 0.86, -0.18)
 shape = SubResource("CoffeeCartShape")
 
 [node name="CarrotCake" parent="ServiceCounter" instance=ExtResource("21_carrot_cake")]
@@ -445,6 +445,7 @@ rotation = Vector3(0, 1.53, 0)
 scale = Vector3(0.52, 0.52, 0.52)
 
 [node name="Kitchen" type="Node3D" parent="."]
+position = Vector3(4.7, 0, 0)
 
 [node name="CookLine" type="Node3D" parent="Kitchen"]
 
@@ -461,11 +462,11 @@ position = Vector3(3.34, 2.48, 1.62)
 rotation = Vector3(0, 1.5707964, 0)
 
 [node name="GriddleCollision" type="CollisionShape3D" parent="."]
-position = Vector3(3.36, 0.55, 1.0)
+position = Vector3(8.06, 0.55, 1.0)
 shape = SubResource("GriddleShape")
 
 [node name="FryerCollision" type="CollisionShape3D" parent="."]
-position = Vector3(3.28, 0.61, 2.25)
+position = Vector3(7.98, 0.61, 2.25)
 shape = SubResource("FryerShape")
 
 [node name="Washing" type="Node3D" parent="Kitchen"]
@@ -475,7 +476,7 @@ position = Vector3(3.46, 0, -1.35)
 rotation = Vector3(0, 1.5707964, 0)
 
 [node name="SinkCollision" type="CollisionShape3D" parent="."]
-position = Vector3(3.46, 0.7, -1.35)
+position = Vector3(8.16, 0.7, -1.35)
 shape = SubResource("SinkShape")
 
 [node name="Prep" type="Node3D" parent="Kitchen"]
@@ -499,6 +500,7 @@ rotation = Vector3(0, 1.5707964, 0)
 scale = Vector3(0.58, 0.58, 0.58)
 
 [node name="Office" type="Node3D" parent="."]
+position = Vector3(2, 0, 0)
 
 [node name="Desk" parent="Office" instance=ExtResource("31_desk")]
 position = Vector3(1.56, 0, -5.12)
@@ -540,10 +542,11 @@ rotation = Vector3(0.03, 0.26, -0.02)
 scale = Vector3(0.72, 0.72, 0.72)
 
 [node name="OfficeDeskCollision" type="CollisionShape3D" parent="."]
-position = Vector3(1.56, 0.4, -5.12)
+position = Vector3(3.56, 0.4, -5.12)
 shape = SubResource("OfficeDeskShape")
 
 [node name="Storage" type="Node3D" parent="."]
+position = Vector3(4, 0, 0)
 
 [node name="Shelf" parent="Storage" instance=ExtResource("29_shelf_b")]
 position = Vector3(3.68, 0, -4.66)
@@ -575,9 +578,10 @@ rotation = Vector3(0, 1.68, 0)
 scale = Vector3(0.86, 0.86, 0.86)
 
 [node name="Restroom" type="Node3D" parent="."]
+position = Vector3(0.8, 0, 0)
 
 [node name="Toilet" parent="Restroom" instance=ExtResource("44_toilet")]
-position = Vector3(1.72, 0.11, 5.25)
+position = Vector3(3.1, 0.11, 5.25)
 rotation = Vector3(0, 3.1415927, 0)
 
 [node name="Sink" parent="Restroom" instance=ExtResource("43_bath_sink")]
@@ -586,10 +590,11 @@ rotation = Vector3(0, 1.5707964, 0)
 scale = Vector3(1.2, 1.2, 1.2)
 
 [node name="ToiletCollision" type="CollisionShape3D" parent="."]
-position = Vector3(1.72, 0.45, 5.25)
+position = Vector3(3.9, 0.45, 5.25)
 shape = SubResource("ToiletShape")
 
 [node name="ColdStorage" type="Node3D" parent="."]
+position = Vector3(4, 0, 0)
 
 [node name="Shelf" parent="ColdStorage" instance=ExtResource("29_shelf_b")]
 position = Vector3(3.68, 0, 4.32)
@@ -635,12 +640,12 @@ scale = Vector3(0.76, 0.76, 0.76)
 [node name="Signage" type="Node3D" parent="."]
 
 [node name="BreakfastBoard" type="MeshInstance3D" parent="Signage"]
-position = Vector3(3.76, 2.75, -1.48)
+position = Vector3(8.7, 2.75, -1.48)
 scale = Vector3(0.05, 0.72, 1.42)
 mesh = SubResource("MeshBlackboard")
 
 [node name="Breakfast" type="Label3D" parent="Signage"]
-position = Vector3(3.715, 2.76, -1.48)
+position = Vector3(8.645, 2.76, -1.48)
 rotation = Vector3(0, -1.5707964, 0)
 text = "BREAKFAST ALL DAY\nEGGS  BACON  PANCAKES"
 font_size = 24
@@ -648,12 +653,12 @@ outline_size = 5
 modulate = Color(0.92, 0.82, 0.58, 1)
 
 [node name="PieBoard" type="MeshInstance3D" parent="Signage"]
-position = Vector3(3.76, 2.75, 0.0)
+position = Vector3(8.7, 2.75, 0.0)
 scale = Vector3(0.05, 0.72, 1.18)
 mesh = SubResource("MeshBlackboard")
 
 [node name="PieAndCoffee" type="Label3D" parent="Signage"]
-position = Vector3(3.715, 2.76, 0.0)
+position = Vector3(8.645, 2.76, 0.0)
 rotation = Vector3(0, -1.5707964, 0)
 text = "FRESH PIE\nCOFFEE  50c"
 font_size = 25
@@ -661,21 +666,21 @@ outline_size = 5
 modulate = Color(0.92, 0.82, 0.58, 1)
 
 [node name="OfficeLabel" type="Label3D" parent="Signage"]
-position = Vector3(1.58, 2.25, -3.62)
+position = Vector3(1.45, 2.25, -4.12)
 text = "OFFICE"
 font_size = 25
 outline_size = 5
 modulate = Color(0.42, 0.09, 0.065, 1)
 
 [node name="PantryLabel" type="Label3D" parent="Signage"]
-position = Vector3(3.15, 2.25, -3.62)
+position = Vector3(6.25, 2.25, -4.12)
 text = "PANTRY"
 font_size = 25
 outline_size = 5
 modulate = Color(0.42, 0.09, 0.065, 1)
 
 [node name="RestroomLabel" type="Label3D" parent="Signage"]
-position = Vector3(1.58, 2.25, 3.62)
+position = Vector3(1.45, 2.25, 4.12)
 rotation = Vector3(0, 3.1415927, 0)
 text = "RESTROOM"
 font_size = 23
@@ -683,7 +688,7 @@ outline_size = 5
 modulate = Color(0.42, 0.09, 0.065, 1)
 
 [node name="ColdStorageLabel" type="Label3D" parent="Signage"]
-position = Vector3(3.15, 2.25, 3.62)
+position = Vector3(6.25, 2.25, 4.12)
 rotation = Vector3(0, 3.1415927, 0)
 text = "COLD STORAGE"
 font_size = 21
@@ -709,18 +714,18 @@ position = Vector3(-2.75, 3.7, 4.7)
 scale = Vector3(0.78, 0.78, 0.78)
 
 [node name="KitchenFluorescentNorth" parent="Lighting" instance=ExtResource("47_fluorescent")]
-position = Vector3(2.18, 3.7, -2.15)
+position = Vector3(5.2, 3.7, -2.15)
 rotation = Vector3(0, 1.5707964, 0)
 
 [node name="KitchenFluorescentSouth" parent="Lighting" instance=ExtResource("47_fluorescent")]
-position = Vector3(2.18, 3.7, 2.15)
+position = Vector3(7.4, 3.7, 2.15)
 rotation = Vector3(0, 1.5707964, 0)
 
 [node name="OfficeFluorescent" parent="Lighting" instance=ExtResource("47_fluorescent")]
-position = Vector3(1.55, 3.7, -4.78)
+position = Vector3(2.75, 3.7, -5.15)
 
 [node name="BackRoomsFluorescent" parent="Lighting" instance=ExtResource("47_fluorescent")]
-position = Vector3(2.65, 3.7, 4.78)
+position = Vector3(7.0, 3.7, 5.15)
 
 [node name="DiningLight" type="OmniLight3D" parent="Lighting"]
 position = Vector3(-1.75, 2.92, 0)
@@ -730,7 +735,7 @@ omni_range = 6.5
 shadow_enabled = false
 
 [node name="KitchenLight" type="OmniLight3D" parent="Lighting"]
-position = Vector3(2.35, 2.94, 0)
+position = Vector3(6.1, 2.94, 0)
 light_color = Color(0.82, 0.89, 1, 1)
 light_energy = 0.46
 omni_range = 5.3

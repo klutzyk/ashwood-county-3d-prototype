@@ -7,11 +7,9 @@
 [node name="Pharmacy" type="Node3D"]
 
 [node name="Exterior" parent="." instance=ExtResource("1_exterior")]
-transform = Transform3D(1.22, 0, 0, 0, 1, 0, 0, 0, 1.22, -0.77, 0, 0)
 
 [node name="Interior" parent="." instance=ExtResource("2_interior")]
-transform = Transform3D(1.22, 0, 0, 0, 1, 0, 0, 0, 1.22, -0.77, 0, 0)
 
 [node name="FrontDoor" parent="." instance=ExtResource("3_door")]
-position = Vector3(3.38, 0.03, -0.854)
+position = Vector3(3.38, 0.03, -0.85)
 OpenAngleDegrees = -100.0

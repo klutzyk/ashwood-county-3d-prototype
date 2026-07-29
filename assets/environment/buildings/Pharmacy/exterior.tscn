@@ -25,79 +25,79 @@ material = ExtResource("4_concrete")
 
 [sub_resource type="BoxMesh" id="RoofMesh"]
 material = ExtResource("5_roof")
-size = Vector3(7.35, 0.24, 9.35)
+size = Vector3(12.35, 0.24, 12.35)
 
 [sub_resource type="BoxShape3D" id="BackShape"]
-size = Vector3(0.2, 4.4, 9)
+size = Vector3(0.2, 4.4, 12)
 
 [sub_resource type="BoxShape3D" id="SideShape"]
-size = Vector3(7, 4.4, 0.2)
+size = Vector3(12, 4.4, 0.2)
 
 [sub_resource type="BoxShape3D" id="RoofShape"]
-size = Vector3(7.35, 0.24, 9.35)
+size = Vector3(12.35, 0.24, 12.35)
 
 [sub_resource type="BoxShape3D" id="FrontSillShape"]
-size = Vector3(0.2, 0.7, 3.4)
+size = Vector3(0.2, 0.7, 4.85)
 
 [sub_resource type="BoxShape3D" id="FrontHeaderShape"]
-size = Vector3(0.2, 1.7, 9)
+size = Vector3(0.2, 1.7, 12)
 
 [sub_resource type="BoxShape3D" id="FrontPierShape"]
 size = Vector3(0.2, 2.0, 0.2)
 
 [sub_resource type="BoxShape3D" id="WindowShape"]
-size = Vector3(0.08, 1.92, 3.15)
+size = Vector3(0.08, 1.92, 4.6)
 
 [node name="PharmacyExterior" type="StaticBody3D"]
 
 [node name="RearWall" type="MeshInstance3D" parent="."]
-position = Vector3(-3.5, 2.2, 0)
-scale = Vector3(0.2, 4.4, 9)
+position = Vector3(-8.5, 2.2, 0)
+scale = Vector3(0.2, 4.4, 12)
 mesh = SubResource("BrickMesh")
 
 [node name="RearWallCollision" type="CollisionShape3D" parent="."]
-position = Vector3(-3.5, 2.2, 0)
+position = Vector3(-8.5, 2.2, 0)
 shape = SubResource("BackShape")
 
 [node name="NorthWall" type="MeshInstance3D" parent="."]
-position = Vector3(0, 2.2, -4.5)
-scale = Vector3(7, 4.4, 0.2)
+position = Vector3(-2.5, 2.2, -6)
+scale = Vector3(12, 4.4, 0.2)
 mesh = SubResource("BrickMesh")
 
 [node name="NorthWallCollision" type="CollisionShape3D" parent="."]
-position = Vector3(0, 2.2, -4.5)
+position = Vector3(-2.5, 2.2, -6)
 shape = SubResource("SideShape")
 
 [node name="SouthWall" type="MeshInstance3D" parent="."]
-position = Vector3(0, 2.2, 4.5)
-scale = Vector3(7, 4.4, 0.2)
+position = Vector3(-2.5, 2.2, 6)
+scale = Vector3(12, 4.4, 0.2)
 mesh = SubResource("BrickMesh")
 
 [node name="SouthWallCollision" type="CollisionShape3D" parent="."]
-position = Vector3(0, 2.2, 4.5)
+position = Vector3(-2.5, 2.2, 6)
 shape = SubResource("SideShape")
 
 [node name="FrontNorthSill" type="MeshInstance3D" parent="."]
-position = Vector3(3.5, 0.35, -2.7)
-scale = Vector3(0.2, 0.7, 3.4)
+position = Vector3(3.5, 0.35, -3.475)
+scale = Vector3(0.2, 0.7, 4.85)
 mesh = SubResource("BrickMesh")
 
 [node name="FrontNorthSillCollision" type="CollisionShape3D" parent="."]
-position = Vector3(3.5, 0.35, -2.7)
+position = Vector3(3.5, 0.35, -3.475)
 shape = SubResource("FrontSillShape")
 
 [node name="FrontSouthSill" type="MeshInstance3D" parent="."]
-position = Vector3(3.5, 0.35, 2.7)
-scale = Vector3(0.2, 0.7, 3.4)
+position = Vector3(3.5, 0.35, 3.475)
+scale = Vector3(0.2, 0.7, 4.85)
 mesh = SubResource("BrickMesh")
 
 [node name="FrontSouthSillCollision" type="CollisionShape3D" parent="."]
-position = Vector3(3.5, 0.35, 2.7)
+position = Vector3(3.5, 0.35, 3.475)
 shape = SubResource("FrontSillShape")
 
 [node name="FrontHeader" type="MeshInstance3D" parent="."]
 position = Vector3(3.5, 3.55, 0)
-scale = Vector3(0.2, 1.7, 9)
+scale = Vector3(0.2, 1.7, 12)
 mesh = SubResource("BrickMesh")
 
 [node name="FrontHeaderCollision" type="CollisionShape3D" parent="."]
@@ -123,45 +123,45 @@ position = Vector3(3.5, 1.7, 0.9)
 shape = SubResource("FrontPierShape")
 
 [node name="Roof" type="MeshInstance3D" parent="."]
-position = Vector3(0, 4.52, 0)
+position = Vector3(-2.5, 4.52, 0)
 mesh = SubResource("RoofMesh")
 
 [node name="RoofCollision" type="CollisionShape3D" parent="."]
-position = Vector3(0, 4.52, 0)
+position = Vector3(-2.5, 4.52, 0)
 shape = SubResource("RoofShape")
 
 [node name="StorefrontGlass" type="Node3D" parent="."]
 
 [node name="NorthWindow" type="MeshInstance3D" parent="StorefrontGlass"]
-position = Vector3(3.62, 1.69, -2.7)
-scale = Vector3(0.06, 1.92, 3.15)
+position = Vector3(3.62, 1.69, -3.475)
+scale = Vector3(0.06, 1.92, 4.6)
 mesh = SubResource("GlassMesh")
 
 [node name="SouthWindow" type="MeshInstance3D" parent="StorefrontGlass"]
-position = Vector3(3.62, 1.69, 2.7)
-scale = Vector3(0.06, 1.92, 3.15)
+position = Vector3(3.62, 1.69, 3.475)
+scale = Vector3(0.06, 1.92, 4.6)
 mesh = SubResource("GlassMesh")
 
 [node name="NorthWindowCollision" type="CollisionShape3D" parent="."]
-position = Vector3(3.62, 1.69, -2.7)
+position = Vector3(3.62, 1.69, -3.475)
 shape = SubResource("WindowShape")
 
 [node name="SouthWindowCollision" type="CollisionShape3D" parent="."]
-position = Vector3(3.62, 1.69, 2.7)
+position = Vector3(3.62, 1.69, 3.475)
 shape = SubResource("WindowShape")
 
 [node name="NorthFrameTop" type="MeshInstance3D" parent="StorefrontGlass"]
-position = Vector3(3.66, 2.68, -2.7)
-scale = Vector3(0.12, 0.11, 3.3)
+position = Vector3(3.66, 2.68, -3.475)
+scale = Vector3(0.12, 0.11, 4.85)
 mesh = SubResource("GreenMesh")
 
 [node name="NorthFrameBottom" type="MeshInstance3D" parent="StorefrontGlass"]
-position = Vector3(3.66, 0.7, -2.7)
-scale = Vector3(0.12, 0.11, 3.3)
+position = Vector3(3.66, 0.7, -3.475)
+scale = Vector3(0.12, 0.11, 4.85)
 mesh = SubResource("GreenMesh")
 
 [node name="NorthFrameOuter" type="MeshInstance3D" parent="StorefrontGlass"]
-position = Vector3(3.66, 1.69, -4.35)
+position = Vector3(3.66, 1.69, -5.9)
 scale = Vector3(0.12, 2.08, 0.11)
 mesh = SubResource("GreenMesh")
 
@@ -171,22 +171,22 @@ scale = Vector3(0.12, 2.08, 0.11)
 mesh = SubResource("GreenMesh")
 
 [node name="NorthMullion" type="MeshInstance3D" parent="StorefrontGlass"]
-position = Vector3(3.66, 1.69, -2.7)
+position = Vector3(3.66, 1.69, -3.475)
 scale = Vector3(0.12, 2.0, 0.08)
 mesh = SubResource("GreenMesh")
 
 [node name="SouthFrameTop" type="MeshInstance3D" parent="StorefrontGlass"]
-position = Vector3(3.66, 2.68, 2.7)
-scale = Vector3(0.12, 0.11, 3.3)
+position = Vector3(3.66, 2.68, 3.475)
+scale = Vector3(0.12, 0.11, 4.85)
 mesh = SubResource("GreenMesh")
 
 [node name="SouthFrameBottom" type="MeshInstance3D" parent="StorefrontGlass"]
-position = Vector3(3.66, 0.7, 2.7)
-scale = Vector3(0.12, 0.11, 3.3)
+position = Vector3(3.66, 0.7, 3.475)
+scale = Vector3(0.12, 0.11, 4.85)
 mesh = SubResource("GreenMesh")
 
 [node name="SouthFrameOuter" type="MeshInstance3D" parent="StorefrontGlass"]
-position = Vector3(3.66, 1.69, 4.35)
+position = Vector3(3.66, 1.69, 5.9)
 scale = Vector3(0.12, 2.08, 0.11)
 mesh = SubResource("GreenMesh")
 
@@ -196,7 +196,7 @@ scale = Vector3(0.12, 2.08, 0.11)
 mesh = SubResource("GreenMesh")
 
 [node name="SouthMullion" type="MeshInstance3D" parent="StorefrontGlass"]
-position = Vector3(3.66, 1.69, 2.7)
+position = Vector3(3.66, 1.69, 3.475)
 scale = Vector3(0.12, 2.0, 0.08)
 mesh = SubResource("GreenMesh")
 
@@ -217,13 +217,13 @@ mesh = SubResource("GreenMesh")
 
 [node name="Pavement" type="MeshInstance3D" parent="."]
 position = Vector3(4.68, 0.02, 0)
-scale = Vector3(2.45, 0.04, 9.8)
+scale = Vector3(2.45, 0.04, 12.8)
 mesh = SubResource("ConcreteMesh")
 
 [node name="SignBand" type="MeshInstance3D" parent="."]
 position = Vector3(3.66, 3.58, 0)
 rotation = Vector3(0.004, 0, -0.006)
-scale = Vector3(0.16, 0.94, 8.55)
+scale = Vector3(0.16, 0.94, 11.55)
 mesh = SubResource("GreenMesh")
 
 [node name="Name" type="Label3D" parent="."]
@@ -243,7 +243,7 @@ outline_size = 5
 modulate = Color(0.72, 0.66, 0.44, 1)
 
 [node name="PharmacyCross" type="Node3D" parent="."]
-position = Vector3(3.78, 3.58, -3.64)
+position = Vector3(3.78, 3.58, -5.12)
 
 [node name="Vertical" type="MeshInstance3D" parent="PharmacyCross"]
 scale = Vector3(0.13, 0.72, 0.24)
@@ -258,16 +258,16 @@ mesh = SubResource("SignMesh")
 [node name="Canopy" type="MeshInstance3D" parent="Awning"]
 position = Vector3(4.08, 2.72, 0)
 rotation = Vector3(0, 0, -0.11)
-scale = Vector3(1.0, 0.12, 8.25)
+scale = Vector3(1.0, 0.12, 11.25)
 mesh = SubResource("GreenMesh")
 
 [node name="Valance" type="MeshInstance3D" parent="Awning"]
 position = Vector3(4.56, 2.56, 0)
-scale = Vector3(0.1, 0.38, 8.25)
+scale = Vector3(0.1, 0.38, 11.25)
 mesh = SubResource("GreenMesh")
 
 [node name="RibNorth" type="MeshInstance3D" parent="Awning"]
-position = Vector3(4.3, 2.65, -3.85)
+position = Vector3(4.3, 2.65, -5.35)
 rotation = Vector3(0, 0, -0.11)
 scale = Vector3(1.15, 0.16, 0.08)
 mesh = SubResource("GreenMesh")
@@ -285,15 +285,15 @@ scale = Vector3(1.15, 0.16, 0.08)
 mesh = SubResource("GreenMesh")
 
 [node name="RibSouth" type="MeshInstance3D" parent="Awning"]
-position = Vector3(4.3, 2.65, 3.85)
+position = Vector3(4.3, 2.65, 5.35)
 rotation = Vector3(0, 0, -0.11)
 scale = Vector3(1.15, 0.16, 0.08)
 mesh = SubResource("GreenMesh")
 
 [node name="NorthWallLamp" parent="." instance=ExtResource("6_lamp")]
-position = Vector3(3.76, 3.0, -4.08)
+position = Vector3(3.76, 3.0, -5.32)
 rotation = Vector3(0, 1.5707964, 0)
 
 [node name="SouthWallLamp" parent="." instance=ExtResource("6_lamp")]
-position = Vector3(3.76, 3.0, 4.08)
+position = Vector3(3.76, 3.0, 5.32)
 rotation = Vector3(0, 1.5707964, 0)

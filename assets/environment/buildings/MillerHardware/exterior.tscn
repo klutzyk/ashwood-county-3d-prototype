@@ -1,0 +1,449 @@
+[gd_scene load_steps=27 format=3]
+
+[ext_resource type="Material" path="res://assets/materials/miller_hardware_brick.tres" id="1_brick"]
+[ext_resource type="Material" path="res://assets/materials/miller_hardware_green_metal.tres" id="2_green"]
+[ext_resource type="Material" path="res://assets/materials/building_authoring/dark_wooden_planks_1k.tres" id="3_wood"]
+[ext_resource type="Material" path="res://assets/materials/miller_hardware_glass.tres" id="4_glass"]
+[ext_resource type="Material" path="res://assets/materials/ashwood_bakery_aged_brass.tres" id="5_brass"]
+[ext_resource type="Material" path="res://assets/materials/building_roof.tres" id="6_roof"]
+[ext_resource type="Material" path="res://assets/materials/miller_hardware_floor.tres" id="7_concrete"]
+[ext_resource type="PackedScene" path="res://assets/third_party/interiors/pharmacy/poly_haven/industrial_wall_lamp/industrial_wall_lamp_1k.gltf" id="8_lamp"]
+
+[sub_resource type="BoxMesh" id="BrickMesh"]
+material = ExtResource("1_brick")
+
+[sub_resource type="BoxMesh" id="GreenMesh"]
+material = ExtResource("2_green")
+
+[sub_resource type="BoxMesh" id="WoodMesh"]
+material = ExtResource("3_wood")
+
+[sub_resource type="BoxMesh" id="GlassMesh"]
+material = ExtResource("4_glass")
+
+[sub_resource type="BoxMesh" id="BrassMesh"]
+material = ExtResource("5_brass")
+
+[sub_resource type="BoxMesh" id="RoofMesh"]
+material = ExtResource("6_roof")
+
+[sub_resource type="BoxMesh" id="ConcreteMesh"]
+material = ExtResource("7_concrete")
+
+[sub_resource type="BoxShape3D" id="RearWallShape"]
+size = Vector3(0.26, 4.8, 18)
+
+[sub_resource type="BoxShape3D" id="SideWallShape"]
+size = Vector3(14, 4.8, 0.26)
+
+[sub_resource type="BoxShape3D" id="FrontSillNorthShape"]
+size = Vector3(0.24, 0.68, 1.75)
+
+[sub_resource type="BoxShape3D" id="FrontSillSouthShape"]
+size = Vector3(0.24, 0.68, 14.75)
+
+[sub_resource type="BoxShape3D" id="FrontHeaderShape"]
+size = Vector3(0.24, 1.35, 18)
+
+[sub_resource type="BoxShape3D" id="DoorPierShape"]
+size = Vector3(0.24, 2.72, 0.16)
+
+[sub_resource type="BoxShape3D" id="RoofShape"]
+size = Vector3(14.5, 0.24, 18.5)
+
+[sub_resource type="BoxShape3D" id="WindowNorthShape"]
+size = Vector3(0.08, 2.44, 1.56)
+
+[sub_resource type="BoxShape3D" id="WindowBayShape"]
+size = Vector3(0.08, 2.44, 2.62)
+
+[sub_resource type="BoxShape3D" id="WindowSouthShape"]
+size = Vector3(0.08, 2.44, 2.34)
+
+[sub_resource type="BoxShape3D" id="LoadingDoorShape"]
+size = Vector3(0.18, 3.18, 3.62)
+
+[node name="MillerHardwareExterior" type="StaticBody3D"]
+
+[node name="Shell" type="Node3D" parent="."]
+
+[node name="RearWall" type="MeshInstance3D" parent="Shell"]
+position = Vector3(7, 2.4, 0)
+scale = Vector3(0.26, 4.8, 18)
+mesh = SubResource("BrickMesh")
+
+[node name="NorthWall" type="MeshInstance3D" parent="Shell"]
+position = Vector3(0, 2.4, -9)
+scale = Vector3(14, 4.8, 0.26)
+mesh = SubResource("BrickMesh")
+
+[node name="SouthWall" type="MeshInstance3D" parent="Shell"]
+position = Vector3(0, 2.4, 9)
+scale = Vector3(14, 4.8, 0.26)
+mesh = SubResource("BrickMesh")
+
+[node name="FrontSillNorth" type="MeshInstance3D" parent="Shell"]
+position = Vector3(-7, 0.34, -8.125)
+scale = Vector3(0.24, 0.68, 1.75)
+mesh = SubResource("BrickMesh")
+
+[node name="FrontSillSouth" type="MeshInstance3D" parent="Shell"]
+position = Vector3(-7, 0.34, 1.625)
+scale = Vector3(0.24, 0.68, 14.75)
+mesh = SubResource("BrickMesh")
+
+[node name="FrontHeader" type="MeshInstance3D" parent="Shell"]
+position = Vector3(-7, 4.125, 0)
+scale = Vector3(0.24, 1.35, 18)
+mesh = SubResource("BrickMesh")
+
+[node name="DoorPierNorth" type="MeshInstance3D" parent="Shell"]
+position = Vector3(-7, 2.04, -7.26)
+scale = Vector3(0.24, 2.72, 0.16)
+mesh = SubResource("WoodMesh")
+
+[node name="DoorPierSouth" type="MeshInstance3D" parent="Shell"]
+position = Vector3(-7, 2.04, -6.04)
+scale = Vector3(0.24, 2.72, 0.16)
+mesh = SubResource("WoodMesh")
+
+[node name="Roof" type="MeshInstance3D" parent="Shell"]
+position = Vector3(0, 4.94, 0)
+scale = Vector3(14.5, 0.24, 18.5)
+mesh = SubResource("RoofMesh")
+
+[node name="FrontParapet" type="MeshInstance3D" parent="Shell"]
+position = Vector3(-7, 5.52, 0)
+scale = Vector3(0.40, 1.18, 18.26)
+mesh = SubResource("BrickMesh")
+
+[node name="RearParapet" type="MeshInstance3D" parent="Shell"]
+position = Vector3(7, 5.27, 0)
+scale = Vector3(0.3, 0.66, 18.28)
+mesh = SubResource("BrickMesh")
+
+[node name="NorthParapet" type="MeshInstance3D" parent="Shell"]
+position = Vector3(0, 5.27, -9)
+scale = Vector3(14.1, 0.66, 0.3)
+mesh = SubResource("BrickMesh")
+
+[node name="SouthParapet" type="MeshInstance3D" parent="Shell"]
+position = Vector3(0, 5.27, 9)
+scale = Vector3(14.1, 0.66, 0.3)
+mesh = SubResource("BrickMesh")
+
+[node name="FrontCorniceLower" type="MeshInstance3D" parent="Shell"]
+position = Vector3(-7.23, 4.85, 0)
+scale = Vector3(0.24, 0.18, 18.68)
+mesh = SubResource("WoodMesh")
+
+[node name="FrontCorniceUpper" type="MeshInstance3D" parent="Shell"]
+position = Vector3(-7.28, 6.08, 0)
+scale = Vector3(0.28, 0.2, 18.72)
+mesh = SubResource("WoodMesh")
+
+[node name="CorniceBrassRule" type="MeshInstance3D" parent="Shell"]
+position = Vector3(-7.44, 6.01, 0)
+scale = Vector3(0.06, 0.055, 18.54)
+mesh = SubResource("BrassMesh")
+
+[node name="RearWallCollision" type="CollisionShape3D" parent="."]
+position = Vector3(7, 2.4, 0)
+shape = SubResource("RearWallShape")
+
+[node name="NorthWallCollision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 2.4, -9)
+shape = SubResource("SideWallShape")
+
+[node name="SouthWallCollision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 2.4, 9)
+shape = SubResource("SideWallShape")
+
+[node name="FrontSillNorthCollision" type="CollisionShape3D" parent="."]
+position = Vector3(-7, 0.34, -8.125)
+shape = SubResource("FrontSillNorthShape")
+
+[node name="FrontSillSouthCollision" type="CollisionShape3D" parent="."]
+position = Vector3(-7, 0.34, 1.625)
+shape = SubResource("FrontSillSouthShape")
+
+[node name="FrontHeaderCollision" type="CollisionShape3D" parent="."]
+position = Vector3(-7, 4.125, 0)
+shape = SubResource("FrontHeaderShape")
+
+[node name="DoorPierNorthCollision" type="CollisionShape3D" parent="."]
+position = Vector3(-7, 2.04, -7.26)
+shape = SubResource("DoorPierShape")
+
+[node name="DoorPierSouthCollision" type="CollisionShape3D" parent="."]
+position = Vector3(-7, 2.04, -6.04)
+shape = SubResource("DoorPierShape")
+
+[node name="RoofCollision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 4.94, 0)
+shape = SubResource("RoofShape")
+
+[node name="Storefront" type="Node3D" parent="."]
+
+[node name="DoorTransom" type="MeshInstance3D" parent="Storefront"]
+position = Vector3(-7.13, 3.12, -6.65)
+scale = Vector3(0.07, 0.42, 1.06)
+mesh = SubResource("GlassMesh")
+
+[node name="NorthWindow" type="MeshInstance3D" parent="Storefront"]
+position = Vector3(-7.13, 1.90, -8.12)
+scale = Vector3(0.08, 2.44, 1.56)
+mesh = SubResource("GlassMesh")
+
+[node name="WindowA" type="MeshInstance3D" parent="Storefront"]
+position = Vector3(-7.13, 1.90, -4.56)
+scale = Vector3(0.08, 2.44, 2.62)
+mesh = SubResource("GlassMesh")
+
+[node name="WindowB" type="MeshInstance3D" parent="Storefront"]
+position = Vector3(-7.13, 1.90, -1.72)
+scale = Vector3(0.08, 2.44, 2.62)
+mesh = SubResource("GlassMesh")
+
+[node name="WindowC" type="MeshInstance3D" parent="Storefront"]
+position = Vector3(-7.13, 1.90, 1.12)
+scale = Vector3(0.08, 2.44, 2.62)
+mesh = SubResource("GlassMesh")
+
+[node name="WindowD" type="MeshInstance3D" parent="Storefront"]
+position = Vector3(-7.13, 1.90, 3.96)
+scale = Vector3(0.08, 2.44, 2.62)
+mesh = SubResource("GlassMesh")
+
+[node name="SouthWindow" type="MeshInstance3D" parent="Storefront"]
+position = Vector3(-7.13, 1.90, 6.62)
+scale = Vector3(0.08, 2.44, 2.34)
+mesh = SubResource("GlassMesh")
+
+[node name="NorthWindowCollision" type="CollisionShape3D" parent="."]
+position = Vector3(-7.13, 1.90, -8.12)
+shape = SubResource("WindowNorthShape")
+
+[node name="WindowACollision" type="CollisionShape3D" parent="."]
+position = Vector3(-7.13, 1.90, -4.56)
+shape = SubResource("WindowBayShape")
+
+[node name="WindowBCollision" type="CollisionShape3D" parent="."]
+position = Vector3(-7.13, 1.90, -1.72)
+shape = SubResource("WindowBayShape")
+
+[node name="WindowCCollision" type="CollisionShape3D" parent="."]
+position = Vector3(-7.13, 1.90, 1.12)
+shape = SubResource("WindowBayShape")
+
+[node name="WindowDCollision" type="CollisionShape3D" parent="."]
+position = Vector3(-7.13, 1.90, 3.96)
+shape = SubResource("WindowBayShape")
+
+[node name="SouthWindowCollision" type="CollisionShape3D" parent="."]
+position = Vector3(-7.13, 1.90, 6.62)
+shape = SubResource("WindowSouthShape")
+
+[node name="Frames" type="Node3D" parent="Storefront"]
+
+[node name="TopRail" type="MeshInstance3D" parent="Storefront/Frames"]
+position = Vector3(-7.24, 3.14, 0)
+scale = Vector3(0.12, 0.14, 17.82)
+mesh = SubResource("GreenMesh")
+
+[node name="BottomRailNorth" type="MeshInstance3D" parent="Storefront/Frames"]
+position = Vector3(-7.24, 0.68, -8.12)
+scale = Vector3(0.12, 0.14, 1.66)
+mesh = SubResource("GreenMesh")
+
+[node name="BottomRailSouth" type="MeshInstance3D" parent="Storefront/Frames"]
+position = Vector3(-7.24, 0.68, 1.63)
+scale = Vector3(0.12, 0.14, 14.60)
+mesh = SubResource("GreenMesh")
+
+[node name="FrameNorth" type="MeshInstance3D" parent="Storefront/Frames"]
+position = Vector3(-7.24, 1.90, -8.91)
+scale = Vector3(0.12, 2.58, 0.13)
+mesh = SubResource("GreenMesh")
+
+[node name="DoorFrameNorth" type="MeshInstance3D" parent="Storefront/Frames"]
+position = Vector3(-7.24, 1.90, -7.24)
+scale = Vector3(0.12, 2.58, 0.13)
+mesh = SubResource("GreenMesh")
+
+[node name="DoorFrameSouth" type="MeshInstance3D" parent="Storefront/Frames"]
+position = Vector3(-7.24, 1.90, -6.06)
+scale = Vector3(0.12, 2.58, 0.13)
+mesh = SubResource("GreenMesh")
+
+[node name="MullionA" type="MeshInstance3D" parent="Storefront/Frames"]
+position = Vector3(-7.24, 1.90, -5.94)
+scale = Vector3(0.12, 2.58, 0.12)
+mesh = SubResource("GreenMesh")
+
+[node name="MullionB" type="MeshInstance3D" parent="Storefront/Frames"]
+position = Vector3(-7.24, 1.90, -3.18)
+scale = Vector3(0.12, 2.58, 0.12)
+mesh = SubResource("GreenMesh")
+
+[node name="MullionC" type="MeshInstance3D" parent="Storefront/Frames"]
+position = Vector3(-7.24, 1.90, -0.34)
+scale = Vector3(0.12, 2.58, 0.12)
+mesh = SubResource("GreenMesh")
+
+[node name="MullionD" type="MeshInstance3D" parent="Storefront/Frames"]
+position = Vector3(-7.24, 1.90, 2.50)
+scale = Vector3(0.12, 2.58, 0.12)
+mesh = SubResource("GreenMesh")
+
+[node name="MullionE" type="MeshInstance3D" parent="Storefront/Frames"]
+position = Vector3(-7.24, 1.90, 5.34)
+scale = Vector3(0.12, 2.58, 0.12)
+mesh = SubResource("GreenMesh")
+
+[node name="FrameSouth" type="MeshInstance3D" parent="Storefront/Frames"]
+position = Vector3(-7.24, 1.90, 8.91)
+scale = Vector3(0.12, 2.58, 0.13)
+mesh = SubResource("GreenMesh")
+
+[node name="DoorTop" type="MeshInstance3D" parent="Storefront/Frames"]
+position = Vector3(-7.25, 3.02, -6.65)
+scale = Vector3(0.14, 0.16, 1.32)
+mesh = SubResource("WoodMesh")
+
+[node name="Canopy" type="Node3D" parent="."]
+
+[node name="WeatheredMetal" type="MeshInstance3D" parent="Canopy"]
+position = Vector3(-7.37, 3.28, 0)
+rotation = Vector3(0, 0, 0.13)
+scale = Vector3(1.04, 0.14, 17.30)
+mesh = SubResource("GreenMesh")
+
+[node name="FrontLip" type="MeshInstance3D" parent="Canopy"]
+position = Vector3(-7.92, 3.09, 0)
+scale = Vector3(0.10, 0.38, 17.32)
+mesh = SubResource("GreenMesh")
+
+[node name="NorthEndCap" type="MeshInstance3D" parent="Canopy"]
+position = Vector3(-7.47, 3.24, -8.64)
+rotation = Vector3(0, 0, 0.13)
+scale = Vector3(1.10, 0.16, 0.10)
+mesh = SubResource("BrassMesh")
+
+[node name="RibA" type="MeshInstance3D" parent="Canopy"]
+position = Vector3(-7.47, 3.24, -4.4)
+rotation = Vector3(0, 0, 0.13)
+scale = Vector3(1.10, 0.16, 0.07)
+mesh = SubResource("BrassMesh")
+
+[node name="RibB" type="MeshInstance3D" parent="Canopy"]
+position = Vector3(-7.47, 3.24, 0)
+rotation = Vector3(0, 0, 0.13)
+scale = Vector3(1.10, 0.16, 0.07)
+mesh = SubResource("BrassMesh")
+
+[node name="RibC" type="MeshInstance3D" parent="Canopy"]
+position = Vector3(-7.47, 3.24, 4.4)
+rotation = Vector3(0, 0, 0.13)
+scale = Vector3(1.10, 0.16, 0.07)
+mesh = SubResource("BrassMesh")
+
+[node name="SouthEndCap" type="MeshInstance3D" parent="Canopy"]
+position = Vector3(-7.47, 3.24, 8.64)
+rotation = Vector3(0, 0, 0.13)
+scale = Vector3(1.10, 0.16, 0.10)
+mesh = SubResource("BrassMesh")
+
+[node name="Identity" type="Node3D" parent="."]
+
+[node name="SignBoard" type="MeshInstance3D" parent="Identity"]
+position = Vector3(-7.28, 5.40, 0)
+scale = Vector3(0.24, 0.82, 13.9)
+mesh = SubResource("WoodMesh")
+
+[node name="SignInset" type="MeshInstance3D" parent="Identity"]
+position = Vector3(-7.42, 5.40, 0)
+scale = Vector3(0.08, 0.62, 13.45)
+mesh = SubResource("GreenMesh")
+
+[node name="SignTopRule" type="MeshInstance3D" parent="Identity"]
+position = Vector3(-7.48, 5.73, 0)
+scale = Vector3(0.05, 0.045, 13.30)
+mesh = SubResource("BrassMesh")
+
+[node name="SignBottomRule" type="MeshInstance3D" parent="Identity"]
+position = Vector3(-7.48, 5.07, 0)
+scale = Vector3(0.05, 0.045, 13.30)
+mesh = SubResource("BrassMesh")
+
+[node name="Name" type="Label3D" parent="Identity"]
+position = Vector3(-7.52, 5.46, 0)
+rotation = Vector3(0, -1.5707964, 0)
+text = "MILLER HARDWARE"
+font_size = 105
+outline_size = 12
+pixel_size = 0.0062
+modulate = Color(0.91, 0.82, 0.57, 1)
+
+[node name="Tagline" type="Label3D" parent="Identity"]
+position = Vector3(-7.53, 5.14, 0)
+rotation = Vector3(0, -1.5707964, 0)
+text = "TOOLS  •  PAINT  •  PLUMBING  •  LUMBER"
+font_size = 25
+outline_size = 6
+pixel_size = 0.0054
+modulate = Color(0.84, 0.78, 0.59, 1)
+
+[node name="EntranceStep" type="MeshInstance3D" parent="."]
+position = Vector3(-7.16, 0.055, -6.65)
+scale = Vector3(0.48, 0.11, 1.48)
+mesh = SubResource("ConcreteMesh")
+
+[node name="Hours" type="Label3D" parent="."]
+position = Vector3(-7.28, 1.82, -5.18)
+rotation = Vector3(0, -1.5707964, 0)
+text = "MON–SAT  7–6"
+font_size = 21
+outline_size = 5
+modulate = Color(0.84, 0.80, 0.63, 0.84)
+
+[node name="RearLoading" type="Node3D" parent="."]
+
+[node name="LoadingDoor" type="MeshInstance3D" parent="RearLoading"]
+position = Vector3(7.14, 1.59, 4.8)
+scale = Vector3(0.18, 3.18, 3.62)
+mesh = SubResource("GreenMesh")
+
+[node name="LoadingDoorSlatA" type="MeshInstance3D" parent="RearLoading"]
+position = Vector3(7.25, 0.48, 4.8)
+scale = Vector3(0.05, 0.055, 3.42)
+mesh = SubResource("BrassMesh")
+
+[node name="LoadingDoorSlatB" type="MeshInstance3D" parent="RearLoading"]
+position = Vector3(7.25, 1.00, 4.8)
+scale = Vector3(0.05, 0.055, 3.42)
+mesh = SubResource("BrassMesh")
+
+[node name="LoadingDoorSlatC" type="MeshInstance3D" parent="RearLoading"]
+position = Vector3(7.25, 1.52, 4.8)
+scale = Vector3(0.05, 0.055, 3.42)
+mesh = SubResource("BrassMesh")
+
+[node name="LoadingDoorSlatD" type="MeshInstance3D" parent="RearLoading"]
+position = Vector3(7.25, 2.04, 4.8)
+scale = Vector3(0.05, 0.055, 3.42)
+mesh = SubResource("BrassMesh")
+
+[node name="LoadingDoorSlatE" type="MeshInstance3D" parent="RearLoading"]
+position = Vector3(7.25, 2.56, 4.8)
+scale = Vector3(0.05, 0.055, 3.42)
+mesh = SubResource("BrassMesh")
+
+[node name="LoadingDoorCollision" type="CollisionShape3D" parent="."]
+position = Vector3(7.14, 1.59, 4.8)
+shape = SubResource("LoadingDoorShape")
+
+[node name="RearLamp" parent="RearLoading" instance=ExtResource("8_lamp")]
+position = Vector3(7.35, 3.78, 4.8)
+rotation = Vector3(0, 0, -1.5707964)
+scale = Vector3(0.55, 0.55, 0.55)

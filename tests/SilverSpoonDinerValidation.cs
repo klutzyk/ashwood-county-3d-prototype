@@ -49,6 +49,7 @@ public partial class SilverSpoonDinerValidation : Node
 				pantry,
 				fridge);
 			ValidateConceptZones(interior);
+			ValidateExpandedTexturedShell(interior);
 			ValidateDinerFixtures(interior);
 			ValidateImportedPropDensity(interior);
 			ValidateMajorOnlyCollision(interior);
@@ -200,6 +201,22 @@ public partial class SilverSpoonDinerValidation : Node
 			"restroom contains the expected sanitary fixtures");
 		Require(interior.GetNode("Abandonment").GetChildCount() >= 5,
 			"restrained abandoned clutter gives the diner a lived-in history");
+	}
+
+	private static void ValidateExpandedTexturedShell(StaticBody3D interior)
+	{
+		BoxShape3D floor = (BoxShape3D)interior
+			.GetNode<CollisionShape3D>("FloorCollision").Shape;
+		Require(floor.Size.X >= 12.9f && floor.Size.Z >= 13.3f,
+			"expanded diner provides a generous 13 m by 13.4 m traversable floor");
+
+		StandardMaterial3D wallMaterial = GD.Load<StandardMaterial3D>(
+			"res://assets/materials/silver_spoon_wall.tres");
+		Require(wallMaterial.AlbedoTexture is not null &&
+			wallMaterial.NormalEnabled &&
+			wallMaterial.NormalTexture is not null &&
+			wallMaterial.RoughnessTexture is not null,
+			"every diner wall uses the worn-plaster PBR texture set");
 	}
 
 	private static void ValidateDinerFixtures(StaticBody3D interior)
@@ -409,43 +426,48 @@ public partial class SilverSpoonDinerValidation : Node
 			new Vector3(-0.6f, 0.9f, 3.25f),
 			new Vector3(-0.15f, 0.9f, 3.25f),
 			new Vector3(0.4f, 0.9f, 3.25f),
-			new Vector3(0.9f, 0.9f, 3.25f),
+			new Vector3(1.2f, 0.9f, 3.25f),
+			new Vector3(2.2f, 0.9f, 3.25f),
+			new Vector3(3.4f, 0.9f, 3.25f),
+			new Vector3(4.6f, 0.9f, 3.25f),
 		});
 		ValidateClearRoute(diner, authoredBoxes, "kitchen working aisle", new[]
 		{
-			new Vector3(1.8f, 0.9f, 2.75f),
-			new Vector3(1.8f, 0.9f, 1.7f),
-			new Vector3(1.8f, 0.9f, 0.55f),
-			new Vector3(1.8f, 0.9f, -0.9f),
-			new Vector3(1.8f, 0.9f, -2.45f),
+			new Vector3(5.6f, 0.9f, 3.35f),
+			new Vector3(5.6f, 0.9f, 2.35f),
+			new Vector3(5.6f, 0.9f, 1.25f),
+			new Vector3(5.6f, 0.9f, 0.0f),
+			new Vector3(5.6f, 0.9f, -1.25f),
+			new Vector3(5.6f, 0.9f, -2.45f),
+			new Vector3(5.6f, 0.9f, -3.35f),
 		});
 		ValidateClearRoute(diner, authoredBoxes, "office doorway", new[]
 		{
-			new Vector3(2.22f, 0.9f, -3.64f),
-			new Vector3(2.22f, 0.9f, -3.98f),
-			new Vector3(2.22f, 0.9f, -4.28f),
-			new Vector3(2.22f, 0.9f, -4.54f),
+			new Vector3(1.9f, 0.9f, -3.65f),
+			new Vector3(1.9f, 0.9f, -3.98f),
+			new Vector3(1.9f, 0.9f, -4.3f),
+			new Vector3(1.9f, 0.9f, -4.65f),
 		});
 		ValidateClearRoute(diner, authoredBoxes, "pantry doorway", new[]
 		{
-			new Vector3(4.0f, 0.9f, -3.64f),
-			new Vector3(4.0f, 0.9f, -3.98f),
-			new Vector3(4.0f, 0.9f, -4.28f),
-			new Vector3(4.0f, 0.9f, -4.54f),
+			new Vector3(6.7f, 0.9f, -3.65f),
+			new Vector3(6.7f, 0.9f, -3.98f),
+			new Vector3(6.7f, 0.9f, -4.3f),
+			new Vector3(6.7f, 0.9f, -4.65f),
 		});
 		ValidateClearRoute(diner, authoredBoxes, "restroom doorway", new[]
 		{
-			new Vector3(2.18f, 0.9f, 3.64f),
-			new Vector3(2.18f, 0.9f, 3.98f),
-			new Vector3(2.18f, 0.9f, 4.28f),
-			new Vector3(2.18f, 0.9f, 4.6f),
+			new Vector3(1.9f, 0.9f, 3.65f),
+			new Vector3(1.9f, 0.9f, 3.98f),
+			new Vector3(1.9f, 0.9f, 4.3f),
+			new Vector3(1.9f, 0.9f, 4.65f),
 		});
 		ValidateClearRoute(diner, authoredBoxes, "cold-storage doorway", new[]
 		{
-			new Vector3(4.0f, 0.9f, 3.75f),
-			new Vector3(4.0f, 0.9f, 3.98f),
-			new Vector3(4.0f, 0.9f, 4.28f),
-			new Vector3(4.0f, 0.9f, 4.6f),
+			new Vector3(6.7f, 0.9f, 3.65f),
+			new Vector3(6.7f, 0.9f, 3.98f),
+			new Vector3(6.7f, 0.9f, 4.3f),
+			new Vector3(6.7f, 0.9f, 4.65f),
 		});
 
 		frontDoor.ToggleDoor();

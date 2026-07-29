@@ -13,6 +13,9 @@ public partial class ThirdPersonPlayer : CharacterBody3D
 	[Export] public float Acceleration { get; set; } = 18.0f;
 	[Export] public float Gravity { get; set; } = 24.0f;
 	[Export] public float JumpVelocity { get; set; } = 8.0f;
+	[Export] public float MaxStepHeight { get; set; } = 0.32f;
+	[Export] public float GroundSnapDistance { get; set; } = 0.36f;
+	[Export] public float MaxWalkableSlopeDegrees { get; set; } = 45.0f;
 	[Export] public float MouseSensitivity { get; set; } = 0.0025f;
 	[Export] public float SprintNoiseRadius { get; set; } = 9.0f;
 	[Export] public float SprintNoiseInterval { get; set; } = 0.6f;
@@ -23,6 +26,9 @@ public partial class ThirdPersonPlayer : CharacterBody3D
 	private const float MinimumPitch = -1.05f;
 	private const float MaximumPitch = 0.65f;
 	private const float TurnSpeed = 12.0f;
+	private const float MinimumStepRise = 0.02f;
+	private const float MinimumStepForwardDistance = 0.11f;
+	private const float CameraStepSmoothingSpeed = 2.4f;
 
 	private Node3D _cameraRig = null!;
 	private SpringArm3D _springArm = null!;
@@ -40,6 +46,9 @@ public partial class ThirdPersonPlayer : CharacterBody3D
 	private float _meleeImpactShakeElapsed;
 	private float _standingCollisionHeight;
 	private Vector3 _standingCollisionPosition;
+	private float _cameraStepVerticalOffset;
+	private readonly PhysicsTestMotionParameters3D _stepMotionParameters = new();
+	private readonly PhysicsTestMotionResult3D _stepMotionResult = new();
 
 	public bool IsSprinting { get; private set; }
 	public bool IsCrouching { get; private set; }
@@ -59,6 +68,12 @@ public partial class ThirdPersonPlayer : CharacterBody3D
 		_collisionShape.Shape = _collisionCapsule;
 		_standingCollisionHeight = _collisionCapsule.Height;
 		_standingCollisionPosition = _collisionShape.Position;
+		MotionMode = MotionModeEnum.Grounded;
+		UpDirection = Vector3.Up;
+		FloorMaxAngle = Mathf.DegToRad(
+			Mathf.Clamp(MaxWalkableSlopeDegrees, 0.0f, 89.0f));
+		FloorSnapLength = Mathf.Max(GroundSnapDistance, 0.0f);
+		FloorBlockOnWall = true;
 		_health = GetNode<PlayerHealth>("Health");
 		_stamina = GetNode<PlayerStamina>("Stamina");
 		_interaction = GetNode<PlayerInteraction>("Interaction");
@@ -148,9 +163,10 @@ public partial class ThirdPersonPlayer : CharacterBody3D
 			return;
 		}
 
+		bool startedOnFloor = IsOnFloor();
 		Vector3 movementDirection = GetMovementDirection();
 		UpdateCrouch();
-		ApplyJump();
+		bool jumpedThisFrame = ApplyJump();
 		bool wantsToSprint =
 			Input.IsActionPressed("run") &&
 			!IsCrouching &&
@@ -176,7 +192,11 @@ public partial class ThirdPersonPlayer : CharacterBody3D
 			RotateTowardMovement(movementDirection, deltaTime);
 		}
 
-		MoveAndSlide();
+		MoveWithStepHandling(
+			deltaTime,
+			startedOnFloor,
+			jumpedThisFrame,
+			movementDirection);
 		FollowPlayerWithCamera();
 	}
 
@@ -268,16 +288,196 @@ public partial class ThirdPersonPlayer : CharacterBody3D
 		Velocity = velocity;
 	}
 
-	private void ApplyJump()
+	private bool ApplyJump()
+	{
+		return ApplyJump(Input.IsActionJustPressed("jump"));
+	}
+
+	private bool ApplyJump(bool jumpRequested)
 	{
 		if (!IsCrouching &&
 			IsOnFloor() &&
-			Input.IsActionJustPressed("jump"))
+			jumpRequested)
 		{
 			Vector3 velocity = Velocity;
 			velocity.Y = JumpVelocity;
 			Velocity = velocity;
+			return true;
 		}
+
+		return false;
+	}
+
+	private void MoveWithStepHandling(
+		float delta,
+		bool startedOnFloor,
+		bool jumpedThisFrame,
+		Vector3 movementDirection)
+	{
+		Transform3D startTransform = GlobalTransform;
+		Vector3 horizontalMotion = new(
+			Velocity.X * delta,
+			0.0f,
+			Velocity.Z * delta);
+		Transform3D stepLanding = startTransform;
+		bool hasStepLanding =
+			startedOnFloor &&
+			!jumpedThisFrame &&
+			!movementDirection.IsZeroApprox() &&
+			TryFindStepLanding(
+				startTransform,
+				horizontalMotion,
+				out stepLanding);
+
+		MoveAndSlide();
+
+		if (hasStepLanding)
+		{
+			GlobalTransform = stepLanding;
+			Vector3 velocity = Velocity;
+			velocity.Y = Mathf.Max(velocity.Y, 0.0f);
+			Velocity = velocity;
+			ApplyFloorSnap();
+			SmoothCameraOverGroundHeightChange(
+				stepLanding.Origin.Y - startTransform.Origin.Y);
+			return;
+		}
+
+		if (startedOnFloor && !jumpedThisFrame)
+		{
+			SmoothCameraOverGroundHeightChange(
+				GlobalPosition.Y - startTransform.Origin.Y);
+		}
+	}
+
+	private bool TryFindStepLanding(
+		Transform3D startTransform,
+		Vector3 horizontalMotion,
+		out Transform3D landingTransform)
+	{
+		landingTransform = startTransform;
+		float stepHeight = Mathf.Max(MaxStepHeight, 0.0f);
+		if (stepHeight <= MinimumStepRise ||
+			horizontalMotion.LengthSquared() <= 0.000001f ||
+			!MotionHitsWall(startTransform, horizontalMotion))
+		{
+			return false;
+		}
+
+		Vector3 up = UpDirection.Normalized();
+		Vector3 upwardMotion = up * stepHeight;
+		if (TestBodyMotion(startTransform, upwardMotion))
+		{
+			return false;
+		}
+
+		Vector3 stepForwardMotion =
+			horizontalMotion.Normalized() *
+			Mathf.Max(
+				horizontalMotion.Length(),
+				MinimumStepForwardDistance);
+		Transform3D raisedTransform = startTransform;
+		raisedTransform.Origin += upwardMotion;
+		if (TestBodyMotion(raisedTransform, stepForwardMotion))
+		{
+			return false;
+		}
+
+		Transform3D forwardTransform = raisedTransform;
+		forwardTransform.Origin += stepForwardMotion;
+		Vector3 downwardMotion =
+			-up * (stepHeight + Mathf.Max(GroundSnapDistance, 0.0f));
+		if (!TestBodyMotion(forwardTransform, downwardMotion) ||
+			!HasWalkableLandingNormal())
+		{
+			return false;
+		}
+
+		Vector3 landingOrigin =
+			forwardTransform.Origin + _stepMotionResult.GetTravel();
+		float rise = (landingOrigin - startTransform.Origin).Dot(up);
+		if (rise < MinimumStepRise || rise > stepHeight + SafeMargin + 0.01f)
+		{
+			return false;
+		}
+
+		landingTransform = startTransform;
+		landingTransform.Origin = landingOrigin;
+		return true;
+	}
+
+	private bool MotionHitsWall(Transform3D from, Vector3 motion)
+	{
+		if (!TestBodyMotion(from, motion))
+		{
+			return false;
+		}
+
+		Vector3 up = UpDirection.Normalized();
+		float walkableFloorDot = Mathf.Cos(FloorMaxAngle);
+		for (int collisionIndex = 0;
+			collisionIndex < _stepMotionResult.GetCollisionCount();
+			collisionIndex++)
+		{
+			float upDot = _stepMotionResult
+				.GetCollisionNormal(collisionIndex)
+				.Dot(up);
+			if (Mathf.Abs(upDot) < walkableFloorDot)
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	private bool HasWalkableLandingNormal()
+	{
+		Vector3 up = UpDirection.Normalized();
+		float walkableFloorDot = Mathf.Cos(FloorMaxAngle);
+		for (int collisionIndex = 0;
+			collisionIndex < _stepMotionResult.GetCollisionCount();
+			collisionIndex++)
+		{
+			if (_stepMotionResult
+				.GetCollisionNormal(collisionIndex)
+				.Dot(up) >= walkableFloorDot)
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	private bool TestBodyMotion(Transform3D from, Vector3 motion)
+	{
+		_stepMotionParameters.From = from;
+		_stepMotionParameters.Motion = motion;
+		_stepMotionParameters.Margin = Mathf.Max(SafeMargin, 0.001f);
+		_stepMotionParameters.MaxCollisions = 4;
+		_stepMotionParameters.RecoveryAsCollision = false;
+		return PhysicsServer3D.BodyTestMotion(
+			GetRid(),
+			_stepMotionParameters,
+			_stepMotionResult);
+	}
+
+	private void SmoothCameraOverGroundHeightChange(float verticalChange)
+	{
+		float snapDistance = Mathf.Max(GroundSnapDistance, 0.0f);
+		float maximumSmoothedChange =
+			Mathf.Max(Mathf.Max(MaxStepHeight, 0.0f), snapDistance) + 0.03f;
+		if (Mathf.Abs(verticalChange) < MinimumStepRise ||
+			Mathf.Abs(verticalChange) > maximumSmoothedChange)
+		{
+			return;
+		}
+
+		_cameraStepVerticalOffset = Mathf.Clamp(
+			_cameraStepVerticalOffset - verticalChange,
+			-snapDistance,
+			snapDistance);
 	}
 
 	private void UpdateCrouch()
@@ -330,10 +530,14 @@ public partial class ThirdPersonPlayer : CharacterBody3D
 
 	private void FollowPlayerWithCamera()
 	{
+		float delta = (float)GetPhysicsProcessDeltaTime();
+		_cameraStepVerticalOffset = Mathf.MoveToward(
+			_cameraStepVerticalOffset,
+			0.0f,
+			CameraStepSmoothingSpeed * delta);
 		Vector3 shakeOffset = Vector3.Zero;
 		if (_meleeImpactShakeRemaining > 0.0f)
 		{
-			float delta = (float)GetPhysicsProcessDeltaTime();
 			_meleeImpactShakeRemaining = Mathf.Max(_meleeImpactShakeRemaining - delta, 0.0f);
 			_meleeImpactShakeElapsed += delta;
 			float duration = Mathf.Max(MeleeImpactShakeDuration, 0.001f);
@@ -346,6 +550,8 @@ public partial class ThirdPersonPlayer : CharacterBody3D
 		}
 
 		_cameraRig.GlobalPosition =
-			GlobalPosition + (Vector3.Up * CameraHeight) + shakeOffset;
+			GlobalPosition +
+			(Vector3.Up * (CameraHeight + _cameraStepVerticalOffset)) +
+			shakeOffset;
 	}
 }

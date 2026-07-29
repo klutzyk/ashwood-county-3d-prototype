@@ -4,8 +4,10 @@ This document records the origin, licensing, project use, and local location of
 third-party assets used by the feasibility prototype. It is an attribution
 record, not a replacement for the original license terms.
 
-The source and license links below were verified on 22 July 2026. Retain a copy
-of each downloaded asset and its license information with project records.
+The initial source and license links below were verified on 22 July 2026;
+later additions record their verification or download date in the relevant
+section. Retain a copy of each downloaded asset and its license information
+with project records.
 
 ## Player
 
@@ -584,6 +586,84 @@ No new door model was downloaded: the existing CC BY 4.0 Shop Front Door is
 instanced through
 `assets/environment/buildings/Pharmacy/front_door.tscn`; its full credit
 remains in the earlier door-assets entry.
+
+## Additional Main Street Business Interior Assets
+
+The following compact 1K glTF models were downloaded through Poly Haven's
+official API on 29 July 2026. All are licensed under
+[CC0 1.0 Universal](https://polyhaven.com/license); attribution is not
+required, but the available author and source information is retained for
+provenance.
+
+### Ashwood Grocery Models
+
+| Asset | Author/provider | Source | Local path | License |
+| --- | --- | --- | --- | --- |
+| Bananas | Poly Haven contributors | [Poly Haven](https://polyhaven.com/a/bananas) | `assets/third_party/interiors/ashwood_grocery/poly_haven/bananas/` | CC0 1.0 |
+| Food Apple 01 | Poly Haven contributors | [Poly Haven](https://polyhaven.com/a/food_apple_01) | `assets/third_party/interiors/ashwood_grocery/poly_haven/food_apple_01/` | CC0 1.0 |
+| Yellow Onion | Poly Haven contributors | [Poly Haven](https://polyhaven.com/a/yellow_onion) | `assets/third_party/interiors/ashwood_grocery/poly_haven/yellow_onion/` | CC0 1.0 |
+| Sweet Potato | Poly Haven contributors | [Poly Haven](https://polyhaven.com/a/sweet_potato) | `assets/third_party/interiors/ashwood_grocery/poly_haven/sweet_potato/` | CC0 1.0 |
+| Wicker Basket 01 | Poly Haven contributors | [Poly Haven](https://polyhaven.com/a/wicker_basket_01) | `assets/third_party/interiors/ashwood_grocery/poly_haven/wicker_basket_01/` | CC0 1.0 |
+| Russian Food Cans 01 | Poly Haven contributors | [Poly Haven](https://polyhaven.com/a/russian_food_cans_01) | `assets/third_party/interiors/ashwood_grocery/poly_haven/russian_food_cans_01/` | CC0 1.0 |
+| Wine Bottles 01 | Poly Haven contributors | [Poly Haven](https://polyhaven.com/a/wine_bottles_01) | `assets/third_party/interiors/ashwood_grocery/poly_haven/wine_bottles_01/` | CC0 1.0 |
+
+- **Prototype use:** Produce displays, stocked grocery aisles, baskets, cans,
+  and bottle shelving
+- **Project composition:** `assets/environment/buildings/AshwoodGrocery/`
+- **Local source record:**
+  `assets/third_party/interiors/ashwood_grocery/SOURCES.md`
+- **Status:** In use
+
+### Miller Hardware Models
+
+| Asset | Author | Source | Local path | License |
+| --- | --- | --- | --- | --- |
+| Drill 01 | Fernando Quinn | [Poly Haven](https://polyhaven.com/a/Drill_01) | `assets/third_party/interiors/miller_hardware/poly_haven/Drill_01/` | CC0 1.0 |
+| Adjustable Wrench | Mateusz Sadek | [Poly Haven](https://polyhaven.com/a/adjustable_wrench) | `assets/third_party/interiors/miller_hardware/poly_haven/adjustable_wrench/` | CC0 1.0 |
+| Crowbar 01 | Alexander Otterbeck | [Poly Haven](https://polyhaven.com/a/crowbar_01) | `assets/third_party/interiors/miller_hardware/poly_haven/crowbar_01/` | CC0 1.0 |
+| Rusted Hacksaw | Dabou Master | [Poly Haven](https://polyhaven.com/a/rusted_hacksaw) | `assets/third_party/interiors/miller_hardware/poly_haven/rusted_hacksaw/` | CC0 1.0 |
+| Screwdrivers 02 | BKS | [Poly Haven](https://polyhaven.com/a/screwdrivers_02) | `assets/third_party/interiors/miller_hardware/poly_haven/screwdrivers_02/` | CC0 1.0 |
+| Metal Toolbox | Mateusz Sadek | [Poly Haven](https://polyhaven.com/a/metal_toolbox) | `assets/third_party/interiors/miller_hardware/poly_haven/metal_toolbox/` | CC0 1.0 |
+| Metal Jerrycan | Sean Buckley | [Poly Haven](https://polyhaven.com/a/metal_jerrycan) | `assets/third_party/interiors/miller_hardware/poly_haven/metal_jerrycan/` | CC0 1.0 |
+| Ladder Sectioned 01 | MP | [Poly Haven](https://polyhaven.com/a/ladder_sectioned_01) | `assets/third_party/interiors/miller_hardware/poly_haven/ladder_sectioned_01/` | CC0 1.0 |
+
+- **Prototype use:** Tool displays, counter stock, utility supplies, warehouse
+  storage, and loading-area dressing
+- **Project composition:** `assets/environment/buildings/MillerHardware/`
+- **Local source record:**
+  `assets/third_party/interiors/miller_hardware/SOURCES.md`
+- **Status:** In use
+
+### Ashwood Police Station Models
+
+| Asset | Author/provider | Source | Local path | License |
+| --- | --- | --- | --- | --- |
+| Ammo Box | Poly Haven contributors | [Poly Haven](https://polyhaven.com/a/ammo_box) | `assets/third_party/interiors/ashwood_police_station/poly_haven/ammo_box/` | CC0 1.0 |
+| Signal Flashlight | Poly Haven contributors | [Poly Haven](https://polyhaven.com/a/signal_flashlight) | `assets/third_party/interiors/ashwood_police_station/poly_haven/signal_flashlight/` | CC0 1.0 |
+| Vintage Radio Transceiver | Poly Haven contributors | [Poly Haven](https://polyhaven.com/a/vintage_radio_transceiver) | `assets/third_party/interiors/ashwood_police_station/poly_haven/vintage_radio_transceiver/` | CC0 1.0 |
+| Megaphone 01 | Poly Haven contributors | [Poly Haven](https://polyhaven.com/a/Megaphone_01) | `assets/third_party/interiors/ashwood_police_station/poly_haven/Megaphone_01/` | CC0 1.0 |
+| Binder Notebook | Poly Haven contributors | [Poly Haven](https://polyhaven.com/a/binder_notebook) | `assets/third_party/interiors/ashwood_police_station/poly_haven/binder_notebook/` | CC0 1.0 |
+| Old Gas Mask | Poly Haven contributors | [Poly Haven](https://polyhaven.com/a/old_gas_mask) | `assets/third_party/interiors/ashwood_police_station/poly_haven/old_gas_mask/` | CC0 1.0 |
+| Security Camera 01 | Poly Haven contributors | [Poly Haven](https://polyhaven.com/a/security_camera_01) | `assets/third_party/interiors/ashwood_police_station/poly_haven/security_camera_01/` | CC0 1.0 |
+
+- **Prototype use:** Reception and office clutter, evidence and armory
+  dressing, security equipment, and basement cell-block details
+- **Project composition:**
+  `assets/environment/buildings/AshwoodPoliceStation/`
+- **Local source record:**
+  `assets/third_party/interiors/ashwood_police_station/SOURCES.md`
+- **Status:** In use
+
+### Reused Shared Interior Assets and PBR Surfaces
+
+Ashwood Grocery, Miller Hardware, and Ashwood Police Station also instance
+already-present Bakery, Pharmacy, Diner, Willow Outfitters, common-crate, and
+shared sanitary assets without modifying their source files. This includes the
+previously credited CC0 Poly Haven furniture, shelving, registers, fluorescent
+fixtures and PBR surfaces; the CC0 OpenGameArt toilet-and-sink subset; and the
+existing CC BY door and mattress models where used. Their original records
+remain in this document and in the source manifests beside those shared packs,
+so they are not duplicated asset by asset here.
 
 ## Release Checklist
 

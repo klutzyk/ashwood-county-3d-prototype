@@ -45,23 +45,23 @@ public partial class SilverSpoonVisualReview : Node3D
 			ReviewShot[] shots =
 			{
 				new("01_exterior.png",
-					new Vector3(-11.5f, 4.7f, 8.8f),
+					new Vector3(-13.0f, 5.0f, 10.5f),
 					new Vector3(-3.7f, 2.15f, 0.0f)),
 				new("02_entry.png",
 					new Vector3(-3.35f, 1.72f, -0.65f),
-					new Vector3(0.55f, 1.25f, 0.25f)),
+					new Vector3(1.25f, 1.25f, 0.25f)),
 				new("03_dining.png",
 					new Vector3(-1.72f, 1.78f, 3.2f),
 					new Vector3(-2.35f, 1.05f, -1.5f)),
 				new("04_counter_kitchen.png",
 					new Vector3(-1.62f, 1.82f, -1.85f),
-					new Vector3(2.65f, 1.22f, 0.8f)),
+					new Vector3(5.6f, 1.22f, 0.8f)),
 				new("05_cookline.png",
-					new Vector3(1.05f, 1.72f, -2.65f),
-					new Vector3(3.25f, 1.2f, 1.65f)),
+					new Vector3(4.65f, 1.72f, -2.85f),
+					new Vector3(8.05f, 1.2f, 1.35f)),
 				new("06_back_rooms.png",
-					new Vector3(1.3f, 1.72f, 1.4f),
-					new Vector3(2.15f, 1.25f, 4.75f)),
+					new Vector3(4.2f, 1.72f, 1.35f),
+					new Vector3(6.35f, 1.25f, 4.85f)),
 			};
 
 			foreach (ReviewShot shot in shots)

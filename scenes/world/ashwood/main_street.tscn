@@ -19,10 +19,31 @@
 
 [sub_resource type="BoxMesh" id="GroundMesh"]
 material = ExtResource("15_grass")
-size = Vector3(220, 0.2, 80)
+size = Vector3(186.5, 0.2, 80)
 
 [sub_resource type="BoxShape3D" id="GroundShape"]
-size = Vector3(220, 0.2, 80)
+size = Vector3(186.5, 0.2, 80)
+
+[sub_resource type="BoxMesh" id="GroundEastMesh"]
+material = ExtResource("15_grass")
+size = Vector3(10.5, 0.2, 80)
+
+[sub_resource type="BoxShape3D" id="GroundEastShape"]
+size = Vector3(10.5, 0.2, 80)
+
+[sub_resource type="BoxMesh" id="GroundPoliceStreetMesh"]
+material = ExtResource("15_grass")
+size = Vector3(23, 0.2, 48.7)
+
+[sub_resource type="BoxShape3D" id="GroundPoliceStreetShape"]
+size = Vector3(23, 0.2, 48.7)
+
+[sub_resource type="BoxMesh" id="GroundPoliceRearMesh"]
+material = ExtResource("15_grass")
+size = Vector3(23, 0.2, 12.7)
+
+[sub_resource type="BoxShape3D" id="GroundPoliceRearShape"]
+size = Vector3(23, 0.2, 12.7)
 
 [sub_resource type="BoxMesh" id="MainRoadMesh"]
 material = ExtResource("6_asphalt")
@@ -148,10 +169,36 @@ WanderRadius = 8.0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
 
 [node name="Mesh" type="MeshInstance3D" parent="Environment/Ground" unique_id=742813615]
+position = Vector3(-16.75, 0, 0)
 mesh = SubResource("GroundMesh")
 
 [node name="Collision" type="CollisionShape3D" parent="Environment/Ground" unique_id=1550858669]
+position = Vector3(-16.75, 0, 0)
 shape = SubResource("GroundShape")
+
+[node name="EastMesh" type="MeshInstance3D" parent="Environment/Ground"]
+position = Vector3(104.75, 0, 0)
+mesh = SubResource("GroundEastMesh")
+
+[node name="EastCollision" type="CollisionShape3D" parent="Environment/Ground"]
+position = Vector3(104.75, 0, 0)
+shape = SubResource("GroundEastShape")
+
+[node name="PoliceStreetMesh" type="MeshInstance3D" parent="Environment/Ground"]
+position = Vector3(88, 0, -15.65)
+mesh = SubResource("GroundPoliceStreetMesh")
+
+[node name="PoliceStreetCollision" type="CollisionShape3D" parent="Environment/Ground"]
+position = Vector3(88, 0, -15.65)
+shape = SubResource("GroundPoliceStreetShape")
+
+[node name="PoliceRearMesh" type="MeshInstance3D" parent="Environment/Ground"]
+position = Vector3(88, 0, 33.65)
+mesh = SubResource("GroundPoliceRearMesh")
+
+[node name="PoliceRearCollision" type="CollisionShape3D" parent="Environment/Ground"]
+position = Vector3(88, 0, 33.65)
+shape = SubResource("GroundPoliceRearShape")
 
 [node name="RoadSurface" type="StaticBody3D" parent="Environment" unique_id=1259637871]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, 0)

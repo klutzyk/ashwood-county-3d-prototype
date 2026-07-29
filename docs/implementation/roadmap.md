@@ -17,6 +17,7 @@ The prototype is intentionally small, focused and highly polished.
 # Foundation ✅
 
 - [x] Third-person movement
+- [x] Small-step, curb, threshold, and stair traversal without jumping
 - [x] Mouse camera
 - [x] Character animations
 - [x] Sprinting
@@ -165,6 +166,8 @@ Buildings
 - [x] Better pharmacy exterior
 - [x] Better diner
 - [x] Better service station
+- [x] Expanded pharmacy and diner interiors with clear circulation
+- [x] Textured PBR walls across enterable Main Street interiors
 
 Props
 
@@ -215,7 +218,15 @@ Diner
 
 - [x] Dining area
 - [x] Kitchen
-- [ ] Office
+- [x] Office
+
+Additional Main Street Businesses
+
+- [x] Miller Hardware sales floor, counter, stockroom, warehouse, and restroom
+- [x] Ashwood Grocery checkouts, aisles, produce, refrigeration, back rooms,
+  and restroom
+- [x] Ashwood Police Station lobby, offices, evidence and armory spaces, and
+  two-cell basement
 
 Loot
 
@@ -317,6 +328,8 @@ World
   - [x] Reclaiming vegetation, litter and environmental storytelling
   - [x] Daytime lighting, materials and atmosphere polish
   - [x] Bakery final full-interior art
+  - [x] Pharmacy, diner, outfitters, hardware, grocery, and police enterable
+    interiors
   - [ ] Bakery loot
   - [ ] Rear service opening and door when the exterior mesh supports one
 - [ ] Replace all placeholder buildings

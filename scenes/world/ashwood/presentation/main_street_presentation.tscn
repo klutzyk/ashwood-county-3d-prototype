@@ -33,6 +33,9 @@
 [ext_resource type="PackedScene" uid="uid://bivilksa3u228" path="res://assets/third_party/buildings/lowpoly industrial building/lowpoly_industrial_building.glb" id="32_industrial"]
 [ext_resource type="PackedScene" uid="uid://cu02iban0n6hl" path="res://assets/third_party/buildings/lowpoly industrial building/old_building.glb" id="33_old_building"]
 [ext_resource type="PackedScene" uid="uid://knag5b8wjtmw" path="res://assets/third_party/props/signs/welcome_sign_restaurant.glb" id="34_restaurant_sign"]
+[ext_resource type="PackedScene" path="res://assets/environment/buildings/AshwoodGrocery/ashwood_grocery.tscn" id="35_grocery"]
+[ext_resource type="PackedScene" path="res://assets/environment/buildings/MillerHardware/miller_hardware.tscn" id="36_hardware"]
+[ext_resource type="PackedScene" path="res://assets/environment/buildings/AshwoodPoliceStation/ashwood_police_station.tscn" id="37_police"]
 
 [sub_resource type="StandardMaterial3D" id="YellowPaint"]
 albedo_color = Color(0.67, 0.46, 0.08, 1)
@@ -408,8 +411,11 @@ transform = Transform3D(15.2, 0, 0, 0, 15.2, 0, 0, 0, 15.2, 0.0077, 0, -2.917)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.45, -3.07)
 shape = SubResource("InsuranceShape")
 
+[node name="NorthGrocery" parent="Storefronts" instance=ExtResource("35_grocery")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 26, 0.2, -17)
+
 [node name="NorthPharmacy" parent="Storefronts" unique_id=1672649885 instance=ExtResource("8_pharmacy")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 44, 0.2, -13.2)
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 44, 0.2, -12.6)
 
 [node name="NorthOffice" parent="Storefronts" unique_id=1942571544 instance=ExtResource("11_office")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 88, 0.2, -13.55)
@@ -463,14 +469,14 @@ transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 0, 0
 [node name="SouthBank" parent="Storefronts" unique_id=1607024982 instance=ExtResource("12_bank")]
 transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 15, 0.2, 13.85)
 
-[node name="SouthSportingAnnex" parent="Storefronts" unique_id=1988398051 instance=ExtResource("1_store")]
-transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 29, 0.2, 13.05)
+[node name="SouthMillerHardware" parent="Storefronts" instance=ExtResource("36_hardware")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 29, 0.2, 16)
 
 [node name="SouthDiner" parent="Storefronts" unique_id=732950737 instance=ExtResource("9_diner")]
-transform = Transform3D(-0.027724572, 0, -0.9996156, 0, 1, 0, 0.9996156, 0, -0.027724572, 54, 0.2, 14)
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 54, 0.2, 13.2)
 
-[node name="SouthOffices" parent="Storefronts" unique_id=1208540232 instance=ExtResource("11_office")]
-transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 88, 0.2, 13.55)
+[node name="SouthPoliceStation" parent="Storefronts" instance=ExtResource("37_police")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 88, 0.2, 18)
 
 [node name="BackgroundBuildings" type="Node3D" parent="." unique_id=994429708]
 
@@ -483,16 +489,6 @@ transform = Transform3D(3.4, 0, 0, 0, 3.4, 0, 0, 0, 3.4, -0.0313, 0, -8.1245)
 [node name="Collision" type="CollisionShape3D" parent="BackgroundBuildings/EastIndustrialWorks" unique_id=926326761]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.75, -6.015)
 shape = SubResource("IndustrialShape")
-
-[node name="EastCarpetWarehouse" type="StaticBody3D" parent="BackgroundBuildings" unique_id=1456317937]
-transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 94, 0.2, 20)
-
-[node name="Visual" parent="BackgroundBuildings/EastCarpetWarehouse" unique_id=1109305055 instance=ExtResource("33_old_building")]
-transform = Transform3D(0.0197, 0, 0, 0, 0.0197, 0, 0, 0, 0.0197, 0.4452, 0, -3.7499)
-
-[node name="Collision" type="CollisionShape3D" parent="BackgroundBuildings/EastCarpetWarehouse" unique_id=1143499774]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.75, -3.906)
-shape = SubResource("OldBuildingShape")
 
 [node name="BusinessSigns" type="Node3D" parent="." unique_id=1778970311]
 
@@ -512,18 +508,6 @@ outline_size = 8
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 15, 4.55, 8.45)
 text = "FIRST COUNTY SAVINGS"
 font_size = 38
-outline_size = 8
-
-[node name="SportingAnnex" type="Label3D" parent="BusinessSigns" unique_id=1792293043]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 29, 3.35, 8.5)
-text = "TRAIL & FIELD"
-font_size = 38
-outline_size = 8
-
-[node name="OfficesSouth" type="Label3D" parent="BusinessSigns" unique_id=270188560]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 88, 3.75, 8.45)
-text = "PROFESSIONAL OFFICES"
-font_size = 36
 outline_size = 8
 
 [node name="Streetlights" type="Node3D" parent="." unique_id=1805111897]
@@ -591,7 +575,7 @@ transform = Transform3D(0.79543585, 0, 0.66998637, 0, 1.04, 0, -0.66998637, 0, 0
 transform = Transform3D(0.8036546, 0, -0.16290885, 0, 0.82, 0, 0.16290885, 0, 0.8036546, -3, 0.2, -8.35)
 
 [node name="North05" parent="Trees" unique_id=191775325 instance=ExtResource("6_tree1")]
-transform = Transform3D(0.44304863, 0, 0.82904035, 0, 0.94, 0, -0.82904035, 0, 0.44304863, 24.5, 0.2, -8.55)
+transform = Transform3D(0.44304863, 0, 0.82904035, 0, 0.94, 0, -0.82904035, 0, 0.44304863, 14.5, 0.2, -8.55)
 
 [node name="North06" parent="Trees" unique_id=2013519005 instance=ExtResource("7_tree2")]
 transform = Transform3D(0.49265933, 0, -0.5386899, 0, 0.73, 0, 0.5386899, 0, 0.49265933, 57, 0.2, -8.38)
@@ -656,7 +640,7 @@ transform = Transform3D(-0.95486456, 0, 0.29704145, 0, 1, 0, -0.29704145, 0, -0.
 transform = Transform3D(-0.8142584, 0, -0.09686729, 0, 0.82, 0, 0.09686729, 0, -0.8142584, 9, 0.2, 8.48)
 
 [node name="SouthCentre03" parent="Shrubs" unique_id=84783479 instance=ExtResource("19_shrub")]
-transform = Transform3D(-1.1651498, 0, 0.2870991, 0, 1.2, 0, -0.2870991, 0, -1.1651498, 36, 0.2, 8.56)
+transform = Transform3D(-1.1651498, 0, 0.2870991, 0, 1.2, 0, -0.2870991, 0, -1.1651498, 39.5, 0.2, 8.56)
 
 [node name="SouthEast01" parent="Shrubs" unique_id=1135927059 instance=ExtResource("22_shrub_autumn")]
 transform = Transform3D(-0.846115, 0, -0.24184577, 0, 0.88, 0, 0.24184577, 0, -0.846115, 66, 0.2, 8.5)
@@ -726,7 +710,7 @@ transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, -12.
 transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 48, 0.2, 8.25)
 
 [node name="BenchSouth04" parent="Furniture" unique_id=1626053737 instance=ExtResource("3_bench")]
-transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 90, 0.2, 8.25)
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 100, 0.2, 8.25)
 
 [node name="PlanterNorth01" parent="Furniture" unique_id=1894207698 instance=ExtResource("4_planter")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -46, 0.2, -8.45)
@@ -738,7 +722,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -34, 0.2, -8.45)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0.2, -8.45)
 
 [node name="PlanterNorth04" parent="Furniture" unique_id=318090141 instance=ExtResource("4_planter")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0.2, -8.45)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 35.2, 0.2, -8.45)
 
 [node name="PlanterNorth05" parent="Furniture" unique_id=1179727457 instance=ExtResource("4_planter")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 40, 0.2, -8.45)
@@ -762,7 +746,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 0.2, 8.45)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 43, 0.2, 8.45)
 
 [node name="PlanterSouth06" parent="Furniture" unique_id=1814396669 instance=ExtResource("4_planter")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 92, 0.2, 8.45)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 75.5, 0.2, 8.45)
 
 [node name="BinNorth01" parent="Furniture" unique_id=1666213292 instance=ExtResource("5_bin")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -78, 0.2, -6.3)

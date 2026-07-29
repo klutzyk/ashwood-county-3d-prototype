@@ -2111,3 +2111,42 @@ Validation:
   with 9.41 ms p95 frame time; the scene retained simplified collision and
   shadowless interior fill lights
 - C# build completed with no warnings or errors
+
+---
+
+## Main Street Enterable-Building Expansion (2026-07-29)
+
+Completed:
+
+- Enlarged Greenleaf Pharmacy and Silver Spoon Diner at identity scale, moved
+  their entrances to face Main Street, and redistributed fixtures and back
+  rooms to provide comfortable player circulation
+- Added consistent aged PBR wall finishes across the enterable interior set
+  and upgraded the bakery's painted-plaster wrapper from a flat placeholder
+- Built Ashwood Grocery with checkouts, stocked aisles, produce,
+  refrigeration, household goods, receiving, office, storage, and an enclosed
+  restroom
+- Built Miller Hardware with stocked sales aisles, a service counter, tool
+  displays, back stock, warehouse and loading spaces, office, and restroom
+- Built Ashwood Police Station with reception, working offices, evidence and
+  armory areas, service rooms, and a connected basement containing two
+  furnished prison cells
+- Placed the three new buildings on Main Street, corrected the diner
+  orientation, cleared nearby street dressing from entrances, and segmented
+  the ground beneath the police-station basement
+- Added configurable player auto-step and ground snapping for normal curbs,
+  thresholds, and stair risers up to 0.32 metres while keeping taller
+  obstacles dependent on the existing jump action
+- Retained compact 1K source assets and recorded the new Grocery, Hardware, and
+  Police Station Poly Haven CC0 packs alongside their local source manifests
+
+Outcome:
+
+Main Street now has a broader set of distinct, explorable businesses with
+roomier circulation, textured architecture, business-specific prop density,
+and a multi-level civic interior.
+
+Validation:
+
+- Final integrated scene, traversal, regression, build, and visual-review
+  validation remained pending when this entry was written
