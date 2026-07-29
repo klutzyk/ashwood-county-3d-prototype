@@ -469,6 +469,42 @@ The following assets were downloaded and integrated on 28 July 2026. Only the
   `docs/design/locations/ashwood/images/mainstreet_concepts.png`
 - **Status:** Design reference only
 
+## Glen's Bakery Production Interior
+
+The following compact asset set was downloaded from Poly Haven for the bakery
+production-interior pass on 29 July 2026.
+
+### Bakery Furniture, Equipment, Food, and Lighting
+
+- **Assets:** [Cash Register 01](https://polyhaven.com/a/CashRegister_01),
+  [Croissant](https://polyhaven.com/a/croissant),
+  [Electric Stove](https://polyhaven.com/a/electric_stove),
+  [Shelf 01](https://polyhaven.com/a/Shelf_01),
+  [Wooden Table 02](https://polyhaven.com/a/wooden_table_02),
+  [Steel Frame Shelves 01](https://polyhaven.com/a/steel_frame_shelves_01),
+  and [Hanging Industrial Lamp](https://polyhaven.com/a/hanging_industrial_lamp)
+- **Asset type:** Bakery retail furniture, food, back-of-house equipment,
+  storage, and ceiling fixtures
+- **Creator/provider:** Individual Poly Haven contributors / Poly Haven
+- **License:** [CC0 1.0 Universal](https://polyhaven.com/license)
+- **Asset details:** 1K glTF variants only; approximately 11 MB of source
+  files across the seven assets
+- **Attribution requirement:** None; provider and source pages are retained for
+  provenance
+- **Prototype use:** Glen's Bakery sales floor, open prep line, storage area,
+  register, pastry displays, and visible period lighting
+- **Downloaded location:**
+  `assets/third_party/interiors/bakery/poly_haven/`
+- **Local license record:**
+  `assets/third_party/interiors/bakery/poly_haven/LICENSE.txt`
+- **Project composition:**
+  `scenes/world/ashwood/interiors/glens_bakery_interior.tscn`
+- **Status:** In use
+
+The existing licensed plastic crates and project-owned PBR wood, brick,
+plaster, glass, enamel, brass, and stainless-steel materials are reused around
+the downloaded focal assets. Imported sources remain unmodified.
+
 ## Release Checklist
 
 - [x] Record source and license links for all listed assets.

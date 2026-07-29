@@ -50,11 +50,6 @@ size = Vector3(0.08, 1.65, 2.15)
 [node name="BreadWindow" type="Node3D" parent="."]
 position = Vector3(1.82, 0.84, -1.75)
 
-[node name="Backdrop" type="MeshInstance3D" parent="BreadWindow"]
-position = Vector3(-0.42, 0.42, 0)
-visibility_range_end = 42.0
-mesh = SubResource("Backdrop")
-
 [node name="Base" type="MeshInstance3D" parent="BreadWindow"]
 scale = Vector3(0.7, 0.12, 2.1)
 visibility_range_end = 42.0
@@ -109,11 +104,6 @@ mesh = SubResource("Loaf")
 
 [node name="CakeWindow" type="Node3D" parent="."]
 position = Vector3(1.82, 0.84, 2.65)
-
-[node name="Backdrop" type="MeshInstance3D" parent="CakeWindow"]
-position = Vector3(-0.42, 0.42, 0)
-visibility_range_end = 42.0
-mesh = SubResource("Backdrop")
 
 [node name="Base" type="MeshInstance3D" parent="CakeWindow"]
 scale = Vector3(0.7, 0.12, 2.1)

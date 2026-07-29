@@ -1,0 +1,810 @@
+[gd_scene load_steps=43 format=3]
+
+[ext_resource type="Material" path="res://assets/materials/ashwood_bakery_floor.tres" id="1_floor"]
+[ext_resource type="Material" path="res://assets/materials/ashwood_bakery_counter.tres" id="2_wood"]
+[ext_resource type="Material" path="res://assets/materials/ashwood_bakery_painted_plaster.tres" id="3_plaster"]
+[ext_resource type="Material" path="res://assets/materials/ashwood_bakery_ceiling.tres" id="4_ceiling"]
+[ext_resource type="Material" path="res://assets/materials/ashwood_main_street/red_brick_2k.tres" id="5_brick"]
+[ext_resource type="Material" path="res://assets/materials/ashwood_bakery_glass.tres" id="6_glass"]
+[ext_resource type="Material" path="res://assets/materials/ashwood_bakery_aged_brass.tres" id="7_brass"]
+[ext_resource type="Material" path="res://assets/materials/ashwood_bakery_stainless.tres" id="8_stainless"]
+[ext_resource type="Material" path="res://assets/materials/ashwood_bakery_enamel.tres" id="9_enamel"]
+[ext_resource type="Material" path="res://assets/materials/ashwood_bakery_blackboard.tres" id="10_blackboard"]
+[ext_resource type="Material" path="res://assets/materials/ashwood_bakery_paper.tres" id="11_paper"]
+[ext_resource type="Material" path="res://assets/materials/ashwood_bakery_pastry.tres" id="12_pastry"]
+[ext_resource type="PackedScene" path="res://assets/third_party/interiors/bakery/poly_haven/CashRegister_01/CashRegister_01_1k.gltf" id="13_register"]
+[ext_resource type="PackedScene" path="res://assets/third_party/interiors/bakery/poly_haven/croissant/croissant_1k.gltf" id="14_croissant"]
+[ext_resource type="PackedScene" path="res://assets/third_party/interiors/bakery/poly_haven/electric_stove/electric_stove_1k.gltf" id="15_stove"]
+[ext_resource type="PackedScene" path="res://assets/third_party/interiors/bakery/poly_haven/Shelf_01/Shelf_01_1k.gltf" id="16_shelf"]
+[ext_resource type="PackedScene" path="res://assets/third_party/interiors/bakery/poly_haven/wooden_table_02/wooden_table_02_1k.gltf" id="17_table"]
+[ext_resource type="PackedScene" path="res://assets/third_party/interiors/bakery/poly_haven/steel_frame_shelves_01/steel_frame_shelves_01_1k.gltf" id="18_steel_shelf"]
+[ext_resource type="PackedScene" path="res://assets/third_party/interiors/bakery/poly_haven/hanging_industrial_lamp/hanging_industrial_lamp_1k.gltf" id="19_lamp"]
+[ext_resource type="PackedScene" path="res://assets/third_party/common/containers/cabinets/kitchen_spice_cabinet__game_ready_model.glb" id="20_spice_cabinet"]
+[ext_resource type="PackedScene" path="res://assets/third_party/props/crates/plastic_crate_01_1k.gltf/plastic_crate_01_1k.gltf" id="21_crate_a"]
+[ext_resource type="PackedScene" path="res://assets/third_party/props/crates/plastic_crate_02_1k.gltf/plastic_crate_02_1k.gltf" id="22_crate_b"]
+
+[sub_resource type="StandardMaterial3D" id="Material_dark_metal"]
+albedo_color = Color(0.045, 0.05, 0.046, 1)
+metallic = 0.74
+roughness = 0.48
+
+[sub_resource type="StandardMaterial3D" id="Material_cream"]
+albedo_color = Color(0.74, 0.66, 0.48, 1)
+roughness = 0.86
+
+[sub_resource type="StandardMaterial3D" id="Material_red"]
+albedo_color = Color(0.29, 0.035, 0.025, 1)
+roughness = 0.78
+
+[sub_resource type="StandardMaterial3D" id="Material_cake"]
+albedo_color = Color(0.68, 0.47, 0.31, 1)
+roughness = 0.87
+
+[sub_resource type="StandardMaterial3D" id="Material_frosting"]
+albedo_color = Color(0.86, 0.78, 0.62, 1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="Material_ceramic"]
+albedo_color = Color(0.66, 0.7, 0.66, 1)
+roughness = 0.38
+
+[sub_resource type="BoxMesh" id="Mesh_floor"]
+material = ExtResource("1_floor")
+size = Vector3(5.76, 0.08, 7.22)
+
+[sub_resource type="BoxMesh" id="Mesh_ceiling"]
+material = ExtResource("4_ceiling")
+size = Vector3(5.76, 0.08, 7.22)
+
+[sub_resource type="BoxMesh" id="Mesh_rear_wall"]
+material = ExtResource("5_brick")
+size = Vector3(0.12, 2.96, 7.22)
+
+[sub_resource type="BoxMesh" id="Mesh_side_wall"]
+material = ExtResource("3_plaster")
+size = Vector3(5.76, 2.96, 0.1)
+
+[sub_resource type="BoxMesh" id="Mesh_wainscot"]
+material = ExtResource("2_wood")
+size = Vector3(5.76, 0.82, 0.09)
+
+[sub_resource type="BoxMesh" id="Mesh_box_wood"]
+material = ExtResource("2_wood")
+
+[sub_resource type="BoxMesh" id="Mesh_box_glass"]
+material = ExtResource("6_glass")
+
+[sub_resource type="BoxMesh" id="Mesh_box_brass"]
+material = ExtResource("7_brass")
+
+[sub_resource type="BoxMesh" id="Mesh_box_metal"]
+material = ExtResource("8_stainless")
+
+[sub_resource type="BoxMesh" id="Mesh_box_enamel"]
+material = ExtResource("9_enamel")
+
+[sub_resource type="BoxMesh" id="Mesh_box_black"]
+material = SubResource("Material_dark_metal")
+
+[sub_resource type="BoxMesh" id="Mesh_box_blackboard"]
+material = ExtResource("10_blackboard")
+
+[sub_resource type="BoxMesh" id="Mesh_box_paper"]
+material = ExtResource("11_paper")
+
+[sub_resource type="BoxMesh" id="Mesh_box_cream"]
+material = SubResource("Material_cream")
+
+[sub_resource type="BoxMesh" id="Mesh_box_red"]
+material = SubResource("Material_red")
+
+[sub_resource type="CylinderMesh" id="Mesh_cake"]
+material = SubResource("Material_cake")
+top_radius = 0.22
+bottom_radius = 0.22
+height = 0.18
+radial_segments = 24
+
+[sub_resource type="CylinderMesh" id="Mesh_frosting"]
+material = SubResource("Material_frosting")
+top_radius = 0.225
+bottom_radius = 0.225
+height = 0.045
+radial_segments = 24
+
+[sub_resource type="CylinderMesh" id="Mesh_canister"]
+material = ExtResource("9_enamel")
+top_radius = 0.105
+bottom_radius = 0.105
+height = 0.31
+radial_segments = 18
+
+[sub_resource type="CylinderMesh" id="Mesh_urn"]
+material = ExtResource("8_stainless")
+top_radius = 0.15
+bottom_radius = 0.19
+height = 0.48
+radial_segments = 20
+
+[sub_resource type="CylinderMesh" id="Mesh_cup"]
+material = SubResource("Material_ceramic")
+top_radius = 0.075
+bottom_radius = 0.06
+height = 0.11
+radial_segments = 16
+
+[sub_resource type="CylinderMesh" id="Mesh_rolling_pin"]
+material = ExtResource("2_wood")
+top_radius = 0.045
+bottom_radius = 0.045
+height = 0.52
+radial_segments = 16
+
+[sub_resource type="BoxShape3D" id="Shape_floor"]
+size = Vector3(5.76, 0.12, 7.22)
+
+[sub_resource type="BoxShape3D" id="Shape_counter"]
+size = Vector3(0.82, 1.0, 3.05)
+
+[sub_resource type="BoxShape3D" id="Shape_prep"]
+size = Vector3(1.38, 0.9, 0.88)
+
+[sub_resource type="BoxShape3D" id="Shape_stoves"]
+size = Vector3(0.72, 0.95, 1.55)
+
+[sub_resource type="BoxShape3D" id="Shape_storage"]
+size = Vector3(0.62, 2.2, 2.5)
+
+[node name="GlensBakeryInterior" type="Node3D"]
+
+[node name="Architecture" type="Node3D" parent="."]
+
+[node name="Floor" type="MeshInstance3D" parent="Architecture"]
+position = Vector3(-0.35, 0.58, 1.06)
+visibility_range_end = 56.0
+mesh = SubResource("Mesh_floor")
+
+[node name="Ceiling" type="MeshInstance3D" parent="Architecture"]
+position = Vector3(-0.35, 3.58, 1.06)
+visibility_range_end = 48.0
+mesh = SubResource("Mesh_ceiling")
+
+[node name="RearBrickWall" type="MeshInstance3D" parent="Architecture"]
+position = Vector3(-3.18, 2.1, 1.06)
+visibility_range_end = 54.0
+mesh = SubResource("Mesh_rear_wall")
+
+[node name="LeftPlasterWall" type="MeshInstance3D" parent="Architecture"]
+position = Vector3(-0.35, 2.1, -2.5)
+visibility_range_end = 54.0
+mesh = SubResource("Mesh_side_wall")
+
+[node name="RightPlasterWall" type="MeshInstance3D" parent="Architecture"]
+position = Vector3(-0.35, 2.1, 4.62)
+visibility_range_end = 54.0
+mesh = SubResource("Mesh_side_wall")
+
+[node name="LeftWainscot" type="MeshInstance3D" parent="Architecture"]
+position = Vector3(-0.35, 1.03, -2.43)
+visibility_range_end = 48.0
+mesh = SubResource("Mesh_wainscot")
+
+[node name="RightWainscot" type="MeshInstance3D" parent="Architecture"]
+position = Vector3(-0.35, 1.03, 4.55)
+visibility_range_end = 48.0
+mesh = SubResource("Mesh_wainscot")
+
+[node name="RearBaseboard" type="MeshInstance3D" parent="Architecture"]
+position = Vector3(-3.1, 0.73, 1.06)
+scale = Vector3(0.12, 0.22, 7.05)
+visibility_range_end = 46.0
+mesh = SubResource("Mesh_box_wood")
+
+[node name="LeftCrown" type="MeshInstance3D" parent="Architecture"]
+position = Vector3(-0.35, 3.49, -2.4)
+scale = Vector3(5.7, 0.16, 0.15)
+visibility_range_end = 46.0
+mesh = SubResource("Mesh_box_wood")
+
+[node name="RightCrown" type="MeshInstance3D" parent="Architecture"]
+position = Vector3(-0.35, 3.49, 4.52)
+scale = Vector3(5.7, 0.16, 0.15)
+visibility_range_end = 46.0
+mesh = SubResource("Mesh_box_wood")
+
+[node name="CeilingGrid" type="Node3D" parent="Architecture"]
+
+[node name="Runner01" type="MeshInstance3D" parent="Architecture/CeilingGrid"]
+position = Vector3(-0.35, 3.52, -0.7)
+scale = Vector3(5.72, 0.045, 0.035)
+mesh = SubResource("Mesh_box_brass")
+
+[node name="Runner02" type="MeshInstance3D" parent="Architecture/CeilingGrid"]
+position = Vector3(-0.35, 3.52, 1.06)
+scale = Vector3(5.72, 0.045, 0.035)
+mesh = SubResource("Mesh_box_brass")
+
+[node name="Runner03" type="MeshInstance3D" parent="Architecture/CeilingGrid"]
+position = Vector3(-0.35, 3.52, 2.82)
+scale = Vector3(5.72, 0.045, 0.035)
+mesh = SubResource("Mesh_box_brass")
+
+[node name="CrossRunner01" type="MeshInstance3D" parent="Architecture/CeilingGrid"]
+position = Vector3(-1.78, 3.515, 1.06)
+scale = Vector3(0.035, 0.045, 7.05)
+mesh = SubResource("Mesh_box_brass")
+
+[node name="CrossRunner02" type="MeshInstance3D" parent="Architecture/CeilingGrid"]
+position = Vector3(1.08, 3.515, 1.06)
+scale = Vector3(0.035, 0.045, 7.05)
+mesh = SubResource("Mesh_box_brass")
+
+[node name="Signage" type="Node3D" parent="."]
+
+[node name="MenuBoard" type="MeshInstance3D" parent="Signage"]
+position = Vector3(0.5, 2.42, -2.37)
+scale = Vector3(1.55, 0.78, 0.045)
+visibility_range_end = 38.0
+mesh = SubResource("Mesh_box_blackboard")
+
+[node name="MenuTrimTop" type="MeshInstance3D" parent="Signage"]
+position = Vector3(0.5, 2.83, -2.31)
+scale = Vector3(1.68, 0.055, 0.05)
+mesh = SubResource("Mesh_box_brass")
+
+[node name="MenuTrimBottom" type="MeshInstance3D" parent="Signage"]
+position = Vector3(0.5, 2.01, -2.31)
+scale = Vector3(1.68, 0.055, 0.05)
+mesh = SubResource("Mesh_box_brass")
+
+[node name="MenuText" type="Label3D" parent="Signage"]
+position = Vector3(0.5, 2.43, -2.305)
+text = "GLEN'S BAKERY\nDAILY BREAD  85¢\nCOFFEE  40¢\nAPPLE PIE  $2.75"
+font_size = 40
+pixel_size = 0.004
+outline_size = 5
+modulate = Color(0.88, 0.82, 0.67, 1)
+visibility_range_end = 35.0
+
+[node name="RearLogo" type="Label3D" parent="Signage"]
+position = Vector3(-3.09, 2.95, 1.7)
+rotation_degrees = Vector3(0, 90, 0)
+text = "GLEN'S BAKERY"
+font_size = 64
+pixel_size = 0.0045
+outline_size = 6
+modulate = Color(0.82, 0.7, 0.45, 1)
+visibility_range_end = 44.0
+
+[node name="StaffOnlyPlaque" type="MeshInstance3D" parent="Signage"]
+position = Vector3(-3.09, 2.0, 3.7)
+scale = Vector3(0.04, 0.34, 0.78)
+mesh = SubResource("Mesh_box_cream")
+
+[node name="StaffOnlyText" type="Label3D" parent="Signage"]
+position = Vector3(-3.045, 2.0, 3.7)
+rotation_degrees = Vector3(0, 90, 0)
+text = "STAFF ONLY"
+font_size = 44
+pixel_size = 0.004
+outline_size = 4
+modulate = Color(0.18, 0.1, 0.05, 1)
+visibility_range_end = 34.0
+
+[node name="Retail" type="Node3D" parent="."]
+
+[node name="BreadShelves" type="Node3D" parent="Retail"]
+
+[node name="ShelfFront" parent="Retail/BreadShelves" instance=ExtResource("16_shelf")]
+position = Vector3(1.18, 0.63, -2.34)
+scale = Vector3(1.12, 1.12, 1.12)
+
+[node name="ShelfRear" parent="Retail/BreadShelves" instance=ExtResource("16_shelf")]
+position = Vector3(-0.15, 0.63, -2.34)
+scale = Vector3(1.12, 1.12, 1.12)
+
+[node name="ShelfBread01" parent="Retail/BreadShelves" instance=ExtResource("14_croissant")]
+position = Vector3(1.02, 1.15, -2.05)
+rotation_degrees = Vector3(-4, 12, 0)
+scale = Vector3(1.6, 1.6, 1.6)
+
+[node name="ShelfBread02" parent="Retail/BreadShelves" instance=ExtResource("14_croissant")]
+position = Vector3(1.36, 1.17, -2.04)
+rotation_degrees = Vector3(2, -14, 4)
+scale = Vector3(1.55, 1.55, 1.55)
+
+[node name="ShelfBread03" parent="Retail/BreadShelves" instance=ExtResource("14_croissant")]
+position = Vector3(0.98, 1.64, -2.04)
+rotation_degrees = Vector3(-2, -10, 0)
+scale = Vector3(1.7, 1.7, 1.7)
+
+[node name="ShelfBread04" parent="Retail/BreadShelves" instance=ExtResource("14_croissant")]
+position = Vector3(1.35, 1.66, -2.03)
+rotation_degrees = Vector3(3, 18, -3)
+scale = Vector3(1.62, 1.62, 1.62)
+
+[node name="ShelfBread05" parent="Retail/BreadShelves" instance=ExtResource("14_croissant")]
+position = Vector3(-0.32, 1.18, -2.04)
+rotation_degrees = Vector3(-4, -15, 2)
+scale = Vector3(1.7, 1.7, 1.7)
+
+[node name="ShelfBread06" parent="Retail/BreadShelves" instance=ExtResource("14_croissant")]
+position = Vector3(0.04, 1.17, -2.04)
+rotation_degrees = Vector3(2, 10, -4)
+scale = Vector3(1.6, 1.6, 1.6)
+
+[node name="ShelfBread07" parent="Retail/BreadShelves" instance=ExtResource("14_croissant")]
+position = Vector3(-0.32, 1.68, -2.03)
+rotation_degrees = Vector3(0, 13, 0)
+scale = Vector3(1.55, 1.55, 1.55)
+
+[node name="ShelfBread08" parent="Retail/BreadShelves" instance=ExtResource("14_croissant")]
+position = Vector3(0.03, 1.68, -2.03)
+rotation_degrees = Vector3(-3, -12, 3)
+scale = Vector3(1.65, 1.65, 1.65)
+
+[node name="DisplayCounter" type="Node3D" parent="Retail"]
+
+[node name="CabinetBase" type="MeshInstance3D" parent="Retail/DisplayCounter"]
+position = Vector3(-0.2, 0.94, -1.34)
+scale = Vector3(0.76, 0.62, 3.1)
+visibility_range_end = 44.0
+mesh = SubResource("Mesh_box_wood")
+
+[node name="CabinetInset" type="MeshInstance3D" parent="Retail/DisplayCounter"]
+position = Vector3(0.19, 0.94, -1.34)
+scale = Vector3(0.035, 0.43, 2.75)
+visibility_range_end = 40.0
+mesh = SubResource("Mesh_box_black")
+
+[node name="GlassFront" type="MeshInstance3D" parent="Retail/DisplayCounter"]
+position = Vector3(0.21, 1.31, -1.34)
+scale = Vector3(0.035, 0.58, 2.94)
+cast_shadow = 0
+visibility_range_end = 42.0
+mesh = SubResource("Mesh_box_glass")
+
+[node name="GlassBack" type="MeshInstance3D" parent="Retail/DisplayCounter"]
+position = Vector3(-0.58, 1.31, -1.34)
+scale = Vector3(0.035, 0.58, 2.94)
+cast_shadow = 0
+visibility_range_end = 42.0
+mesh = SubResource("Mesh_box_glass")
+
+[node name="GlassEndLeft" type="MeshInstance3D" parent="Retail/DisplayCounter"]
+position = Vector3(-0.185, 1.31, -2.79)
+scale = Vector3(0.76, 0.58, 0.035)
+cast_shadow = 0
+mesh = SubResource("Mesh_box_glass")
+
+[node name="GlassEndRight" type="MeshInstance3D" parent="Retail/DisplayCounter"]
+position = Vector3(-0.185, 1.31, 0.11)
+scale = Vector3(0.76, 0.58, 0.035)
+cast_shadow = 0
+mesh = SubResource("Mesh_box_glass")
+
+[node name="CounterTop" type="MeshInstance3D" parent="Retail/DisplayCounter"]
+position = Vector3(-0.19, 1.62, -1.34)
+scale = Vector3(0.92, 0.1, 3.18)
+visibility_range_end = 44.0
+mesh = SubResource("Mesh_box_wood")
+
+[node name="BrassRailTop" type="MeshInstance3D" parent="Retail/DisplayCounter"]
+position = Vector3(0.24, 1.59, -1.34)
+scale = Vector3(0.04, 0.055, 3.02)
+mesh = SubResource("Mesh_box_brass")
+
+[node name="BrassRailBottom" type="MeshInstance3D" parent="Retail/DisplayCounter"]
+position = Vector3(0.24, 1.04, -1.34)
+scale = Vector3(0.04, 0.055, 3.02)
+mesh = SubResource("Mesh_box_brass")
+
+[node name="BrassPost01" type="MeshInstance3D" parent="Retail/DisplayCounter"]
+position = Vector3(0.24, 1.31, -2.77)
+scale = Vector3(0.05, 0.58, 0.05)
+mesh = SubResource("Mesh_box_brass")
+
+[node name="BrassPost02" type="MeshInstance3D" parent="Retail/DisplayCounter"]
+position = Vector3(0.24, 1.31, -1.82)
+scale = Vector3(0.05, 0.58, 0.05)
+mesh = SubResource("Mesh_box_brass")
+
+[node name="BrassPost03" type="MeshInstance3D" parent="Retail/DisplayCounter"]
+position = Vector3(0.24, 1.31, -0.87)
+scale = Vector3(0.05, 0.58, 0.05)
+mesh = SubResource("Mesh_box_brass")
+
+[node name="BrassPost04" type="MeshInstance3D" parent="Retail/DisplayCounter"]
+position = Vector3(0.24, 1.31, 0.08)
+scale = Vector3(0.05, 0.58, 0.05)
+mesh = SubResource("Mesh_box_brass")
+
+[node name="Tray01" type="MeshInstance3D" parent="Retail/DisplayCounter"]
+position = Vector3(-0.17, 1.18, -2.28)
+scale = Vector3(0.58, 0.025, 0.78)
+mesh = SubResource("Mesh_box_metal")
+
+[node name="Tray02" type="MeshInstance3D" parent="Retail/DisplayCounter"]
+position = Vector3(-0.17, 1.18, -1.34)
+scale = Vector3(0.58, 0.025, 0.78)
+mesh = SubResource("Mesh_box_metal")
+
+[node name="Tray03" type="MeshInstance3D" parent="Retail/DisplayCounter"]
+position = Vector3(-0.17, 1.18, -0.4)
+scale = Vector3(0.58, 0.025, 0.78)
+mesh = SubResource("Mesh_box_metal")
+
+[node name="DisplayCroissant01" parent="Retail/DisplayCounter" instance=ExtResource("14_croissant")]
+position = Vector3(-0.09, 1.25, -2.43)
+rotation_degrees = Vector3(0, 12, 0)
+scale = Vector3(1.45, 1.45, 1.45)
+
+[node name="DisplayCroissant02" parent="Retail/DisplayCounter" instance=ExtResource("14_croissant")]
+position = Vector3(-0.09, 1.25, -2.12)
+rotation_degrees = Vector3(1, -9, 0)
+scale = Vector3(1.48, 1.48, 1.48)
+
+[node name="DisplayCroissant03" parent="Retail/DisplayCounter" instance=ExtResource("14_croissant")]
+position = Vector3(-0.09, 1.25, -1.5)
+rotation_degrees = Vector3(0, 18, -2)
+scale = Vector3(1.42, 1.42, 1.42)
+
+[node name="DisplayCroissant04" parent="Retail/DisplayCounter" instance=ExtResource("14_croissant")]
+position = Vector3(-0.09, 1.25, -1.18)
+rotation_degrees = Vector3(-2, -12, 2)
+scale = Vector3(1.46, 1.46, 1.46)
+
+[node name="Cake01" type="MeshInstance3D" parent="Retail/DisplayCounter"]
+position = Vector3(-0.16, 1.28, -0.54)
+mesh = SubResource("Mesh_cake")
+
+[node name="Cake01Frosting" type="MeshInstance3D" parent="Retail/DisplayCounter"]
+position = Vector3(-0.16, 1.39, -0.54)
+mesh = SubResource("Mesh_frosting")
+
+[node name="Cake02" type="MeshInstance3D" parent="Retail/DisplayCounter"]
+position = Vector3(-0.16, 1.28, -0.19)
+scale = Vector3(0.82, 1.1, 0.82)
+mesh = SubResource("Mesh_cake")
+
+[node name="Cake02Frosting" type="MeshInstance3D" parent="Retail/DisplayCounter"]
+position = Vector3(-0.16, 1.395, -0.19)
+scale = Vector3(0.82, 1, 0.82)
+mesh = SubResource("Mesh_frosting")
+
+[node name="RegisterStation" type="Node3D" parent="Retail"]
+
+[node name="RegisterCabinet" type="MeshInstance3D" parent="Retail/RegisterStation"]
+position = Vector3(-0.25, 1.05, 0.63)
+scale = Vector3(0.82, 0.86, 0.76)
+visibility_range_end = 42.0
+mesh = SubResource("Mesh_box_wood")
+
+[node name="RegisterTop" type="MeshInstance3D" parent="Retail/RegisterStation"]
+position = Vector3(-0.25, 1.51, 0.63)
+scale = Vector3(0.96, 0.1, 0.88)
+mesh = SubResource("Mesh_box_wood")
+
+[node name="CashRegister" parent="Retail/RegisterStation" instance=ExtResource("13_register")]
+position = Vector3(-0.22, 1.56, 0.64)
+rotation_degrees = Vector3(0, 90, 0)
+scale = Vector3(0.72, 0.72, 0.72)
+
+[node name="CoffeeStation" type="Node3D" parent="Retail"]
+
+[node name="CoffeeCabinet" type="MeshInstance3D" parent="Retail/CoffeeStation"]
+position = Vector3(-2.55, 1.02, -2.08)
+scale = Vector3(0.82, 0.76, 0.72)
+mesh = SubResource("Mesh_box_enamel")
+
+[node name="CoffeeTop" type="MeshInstance3D" parent="Retail/CoffeeStation"]
+position = Vector3(-2.55, 1.44, -2.08)
+scale = Vector3(0.92, 0.09, 0.82)
+mesh = SubResource("Mesh_box_metal")
+
+[node name="CoffeeUrn" type="MeshInstance3D" parent="Retail/CoffeeStation"]
+position = Vector3(-2.56, 1.73, -2.08)
+mesh = SubResource("Mesh_urn")
+
+[node name="CoffeeUrnLid" type="MeshInstance3D" parent="Retail/CoffeeStation"]
+position = Vector3(-2.56, 1.99, -2.08)
+scale = Vector3(0.38, 0.055, 0.38)
+mesh = SubResource("Mesh_box_metal")
+
+[node name="Cup01" type="MeshInstance3D" parent="Retail/CoffeeStation"]
+position = Vector3(-2.37, 1.57, -1.86)
+mesh = SubResource("Mesh_cup")
+
+[node name="Cup02" type="MeshInstance3D" parent="Retail/CoffeeStation"]
+position = Vector3(-2.66, 1.57, -1.86)
+mesh = SubResource("Mesh_cup")
+
+[node name="Kitchen" type="Node3D" parent="."]
+
+[node name="PrepTable" parent="Kitchen" instance=ExtResource("17_table")]
+position = Vector3(-1.55, 0.64, 1.63)
+rotation_degrees = Vector3(0, 90, 0)
+scale = Vector3(1.18, 1.18, 1.18)
+
+[node name="PrepTray" type="MeshInstance3D" parent="Kitchen"]
+position = Vector3(-1.55, 1.595, 1.62)
+scale = Vector3(0.78, 0.035, 0.5)
+mesh = SubResource("Mesh_box_metal")
+
+[node name="PrepCroissant01" parent="Kitchen" instance=ExtResource("14_croissant")]
+position = Vector3(-1.72, 1.66, 1.5)
+rotation_degrees = Vector3(0, 14, 0)
+scale = Vector3(1.25, 1.25, 1.25)
+
+[node name="PrepCroissant02" parent="Kitchen" instance=ExtResource("14_croissant")]
+position = Vector3(-1.39, 1.66, 1.5)
+rotation_degrees = Vector3(2, -15, 1)
+scale = Vector3(1.22, 1.22, 1.22)
+
+[node name="RollingPin" type="MeshInstance3D" parent="Kitchen"]
+position = Vector3(-1.55, 1.67, 1.88)
+rotation_degrees = Vector3(0, 0, 90)
+mesh = SubResource("Mesh_rolling_pin")
+
+[node name="PrepCanister" type="MeshInstance3D" parent="Kitchen"]
+position = Vector3(-1.28, 1.78, 1.4)
+scale = Vector3(0.76, 0.76, 0.76)
+mesh = SubResource("Mesh_canister")
+
+[node name="MeasuringCup" type="MeshInstance3D" parent="Kitchen"]
+position = Vector3(-1.85, 1.68, 1.83)
+scale = Vector3(0.78, 0.78, 0.78)
+mesh = SubResource("Mesh_cup")
+
+[node name="StoveLeft" parent="Kitchen" instance=ExtResource("15_stove")]
+position = Vector3(-2.81, 0.67, -1.32)
+rotation_degrees = Vector3(0, 90, 0)
+
+[node name="StoveRight" parent="Kitchen" instance=ExtResource("15_stove")]
+position = Vector3(-2.81, 0.67, -0.52)
+rotation_degrees = Vector3(0, 90, 0)
+
+[node name="SpiceCabinet01" parent="Kitchen" instance=ExtResource("20_spice_cabinet")]
+position = Vector3(-3.04, 2.65, -0.95)
+rotation_degrees = Vector3(0, 90, 0)
+scale = Vector3(0.82, 0.82, 0.82)
+
+[node name="SpiceCabinet02" parent="Kitchen" instance=ExtResource("20_spice_cabinet")]
+position = Vector3(-3.04, 2.65, 0.1)
+rotation_degrees = Vector3(0, 90, 0)
+scale = Vector3(0.82, 0.82, 0.82)
+
+[node name="SinkCabinet" type="MeshInstance3D" parent="Kitchen"]
+position = Vector3(-2.75, 1.04, 0.75)
+scale = Vector3(0.74, 0.78, 1.18)
+mesh = SubResource("Mesh_box_enamel")
+
+[node name="SinkTop" type="MeshInstance3D" parent="Kitchen"]
+position = Vector3(-2.74, 1.46, 0.75)
+scale = Vector3(0.86, 0.09, 1.3)
+mesh = SubResource("Mesh_box_metal")
+
+[node name="SinkBasin" type="MeshInstance3D" parent="Kitchen"]
+position = Vector3(-2.72, 1.5, 0.75)
+scale = Vector3(0.48, 0.035, 0.62)
+mesh = SubResource("Mesh_box_black")
+
+[node name="FaucetStem" type="MeshInstance3D" parent="Kitchen"]
+position = Vector3(-2.95, 1.72, 0.75)
+scale = Vector3(0.06, 0.4, 0.06)
+mesh = SubResource("Mesh_box_metal")
+
+[node name="FaucetSpout" type="MeshInstance3D" parent="Kitchen"]
+position = Vector3(-2.83, 1.9, 0.75)
+scale = Vector3(0.3, 0.06, 0.06)
+mesh = SubResource("Mesh_box_metal")
+
+[node name="CanisterFlour" type="MeshInstance3D" parent="Kitchen"]
+position = Vector3(-2.71, 1.68, 1.15)
+mesh = SubResource("Mesh_canister")
+
+[node name="CanisterSugar" type="MeshInstance3D" parent="Kitchen"]
+position = Vector3(-2.71, 1.65, 0.38)
+scale = Vector3(0.82, 0.82, 0.82)
+mesh = SubResource("Mesh_canister")
+
+[node name="HangingTowel" type="MeshInstance3D" parent="Kitchen"]
+position = Vector3(-3.045, 1.34, 1.17)
+rotation_degrees = Vector3(0, 0, 5)
+scale = Vector3(0.035, 0.56, 0.34)
+mesh = SubResource("Mesh_box_red")
+
+[node name="LeaningOvenTray" type="MeshInstance3D" parent="Kitchen"]
+position = Vector3(-2.96, 1.05, -1.85)
+rotation_degrees = Vector3(0, 90, 12)
+scale = Vector3(0.035, 0.48, 0.68)
+mesh = SubResource("Mesh_box_metal")
+
+[node name="Storage" type="Node3D" parent="."]
+
+[node name="SteelShelf01" parent="Storage" instance=ExtResource("18_steel_shelf")]
+position = Vector3(-2.82, 0.64, 2.75)
+rotation_degrees = Vector3(0, 90, 0)
+scale = Vector3(0.1, 0.1, 0.1)
+
+[node name="SteelShelf02" parent="Storage" instance=ExtResource("18_steel_shelf")]
+position = Vector3(-2.82, 0.64, 3.95)
+rotation_degrees = Vector3(0, 90, 0)
+scale = Vector3(0.1, 0.1, 0.1)
+
+[node name="Crate01" parent="Storage" instance=ExtResource("21_crate_a")]
+position = Vector3(-2.35, 0.64, 2.58)
+rotation_degrees = Vector3(0, 90, 0)
+
+[node name="Crate02" parent="Storage" instance=ExtResource("22_crate_b")]
+position = Vector3(-2.27, 0.64, 3.05)
+rotation_degrees = Vector3(0, -8, 0)
+
+[node name="Crate03" parent="Storage" instance=ExtResource("21_crate_a")]
+position = Vector3(-2.34, 0.9, 2.58)
+rotation_degrees = Vector3(0, 82, 0)
+
+[node name="SupplyBox01" type="MeshInstance3D" parent="Storage"]
+position = Vector3(-2.74, 1.05, 2.56)
+scale = Vector3(0.42, 0.32, 0.64)
+mesh = SubResource("Mesh_box_paper")
+
+[node name="SupplyBox02" type="MeshInstance3D" parent="Storage"]
+position = Vector3(-2.74, 1.55, 3.76)
+rotation_degrees = Vector3(0, -4, 0)
+scale = Vector3(0.44, 0.28, 0.58)
+mesh = SubResource("Mesh_box_paper")
+
+[node name="SupplyBoxLabel01" type="Label3D" parent="Storage"]
+position = Vector3(-2.5, 1.05, 2.56)
+rotation_degrees = Vector3(0, 90, 0)
+text = "FLOUR"
+font_size = 30
+pixel_size = 0.0035
+outline_size = 3
+modulate = Color(0.2, 0.09, 0.035, 1)
+visibility_range_end = 24.0
+
+[node name="SupplyBoxLabel02" type="Label3D" parent="Storage"]
+position = Vector3(-2.5, 1.55, 3.76)
+rotation_degrees = Vector3(0, 90, 0)
+text = "PAPER"
+font_size = 30
+pixel_size = 0.0035
+outline_size = 3
+modulate = Color(0.2, 0.09, 0.035, 1)
+visibility_range_end = 24.0
+
+[node name="Abandonment" type="Node3D" parent="."]
+
+[node name="Paper01" type="MeshInstance3D" parent="Abandonment"]
+position = Vector3(1.2, 0.64, 1.95)
+rotation_degrees = Vector3(2, 28, -2)
+scale = Vector3(0.28, 0.008, 0.4)
+mesh = SubResource("Mesh_box_paper")
+
+[node name="Paper02" type="MeshInstance3D" parent="Abandonment"]
+position = Vector3(0.65, 0.64, 3.58)
+rotation_degrees = Vector3(-2, -19, 1)
+scale = Vector3(0.22, 0.008, 0.32)
+mesh = SubResource("Mesh_box_paper")
+
+[node name="Paper03" type="MeshInstance3D" parent="Abandonment"]
+position = Vector3(-1.08, 0.64, 3.25)
+rotation_degrees = Vector3(3, 42, -3)
+scale = Vector3(0.3, 0.008, 0.2)
+mesh = SubResource("Mesh_box_paper")
+
+[node name="Paper04" type="MeshInstance3D" parent="Abandonment"]
+position = Vector3(1.28, 0.64, -0.42)
+rotation_degrees = Vector3(-2, 61, 2)
+scale = Vector3(0.2, 0.008, 0.29)
+mesh = SubResource("Mesh_box_paper")
+
+[node name="CollapsedPaperBag" type="MeshInstance3D" parent="Abandonment"]
+position = Vector3(-0.86, 0.69, -2.03)
+rotation_degrees = Vector3(0, -18, 7)
+scale = Vector3(0.24, 0.12, 0.18)
+mesh = SubResource("Mesh_box_paper")
+
+[node name="FallenTray" type="MeshInstance3D" parent="Abandonment"]
+position = Vector3(1.25, 0.8, 4.16)
+rotation_degrees = Vector3(0, 14, 73)
+scale = Vector3(0.55, 0.035, 0.78)
+mesh = SubResource("Mesh_box_metal")
+
+[node name="DiscardedBox" type="MeshInstance3D" parent="Abandonment"]
+position = Vector3(-0.5, 0.79, 4.05)
+rotation_degrees = Vector3(0, -24, 8)
+scale = Vector3(0.52, 0.32, 0.44)
+mesh = SubResource("Mesh_box_paper")
+
+[node name="Lighting" type="Node3D" parent="."]
+
+[node name="LampRetail01" parent="Lighting" instance=ExtResource("19_lamp")]
+position = Vector3(1.0, 3.48, -1.05)
+scale = Vector3(0.58, 0.58, 0.58)
+
+[node name="LampRetail02" parent="Lighting" instance=ExtResource("19_lamp")]
+position = Vector3(0.95, 3.48, 2.55)
+scale = Vector3(0.58, 0.58, 0.58)
+
+[node name="LampKitchen01" parent="Lighting" instance=ExtResource("19_lamp")]
+position = Vector3(-1.65, 3.48, -0.8)
+scale = Vector3(0.58, 0.58, 0.58)
+
+[node name="LampKitchen02" parent="Lighting" instance=ExtResource("19_lamp")]
+position = Vector3(-1.65, 3.48, 2.45)
+scale = Vector3(0.58, 0.58, 0.58)
+
+[node name="RetailLight01" type="OmniLight3D" parent="Lighting"]
+position = Vector3(1.0, 2.68, -1.05)
+light_color = Color(1, 0.73, 0.42, 1)
+light_energy = 0.95
+omni_range = 4.2
+omni_attenuation = 1.2
+distance_fade_enabled = true
+distance_fade_begin = 26.0
+distance_fade_shadow = 18.0
+distance_fade_length = 7.0
+
+[node name="RetailLight02" type="OmniLight3D" parent="Lighting"]
+position = Vector3(0.95, 2.68, 2.55)
+light_color = Color(1, 0.75, 0.46, 1)
+light_energy = 0.78
+omni_range = 4.0
+omni_attenuation = 1.25
+distance_fade_enabled = true
+distance_fade_begin = 26.0
+distance_fade_shadow = 18.0
+distance_fade_length = 7.0
+
+[node name="KitchenLight01" type="OmniLight3D" parent="Lighting"]
+position = Vector3(-1.65, 2.68, -0.8)
+light_color = Color(1, 0.81, 0.58, 1)
+light_energy = 0.72
+omni_range = 3.8
+omni_attenuation = 1.2
+distance_fade_enabled = true
+distance_fade_begin = 24.0
+distance_fade_shadow = 17.0
+distance_fade_length = 7.0
+
+[node name="KitchenLight02" type="OmniLight3D" parent="Lighting"]
+position = Vector3(-1.65, 2.68, 2.45)
+light_color = Color(1, 0.79, 0.53, 1)
+light_energy = 0.66
+omni_range = 3.8
+omni_attenuation = 1.2
+distance_fade_enabled = true
+distance_fade_begin = 24.0
+distance_fade_shadow = 17.0
+distance_fade_length = 7.0
+
+[node name="Collision" type="StaticBody3D" parent="."]
+
+[node name="Floor" type="CollisionShape3D" parent="Collision"]
+position = Vector3(-0.35, 0.56, 1.06)
+shape = SubResource("Shape_floor")
+
+[node name="DisplayCounter" type="CollisionShape3D" parent="Collision"]
+position = Vector3(-0.2, 1.12, -1.34)
+shape = SubResource("Shape_counter")
+
+[node name="RegisterStation" type="CollisionShape3D" parent="Collision"]
+position = Vector3(-0.25, 1.08, 0.63)
+scale = Vector3(1, 1, 0.5)
+shape = SubResource("Shape_counter")
+
+[node name="PrepTable" type="CollisionShape3D" parent="Collision"]
+position = Vector3(-1.55, 1.05, 1.63)
+rotation_degrees = Vector3(0, 90, 0)
+shape = SubResource("Shape_prep")
+
+[node name="Stoves" type="CollisionShape3D" parent="Collision"]
+position = Vector3(-2.78, 1.1, -0.91)
+shape = SubResource("Shape_stoves")
+
+[node name="StorageShelves" type="CollisionShape3D" parent="Collision"]
+position = Vector3(-2.78, 1.7, 3.36)
+shape = SubResource("Shape_storage")

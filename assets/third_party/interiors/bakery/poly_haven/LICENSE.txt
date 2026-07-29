@@ -1,0 +1,18 @@
+Poly Haven bakery interior asset pack
+
+Assets:
+- Cash Register 01: https://polyhaven.com/a/CashRegister_01
+- Croissant: https://polyhaven.com/a/croissant
+- Electric Stove: https://polyhaven.com/a/electric_stove
+- Shelf 01: https://polyhaven.com/a/Shelf_01
+- Wooden Table 02: https://polyhaven.com/a/wooden_table_02
+- Steel Frame Shelves 01: https://polyhaven.com/a/steel_frame_shelves_01
+- Hanging Industrial Lamp: https://polyhaven.com/a/hanging_industrial_lamp
+
+Provider: Poly Haven
+License: CC0 1.0 Universal
+License URL: https://polyhaven.com/license
+
+Only the 1K glTF variants and their referenced files are retained in this
+project. Attribution is not required, but source records are preserved here
+and in docs/implementation/assets_reference.md for provenance.

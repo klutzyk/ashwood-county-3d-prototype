@@ -2016,3 +2016,42 @@ Validation:
 - Direct Main Street runtime completed a 180-frame cold start without scene,
   import or script errors
 - C# build completed with no warnings or errors
+
+---
+
+## Glen's Bakery Production Interior
+
+Completed:
+
+- Replaced the four-piece runtime prototype with a hand-authored bakery
+  production interior fitted to the existing imported shell
+- Established distinct customer retail, glazed pastry display, register,
+  coffee, open baking/prep, sink, storage, and restrained abandonment zones
+- Integrated seven compact Poly Haven CC0 assets at 1K resolution, totaling
+  approximately 11 MB, with a local license record and source provenance
+- Reused realistic stoves, furniture, shelving, register, pastry, lighting,
+  spice cabinets, and plastic crates while reserving project geometry for the
+  architectural shell, cabinetry, trays, and small supporting details
+- Added aged PBR floor, brick, plaster, wood, metal, glass, and enamel
+  materials, period menu signage, ceiling grid, warm daytime-readable fixtures,
+  papers, discarded packaging, and a fallen tray
+- Added simplified collision only to the floor and substantial furniture,
+  preserving a clear player route from the working front door into the sales
+  floor
+- Removed the old window-display backboards that read as flat panels from
+  inside while retaining the storefront bread, cake, and coffee dressing
+- Kept all player, zombie, combat, save, objective, and interaction systems
+  unchanged
+
+Validation:
+
+- Focused bakery validation passed production hierarchy, curated asset usage,
+  retail and kitchen detail density, lighting limits, simplified collision,
+  entrance clearance, and Compatibility-renderer performance bounds
+- Existing Main Street art-pass regression validation passed
+- Three-angle Compatibility-rendered review covered the entry view, glazed
+  display counter, open prep line, rear storage, and the view back to the
+  storefront
+- Direct Main Street runtime completed a 120-frame cold start without scene or
+  script errors
+- C# build completed with no warnings or errors

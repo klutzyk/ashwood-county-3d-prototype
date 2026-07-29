@@ -314,7 +314,8 @@ World
   - [x] Street furniture, parked vehicles, utilities and power lines
   - [x] Reclaiming vegetation, litter and environmental storytelling
   - [x] Daytime lighting, materials and atmosphere polish
-  - [ ] Bakery loot and final full-interior art
+  - [x] Bakery final full-interior art
+  - [ ] Bakery loot
   - [ ] Rear service opening and door when the exterior mesh supports one
 - [ ] Replace all placeholder buildings
 - [ ] Replace all placeholder props
