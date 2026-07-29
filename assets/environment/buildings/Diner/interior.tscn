@@ -266,7 +266,7 @@ scale = Vector3(0.027, 0.027, 0.027)
 
 [node name="RestroomDoor" parent="Architecture" instance=ExtResource("45_white_door")]
 position = Vector3(1.06, 1.2, 3.68)
-rotation = Vector3(0, 2.34, 0)
+rotation = Vector3(0, 3.1415927, 0)
 scale = Vector3(0.027, 0.027, 0.027)
 
 [node name="ColdStorageDoor" parent="Architecture" instance=ExtResource("45_white_door")]
@@ -449,33 +449,33 @@ scale = Vector3(0.52, 0.52, 0.52)
 [node name="CookLine" type="Node3D" parent="Kitchen"]
 
 [node name="GriddleRange" parent="Kitchen/CookLine" instance=ExtResource("15_griddle")]
-position = Vector3(3.36, 0, 1.68)
+position = Vector3(3.36, 0, 1.0)
 rotation = Vector3(0, 1.5707964, 0)
 
 [node name="TwinDeepFryer" parent="Kitchen/CookLine" instance=ExtResource("16_fryer")]
-position = Vector3(3.28, 0, 3.0)
+position = Vector3(3.28, 0, 2.25)
 rotation = Vector3(0, 1.5707964, 0)
 
 [node name="ExtractorHood" parent="Kitchen/CookLine" instance=ExtResource("17_hood")]
-position = Vector3(3.34, 2.48, 2.12)
+position = Vector3(3.34, 2.48, 1.62)
 rotation = Vector3(0, 1.5707964, 0)
 
 [node name="GriddleCollision" type="CollisionShape3D" parent="."]
-position = Vector3(3.36, 0.55, 1.68)
+position = Vector3(3.36, 0.55, 1.0)
 shape = SubResource("GriddleShape")
 
 [node name="FryerCollision" type="CollisionShape3D" parent="."]
-position = Vector3(3.28, 0.61, 3.0)
+position = Vector3(3.28, 0.61, 2.25)
 shape = SubResource("FryerShape")
 
 [node name="Washing" type="Node3D" parent="Kitchen"]
 
 [node name="TripleSink" parent="Kitchen/Washing" instance=ExtResource("14_sink_station")]
-position = Vector3(3.46, 0, -2.15)
+position = Vector3(3.46, 0, -1.35)
 rotation = Vector3(0, 1.5707964, 0)
 
 [node name="SinkCollision" type="CollisionShape3D" parent="."]
-position = Vector3(3.46, 0.7, -2.15)
+position = Vector3(3.46, 0.7, -1.35)
 shape = SubResource("SinkShape")
 
 [node name="Prep" type="Node3D" parent="Kitchen"]
@@ -486,11 +486,11 @@ scale = Vector3(0.68, 0.06, 1.0)
 mesh = SubResource("MeshStainless")
 
 [node name="CuttingBoard" parent="Kitchen/Prep" instance=ExtResource("26_board")]
-position = Vector3(3.17, 0.96, -2.35)
+position = Vector3(3.17, 0.96, -1.6)
 rotation = Vector3(0.03, 0.18, -0.02)
 
 [node name="WoodenSpoon" parent="Kitchen/Prep" instance=ExtResource("27_spoon")]
-position = Vector3(3.2, 1.0, -2.08)
+position = Vector3(3.2, 1.0, -1.32)
 rotation = Vector3(0.06, 1.2, 0.04)
 
 [node name="Microwave" parent="Kitchen/Prep" instance=ExtResource("25_microwave")]

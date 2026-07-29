@@ -243,7 +243,6 @@ scale = Vector3(0.027, 0.027, 0.027)
 
 [node name="RestroomDoor" parent="Architecture" instance=ExtResource("36_white_door")]
 position = Vector3(-2.05, 1.2, 3.03)
-rotation = Vector3(0, 0.82, 0)
 scale = Vector3(0.027, 0.027, 0.027)
 
 [node name="FloorCollision" type="CollisionShape3D" parent="."]

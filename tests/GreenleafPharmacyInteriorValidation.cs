@@ -275,18 +275,18 @@ public partial class GreenleafPharmacyInteriorValidation : Node
 		});
 		ValidateClearRoute(pharmacy, authoredBoxes, "storage-room doorway", new[]
 		{
-			new Vector3(-2.05f, 0.9f, -2.2f),
-			new Vector3(-2.05f, 0.9f, -2.4f),
-			new Vector3(-2.05f, 0.9f, -2.55f),
-			new Vector3(-2.05f, 0.9f, -2.72f),
-			new Vector3(-2.05f, 0.9f, -2.88f),
+			new Vector3(-3.27f, 0.9f, -2.68f),
+			new Vector3(-3.27f, 0.9f, -2.93f),
+			new Vector3(-3.27f, 0.9f, -3.11f),
+			new Vector3(-3.27f, 0.9f, -3.32f),
+			new Vector3(-3.27f, 0.9f, -3.51f),
 		});
 		ValidateClearRoute(pharmacy, authoredBoxes, "restroom doorway", new[]
 		{
-			new Vector3(-1.94f, 0.9f, 2.75f),
-			new Vector3(-1.94f, 0.9f, 2.9f),
-			new Vector3(-1.94f, 0.9f, 3.05f),
-			new Vector3(-1.94f, 0.9f, 3.18f),
+			new Vector3(-3.14f, 0.9f, 3.36f),
+			new Vector3(-3.14f, 0.9f, 3.54f),
+			new Vector3(-3.14f, 0.9f, 3.72f),
+			new Vector3(-3.14f, 0.9f, 3.88f),
 		});
 	}
 

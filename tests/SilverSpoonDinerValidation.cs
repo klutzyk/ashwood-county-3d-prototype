@@ -33,6 +33,8 @@ public partial class SilverSpoonDinerValidation : Node
 			StaticBody3D interior = diner.GetNode<StaticBody3D>("Interior");
 			DoorController frontDoor =
 				diner.GetNode<DoorController>("FrontDoor");
+			DoorController frontDoorRight =
+				diner.GetNode<DoorController>("FrontDoorRight");
 			SearchableContainer pantry =
 				diner.GetNode<SearchableContainer>("Pantry");
 			SearchableContainer fridge =
@@ -43,6 +45,7 @@ public partial class SilverSpoonDinerValidation : Node
 				exterior,
 				interior,
 				frontDoor,
+				frontDoorRight,
 				pantry,
 				fridge);
 			ValidateConceptZones(interior);
@@ -51,7 +54,10 @@ public partial class SilverSpoonDinerValidation : Node
 			ValidateMajorOnlyCollision(interior);
 			ValidatePerformanceIntent(interior);
 			RequireNoModernDiner(diner, "standalone diner");
-			await ValidateDoorAndClearance(diner, frontDoor);
+			await ValidateDoorAndClearance(
+				diner,
+				frontDoor,
+				frontDoorRight);
 
 			diner.QueueFree();
 			await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
@@ -73,6 +79,7 @@ public partial class SilverSpoonDinerValidation : Node
 		StaticBody3D exterior,
 		StaticBody3D interior,
 		DoorController frontDoor,
+		DoorController frontDoorRight,
 		SearchableContainer pantry,
 		SearchableContainer fridge)
 	{
@@ -88,6 +95,10 @@ public partial class SilverSpoonDinerValidation : Node
 				"/Diner/front_door.tscn",
 				StringComparison.Ordinal),
 			"FrontDoor remains the diner-specific functional production door");
+		Require(frontDoorRight.SceneFilePath.EndsWith(
+				"/Diner/front_door_right.tscn",
+				StringComparison.Ordinal),
+			"FrontDoorRight completes the functional double entrance");
 		Require(pantry.SceneFilePath.EndsWith(
 				"/containers/diner_pantry.tscn",
 				StringComparison.Ordinal),
@@ -338,14 +349,20 @@ public partial class SilverSpoonDinerValidation : Node
 
 	private async System.Threading.Tasks.Task ValidateDoorAndClearance(
 		Node3D diner,
-		DoorController frontDoor)
+		DoorController frontDoor,
+		DoorController frontDoorRight)
 	{
 		Node3D hinge = frontDoor.GetNode<Node3D>("Hinge");
+		Node3D rightHinge = frontDoorRight.GetNode<Node3D>("Hinge");
 		float closedAngle = hinge.Rotation.Y;
+		float rightClosedAngle = rightHinge.Rotation.Y;
 
 		frontDoor.AnimationDuration = 0.01f;
+		frontDoorRight.AnimationDuration = 0.01f;
 		frontDoor.ToggleDoor();
+		frontDoorRight.ToggleDoor();
 		await WaitForDoor(frontDoor);
+		await WaitForDoor(frontDoorRight);
 
 		float expectedOpenAngle =
 			closedAngle + Mathf.DegToRad(frontDoor.OpenAngleDegrees);
@@ -354,6 +371,14 @@ public partial class SilverSpoonDinerValidation : Node
 				hinge.Rotation.Y,
 				expectedOpenAngle)) <= 0.02f,
 			"front door interaction opens the visible model and collision together");
+		float expectedRightOpenAngle =
+			rightClosedAngle +
+			Mathf.DegToRad(frontDoorRight.OpenAngleDegrees);
+		Require(frontDoorRight.IsOpen && !frontDoorRight.IsAnimating &&
+			Mathf.Abs(Mathf.AngleDifference(
+				rightHinge.Rotation.Y,
+				expectedRightOpenAngle)) <= 0.02f,
+			"mirrored front door opens the second visible leaf and collision");
 
 		CollisionShape3D[] authoredBoxes = diner
 			.FindChildren("*", "CollisionShape3D", true, false)
@@ -379,57 +404,64 @@ public partial class SilverSpoonDinerValidation : Node
 		});
 		ValidateClearRoute(diner, authoredBoxes, "behind-counter access", new[]
 		{
-			new Vector3(-1.55f, 0.9f, 2.85f),
-			new Vector3(-1.1f, 0.9f, 2.85f),
-			new Vector3(-0.6f, 0.9f, 2.85f),
-			new Vector3(-0.15f, 0.9f, 2.85f),
-			new Vector3(0.4f, 0.9f, 2.85f),
-			new Vector3(0.9f, 0.9f, 2.85f),
+			new Vector3(-1.55f, 0.9f, 3.25f),
+			new Vector3(-1.1f, 0.9f, 3.25f),
+			new Vector3(-0.6f, 0.9f, 3.25f),
+			new Vector3(-0.15f, 0.9f, 3.25f),
+			new Vector3(0.4f, 0.9f, 3.25f),
+			new Vector3(0.9f, 0.9f, 3.25f),
 		});
 		ValidateClearRoute(diner, authoredBoxes, "kitchen working aisle", new[]
 		{
-			new Vector3(1.15f, 0.9f, 2.45f),
-			new Vector3(1.15f, 0.9f, 1.5f),
-			new Vector3(1.15f, 0.9f, 0.5f),
-			new Vector3(1.15f, 0.9f, -0.8f),
-			new Vector3(1.15f, 0.9f, -2.2f),
+			new Vector3(1.8f, 0.9f, 2.75f),
+			new Vector3(1.8f, 0.9f, 1.7f),
+			new Vector3(1.8f, 0.9f, 0.55f),
+			new Vector3(1.8f, 0.9f, -0.9f),
+			new Vector3(1.8f, 0.9f, -2.45f),
 		});
 		ValidateClearRoute(diner, authoredBoxes, "office doorway", new[]
 		{
-			new Vector3(1.55f, 0.9f, -3.25f),
-			new Vector3(1.55f, 0.9f, -3.55f),
-			new Vector3(1.55f, 0.9f, -3.82f),
-			new Vector3(1.55f, 0.9f, -4.05f),
+			new Vector3(2.22f, 0.9f, -3.64f),
+			new Vector3(2.22f, 0.9f, -3.98f),
+			new Vector3(2.22f, 0.9f, -4.28f),
+			new Vector3(2.22f, 0.9f, -4.54f),
 		});
 		ValidateClearRoute(diner, authoredBoxes, "pantry doorway", new[]
 		{
-			new Vector3(3.15f, 0.9f, -3.25f),
-			new Vector3(3.15f, 0.9f, -3.55f),
-			new Vector3(3.15f, 0.9f, -3.82f),
-			new Vector3(3.15f, 0.9f, -4.05f),
+			new Vector3(4.0f, 0.9f, -3.64f),
+			new Vector3(4.0f, 0.9f, -3.98f),
+			new Vector3(4.0f, 0.9f, -4.28f),
+			new Vector3(4.0f, 0.9f, -4.54f),
 		});
 		ValidateClearRoute(diner, authoredBoxes, "restroom doorway", new[]
 		{
-			new Vector3(1.52f, 0.9f, 3.25f),
-			new Vector3(1.52f, 0.9f, 3.55f),
-			new Vector3(1.52f, 0.9f, 3.82f),
-			new Vector3(1.52f, 0.9f, 4.1f),
+			new Vector3(2.18f, 0.9f, 3.64f),
+			new Vector3(2.18f, 0.9f, 3.98f),
+			new Vector3(2.18f, 0.9f, 4.28f),
+			new Vector3(2.18f, 0.9f, 4.6f),
 		});
 		ValidateClearRoute(diner, authoredBoxes, "cold-storage doorway", new[]
 		{
-			new Vector3(3.15f, 0.9f, 3.25f),
-			new Vector3(3.15f, 0.9f, 3.55f),
-			new Vector3(3.15f, 0.9f, 3.82f),
-			new Vector3(3.15f, 0.9f, 4.1f),
+			new Vector3(4.0f, 0.9f, 3.75f),
+			new Vector3(4.0f, 0.9f, 3.98f),
+			new Vector3(4.0f, 0.9f, 4.28f),
+			new Vector3(4.0f, 0.9f, 4.6f),
 		});
 
 		frontDoor.ToggleDoor();
+		frontDoorRight.ToggleDoor();
 		await WaitForDoor(frontDoor);
+		await WaitForDoor(frontDoorRight);
 		Require(!frontDoor.IsOpen && !frontDoor.IsAnimating &&
 			Mathf.Abs(Mathf.AngleDifference(
 				hinge.Rotation.Y,
 				closedAngle)) <= 0.02f,
 			"front door can toggle cleanly back to its closed state");
+		Require(!frontDoorRight.IsOpen && !frontDoorRight.IsAnimating &&
+			Mathf.Abs(Mathf.AngleDifference(
+				rightHinge.Rotation.Y,
+				rightClosedAngle)) <= 0.02f,
+			"mirrored front door can toggle cleanly back to its closed state");
 	}
 
 	private async System.Threading.Tasks.Task WaitForDoor(
