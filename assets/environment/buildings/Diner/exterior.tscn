@@ -1,136 +1,352 @@
-[gd_scene format=3 uid="uid://ww2yrl24p1qs"]
+[gd_scene load_steps=25 format=3]
 
-[ext_resource type="Material" path="res://assets/materials/building_wall.tres" id="1_wall"]
-[ext_resource type="Texture2D" uid="uid://c4s30gbafq47e" path="res://assets/third_party/materials/textures/walls/concrete_wall_009_1k.gltf/textures/concrete_wall_009_diff_1k.jpg" id="2_8rvjd"]
-[ext_resource type="Material" path="res://assets/materials/building_fixture.tres" id="2_fixture"]
-[ext_resource type="Material" path="res://assets/materials/building_roof.tres" id="2_roof"]
-[ext_resource type="Texture2D" uid="uid://cp5bsfrx7ksk5" path="res://assets/third_party/materials/textures/walls/concrete_wall_009_1k.gltf/textures/concrete_wall_009_arm_1k.jpg" id="3_8fsd2"]
-[ext_resource type="Texture2D" uid="uid://cduvrn7243ctb" path="res://assets/third_party/materials/textures/walls/concrete_wall_009_1k.gltf/textures/concrete_wall_009_nor_gl_1k.jpg" id="4_cg3lo"]
+[ext_resource type="Material" path="res://assets/materials/silver_spoon_exterior_brick.tres" id="1_brick"]
+[ext_resource type="Material" path="res://assets/materials/silver_spoon_red_metal.tres" id="2_red"]
+[ext_resource type="Material" path="res://assets/materials/silver_spoon_cream_enamel.tres" id="3_cream"]
+[ext_resource type="Material" path="res://assets/materials/silver_spoon_chrome.tres" id="4_chrome"]
+[ext_resource type="Material" path="res://assets/materials/silver_spoon_glass.tres" id="5_glass"]
+[ext_resource type="Material" path="res://assets/materials/building_roof.tres" id="6_roof"]
+[ext_resource type="Material" path="res://assets/materials/ashwood_main_street_concrete.tres" id="7_concrete"]
+[ext_resource type="PackedScene" path="res://assets/third_party/interiors/pharmacy/poly_haven/industrial_wall_lamp/industrial_wall_lamp_1k.gltf" id="8_lamp"]
+[ext_resource type="PackedScene" path="res://assets/third_party/interiors/diner/poly_haven/standing_chalkboard_01/standing_chalkboard_01_1k.gltf" id="9_chalkboard"]
 
-[sub_resource type="BoxMesh" id="WallMesh"]
-material = ExtResource("1_wall")
+[sub_resource type="BoxMesh" id="BrickMesh"]
+material = ExtResource("1_brick")
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pv1m1"]
-albedo_texture = ExtResource("2_8rvjd")
-roughness_texture = ExtResource("3_8fsd2")
-roughness_texture_channel = 1
-normal_enabled = true
-normal_texture = ExtResource("4_cg3lo")
-ao_enabled = true
-ao_texture = ExtResource("3_8fsd2")
-uv1_scale = Vector3(40, 20, 6)
+[sub_resource type="BoxMesh" id="RedMesh"]
+material = ExtResource("2_red")
 
-[sub_resource type="BoxShape3D" id="FrontHalfShape"]
-size = Vector3(0.2, 3.4, 5.1)
+[sub_resource type="BoxMesh" id="CreamMesh"]
+material = ExtResource("3_cream")
 
-[sub_resource type="BoxShape3D" id="DoorHeaderShape"]
-size = Vector3(0.2, 1.2, 1.6)
+[sub_resource type="BoxMesh" id="ChromeMesh"]
+material = ExtResource("4_chrome")
 
-[sub_resource type="BoxShape3D" id="BackShape"]
-size = Vector3(0.2, 3.4, 12)
+[sub_resource type="BoxMesh" id="GlassMesh"]
+material = ExtResource("5_glass")
 
-[sub_resource type="BoxShape3D" id="SideShape"]
-size = Vector3(8, 3.4, 0.2)
+[sub_resource type="BoxMesh" id="ConcreteMesh"]
+material = ExtResource("7_concrete")
 
 [sub_resource type="BoxMesh" id="RoofMesh"]
-material = ExtResource("2_roof")
-size = Vector3(8.4, 0.25, 12.4)
+material = ExtResource("6_roof")
+size = Vector3(8.4, 0.24, 12.4)
+
+[sub_resource type="BoxShape3D" id="BackShape"]
+size = Vector3(0.2, 3.8, 12)
+
+[sub_resource type="BoxShape3D" id="SideShape"]
+size = Vector3(8, 3.8, 0.2)
 
 [sub_resource type="BoxShape3D" id="RoofShape"]
-size = Vector3(8.4, 0.25, 12.4)
+size = Vector3(8.4, 0.24, 12.4)
 
-[sub_resource type="StandardMaterial3D" id="GlassMaterial"]
-transparency = 1
-albedo_color = Color(0.11, 0.2, 0.2, 0.68)
-metallic = 0.12
-roughness = 0.3
+[sub_resource type="BoxShape3D" id="NorthSillShape"]
+size = Vector3(0.2, 0.72, 3.7)
 
-[sub_resource type="BoxMesh" id="WindowMesh"]
-material = SubResource("GlassMaterial")
-size = Vector3(0.08, 1.35, 2.1)
+[sub_resource type="BoxShape3D" id="SouthSillShape"]
+size = Vector3(0.2, 0.72, 5.4)
 
-[sub_resource type="BoxMesh" id="FixtureMesh"]
-material = ExtResource("2_fixture")
+[sub_resource type="BoxShape3D" id="HeaderShape"]
+size = Vector3(0.2, 1.1, 12)
 
-[node name="DinerExterior" type="StaticBody3D" unique_id=910475145]
+[sub_resource type="BoxShape3D" id="PierShape"]
+size = Vector3(0.2, 2.0, 0.22)
 
-[node name="FrontNorth" type="MeshInstance3D" parent="." unique_id=672910815]
-transform = Transform3D(0.2, 0, 0, 0, 3.4, 0, 0, 0, 5.1, -4, 1.7, -3.45)
-mesh = SubResource("WallMesh")
-surface_material_override/0 = SubResource("StandardMaterial3D_pv1m1")
+[sub_resource type="BoxShape3D" id="NorthWindowShape"]
+size = Vector3(0.08, 1.95, 3.62)
 
-[node name="FrontNorthCollision" type="CollisionShape3D" parent="." unique_id=1955300815]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 1.7, -3.45)
-shape = SubResource("FrontHalfShape")
+[sub_resource type="BoxShape3D" id="SouthWindowShape"]
+size = Vector3(0.08, 1.95, 5.32)
 
-[node name="FrontSouth" type="MeshInstance3D" parent="." unique_id=1266857771]
-transform = Transform3D(0.2, 0, 0, 0, 3.4, 0, 0, 0, 5.1, -4, 1.7, 3.45)
-mesh = SubResource("WallMesh")
-surface_material_override/0 = SubResource("StandardMaterial3D_pv1m1")
+[node name="DinerExterior" type="StaticBody3D"]
 
-[node name="FrontSouthCollision" type="CollisionShape3D" parent="." unique_id=495730626]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 1.7, 3.45)
-shape = SubResource("FrontHalfShape")
+[node name="Shell" type="Node3D" parent="."]
 
-[node name="DoorHeader" type="MeshInstance3D" parent="." unique_id=140962477]
-transform = Transform3D(0.2, 0, 0, 0, 1.2, 0, 0, 0, 1.6, -4, 2.8, 0)
-mesh = SubResource("WallMesh")
-surface_material_override/0 = SubResource("StandardMaterial3D_pv1m1")
+[node name="RearWall" type="MeshInstance3D" parent="Shell"]
+position = Vector3(4, 1.9, 0)
+scale = Vector3(0.2, 3.8, 12)
+mesh = SubResource("BrickMesh")
 
-[node name="DoorHeaderCollision" type="CollisionShape3D" parent="." unique_id=1505531079]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 2.8, 0)
-shape = SubResource("DoorHeaderShape")
+[node name="NorthWall" type="MeshInstance3D" parent="Shell"]
+position = Vector3(0, 1.9, -6)
+scale = Vector3(8, 3.8, 0.2)
+mesh = SubResource("BrickMesh")
 
-[node name="BackWall" type="MeshInstance3D" parent="." unique_id=768436611]
-transform = Transform3D(0.2, 0, 0, 0, 3.4, 0, 0, 0, 12, 4, 1.7, 0)
-mesh = SubResource("WallMesh")
-surface_material_override/0 = SubResource("StandardMaterial3D_pv1m1")
+[node name="SouthWall" type="MeshInstance3D" parent="Shell"]
+position = Vector3(0, 1.9, 6)
+scale = Vector3(8, 3.8, 0.2)
+mesh = SubResource("BrickMesh")
 
-[node name="BackWallCollision" type="CollisionShape3D" parent="." unique_id=2104748049]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 1.7, 0)
-shape = SubResource("BackShape")
+[node name="FrontNorthSill" type="MeshInstance3D" parent="Shell"]
+position = Vector3(-4, 0.36, -3.75)
+scale = Vector3(0.2, 0.72, 3.7)
+mesh = SubResource("BrickMesh")
 
-[node name="NorthWall" type="MeshInstance3D" parent="." unique_id=1914951168]
-transform = Transform3D(8, 0, 0, 0, 3.4, 0, 0, 0, 0.2, 0, 1.7, -6)
-mesh = SubResource("WallMesh")
-surface_material_override/0 = SubResource("StandardMaterial3D_pv1m1")
+[node name="FrontSouthSill" type="MeshInstance3D" parent="Shell"]
+position = Vector3(-4, 0.36, 2.85)
+scale = Vector3(0.2, 0.72, 5.4)
+mesh = SubResource("BrickMesh")
 
-[node name="NorthWallCollision" type="CollisionShape3D" parent="." unique_id=766899455]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, -6)
-shape = SubResource("SideShape")
+[node name="FrontHeader" type="MeshInstance3D" parent="Shell"]
+position = Vector3(-4, 3.25, 0)
+scale = Vector3(0.2, 1.1, 12)
+mesh = SubResource("BrickMesh")
 
-[node name="SouthWall" type="MeshInstance3D" parent="." unique_id=488907734]
-transform = Transform3D(8, 0, 0, 0, 3.4, 0, 0, 0, 0.2, 0, 1.7, 6)
-mesh = SubResource("WallMesh")
-surface_material_override/0 = SubResource("StandardMaterial3D_pv1m1")
+[node name="DoorPierNorth" type="MeshInstance3D" parent="Shell"]
+position = Vector3(-4, 1.72, -1.82)
+scale = Vector3(0.2, 2.72, 0.22)
+mesh = SubResource("CreamMesh")
 
-[node name="SouthWallCollision" type="CollisionShape3D" parent="." unique_id=2008843893]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 6)
-shape = SubResource("SideShape")
+[node name="DoorPierSouth" type="MeshInstance3D" parent="Shell"]
+position = Vector3(-4, 1.72, 0.18)
+scale = Vector3(0.2, 2.72, 0.22)
+mesh = SubResource("CreamMesh")
 
-[node name="Roof" type="MeshInstance3D" parent="." unique_id=1101446220]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.52, 0)
+[node name="Roof" type="MeshInstance3D" parent="Shell"]
+position = Vector3(0, 3.94, 0)
 mesh = SubResource("RoofMesh")
 
+[node name="ParapetFront" type="MeshInstance3D" parent="Shell"]
+position = Vector3(-4, 4.16, 0)
+scale = Vector3(0.28, 0.48, 12.2)
+mesh = SubResource("BrickMesh")
+
+[node name="ParapetRear" type="MeshInstance3D" parent="Shell"]
+position = Vector3(4, 4.12, 0)
+scale = Vector3(0.28, 0.4, 12.2)
+mesh = SubResource("BrickMesh")
+
+[node name="ParapetNorth" type="MeshInstance3D" parent="Shell"]
+position = Vector3(0, 4.12, -6)
+scale = Vector3(8.2, 0.4, 0.28)
+mesh = SubResource("BrickMesh")
+
+[node name="ParapetSouth" type="MeshInstance3D" parent="Shell"]
+position = Vector3(0, 4.12, 6)
+scale = Vector3(8.2, 0.4, 0.28)
+mesh = SubResource("BrickMesh")
+
+[node name="ParapetChromeCap" type="MeshInstance3D" parent="Shell"]
+position = Vector3(-4.18, 4.42, 0)
+scale = Vector3(0.18, 0.08, 12.38)
+mesh = SubResource("ChromeMesh")
+
+[node name="RearWallCollision" type="CollisionShape3D" parent="."]
+position = Vector3(4, 1.9, 0)
+shape = SubResource("BackShape")
+
+[node name="NorthWallCollision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 1.9, -6)
+shape = SubResource("SideShape")
+
+[node name="SouthWallCollision" type="CollisionShape3D" parent="."]
+position = Vector3(0, 1.9, 6)
+shape = SubResource("SideShape")
+
+[node name="FrontNorthSillCollision" type="CollisionShape3D" parent="."]
+position = Vector3(-4, 0.36, -3.75)
+shape = SubResource("NorthSillShape")
+
+[node name="FrontSouthSillCollision" type="CollisionShape3D" parent="."]
+position = Vector3(-4, 0.36, 2.85)
+shape = SubResource("SouthSillShape")
+
+[node name="FrontHeaderCollision" type="CollisionShape3D" parent="."]
+position = Vector3(-4, 3.25, 0)
+shape = SubResource("HeaderShape")
+
+[node name="DoorPierNorthCollision" type="CollisionShape3D" parent="."]
+position = Vector3(-4, 1.72, -1.82)
+shape = SubResource("PierShape")
+
+[node name="DoorPierSouthCollision" type="CollisionShape3D" parent="."]
+position = Vector3(-4, 1.72, 0.18)
+shape = SubResource("PierShape")
+
 [node name="RoofCollision" type="CollisionShape3D" parent="."]
-position = Vector3(0, 3.52, 0)
+position = Vector3(0, 3.94, 0)
 shape = SubResource("RoofShape")
 
-[node name="FrontWindowNorth" type="MeshInstance3D" parent="." unique_id=1086758544]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.12, 1.55, -3.25)
-mesh = SubResource("WindowMesh")
+[node name="StorefrontGlass" type="Node3D" parent="."]
 
-[node name="FrontWindowSouth" type="MeshInstance3D" parent="." unique_id=1386314787]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.12, 1.55, 3.25)
-mesh = SubResource("WindowMesh")
+[node name="NorthWindow" type="MeshInstance3D" parent="StorefrontGlass"]
+position = Vector3(-4.11, 1.7, -3.75)
+scale = Vector3(0.06, 1.95, 3.62)
+mesh = SubResource("GlassMesh")
 
-[node name="SignBacking" type="MeshInstance3D" parent="." unique_id=1937529373]
-transform = Transform3D(0.18, 0, 0, 0, 1.05, 0, 0, 0, 5.2, -4.15, 3.6, 0)
-mesh = SubResource("FixtureMesh")
+[node name="SouthWindow" type="MeshInstance3D" parent="StorefrontGlass"]
+position = Vector3(-4.11, 1.7, 2.85)
+scale = Vector3(0.06, 1.95, 5.32)
+mesh = SubResource("GlassMesh")
 
-[node name="DinerSign" type="Label3D" parent="." unique_id=1467038917]
-transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -4.28, 3.6, 0)
-modulate = Color(0.9, 0.74, 0.4, 1)
-text = "ASHWOOD DINER"
-font_size = 38
-outline_size = 6
+[node name="NorthWindowCollision" type="CollisionShape3D" parent="."]
+position = Vector3(-4.11, 1.7, -3.75)
+shape = SubResource("NorthWindowShape")
+
+[node name="SouthWindowCollision" type="CollisionShape3D" parent="."]
+position = Vector3(-4.11, 1.7, 2.85)
+shape = SubResource("SouthWindowShape")
+
+[node name="Frames" type="Node3D" parent="StorefrontGlass"]
+
+[node name="NorthTop" type="MeshInstance3D" parent="StorefrontGlass/Frames"]
+position = Vector3(-4.15, 2.71, -3.75)
+scale = Vector3(0.12, 0.1, 3.85)
+mesh = SubResource("ChromeMesh")
+
+[node name="NorthBottom" type="MeshInstance3D" parent="StorefrontGlass/Frames"]
+position = Vector3(-4.15, 0.68, -3.75)
+scale = Vector3(0.12, 0.1, 3.85)
+mesh = SubResource("ChromeMesh")
+
+[node name="NorthOuter" type="MeshInstance3D" parent="StorefrontGlass/Frames"]
+position = Vector3(-4.15, 1.7, -5.65)
+scale = Vector3(0.12, 2.12, 0.1)
+mesh = SubResource("ChromeMesh")
+
+[node name="NorthInner" type="MeshInstance3D" parent="StorefrontGlass/Frames"]
+position = Vector3(-4.15, 1.7, -1.85)
+scale = Vector3(0.12, 2.12, 0.1)
+mesh = SubResource("ChromeMesh")
+
+[node name="NorthMullion" type="MeshInstance3D" parent="StorefrontGlass/Frames"]
+position = Vector3(-4.15, 1.7, -3.75)
+scale = Vector3(0.12, 2.02, 0.07)
+mesh = SubResource("ChromeMesh")
+
+[node name="SouthTop" type="MeshInstance3D" parent="StorefrontGlass/Frames"]
+position = Vector3(-4.15, 2.71, 2.85)
+scale = Vector3(0.12, 0.1, 5.55)
+mesh = SubResource("ChromeMesh")
+
+[node name="SouthBottom" type="MeshInstance3D" parent="StorefrontGlass/Frames"]
+position = Vector3(-4.15, 0.68, 2.85)
+scale = Vector3(0.12, 0.1, 5.55)
+mesh = SubResource("ChromeMesh")
+
+[node name="SouthOuter" type="MeshInstance3D" parent="StorefrontGlass/Frames"]
+position = Vector3(-4.15, 1.7, 5.6)
+scale = Vector3(0.12, 2.12, 0.1)
+mesh = SubResource("ChromeMesh")
+
+[node name="SouthInner" type="MeshInstance3D" parent="StorefrontGlass/Frames"]
+position = Vector3(-4.15, 1.7, 0.1)
+scale = Vector3(0.12, 2.12, 0.1)
+mesh = SubResource("ChromeMesh")
+
+[node name="SouthMullionA" type="MeshInstance3D" parent="StorefrontGlass/Frames"]
+position = Vector3(-4.15, 1.7, 1.95)
+scale = Vector3(0.12, 2.02, 0.07)
+mesh = SubResource("ChromeMesh")
+
+[node name="SouthMullionB" type="MeshInstance3D" parent="StorefrontGlass/Frames"]
+position = Vector3(-4.15, 1.7, 3.75)
+scale = Vector3(0.12, 2.02, 0.07)
+mesh = SubResource("ChromeMesh")
+
+[node name="DoorFrameNorth" type="MeshInstance3D" parent="StorefrontGlass/Frames"]
+position = Vector3(-4.15, 1.68, -1.74)
+scale = Vector3(0.12, 2.1, 0.12)
+mesh = SubResource("ChromeMesh")
+
+[node name="DoorFrameSouth" type="MeshInstance3D" parent="StorefrontGlass/Frames"]
+position = Vector3(-4.15, 1.68, 0.14)
+scale = Vector3(0.12, 2.1, 0.12)
+mesh = SubResource("ChromeMesh")
+
+[node name="DoorFrameTop" type="MeshInstance3D" parent="StorefrontGlass/Frames"]
+position = Vector3(-4.15, 2.69, -0.8)
+scale = Vector3(0.12, 0.12, 2.0)
+mesh = SubResource("ChromeMesh")
+
+[node name="Canopy" type="Node3D" parent="."]
+
+[node name="WeatheredRedTop" type="MeshInstance3D" parent="Canopy"]
+position = Vector3(-4.48, 2.78, 0)
+rotation = Vector3(0, 0, 0.12)
+scale = Vector3(0.9, 0.1, 11.45)
+mesh = SubResource("RedMesh")
+
+[node name="CreamLip" type="MeshInstance3D" parent="Canopy"]
+position = Vector3(-4.92, 2.63, 0)
+scale = Vector3(0.08, 0.32, 11.45)
+mesh = SubResource("CreamMesh")
+
+[node name="NorthRib" type="MeshInstance3D" parent="Canopy"]
+position = Vector3(-4.52, 2.76, -5.35)
+rotation = Vector3(0, 0, 0.12)
+scale = Vector3(1.0, 0.12, 0.07)
+mesh = SubResource("ChromeMesh")
+
+[node name="CenterNorthRib" type="MeshInstance3D" parent="Canopy"]
+position = Vector3(-4.52, 2.76, -2.0)
+rotation = Vector3(0, 0, 0.12)
+scale = Vector3(1.0, 0.12, 0.07)
+mesh = SubResource("ChromeMesh")
+
+[node name="CenterSouthRib" type="MeshInstance3D" parent="Canopy"]
+position = Vector3(-4.52, 2.76, 2.0)
+rotation = Vector3(0, 0, 0.12)
+scale = Vector3(1.0, 0.12, 0.07)
+mesh = SubResource("ChromeMesh")
+
+[node name="SouthRib" type="MeshInstance3D" parent="Canopy"]
+position = Vector3(-4.52, 2.76, 5.35)
+rotation = Vector3(0, 0, 0.12)
+scale = Vector3(1.0, 0.12, 0.07)
+mesh = SubResource("ChromeMesh")
+
+[node name="Identity" type="Node3D" parent="."]
+
+[node name="SignBand" type="MeshInstance3D" parent="Identity"]
+position = Vector3(-4.18, 3.55, 0)
+rotation = Vector3(0.004, 0, 0.005)
+scale = Vector3(0.16, 0.82, 10.9)
+mesh = SubResource("RedMesh")
+
+[node name="SignChromeTop" type="MeshInstance3D" parent="Identity"]
+position = Vector3(-4.28, 3.98, 0)
+scale = Vector3(0.1, 0.06, 11.05)
+mesh = SubResource("ChromeMesh")
+
+[node name="SignChromeBottom" type="MeshInstance3D" parent="Identity"]
+position = Vector3(-4.28, 3.12, 0)
+scale = Vector3(0.1, 0.06, 11.05)
+mesh = SubResource("ChromeMesh")
+
+[node name="Name" type="Label3D" parent="Identity"]
+position = Vector3(-4.29, 3.63, 0.35)
+rotation = Vector3(0, -1.5707964, 0)
+text = "SILVER SPOON DINER"
+font_size = 82
+outline_size = 9
+modulate = Color(0.96, 0.86, 0.62, 1)
+outline_modulate = Color(0.24, 0.035, 0.028, 1)
+
+[node name="Tagline" type="Label3D" parent="Identity"]
+position = Vector3(-4.3, 3.3, 0.25)
+rotation = Vector3(0, -1.5707964, 0)
+text = "COFFEE  -  PIE  -  HOT MEALS"
+font_size = 30
+outline_size = 5
+modulate = Color(0.9, 0.79, 0.55, 1)
+outline_modulate = Color(0.19, 0.025, 0.02, 1)
+
+[node name="NorthWallLamp" parent="." instance=ExtResource("8_lamp")]
+position = Vector3(-4.28, 3.04, -5.32)
+rotation = Vector3(0, -1.5707964, 0)
+
+[node name="SouthWallLamp" parent="." instance=ExtResource("8_lamp")]
+position = Vector3(-4.28, 3.04, 5.32)
+rotation = Vector3(0, -1.5707964, 0)
+
+[node name="EntryThreshold" type="MeshInstance3D" parent="."]
+position = Vector3(-4.38, 0.035, -0.8)
+scale = Vector3(0.72, 0.07, 1.9)
+mesh = SubResource("ConcreteMesh")
+
+[node name="MenuBoard" parent="." instance=ExtResource("9_chalkboard")]
+position = Vector3(-4.82, 0.01, 4.75)
+rotation = Vector3(0, -1.48, 0)
+scale = Vector3(0.82, 0.82, 0.82)

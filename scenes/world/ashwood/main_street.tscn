@@ -437,9 +437,9 @@ mesh = SubResource("PlotPaintedMesh")
 shape = SubResource("PlotShape")
 disabled = true
 
-[node name="Presentation" parent="Environment" instance=ExtResource("14_presentation")]
+[node name="Presentation" parent="Environment" unique_id=2085646554 instance=ExtResource("14_presentation")]
 
-[node name="Abandonment" parent="Environment" instance=ExtResource("16_abandonment")]
+[node name="Abandonment" parent="Environment" unique_id=1825601162 instance=ExtResource("16_abandonment")]
 
 [node name="BakeryRoot" parent="." unique_id=1602727733 instance=ExtResource("3_bakery")]
 transform = Transform3D(3.1391647e-07, 0, -1, 0, 1, 0, 1, 0, 3.1391647e-07, -59.5, 0.005668834, -12.021713)
