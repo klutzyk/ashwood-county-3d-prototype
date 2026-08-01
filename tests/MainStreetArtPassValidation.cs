@@ -45,8 +45,8 @@ public partial class MainStreetArtPassValidation : Node
 		Require(dressing.GetParent() == world.GetNode("Environment"),
 			"dense apocalypse dressing is integrated under the environment hierarchy");
 		Require(world.HasNode("Gameplay/Player") &&
-			world.GetNode("Gameplay/Zombies").GetChildCount() == 2,
-			"player and zombie composition remains unchanged");
+			world.GetNode("Gameplay/Zombies").GetChildCount() == 5,
+			"player and five-zombie supply-run composition is present");
 		Require(!abandonment.FindChildren("*", "Script", true, false).Any(),
 			"art pass adds no gameplay scripts");
 	}
@@ -118,8 +118,8 @@ public partial class MainStreetArtPassValidation : Node
 			Require(storefronts.HasNode(business), $"{business} has a unique storefront");
 
 		Node vehicles = presentation.GetNode("Vehicles");
-		Require(vehicles.GetChildCount() == 6,
-			"parking remains restrained rather than filling every space");
+		Require(vehicles.GetChildCount() == 7,
+			"parking stays restrained while the bakery delivery van supports the route story");
 		HashSet<string> vehicleScenes = vehicles.GetChildren()
 			.OfType<Node>()
 			.Select(vehicle => vehicle.SceneFilePath)

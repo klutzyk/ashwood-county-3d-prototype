@@ -1,7 +1,6 @@
 #nullable enable
 
 using System;
-using System.Linq;
 using Godot;
 using AshwoodCounty3DPrototype.Interactions;
 using AshwoodCounty3DPrototype.Save;
@@ -36,21 +35,28 @@ public partial class MainStreetPhase1Validation : Node
 
 			SaveGameManager.DeleteSaveFile(SavePath);
 			GD.Print("MAIN_STREET_PHASE1_VALIDATION: PASS");
-			GetTree().Quit(0);
+			QuitAfterManagedCleanup(0);
 		}
 		catch (Exception exception)
 		{
 			SaveGameManager.DeleteSaveFile(SavePath);
 			GD.PushError($"MAIN_STREET_PHASE1_VALIDATION: FAIL - {exception.Message}");
-			GetTree().Quit(1);
+			QuitAfterManagedCleanup(1);
 		}
+	}
+
+	private void QuitAfterManagedCleanup(int exitCode)
+	{
+		GC.Collect();
+		GC.WaitForPendingFinalizers();
+		GetTree().Quit(exitCode);
 	}
 
 	private static void ValidateStreetProfile(Node3D world)
 	{
 		BoxMesh road = (BoxMesh)world.GetNode<MeshInstance3D>(
 			"Environment/RoadSurface/Mesh").Mesh;
-		Require(IsNear(road.Size.X, 200.0f), "Main Street is 200 metres long");
+		Require(IsNear(road.Size.X, 220.0f), "Main Street is 220 metres long");
 		Require(IsNear(road.Size.Z, 11.6f),
 			"road surface includes two 3.5 m lanes and two 2.3 m parking lanes");
 
@@ -81,17 +87,19 @@ public partial class MainStreetPhase1Validation : Node
 				"res://assets/environment/buildings/ashwood/bakery_open.glb",
 			"bakery uses the final open asset");
 		Require(IsNear(bakery.GlobalPosition.X, -59.5f) &&
-			IsNear(bakery.GlobalPosition.Z, -11.2f) &&
+			IsNear(bakery.GlobalPosition.Z, -12.021713f) &&
 			IsNear(bakery.RotationDegrees.Y, -90.0f, 0.1f),
 			"bakery occupies the documented west-end north corner lot");
 
 		Aabb bounds = GetCombinedBounds(exterior);
-		Require(IsNear(bounds.Size.X, 10.0f, 0.08f) &&
+		Require(IsNear(bounds.Size.X, 9.02f, 0.08f) &&
 			IsNear(bounds.Size.Y, 6.54f, 0.08f) &&
 			IsNear(bounds.Size.Z, 9.02f, 0.08f),
-			"rotated bakery retains believable real-world dimensions");
-		Require(IsNear(bounds.Position.Y, 0.2f, 0.03f),
-			"bakery exterior is grounded to sidewalk height");
+			$"rotated bakery retains believable real-world dimensions " +
+			$"(actual {bounds.Size})");
+		Require(IsNear(bounds.Position.Y, 0.0f, 0.03f),
+			$"bakery exterior is grounded to street grade " +
+			$"(actual {bounds.Position.Y})");
 	}
 
 	private static void ValidatePlayerSpawn(Node3D world)
@@ -123,11 +131,12 @@ public partial class MainStreetPhase1Validation : Node
 	private static void ValidateDaylight(Node3D world)
 	{
 		WorldTime time = world.GetNode<WorldTime>("Gameplay/WorldTime");
-		Require(IsNear(time.StartingHour, 9.0f) &&
-			IsNear(time.DayAmbientEnergy, 1.0f) &&
-			IsNear(time.DaySkyEnergy, 0.9f) &&
-			IsNear(time.DayDirectionalEnergy, 0.85f),
-			"Main Street starts with clear morning validation lighting");
+		Require(IsNear(time.StartingHour, 16.75f) &&
+			IsNear(time.DayAmbientEnergy, 1.02f) &&
+			IsNear(time.DaySkyEnergy, 0.95f) &&
+			IsNear(time.DayDirectionalEnergy, 1.2f) &&
+			IsNear(time.GoldenHourColorStrength, 1.0f),
+			"Main Street starts with sustained golden-hour lighting");
 	}
 
 	private static async System.Threading.Tasks.Task ValidateDoor(Node3D world)
@@ -148,9 +157,10 @@ public partial class MainStreetPhase1Validation : Node
 			IsNear(closedBounds.Size.Y, 1.844f, 0.02f),
 			"closed shop door matches the imported doorway dimensions");
 		Require(IsNear(closedCentre.X, -59.608f, 0.03f) &&
-			IsNear(closedBounds.Position.Y, 0.942f, 0.03f) &&
-			IsNear(closedCentre.Z, -8.8f, 0.03f),
-			"closed shop door fills the real bakery doorway");
+			IsNear(closedBounds.Position.Y, 0.748f, 0.03f) &&
+			IsNear(closedCentre.Z, -9.622f, 0.03f),
+			$"closed shop door fills the real bakery doorway " +
+			$"(centre {closedCentre}, minimum Y {closedBounds.Position.Y})");
 		Require(IsNear(pivot.GlobalPosition.X, closedBounds.Position.X, 0.02f),
 			"door hinge is on the physical left edge");
 
@@ -166,7 +176,7 @@ public partial class MainStreetPhase1Validation : Node
 			-100.0f,
 			0.5f), "door rotates around its hinge");
 		Aabb openBounds = GetCombinedBounds(doorModel);
-		Require(openBounds.End.Z > -7.9f,
+		Require(openBounds.End.Z > -8.72f,
 			"open door swings outward clear of the storefront wall");
 		controller.ToggleDoor();
 		await controller.ToSignal(
@@ -193,9 +203,16 @@ public partial class MainStreetPhase1Validation : Node
 			gameplay.HasNode("SaveGameManager"),
 			"HUD and save manager are reused");
 
-		int zombieCount = gameplay.GetNode("Zombies").GetChildren()
-			.Count(node => node is PrototypeZombie);
-		Require(zombieCount == 2, "exactly two zombies are placed");
+		Node zombies = gameplay.GetNode("Zombies");
+		int zombieCount = 0;
+		for (int childIndex = 0; childIndex < zombies.GetChildCount(); childIndex++)
+		{
+			if (zombies.GetChild(childIndex) is PrototypeZombie)
+			{
+				zombieCount++;
+			}
+		}
+		Require(zombieCount == 5, "exactly five zombies are placed");
 	}
 
 	private static void ValidateNavigation(Node3D world)
@@ -213,8 +230,10 @@ public partial class MainStreetPhase1Validation : Node
 	{
 		SaveGameManager save = world.GetNode<SaveGameManager>(
 			"Gameplay/SaveGameManager");
-		Require(save.MinimumContainerCount == 0 && save.MinimumZombieCount == 2,
-			"version-1 save validation is configured for this focused slice");
+		save.SaveFilePath = SavePath;
+		Require(save.MinimumContainerCount == 4 && save.MinimumZombieCount == 5 &&
+			save.PersistenceRootPath.ToString() == "../..",
+			"version-1 save validation covers the production persistence root");
 		Require(save.SaveGame(), "Main Street state saves through the existing manager");
 		Require(save.LoadGame(), "Main Street state loads through the existing manager");
 	}
@@ -223,15 +242,28 @@ public partial class MainStreetPhase1Validation : Node
 	{
 		bool found = false;
 		Aabb combined = default;
-		foreach (MeshInstance3D mesh in root.FindChildren(
-			"*", "MeshInstance3D", true, false).OfType<MeshInstance3D>())
-		{
-			Aabb bounds = mesh.GlobalTransform * mesh.GetAabb();
-			combined = found ? combined.Merge(bounds) : bounds;
-			found = true;
-		}
+		AccumulateMeshBounds(root, ref found, ref combined);
 		Require(found, "expected at least one bakery mesh");
 		return combined;
+	}
+
+	private static void AccumulateMeshBounds(
+		Node root,
+		ref bool found,
+		ref Aabb combined)
+	{
+		for (int childIndex = 0; childIndex < root.GetChildCount(); childIndex++)
+		{
+			Node child = root.GetChild(childIndex);
+			if (child is MeshInstance3D mesh)
+			{
+				Aabb bounds = mesh.GlobalTransform * mesh.GetAabb();
+				combined = found ? combined.Merge(bounds) : bounds;
+				found = true;
+			}
+
+			AccumulateMeshBounds(child, ref found, ref combined);
+		}
 	}
 
 	private static bool IsNear(float value, float expected, float tolerance = 0.01f)

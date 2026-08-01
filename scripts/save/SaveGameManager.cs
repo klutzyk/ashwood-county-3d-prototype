@@ -38,6 +38,7 @@ public partial class SaveGameManager : Node
 	[Export] public NodePath SuppliesObjectivePath { get; set; } =
 		new("../ServiceStationSuppliesObjective");
 	[Export] public NodePath WorldTimePath { get; set; } = new("../WorldTime");
+	[Export] public NodePath PersistenceRootPath { get; set; } = new("..");
 
 	private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = true };
 	private static readonly IReadOnlyDictionary<string, string> ItemResourcePaths =
@@ -85,7 +86,10 @@ public partial class SaveGameManager : Node
 		LoadGame();
 	}
 
-	public static bool HasValidSaveFile(string saveFilePath = DefaultSaveFilePath)
+	public static bool HasValidSaveFile(
+		string saveFilePath = DefaultSaveFilePath,
+		int expectedContainerCount = -1,
+		int expectedZombieCount = -1)
 	{
 		if (!GodotFileAccess.FileExists(saveFilePath))
 		{
@@ -99,7 +103,10 @@ public partial class SaveGameManager : Node
 			SaveGameDataV1? data = file is null
 				? null
 				: JsonSerializer.Deserialize<SaveGameDataV1>(file.GetAsText(), JsonOptions);
-			return IsStructurallyValid(data);
+			return IsStructurallyValid(
+				data,
+				expectedContainerCount,
+				expectedZombieCount);
 		}
 		catch (Exception)
 		{
@@ -128,7 +135,10 @@ public partial class SaveGameManager : Node
 		return success;
 	}
 
-	private static bool IsStructurallyValid(SaveGameDataV1? data)
+	private static bool IsStructurallyValid(
+		SaveGameDataV1? data,
+		int expectedContainerCount = -1,
+		int expectedZombieCount = -1)
 	{
 		if (data is null || data.Version != SaveGameDataV1.CurrentVersion ||
 			data.PlayerTransform?.Position is null || data.PlayerTransform.Rotation is null ||
@@ -147,6 +157,10 @@ public partial class SaveGameManager : Node
 			!IsFinite(data.PlayerTransform.Rotation) ||
 			data.Containers.Count < DefaultVersionOneMinimumContainerCount ||
 			data.Zombies.Count < DefaultVersionOneMinimumZombieCount ||
+			(expectedContainerCount >= 0 &&
+				data.Containers.Count != expectedContainerCount) ||
+			(expectedZombieCount >= 0 &&
+				data.Zombies.Count != expectedZombieCount) ||
 			!HasValidItemStacks(data.PlayerInventory))
 		{
 			return false;
@@ -284,7 +298,7 @@ public partial class SaveGameManager : Node
 
 	private SaveGameDataV1 CaptureState()
 	{
-		Node worldRoot = GetParent();
+		Node worldRoot = GetPersistenceRoot();
 		SaveGameDataV1 data = new()
 		{
 			PlayerTransform = new TransformSaveData
@@ -352,13 +366,13 @@ public partial class SaveGameManager : Node
 			return false;
 		}
 
-		Node worldRoot = GetParent();
+		Node worldRoot = GetPersistenceRoot();
 		List<SearchableContainer> existingContainers = GetContainers();
 		List<PrototypeZombie> existingZombies = GetZombies();
-		if (data.Containers.Count < MinimumContainerCount ||
-			data.Containers.Count > existingContainers.Count ||
-			data.Zombies.Count < MinimumZombieCount ||
-			data.Zombies.Count > existingZombies.Count)
+		if (existingContainers.Count < MinimumContainerCount ||
+			existingZombies.Count < MinimumZombieCount ||
+			data.Containers.Count != existingContainers.Count ||
+			data.Zombies.Count != existingZombies.Count)
 		{
 			return false;
 		}
@@ -494,20 +508,27 @@ public partial class SaveGameManager : Node
 
 	private List<SearchableContainer> GetContainers()
 	{
+		Node persistenceRoot = GetPersistenceRoot();
 		return GetTree().GetNodesInGroup(SearchableContainer.GroupName)
 			.OfType<SearchableContainer>()
-			.Where(node => GetParent().IsAncestorOf(node))
+			.Where(node => persistenceRoot.IsAncestorOf(node))
 			.OrderBy(node => node.GetPath().ToString(), StringComparer.Ordinal)
 			.ToList();
 	}
 
 	private List<PrototypeZombie> GetZombies()
 	{
+		Node persistenceRoot = GetPersistenceRoot();
 		return GetTree().GetNodesInGroup(PrototypeZombie.ZombieGroupName)
 			.OfType<PrototypeZombie>()
-			.Where(node => GetParent().IsAncestorOf(node))
+			.Where(node => persistenceRoot.IsAncestorOf(node))
 			.OrderBy(node => node.GetPath().ToString(), StringComparer.Ordinal)
 			.ToList();
+	}
+
+	private Node GetPersistenceRoot()
+	{
+		return GetNode(PersistenceRootPath);
 	}
 
 	private static bool IsFinite(float value) => !float.IsNaN(value) && !float.IsInfinity(value);

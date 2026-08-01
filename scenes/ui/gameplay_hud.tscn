@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3]
+[gd_scene load_steps=16 format=3]
 
 [ext_resource type="Script" path="res://scripts/ui/PlayerStatusDisplay.cs" id="1_status"]
 [ext_resource type="Script" path="res://scripts/ui/PerformanceDisplay.cs" id="2_fps"]
@@ -7,6 +7,8 @@
 [ext_resource type="Script" path="res://scripts/ui/InventoryDisplay.cs" id="5_inventory"]
 [ext_resource type="PackedScene" path="res://scenes/ui/pause_menu.tscn" id="6_pause"]
 [ext_resource type="Script" path="res://scripts/ui/ContainerInventoryDisplay.cs" id="7_container"]
+[ext_resource type="Script" path="res://scripts/ui/ObjectiveDisplay.cs" id="8_objective"]
+[ext_resource type="Script" path="res://scripts/ui/GameplayNotificationDisplay.cs" id="9_notifications"]
 
 [sub_resource type="StyleBoxFlat" id="Panel"]
 bg_color = Color(0.02, 0.03, 0.04, 0.78)
@@ -63,6 +65,7 @@ vertical_alignment = 1
 script = ExtResource("3_clock")
 
 [node name="FpsLabel" type="Label" parent="."]
+visible = false
 offset_left = 12.0
 offset_top = 12.0
 offset_right = 112.0
@@ -73,6 +76,44 @@ text = "FPS: --"
 horizontal_alignment = 1
 vertical_alignment = 1
 script = ExtResource("2_fps")
+
+[node name="GameplayNotifications" type="Label" parent="."]
+visible = false
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 300.0
+offset_top = 20.0
+offset_right = -300.0
+offset_bottom = 66.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("Panel")
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("9_notifications")
+
+[node name="ObjectiveDisplay" type="Control" parent="."]
+offset_left = 28.0
+offset_top = 126.0
+offset_right = 588.0
+offset_bottom = 208.0
+script = ExtResource("8_objective")
+SingleObjectiveMode = true
+
+[node name="ObjectiveText" type="Label" parent="ObjectiveDisplay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.88, 0.9, 0.82, 1)
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("Panel")
+text = "CURRENT OBJECTIVE\nSearch Glen's Bakery for emergency supplies"
+vertical_alignment = 1
+autowrap_mode = 2
+clip_text = true
 
 [node name="HealthLabel" type="Label" parent="."]
 offset_left = 12.0

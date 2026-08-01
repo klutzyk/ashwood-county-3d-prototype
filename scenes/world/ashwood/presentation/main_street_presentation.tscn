@@ -1,6 +1,5 @@
 [gd_scene format=3 uid="uid://d0k8joa8puqmt"]
 
-[ext_resource type="PackedScene" path="res://scenes/world/ashwood/presentation/buildings/historic_brick_storefront.tscn" id="1_store"]
 [ext_resource type="PackedScene" path="res://assets/environment/props/poly_haven_street_lamp.tscn" id="2_light"]
 [ext_resource type="PackedScene" path="res://scenes/world/ashwood/presentation/props/apocalypse_park_bench.tscn" id="3_bench"]
 [ext_resource type="PackedScene" path="res://scenes/world/ashwood/presentation/planter.tscn" id="4_planter"]
@@ -34,6 +33,7 @@
 [ext_resource type="PackedScene" path="res://assets/environment/buildings/AshwoodGrocery/ashwood_grocery.tscn" id="35_grocery"]
 [ext_resource type="PackedScene" path="res://assets/environment/buildings/MillerHardware/miller_hardware.tscn" id="36_hardware"]
 [ext_resource type="PackedScene" path="res://assets/environment/buildings/AshwoodPoliceStation/ashwood_police_station.tscn" id="37_police"]
+[ext_resource type="PackedScene" path="res://scenes/world/ashwood/presentation/props/newspaper_box.tscn" id="38_newspaper"]
 
 [sub_resource type="StandardMaterial3D" id="YellowPaint"]
 albedo_color = Color(0.67, 0.46, 0.08, 1)
@@ -472,6 +472,23 @@ transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 88, 0.2, 18)
 
 [node name="BackgroundBuildings" type="Node3D" parent="." unique_id=994429708]
 
+[node name="NorthBarberInfill" type="Node3D" parent="BackgroundBuildings"]
+position = Vector3(-78.2, 0.2, -8.75)
+
+[node name="Visual" parent="BackgroundBuildings/NorthBarberInfill" instance=ExtResource("25_barber")]
+transform = Transform3D(0, 0, -8.65, 0, 8.65, 0, 8.65, 0, 0, -0.235, -0.2058, -4.3256)
+
+[node name="NorthFloristInfill" type="Node3D" parent="BackgroundBuildings"]
+position = Vector3(-69.6, 0.2, -8.75)
+
+[node name="Visual" parent="BackgroundBuildings/NorthFloristInfill" instance=ExtResource("28_florist")]
+transform = Transform3D(0, 0, -6, 0, 6, 0, 6, 0, 0, 0.0062, 0, -2.8907)
+
+[node name="WestTownEdge" parent="BackgroundBuildings" instance=ExtResource("33_old_building")]
+position = Vector3(-106.5, 0.2, -15)
+rotation_degrees = Vector3(0, 90, 0)
+scale = Vector3(0.02, 0.02, 0.02)
+
 [node name="BusinessSigns" type="Node3D" parent="." unique_id=1778970311]
 
 [node name="Laundromat" type="Label3D" parent="BusinessSigns" unique_id=1825668996]
@@ -540,9 +557,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 94, 0.2, 6.25)
 
 [node name="North01" parent="Trees" unique_id=1788815086 instance=ExtResource("6_tree1")]
 transform = Transform3D(0.8854593, 0, 0.16112663, 0, 0.9, 0, -0.16112663, 0, 0.8854593, -81, 0.2, -8.45)
+visible = false
 
 [node name="North02" parent="Trees" unique_id=411961853 instance=ExtResource("7_tree2")]
 transform = Transform3D(0.71220934, 0, -0.31805313, 0, 0.78, 0, 0.31805313, 0, 0.71220934, -49.5, 0.2, -8.35)
+visible = false
 
 [node name="North03" parent="Trees" unique_id=928933816 instance=ExtResource("6_tree1")]
 transform = Transform3D(0.79543585, 0, 0.66998637, 0, 1.04, 0, -0.66998637, 0, 0.79543585, -34.5, 0.2, -8.52)
@@ -561,9 +580,11 @@ transform = Transform3D(0.9579545, 0, 0.49872154, 0, 1.08, 0, -0.49872154, 0, 0.
 
 [node name="South01" parent="Trees" unique_id=1459949940 instance=ExtResource("7_tree2")]
 transform = Transform3D(0.66917014, 0, 0.43841916, 0, 0.8, 0, -0.43841916, 0, 0.66917014, -81.5, 0.2, 8.4)
+visible = false
 
 [node name="South02" parent="Trees" unique_id=1508466663 instance=ExtResource("6_tree1")]
 transform = Transform3D(0.9017978, 0, -0.32918188, 0, 0.96, 0, 0.32918188, 0, 0.9017978, -52, 0.2, 8.55)
+visible = false
 
 [node name="South03" parent="Trees" unique_id=411079845 instance=ExtResource("7_tree2")]
 transform = Transform3D(0.41219667, 0, 0.61456805, 0, 0.74, 0, -0.61456805, 0, 0.41219667, -35.5, 0.2, 8.38)
@@ -625,6 +646,7 @@ transform = Transform3D(-0.846115, 0, -0.24184577, 0, 0.88, 0, 0.24184577, 0, -0
 transform = Transform3D(-1.0142783, 0, 0.2715502, 0, 1.05, 0, -0.2715502, 0, -1.0142783, 96, 0.2, 8.58)
 
 [node name="TownEdgeTrees" type="Node3D" parent="." unique_id=305136660]
+visible = false
 
 [node name="EastNorthFront" parent="TownEdgeTrees" unique_id=1548483872 instance=ExtResource("6_tree1")]
 transform = Transform3D(1.0762813, 0, 0.40511537, 0, 1.15, 0, -0.40511537, 0, 1.0762813, 104, 0.2, -17)
@@ -774,6 +796,10 @@ transform = Transform3D(0.997564, 0, -0.0697565, 0, 1, 0, 0.0697565, 0, 0.997564
 [node name="DeliveryVan" parent="Vehicles" unique_id=354267551 instance=ExtResource("17_van")]
 transform = Transform3D(-0.999848, 0, 0.0174524, 0, 1, 0, -0.0174524, 0, -0.999848, 89, 0.2, 3.85)
 
+[node name="BakeryDeliveryVan" parent="Vehicles" instance=ExtResource("17_van")]
+position = Vector3(-67.6, 0.2, -3.85)
+rotation_degrees = Vector3(0, -4, 0)
+
 [node name="StreetDetails" type="Node3D" parent="." unique_id=712847829]
 
 [node name="UtilityWest" parent="StreetDetails" unique_id=2139379920 instance=ExtResource("20_utility")]
@@ -781,6 +807,10 @@ transform = Transform3D(0.99280864, 0, 0.119712204, 0, 1, 0, -0.119712204, 0, 0.
 
 [node name="UtilityEast" parent="StreetDetails" unique_id=2142373085 instance=ExtResource("20_utility")]
 transform = Transform3D(-0.9926167, 0, 0.12129328, 0, 1, 0, -0.12129328, 0, -0.9926167, 75.2, 0.2, 8.45)
+
+[node name="BakeryNewspaperBox" parent="StreetDetails" instance=ExtResource("38_newspaper")]
+position = Vector3(-63.4, 0.2, -8.35)
+rotation_degrees = Vector3(0, 180, 0)
 
 [node name="MailboxWestEdge" parent="StreetDetails" unique_id=484195527 instance=ExtResource("21_mailbox")]
 transform = Transform3D(0.99280864, 0, 0.119712204, 0, 1, 0, -0.119712204, 0, 0.99280864, -103, 0, -10.2)

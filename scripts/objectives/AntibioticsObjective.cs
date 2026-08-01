@@ -24,6 +24,8 @@ public partial class AntibioticsObjective : Node
 	public delegate void StateRestoredEventHandler(int state);
 
 	[Export] public NodePath PlayerInventoryPath { get; set; } = new("../Player/Inventory");
+	[Export] public AntibioticsObjectiveState InitialState { get; set; } =
+		AntibioticsObjectiveState.SearchPharmacy;
 
 	public AntibioticsObjectiveState State { get; private set; } = AntibioticsObjectiveState.SearchPharmacy;
 	public string DisplayText => State switch
@@ -38,6 +40,7 @@ public partial class AntibioticsObjective : Node
 	public override void _Ready()
 	{
 		AddToGroup(GroupName);
+		State = InitialState;
 		_playerInventory = GetNode<PlayerInventory>(PlayerInventoryPath);
 		_playerInventory.InventoryChanged += OnInventoryChanged;
 		OnInventoryChanged();

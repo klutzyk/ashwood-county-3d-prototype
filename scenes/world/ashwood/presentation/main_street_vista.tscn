@@ -1,0 +1,190 @@
+[gd_scene load_steps=11 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/environment/nature/main_street_tree_1.tscn" id="1_tree_a"]
+[ext_resource type="PackedScene" path="res://assets/environment/nature/main_street_tree_2.tscn" id="2_tree_b"]
+
+[sub_resource type="StandardMaterial3D" id="FarRidgeMaterial"]
+albedo_color = Color(0.095, 0.13, 0.105, 1)
+roughness = 1.0
+
+[sub_resource type="SphereMesh" id="FarRidgeMesh"]
+material = SubResource("FarRidgeMaterial")
+radius = 1.0
+height = 2.0
+radial_segments = 32
+rings = 12
+
+[sub_resource type="StandardMaterial3D" id="NearRidgeMaterial"]
+albedo_color = Color(0.12, 0.17, 0.125, 1)
+roughness = 1.0
+
+[sub_resource type="SphereMesh" id="NearRidgeMesh"]
+material = SubResource("NearRidgeMaterial")
+radius = 1.0
+height = 2.0
+radial_segments = 32
+rings = 12
+
+[sub_resource type="StandardMaterial3D" id="TowerMaterial"]
+albedo_color = Color(0.2, 0.23, 0.22, 1)
+metallic = 0.72
+roughness = 0.62
+
+[sub_resource type="CylinderMesh" id="TowerLegMesh"]
+material = SubResource("TowerMaterial")
+top_radius = 0.12
+bottom_radius = 0.18
+height = 17.0
+radial_segments = 8
+
+[sub_resource type="CylinderMesh" id="TowerTankMesh"]
+material = SubResource("TowerMaterial")
+top_radius = 3.8
+bottom_radius = 3.8
+height = 4.2
+radial_segments = 24
+
+[sub_resource type="CylinderMesh" id="TowerRoofMesh"]
+material = SubResource("TowerMaterial")
+top_radius = 0.35
+bottom_radius = 4.1
+height = 2.1
+radial_segments = 24
+
+[sub_resource type="TorusMesh" id="TowerRingMesh"]
+material = SubResource("TowerMaterial")
+inner_radius = 4.0
+outer_radius = 4.15
+rings = 32
+ring_segments = 6
+
+[node name="MainStreetVista" type="Node3D"]
+
+[node name="Ridges" type="Node3D" parent="."]
+
+[node name="EastFar" type="MeshInstance3D" parent="Ridges"]
+position = Vector3(245, -8, 4)
+scale = Vector3(92, 20, 84)
+cast_shadow = 0
+mesh = SubResource("FarRidgeMesh")
+
+[node name="EastNear" type="MeshInstance3D" parent="Ridges"]
+position = Vector3(190, -10, -24)
+scale = Vector3(62, 17, 54)
+cast_shadow = 0
+mesh = SubResource("NearRidgeMesh")
+
+[node name="WestFar" type="MeshInstance3D" parent="Ridges"]
+position = Vector3(-245, -9, -6)
+scale = Vector3(96, 21, 88)
+cast_shadow = 0
+mesh = SubResource("FarRidgeMesh")
+
+[node name="WestNear" type="MeshInstance3D" parent="Ridges"]
+position = Vector3(-192, -11, 28)
+scale = Vector3(64, 18, 58)
+cast_shadow = 0
+mesh = SubResource("NearRidgeMesh")
+
+[node name="NorthRidge" type="MeshInstance3D" parent="Ridges"]
+position = Vector3(5, -12, -125)
+scale = Vector3(210, 17, 62)
+cast_shadow = 0
+mesh = SubResource("FarRidgeMesh")
+
+[node name="SouthRidge" type="MeshInstance3D" parent="Ridges"]
+position = Vector3(-10, -12, 125)
+scale = Vector3(215, 18, 64)
+cast_shadow = 0
+mesh = SubResource("FarRidgeMesh")
+
+[node name="EastTreeline" type="Node3D" parent="."]
+
+[node name="Tree01" parent="EastTreeline" instance=ExtResource("1_tree_a")]
+position = Vector3(151, 0.2, -38)
+scale = Vector3(1.6, 1.8, 1.6)
+
+[node name="Tree02" parent="EastTreeline" instance=ExtResource("2_tree_b")]
+position = Vector3(158, 0.2, -24)
+scale = Vector3(1.35, 1.55, 1.35)
+
+[node name="Tree03" parent="EastTreeline" instance=ExtResource("1_tree_a")]
+position = Vector3(166, 0.2, -10)
+scale = Vector3(1.5, 1.65, 1.5)
+
+[node name="Tree04" parent="EastTreeline" instance=ExtResource("2_tree_b")]
+position = Vector3(171, 0.2, 6)
+scale = Vector3(1.45, 1.7, 1.45)
+
+[node name="Tree05" parent="EastTreeline" instance=ExtResource("1_tree_a")]
+position = Vector3(164, 0.2, 24)
+scale = Vector3(1.7, 1.9, 1.7)
+
+[node name="Tree06" parent="EastTreeline" instance=ExtResource("2_tree_b")]
+position = Vector3(154, 0.2, 40)
+scale = Vector3(1.4, 1.6, 1.4)
+
+[node name="WestTreeline" type="Node3D" parent="."]
+
+[node name="Tree01" parent="WestTreeline" instance=ExtResource("2_tree_b")]
+position = Vector3(-154, 0.2, -40)
+scale = Vector3(1.5, 1.7, 1.5)
+
+[node name="Tree02" parent="WestTreeline" instance=ExtResource("1_tree_a")]
+position = Vector3(-164, 0.2, -22)
+scale = Vector3(1.65, 1.85, 1.65)
+
+[node name="Tree03" parent="WestTreeline" instance=ExtResource("2_tree_b")]
+position = Vector3(-171, 0.2, -4)
+scale = Vector3(1.35, 1.55, 1.35)
+
+[node name="Tree04" parent="WestTreeline" instance=ExtResource("1_tree_a")]
+position = Vector3(-166, 0.2, 17)
+scale = Vector3(1.55, 1.75, 1.55)
+
+[node name="Tree05" parent="WestTreeline" instance=ExtResource("2_tree_b")]
+position = Vector3(-157, 0.2, 36)
+scale = Vector3(1.45, 1.65, 1.45)
+
+[node name="WaterTower" type="Node3D" parent="."]
+position = Vector3(118, 0.2, 2)
+scale = Vector3(1.35, 1.35, 1.35)
+
+[node name="LegNorthWest" type="MeshInstance3D" parent="WaterTower"]
+position = Vector3(-2.2, 8.5, -2.2)
+rotation_degrees = Vector3(0, 0, -7.5)
+cast_shadow = 0
+mesh = SubResource("TowerLegMesh")
+
+[node name="LegNorthEast" type="MeshInstance3D" parent="WaterTower"]
+position = Vector3(2.2, 8.5, -2.2)
+rotation_degrees = Vector3(0, 0, 7.5)
+cast_shadow = 0
+mesh = SubResource("TowerLegMesh")
+
+[node name="LegSouthWest" type="MeshInstance3D" parent="WaterTower"]
+position = Vector3(-2.2, 8.5, 2.2)
+rotation_degrees = Vector3(7.5, 0, -7.5)
+cast_shadow = 0
+mesh = SubResource("TowerLegMesh")
+
+[node name="LegSouthEast" type="MeshInstance3D" parent="WaterTower"]
+position = Vector3(2.2, 8.5, 2.2)
+rotation_degrees = Vector3(-7.5, 0, 7.5)
+cast_shadow = 0
+mesh = SubResource("TowerLegMesh")
+
+[node name="Tank" type="MeshInstance3D" parent="WaterTower"]
+position = Vector3(0, 17.4, 0)
+cast_shadow = 0
+mesh = SubResource("TowerTankMesh")
+
+[node name="Roof" type="MeshInstance3D" parent="WaterTower"]
+position = Vector3(0, 20.55, 0)
+cast_shadow = 0
+mesh = SubResource("TowerRoofMesh")
+
+[node name="Walkway" type="MeshInstance3D" parent="WaterTower"]
+position = Vector3(0, 15.4, 0)
+cast_shadow = 0
+mesh = SubResource("TowerRingMesh")

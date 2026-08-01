@@ -10,6 +10,7 @@ public partial class ObjectiveDisplay : Control
 	[Export] public NodePath ObjectivePath { get; set; } = new("../../AntibioticsObjective");
 	[Export] public NodePath SuppliesObjectivePath { get; set; } =
 		new("../../ServiceStationSuppliesObjective");
+	[Export] public bool SingleObjectiveMode { get; set; }
 
 	private AntibioticsObjective _objective = null!;
 	private ServiceStationSuppliesObjective _suppliesObjective = null!;
@@ -44,7 +45,9 @@ public partial class ObjectiveDisplay : Control
 	private void OnStateChanged(int state)
 	{
 		Refresh();
-		if (_suppliesObjective.State == ServiceStationSuppliesObjectiveState.Completed)
+		if ((SingleObjectiveMode ||
+			_objective.State == AntibioticsObjectiveState.Completed) &&
+			_suppliesObjective.State == ServiceStationSuppliesObjectiveState.Completed)
 		{
 			return;
 		}
@@ -59,8 +62,17 @@ public partial class ObjectiveDisplay : Control
 	{
 		if (_suppliesObjective.State == ServiceStationSuppliesObjectiveState.Completed)
 		{
-			_objectiveText.Text = "OBJECTIVES COMPLETE\nEmergency supplies delivered";
+			_objectiveText.Text = SingleObjectiveMode
+				? "OBJECTIVE COMPLETE\nEmergency supplies delivered"
+				: "OBJECTIVES COMPLETE\nEmergency supplies delivered";
 			_objectiveText.Modulate = new Color(0.72f, 0.92f, 0.68f, 1.0f);
+			return;
+		}
+
+		if (SingleObjectiveMode)
+		{
+			_objectiveText.Text = $"CURRENT OBJECTIVE\n{_suppliesObjective.DisplayText}";
+			_objectiveText.Modulate = Colors.White;
 			return;
 		}
 

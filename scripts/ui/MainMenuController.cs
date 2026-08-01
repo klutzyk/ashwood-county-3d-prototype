@@ -10,6 +10,10 @@ public partial class MainMenuController : Control
 {
 	[Export] public string GameplayScenePath { get; set; } = "res://scenes/prototype_world.tscn";
 	[Export] public string SaveFilePath { get; set; } = SaveGameManager.DefaultSaveFilePath;
+	[Export(PropertyHint.Range, "-1,100,1")]
+	public int ExpectedContainerCount { get; set; } = -1;
+	[Export(PropertyHint.Range, "-1,100,1")]
+	public int ExpectedZombieCount { get; set; } = -1;
 
 	private Button _newGame = null!;
 	private Button _continue = null!;
@@ -40,12 +44,12 @@ public partial class MainMenuController : Control
 
 	public void RefreshContinueState()
 	{
-		_continue.Disabled = !SaveGameManager.HasValidSaveFile(SaveFilePath);
+		_continue.Disabled = !HasValidSaveFile();
 	}
 
 	public void RequestNewGame()
 	{
-		if (SaveGameManager.HasValidSaveFile(SaveFilePath))
+		if (HasValidSaveFile())
 		{
 			_overwriteConfirmation.PopupCentered();
 			return;
@@ -55,7 +59,7 @@ public partial class MainMenuController : Control
 
 	public void ContinueGame()
 	{
-		if (!SaveGameManager.HasValidSaveFile(SaveFilePath))
+		if (!HasValidSaveFile())
 		{
 			RefreshContinueState();
 			return;
@@ -88,5 +92,13 @@ public partial class MainMenuController : Control
 	private void CloseSettings()
 	{
 		_settings.GrabFocus();
+	}
+
+	private bool HasValidSaveFile()
+	{
+		return SaveGameManager.HasValidSaveFile(
+			SaveFilePath,
+			ExpectedContainerCount,
+			ExpectedZombieCount);
 	}
 }

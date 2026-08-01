@@ -1,0 +1,138 @@
+[gd_scene load_steps=13 format=3]
+
+[ext_resource type="Script" path="res://scripts/objectives/PrototypeSafePoint.cs" id="1_safe_point"]
+[ext_resource type="Script" path="res://scripts/interactions/Interactable.cs" id="2_interactable"]
+[ext_resource type="Script" path="res://scripts/interactions/SearchableContainer.cs" id="3_searchable"]
+[ext_resource type="Script" path="res://scripts/items/ContainerInventory.cs" id="4_inventory"]
+[ext_resource type="PackedScene" path="res://assets/third_party/props/crates/medical/medical_crate_derivative.glb" id="5_crate"]
+[ext_resource type="PackedScene" path="res://assets/third_party/interiors/willow_outfitters/poly_haven/Lantern_01/Lantern_01_1k.gltf" id="6_lantern"]
+[ext_resource type="PackedScene" path="res://assets/third_party/interiors/ashwood_police_station/poly_haven/vintage_radio_transceiver/vintage_radio_transceiver_1k.gltf" id="7_radio"]
+
+[sub_resource type="BoxShape3D" id="CrateCollision"]
+size = Vector3(0.94, 0.58, 0.68)
+
+[sub_resource type="StandardMaterial3D" id="TarpMaterial"]
+albedo_color = Color(0.12, 0.2, 0.14, 1)
+roughness = 0.96
+
+[sub_resource type="PlaneMesh" id="TarpMesh"]
+material = SubResource("TarpMaterial")
+size = Vector2(2.05, 1.35)
+
+[sub_resource type="StandardMaterial3D" id="ReliefSignMaterial"]
+albedo_color = Color(0.055, 0.13, 0.085, 1)
+roughness = 0.92
+
+[sub_resource type="BoxMesh" id="ReliefSignMesh"]
+material = SubResource("ReliefSignMaterial")
+
+[node name="ReliefSafePoint" type="Node3D"]
+script = ExtResource("1_safe_point")
+
+[node name="Visuals" type="Node3D" parent="."]
+
+[node name="GroundTarp" type="MeshInstance3D" parent="Visuals"]
+position = Vector3(0.18, 0.012, 0.08)
+rotation_degrees = Vector3(0, 4, 0)
+cast_shadow = 0
+mesh = SubResource("TarpMesh")
+
+[node name="MedicalCrate" parent="Visuals" instance=ExtResource("5_crate")]
+position = Vector3(0, 0.03, 0)
+rotation_degrees = Vector3(0, -8, 0)
+scale = Vector3(0.8, 0.8, 0.8)
+
+[node name="ReserveCrate" parent="Visuals" instance=ExtResource("5_crate")]
+position = Vector3(0.78, 0.03, 0.28)
+rotation_degrees = Vector3(0, 13, 0)
+scale = Vector3(0.58, 0.58, 0.58)
+
+[node name="Lantern" parent="Visuals" instance=ExtResource("6_lantern")]
+position = Vector3(-0.48, 0.76, -0.12)
+rotation_degrees = Vector3(0, 18, 0)
+scale = Vector3(0.76, 0.76, 0.76)
+
+[node name="Radio" parent="Visuals" instance=ExtResource("7_radio")]
+position = Vector3(0.38, 0.72, -0.05)
+rotation_degrees = Vector3(0, -20, 0)
+scale = Vector3(0.58, 0.58, 0.58)
+
+[node name="ReliefSign" type="MeshInstance3D" parent="Visuals"]
+position = Vector3(0.08, 1.72, 0.18)
+scale = Vector3(1.08, 0.38, 0.045)
+mesh = SubResource("ReliefSignMesh")
+
+[node name="ReliefSignText" type="Label3D" parent="Visuals"]
+position = Vector3(0.08, 1.74, 0.28)
+text = "RELIEF CACHE"
+font_size = 48
+pixel_size = 0.0023
+outline_size = 6
+modulate = Color(0.91, 0.78, 0.47, 1)
+visibility_range_end = 45.0
+
+[node name="ReliefSignSubtext" type="Label3D" parent="Visuals"]
+position = Vector3(0.08, 1.6, 0.285)
+text = "ASHWOOD COUNTY AID"
+font_size = 26
+pixel_size = 0.0018
+outline_size = 4
+modulate = Color(0.76, 0.8, 0.67, 1)
+visibility_range_end = 36.0
+
+[node name="ReliefSignTextWest" type="Label3D" parent="Visuals"]
+position = Vector3(0.08, 1.74, 0.08)
+rotation_degrees = Vector3(0, 180, 0)
+text = "RELIEF CACHE"
+font_size = 48
+pixel_size = 0.0023
+outline_size = 6
+modulate = Color(0.91, 0.78, 0.47, 1)
+visibility_range_end = 45.0
+
+[node name="ReliefSignSubtextWest" type="Label3D" parent="Visuals"]
+position = Vector3(0.08, 1.6, 0.075)
+rotation_degrees = Vector3(0, 180, 0)
+text = "ASHWOOD COUNTY AID"
+font_size = 26
+pixel_size = 0.0018
+outline_size = 4
+modulate = Color(0.76, 0.8, 0.67, 1)
+visibility_range_end = 36.0
+
+[node name="LanternGlow" type="OmniLight3D" parent="Visuals"]
+position = Vector3(-0.48, 1.02, -0.12)
+light_color = Color(1, 0.57, 0.25, 1)
+light_energy = 0.95
+light_indirect_energy = 0.0
+shadow_enabled = false
+omni_range = 4.2
+omni_attenuation = 1.35
+distance_fade_enabled = true
+distance_fade_begin = 20.0
+distance_fade_shadow = 16.0
+distance_fade_length = 8.0
+
+[node name="Collision" type="StaticBody3D" parent="."]
+
+[node name="Crate" type="CollisionShape3D" parent="Collision"]
+position = Vector3(0, 0.31, 0)
+shape = SubResource("CrateCollision")
+
+[node name="Interactable" type="Node3D" parent="."]
+position = Vector3(0, 0.82, -0.52)
+script = ExtResource("2_interactable")
+InteractionName = "Relief Cache"
+InteractionPrompt = "Deliver Supplies at"
+
+[node name="Storage" type="Node3D" parent="."]
+script = ExtResource("3_searchable")
+DisplayName = "Relief Cache Storage"
+SearchDuration = 0.0
+
+[node name="Interactable" type="Node3D" parent="Storage"]
+script = ExtResource("2_interactable")
+Enabled = false
+
+[node name="Inventory" type="Node" parent="Storage"]
+script = ExtResource("4_inventory")

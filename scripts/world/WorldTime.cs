@@ -24,6 +24,14 @@ public partial class WorldTime : Node
 	[Export] public float DaySkyEnergy { get; set; } = 0.7f;
 	[Export] public float NightDirectionalEnergy { get; set; } = 0.06f;
 	[Export] public float DayDirectionalEnergy { get; set; } = 0.65f;
+	[Export] public Color NightDirectionalColor { get; set; } =
+		new(0.5f, 0.58f, 0.78f);
+	[Export] public Color DayDirectionalColor { get; set; } =
+		new(0.83f, 0.85f, 0.88f);
+	[Export] public Color GoldenHourDirectionalColor { get; set; } =
+		new(1.0f, 0.68f, 0.43f);
+	[Export(PropertyHint.Range, "0,1,0.05")]
+	public float GoldenHourColorStrength { get; set; }
 
 	public float CurrentHour { get; private set; }
 
@@ -59,16 +67,22 @@ public partial class WorldTime : Node
 		float sunHeight = Mathf.Sin(((CurrentHour - 6.0f) / 24.0f) * Mathf.Tau);
 		float daylight = Mathf.Clamp((sunHeight + 0.12f) / 0.55f, 0.0f, 1.0f);
 		daylight = daylight * daylight * (3.0f - (2.0f * daylight));
+		float goldenHour = Mathf.Clamp(
+			1.0f - (Mathf.Abs(sunHeight - 0.2f) / 0.34f),
+			0.0f,
+			1.0f) * daylight * GoldenHourColorStrength;
 
 		_directionalLight.RotationDegrees = new Vector3(
 			-(CurrentHour - 6.0f) * 15.0f,
 			-28.0f,
 			0.0f);
 		_directionalLight.LightEnergy = Mathf.Lerp(NightDirectionalEnergy, DayDirectionalEnergy, daylight);
-		_directionalLight.LightColor = new Color(
-			Mathf.Lerp(0.5f, 0.83f, daylight),
-			Mathf.Lerp(0.58f, 0.85f, daylight),
-			Mathf.Lerp(0.78f, 0.88f, daylight));
+		Color daylightColor = NightDirectionalColor.Lerp(
+			DayDirectionalColor,
+			daylight);
+		_directionalLight.LightColor = daylightColor.Lerp(
+			GoldenHourDirectionalColor,
+			goldenHour);
 		_environment.AmbientLightEnergy = Mathf.Lerp(NightAmbientEnergy, DayAmbientEnergy, daylight);
 		_environment.BackgroundEnergyMultiplier = Mathf.Lerp(NightSkyEnergy, DaySkyEnergy, daylight);
 	}

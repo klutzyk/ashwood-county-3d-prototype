@@ -2226,3 +2226,48 @@ Validation:
   Ashwood Police Station validators passed after the asset-placement pass;
   Main Street storefront traversal, room enclosure, wall-material, art-pass,
   player-step, and police-basement-stair regressions also passed
+
+---
+
+## Golden-Hour Glen's Bakery Supply Run (2026-08-01)
+
+Completed:
+
+- Changed the production boot flow to the main menu and Main Street while
+  keeping a dedicated versioned save slot for this vertical slice
+- Built a focused route from a composed relief cache to Glen's Bakery, with a
+  clear bakery identity, delivery van, five placed zombies, readable objective
+  HUD, warm interior beacon, distant ridges, and a water-tower landmark
+- Added a project-owned, AI-generated golden-hour cloud cover, sustained
+  late-afternoon lighting, atmospheric fog, warmer surface response, and
+  restrained ambient audio
+- Added Glen's Bakery's persistent emergency pantry using the shared container
+  inventory foundation; searching reveals guaranteed canned food and water but
+  transfer remains an explicit player action, and alternate food sources cannot
+  bypass the required Bakery search
+- Preserved separate world and player inventories, delivery consumption,
+  searched state, player-added container items, objective state, and all five
+  zombies through production save/load; the menu rejects incomplete production
+  persistence sets before enabling Continue, and runtime validation rejects
+  mismatched sets before live state can be mutated
+- Added camera-distance visual culling for dense distant buildings and vehicles;
+  collision, interaction, navigation, inventories, and save state remain active
+- Added a deterministic five-plate 1920 by 1080 visual-review scene, focused
+  supply-run validation, and a representative rendered performance benchmark
+
+Validation:
+
+- C# build completed with no warnings or errors
+- Main menu, Main Street Phase 1, Main Street art, apocalypse dressing, Bakery
+  interior, supply-run, enterable-building, and storefront-traversal checks
+  passed
+- The median result from three consecutive Compatibility-rendered
+  bakery-approach runs at 1280 by 720 with the live player, five zombies, HUD,
+  and golden-hour environment was 83.92 FPS average, 11.35 ms median, 19.79 ms
+  p95, 23.26 ms p99, 39.19 FPS one-percent low, and 1,199.9 draw calls over
+  600 sampled frames per run; average throughput exceeded 60 FPS, but sustained
+  tail latency did not yet justify marking the stable-60-FPS roadmap goal done
+- Independent visual review found a clear improvement from the earlier blockout
+  and functional passes for the route, threshold, cache, landmark, lighting,
+  and HUD, while still rejecting AAA parity because hero assets, vegetation,
+  animation, atmosphere, and final-art UI remain below that benchmark

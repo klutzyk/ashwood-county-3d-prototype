@@ -1,6 +1,7 @@
 #nullable enable
 
 using Godot;
+using AshwoodCounty3DPrototype.Interactions;
 using AshwoodCounty3DPrototype.Items;
 
 namespace AshwoodCounty3DPrototype.Objectives;
@@ -28,13 +29,15 @@ public partial class ServiceStationSuppliesObjective : Node
 
 	[Export] public NodePath PlayerInventoryPath { get; set; } = new("../Player/Inventory");
 	[Export] public NodePath AntibioticsObjectivePath { get; set; } = new("../AntibioticsObjective");
+	[Export] public NodePath RequiredSearchContainerPath { get; set; } = new();
+	[Export] public string SearchLocationName { get; set; } = "the service station";
 
 	public ServiceStationSuppliesObjectiveState State { get; private set; } =
 		ServiceStationSuppliesObjectiveState.Locked;
 	public string DisplayText => State switch
 	{
 		ServiceStationSuppliesObjectiveState.SearchServiceStation =>
-			"Search the service station for canned food and a drink",
+			$"Search {SearchLocationName} for canned food and a drink",
 		ServiceStationSuppliesObjectiveState.ReturnToSafePoint =>
 			"Return the emergency supplies to the safe point",
 		ServiceStationSuppliesObjectiveState.Completed => "Emergency supplies delivered",
@@ -43,12 +46,19 @@ public partial class ServiceStationSuppliesObjective : Node
 
 	private PlayerInventory _playerInventory = null!;
 	private AntibioticsObjective _antibioticsObjective = null!;
+	private SearchableContainer? _requiredSearchContainer;
 
 	public override void _Ready()
 	{
 		AddToGroup(GroupName);
 		_playerInventory = GetNode<PlayerInventory>(PlayerInventoryPath);
 		_antibioticsObjective = GetNode<AntibioticsObjective>(AntibioticsObjectivePath);
+		if (!string.IsNullOrEmpty(RequiredSearchContainerPath.ToString()))
+		{
+			_requiredSearchContainer =
+				GetNode<SearchableContainer>(RequiredSearchContainerPath);
+			_requiredSearchContainer.SearchCompleted += OnRequiredSearchCompleted;
+		}
 		_playerInventory.InventoryChanged += OnInventoryChanged;
 		_antibioticsObjective.StateChanged += OnAntibioticsStateChanged;
 		_antibioticsObjective.StateRestored += OnAntibioticsStateChanged;
@@ -68,6 +78,10 @@ public partial class ServiceStationSuppliesObjective : Node
 		{
 			_antibioticsObjective.StateChanged -= OnAntibioticsStateChanged;
 			_antibioticsObjective.StateRestored -= OnAntibioticsStateChanged;
+		}
+		if (IsInstanceValid(_requiredSearchContainer))
+		{
+			_requiredSearchContainer.SearchCompleted -= OnRequiredSearchCompleted;
 		}
 	}
 
@@ -125,12 +139,18 @@ public partial class ServiceStationSuppliesObjective : Node
 	private void OnInventoryChanged()
 	{
 		if (State == ServiceStationSuppliesObjectiveState.SearchServiceStation &&
+			(_requiredSearchContainer is null || _requiredSearchContainer.IsSearched) &&
 			_playerInventory.GetQuantity(CannedFoodItemId) >= 1 &&
 			(_playerInventory.GetQuantity(WaterItemId) >= 1 ||
 				_playerInventory.GetQuantity(SodaItemId) >= 1))
 		{
 			SetState(ServiceStationSuppliesObjectiveState.ReturnToSafePoint);
 		}
+	}
+
+	private void OnRequiredSearchCompleted()
+	{
+		OnInventoryChanged();
 	}
 
 	private void SetState(ServiceStationSuppliesObjectiveState state)

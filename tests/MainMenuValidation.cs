@@ -98,6 +98,8 @@ public partial class MainMenuValidation : Node
 		MainMenuController menu = (MainMenuController)GD.Load<PackedScene>(
 			"res://scenes/ui/main_menu.tscn").Instantiate();
 		menu.SaveFilePath = ValidationSavePath;
+		menu.ExpectedContainerCount = -1;
+		menu.ExpectedZombieCount = -1;
 		return menu;
 	}
 

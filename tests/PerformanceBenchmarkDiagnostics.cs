@@ -58,13 +58,21 @@ internal sealed class PerformanceBenchmarkSampler
 		double elapsedSeconds = _frameTimes.Sum();
 		double averageFps = _frameTimes.Count / elapsedSeconds;
 		double minimumFps = 1.0 / sorted[^1];
+		double p99FrameTimeMilliseconds = Percentile(sorted, 0.99);
+		int onePercentFrameCount = Math.Max(
+			1,
+			Mathf.CeilToInt(sorted.Count * 0.01f));
+		double onePercentLowFps = 1.0 / sorted
+			.Skip(sorted.Count - onePercentFrameCount)
+			.Average();
 		double sampleCount = _frameTimes.Count;
 
 		return
 			$"{label}: frames={_frameTimes.Count}, elapsed={elapsedSeconds:F2}s, " +
 			$"average_fps={averageFps:F2}, median_ms={Percentile(sorted, 0.50):F2}, " +
 			$"p95_ms={Percentile(sorted, 0.95):F2}, " +
-			$"p99_ms={Percentile(sorted, 0.99):F2}, min_fps={minimumFps:F2}, " +
+			$"p99_ms={p99FrameTimeMilliseconds:F2}, " +
+			$"one_percent_low_fps={onePercentLowFps:F2}, min_fps={minimumFps:F2}, " +
 			$"process_ms={(_processSeconds * 1000.0 / sampleCount):F3}, " +
 			$"physics_ms={(_physicsSeconds * 1000.0 / sampleCount):F3}, " +
 			$"navigation_ms={(_navigationSeconds * 1000.0 / sampleCount):F3}, " +

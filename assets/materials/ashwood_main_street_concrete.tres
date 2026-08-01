@@ -5,7 +5,7 @@
 [ext_resource type="Texture2D" path="res://assets/third_party/materials/pavement/concrete_pavement_02_1k.gltf/textures/concrete_pavement_02_arm_1k.jpg" id="3_arm"]
 
 [resource]
-albedo_color = Color(0.56, 0.54, 0.49, 1)
+albedo_color = Color(0.76, 0.73, 0.66, 1)
 albedo_texture = ExtResource("1_diffuse")
 metallic_texture = ExtResource("3_arm")
 metallic_texture_channel = 2

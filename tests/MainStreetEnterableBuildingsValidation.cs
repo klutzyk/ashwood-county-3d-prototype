@@ -254,8 +254,8 @@ public partial class MainStreetEnterableBuildingsValidation : Node
 	private static void ValidateGameplayCompositionUnchanged(Node3D world)
 	{
 		Require(world.HasNode("Gameplay/Player") &&
-			world.GetNode("Gameplay/Zombies").GetChildCount() == 2,
-			"environment expansion leaves player and zombie composition unchanged");
+			world.GetNode("Gameplay/Zombies").GetChildCount() == 5,
+			"enterable buildings coexist with the five-zombie supply-run threat");
 	}
 
 	private static void Require(bool condition, string message)

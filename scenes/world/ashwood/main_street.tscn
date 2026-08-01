@@ -19,6 +19,11 @@
 [ext_resource type="PackedScene" path="res://scenes/world/ashwood/presentation/main_street_apocalypse_dressing.tscn" id="17_apocalypse_dressing"]
 [ext_resource type="PackedScene" path="res://assets/environment/buildings/AshwoodSchool/ashwood_school.tscn" id="18_school"]
 [ext_resource type="PackedScene" path="res://scenes/world/ashwood/presentation/main_street_user_asset_enrichment.tscn" id="19_user_enrichment"]
+[ext_resource type="Texture2D" path="res://assets/environment/sky/ashwood_golden_hour_cloud_cover.png" id="20_cloud_cover"]
+[ext_resource type="PackedScene" path="res://scenes/world/ashwood/gameplay/relief_safe_point.tscn" id="21_safe_point"]
+[ext_resource type="PackedScene" path="res://scenes/world/ashwood/presentation/main_street_vista.tscn" id="22_vista"]
+[ext_resource type="Script" path="res://scripts/world/AtmosphereAudio.cs" id="23_atmosphere"]
+[ext_resource type="Script" path="res://scripts/world/BuildingVisibilityCuller.cs" id="24_building_culler"]
 
 [sub_resource type="BoxMesh" id="GroundMesh"]
 material = ExtResource("15_grass")
@@ -107,10 +112,18 @@ roughness = 0.92
 material = SubResource("PlotPainted")
 
 [sub_resource type="ProceduralSkyMaterial" id="SkyMaterial"]
-sky_top_color = Color(0.3, 0.42, 0.56, 1)
-sky_horizon_color = Color(0.62, 0.67, 0.66, 1)
-ground_bottom_color = Color(0.12, 0.16, 0.11, 1)
-ground_horizon_color = Color(0.42, 0.48, 0.4, 1)
+sky_top_color = Color(0.25, 0.34, 0.47, 1)
+sky_horizon_color = Color(0.78, 0.56, 0.39, 1)
+sky_curve = 0.14
+sky_energy_multiplier = 1.0
+sky_cover = ExtResource("20_cloud_cover")
+sky_cover_modulate = Color(0.82, 0.86, 0.94, 0.36)
+ground_bottom_color = Color(0.065, 0.075, 0.065, 1)
+ground_horizon_color = Color(0.34, 0.31, 0.27, 1)
+ground_curve = 0.12
+sun_angle_max = 4.0
+sun_curve = 0.18
+use_debanding = true
 
 [sub_resource type="Sky" id="Sky"]
 sky_material = SubResource("SkyMaterial")
@@ -118,11 +131,29 @@ process_mode = 1
 
 [sub_resource type="Environment" id="Environment"]
 background_mode = 2
-background_energy_multiplier = 0.84
+background_energy_multiplier = 0.82
 sky = SubResource("Sky")
 ambient_light_source = 3
-ambient_light_energy = 0.82
+ambient_light_color = Color(0.42, 0.5, 0.62, 1)
+ambient_light_energy = 0.72
 tonemap_mode = 2
+tonemap_exposure = 1.02
+tonemap_white = 6.0
+fog_enabled = true
+fog_mode = 1
+fog_light_color = Color(0.5, 0.43, 0.36, 1)
+fog_light_energy = 0.8
+fog_sun_scatter = 0.16
+fog_density = 0.42
+fog_aerial_perspective = 0.58
+fog_sky_affect = 0.22
+fog_depth_curve = 1.25
+fog_depth_begin = 62.0
+fog_depth_end = 260.0
+adjustment_enabled = true
+adjustment_brightness = 1.04
+adjustment_contrast = 0.99
+adjustment_saturation = 0.9
 
 [node name="MainStreet" type="Node3D" unique_id=1127619697]
 
@@ -130,24 +161,45 @@ tonemap_mode = 2
 
 [node name="AntibioticsObjective" type="Node" parent="Gameplay" unique_id=126777185]
 script = ExtResource("8_objective")
+InitialState = 2
 
 [node name="ServiceStationSuppliesObjective" type="Node" parent="Gameplay" unique_id=1755125297]
 script = ExtResource("9_supplies")
+RequiredSearchContainerPath = NodePath("../../BakeryRoot/ProductionInterior/Storage/BakerySupplyCache")
+SearchLocationName = "Glen's Bakery emergency pantry"
 
 [node name="WorldTime" type="Node" parent="Gameplay" unique_id=1233649751]
 script = ExtResource("10_time")
-StartingHour = 9.0
+FullDayDurationSeconds = 14400.0
+StartingHour = 16.75
 DirectionalLightPath = NodePath("../../DirectionalLight3D")
 WorldEnvironmentPath = NodePath("../../WorldEnvironment")
-DayAmbientEnergy = 0.82
-DaySkyEnergy = 0.84
-DayDirectionalEnergy = 1.0
+DayAmbientEnergy = 1.02
+DaySkyEnergy = 0.95
+DayDirectionalEnergy = 1.2
+GoldenHourColorStrength = 1.0
+
+[node name="AtmosphereAudio" type="Node" parent="Gameplay"]
+script = ExtResource("23_atmosphere")
+WindVolumeDb = -29.0
+ZombieGroanVolumeDb = -34.0
+DayInsectsVolumeDb = -35.0
+NightCricketsVolumeDb = -32.0
+
+[node name="Wind" type="AudioStreamPlayer" parent="Gameplay/AtmosphereAudio"]
+
+[node name="ZombieGroans" type="AudioStreamPlayer" parent="Gameplay/AtmosphereAudio"]
+
+[node name="DayInsects" type="AudioStreamPlayer" parent="Gameplay/AtmosphereAudio"]
+
+[node name="NightCrickets" type="AudioStreamPlayer" parent="Gameplay/AtmosphereAudio"]
 
 [node name="SaveGameManager" type="Node" parent="Gameplay" unique_id=1934613974]
 script = ExtResource("11_save")
-SaveFilePath = "user://ashwood_main_street_phase1_save_v1.json"
-MinimumContainerCount = 0
-MinimumZombieCount = 2
+SaveFilePath = "user://ashwood_main_street_vertical_slice_v1.json"
+MinimumContainerCount = 4
+MinimumZombieCount = 5
+PersistenceRootPath = NodePath("../..")
 
 [node name="Player" parent="Gameplay" unique_id=1153738483 instance=ExtResource("1_player")]
 transform = Transform3D(3.1391647e-07, 0, 1, 0, 1, 0, -1, 0, 3.1391647e-07, -88, 1.11, -7.3)
@@ -155,16 +207,59 @@ transform = Transform3D(3.1391647e-07, 0, 1, 0, 1, 0, -1, 0, 3.1391647e-07, -88,
 [node name="Zombies" type="Node3D" parent="Gameplay" unique_id=1231212132]
 
 [node name="MainStreetZombieWest" parent="Gameplay/Zombies" unique_id=89915827 instance=ExtResource("4_zombie")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 1, 1.8)
+transform = Transform3D(0.9396926, 0, -0.34202015, 0, 1, 0, 0.34202015, 0, 0.9396926, -73, 1, -2.4)
 VariantProfile = ExtResource("13_slow")
-WanderRadius = 7.0
+WanderRadius = 5.0
 
 [node name="MainStreetZombieEast" parent="Gameplay/Zombies" unique_id=1295508610 instance=ExtResource("4_zombie")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 46, 1, -2)
 VariantProfile = ExtResource("12_walker")
 WanderRadius = 8.0
 
+[node name="MainStreetZombieCentral" parent="Gameplay/Zombies" instance=ExtResource("4_zombie")]
+transform = Transform3D(0.76604444, 0, 0.64278764, 0, 1, 0, -0.64278764, 0, 0.76604444, -8, 1, 2.8)
+VariantProfile = ExtResource("12_walker")
+WanderRadius = 6.0
+
+[node name="MainStreetZombiePharmacy" parent="Gameplay/Zombies" instance=ExtResource("4_zombie")]
+transform = Transform3D(0.5, 0, -0.8660254, 0, 1, 0, 0.8660254, 0, 0.5, 23, 1, -2.8)
+VariantProfile = ExtResource("13_slow")
+WanderRadius = 5.5
+
+[node name="MainStreetZombieSchool" parent="Gameplay/Zombies" instance=ExtResource("4_zombie")]
+transform = Transform3D(-0.34202015, 0, 0.9396926, 0, 1, 0, -0.9396926, 0, -0.34202015, 76, 1, 2.2)
+VariantProfile = ExtResource("12_walker")
+WanderRadius = 7.0
+
 [node name="GameplayHUD" parent="Gameplay" unique_id=1927601364 instance=ExtResource("2_hud")]
+
+[node name="DenseStorefrontCuller" type="Node" parent="Gameplay"]
+script = ExtResource("24_building_culler")
+TargetRootPath = NodePath("../../Environment/Presentation/Storefronts")
+TargetNames = "NorthGrocery,NorthPharmacy,SouthMillerHardware,SouthDiner,SouthPoliceStation"
+ShowDistance = 82.0
+HideDistance = 92.0
+
+[node name="SportingGoodsCuller" type="Node" parent="Gameplay"]
+script = ExtResource("24_building_culler")
+TargetRootPath = NodePath("../../Environment/Presentation/Storefronts")
+TargetNames = "SouthSportingGoods"
+ShowDistance = 58.0
+HideDistance = 65.0
+
+[node name="SchoolCuller" type="Node" parent="Gameplay"]
+script = ExtResource("24_building_culler")
+TargetRootPath = NodePath("../../Environment")
+TargetNames = "AshwoodSchool"
+ShowDistance = 108.0
+HideDistance = 120.0
+
+[node name="VehicleCuller" type="Node" parent="Gameplay"]
+script = ExtResource("24_building_culler")
+TargetRootPath = NodePath("../../Environment/Presentation/Vehicles")
+TargetNames = "AlfaCentre,ImpalaEast,PickupEast,DeliveryVan"
+ShowDistance = 52.0
+HideDistance = 62.0
 
 [node name="Environment" type="Node3D" parent="." unique_id=1382652494]
 
@@ -498,6 +593,12 @@ position = Vector3(88.5, 0.2, -21.9)
 
 [node name="UserSuppliedEnrichment" parent="Environment" instance=ExtResource("19_user_enrichment")]
 
+[node name="Vista" parent="Environment" instance=ExtResource("22_vista")]
+
+[node name="ReliefSafePoint" parent="Environment" instance=ExtResource("21_safe_point")]
+position = Vector3(-95.2, 0.2, -5.25)
+rotation_degrees = Vector3(0, 92, 0)
+
 [node name="BakeryRoot" parent="." unique_id=1602727733 instance=ExtResource("3_bakery")]
 transform = Transform3D(3.1391647e-07, 0, -1, 0, 1, 0, 1, 0, 3.1391647e-07, -59.5, 0.005668834, -12.021713)
 
@@ -505,11 +606,14 @@ transform = Transform3D(3.1391647e-07, 0, -1, 0, 1, 0, 1, 0, 3.1391647e-07, -59.
 navigation_mesh = ExtResource("5_navmesh")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=351593155]
-transform = Transform3D(0.88294756, 0.3488854, -0.3141378, 0, 0.66913056, 0.74314487, 0.46947157, -0.656158, 0.5908072, 0, 0, 0)
-light_color = Color(1, 0.89, 0.72, 1)
-light_energy = 1.05
+rotation_degrees = Vector3(-168.75, -28, 0)
+light_color = Color(1, 0.57, 0.29, 1)
+light_energy = 0.66
 shadow_enabled = true
-directional_shadow_max_distance = 160.0
+shadow_opacity = 0.64
+shadow_blur = 1.4
+directional_shadow_mode = 1
+directional_shadow_max_distance = 40.0
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=778193923]
 environment = SubResource("Environment")

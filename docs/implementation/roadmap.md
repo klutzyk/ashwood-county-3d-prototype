@@ -187,7 +187,7 @@ Props
 
 Lighting
 
-- [ ] Better sunset lighting
+- [x] Better sunset lighting
 - [ ] Better moonlight
 - [ ] Better interior lighting
 - [ ] Better street lighting
@@ -339,7 +339,9 @@ World
   - [x] Full-height back-room and restroom enclosure with usable imported doors
   - [x] Dense hand-authored apocalypse dressing with licensed detailed props,
     entrance clear zones, instancing, and distance culling
-  - [ ] Bakery loot
+  - [x] Golden-hour Glen's Bakery supply-run slice with a persistent relief
+    cache, five-zombie threat, explicit item transfer, delivery, and save/load
+  - [x] Bakery loot
   - [ ] Rear service opening and door when the exterior mesh supports one
 - [ ] Replace all placeholder buildings
 - [ ] Replace all placeholder props
