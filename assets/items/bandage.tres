@@ -9,6 +9,7 @@ ItemId = &"bandage"
 DisplayName = "Bandage"
 Description = "A basic medical bandage."
 StackLimit = 5
+UnitWeightKg = 0.12
 Category = 0
 Icon = ExtResource("2_icon")
 HealthRestored = 40.0

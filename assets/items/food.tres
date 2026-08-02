@@ -9,6 +9,7 @@ ItemId = &"food"
 DisplayName = "Food"
 Description = "A sealed portion of food."
 StackLimit = 4
+UnitWeightKg = 0.35
 Category = 1
 Icon = ExtResource("2_icon")
 HungerRestored = 35.0

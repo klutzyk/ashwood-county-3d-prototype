@@ -9,5 +9,6 @@ ItemId = &"antibiotics"
 DisplayName = "Antibiotics"
 Description = "A sealed course of vital antibiotics."
 StackLimit = 1
+UnitWeightKg = 0.1
 Category = 4
 Icon = ExtResource("2_icon")

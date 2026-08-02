@@ -150,6 +150,8 @@ public partial class MainStreetPhase1Validation : Node
 		Require(controller.HasNode("DoorInteraction") &&
 			controller.GetNode("DoorInteraction") is Interactable,
 			"door uses the existing interaction component");
+		Require(controller.GetNode<AudioStreamPlayer3D>("DoorAudio").Bus == "Effects",
+			"door transients follow the Effects volume setting");
 
 		Aabb closedBounds = GetCombinedBounds(doorModel);
 		Vector3 closedCentre = closedBounds.GetCenter();
@@ -234,8 +236,22 @@ public partial class MainStreetPhase1Validation : Node
 		Require(save.MinimumContainerCount == 4 && save.MinimumZombieCount == 5 &&
 			save.PersistenceRootPath.ToString() == "../..",
 			"version-1 save validation covers the production persistence root");
+		WeatherDirector weather = world.GetNode<WeatherDirector>("Gameplay/DynamicWeather");
+		Require(weather.SetWeatherByKind(WeatherKind.Fog, immediate: true),
+			"save validation selects an authored weather state");
+		float savedWeatherTimer = weather.SecondsUntilWeatherChange;
+		ulong savedScheduleState = weather.ScheduleRandomState;
+		ulong savedLightningState = weather.LightningRandomState;
 		Require(save.SaveGame(), "Main Street state saves through the existing manager");
+		Require(weather.SetWeatherByKind(WeatherKind.Clear, immediate: true),
+			"weather can diverge from the saved condition before loading");
 		Require(save.LoadGame(), "Main Street state loads through the existing manager");
+		Require(weather.CurrentProfile?.Kind == WeatherKind.Fog &&
+			Mathf.Abs(weather.SecondsUntilWeatherChange - savedWeatherTimer) < 0.01f &&
+			weather.ScheduleRandomState == savedScheduleState &&
+			weather.SecondsUntilLightning < 0.0f &&
+			weather.LightningRandomState == savedLightningState,
+			"version-1 additive fields restore weather timers and deterministic RNG state");
 	}
 
 	private static Aabb GetCombinedBounds(Node root)

@@ -15,12 +15,14 @@ public partial class ObjectiveDisplay : Control
 	private AntibioticsObjective _objective = null!;
 	private ServiceStationSuppliesObjective _suppliesObjective = null!;
 	private Label _objectiveText = null!;
+	private Label? _objectiveKicker;
 
 	public override void _Ready()
 	{
 		_objective = GetNode<AntibioticsObjective>(ObjectivePath);
 		_suppliesObjective = GetNode<ServiceStationSuppliesObjective>(SuppliesObjectivePath);
 		_objectiveText = GetNode<Label>("ObjectiveText");
+		_objectiveKicker = GetNodeOrNull<Label>("ObjectiveKicker");
 		_objective.StateChanged += OnStateChanged;
 		_objective.StateRestored += OnStateChanged;
 		_suppliesObjective.StateChanged += OnStateChanged;
@@ -62,16 +64,18 @@ public partial class ObjectiveDisplay : Control
 	{
 		if (_suppliesObjective.State == ServiceStationSuppliesObjectiveState.Completed)
 		{
-			_objectiveText.Text = SingleObjectiveMode
-				? "OBJECTIVE COMPLETE\nEmergency supplies delivered"
-				: "OBJECTIVES COMPLETE\nEmergency supplies delivered";
+			SetObjectiveText(
+				SingleObjectiveMode ? "SUPPLY RUN" : "SURVIVAL PRIORITIES",
+				SingleObjectiveMode
+					? "OBJECTIVE COMPLETE  /  Emergency supplies delivered"
+					: "OBJECTIVES COMPLETE  /  Emergency supplies delivered");
 			_objectiveText.Modulate = new Color(0.72f, 0.92f, 0.68f, 1.0f);
 			return;
 		}
 
 		if (SingleObjectiveMode)
 		{
-			_objectiveText.Text = $"CURRENT OBJECTIVE\n{_suppliesObjective.DisplayText}";
+			SetObjectiveText("SUPPLY RUN  /  ACTIVE", _suppliesObjective.DisplayText);
 			_objectiveText.Modulate = Colors.White;
 			return;
 		}
@@ -80,8 +84,20 @@ public partial class ObjectiveDisplay : Control
 		string displayText = firstObjective
 			? _objective.DisplayText
 			: _suppliesObjective.DisplayText;
-		_objectiveText.Text = $"CURRENT OBJECTIVE  {(firstObjective ? "1 / 2" : "2 / 2")}\n" +
-			displayText;
+		SetObjectiveText(
+			"SURVIVAL PRIORITY",
+			$"{(firstObjective ? "1 / 2" : "2 / 2")}  /  {displayText}");
 		_objectiveText.Modulate = Colors.White;
+	}
+
+	private void SetObjectiveText(string kicker, string body)
+	{
+		if (_objectiveKicker is null)
+		{
+			_objectiveText.Text = $"{kicker}\n{body}";
+			return;
+		}
+		_objectiveKicker.Text = kicker;
+		_objectiveText.Text = body;
 	}
 }

@@ -1,0 +1,359 @@
+[gd_scene load_steps=34 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/MainStreetWorldPolish.cs" id="1_script"]
+[ext_resource type="PackedScene" path="res://assets/environment/nature/main_street_tree_1.tscn" id="2_tree_a"]
+[ext_resource type="PackedScene" path="res://assets/environment/nature/main_street_tree_2.tscn" id="3_tree_b"]
+[ext_resource type="Material" path="res://assets/materials/ashwood_main_street_grass.tres" id="4_grass"]
+[ext_resource type="Script" path="res://scripts/world/MainStreetDensityPresentation.cs" id="5_density"]
+[ext_resource type="Material" path="res://assets/materials/ashwood_main_street_asphalt.tres" id="6_asphalt"]
+[ext_resource type="Material" path="res://assets/materials/ashwood_main_street/red_brick_2k.tres" id="7_brick_a"]
+[ext_resource type="Material" path="res://assets/materials/ashwood_main_street/factory_brick_2k.tres" id="8_brick_b"]
+[ext_resource type="Material" path="res://assets/materials/ashwood_main_street/facade_roof.tres" id="9_roof"]
+[ext_resource type="PackedScene" path="res://assets/third_party/vehicles/1975_chevrolet_impala/1975_chevrolet_impala.glb" id="10_sedan"]
+
+[sub_resource type="BoxMesh" id="DistantTerrainMesh"]
+material = ExtResource("4_grass")
+size = Vector3(420, 0.08, 250)
+
+[sub_resource type="StandardMaterial3D" id="ClockIron"]
+albedo_color = Color(0.035, 0.04, 0.038, 1)
+metallic = 0.78
+roughness = 0.3
+
+[sub_resource type="StandardMaterial3D" id="ClockBronze"]
+albedo_color = Color(0.25, 0.15, 0.07, 1)
+metallic = 0.68
+roughness = 0.36
+
+[sub_resource type="StandardMaterial3D" id="ClockFace"]
+albedo_color = Color(0.74, 0.69, 0.56, 1)
+roughness = 0.72
+
+[sub_resource type="CylinderMesh" id="ClockBaseMesh"]
+material = SubResource("ClockIron")
+top_radius = 0.32
+bottom_radius = 0.46
+height = 0.36
+radial_segments = 16
+
+[sub_resource type="CylinderMesh" id="ClockPostMesh"]
+material = SubResource("ClockIron")
+top_radius = 0.11
+bottom_radius = 0.16
+height = 3.7
+radial_segments = 12
+
+[sub_resource type="SphereMesh" id="ClockCollarMesh"]
+material = SubResource("ClockBronze")
+radius = 0.23
+height = 0.42
+radial_segments = 16
+rings = 8
+
+[sub_resource type="CylinderMesh" id="ClockRimMesh"]
+material = SubResource("ClockIron")
+top_radius = 0.72
+bottom_radius = 0.72
+height = 0.26
+radial_segments = 32
+
+[sub_resource type="CylinderMesh" id="ClockFaceMesh"]
+material = SubResource("ClockFace")
+top_radius = 0.62
+bottom_radius = 0.62
+height = 0.035
+radial_segments = 32
+
+[sub_resource type="BoxMesh" id="ClockMinuteHandMesh"]
+material = SubResource("ClockIron")
+size = Vector3(0.035, 0.47, 0.045)
+
+[sub_resource type="BoxMesh" id="ClockHourHandMesh"]
+material = SubResource("ClockIron")
+size = Vector3(0.04, 0.34, 0.055)
+
+[sub_resource type="CylinderMesh" id="ClockCrossbarMesh"]
+material = SubResource("ClockIron")
+top_radius = 0.055
+bottom_radius = 0.055
+height = 1.75
+radial_segments = 10
+
+[sub_resource type="SphereMesh" id="ClockFinialMesh"]
+material = SubResource("ClockBronze")
+radius = 0.105
+height = 0.21
+radial_segments = 12
+rings = 6
+
+[sub_resource type="CylinderMesh" id="SignalPoleMesh"]
+material = SubResource("ClockIron")
+top_radius = 0.09
+bottom_radius = 0.14
+height = 4.75
+radial_segments = 10
+
+[sub_resource type="CylinderMesh" id="SignalArmMesh"]
+material = SubResource("ClockIron")
+top_radius = 0.075
+bottom_radius = 0.075
+height = 14.0
+radial_segments = 10
+
+[sub_resource type="BoxMesh" id="SignalHousingMesh"]
+material = SubResource("ClockIron")
+size = Vector3(0.42, 1.16, 0.34)
+
+[sub_resource type="StandardMaterial3D" id="SignalRed"]
+albedo_color = Color(0.42, 0.025, 0.018, 1)
+emission_enabled = true
+emission = Color(0.52, 0.018, 0.012, 1)
+emission_energy_multiplier = 0.65
+roughness = 0.38
+
+[sub_resource type="StandardMaterial3D" id="SignalAmber"]
+albedo_color = Color(0.3, 0.14, 0.02, 1)
+emission_enabled = true
+emission = Color(0.2, 0.07, 0.005, 1)
+emission_energy_multiplier = 0.18
+roughness = 0.4
+
+[sub_resource type="StandardMaterial3D" id="SignalGreen"]
+albedo_color = Color(0.018, 0.16, 0.055, 1)
+emission_enabled = true
+emission = Color(0.01, 0.07, 0.018, 1)
+emission_energy_multiplier = 0.12
+roughness = 0.4
+
+[sub_resource type="CylinderMesh" id="SignalRedLensMesh"]
+material = SubResource("SignalRed")
+top_radius = 0.105
+bottom_radius = 0.105
+height = 0.025
+radial_segments = 20
+
+[sub_resource type="CylinderMesh" id="SignalAmberLensMesh"]
+material = SubResource("SignalAmber")
+top_radius = 0.105
+bottom_radius = 0.105
+height = 0.025
+radial_segments = 20
+
+[sub_resource type="CylinderMesh" id="SignalGreenLensMesh"]
+material = SubResource("SignalGreen")
+top_radius = 0.105
+bottom_radius = 0.105
+height = 0.025
+radial_segments = 20
+
+[sub_resource type="Shader" id="PuddleShader"]
+code = "shader_type spatial;\nrender_mode blend_mix, depth_prepass_alpha, cull_disabled;\n\nvoid fragment() {\n    vec2 p = (UV * 2.0) - vec2(1.0);\n    float angle = atan(p.y, p.x);\n    float radius = length(p);\n    float edge_shape = 0.78\n        + (sin((angle * 3.0) + 0.7) * 0.09)\n        + (sin((angle * 7.0) - 1.2) * 0.055)\n        + (sin((angle * 11.0) + 2.1) * 0.025);\n    float coverage = 1.0 - smoothstep(edge_shape - 0.085, edge_shape, radius);\n    float shallow_variation = 0.88 + (sin((p.x * 8.0) + (p.y * 5.0)) * 0.05);\n    ALBEDO = vec3(0.025, 0.04, 0.052) * shallow_variation;\n    METALLIC = 0.22;\n    ROUGHNESS = 0.18;\n    SPECULAR = 0.78;\n    ALPHA = coverage * 0.66;\n}\n"
+
+[sub_resource type="ShaderMaterial" id="PuddleMaterial"]
+render_priority = 1
+shader = SubResource("PuddleShader")
+
+[sub_resource type="PlaneMesh" id="PuddleMesh"]
+material = SubResource("PuddleMaterial")
+size = Vector2(2, 2)
+
+[node name="MainStreetWorldPolish" type="Node3D"]
+script = ExtResource("1_script")
+TreeSceneA = ExtResource("2_tree_a")
+TreeSceneB = ExtResource("3_tree_b")
+metadata/_environment_art = true
+metadata/environment_role = "county_context_landmarks_and_weathering"
+
+[node name="DistantTerrain" type="MeshInstance3D" parent="."]
+position = Vector3(0, -0.24, 0)
+cast_shadow = 0
+visibility_range_end = 360.0
+visibility_range_end_margin = 28.0
+mesh = SubResource("DistantTerrainMesh")
+
+[node name="DensityPresentation" type="Node3D" parent="."]
+script = ExtResource("5_density")
+RoadMaterial = ExtResource("6_asphalt")
+BrickMaterialA = ExtResource("7_brick_a")
+BrickMaterialB = ExtResource("8_brick_b")
+RoofMaterial = ExtResource("9_roof")
+StalledVehicleScene = ExtResource("10_sedan")
+metadata/environment_role = "batched_street_continuity_and_story_density"
+
+[node name="DistantForest" type="Node3D" parent="."]
+metadata/environment_role = "batched_world_edge_forest"
+
+[node name="RoadWetness" type="Node3D" parent="."]
+metadata/environment_role = "selective_post_rain_puddles"
+
+[node name="WestShoulderA" type="MeshInstance3D" parent="RoadWetness"]
+position = Vector3(-86, 0.116, -4.45)
+rotation_degrees = Vector3(0, 14, 0)
+scale = Vector3(2.65, 1, 0.68)
+cast_shadow = 0
+mesh = SubResource("PuddleMesh")
+
+[node name="WestShoulderB" type="MeshInstance3D" parent="RoadWetness"]
+position = Vector3(-62, 0.116, 4.28)
+rotation_degrees = Vector3(0, -21, 0)
+scale = Vector3(1.82, 1, 0.52)
+cast_shadow = 0
+mesh = SubResource("PuddleMesh")
+
+[node name="CentreWest" type="MeshInstance3D" parent="RoadWetness"]
+position = Vector3(-37, 0.116, -3.92)
+rotation_degrees = Vector3(0, 31, 0)
+scale = Vector3(1.34, 1, 0.42)
+cast_shadow = 0
+mesh = SubResource("PuddleMesh")
+
+[node name="Centre" type="MeshInstance3D" parent="RoadWetness"]
+position = Vector3(-8, 0.116, 4.18)
+rotation_degrees = Vector3(0, -8, 0)
+scale = Vector3(2.08, 1, 0.58)
+cast_shadow = 0
+mesh = SubResource("PuddleMesh")
+
+[node name="CentreEast" type="MeshInstance3D" parent="RoadWetness"]
+position = Vector3(24, 0.116, -4.32)
+rotation_degrees = Vector3(0, 26, 0)
+scale = Vector3(1.72, 1, 0.48)
+cast_shadow = 0
+mesh = SubResource("PuddleMesh")
+
+[node name="EastShoulderA" type="MeshInstance3D" parent="RoadWetness"]
+position = Vector3(53, 0.116, 4.05)
+rotation_degrees = Vector3(0, -18, 0)
+scale = Vector3(1.45, 1, 0.44)
+cast_shadow = 0
+mesh = SubResource("PuddleMesh")
+
+[node name="EastShoulderB" type="MeshInstance3D" parent="RoadWetness"]
+position = Vector3(83, 0.116, -4.2)
+rotation_degrees = Vector3(0, 9, 0)
+scale = Vector3(2.22, 1, 0.62)
+cast_shadow = 0
+mesh = SubResource("PuddleMesh")
+
+[node name="MainStreetClock" type="Node3D" parent="."]
+position = Vector3(68, 0.2, -8.36)
+scale = Vector3(1.12, 1.12, 1.12)
+metadata/environment_role = "navigation_landmark"
+
+[node name="Base" type="MeshInstance3D" parent="MainStreetClock"]
+position = Vector3(0, 0.18, 0)
+mesh = SubResource("ClockBaseMesh")
+
+[node name="Post" type="MeshInstance3D" parent="MainStreetClock"]
+position = Vector3(0, 2.15, 0)
+mesh = SubResource("ClockPostMesh")
+
+[node name="LowerCollar" type="MeshInstance3D" parent="MainStreetClock"]
+position = Vector3(0, 0.48, 0)
+mesh = SubResource("ClockCollarMesh")
+
+[node name="UpperCollar" type="MeshInstance3D" parent="MainStreetClock"]
+position = Vector3(0, 3.93, 0)
+mesh = SubResource("ClockCollarMesh")
+
+[node name="Crossbar" type="MeshInstance3D" parent="MainStreetClock"]
+position = Vector3(0, 4.02, 0)
+rotation_degrees = Vector3(90, 0, 0)
+mesh = SubResource("ClockCrossbarMesh")
+
+[node name="CrossbarWestFinial" type="MeshInstance3D" parent="MainStreetClock"]
+position = Vector3(0, 4.02, -0.93)
+mesh = SubResource("ClockFinialMesh")
+
+[node name="CrossbarEastFinial" type="MeshInstance3D" parent="MainStreetClock"]
+position = Vector3(0, 4.02, 0.93)
+mesh = SubResource("ClockFinialMesh")
+
+[node name="Rim" type="MeshInstance3D" parent="MainStreetClock"]
+position = Vector3(0, 4.68, 0)
+rotation_degrees = Vector3(0, 0, 90)
+mesh = SubResource("ClockRimMesh")
+
+[node name="WestFace" type="MeshInstance3D" parent="MainStreetClock"]
+position = Vector3(-0.15, 4.68, 0)
+rotation_degrees = Vector3(0, 0, 90)
+mesh = SubResource("ClockFaceMesh")
+
+[node name="EastFace" type="MeshInstance3D" parent="MainStreetClock"]
+position = Vector3(0.15, 4.68, 0)
+rotation_degrees = Vector3(0, 0, 90)
+mesh = SubResource("ClockFaceMesh")
+
+[node name="WestMinuteHand" type="MeshInstance3D" parent="MainStreetClock"]
+position = Vector3(-0.185, 4.88, 0)
+mesh = SubResource("ClockMinuteHandMesh")
+
+[node name="WestHourHand" type="MeshInstance3D" parent="MainStreetClock"]
+position = Vector3(-0.192, 4.79, 0.12)
+rotation_degrees = Vector3(55, 0, 0)
+mesh = SubResource("ClockHourHandMesh")
+
+[node name="EastMinuteHand" type="MeshInstance3D" parent="MainStreetClock"]
+position = Vector3(0.185, 4.88, 0)
+mesh = SubResource("ClockMinuteHandMesh")
+
+[node name="EastHourHand" type="MeshInstance3D" parent="MainStreetClock"]
+position = Vector3(0.192, 4.79, -0.12)
+rotation_degrees = Vector3(-55, 0, 0)
+mesh = SubResource("ClockHourHandMesh")
+
+[node name="CrownFinial" type="MeshInstance3D" parent="MainStreetClock"]
+position = Vector3(0, 5.52, 0)
+scale = Vector3(0.85, 0.85, 0.85)
+mesh = SubResource("ClockFinialMesh")
+
+[node name="WestIntersectionSignal" type="Node3D" parent="."]
+position = Vector3(-70, 0.2, 0)
+metadata/environment_role = "historic_downtown_wayfinding"
+
+[node name="NorthPole" type="MeshInstance3D" parent="WestIntersectionSignal"]
+position = Vector3(0, 2.375, -8.45)
+mesh = SubResource("SignalPoleMesh")
+
+[node name="CrossArm" type="MeshInstance3D" parent="WestIntersectionSignal"]
+position = Vector3(0, 4.62, -1.45)
+rotation_degrees = Vector3(90, 0, 0)
+mesh = SubResource("SignalArmMesh")
+
+[node name="NearSignal" type="MeshInstance3D" parent="WestIntersectionSignal"]
+position = Vector3(0, 4.58, -2.45)
+mesh = SubResource("SignalHousingMesh")
+
+[node name="NearRed" type="MeshInstance3D" parent="WestIntersectionSignal"]
+position = Vector3(-0.225, 4.91, -2.45)
+rotation_degrees = Vector3(0, 0, 90)
+mesh = SubResource("SignalRedLensMesh")
+
+[node name="NearAmber" type="MeshInstance3D" parent="WestIntersectionSignal"]
+position = Vector3(-0.225, 4.58, -2.45)
+rotation_degrees = Vector3(0, 0, 90)
+mesh = SubResource("SignalAmberLensMesh")
+
+[node name="NearGreen" type="MeshInstance3D" parent="WestIntersectionSignal"]
+position = Vector3(-0.225, 4.25, -2.45)
+rotation_degrees = Vector3(0, 0, 90)
+mesh = SubResource("SignalGreenLensMesh")
+
+[node name="FarSignal" type="MeshInstance3D" parent="WestIntersectionSignal"]
+position = Vector3(0, 4.58, 2.35)
+mesh = SubResource("SignalHousingMesh")
+
+[node name="FarRed" type="MeshInstance3D" parent="WestIntersectionSignal"]
+position = Vector3(-0.225, 4.91, 2.35)
+rotation_degrees = Vector3(0, 0, 90)
+mesh = SubResource("SignalRedLensMesh")
+
+[node name="FarAmber" type="MeshInstance3D" parent="WestIntersectionSignal"]
+position = Vector3(-0.225, 4.58, 2.35)
+rotation_degrees = Vector3(0, 0, 90)
+mesh = SubResource("SignalAmberLensMesh")
+
+[node name="FarGreen" type="MeshInstance3D" parent="WestIntersectionSignal"]
+position = Vector3(-0.225, 4.25, 2.35)
+rotation_degrees = Vector3(0, 0, 90)
+mesh = SubResource("SignalGreenLensMesh")

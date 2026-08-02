@@ -9,6 +9,7 @@ ItemId = &"water"
 DisplayName = "Water"
 Description = "A bottle of drinking water."
 StackLimit = 4
+UnitWeightKg = 0.55
 Category = 2
 Icon = ExtResource("2_icon")
 ThirstRestored = 40.0

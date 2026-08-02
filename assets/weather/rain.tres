@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="WeatherProfile" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/WeatherProfile.cs" id="1_profile"]
+
+[resource]
+script = ExtResource("1_profile")
+DisplayName = "Cold Rain"
+Kind = 2
+AmbientMultiplier = 0.68
+SkyEnergyMultiplier = 0.57
+DirectionalMultiplier = 0.31
+DirectionalTint = Color(0.7, 0.79, 0.9, 1)
+Exposure = 0.9
+Saturation = 0.68
+SkyTopColor = Color(0.095, 0.12, 0.17, 1)
+SkyHorizonColor = Color(0.3, 0.34, 0.38, 1)
+CloudColor = Color(0.36, 0.4, 0.46, 1)
+CloudOpacity = 0.96
+FogColor = Color(0.37, 0.41, 0.45, 1)
+FogDensity = 0.36
+FogDepthBegin = 38.0
+FogDepthEnd = 205.0
+FogSkyAffect = 0.48
+FogAerialPerspective = 0.72
+PrecipitationIntensity = 0.78
+WindIntensity = 0.68
+LightningPerMinute = 0.0
+LightningBrightness = 0.0
+

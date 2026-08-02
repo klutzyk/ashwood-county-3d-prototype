@@ -5,7 +5,7 @@
 [ext_resource type="Texture2D" path="res://assets/third_party/materials/asphalt/road_damaged_1k.gltf/textures/road_damaged_arm_1k.jpg" id="3_arm"]
 
 [resource]
-albedo_color = Color(0.18, 0.19, 0.18, 1)
+albedo_color = Color(0.61, 0.59, 0.55, 1)
 albedo_texture = ExtResource("1_diffuse")
 metallic_texture = ExtResource("3_arm")
 metallic_texture_channel = 2
@@ -13,7 +13,7 @@ roughness_texture = ExtResource("3_arm")
 roughness_texture_channel = 1
 normal_enabled = true
 normal_texture = ExtResource("2_normal")
-normal_scale = 0.72
+normal_scale = 0.54
 ao_enabled = true
 ao_texture = ExtResource("3_arm")
 ao_texture_channel = 0

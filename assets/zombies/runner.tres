@@ -6,7 +6,7 @@
 script = ExtResource("1_profile")
 Identifier = &"runner"
 DisplayName = "Runner"
-MovementSpeed = 0.52
+MovementSpeed = 2.2
 MaximumHealth = 80.0
 AttackDamage = 16.0
 DetectionRange = 14.0

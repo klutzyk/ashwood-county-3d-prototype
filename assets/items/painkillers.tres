@@ -9,6 +9,7 @@ ItemId = &"painkillers"
 DisplayName = "Painkillers"
 Description = "A small packet of over-the-counter pain relief."
 StackLimit = 4
+UnitWeightKg = 0.08
 Category = 0
 Icon = ExtResource("2_icon")
 DamageReduction = 0.25

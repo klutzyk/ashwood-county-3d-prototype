@@ -9,6 +9,7 @@ ItemId = &"canned_food"
 DisplayName = "Canned Food"
 Description = "A sturdy can of ready-to-eat food."
 StackLimit = 4
+UnitWeightKg = 0.48
 Category = 1
 Icon = ExtResource("2_icon")
 HungerRestored = 45.0

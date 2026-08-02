@@ -1,11 +1,14 @@
-[gd_scene load_steps=17 format=3]
+[gd_scene load_steps=23 format=3]
 
 [ext_resource type="PackedScene" path="res://assets/environment/nature/main_street_tree_1.tscn" id="1_tree_a"]
 [ext_resource type="PackedScene" path="res://assets/environment/nature/main_street_tree_2.tscn" id="2_tree_b"]
 
-[sub_resource type="StandardMaterial3D" id="FarRidgeMaterial"]
-albedo_color = Color(0.175, 0.19, 0.17, 1)
-roughness = 1.0
+[sub_resource type="Shader" id="RidgeSilhouetteShader"]
+code = "shader_type spatial;\nrender_mode unshaded;\n\nuniform vec4 ridge_color : source_color = vec4(0.3, 0.34, 0.3, 1.0);\nvarying float ridge_tone;\n\nvoid vertex() {\n    float crown = smoothstep(-0.46, 0.78, VERTEX.y);\n    float broad = sin((VERTEX.x * 7.0) + (VERTEX.z * 5.0)) * 0.07;\n    float medium = sin((VERTEX.x * 15.0) - (VERTEX.z * 11.0) + 0.7) * 0.032;\n    float fine = sin((VERTEX.x * 29.0) + (VERTEX.z * 17.0) - 0.3) * 0.012;\n    ridge_tone = (broad + medium + fine) * crown;\n    VERTEX.y += ridge_tone;\n}\n\nvoid fragment() {\n    float variation = clamp(0.98 + (ridge_tone * 1.25), 0.9, 1.08);\n    ALBEDO = ridge_color.rgb * variation;\n    ROUGHNESS = 1.0;\n}\n"
+
+[sub_resource type="ShaderMaterial" id="FarRidgeMaterial"]
+shader = SubResource("RidgeSilhouetteShader")
+shader_parameter/ridge_color = Color(0.32, 0.35, 0.325, 1)
 
 [sub_resource type="SphereMesh" id="FarRidgeMesh"]
 material = SubResource("FarRidgeMaterial")
@@ -14,9 +17,9 @@ height = 2.0
 radial_segments = 32
 rings = 12
 
-[sub_resource type="StandardMaterial3D" id="NearRidgeMaterial"]
-albedo_color = Color(0.105, 0.145, 0.112, 1)
-roughness = 1.0
+[sub_resource type="ShaderMaterial" id="NearRidgeMaterial"]
+shader = SubResource("RidgeSilhouetteShader")
+shader_parameter/ridge_color = Color(0.245, 0.315, 0.255, 1)
 
 [sub_resource type="SphereMesh" id="NearRidgeMesh"]
 material = SubResource("NearRidgeMaterial")
@@ -26,9 +29,14 @@ radial_segments = 32
 rings = 12
 
 [sub_resource type="StandardMaterial3D" id="TowerMaterial"]
-albedo_color = Color(0.2, 0.23, 0.22, 1)
-metallic = 0.72
-roughness = 0.62
+albedo_color = Color(0.34, 0.39, 0.4, 1)
+metallic = 0.58
+roughness = 0.7
+
+[sub_resource type="StandardMaterial3D" id="TowerRustMaterial"]
+albedo_color = Color(0.29, 0.14, 0.07, 1)
+metallic = 0.48
+roughness = 0.78
 
 [sub_resource type="CylinderMesh" id="TowerLegMesh"]
 material = SubResource("TowerMaterial")
@@ -57,6 +65,34 @@ inner_radius = 4.0
 outer_radius = 4.15
 rings = 32
 ring_segments = 6
+
+[sub_resource type="TorusMesh" id="TowerTankBandMesh"]
+material = SubResource("TowerRustMaterial")
+inner_radius = 3.76
+outer_radius = 3.94
+rings = 32
+ring_segments = 6
+
+[sub_resource type="TorusMesh" id="TowerRailRingMesh"]
+material = SubResource("TowerMaterial")
+inner_radius = 4.14
+outer_radius = 4.22
+rings = 32
+ring_segments = 5
+
+[sub_resource type="CylinderMesh" id="TowerBraceMesh"]
+material = SubResource("TowerRustMaterial")
+top_radius = 0.055
+bottom_radius = 0.055
+height = 6.2
+radial_segments = 6
+
+[sub_resource type="CylinderMesh" id="TowerRailPostMesh"]
+material = SubResource("TowerMaterial")
+top_radius = 0.045
+bottom_radius = 0.045
+height = 1.0
+radial_segments = 6
 
 [sub_resource type="StandardMaterial3D" id="LandmarkMaterial"]
 albedo_color = Color(0.16, 0.145, 0.125, 1)
@@ -405,3 +441,132 @@ mesh = SubResource("TowerRoofMesh")
 position = Vector3(0, 15.4, 0)
 cast_shadow = 0
 mesh = SubResource("TowerRingMesh")
+
+[node name="LowerTankBand" type="MeshInstance3D" parent="WaterTower"]
+position = Vector3(0, 15.85, 0)
+cast_shadow = 0
+mesh = SubResource("TowerTankBandMesh")
+
+[node name="UpperTankBand" type="MeshInstance3D" parent="WaterTower"]
+position = Vector3(0, 18.9, 0)
+cast_shadow = 0
+mesh = SubResource("TowerTankBandMesh")
+
+[node name="CatwalkRail" type="MeshInstance3D" parent="WaterTower"]
+position = Vector3(0, 16.3, 0)
+cast_shadow = 0
+mesh = SubResource("TowerRailRingMesh")
+
+[node name="RailPosts" type="Node3D" parent="WaterTower"]
+
+[node name="West" type="MeshInstance3D" parent="WaterTower/RailPosts"]
+position = Vector3(-4.18, 15.8, 0)
+cast_shadow = 0
+mesh = SubResource("TowerRailPostMesh")
+
+[node name="East" type="MeshInstance3D" parent="WaterTower/RailPosts"]
+position = Vector3(4.18, 15.8, 0)
+cast_shadow = 0
+mesh = SubResource("TowerRailPostMesh")
+
+[node name="North" type="MeshInstance3D" parent="WaterTower/RailPosts"]
+position = Vector3(0, 15.8, -4.18)
+cast_shadow = 0
+mesh = SubResource("TowerRailPostMesh")
+
+[node name="South" type="MeshInstance3D" parent="WaterTower/RailPosts"]
+position = Vector3(0, 15.8, 4.18)
+cast_shadow = 0
+mesh = SubResource("TowerRailPostMesh")
+
+[node name="NorthWest" type="MeshInstance3D" parent="WaterTower/RailPosts"]
+position = Vector3(-2.95, 15.8, -2.95)
+cast_shadow = 0
+mesh = SubResource("TowerRailPostMesh")
+
+[node name="NorthEast" type="MeshInstance3D" parent="WaterTower/RailPosts"]
+position = Vector3(2.95, 15.8, -2.95)
+cast_shadow = 0
+mesh = SubResource("TowerRailPostMesh")
+
+[node name="SouthWest" type="MeshInstance3D" parent="WaterTower/RailPosts"]
+position = Vector3(-2.95, 15.8, 2.95)
+cast_shadow = 0
+mesh = SubResource("TowerRailPostMesh")
+
+[node name="SouthEast" type="MeshInstance3D" parent="WaterTower/RailPosts"]
+position = Vector3(2.95, 15.8, 2.95)
+cast_shadow = 0
+mesh = SubResource("TowerRailPostMesh")
+
+[node name="CrossBracing" type="Node3D" parent="WaterTower"]
+
+[node name="NorthRise" type="MeshInstance3D" parent="WaterTower/CrossBracing"]
+position = Vector3(0, 7.0, -2.25)
+rotation_degrees = Vector3(0, 0, 43)
+cast_shadow = 0
+mesh = SubResource("TowerBraceMesh")
+
+[node name="NorthFall" type="MeshInstance3D" parent="WaterTower/CrossBracing"]
+position = Vector3(0, 7.0, -2.25)
+rotation_degrees = Vector3(0, 0, -43)
+cast_shadow = 0
+mesh = SubResource("TowerBraceMesh")
+
+[node name="SouthRise" type="MeshInstance3D" parent="WaterTower/CrossBracing"]
+position = Vector3(0, 7.0, 2.25)
+rotation_degrees = Vector3(0, 0, 43)
+cast_shadow = 0
+mesh = SubResource("TowerBraceMesh")
+
+[node name="SouthFall" type="MeshInstance3D" parent="WaterTower/CrossBracing"]
+position = Vector3(0, 7.0, 2.25)
+rotation_degrees = Vector3(0, 0, -43)
+cast_shadow = 0
+mesh = SubResource("TowerBraceMesh")
+
+[node name="WestRise" type="MeshInstance3D" parent="WaterTower/CrossBracing"]
+position = Vector3(-2.25, 7.0, 0)
+rotation_degrees = Vector3(43, 0, 0)
+cast_shadow = 0
+mesh = SubResource("TowerBraceMesh")
+
+[node name="WestFall" type="MeshInstance3D" parent="WaterTower/CrossBracing"]
+position = Vector3(-2.25, 7.0, 0)
+rotation_degrees = Vector3(-43, 0, 0)
+cast_shadow = 0
+mesh = SubResource("TowerBraceMesh")
+
+[node name="EastRise" type="MeshInstance3D" parent="WaterTower/CrossBracing"]
+position = Vector3(2.25, 7.0, 0)
+rotation_degrees = Vector3(43, 0, 0)
+cast_shadow = 0
+mesh = SubResource("TowerBraceMesh")
+
+[node name="EastFall" type="MeshInstance3D" parent="WaterTower/CrossBracing"]
+position = Vector3(2.25, 7.0, 0)
+rotation_degrees = Vector3(-43, 0, 0)
+cast_shadow = 0
+mesh = SubResource("TowerBraceMesh")
+
+[node name="TownNameWest" type="Label3D" parent="WaterTower"]
+position = Vector3(-3.86, 17.45, 0)
+rotation_degrees = Vector3(0, -90, 0)
+modulate = Color(0.82, 0.72, 0.54, 1)
+outline_modulate = Color(0.12, 0.09, 0.06, 1)
+text = "ASHWOOD"
+font_size = 96
+outline_size = 9
+pixel_size = 0.007
+shaded = true
+
+[node name="TownNameEast" type="Label3D" parent="WaterTower"]
+position = Vector3(3.86, 17.45, 0)
+rotation_degrees = Vector3(0, 90, 0)
+modulate = Color(0.82, 0.72, 0.54, 1)
+outline_modulate = Color(0.12, 0.09, 0.06, 1)
+text = "ASHWOOD"
+font_size = 96
+outline_size = 9
+pixel_size = 0.007
+shaded = true

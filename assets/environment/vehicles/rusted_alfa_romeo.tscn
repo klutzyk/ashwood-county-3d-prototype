@@ -91,5 +91,6 @@ script = ExtResource("14_interactable")
 
 [node name="Inventory" type="Node" parent="SearchableContainer"]
 script = ExtResource("18_inventory")
+SlotCapacity = 18
 
 [editable path="Visual"]

@@ -88,7 +88,7 @@ public partial class PlayerStatusDisplay : CanvasLayer
 	{
 		_healthLabel.Text = _healthBar is null
 			? $"Health: {Mathf.CeilToInt(currentHealth)} / {Mathf.CeilToInt(maximumHealth)}"
-			: $"Health {Mathf.CeilToInt(currentHealth)}";
+			: $"HP  {Mathf.CeilToInt(currentHealth)}";
 		if (_healthBar is not null)
 		{
 			_healthBar.MaxValue = maximumHealth;
@@ -108,7 +108,7 @@ public partial class PlayerStatusDisplay : CanvasLayer
 		_staminaBar.MaxValue = maximumStamina;
 		_staminaBar.Value = currentStamina;
 		float ratio = GetRatio(currentStamina, maximumStamina);
-		_staminaLabel.Text = $"Stamina {Mathf.RoundToInt(ratio * 100.0f)}%";
+		_staminaLabel.Text = $"STM  {Mathf.RoundToInt(ratio * 100.0f)}";
 		_staminaBar.Modulate = ConditionTint(ratio);
 	}
 
@@ -117,7 +117,7 @@ public partial class PlayerStatusDisplay : CanvasLayer
 		_hungerBar.MaxValue = maximumHunger;
 		_hungerBar.Value = currentHunger;
 		float ratio = GetRatio(currentHunger, maximumHunger);
-		_hungerLabel.Text = $"Hunger {Mathf.RoundToInt(ratio * 100.0f)}%";
+		_hungerLabel.Text = $"FOOD  {Mathf.RoundToInt(ratio * 100.0f)}";
 		_hungerBar.Modulate = ConditionTint(ratio);
 	}
 
@@ -126,7 +126,7 @@ public partial class PlayerStatusDisplay : CanvasLayer
 		_thirstBar.MaxValue = maximumThirst;
 		_thirstBar.Value = currentThirst;
 		float ratio = GetRatio(currentThirst, maximumThirst);
-		_thirstLabel.Text = $"Thirst {Mathf.RoundToInt(ratio * 100.0f)}%";
+		_thirstLabel.Text = $"WATER  {Mathf.RoundToInt(ratio * 100.0f)}";
 		_thirstBar.Modulate = ConditionTint(ratio);
 	}
 

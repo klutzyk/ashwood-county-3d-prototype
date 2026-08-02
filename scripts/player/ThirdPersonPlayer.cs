@@ -23,6 +23,16 @@ public partial class ThirdPersonPlayer : CharacterBody3D
 	[Export] public float MeleeImpactShakeDuration { get; set; } = 0.08f;
 	[Export(PropertyHint.Range, "0,4,0.1")]
 	public float MeleeImpactFovKick { get; set; } = 1.4f;
+	[Export(PropertyHint.Range, "0,0.2,0.005")]
+	public float DamageImpactShakeStrength { get; set; } = 0.075f;
+	[Export(PropertyHint.Range, "0.05,0.5,0.01")]
+	public float DamageImpactShakeDuration { get; set; } = 0.19f;
+	[Export(PropertyHint.Range, "0,6,0.1")]
+	public float DamageImpactFovKick { get; set; } = 2.4f;
+	[Export(PropertyHint.Range, "0,0.6,0.01")]
+	public float DamageStaggerDuration { get; set; } = 0.16f;
+	[Export(PropertyHint.Range, "0.1,1,0.01")]
+	public float DamageStaggerMovementMultiplier { get; set; } = 0.48f;
 	[Export] public float CameraHeight { get; set; } = 1.15f;
 
 	private const float MinimumPitch = -1.05f;
@@ -47,6 +57,10 @@ public partial class ThirdPersonPlayer : CharacterBody3D
 	private bool _wasSprinting;
 	private float _meleeImpactShakeRemaining;
 	private float _meleeImpactShakeElapsed;
+	private float _damageImpactShakeRemaining;
+	private float _damageImpactShakeElapsed;
+	private float _damageStaggerRemaining;
+	private float _damageImpactSide = 1.0f;
 	private float _standingCollisionHeight;
 	private Vector3 _standingCollisionPosition;
 	private float _cameraStepVerticalOffset;
@@ -59,6 +73,8 @@ public partial class ThirdPersonPlayer : CharacterBody3D
 	public bool IsAirborne => !IsOnFloor();
 	public bool IsInventoryUiOpen => _inventoryUiOpen;
 	public bool IsMeleeImpactFeedbackActive => _meleeImpactShakeRemaining > 0.0f;
+	public bool IsDamageFeedbackActive => _damageImpactShakeRemaining > 0.0f;
+	public bool IsDamageStaggered => _damageStaggerRemaining > 0.0f;
 	public bool CanUseWorldInteractions =>
 		!_health.IsDead && !_inventoryUiOpen && !GetTree().Paused;
 
@@ -145,6 +161,7 @@ public partial class ThirdPersonPlayer : CharacterBody3D
 	public override void _PhysicsProcess(double delta)
 	{
 		float deltaTime = (float)delta;
+		_damageStaggerRemaining = Mathf.Max(_damageStaggerRemaining - deltaTime, 0.0f);
 		if (_health.IsDead)
 		{
 			IsSprinting = false;
@@ -176,6 +193,8 @@ public partial class ThirdPersonPlayer : CharacterBody3D
 		bool wantsToSprint =
 			Input.IsActionPressed("run") &&
 			!IsCrouching &&
+			!_meleeCombat.IsAttacking &&
+			!IsDamageStaggered &&
 			!movementDirection.IsZeroApprox();
 		IsSprinting = wantsToSprint && _stamina.CanSprint;
 		_stamina.UpdateStamina(IsSprinting, deltaTime);
@@ -189,11 +208,23 @@ public partial class ThirdPersonPlayer : CharacterBody3D
 			: IsSprinting
 				? SprintSpeed
 				: WalkSpeed;
+		targetSpeed *= _meleeCombat.MovementSpeedMultiplier;
+		if (IsDamageStaggered)
+		{
+			targetSpeed *= Mathf.Clamp(DamageStaggerMovementMultiplier, 0.1f, 1.0f);
+		}
 
 		ApplyHorizontalMovement(movementDirection, targetSpeed, deltaTime);
 		ApplyGravity(deltaTime);
 
-		if (!movementDirection.IsZeroApprox())
+		if (_meleeCombat.IsAttacking)
+		{
+			RotateTowardDirection(
+				_meleeCombat.CombatFacingDirection,
+				deltaTime,
+				_meleeCombat.TargetTurnSpeed);
+		}
+		else if (!movementDirection.IsZeroApprox())
 		{
 			RotateTowardMovement(movementDirection, deltaTime);
 		}
@@ -227,10 +258,40 @@ public partial class ThirdPersonPlayer : CharacterBody3D
 		}
 	}
 
+	public Vector3 GetCombatAimDirection()
+	{
+		Vector3 direction = -_cameraRig.GlobalBasis.Z;
+		direction.Y = 0.0f;
+		return direction.IsZeroApprox()
+			? GlobalBasis.Z.Normalized()
+			: direction.Normalized();
+	}
+
 	public void RequestMeleeImpactFeedback()
 	{
 		_meleeImpactShakeRemaining = Mathf.Max(MeleeImpactShakeDuration, 0.0f);
 		_meleeImpactShakeElapsed = 0.0f;
+	}
+
+	public void RequestZombieHitFeedback(Vector3 damageSource)
+	{
+		_damageImpactShakeRemaining = Mathf.Max(DamageImpactShakeDuration, 0.0f);
+		_damageImpactShakeElapsed = 0.0f;
+		_damageStaggerRemaining = Mathf.Max(DamageStaggerDuration, 0.0f);
+
+		Vector3 sourceDirection = damageSource - GlobalPosition;
+		sourceDirection.Y = 0.0f;
+		Vector3 cameraRight = _cameraRig.GlobalBasis.X;
+		cameraRight.Y = 0.0f;
+		if (!sourceDirection.IsZeroApprox() && !cameraRight.IsZeroApprox())
+		{
+			_damageImpactSide = Mathf.Sign(
+				cameraRight.Normalized().Dot(sourceDirection.Normalized()));
+			if (Mathf.IsZeroApprox(_damageImpactSide))
+			{
+				_damageImpactSide = 1.0f;
+			}
+		}
 	}
 
 	private void UpdateSprintNoise(float delta)
@@ -302,6 +363,8 @@ public partial class ThirdPersonPlayer : CharacterBody3D
 	private bool ApplyJump(bool jumpRequested)
 	{
 		if (!IsCrouching &&
+			!_meleeCombat.IsAttacking &&
+			!IsDamageStaggered &&
 			IsOnFloor() &&
 			jumpRequested)
 		{
@@ -488,6 +551,11 @@ public partial class ThirdPersonPlayer : CharacterBody3D
 
 	private void UpdateCrouch()
 	{
+		if (_meleeCombat.IsAttacking || IsDamageStaggered)
+		{
+			return;
+		}
+
 		if (IsCrouching && Input.IsActionPressed("run"))
 		{
 			SetCrouching(false);
@@ -520,8 +588,21 @@ public partial class ThirdPersonPlayer : CharacterBody3D
 
 	private void RotateTowardMovement(Vector3 direction, float delta)
 	{
+		RotateTowardDirection(direction, delta, TurnSpeed);
+	}
+
+	private void RotateTowardDirection(Vector3 direction, float delta, float turnSpeed)
+	{
+		if (direction.IsZeroApprox())
+		{
+			return;
+		}
+
 		float targetRotation = Mathf.Atan2(direction.X, direction.Z);
-		Rotation = new Vector3(0.0f, Mathf.LerpAngle(Rotation.Y, targetRotation, TurnSpeed * delta), 0.0f);
+		Rotation = new Vector3(
+			0.0f,
+			Mathf.LerpAngle(Rotation.Y, targetRotation, Mathf.Max(turnSpeed, 0.0f) * delta),
+			0.0f);
 	}
 
 	private void RotateCamera(Vector2 mouseMovement)
@@ -556,8 +637,25 @@ public partial class ThirdPersonPlayer : CharacterBody3D
 				Mathf.Sin(_meleeImpactShakeElapsed * 83.0f),
 				0.0f) * strength;
 		}
+		float damageFade = 0.0f;
+		if (_damageImpactShakeRemaining > 0.0f)
+		{
+			_damageImpactShakeRemaining = Mathf.Max(
+				_damageImpactShakeRemaining - delta,
+				0.0f);
+			_damageImpactShakeElapsed += delta;
+			float duration = Mathf.Max(DamageImpactShakeDuration, 0.001f);
+			damageFade = _damageImpactShakeRemaining / duration;
+			float strength = Mathf.Max(DamageImpactShakeStrength, 0.0f) *
+				Mathf.Pow(damageFade, 1.35f);
+			shakeOffset += new Vector3(
+				_damageImpactSide * Mathf.Sin(_damageImpactShakeElapsed * 72.0f),
+				-Mathf.Abs(Mathf.Sin(_damageImpactShakeElapsed * 54.0f)) * 0.7f,
+				0.0f) * strength;
+		}
 		_camera.Fov = _baseCameraFov -
-			(Mathf.Max(MeleeImpactFovKick, 0.0f) * impactFade);
+			(Mathf.Max(MeleeImpactFovKick, 0.0f) * impactFade) +
+			(Mathf.Max(DamageImpactFovKick, 0.0f) * damageFade);
 
 		_cameraRig.GlobalPosition =
 			GlobalPosition +

@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3]
+[gd_scene load_steps=30 format=3]
 
 [ext_resource type="Script" path="res://scripts/ui/PlayerStatusDisplay.cs" id="1_status"]
 [ext_resource type="Script" path="res://scripts/ui/PerformanceDisplay.cs" id="2_fps"]
@@ -35,12 +35,12 @@ bg_color = Color(0.72, 0.5, 0.2, 0.95)
 bg_color = Color(0.25, 0.58, 0.82, 0.95)
 
 [sub_resource type="StyleBoxFlat" id="Slot"]
-bg_color = Color(0.02, 0.03, 0.035, 0.86)
+bg_color = Color(0.018, 0.025, 0.026, 0.82)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.34, 0.36, 0.32, 0.9)
+border_color = Color(0.4, 0.39, 0.29, 0.82)
 corner_radius_top_left = 4
 corner_radius_top_right = 4
 corner_radius_bottom_right = 4
@@ -49,10 +49,7 @@ corner_radius_bottom_left = 4
 [sub_resource type="StyleBoxFlat" id="VitalsPanel"]
 bg_color = Color(0.012, 0.019, 0.018, 0.82)
 border_width_left = 2
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.38, 0.34, 0.22, 0.78)
+border_color = Color(0.56, 0.47, 0.25, 0.72)
 corner_radius_top_left = 5
 corner_radius_top_right = 5
 corner_radius_bottom_right = 5
@@ -66,16 +63,16 @@ corner_radius_bottom_right = 3
 corner_radius_bottom_left = 3
 
 [sub_resource type="StyleBoxFlat" id="InventoryPanel"]
-content_margin_left = 24.0
-content_margin_top = 18.0
-content_margin_right = 24.0
-content_margin_bottom = 18.0
-bg_color = Color(0.012, 0.017, 0.017, 0.97)
+content_margin_left = 22.0
+content_margin_top = 16.0
+content_margin_right = 22.0
+content_margin_bottom = 16.0
+bg_color = Color(0.014, 0.021, 0.019, 0.985)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.48, 0.4, 0.24, 0.92)
+border_color = Color(0.58, 0.47, 0.25, 0.96)
 corner_radius_top_left = 8
 corner_radius_top_right = 8
 corner_radius_bottom_right = 8
@@ -84,12 +81,12 @@ shadow_color = Color(0, 0, 0, 0.65)
 shadow_size = 18
 
 [sub_resource type="StyleBoxFlat" id="InventoryList"]
-bg_color = Color(0.025, 0.035, 0.032, 0.96)
+bg_color = Color(0.023, 0.033, 0.03, 0.98)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.22, 0.25, 0.21, 0.9)
+border_color = Color(0.27, 0.29, 0.23, 0.94)
 corner_radius_top_left = 4
 corner_radius_top_right = 4
 corner_radius_bottom_right = 4
@@ -131,6 +128,83 @@ corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
+[sub_resource type="StyleBoxFlat" id="InventoryListSelected"]
+bg_color = Color(0.27, 0.255, 0.13, 0.99)
+border_width_left = 4
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.94, 0.74, 0.32, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="InventoryListFocus"]
+bg_color = Color(0, 0, 0, 0)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.82, 0.64, 0.28, 0.98)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="InventoryDetails"]
+content_margin_left = 16.0
+content_margin_top = 10.0
+content_margin_right = 16.0
+content_margin_bottom = 10.0
+bg_color = Color(0.02, 0.027, 0.025, 0.94)
+border_width_left = 3
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.34, 0.32, 0.21, 0.88)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="ActionButtonDisabled"]
+bg_color = Color(0.045, 0.05, 0.045, 0.88)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.13, 0.14, 0.12, 0.8)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="ActionButtonFocus"]
+bg_color = Color(0, 0, 0, 0)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.98, 0.77, 0.31, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="ObjectivePanel"]
+content_margin_left = 11.0
+content_margin_top = 5.0
+content_margin_right = 10.0
+content_margin_bottom = 5.0
+bg_color = Color(0.014, 0.022, 0.021, 0.68)
+border_width_left = 2
+border_color = Color(0.62, 0.51, 0.25, 0.86)
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+shadow_color = Color(0, 0, 0, 0.32)
+shadow_size = 7
+
 [node name="GameplayHUD" type="CanvasLayer"]
 script = ExtResource("1_status")
 
@@ -138,12 +212,13 @@ script = ExtResource("1_status")
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -116.0
-offset_top = 12.0
-offset_right = -12.0
+offset_left = -106.0
+offset_top = 18.0
+offset_right = -18.0
 offset_bottom = 50.0
 grow_horizontal = 0
-theme_override_font_sizes/font_size = 20
+theme_override_colors/font_color = Color(0.9, 0.88, 0.78, 1)
+theme_override_font_sizes/font_size = 17
 theme_override_styles/normal = SubResource("Panel")
 text = "17:00"
 horizontal_alignment = 1
@@ -179,104 +254,173 @@ vertical_alignment = 1
 script = ExtResource("9_notifications")
 
 [node name="ObjectiveDisplay" type="Control" parent="."]
-offset_left = 28.0
-offset_top = 126.0
-offset_right = 588.0
-offset_bottom = 208.0
+offset_left = 20.0
+offset_top = 110.0
+offset_right = 350.0
+offset_bottom = 174.0
 script = ExtResource("8_objective")
 SingleObjectiveMode = true
 
-[node name="ObjectiveText" type="Label" parent="ObjectiveDisplay"]
+[node name="ObjectiveBackdrop" type="Panel" parent="ObjectiveDisplay"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_colors/font_color = Color(0.88, 0.9, 0.82, 1)
-theme_override_font_sizes/font_size = 16
-theme_override_styles/normal = SubResource("Panel")
-text = "CURRENT OBJECTIVE\nSearch Glen's Bakery for emergency supplies"
+mouse_filter = 2
+theme_override_styles/panel = SubResource("ObjectivePanel")
+
+[node name="ObjectiveKicker" type="Label" parent="ObjectiveDisplay"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 13.0
+offset_top = 5.0
+offset_right = -10.0
+offset_bottom = 22.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.92, 0.74, 0.34, 1)
+theme_override_font_sizes/font_size = 10
+text = "SUPPLY RUN  /  ACTIVE"
+vertical_alignment = 1
+
+[node name="ObjectiveText" type="Label" parent="ObjectiveDisplay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 11.0
+offset_top = 21.0
+offset_right = -10.0
+offset_bottom = -5.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.88, 0.89, 0.81, 1)
+theme_override_font_sizes/font_size = 12
+text = "Search Glen's Bakery for emergency supplies"
 vertical_alignment = 1
 autowrap_mode = 2
 clip_text = true
 
 [node name="VitalsBackdrop" type="Panel" parent="."]
-offset_left = 12.0
-offset_top = 48.0
-offset_right = 404.0
-offset_bottom = 120.0
+offset_left = 18.0
+offset_top = 18.0
+offset_right = 346.0
+offset_bottom = 104.0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("VitalsPanel")
 
+[node name="HealthGlyph" type="Label" parent="."]
+offset_left = 29.0
+offset_top = 27.0
+offset_right = 44.0
+offset_bottom = 50.0
+theme_override_colors/font_color = Color(0.9, 0.27, 0.22, 1)
+theme_override_font_sizes/font_size = 18
+text = "+"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="HealthLabel" type="Label" parent="."]
-offset_left = 24.0
-offset_top = 56.0
-offset_right = 104.0
-offset_bottom = 76.0
-theme_override_font_sizes/font_size = 16
-text = "Health: 100 / 100"
+offset_left = 47.0
+offset_top = 29.0
+offset_right = 105.0
+offset_bottom = 49.0
+theme_override_colors/font_color = Color(0.92, 0.88, 0.78, 1)
+theme_override_font_sizes/font_size = 12
+text = "HP  100"
 vertical_alignment = 1
 
 [node name="HealthBar" type="ProgressBar" parent="."]
 offset_left = 106.0
-offset_top = 58.0
-offset_right = 196.0
-offset_bottom = 74.0
+offset_top = 35.0
+offset_right = 169.0
+offset_bottom = 45.0
 theme_override_styles/background = SubResource("BarBackground")
 theme_override_styles/fill = SubResource("HealthFill")
 value = 100.0
 show_percentage = false
 
 [node name="StaminaLabel" type="Label" parent="."]
-offset_left = 24.0
-offset_top = 88.0
-offset_right = 104.0
-offset_bottom = 112.0
-theme_override_font_sizes/font_size = 14
-text = "Stamina"
+offset_left = 47.0
+offset_top = 67.0
+offset_right = 105.0
+offset_bottom = 87.0
+theme_override_colors/font_color = Color(0.92, 0.88, 0.78, 1)
+theme_override_font_sizes/font_size = 12
+text = "STM  100"
+
+[node name="StaminaGlyph" type="Label" parent="."]
+offset_left = 29.0
+offset_top = 65.0
+offset_right = 44.0
+offset_bottom = 88.0
+theme_override_colors/font_color = Color(0.74, 0.78, 0.3, 1)
+theme_override_font_sizes/font_size = 15
+text = ">"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="StaminaBar" type="ProgressBar" parent="."]
 offset_left = 106.0
-offset_top = 93.0
-offset_right = 196.0
-offset_bottom = 111.0
+offset_top = 73.0
+offset_right = 169.0
+offset_bottom = 83.0
 theme_override_styles/background = SubResource("BarBackground")
 theme_override_styles/fill = SubResource("StaminaFill")
 value = 100.0
 show_percentage = false
 
 [node name="HungerLabel" type="Label" parent="."]
-offset_left = 210.0
-offset_top = 52.0
-offset_right = 298.0
-offset_bottom = 72.0
-theme_override_font_sizes/font_size = 14
-text = "Hunger"
+offset_left = 202.0
+offset_top = 29.0
+offset_right = 270.0
+offset_bottom = 49.0
+theme_override_colors/font_color = Color(0.92, 0.88, 0.78, 1)
+theme_override_font_sizes/font_size = 12
+text = "FOOD  100"
+
+[node name="HungerGlyph" type="ColorRect" parent="."]
+offset_left = 185.0
+offset_top = 34.0
+offset_right = 195.0
+offset_bottom = 44.0
+mouse_filter = 2
+color = Color(0.76, 0.53, 0.22, 1)
 
 [node name="HungerBar" type="ProgressBar" parent="."]
-offset_left = 300.0
-offset_top = 53.0
-offset_right = 392.0
-offset_bottom = 71.0
+offset_left = 271.0
+offset_top = 35.0
+offset_right = 334.0
+offset_bottom = 45.0
 theme_override_styles/background = SubResource("BarBackground")
 theme_override_styles/fill = SubResource("HungerFill")
 value = 100.0
 show_percentage = false
 
 [node name="ThirstLabel" type="Label" parent="."]
-offset_left = 210.0
-offset_top = 92.0
-offset_right = 298.0
-offset_bottom = 112.0
-theme_override_font_sizes/font_size = 14
-text = "Thirst"
+offset_left = 202.0
+offset_top = 67.0
+offset_right = 270.0
+offset_bottom = 87.0
+theme_override_colors/font_color = Color(0.92, 0.88, 0.78, 1)
+theme_override_font_sizes/font_size = 12
+text = "WATER  100"
+
+[node name="ThirstGlyph" type="ColorRect" parent="."]
+offset_left = 185.0
+offset_top = 70.0
+offset_right = 195.0
+offset_bottom = 84.0
+mouse_filter = 2
+color = Color(0.27, 0.62, 0.87, 1)
 
 [node name="ThirstBar" type="ProgressBar" parent="."]
-offset_left = 300.0
-offset_top = 93.0
-offset_right = 392.0
-offset_bottom = 111.0
+offset_left = 271.0
+offset_top = 73.0
+offset_right = 334.0
+offset_bottom = 83.0
 theme_override_styles/background = SubResource("BarBackground")
 theme_override_styles/fill = SubResource("ThirstFill")
 value = 100.0
@@ -327,44 +471,66 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -159.0
-offset_top = -70.0
-offset_right = 159.0
-offset_bottom = -16.0
+offset_left = -138.0
+offset_top = -54.0
+offset_right = 138.0
+offset_bottom = -12.0
 grow_horizontal = 2
 grow_vertical = 0
-theme_override_constants/separation = 6
+theme_override_constants/separation = 5
 script = ExtResource("5_inventory")
 
+[node name="QuickAccessTitle" type="Label" parent="."]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -138.0
+offset_top = -76.0
+offset_right = 138.0
+offset_bottom = -57.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.78, 0.74, 0.58, 0.96)
+theme_override_font_sizes/font_size = 10
+theme_override_styles/normal = SubResource("Panel")
+text = "QUICK ACCESS   /   5 - 8"
+horizontal_alignment = 1
+
 [node name="Slot1" type="Label" parent="InventorySlots"]
-custom_minimum_size = Vector2(75, 54)
+custom_minimum_size = Vector2(65, 42)
 layout_mode = 2
+theme_override_font_sizes/font_size = 11
 theme_override_styles/normal = SubResource("Slot")
-text = "1\nEmpty"
+text = "5\n-"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Slot2" type="Label" parent="InventorySlots"]
-custom_minimum_size = Vector2(75, 54)
+custom_minimum_size = Vector2(65, 42)
 layout_mode = 2
+theme_override_font_sizes/font_size = 11
 theme_override_styles/normal = SubResource("Slot")
-text = "2\nEmpty"
+text = "6\n-"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Slot3" type="Label" parent="InventorySlots"]
-custom_minimum_size = Vector2(75, 54)
+custom_minimum_size = Vector2(65, 42)
 layout_mode = 2
+theme_override_font_sizes/font_size = 11
 theme_override_styles/normal = SubResource("Slot")
-text = "3\nEmpty"
+text = "7\n-"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Slot4" type="Label" parent="InventorySlots"]
-custom_minimum_size = Vector2(75, 54)
+custom_minimum_size = Vector2(65, 42)
 layout_mode = 2
+theme_override_font_sizes/font_size = 11
 theme_override_styles/normal = SubResource("Slot")
-text = "4\nEmpty"
+text = "8\n-"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -408,18 +574,19 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -292.0
-offset_top = -67.0
+offset_left = -250.0
+offset_top = -58.0
 offset_right = -18.0
-offset_bottom = -35.0
+offset_bottom = -20.0
 grow_horizontal = 0
 grow_vertical = 0
-theme_override_colors/font_color = Color(0.72, 0.72, 0.63, 0.82)
+theme_override_colors/font_color = Color(0.82, 0.79, 0.66, 0.94)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.8)
 theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 2
-theme_override_font_sizes/font_size = 14
-text = "MELEE  1  BASEBALL BAT"
+theme_override_font_sizes/font_size = 12
+theme_override_styles/normal = SubResource("Panel")
+text = "MELEE  1  /  BASEBALL BAT"
 horizontal_alignment = 2
 vertical_alignment = 1
 
@@ -486,7 +653,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-color = Color(0.004, 0.006, 0.006, 0.62)
+color = Color(0.004, 0.006, 0.006, 0.78)
 
 [node name="Panel" type="PanelContainer" parent="ContainerInventoryWindow"]
 layout_mode = 1
@@ -495,143 +662,298 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -350.0
-offset_top = -260.0
-offset_right = 350.0
-offset_bottom = 260.0
+offset_left = -525.0
+offset_top = -360.0
+offset_right = 525.0
+offset_bottom = 360.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("InventoryPanel")
 
 [node name="Layout" type="VBoxContainer" parent="ContainerInventoryWindow/Panel"]
 layout_mode = 2
+theme_override_constants/separation = 7
 
 [node name="Title" type="Label" parent="ContainerInventoryWindow/Panel/Layout"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.92, 0.82, 0.58, 1)
-theme_override_font_sizes/font_size = 25
-text = "Container"
-horizontal_alignment = 1
+theme_override_colors/font_color = Color(0.94, 0.84, 0.57, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.85)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 26
+text = "FIELD PACK"
+
+[node name="Subtitle" type="Label" parent="ContainerInventoryWindow/Panel/Layout"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.49, 0.52, 0.45, 1)
+theme_override_font_sizes/font_size = 11
+text = "ASHWOOD COUNTY  /  LOADOUT & SUPPLY"
+
+[node name="HeaderRule" type="HSeparator" parent="ContainerInventoryWindow/Panel/Layout"]
+layout_mode = 2
 
 [node name="Columns" type="HBoxContainer" parent="ContainerInventoryWindow/Panel/Layout"]
 layout_mode = 2
 size_flags_vertical = 3
+theme_override_constants/separation = 14
 
 [node name="ContainerColumn" type="VBoxContainer" parent="ContainerInventoryWindow/Panel/Layout/Columns"]
-custom_minimum_size = Vector2(270, 0)
+custom_minimum_size = Vector2(390, 0)
 layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 7
 
 [node name="ContainerLabel" type="Label" parent="ContainerInventoryWindow/Panel/Layout/Columns/ContainerColumn"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.78, 0.8, 0.7, 1)
-theme_override_font_sizes/font_size = 17
-text = "Container Items"
+theme_override_colors/font_color = Color(0.73, 0.76, 0.65, 1)
+theme_override_font_sizes/font_size = 14
+text = "WORLD STORAGE"
 
 [node name="ContainerItems" type="ItemList" parent="ContainerInventoryWindow/Panel/Layout/Columns/ContainerColumn"]
-custom_minimum_size = Vector2(270, 260)
+custom_minimum_size = Vector2(390, 312)
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
+size_flags_vertical = 3
+focus_neighbor_right = NodePath("../../Actions/Take")
+theme_override_colors/font_color = Color(0.83, 0.84, 0.76, 1)
+theme_override_colors/font_selected_color = Color(1, 0.93, 0.72, 1)
+theme_override_constants/icon_margin = 12
+theme_override_constants/line_separation = 5
+theme_override_font_sizes/font_size = 15
 theme_override_styles/panel = SubResource("InventoryList")
+theme_override_styles/focus = SubResource("InventoryListFocus")
+theme_override_styles/cursor = SubResource("InventoryListSelected")
+theme_override_styles/cursor_unfocused = SubResource("InventoryListSelected")
+fixed_icon_size = Vector2i(44, 44)
 
 [node name="Actions" type="VBoxContainer" parent="ContainerInventoryWindow/Panel/Layout/Columns"]
-custom_minimum_size = Vector2(110, 0)
+custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
-alignment = 1
+alignment = 0
+theme_override_constants/separation = 5
+
+[node name="TransferLabel" type="Label" parent="ContainerInventoryWindow/Panel/Layout/Columns/Actions"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.52, 0.54, 0.47, 1)
+theme_override_font_sizes/font_size = 12
+text = "TRANSFER"
+horizontal_alignment = 1
+
+[node name="TakeAll" type="Button" parent="ContainerInventoryWindow/Panel/Layout/Columns/Actions"]
+custom_minimum_size = Vector2(0, 34)
+layout_mode = 2
+focus_neighbor_left = NodePath("../../ContainerColumn/ContainerItems")
+focus_neighbor_right = NodePath("../../PlayerColumn/PlayerItems")
+theme_override_styles/normal = SubResource("ActionButton")
+theme_override_styles/hover = SubResource("ActionButtonHover")
+theme_override_styles/pressed = SubResource("ActionButtonPressed")
+theme_override_styles/disabled = SubResource("ActionButtonDisabled")
+theme_override_styles/focus = SubResource("ActionButtonFocus")
+text = "TAKE ALL  >>"
 
 [node name="Take" type="Button" parent="ContainerInventoryWindow/Panel/Layout/Columns/Actions"]
 custom_minimum_size = Vector2(0, 34)
 layout_mode = 2
+focus_neighbor_left = NodePath("../../ContainerColumn/ContainerItems")
+focus_neighbor_right = NodePath("../../PlayerColumn/PlayerItems")
 theme_override_styles/normal = SubResource("ActionButton")
 theme_override_styles/hover = SubResource("ActionButtonHover")
 theme_override_styles/pressed = SubResource("ActionButtonPressed")
-text = "Take >"
+theme_override_styles/disabled = SubResource("ActionButtonDisabled")
+theme_override_styles/focus = SubResource("ActionButtonFocus")
+text = "TAKE STACK  >"
 
 [node name="Store" type="Button" parent="ContainerInventoryWindow/Panel/Layout/Columns/Actions"]
 custom_minimum_size = Vector2(0, 34)
 layout_mode = 2
+focus_neighbor_left = NodePath("../../ContainerColumn/ContainerItems")
+focus_neighbor_right = NodePath("../../PlayerColumn/PlayerItems")
 theme_override_styles/normal = SubResource("ActionButton")
 theme_override_styles/hover = SubResource("ActionButtonHover")
 theme_override_styles/pressed = SubResource("ActionButtonPressed")
-text = "< Store"
+theme_override_styles/disabled = SubResource("ActionButtonDisabled")
+theme_override_styles/focus = SubResource("ActionButtonFocus")
+text = "<  STORE STACK"
 
 [node name="TakeQuantity" type="Button" parent="ContainerInventoryWindow/Panel/Layout/Columns/Actions"]
-custom_minimum_size = Vector2(0, 34)
+custom_minimum_size = Vector2(0, 31)
 layout_mode = 2
+focus_neighbor_left = NodePath("../../ContainerColumn/ContainerItems")
+focus_neighbor_right = NodePath("../../PlayerColumn/PlayerItems")
 theme_override_styles/normal = SubResource("ActionButton")
 theme_override_styles/hover = SubResource("ActionButtonHover")
 theme_override_styles/pressed = SubResource("ActionButtonPressed")
-text = "Take Qty >"
+theme_override_styles/disabled = SubResource("ActionButtonDisabled")
+theme_override_styles/focus = SubResource("ActionButtonFocus")
+text = "TAKE AMOUNT  >"
 
 [node name="StoreQuantity" type="Button" parent="ContainerInventoryWindow/Panel/Layout/Columns/Actions"]
-custom_minimum_size = Vector2(0, 34)
+custom_minimum_size = Vector2(0, 31)
 layout_mode = 2
+focus_neighbor_left = NodePath("../../ContainerColumn/ContainerItems")
+focus_neighbor_right = NodePath("../../PlayerColumn/PlayerItems")
 theme_override_styles/normal = SubResource("ActionButton")
 theme_override_styles/hover = SubResource("ActionButtonHover")
 theme_override_styles/pressed = SubResource("ActionButtonPressed")
-text = "< Store Qty"
+theme_override_styles/disabled = SubResource("ActionButtonDisabled")
+theme_override_styles/focus = SubResource("ActionButtonFocus")
+text = "<  STORE AMOUNT"
 
 [node name="Split" type="Button" parent="ContainerInventoryWindow/Panel/Layout/Columns/Actions"]
-custom_minimum_size = Vector2(0, 34)
+custom_minimum_size = Vector2(0, 31)
 layout_mode = 2
+focus_neighbor_left = NodePath("../../ContainerColumn/ContainerItems")
+focus_neighbor_right = NodePath("../../PlayerColumn/PlayerItems")
 theme_override_styles/normal = SubResource("ActionButton")
 theme_override_styles/hover = SubResource("ActionButtonHover")
 theme_override_styles/pressed = SubResource("ActionButtonPressed")
-text = "Split"
+theme_override_styles/disabled = SubResource("ActionButtonDisabled")
+theme_override_styles/focus = SubResource("ActionButtonFocus")
+text = "SPLIT STACK"
 
 [node name="Use" type="Button" parent="ContainerInventoryWindow/Panel/Layout/Columns/Actions"]
-custom_minimum_size = Vector2(0, 34)
+custom_minimum_size = Vector2(0, 31)
 layout_mode = 2
+focus_neighbor_left = NodePath("../../ContainerColumn/ContainerItems")
+focus_neighbor_right = NodePath("../../PlayerColumn/PlayerItems")
 theme_override_styles/normal = SubResource("ActionButton")
 theme_override_styles/hover = SubResource("ActionButtonHover")
 theme_override_styles/pressed = SubResource("ActionButtonPressed")
-text = "Use"
+theme_override_styles/disabled = SubResource("ActionButtonDisabled")
+theme_override_styles/focus = SubResource("ActionButtonFocus")
+text = "USE ITEM"
+
+[node name="AssignQuick" type="Button" parent="ContainerInventoryWindow/Panel/Layout/Columns/Actions"]
+custom_minimum_size = Vector2(0, 31)
+layout_mode = 2
+focus_neighbor_left = NodePath("../../ContainerColumn/ContainerItems")
+focus_neighbor_right = NodePath("../../PlayerColumn/PlayerItems")
+theme_override_styles/normal = SubResource("ActionButton")
+theme_override_styles/hover = SubResource("ActionButtonHover")
+theme_override_styles/pressed = SubResource("ActionButtonPressed")
+theme_override_styles/disabled = SubResource("ActionButtonDisabled")
+theme_override_styles/focus = SubResource("ActionButtonFocus")
+text = "TO QUICK SLOT"
 
 [node name="PlayerColumn" type="VBoxContainer" parent="ContainerInventoryWindow/Panel/Layout/Columns"]
-custom_minimum_size = Vector2(270, 0)
+custom_minimum_size = Vector2(390, 0)
 layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 7
 
 [node name="PlayerLabel" type="Label" parent="ContainerInventoryWindow/Panel/Layout/Columns/PlayerColumn"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.78, 0.8, 0.7, 1)
-theme_override_font_sizes/font_size = 17
-text = "Player Inventory"
+theme_override_colors/font_color = Color(0.73, 0.76, 0.65, 1)
+theme_override_font_sizes/font_size = 14
+text = "FIELD PACK"
 
 [node name="PlayerItems" type="ItemList" parent="ContainerInventoryWindow/Panel/Layout/Columns/PlayerColumn"]
-custom_minimum_size = Vector2(270, 260)
+custom_minimum_size = Vector2(390, 312)
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
+size_flags_vertical = 3
+focus_neighbor_left = NodePath("../../Actions/Store")
+theme_override_colors/font_color = Color(0.83, 0.84, 0.76, 1)
+theme_override_colors/font_selected_color = Color(1, 0.93, 0.72, 1)
+theme_override_constants/icon_margin = 12
+theme_override_constants/line_separation = 5
+theme_override_font_sizes/font_size = 15
 theme_override_styles/panel = SubResource("InventoryList")
+theme_override_styles/focus = SubResource("InventoryListFocus")
+theme_override_styles/cursor = SubResource("InventoryListSelected")
+theme_override_styles/cursor_unfocused = SubResource("InventoryListSelected")
+fixed_icon_size = Vector2i(44, 44)
+
+[node name="FieldActions" type="HBoxContainer" parent="ContainerInventoryWindow/Panel/Layout"]
+layout_mode = 2
+alignment = 2
+theme_override_constants/separation = 8
+
+[node name="FieldActionLabel" type="Label" parent="ContainerInventoryWindow/Panel/Layout/FieldActions"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.53, 0.55, 0.47, 1)
+theme_override_font_sizes/font_size = 11
+text = "FIELD ACTIONS"
+vertical_alignment = 1
+
+[node name="FieldSplit" type="Button" parent="ContainerInventoryWindow/Panel/Layout/FieldActions"]
+custom_minimum_size = Vector2(150, 34)
+layout_mode = 2
+focus_neighbor_right = NodePath("../FieldUse")
+theme_override_styles/normal = SubResource("ActionButton")
+theme_override_styles/hover = SubResource("ActionButtonHover")
+theme_override_styles/pressed = SubResource("ActionButtonPressed")
+theme_override_styles/disabled = SubResource("ActionButtonDisabled")
+theme_override_styles/focus = SubResource("ActionButtonFocus")
+text = "SPLIT STACK"
+
+[node name="FieldUse" type="Button" parent="ContainerInventoryWindow/Panel/Layout/FieldActions"]
+custom_minimum_size = Vector2(150, 34)
+layout_mode = 2
+focus_neighbor_left = NodePath("../FieldSplit")
+focus_neighbor_right = NodePath("../FieldAssignQuick")
+theme_override_styles/normal = SubResource("ActionButton")
+theme_override_styles/hover = SubResource("ActionButtonHover")
+theme_override_styles/pressed = SubResource("ActionButtonPressed")
+theme_override_styles/disabled = SubResource("ActionButtonDisabled")
+theme_override_styles/focus = SubResource("ActionButtonFocus")
+text = "USE ITEM"
+
+[node name="FieldAssignQuick" type="Button" parent="ContainerInventoryWindow/Panel/Layout/FieldActions"]
+custom_minimum_size = Vector2(170, 34)
+layout_mode = 2
+focus_neighbor_left = NodePath("../FieldUse")
+theme_override_styles/normal = SubResource("ActionButton")
+theme_override_styles/hover = SubResource("ActionButtonHover")
+theme_override_styles/pressed = SubResource("ActionButtonPressed")
+theme_override_styles/disabled = SubResource("ActionButtonDisabled")
+theme_override_styles/focus = SubResource("ActionButtonFocus")
+text = "ASSIGN QUICK SLOT"
 
 [node name="Details" type="Label" parent="ContainerInventoryWindow/Panel/Layout"]
-custom_minimum_size = Vector2(0, 34)
+custom_minimum_size = Vector2(0, 88)
 layout_mode = 2
-theme_override_colors/font_color = Color(0.72, 0.74, 0.66, 1)
-text = "Select an item to view its details."
-horizontal_alignment = 1
+theme_override_colors/font_color = Color(0.75, 0.77, 0.68, 1)
+theme_override_font_sizes/font_size = 13
+theme_override_styles/normal = SubResource("InventoryDetails")
+text = "Select a supply to inspect its weight and field use."
+vertical_alignment = 1
+autowrap_mode = 2
 
 [node name="Status" type="Label" parent="ContainerInventoryWindow/Panel/Layout"]
-custom_minimum_size = Vector2(0, 24)
+custom_minimum_size = Vector2(0, 22)
 layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.78, 0.4, 1)
+theme_override_font_sizes/font_size = 13
+horizontal_alignment = 1
+
+[node name="InputHint" type="Label" parent="ContainerInventoryWindow/Panel/Layout"]
+custom_minimum_size = Vector2(0, 17)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.47, 0.49, 0.43, 1)
+theme_override_font_sizes/font_size = 11
+text = "ACCEPT: QUICK MOVE   |   TAB / D-PAD: NAVIGATE   |   ESC / B: CLOSE"
 horizontal_alignment = 1
 
 [node name="Close" type="Button" parent="ContainerInventoryWindow/Panel/Layout"]
-custom_minimum_size = Vector2(0, 38)
+custom_minimum_size = Vector2(0, 34)
 layout_mode = 2
 theme_override_styles/normal = SubResource("ActionButton")
 theme_override_styles/hover = SubResource("ActionButtonHover")
 theme_override_styles/pressed = SubResource("ActionButtonPressed")
-text = "Close"
+theme_override_styles/disabled = SubResource("ActionButtonDisabled")
+theme_override_styles/focus = SubResource("ActionButtonFocus")
+text = "CLOSE"
 
 [node name="QuantityDialog" type="ConfirmationDialog" parent="ContainerInventoryWindow"]
 title = "Choose Quantity"
-size = Vector2i(340, 170)
+size = Vector2i(380, 190)
 dialog_text = "Choose a quantity."
 
 [node name="Quantity" type="SpinBox" parent="ContainerInventoryWindow/QuantityDialog"]
-offset_left = 35.0
-offset_top = 58.0
-offset_right = 305.0
-offset_bottom = 94.0
+offset_left = 40.0
+offset_top = 68.0
+offset_right = 340.0
+offset_bottom = 106.0
 min_value = 1.0
 max_value = 1.0
 value = 1.0

@@ -7,12 +7,18 @@ namespace AshwoodCounty3DPrototype.Items;
 
 public partial class PlayerInventory : ItemStorage
 {
-	public const int SlotCount = 4;
+	public const int QuickSlotCount = 4;
+	public const int SlotCount = 8;
+
+	[Export(PropertyHint.Range, "1,100,0.5,or_greater")]
+	public float MaximumCarryWeightKg { get; set; } = 20.0f;
 
 	[Signal]
 	public delegate void ItemUsedEventHandler(string message);
 
 	public override int Capacity => SlotCount;
+	public override float WeightCapacityKg => MaximumCarryWeightKg;
+	protected override bool PreserveSlotPositions => true;
 
 	public override void _UnhandledInput(InputEvent @event)
 	{

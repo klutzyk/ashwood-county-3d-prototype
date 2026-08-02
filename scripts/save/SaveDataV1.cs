@@ -22,6 +22,13 @@ public sealed class SaveGameDataV1
 	public int ServiceStationObjectiveState { get; set; } =
 		(int)ServiceStationSuppliesObjectiveState.Locked;
 	public float WorldTimeHours { get; set; }
+	// Additive version-1 weather fields. Saves written before dynamic weather
+	// omit them and retain the scene's authored starting condition on load.
+	public int WeatherKind { get; set; } = -1;
+	public float WeatherSecondsUntilChange { get; set; } = -1.0f;
+	public ulong WeatherScheduleRandomState { get; set; }
+	public float WeatherSecondsUntilLightning { get; set; } = -1.0f;
+	public ulong WeatherLightningRandomState { get; set; }
 	public List<ContainerSaveData> Containers { get; set; } = new();
 	public List<ZombieSaveData> Zombies { get; set; } = new();
 }
@@ -53,6 +60,9 @@ public sealed class ItemStackSaveData
 {
 	public string ItemId { get; set; } = string.Empty;
 	public int Quantity { get; set; }
+	// Added compatibly to version 1. Older saves deserialize this as -1 and are
+	// packed sequentially; new player saves preserve stable quick/backpack slots.
+	public int SlotIndex { get; set; } = -1;
 }
 
 public sealed class ContainerSaveData

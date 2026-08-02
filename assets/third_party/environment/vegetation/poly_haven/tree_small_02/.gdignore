@@ -1,0 +1,3 @@
+# Retain the untouched authoring source for provenance and reproducibility,
+# but keep its 2M-triangle glTF out of Godot's runtime import scan. The game
+# uses res://assets/environment/nature/ashwood_hero_tree_small_02.glb instead.

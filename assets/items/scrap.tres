@@ -9,5 +9,6 @@ ItemId = &"scrap"
 DisplayName = "Scrap"
 Description = "A few useful pieces of salvaged metal."
 StackLimit = 10
+UnitWeightKg = 0.32
 Category = 3
 Icon = ExtResource("2_icon")

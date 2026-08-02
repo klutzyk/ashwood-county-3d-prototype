@@ -14,6 +14,14 @@ public partial class PrototypeZombie : CharacterBody3D
 	[Export] public ZombieVariantProfile? VariantProfile { get; set; }
 	[Export] public float DetectionRadius { get; set; } = 12.0f;
 	[Export] public float FieldOfViewDegrees { get; set; } = 100.0f;
+	[Export(PropertyHint.Range, "90,360,1")]
+	public float AlertedFieldOfViewDegrees { get; set; } = 220.0f;
+	[Export(PropertyHint.Range, "0.5,5,0.1")]
+	public float CloseAwarenessRadius { get; set; } = 2.1f;
+	[Export(PropertyHint.Range, "0.25,1,0.01")]
+	public float CrouchedDetectionMultiplier { get; set; } = 0.62f;
+	[Export(PropertyHint.Range, "1,2,0.01")]
+	public float SprintingDetectionMultiplier { get; set; } = 1.3f;
 	[Export] public float LostSightGracePeriod { get; set; } = 1.25f;
 	[Export] public float EyeHeight { get; set; } = 1.45f;
 	[Export] public float PlayerTargetHeight { get; set; } = 0.75f;
@@ -22,7 +30,23 @@ public partial class PrototypeZombie : CharacterBody3D
 	[Export] public float AttackDamage { get; set; } = 20.0f;
 	[Export] public float AttackCooldown { get; set; } = 1.0f;
 	[Export] public float AttackHitMoment { get; set; } = 0.98f;
-	[Export] public float MoveSpeed { get; set; } = 0.36f;
+	[Export(PropertyHint.Range, "1,3,0.05")]
+	public float AttackDisengageDistance { get; set; } = 2.05f;
+	[Export(PropertyHint.Range, "30,180,1")]
+	public float AttackArcDegrees { get; set; } = 105.0f;
+	[Export(PropertyHint.Range, "0,0.5,0.01")]
+	public float AttackReachTolerance { get; set; } = 0.12f;
+	[Export(PropertyHint.Range, "0.05,1.5,0.01")]
+	public float AttackRecoveryDuration { get; set; } = 0.46f;
+	[Export(PropertyHint.Range, "0,2,0.05")]
+	public float AttackLungeSpeed { get; set; } = 0.62f;
+	[Export(PropertyHint.Range, "0,2,0.01")]
+	public float AttackLungeEndMoment { get; set; } = 0.72f;
+	[Export(PropertyHint.Range, "0,2,0.01")]
+	public float AttackTrackingEndMoment { get; set; } = 0.48f;
+	[Export(PropertyHint.Range, "0.1,1,0.01")]
+	public float AttackTurnSpeedMultiplier { get; set; } = 0.55f;
+	[Export] public float MoveSpeed { get; set; } = 1.15f;
 	[Export] public float Acceleration { get; set; } = 8.0f;
 	[Export] public float Gravity { get; set; } = 24.0f;
 	[Export] public float TurnSpeed { get; set; } = 7.0f;
@@ -35,21 +59,35 @@ public partial class PrototypeZombie : CharacterBody3D
 	[Export] public float DistantSeparationThreshold { get; set; } = 18.0f;
 	[Export] public float NavigationPathHeightOffset { get; set; } = -0.7f;
 	[Export] public float WanderRadius { get; set; } = 6.0f;
-	[Export] public float WanderSpeed { get; set; } = 0.28f;
+	[Export] public float WanderSpeed { get; set; } = 0.86f;
 	[Export] public float MinimumIdleDuration { get; set; } = 1.5f;
 	[Export] public float MaximumIdleDuration { get; set; } = 3.5f;
 	[Export] public float WanderTargetTolerance { get; set; } = 0.65f;
 	[Export] public int WanderTargetAttempts { get; set; } = 6;
 	[Export] public float SeparationRadius { get; set; } = 1.5f;
 	[Export] public float SeparationStrength { get; set; } = 1.15f;
-	[Export] public float InvestigationSpeed { get; set; } = 0.32f;
+	[Export] public float InvestigationSpeed { get; set; } = 1.02f;
 	[Export] public float InvestigationDuration { get; set; } = 2.5f;
 	[Export] public float InvestigationTargetTolerance { get; set; } = 0.75f;
 	[Export] public float PlayerSearchDuration { get; set; } = 3.0f;
 	[Export] public float PlayerSearchRadius { get; set; } = 2.5f;
 	[Export] public float PlayerSearchTargetInterval { get; set; } = 0.9f;
 	[Export] public float LastKnownPositionTolerance { get; set; } = 0.75f;
-	[Export] public float HitReactionDuration { get; set; } = 0.34f;
+	[Export] public float HitReactionDuration { get; set; } = 0.42f;
+	[Export(PropertyHint.Range, "0,0.1,0.005")]
+	public float HitReactionFreezeDuration { get; set; } = 0.045f;
+	[Export(PropertyHint.Range, "0,35,0.5")]
+	public float HitReactionLeanDegrees { get; set; } = 21.0f;
+	[Export(PropertyHint.Range, "0,25,0.5")]
+	public float HitReactionTwistDegrees { get; set; } = 13.0f;
+	[Export(PropertyHint.Range, "0,0.15,0.005")]
+	public float HitReactionCompression { get; set; } = 0.038f;
+	[Export(PropertyHint.Range, "0,0.18,0.005")]
+	public float HitReactionTravel { get; set; } = 0.085f;
+	[Export(PropertyHint.Range, "0.2,1.4,0.02")]
+	public float HitContactHeight { get; set; } = 0.52f;
+	[Export(PropertyHint.Range, "0,0.6,0.01")]
+	public float HitContactSurfaceOffset { get; set; } = 0.28f;
 	[Export] public float KnockbackDamping { get; set; } = 9.0f;
 	[Export] public float AnimationUpdateDistance { get; set; } = 28.0f;
 	[Export(PropertyHint.Range, "0,0.12,0.01")]
@@ -78,11 +116,13 @@ public partial class PrototypeZombie : CharacterBody3D
 		SearchingPlayer,
 		Chasing,
 		Attacking,
+		Staggered,
 	}
 
 	private NavigationAgent3D _navigationAgent = null!;
 	private AnimationPlayer _animationPlayer = null!;
 	private Node3D _player = null!;
+	private ThirdPersonPlayer _playerCharacter = null!;
 	private PlayerHealth _playerHealth = null!;
 	private ZombieHealth _health = null!;
 	private ZombieAudioFeedback _audioFeedback = null!;
@@ -102,9 +142,12 @@ public partial class PrototypeZombie : CharacterBody3D
 	private bool _reachedLastKnownPlayerPosition;
 	private float _playerSearchRemaining;
 	private float _playerSearchTargetRemaining;
-	private float _previousAttackAnimationPosition;
-	private float _timeSinceAttackHit;
+	private float _attackElapsed;
 	private bool _attackHitAttempted;
+	private bool _lastAttackConnected;
+	private Vector3 _attackFacingDirection = Vector3.Forward;
+	private int _attackAttemptCount;
+	private int _successfulAttackCount;
 	private readonly RandomNumberGenerator _random = new();
 	private Vector3 _wanderOrigin;
 	private float _idleRemaining;
@@ -115,6 +158,7 @@ public partial class PrototypeZombie : CharacterBody3D
 	private GameplayNoiseCategory _lastHeardCategory;
 	private float _investigationRemaining;
 	private float _hitReactionRemaining;
+	private float _hitReactionFreezeRemaining;
 	private Vector3 _knockbackVelocity;
 	private float _separationUpdateRemaining;
 	private Vector3 _cachedSeparation;
@@ -122,6 +166,10 @@ public partial class PrototypeZombie : CharacterBody3D
 	private bool _isOnScreen = true;
 	private bool _animationProcessingEnabled = true;
 	private Vector3 _baseVisualScale = Vector3.One;
+	private Vector3 _baseVisualPosition;
+	private Vector3 _baseVisualRotation;
+	private Vector3 _hitReactionDirection = Vector3.Forward;
+	private float _hitReactionSide = 1.0f;
 
 	public static readonly StringName ZombieGroupName = new("prototype_zombies");
 
@@ -134,15 +182,29 @@ public partial class PrototypeZombie : CharacterBody3D
 	public StringName CurrentAnimationName => _animationPlayer.CurrentAnimation;
 	public StringName VariantIdentifier => VariantProfile?.Identifier ?? new StringName("walker");
 	public float HearingSensitivity { get; private set; } = 1.0f;
+	public bool LastAttackConnected => _lastAttackConnected;
+	public int AttackAttemptCount => _attackAttemptCount;
+	public int SuccessfulAttackCount => _successfulAttackCount;
+	public float AttackCycleElapsed => _attackElapsed;
+	public float HitReactionVisualStrength { get; private set; }
+	public Vector3 LastMeleeContactWorldPosition =>
+		_impactFeedback.LastContactWorldPosition;
+	public int ImpactPresentationCount => _impactFeedback.PresentationCount;
+	public bool IsImpactFrozen => _hitReactionFreezeRemaining > 0.0f;
+	public float HitReactionSide => _hitReactionSide;
+	public Vector3 HitReactionDirection => _hitReactionDirection;
 
 	public override void _Ready()
 	{
 		_player = GetNode<Node3D>(PlayerPath);
+		_playerCharacter = (ThirdPersonPlayer)_player;
 		_playerHealth = _player.GetNode<PlayerHealth>("Health");
 		_health = GetNode<ZombieHealth>("Health");
 		_audioFeedback = GetNode<ZombieAudioFeedback>("AudioFeedback");
 		_impactFeedback = GetNode<ZombieImpactFeedback>("ImpactFeedback");
 		_visual = GetNode<Node3D>("Visual");
+		_baseVisualPosition = _visual.Position;
+		_baseVisualRotation = _visual.Rotation;
 		_corpseLoot = GetNode<SearchableContainer>("CorpseLoot");
 		_visibilityNotifier = GetNode<VisibleOnScreenNotifier3D>("VisibilityNotifier");
 		_navigationAgent = GetNode<NavigationAgent3D>("NavigationAgent3D");
@@ -195,6 +257,12 @@ public partial class PrototypeZombie : CharacterBody3D
 		}
 
 		float deltaTime = (float)delta;
+		if (_playerHealth.IsDead &&
+			_state is BehaviourState.Chasing or BehaviourState.Attacking or BehaviourState.SearchingPlayer)
+		{
+			ClearPlayerAwareness();
+			SetState(_hasHeardNoise ? BehaviourState.Investigating : BehaviourState.Idle);
+		}
 		if (_hitReactionRemaining > 0.0f)
 		{
 			UpdateHitReaction(deltaTime);
@@ -204,11 +272,12 @@ public partial class PrototypeZombie : CharacterBody3D
 		UpdateInvestigation(deltaTime);
 		UpdatePlayerSearch(deltaTime);
 		UpdateWandering(deltaTime);
-		UpdateAttack(deltaTime, _cachedDistanceToPlayer, _cachedCanSeePlayer);
+		UpdateAttack(deltaTime);
 
 		Vector3 movementDirection = _state switch
 		{
 			BehaviourState.Chasing => GetChaseNavigationDirection(deltaTime),
+			BehaviourState.Attacking => GetAttackLungeDirection(),
 			BehaviourState.Wandering => GetPathDirection(),
 			BehaviourState.Investigating => GetPathDirection(),
 			BehaviourState.SearchingPlayer => GetPathDirection(),
@@ -223,16 +292,19 @@ public partial class PrototypeZombie : CharacterBody3D
 		{
 			BehaviourState.Wandering => WanderSpeed,
 			BehaviourState.Investigating => InvestigationSpeed,
-			BehaviourState.Attacking => MoveSpeed * 0.35f,
+			BehaviourState.Attacking => Mathf.Max(AttackLungeSpeed, MoveSpeed * 0.5f),
 			_ => MoveSpeed,
 		};
 		ApplyHorizontalMovement(movementDirection, movementSpeed, deltaTime);
 		ApplyGravity(deltaTime);
 
 		Vector3 facingDirection = _state == BehaviourState.Attacking
-			? HorizontalDirectionTo(_player.GlobalPosition)
+			? GetAttackFacingDirection()
 			: movementDirection;
-		RotateToward(facingDirection, deltaTime);
+		float facingDelta = _state == BehaviourState.Attacking
+			? deltaTime * Mathf.Clamp(AttackTurnSpeedMultiplier, 0.1f, 1.0f)
+			: deltaTime;
+		RotateToward(facingDirection, facingDelta);
 
 		MoveAndSlide();
 	}
@@ -261,49 +333,118 @@ public partial class PrototypeZombie : CharacterBody3D
 		SetState(nextState);
 	}
 
-	private void UpdateAttack(float delta, float distanceToPlayer, bool canSeePlayer)
+	private void UpdateAttack(float delta)
 	{
 		if (_state != BehaviourState.Attacking)
 		{
 			return;
 		}
 
-		_timeSinceAttackHit += delta;
-		float animationLength = (float)_animationPlayer.CurrentAnimationLength;
-		float hitMoment = Mathf.Clamp(AttackHitMoment, 0.0f, animationLength);
-		float currentPosition = (float)_animationPlayer.CurrentAnimationPosition;
+		_attackElapsed += delta;
+		float hitMoment = Mathf.Max(AttackHitMoment, 0.0f);
 
-		if (!_attackHitAttempted &&
-			_previousAttackAnimationPosition <= hitMoment &&
-			currentPosition >= hitMoment)
+		if (!_attackHitAttempted && _attackElapsed >= hitMoment)
 		{
 			_attackHitAttempted = true;
-			if (_timeSinceAttackHit >= Mathf.Max(AttackCooldown, 0.0f) &&
-				canSeePlayer && distanceToPlayer <= AttackDistance)
+			_attackAttemptCount++;
+			_lastAttackConnected = TryApplyAttackHit();
+			if (_lastAttackConnected)
 			{
-				_playerHealth.ApplyDamage(AttackDamage);
-				_timeSinceAttackHit = 0.0f;
+				_successfulAttackCount++;
 			}
 		}
 
-		_previousAttackAnimationPosition = currentPosition;
-		if (_animationPlayer.IsPlaying() ||
-			_timeSinceAttackHit < Mathf.Max(AttackCooldown, 0.0f))
+		float cycleDuration = Mathf.Max(
+			Mathf.Max(AttackCooldown, hitMoment + Mathf.Max(AttackRecoveryDuration, 0.05f)),
+			0.1f);
+		if (_attackElapsed < cycleDuration)
 		{
 			return;
 		}
 
-		_previousAttackAnimationPosition = 0.0f;
+		float liveDistance = HorizontalDistanceTo(_player.GlobalPosition);
+		bool hasLiveSight = CanSeePlayer(liveDistance);
+		if (_playerHealth.IsDead ||
+			!hasLiveSight ||
+			liveDistance > Mathf.Max(AttackDisengageDistance, AttackDistance))
+		{
+			SetState(_hasLastKnownPlayerPosition
+				? BehaviourState.Chasing
+				: BehaviourState.Idle);
+			return;
+		}
+
+		BeginAttackCycle();
+	}
+
+	private bool TryApplyAttackHit()
+	{
+		if (_playerHealth.IsDead)
+		{
+			return false;
+		}
+
+		Vector3 directionToPlayer = HorizontalDirectionTo(_player.GlobalPosition);
+		float distance = HorizontalDistanceTo(_player.GlobalPosition);
+		float maximumReach = Mathf.Max(AttackDistance, 0.0f) +
+			Mathf.Max(AttackReachTolerance, 0.0f);
+		float minimumFacingDot = Mathf.Cos(Mathf.DegToRad(
+			Mathf.Clamp(AttackArcDegrees, 30.0f, 180.0f) * 0.5f));
+		Vector3 forward = GlobalBasis.Z;
+		forward.Y = 0.0f;
+		if (distance > maximumReach ||
+			directionToPlayer.IsZeroApprox() ||
+			forward.Normalized().Dot(directionToPlayer) < minimumFacingDot ||
+			!HasClearAttackPath())
+		{
+			return false;
+		}
+
+		if (!_playerHealth.ApplyDamage(Mathf.Max(AttackDamage, 0.0f)))
+		{
+			return false;
+		}
+
+		_playerCharacter.RequestZombieHitFeedback(GlobalPosition);
+		return true;
+	}
+
+	private bool HasClearAttackPath()
+	{
+		Vector3 rayStart = GlobalPosition + Vector3.Up * Mathf.Max(EyeHeight * 0.65f, 0.5f);
+		Vector3 rayEnd = _player.GlobalPosition +
+			Vector3.Up * Mathf.Max(PlayerTargetHeight, 0.25f);
+		_visionQuery.From = rayStart;
+		_visionQuery.To = rayEnd;
+		_visionQuery.CollisionMask = VisionCollisionMask;
+		Godot.Collections.Dictionary hit =
+			GetWorld3D().DirectSpaceState.IntersectRay(_visionQuery);
+		return hit.Count > 0 && hit["collider"].AsGodotObject() == _player;
+	}
+
+	private void BeginAttackCycle()
+	{
+		_attackElapsed = 0.0f;
 		_attackHitAttempted = false;
+		_lastAttackConnected = false;
+		CaptureAttackFacingDirection();
 		_animationPlayer.Play(AttackAnimationName, AnimationBlendTime);
 		_audioFeedback.PlayCue(ZombieAudioCue.Attack);
 	}
 
 	private BehaviourState DetermineState(float distanceToPlayer, bool canSeePlayer)
 	{
+		if (_playerHealth.IsDead)
+		{
+			return _hasHeardNoise ? BehaviourState.Investigating : BehaviourState.Idle;
+		}
+
 		if (canSeePlayer)
 		{
-			return distanceToPlayer <= AttackDistance
+			float attackThreshold = _state == BehaviourState.Attacking
+				? Mathf.Max(AttackDisengageDistance, AttackDistance)
+				: AttackDistance;
+			return distanceToPlayer <= attackThreshold
 				? BehaviourState.Attacking
 				: BehaviourState.Chasing;
 		}
@@ -351,7 +492,10 @@ public partial class PrototypeZombie : CharacterBody3D
 		if (!isAlive)
 		{
 			Velocity = Vector3.Zero;
+			_attackElapsed = 0.0f;
+			_attackHitAttempted = false;
 		}
+		ResetHitReactionVisual();
 
 		SetCollisionDisabled(this, !isAlive);
 		_corpseLoot.SetInteractionEnabled(!isAlive);
@@ -367,30 +511,131 @@ public partial class PrototypeZombie : CharacterBody3D
 		}
 	}
 
-	public bool ReceiveMeleeHit(float damage, Vector3 knockbackVelocity)
+	public bool ReceiveMeleeHit(
+		float damage,
+		Vector3 knockbackVelocity,
+		Vector3? requestedContactWorldPosition = null)
 	{
+		Vector3 impactDirection = knockbackVelocity;
+		impactDirection.Y = 0.0f;
+		if (impactDirection.IsZeroApprox())
+		{
+			impactDirection = GlobalPosition - _player.GlobalPosition;
+			impactDirection.Y = 0.0f;
+		}
+		impactDirection = impactDirection.IsZeroApprox()
+			? GlobalBasis.Z.Normalized()
+			: impactDirection.Normalized();
+		Vector3 contactWorldPosition = GlobalPosition +
+			(Vector3.Up * Mathf.Max(HitContactHeight, 0.0f)) -
+			(impactDirection * Mathf.Max(HitContactSurfaceOffset, 0.0f));
+		if (requestedContactWorldPosition.HasValue)
+		{
+			Vector3 requestedOffset =
+				requestedContactWorldPosition.Value - GlobalPosition;
+			requestedOffset.Y = Mathf.Clamp(requestedOffset.Y, 0.22f, 0.8f);
+			Vector3 horizontalOffset = new(
+				requestedOffset.X,
+				0.0f,
+				requestedOffset.Z);
+			Vector3 playerFacingDirection = -impactDirection;
+			float minimumFacingOffset = Mathf.Max(HitContactSurfaceOffset, 0.0f) * 0.35f;
+			float facingOffset = horizontalOffset.Dot(playerFacingDirection);
+			if (facingOffset < minimumFacingOffset)
+			{
+				horizontalOffset += playerFacingDirection *
+					(minimumFacingOffset - facingOffset);
+			}
+			float maximumSurfaceRadius = Mathf.Max(
+				HitContactSurfaceOffset + 0.12f,
+				0.2f);
+			if (horizontalOffset.Length() > maximumSurfaceRadius)
+			{
+				horizontalOffset = horizontalOffset.Normalized() * maximumSurfaceRadius;
+			}
+			contactWorldPosition = GlobalPosition + horizontalOffset +
+				(Vector3.Up * requestedOffset.Y);
+		}
+
 		if (!IsAlive || !_health.ApplyDamage(damage))
 		{
 			return false;
 		}
 
-		_impactFeedback.PlayHit(knockbackVelocity, lethal: !IsAlive);
+		_impactFeedback.PlayHit(
+			impactDirection,
+			lethal: !IsAlive,
+			contactWorldPosition);
 
 		if (!IsAlive)
 		{
 			return true;
 		}
 
+		if (_state == BehaviourState.Attacking)
+		{
+			_lastKnownPlayerPosition = _player.GlobalPosition;
+			_hasLastKnownPlayerPosition = true;
+		}
 		_knockbackVelocity = knockbackVelocity;
+		_hitReactionDirection = impactDirection;
+		Vector3 localContactOffset = GlobalBasis.Inverse() *
+			(contactWorldPosition - GlobalPosition);
+		float hitSide = localContactOffset.X;
+		if (Mathf.Abs(hitSide) < 0.045f)
+		{
+			hitSide = GlobalBasis.X.Dot(impactDirection);
+		}
+		_hitReactionSide = Mathf.Abs(hitSide) >= 0.045f
+			? Mathf.Sign(hitSide)
+			: (GetInstanceId() & 1UL) == 0UL ? 1.0f : -1.0f;
 		_hitReactionRemaining = Mathf.Max(HitReactionDuration, 0.0f);
-		_animationPlayer.Play(HitReactionAnimationName, 0.06f);
+		_hitReactionFreezeRemaining = Mathf.Max(HitReactionFreezeDuration, 0.0f);
+		SetState(BehaviourState.Staggered, forceRefresh: true);
+		ApplyHitReactionVisual(1.0f);
+		if (_hitReactionFreezeRemaining > 0.0f)
+		{
+			_animationPlayer.SpeedScale = 0.0f;
+		}
 		_audioFeedback.PlayCue(ZombieAudioCue.Hurt);
 		return true;
 	}
 
 	private void UpdateHitReaction(float delta)
 	{
+		if (_hitReactionFreezeRemaining > 0.0f)
+		{
+			_hitReactionFreezeRemaining = Mathf.Max(
+				_hitReactionFreezeRemaining - delta,
+				0.0f);
+			ApplyHitReactionVisual(1.0f);
+			Vector3 frozenVelocity = Velocity;
+			frozenVelocity.X = 0.0f;
+			frozenVelocity.Z = 0.0f;
+			Velocity = frozenVelocity;
+			ApplyGravity(delta);
+			MoveAndSlide();
+			if (_hitReactionFreezeRemaining <= 0.0f)
+			{
+				_animationPlayer.SpeedScale = 1.0f;
+			}
+			return;
+		}
+
 		_hitReactionRemaining = Mathf.Max(_hitReactionRemaining - delta, 0.0f);
+		float duration = Mathf.Max(HitReactionDuration, 0.001f);
+		float remainingRatio = Mathf.Clamp(
+			_hitReactionRemaining / duration,
+			0.0f,
+			1.0f);
+		float elapsedRatio = 1.0f - remainingRatio;
+		float primaryRecoil = 1.0f - Mathf.SmoothStep(0.0f, 1.0f, elapsedRatio);
+		float settlingRecoil = Mathf.Sin(elapsedRatio * Mathf.Pi * 2.25f) *
+			(1.0f - elapsedRatio) * 0.16f;
+		ApplyHitReactionVisual(Mathf.Clamp(
+			primaryRecoil + settlingRecoil,
+			0.0f,
+			1.0f));
 		Vector3 velocity = Velocity;
 		velocity.X = _knockbackVelocity.X;
 		velocity.Z = _knockbackVelocity.Z;
@@ -402,8 +647,56 @@ public partial class PrototypeZombie : CharacterBody3D
 			Mathf.Max(KnockbackDamping, 0.0f) * delta);
 		if (_hitReactionRemaining <= 0.0f)
 		{
-			PlayStateAnimation();
+			ResetHitReactionVisual();
+			SetState(
+				DetermineState(_cachedDistanceToPlayer, _cachedCanSeePlayer),
+				forceRefresh: true);
 		}
+	}
+
+	private void ApplyHitReactionVisual(float strength)
+	{
+		HitReactionVisualStrength = Mathf.Clamp(strength, 0.0f, 1.0f);
+		Vector3 localDirection = GlobalBasis.Inverse() * _hitReactionDirection;
+		localDirection.Y = 0.0f;
+		if (!localDirection.IsZeroApprox())
+		{
+			localDirection = localDirection.Normalized();
+		}
+
+		float leanRadians = Mathf.DegToRad(
+			Mathf.Max(HitReactionLeanDegrees, 0.0f)) * HitReactionVisualStrength;
+		float twistRadians = Mathf.DegToRad(
+			Mathf.Max(HitReactionTwistDegrees, 0.0f)) * HitReactionVisualStrength;
+		_visual.Rotation = _baseVisualRotation + new Vector3(
+			localDirection.Z * leanRadians,
+			(localDirection.X * twistRadians) +
+				(_hitReactionSide * twistRadians * 0.25f),
+			(-localDirection.X * leanRadians) +
+				(_hitReactionSide * leanRadians * 0.32f));
+		float compression = Mathf.Clamp(HitReactionCompression, 0.0f, 0.15f) *
+			HitReactionVisualStrength;
+		_visual.Scale = new Vector3(
+			_baseVisualScale.X * (1.0f + (compression * 0.35f)),
+			_baseVisualScale.Y * (1.0f - compression),
+			_baseVisualScale.Z * (1.0f + (compression * 0.2f)));
+		float travel = Mathf.Max(HitReactionTravel, 0.0f) *
+			HitReactionVisualStrength;
+		_visual.Position = _baseVisualPosition + new Vector3(
+			(localDirection.X * travel) + (_hitReactionSide * 0.028f *
+				HitReactionVisualStrength),
+			-compression * 0.14f,
+			localDirection.Z * travel);
+	}
+
+	private void ResetHitReactionVisual()
+	{
+		HitReactionVisualStrength = 0.0f;
+		_hitReactionFreezeRemaining = 0.0f;
+		_animationPlayer.SpeedScale = 1.0f;
+		_visual.Position = _baseVisualPosition;
+		_visual.Rotation = _baseVisualRotation;
+		_visual.Scale = _baseVisualScale;
 	}
 
 	private void OnDied()
@@ -413,7 +706,9 @@ public partial class PrototypeZombie : CharacterBody3D
 		_navigationAgent.AvoidanceEnabled = false;
 		Velocity = Vector3.Zero;
 		_hitReactionRemaining = 0.0f;
-		_visual.Scale = _baseVisualScale;
+		_attackElapsed = 0.0f;
+		_attackHitAttempted = false;
+		ResetHitReactionVisual();
 		SetCollisionDisabled(this, true);
 		_corpseLoot.SetInteractionEnabled(true);
 		SetPhysicsProcess(false);
@@ -567,17 +862,46 @@ public partial class PrototypeZombie : CharacterBody3D
 		_timeSincePlayerVisible += delta;
 	}
 
+	private void ClearPlayerAwareness()
+	{
+		_cachedCanSeePlayer = false;
+		_hasLastKnownPlayerPosition = false;
+		_reachedLastKnownPlayerPosition = false;
+		_timeSincePlayerVisible = float.PositiveInfinity;
+	}
+
 	private bool CanSeePlayer(float distanceToPlayer)
 	{
-		if (distanceToPlayer > DetectionRadius || distanceToPlayer <= 0.001f)
+		if (_playerHealth.IsDead || distanceToPlayer <= 0.001f)
+		{
+			return false;
+		}
+
+		float detectionRadius = Mathf.Max(DetectionRadius, 0.0f);
+		if (_playerCharacter.IsCrouching)
+		{
+			detectionRadius *= Mathf.Clamp(CrouchedDetectionMultiplier, 0.25f, 1.0f);
+		}
+		else if (_playerCharacter.IsSprinting)
+		{
+			detectionRadius *= Mathf.Max(SprintingDetectionMultiplier, 1.0f);
+		}
+		if (distanceToPlayer > detectionRadius)
 		{
 			return false;
 		}
 
 		Vector3 directionToPlayer = HorizontalDirectionTo(_player.GlobalPosition);
 		Vector3 forward = GlobalBasis.Z.Normalized();
-		float minimumFacingDot = Mathf.Cos(Mathf.DegToRad(FieldOfViewDegrees * 0.5f));
-		if (forward.Dot(directionToPlayer) < minimumFacingDot)
+		bool isAlerted = _state is BehaviourState.Chasing or
+			BehaviourState.Attacking or BehaviourState.SearchingPlayer;
+		float fieldOfView = isAlerted
+			? Mathf.Max(AlertedFieldOfViewDegrees, FieldOfViewDegrees)
+			: FieldOfViewDegrees;
+		float minimumFacingDot = Mathf.Cos(Mathf.DegToRad(
+			Mathf.Clamp(fieldOfView, 1.0f, 360.0f) * 0.5f));
+		if (distanceToPlayer > Mathf.Max(CloseAwarenessRadius, 0.0f) &&
+			forward.Dot(directionToPlayer) < minimumFacingDot)
 		{
 			return false;
 		}
@@ -590,6 +914,41 @@ public partial class PrototypeZombie : CharacterBody3D
 
 		Godot.Collections.Dictionary hit = GetWorld3D().DirectSpaceState.IntersectRay(_visionQuery);
 		return hit.Count > 0 && hit["collider"].AsGodotObject() == _player;
+	}
+
+	private Vector3 GetAttackLungeDirection()
+	{
+		if (_attackElapsed >= Mathf.Max(AttackLungeEndMoment, 0.0f))
+		{
+			return Vector3.Zero;
+		}
+
+		float distance = HorizontalDistanceTo(_player.GlobalPosition);
+		if (distance <= 0.75f ||
+			distance > Mathf.Max(AttackDisengageDistance, AttackDistance))
+		{
+			return Vector3.Zero;
+		}
+
+		return GetAttackFacingDirection();
+	}
+
+	private Vector3 GetAttackFacingDirection()
+	{
+		if (_attackElapsed <= Mathf.Max(AttackTrackingEndMoment, 0.0f))
+		{
+			CaptureAttackFacingDirection();
+		}
+		return _attackFacingDirection;
+	}
+
+	private void CaptureAttackFacingDirection()
+	{
+		Vector3 direction = HorizontalDirectionTo(_player.GlobalPosition);
+		if (!direction.IsZeroApprox())
+		{
+			_attackFacingDirection = direction;
+		}
 	}
 
 	private Vector3 GetChaseNavigationDirection(float delta)
@@ -812,9 +1171,10 @@ public partial class PrototypeZombie : CharacterBody3D
 		_state = nextState;
 		if (_state == BehaviourState.Attacking)
 		{
-			_previousAttackAnimationPosition = 0.0f;
-			_timeSinceAttackHit = Mathf.Max(AttackCooldown, 0.0f);
+			_attackElapsed = 0.0f;
 			_attackHitAttempted = false;
+			_lastAttackConnected = false;
+			CaptureAttackFacingDirection();
 			_audioFeedback.PlayCue(ZombieAudioCue.Attack);
 		}
 		else if (_state == BehaviourState.Chasing)
@@ -855,9 +1215,13 @@ public partial class PrototypeZombie : CharacterBody3D
 			BehaviourState.Investigating => WalkAnimationName,
 			BehaviourState.SearchingPlayer => WalkAnimationName,
 			BehaviourState.Attacking => AttackAnimationName,
+			BehaviourState.Staggered => HitReactionAnimationName,
 			_ => IdleAnimationName,
 		};
-		_animationPlayer.Play(animationName, AnimationBlendTime);
+		float blendTime = _state == BehaviourState.Staggered
+			? 0.04f
+			: AnimationBlendTime;
+		_animationPlayer.Play(animationName, blendTime);
 	}
 
 	private void OnScreenEntered()

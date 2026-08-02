@@ -71,7 +71,8 @@ public partial class CombatFeedbackDisplay : Control
 
 	private void UpdateWeaponReadout(int slot, string displayName)
 	{
-		_weaponReadout.Text = $"MELEE  {slot + 1}  {displayName.ToUpperInvariant()}";
+		_weaponReadout.Text =
+			$"MELEE  {slot + 1}  /  {displayName.ToUpperInvariant()}";
 	}
 
 	private void SetMarkerAlpha(float alpha)

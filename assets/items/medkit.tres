@@ -9,6 +9,7 @@ ItemId = &"medkit"
 DisplayName = "Medkit"
 Description = "A compact emergency medical kit."
 StackLimit = 2
+UnitWeightKg = 1.25
 Category = 0
 Icon = ExtResource("2_icon")
 HealthRestored = 75.0

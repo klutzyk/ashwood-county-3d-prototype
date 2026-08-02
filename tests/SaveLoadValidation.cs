@@ -1,6 +1,8 @@
 #nullable enable
 
 using System;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using Godot;
 using AshwoodCounty3DPrototype.Interactions;
 using AshwoodCounty3DPrototype.Items;
@@ -36,6 +38,12 @@ public partial class SaveLoadValidation : Node
 			{
 				ValidateSaveAndSameSessionLoad(world);
 			}
+
+			world.QueueFree();
+			await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
+			await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
+			GC.Collect();
+			GC.WaitForPendingFinalizers();
 
 			GD.Print(readAfterRestart
 				? "SAVE_LOAD_RESTART_VALIDATION: PASS"
@@ -77,6 +85,8 @@ public partial class SaveLoadValidation : Node
 		inventory.AddItem(GD.Load<ItemDefinition>("res://assets/items/antibiotics.tres"), 1);
 		inventory.AddSavedStack(GD.Load<ItemDefinition>("res://assets/items/bandage.tres"), 3);
 		inventory.AddSavedStack(GD.Load<ItemDefinition>("res://assets/items/bandage.tres"), 2);
+		Require(inventory.SwapStacks(2, 7),
+			"validation state places a stack in a non-contiguous backpack slot");
 		cabinet.Inventory.ClearItems();
 		cabinet.Inventory.AddItem(GD.Load<ItemDefinition>("res://assets/items/water.tres"), 2);
 		cabinet.Inventory.AddItem(GD.Load<ItemDefinition>("res://assets/items/medkit.tres"), 1);
@@ -118,6 +128,110 @@ public partial class SaveLoadValidation : Node
 		Require(manager.LoadGame(), "same-session save reload succeeds");
 		Require(statusMessage == "Game Loaded", "successful load requests brief feedback");
 		AssertSavedState(world);
+		ValidatePreCapacityVersionOneLoad(manager, inventory, cabinet);
+	}
+
+	private static void ValidatePreCapacityVersionOneLoad(
+		SaveGameManager manager,
+		PlayerInventory inventory,
+		SearchableContainer cabinet)
+	{
+		string originalJson = ReadText(ValidationSavePath);
+		try
+		{
+			JsonObject root = JsonNode.Parse(originalJson)?.AsObject()
+				?? throw new InvalidOperationException("saved version-1 JSON could not be parsed");
+			root.Remove("WeatherKind");
+			root.Remove("WeatherSecondsUntilChange");
+			root.Remove("WeatherScheduleRandomState");
+			root.Remove("WeatherSecondsUntilLightning");
+			root.Remove("WeatherLightningRandomState");
+			RemoveSlotIndices(root["PlayerInventory"]?.AsArray());
+
+			JsonArray containers = root["Containers"]?.AsArray()
+				?? throw new InvalidOperationException("saved containers were missing");
+			JsonObject? cabinetRecord = null;
+			foreach (JsonNode? containerNode in containers)
+			{
+				JsonObject container = containerNode?.AsObject()
+					?? throw new InvalidOperationException("saved container record was malformed");
+				RemoveSlotIndices(container["Items"]?.AsArray());
+				string nodePath = container["NodePath"]?.GetValue<string>() ?? string.Empty;
+				if (nodePath.EndsWith(
+					"MedicineCabinet/SearchableContainer",
+					StringComparison.Ordinal))
+				{
+					cabinetRecord = container;
+				}
+			}
+			Require(cabinetRecord is not null, "legacy fixture resolves the medicine cabinet record");
+
+			JsonArray overflowItems = new();
+			for (int stack = 0; stack < cabinet.Inventory.Capacity + 1; stack++)
+			{
+				overflowItems.Add(new JsonObject
+				{
+					["ItemId"] = "medkit",
+					["Quantity"] = 1,
+				});
+			}
+			cabinetRecord!["Items"] = overflowItems;
+			WriteText(
+				ValidationSavePath,
+				root.ToJsonString(new JsonSerializerOptions { WriteIndented = true }));
+
+			Require(SaveGameManager.HasValidSaveFile(ValidationSavePath),
+				"slot-less pre-capacity version-1 JSON remains structurally valid");
+			inventory.ClearItems();
+			cabinet.Inventory.ClearItems();
+			Require(manager.LoadGame(),
+				"legacy container overflow does not reject the complete save");
+			Require(inventory.StackCount == 3 &&
+				inventory.GetQuantityAt(0) == 1 &&
+				inventory.GetQuantityAt(1) == 3 &&
+				inventory.GetQuantityAt(2) == 2 &&
+				inventory.GetItemAt(7) is null,
+				"missing SlotIndex records migrate deterministically to sequential slots");
+			Require(cabinet.Inventory.HasCapacityOverflow &&
+				cabinet.Inventory.StackCount == cabinet.Inventory.Capacity + 1 &&
+				cabinet.Inventory.GetQuantity("medkit") == cabinet.Inventory.Capacity + 1,
+				"all legacy over-capacity stacks restore without silent item loss");
+		}
+		finally
+		{
+			WriteText(ValidationSavePath, originalJson);
+		}
+	}
+
+	private static void RemoveSlotIndices(JsonArray? stacks)
+	{
+		if (stacks is null)
+		{
+			throw new InvalidOperationException("saved item stack array was missing");
+		}
+		foreach (JsonNode? stackNode in stacks)
+		{
+			stackNode?.AsObject().Remove("SlotIndex");
+		}
+	}
+
+	private static string ReadText(string path)
+	{
+		using GodotFileAccess file = GodotFileAccess.Open(
+			path,
+			GodotFileAccess.ModeFlags.Read)
+			?? throw new InvalidOperationException("validation save could not be read");
+		return file.GetAsText();
+	}
+
+	private static void WriteText(string path, string contents)
+	{
+		using GodotFileAccess file = GodotFileAccess.Open(
+			path,
+			GodotFileAccess.ModeFlags.Write)
+			?? throw new InvalidOperationException("validation save could not be written");
+		file.StoreString(contents);
+		file.Flush();
 	}
 
 	private static void ValidateFreshProcessLoad(Node world)
@@ -176,8 +290,9 @@ public partial class SaveLoadValidation : Node
 		Require(inventory.GetQuantity(AntibioticsObjective.AntibioticsItemId) == 1,
 			"player inventory contents restore");
 		Require(inventory.StackCount == 3 && inventory.GetQuantity("bandage") == 5 &&
-			inventory.GetQuantityAt(1) == 3 && inventory.GetQuantityAt(2) == 2,
-			"split stack boundaries and quantities restore");
+			inventory.GetQuantityAt(1) == 3 && inventory.GetItemAt(2) is null &&
+			inventory.GetQuantityAt(7) == 2,
+			"split stack boundaries, stable slot indices and quantities restore");
 		Require(world.GetNode<AntibioticsObjective>("AntibioticsObjective").State ==
 			AntibioticsObjectiveState.ReturnToSafePoint, "structured objective state restores");
 		Require(Mathf.Abs(world.GetNode<WorldTime>("WorldTime").CurrentHour - 21.25f) < 0.05f,

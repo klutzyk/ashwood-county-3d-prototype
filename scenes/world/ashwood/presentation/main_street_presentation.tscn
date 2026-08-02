@@ -37,6 +37,8 @@
 [ext_resource type="Material" path="res://assets/materials/ashwood_main_street/red_brick_2k.tres" id="39_service_brick"]
 [ext_resource type="Material" path="res://assets/materials/ashwood_main_street/factory_brick_2k.tres" id="40_service_brick_alt"]
 [ext_resource type="Material" path="res://assets/materials/ashwood_main_street/facade_roof.tres" id="41_service_roof"]
+[ext_resource type="PackedScene" path="res://assets/environment/nature/ashwood_hero_tree_small_02.glb" id="42_hero_tree"]
+[ext_resource type="Script" path="res://scripts/world/HeroTreePresentation.cs" id="43_hero_tree_presentation"]
 
 [sub_resource type="StandardMaterial3D" id="YellowPaint"]
 albedo_color = Color(0.43, 0.315, 0.085, 1)
@@ -179,6 +181,22 @@ material = SubResource("ServiceGateMaterial")
 [sub_resource type="BoxMesh" id="ServiceGateRailMesh"]
 material = SubResource("ServiceGateMaterial")
 size = Vector3(1, 0.08, 0.1)
+
+[sub_resource type="CylinderShape3D" id="HeroTreeNorth03TrunkShape"]
+height = 3.65
+radius = 0.32
+
+[sub_resource type="CylinderShape3D" id="HeroTreeNorth06TrunkShape"]
+height = 3.35
+radius = 0.29
+
+[sub_resource type="CylinderShape3D" id="HeroTreeSouth03TrunkShape"]
+height = 3.6
+radius = 0.31
+
+[sub_resource type="CylinderShape3D" id="HeroTreeSouth06TrunkShape"]
+height = 3.45
+radius = 0.3
 
 [node name="MainStreetPresentation" type="Node3D" unique_id=926575327]
 
@@ -794,8 +812,14 @@ visible = false
 transform = Transform3D(0.71220934, 0, -0.31805313, 0, 0.78, 0, 0.31805313, 0, 0.71220934, -49.5, 0.2, -8.35)
 visible = false
 
-[node name="North03" parent="Trees" unique_id=928933816 instance=ExtResource("6_tree1")]
-transform = Transform3D(0.79543585, 0, 0.66998637, 0, 1.04, 0, -0.66998637, 0, 0.79543585, -34.5, 0.2, -8.52)
+[node name="North03" parent="Trees" unique_id=928933816 instance=ExtResource("42_hero_tree")]
+position = Vector3(-34.5, 0.2, -8.52)
+rotation_degrees = Vector3(0, 40, 0)
+scale = Vector3(1.72, 1.82, 1.72)
+script = ExtResource("43_hero_tree_presentation")
+LeafTint = Color(0.9, 0.69, 0.33, 1)
+BarkTint = Color(0.9, 0.84, 0.73, 1)
+VisibilityRange = 86.0
 
 [node name="North04" parent="Trees" unique_id=1959885392 instance=ExtResource("7_tree2")]
 transform = Transform3D(0.8036546, 0, -0.16290885, 0, 0.82, 0, 0.16290885, 0, 0.8036546, -3, 0.2, -8.35)
@@ -803,8 +827,14 @@ transform = Transform3D(0.8036546, 0, -0.16290885, 0, 0.82, 0, 0.16290885, 0, 0.
 [node name="North05" parent="Trees" unique_id=191775325 instance=ExtResource("6_tree1")]
 transform = Transform3D(0.44304863, 0, 0.82904035, 0, 0.94, 0, -0.82904035, 0, 0.44304863, 14.5, 0.2, -8.55)
 
-[node name="North06" parent="Trees" unique_id=2013519005 instance=ExtResource("7_tree2")]
-transform = Transform3D(0.49265933, 0, -0.5386899, 0, 0.73, 0, 0.5386899, 0, 0.49265933, 57, 0.2, -8.38)
+[node name="North06" parent="Trees" unique_id=2013519005 instance=ExtResource("42_hero_tree")]
+position = Vector3(57, 0.2, -8.38)
+rotation_degrees = Vector3(0, -48, 0)
+scale = Vector3(1.56, 1.66, 1.56)
+script = ExtResource("43_hero_tree_presentation")
+LeafTint = Color(0.75, 0.88, 0.48, 1)
+BarkTint = Color(0.9, 0.84, 0.74, 1)
+VisibilityRange = 94.0
 
 [node name="North07" parent="Trees" unique_id=146808655 instance=ExtResource("6_tree1")]
 transform = Transform3D(0.9579545, 0, 0.49872154, 0, 1.08, 0, -0.49872154, 0, 0.9579545, 80.5, 0.2, -8.5)
@@ -817,8 +847,14 @@ visible = false
 transform = Transform3D(0.9017978, 0, -0.32918188, 0, 0.96, 0, 0.32918188, 0, 0.9017978, -52, 0.2, 8.55)
 visible = false
 
-[node name="South03" parent="Trees" unique_id=411079845 instance=ExtResource("7_tree2")]
-transform = Transform3D(0.41219667, 0, 0.61456805, 0, 0.74, 0, -0.61456805, 0, 0.41219667, -35.5, 0.2, 8.38)
+[node name="South03" parent="Trees" unique_id=411079845 instance=ExtResource("42_hero_tree")]
+position = Vector3(-35.5, 0.2, 8.38)
+rotation_degrees = Vector3(0, 56.2, 0)
+scale = Vector3(1.68, 1.8, 1.68)
+script = ExtResource("43_hero_tree_presentation")
+LeafTint = Color(0.86, 0.56, 0.27, 1)
+BarkTint = Color(0.91, 0.83, 0.71, 1)
+VisibilityRange = 86.0
 
 [node name="South04" parent="Trees" unique_id=306049597 instance=ExtResource("6_tree1")]
 transform = Transform3D(0.81200546, 0, -0.61729014, 0, 1.02, 0, 0.61729014, 0, 0.81200546, -6.3226104, 0.2, 7.5779343)
@@ -826,11 +862,56 @@ transform = Transform3D(0.81200546, 0, -0.61729014, 0, 1.02, 0, 0.61729014, 0, 0
 [node name="South05" parent="Trees" unique_id=1446869771 instance=ExtResource("7_tree2")]
 transform = Transform3D(0.76426923, 0, 0.23641618, 0, 0.8, 0, -0.23641618, 0, 0.76426923, 23, 0.2, 8.4)
 
-[node name="South06" parent="Trees" unique_id=1474935575 instance=ExtResource("6_tree1")]
-transform = Transform3D(0.5573545, 0, -0.7319535, 0, 0.92, 0, 0.7319535, 0, 0.5573545, 60.935055, 0.2, 8.55)
+[node name="South06" parent="Trees" unique_id=1474935575 instance=ExtResource("42_hero_tree")]
+position = Vector3(60.935055, 0.2, 8.55)
+rotation_degrees = Vector3(0, -52.72, 0)
+scale = Vector3(1.62, 1.72, 1.62)
+script = ExtResource("43_hero_tree_presentation")
+LeafTint = Color(0.88, 0.57, 0.27, 1)
+BarkTint = Color(0.91, 0.83, 0.71, 1)
+VisibilityRange = 94.0
 
 [node name="South07" parent="Trees" unique_id=169918644 instance=ExtResource("7_tree2")]
 transform = Transform3D(0.5402943, 0, 0.5344923, 0, 0.76, 0, -0.5344923, 0, 0.5402943, 81.5, 0.2, 8.38)
+
+[node name="HeroTreeTrunkCollisions" type="Node3D" parent="."]
+editor_description = "Unscaled, gameplay-only lower-trunk collision for the four hero-tree visuals."
+
+[node name="North03Trunk" type="StaticBody3D" parent="HeroTreeTrunkCollisions"]
+position = Vector3(-34.5, 0.2, -8.52)
+collision_layer = 1
+collision_mask = 1
+
+[node name="Collision" type="CollisionShape3D" parent="HeroTreeTrunkCollisions/North03Trunk"]
+position = Vector3(0, 1.825, 0)
+shape = SubResource("HeroTreeNorth03TrunkShape")
+
+[node name="North06Trunk" type="StaticBody3D" parent="HeroTreeTrunkCollisions"]
+position = Vector3(57, 0.2, -8.38)
+collision_layer = 1
+collision_mask = 1
+
+[node name="Collision" type="CollisionShape3D" parent="HeroTreeTrunkCollisions/North06Trunk"]
+position = Vector3(0, 1.675, 0)
+shape = SubResource("HeroTreeNorth06TrunkShape")
+
+[node name="South03Trunk" type="StaticBody3D" parent="HeroTreeTrunkCollisions"]
+position = Vector3(-35.5, 0.2, 8.38)
+collision_layer = 1
+collision_mask = 1
+
+[node name="Collision" type="CollisionShape3D" parent="HeroTreeTrunkCollisions/South03Trunk"]
+position = Vector3(0, 1.8, 0)
+shape = SubResource("HeroTreeSouth03TrunkShape")
+
+[node name="South06Trunk" type="StaticBody3D" parent="HeroTreeTrunkCollisions"]
+position = Vector3(60.935055, 0.2, 8.55)
+collision_layer = 1
+collision_mask = 1
+
+[node name="Collision" type="CollisionShape3D" parent="HeroTreeTrunkCollisions/South06Trunk"]
+position = Vector3(0, 1.725, 0)
+shape = SubResource("HeroTreeSouth06TrunkShape")
 
 [node name="Shrubs" type="Node3D" parent="." unique_id=1501210485]
 

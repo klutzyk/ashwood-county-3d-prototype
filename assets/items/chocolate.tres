@@ -9,6 +9,7 @@ ItemId = &"chocolate"
 DisplayName = "Chocolate"
 Description = "A small, slightly melted chocolate bar."
 StackLimit = 6
+UnitWeightKg = 0.1
 Category = 1
 Icon = ExtResource("2_icon")
 HungerRestored = 15.0

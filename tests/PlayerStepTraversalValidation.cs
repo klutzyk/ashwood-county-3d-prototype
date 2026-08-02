@@ -34,6 +34,10 @@ public partial class PlayerStepTraversalValidation : Node
 
 			ReleaseMovementInput();
 			GD.Print("PLAYER_STEP_TRAVERSAL_VALIDATION: PASS");
+			_player.QueueFree();
+			await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
+			GC.Collect();
+			GC.WaitForPendingFinalizers();
 			GetTree().Quit(0);
 		}
 		catch (Exception exception)

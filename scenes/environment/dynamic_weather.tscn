@@ -1,0 +1,55 @@
+[gd_scene load_steps=11 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/WeatherDirector.cs" id="1_director"]
+[ext_resource type="Resource" path="res://assets/weather/clear.tres" id="2_clear"]
+[ext_resource type="Resource" path="res://assets/weather/overcast.tres" id="3_overcast"]
+[ext_resource type="Resource" path="res://assets/weather/rain.tres" id="4_rain"]
+[ext_resource type="Resource" path="res://assets/weather/storm.tres" id="5_storm"]
+[ext_resource type="Resource" path="res://assets/weather/morning_fog.tres" id="6_fog"]
+[ext_resource type="Script" path="res://scripts/world/WeatherProfile.cs" id="7_profile_type"]
+
+[sub_resource type="StandardMaterial3D" id="RainMaterial"]
+transparency = 1
+shading_mode = 0
+albedo_color = Color(0.7, 0.82, 0.93, 0.42)
+billboard_mode = 1
+
+[sub_resource type="QuadMesh" id="RainStreak"]
+material = SubResource("RainMaterial")
+size = Vector2(0.022, 0.72)
+
+[sub_resource type="ParticleProcessMaterial" id="RainProcess"]
+direction = Vector3(0.12, -1, 0.035)
+spread = 4.0
+gravity = Vector3(0.5, -7.0, 0.15)
+initial_velocity_min = 19.0
+initial_velocity_max = 27.0
+scale_min = 0.55
+scale_max = 1.15
+emission_shape = 3
+emission_box_extents = Vector3(13.5, 2.2, 13.5)
+
+[node name="DynamicWeather" type="Node3D"]
+script = ExtResource("1_director")
+Profiles = Array[ExtResource("7_profile_type")]([ExtResource("2_clear"), ExtResource("3_overcast"), ExtResource("4_rain"), ExtResource("5_storm"), ExtResource("6_fog")])
+StartingWeatherIndex = 0
+AutoCycle = true
+MinimumWeatherDurationSeconds = 420.0
+MaximumWeatherDurationSeconds = 900.0
+TransitionDurationSeconds = 36.0
+
+[node name="Precipitation" type="GPUParticles3D" parent="."]
+emitting = false
+amount = 1800
+amount_ratio = 0.0
+lifetime = 0.82
+preprocess = 0.8
+randomness = 0.34
+local_coords = false
+visibility_aabb = AABB(-16, -14, -16, 32, 28, 32)
+process_material = SubResource("RainProcess")
+draw_pass_1 = SubResource("RainStreak")
+
+[node name="WeatherAudio" type="AudioStreamPlayer" parent="."]
+volume_db = -80.0
+bus = &"Ambient"

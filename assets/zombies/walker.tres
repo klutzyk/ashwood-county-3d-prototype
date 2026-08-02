@@ -6,7 +6,7 @@
 script = ExtResource("1_profile")
 Identifier = &"walker"
 DisplayName = "Walker"
-MovementSpeed = 0.38
+MovementSpeed = 1.15
 MaximumHealth = 100.0
 AttackDamage = 20.0
 DetectionRange = 12.5

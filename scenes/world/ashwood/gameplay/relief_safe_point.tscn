@@ -136,3 +136,4 @@ Enabled = false
 
 [node name="Inventory" type="Node" parent="Storage"]
 script = ExtResource("4_inventory")
+SlotCapacity = 48

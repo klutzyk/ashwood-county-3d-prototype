@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/CombatStaminaValidation.cs" id="1_test"]
+
+[node name="CombatStaminaValidation" type="Node"]
+script = ExtResource("1_test")

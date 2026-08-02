@@ -38,6 +38,7 @@ public partial class SaveGameManager : Node
 	[Export] public NodePath SuppliesObjectivePath { get; set; } =
 		new("../ServiceStationSuppliesObjective");
 	[Export] public NodePath WorldTimePath { get; set; } = new("../WorldTime");
+	[Export] public NodePath WeatherDirectorPath { get; set; } = new("../DynamicWeather");
 	[Export] public NodePath PersistenceRootPath { get; set; } = new("..");
 
 	private static readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = true };
@@ -64,6 +65,7 @@ public partial class SaveGameManager : Node
 	private AntibioticsObjective _objective = null!;
 	private ServiceStationSuppliesObjective _suppliesObjective = null!;
 	private WorldTime _worldTime = null!;
+	private WeatherDirector? _weatherDirector;
 
 	public override void _Ready()
 	{
@@ -75,6 +77,7 @@ public partial class SaveGameManager : Node
 		_objective = GetNode<AntibioticsObjective>(ObjectivePath);
 		_suppliesObjective = GetNode<ServiceStationSuppliesObjective>(SuppliesObjectivePath);
 		_worldTime = GetNode<WorldTime>(WorldTimePath);
+		_weatherDirector = GetNodeOrNull<WeatherDirector>(WeatherDirectorPath);
 		if (GameLaunchContext.ConsumeContinueRequest())
 		{
 			CallDeferred(MethodName.LoadRequestedGame);
@@ -153,6 +156,7 @@ public partial class SaveGameManager : Node
 			!IsFinite(data.PlayerThirst) || data.PlayerThirst < 0.0f || data.PlayerThirst > 100.0f ||
 			!IsFinite(data.WorldTimeHours) || data.WorldTimeHours < 0.0f ||
 			data.WorldTimeHours >= 24.0f ||
+			!HasValidOptionalWeatherState(data) ||
 			!IsFinite(data.PlayerTransform.Position) ||
 			!IsFinite(data.PlayerTransform.Rotation) ||
 			data.Containers.Count < DefaultVersionOneMinimumContainerCount ||
@@ -188,6 +192,24 @@ public partial class SaveGameManager : Node
 		return true;
 	}
 
+	private static bool HasValidOptionalWeatherState(SaveGameDataV1 data)
+	{
+		if (data.WeatherKind == -1)
+		{
+			return Mathf.IsEqualApprox(data.WeatherSecondsUntilChange, -1.0f) &&
+				data.WeatherScheduleRandomState == 0 &&
+				Mathf.IsEqualApprox(data.WeatherSecondsUntilLightning, -1.0f) &&
+				data.WeatherLightningRandomState == 0;
+		}
+
+		return Enum.IsDefined(typeof(WeatherKind), data.WeatherKind) &&
+			IsFinite(data.WeatherSecondsUntilChange) &&
+			data.WeatherSecondsUntilChange >= 0.0f &&
+			(data.WeatherSecondsUntilLightning < 0.0f
+				? Mathf.IsEqualApprox(data.WeatherSecondsUntilLightning, -1.0f)
+				: IsFinite(data.WeatherSecondsUntilLightning));
+	}
+
 	private static bool HasValidItemStacks(List<ItemStackSaveData>? stacks)
 	{
 		if (stacks is null)
@@ -196,7 +218,7 @@ public partial class SaveGameManager : Node
 		}
 		foreach (ItemStackSaveData stack in stacks)
 		{
-			if (stack is null || stack.Quantity <= 0 ||
+			if (stack is null || stack.Quantity <= 0 || stack.SlotIndex < -1 ||
 				!ItemResourcePaths.ContainsKey(stack.ItemId))
 			{
 				return false;
@@ -315,7 +337,16 @@ public partial class SaveGameManager : Node
 			ServiceStationObjectiveState = (int)_suppliesObjective.State,
 			WorldTimeHours = _worldTime.CurrentHour,
 		};
-		data.PlayerInventory = CaptureItems(_playerInventory);
+		if (_weatherDirector?.CurrentProfile is WeatherProfile weatherProfile)
+		{
+			data.WeatherKind = (int)weatherProfile.Kind;
+			data.WeatherSecondsUntilChange =
+				Mathf.Max(_weatherDirector.SecondsUntilWeatherChange, 0.0f);
+			data.WeatherScheduleRandomState = _weatherDirector.ScheduleRandomState;
+			data.WeatherSecondsUntilLightning = _weatherDirector.SecondsUntilLightning;
+			data.WeatherLightningRandomState = _weatherDirector.LightningRandomState;
+		}
+		data.PlayerInventory = CaptureItems(_playerInventory, includeSlotIndices: true);
 
 		foreach (SearchableContainer container in GetContainers())
 		{
@@ -357,6 +388,7 @@ public partial class SaveGameManager : Node
 			!IsFinite(data.PlayerHunger) || !IsFinite(data.PlayerThirst) ||
 			!IsFinite(data.WorldTimeHours) || !IsFinite(data.PlayerTransform.Position) ||
 			!IsFinite(data.PlayerTransform.Rotation) ||
+			!HasValidOptionalWeatherState(data) ||
 			data.PlayerHealth < 0.0f || data.PlayerHealth > _health.MaximumHealth ||
 			data.PlayerStamina < 0.0f || data.PlayerStamina > _stamina.MaximumStamina ||
 			data.PlayerHunger < 0.0f || data.PlayerHunger > _needs.MaximumHunger ||
@@ -382,7 +414,7 @@ public partial class SaveGameManager : Node
 		{
 			return false;
 		}
-		if (CountRequiredStacks(playerItems) > _playerInventory.Capacity)
+		if (!_playerInventory.CanRestoreSavedStacks(ToRestoreData(playerItems)))
 		{
 			return false;
 		}
@@ -396,7 +428,8 @@ public partial class SaveGameManager : Node
 				: worldRoot.GetNodeOrNull<SearchableContainer>(containerData.NodePath);
 			if (containerData is null || containerData.Items is null ||
 				container is null || !seenContainers.Add(container) ||
-				!TryResolveItems(containerData.Items, out List<ResolvedItem>? items))
+				!TryResolveItems(containerData.Items, out List<ResolvedItem>? items) ||
+				!container.Inventory.CanRestoreSavedStacks(ToRestoreData(items)))
 			{
 				return false;
 			}
@@ -445,17 +478,36 @@ public partial class SaveGameManager : Node
 		_suppliesObjective.RestoreState(
 			(ServiceStationSuppliesObjectiveState)data.ServiceStationObjectiveState);
 		_worldTime.SetTimeOfDay(data.WorldTimeHours);
+		if (_weatherDirector is not null && data.WeatherKind >= 0)
+		{
+			if (!_weatherDirector.RestoreWeatherState(
+				(WeatherKind)data.WeatherKind,
+				data.WeatherSecondsUntilChange,
+				data.WeatherScheduleRandomState,
+				data.WeatherSecondsUntilLightning,
+				data.WeatherLightningRandomState))
+			{
+				// Weather is additive to version 1. A district that no longer offers a
+				// saved profile keeps its authored condition without blocking core state.
+				GD.PushWarning(
+					$"Saved weather kind {(WeatherKind)data.WeatherKind} is unavailable; " +
+					"the district's authored weather was retained.");
+			}
+		}
 	}
 
-	private static List<ItemStackSaveData> CaptureItems(ItemStorage inventory)
+	private static List<ItemStackSaveData> CaptureItems(
+		ItemStorage inventory,
+		bool includeSlotIndices = false)
 	{
 		List<ItemStackSaveData> items = new();
-		for (int index = 0; index < inventory.StackCount; index++)
+		foreach (int index in inventory.GetOccupiedSlotIndices())
 		{
 			items.Add(new ItemStackSaveData
 			{
 				ItemId = inventory.GetItemAt(index)!.ItemId.ToString(),
 				Quantity = inventory.GetQuantityAt(index),
+				SlotIndex = includeSlotIndices ? index : -1,
 			});
 		}
 		return items;
@@ -470,7 +522,8 @@ public partial class SaveGameManager : Node
 		}
 		foreach (ItemStackSaveData stack in itemData)
 		{
-			if (stack is null || stack.Quantity <= 0 || string.IsNullOrWhiteSpace(stack.ItemId) ||
+			if (stack is null || stack.Quantity <= 0 || stack.SlotIndex < -1 ||
+				string.IsNullOrWhiteSpace(stack.ItemId) ||
 				!ItemResourcePaths.TryGetValue(stack.ItemId, out string? resourcePath))
 			{
 				return false;
@@ -481,29 +534,30 @@ public partial class SaveGameManager : Node
 			{
 				return false;
 			}
-			items.Add(new ResolvedItem(item, stack.Quantity));
+			items.Add(new ResolvedItem(item, stack.Quantity, stack.SlotIndex));
 		}
 		return true;
 	}
 
 	private static void RestoreItems(ItemStorage inventory, List<ResolvedItem> items)
 	{
-		inventory.ClearItems();
-		foreach (ResolvedItem item in items)
+		if (!inventory.RestoreSavedStacks(ToRestoreData(items)))
 		{
-			inventory.AddSavedStack(item.Definition, item.Quantity);
+			throw new InvalidOperationException("Validated inventory state could not be restored.");
 		}
 	}
 
-	private static int CountRequiredStacks(List<ResolvedItem> items)
+	private static List<ItemStackRestoreData> ToRestoreData(List<ResolvedItem> items)
 	{
-		int count = 0;
+		List<ItemStackRestoreData> result = new(items.Count);
 		foreach (ResolvedItem item in items)
 		{
-			count += Mathf.CeilToInt(
-				item.Quantity / (float)ItemStorage.GetStackLimit(item.Definition));
+			result.Add(new ItemStackRestoreData(
+				item.Definition,
+				item.Quantity,
+				item.SlotIndex));
 		}
-		return count;
+		return result;
 	}
 
 	private List<SearchableContainer> GetContainers()
@@ -602,7 +656,10 @@ public partial class SaveGameManager : Node
 		}
 	}
 
-	private sealed record ResolvedItem(ItemDefinition Definition, int Quantity);
+	private sealed record ResolvedItem(
+		ItemDefinition Definition,
+		int Quantity,
+		int SlotIndex);
 
 	private sealed class ValidatedSaveData
 	{

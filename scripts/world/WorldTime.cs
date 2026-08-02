@@ -34,6 +34,11 @@ public partial class WorldTime : Node
 	public float GoldenHourColorStrength { get; set; }
 
 	public float CurrentHour { get; private set; }
+	public float DaylightBlend { get; private set; }
+	public float WeatherAmbientMultiplier { get; private set; } = 1.0f;
+	public float WeatherSkyMultiplier { get; private set; } = 1.0f;
+	public float WeatherDirectionalMultiplier { get; private set; } = 1.0f;
+	public Color WeatherDirectionalTint { get; private set; } = Colors.White;
 
 	private DirectionalLight3D _directionalLight = null!;
 	private Environment _environment = null!;
@@ -62,11 +67,30 @@ public partial class WorldTime : Node
 		EmitTimeWhenMinuteChanges();
 	}
 
+	/// <summary>
+	/// Applies weather as a multiplier over the authored day/night curve. Keeping
+	/// the two systems composed here prevents weather transitions from fighting
+	/// the clock or compounding energy every frame.
+	/// </summary>
+	public void SetWeatherInfluence(
+		float ambientMultiplier,
+		float skyMultiplier,
+		float directionalMultiplier,
+		Color directionalTint)
+	{
+		WeatherAmbientMultiplier = Mathf.Max(ambientMultiplier, 0.0f);
+		WeatherSkyMultiplier = Mathf.Max(skyMultiplier, 0.0f);
+		WeatherDirectionalMultiplier = Mathf.Max(directionalMultiplier, 0.0f);
+		WeatherDirectionalTint = directionalTint;
+		UpdateLighting();
+	}
+
 	private void UpdateLighting()
 	{
 		float sunHeight = Mathf.Sin(((CurrentHour - 6.0f) / 24.0f) * Mathf.Tau);
 		float daylight = Mathf.Clamp((sunHeight + 0.12f) / 0.55f, 0.0f, 1.0f);
 		daylight = daylight * daylight * (3.0f - (2.0f * daylight));
+		DaylightBlend = daylight;
 		float goldenHour = Mathf.Clamp(
 			1.0f - (Mathf.Abs(sunHeight - 0.2f) / 0.34f),
 			0.0f,
@@ -76,15 +100,29 @@ public partial class WorldTime : Node
 			-(CurrentHour - 6.0f) * 15.0f,
 			-28.0f,
 			0.0f);
-		_directionalLight.LightEnergy = Mathf.Lerp(NightDirectionalEnergy, DayDirectionalEnergy, daylight);
+		_directionalLight.LightEnergy = Mathf.Lerp(
+			NightDirectionalEnergy,
+			DayDirectionalEnergy,
+			daylight) * WeatherDirectionalMultiplier;
 		Color daylightColor = NightDirectionalColor.Lerp(
 			DayDirectionalColor,
 			daylight);
-		_directionalLight.LightColor = daylightColor.Lerp(
+		Color timeOfDayColor = daylightColor.Lerp(
 			GoldenHourDirectionalColor,
 			goldenHour);
-		_environment.AmbientLightEnergy = Mathf.Lerp(NightAmbientEnergy, DayAmbientEnergy, daylight);
-		_environment.BackgroundEnergyMultiplier = Mathf.Lerp(NightSkyEnergy, DaySkyEnergy, daylight);
+		_directionalLight.LightColor = new Color(
+			timeOfDayColor.R * WeatherDirectionalTint.R,
+			timeOfDayColor.G * WeatherDirectionalTint.G,
+			timeOfDayColor.B * WeatherDirectionalTint.B,
+			1.0f);
+		_environment.AmbientLightEnergy = Mathf.Lerp(
+			NightAmbientEnergy,
+			DayAmbientEnergy,
+			daylight) * WeatherAmbientMultiplier;
+		_environment.BackgroundEnergyMultiplier = Mathf.Lerp(
+			NightSkyEnergy,
+			DaySkyEnergy,
+			daylight) * WeatherSkyMultiplier;
 	}
 
 	private void EmitTimeWhenMinuteChanges()

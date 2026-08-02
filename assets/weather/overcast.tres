@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="WeatherProfile" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/WeatherProfile.cs" id="1_profile"]
+
+[resource]
+script = ExtResource("1_profile")
+DisplayName = "Low Overcast"
+Kind = 1
+AmbientMultiplier = 0.82
+SkyEnergyMultiplier = 0.76
+DirectionalMultiplier = 0.44
+DirectionalTint = Color(0.78, 0.84, 0.92, 1)
+Exposure = 0.96
+Saturation = 0.8
+SkyTopColor = Color(0.17, 0.2, 0.25, 1)
+SkyHorizonColor = Color(0.42, 0.43, 0.43, 1)
+CloudColor = Color(0.51, 0.54, 0.58, 1)
+CloudOpacity = 0.84
+FogColor = Color(0.46, 0.47, 0.48, 1)
+FogDensity = 0.27
+FogDepthBegin = 56.0
+FogDepthEnd = 250.0
+FogSkyAffect = 0.34
+FogAerialPerspective = 0.62
+PrecipitationIntensity = 0.0
+WindIntensity = 0.42
+LightningPerMinute = 0.0
+LightningBrightness = 0.0
+

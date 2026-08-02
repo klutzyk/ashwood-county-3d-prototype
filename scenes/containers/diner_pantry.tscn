@@ -17,6 +17,7 @@ script = ExtResource("2_interactable")
 
 [node name="Inventory" type="Node" parent="." unique_id=1810158691]
 script = ExtResource("3_inventory")
+SlotCapacity = 18
 
 [node name="Visual" type="Node3D" parent="." unique_id=1580504011]
 

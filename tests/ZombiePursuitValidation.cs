@@ -53,6 +53,11 @@ public partial class ZombiePursuitValidation : Node
 			Require(!zombie.IsPhysicsProcessing(), "dead zombie stops physics processing");
 			Require(!zombie.IsAlive, "dead zombie remains inactive");
 
+			world.QueueFree();
+			await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
+			await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
+			GC.Collect();
+			GC.WaitForPendingFinalizers();
 			GD.Print("ZOMBIE_PURSUIT_VALIDATION: PASS");
 			GetTree().Quit(0);
 		}

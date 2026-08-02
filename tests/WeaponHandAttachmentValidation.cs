@@ -86,6 +86,8 @@ public partial class WeaponHandAttachmentValidation : Node
 			attachment._Process(0.1);
 			Require(!weaponPivot.RotationDegrees.IsEqualApprox(readyRotation),
 				"WeaponPivot still drives the gameplay attack pose");
+			Require(combat.AttackBodyOffsetMagnitude >= 0.005f,
+				"two-hand swing transfers visible weight through the grounded character root");
 			Require(attachment.CurrentPoseName ==
 					WeaponAttachmentController.MeleeAttackPoseName &&
 				attachment.IsAncestorOf(bat),
@@ -104,6 +106,9 @@ public partial class WeaponHandAttachmentValidation : Node
 
 			player.QueueFree();
 			await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
+			await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
+			GC.Collect();
+			GC.WaitForPendingFinalizers();
 			GD.Print("WEAPON_HAND_ATTACHMENT_VALIDATION: PASS");
 			GetTree().Quit(0);
 		}

@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="WeatherProfile" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/WeatherProfile.cs" id="1_profile"]
+
+[resource]
+script = ExtResource("1_profile")
+DisplayName = "Blackwater Fog"
+Kind = 4
+AmbientMultiplier = 0.76
+SkyEnergyMultiplier = 0.66
+DirectionalMultiplier = 0.27
+DirectionalTint = Color(0.82, 0.86, 0.9, 1)
+Exposure = 0.94
+Saturation = 0.7
+SkyTopColor = Color(0.29, 0.32, 0.34, 1)
+SkyHorizonColor = Color(0.56, 0.56, 0.53, 1)
+CloudColor = Color(0.67, 0.68, 0.67, 1)
+CloudOpacity = 0.74
+FogColor = Color(0.59, 0.6, 0.58, 1)
+FogDensity = 0.62
+FogDepthBegin = 10.0
+FogDepthEnd = 118.0
+FogSkyAffect = 0.72
+FogAerialPerspective = 0.9
+PrecipitationIntensity = 0.05
+WindIntensity = 0.12
+LightningPerMinute = 0.0
+LightningBrightness = 0.0

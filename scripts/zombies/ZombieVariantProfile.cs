@@ -9,7 +9,7 @@ public partial class ZombieVariantProfile : Resource
 {
 	[Export] public StringName Identifier { get; set; } = new();
 	[Export] public string DisplayName { get; set; } = string.Empty;
-	[Export] public float MovementSpeed { get; set; } = 0.36f;
+	[Export] public float MovementSpeed { get; set; } = 1.15f;
 	[Export] public float MaximumHealth { get; set; } = 100.0f;
 	[Export] public float AttackDamage { get; set; } = 20.0f;
 	[Export] public float DetectionRange { get; set; } = 12.0f;

@@ -57,10 +57,10 @@ public partial class StackManagementValidation : Node
 				"selected player stack splits by a chosen quantity");
 			Require(playerInventory.StackCount == 3 &&
 				playerInventory.GetQuantityAt(0) == 2 &&
-				playerInventory.GetQuantityAt(1) == 2 &&
-				playerInventory.GetQuantityAt(2) == 1,
-				"splitting preserves total quantity and stack limits");
-			Require(playerItems.GetSelectedItems()[0] == 1,
+				playerInventory.GetQuantityAt(1) == 1 &&
+				playerInventory.GetQuantityAt(2) == 2,
+				"splitting preserves total quantity and uses a free stable slot");
+			Require(playerItems.GetSelectedItems()[0] == 2,
 				"selection follows the new split stack");
 
 			inventoryUi.SelectPlayerItem(1);
@@ -95,27 +95,63 @@ public partial class StackManagementValidation : Node
 		ItemDefinition food = GD.Load<ItemDefinition>("res://assets/items/food.tres");
 		ItemDefinition water = GD.Load<ItemDefinition>("res://assets/items/water.tres");
 		ItemDefinition medkit = GD.Load<ItemDefinition>("res://assets/items/medkit.tres");
+		ItemDefinition scrap = GD.Load<ItemDefinition>("res://assets/items/scrap.tres");
+		ItemDefinition cannedFood =
+			GD.Load<ItemDefinition>("res://assets/items/canned_food.tres");
+		ItemDefinition soda = GD.Load<ItemDefinition>("res://assets/items/soda.tres");
 
 		Require(player.AddItem(bandage, 4) && player.AddItem(bandage, 3),
 			"compatible additions merge automatically");
 		Require(player.StackCount == 2 && player.GetQuantityAt(0) == 5 &&
 			player.GetQuantityAt(1) == 2 && player.GetQuantity("bandage") == 7,
 			"automatic merging never exceeds the bandage stack limit");
-		Require(player.AddItem(food) && player.AddItem(water) && player.IsFull,
-			"player capacity counts bounded stacks");
-		Require(!player.AddItem(medkit, 3) && player.GetQuantity("medkit") == 0,
+		Require(player.AddItem(food) && player.AddItem(water) &&
+			player.AddItem(medkit) && player.AddItem(scrap) &&
+			player.AddItem(cannedFood) && player.AddItem(soda) && player.IsFull,
+			"the expanded survival pack capacity counts bounded stacks");
+		Require(!player.AddItem(medkit, 3) && player.GetQuantity("medkit") == 1,
 			"an invalid addition is atomic and never exceeds capacity");
 
 		Require(player.TransferQuantityTo(1, 2, container, out int destination) &&
 			destination == 0 && player.GetQuantity("bandage") == 5 &&
 			container.GetQuantity("bandage") == 2,
 			"quantity transfer removes only the chosen amount");
+		Require(player.GetItemAt(1) is null && player.GetItemAt(2)?.ItemId == food.ItemId,
+			"removing a stack leaves a stable slot instead of silently remapping hotkeys");
 		Require(container.AddItem(bandage, 4) &&
 			container.GetQuantityAt(0) == 5 && container.GetQuantityAt(1) == 1,
 			"container additions merge before creating overflow stacks");
 		Require(container.SplitStack(0, 2) == 1 &&
 			container.GetQuantityAt(0) == 3 && container.GetQuantityAt(1) == 2,
 			"storage split inserts a predictable selected stack");
+
+		PlayerInventory weightLimited = new() { MaximumCarryWeightKg = 1.0f };
+		AddChild(weightLimited);
+		Require(weightLimited.AddItem(water) && !weightLimited.AddItem(water) &&
+			weightLimited.GetQuantity("water") == 1,
+			"carry weight rejects an overweight addition atomically");
+
+		ContainerInventory legacyContainer = new() { SlotCapacity = 2 };
+		AddChild(legacyContainer);
+		ItemStackRestoreData[] legacyStacks =
+		{
+			new(bandage, 5),
+			new(bandage, 5),
+			new(bandage, 5),
+		};
+		Require(legacyContainer.CanRestoreSavedStacks(legacyStacks) &&
+			legacyContainer.RestoreSavedStacks(legacyStacks),
+			"pre-capacity container stacks remain eligible for version-1 restoration");
+		Require(legacyContainer.HasCapacityOverflow &&
+			legacyContainer.OverflowStackCount == 1 &&
+			legacyContainer.StackCount == 3 &&
+			legacyContainer.GetQuantity("bandage") == 15,
+			"legacy overflow remains visible and preserves every saved item");
+		Require(!legacyContainer.AddItem(medkit),
+			"runtime additions remain blocked while restored contents exceed capacity");
+		Require(legacyContainer.RemoveItemAt(2, 5) &&
+			!legacyContainer.HasCapacityOverflow && legacyContainer.StackCount == 2,
+			"taking an overflow stack deterministically returns the container to capacity");
 	}
 
 	private static void Require(bool condition, string message)

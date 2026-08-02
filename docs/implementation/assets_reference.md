@@ -838,6 +838,66 @@ existing CC BY door and mattress models where used. Their original records
 remain in this document and in the source manifests beside those shared packs,
 so they are not duplicated asset by asset here.
 
+## August 2026 Survival Systems and Vegetation Pass
+
+### Tree Small 02
+
+- **Asset type:** High-detail tree model and 1K PBR texture set
+- **Creator:** Rico Cilliers
+- **Provider/source:** [Tree Small 02 on Poly Haven](https://polyhaven.com/a/tree_small_02)
+- **License:** [CC0 1.0 Universal](https://polyhaven.com/license)
+- **Commercial use:** Permitted; attribution is not required
+- **Downloaded:** 2 August 2026 through Poly Haven's official public API; all
+  retained downloads matched the API-provided MD5 values
+- **Retained source:**
+  `assets/third_party/environment/vegetation/poly_haven/tree_small_02/`
+- **Editor/source-control note:** A local `.gdignore` keeps the unused
+  2,062,487-triangle authoring source out of Godot's import scan. The retained
+  source is approximately 101 MB and should use Git LFS or a reproducible
+  acquisition step before a public repository release.
+- **Project derivative:**
+  `assets/environment/nature/ashwood_hero_tree_small_02.glb`
+- **Reproducible optimization:**
+  `tools/blender/optimize_poly_haven_tree_small_02.py`
+- **Modification record:** Material parts were separated, redundant planar
+  leaf tessellation was dissolved, part-specific decimation was applied, and
+  the mesh was rejoined/exported without modifying the retained source. The
+  measured project input was reduced from 2,062,487 to 120,429 triangles.
+- **Derivative SHA-256:**
+  `AB221DAB7AC84262D37EE857F325D110E2D7B2588158AAF317B4E7F486182B00`
+- **Prototype use:** Four seasonally tinted, range-limited foreground and
+  midground anchors on Main Street; lightweight existing trees remain in the
+  distant canopy
+- **Local provenance record:**
+  `assets/third_party/environment/vegetation/poly_haven/tree_small_02/SOURCES.md`
+- **Status:** In use
+
+### Kenney RPG Audio
+
+- **Asset type:** RPG game-foley audio pack (51 extracted OGG files)
+- **Creator/provider:** Kenney Vleugels / Kenney
+- **Source:** [RPG Audio on Kenney](https://kenney.nl/assets/rpg-audio)
+- **License:** Creative Commons Zero (CC0 1.0 Universal)
+- **Commercial use:** Permitted; attribution is not required. Kenney is
+  credited here for provenance.
+- **Downloaded:** 2 August 2026 from Kenney's official asset download
+- **Local location:** `assets/third_party/audio/kenney_rpg_audio/`
+- **Local license:**
+  `assets/third_party/audio/kenney_rpg_audio/License.txt`
+- **Downloaded archive SHA-256 (acquisition record):**
+  `6DBEAF8544DA958D8F2ADCB4A4A4B76C1ADE34A05F8AB9EDCCD327DA7375F38B`
+- **Repository note:** The extracted OGG files and local `License.txt` are the
+  retained project sources. Download archives are excluded by the repository's
+  `*.zip` rule, so the hash records the verified acquisition rather than a file
+  expected to survive a normal commit.
+- **Files currently used:** `footstep00.ogg` through `footstep09.ogg` for
+  distance-driven player footsteps; `doorOpen_1.ogg` and `doorClose_2.ogg` for
+  world doors; `cloth2.ogg`, `cloth4.ogg`, and `chop.ogg` for melee motion and
+  contact; `handleSmallLeather.ogg`, `handleSmallLeather2.ogg`,
+  `handleCoins2.ogg`, `metalClick.ogg`, and `bookPlace2.ogg` for inventory and
+  storage feedback
+- **Status:** In use
+
 ## Release Checklist
 
 - [x] Record source and license links for all listed assets.

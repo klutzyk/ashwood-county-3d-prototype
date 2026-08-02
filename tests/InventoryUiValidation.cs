@@ -34,6 +34,12 @@ public partial class InventoryUiValidation : Node
 			Button take = inventoryUi.GetNode<Button>("Panel/Layout/Columns/Actions/Take");
 			Button store = inventoryUi.GetNode<Button>("Panel/Layout/Columns/Actions/Store");
 			Button use = inventoryUi.GetNode<Button>("Panel/Layout/Columns/Actions/Use");
+			Label emptyQuickSlot = world.GetNode<Label>("PerformanceUI/InventorySlots/Slot1");
+			Require(inventoryUi.GetNode<AudioStreamPlayer>("InventoryUiAudio").Bus == "Effects",
+				"inventory feedback follows the Effects volume setting");
+			Require(emptyQuickSlot.Text.Contains("EMPTY") &&
+				emptyQuickSlot.Modulate.A >= 0.99f,
+				"empty quick slots remain visible as actionable HUD affordances");
 
 			cabinet.GetNode<Interactable>("Interactable").Interact(player);
 			Require(inventoryUi.IsOpen, "search opens the inventory interface");
@@ -63,6 +69,10 @@ public partial class InventoryUiValidation : Node
 			playerInventory.AddItem(GD.Load<ItemDefinition>("res://assets/items/food.tres"));
 			playerInventory.AddItem(GD.Load<ItemDefinition>("res://assets/items/water.tres"));
 			playerInventory.AddItem(GD.Load<ItemDefinition>("res://assets/items/scrap.tres"));
+			playerInventory.AddItem(GD.Load<ItemDefinition>("res://assets/items/canned_food.tres"));
+			playerInventory.AddItem(GD.Load<ItemDefinition>("res://assets/items/soda.tres"));
+			playerInventory.AddItem(GD.Load<ItemDefinition>("res://assets/items/chocolate.tres"));
+			playerInventory.AddItem(GD.Load<ItemDefinition>("res://assets/items/medkit.tres"));
 			inventoryUi.SelectContainerItem(cabinet.Inventory.FindItemStack("antibiotics"));
 			Require(take.Disabled, "Take is disabled when the player has no compatible free slot");
 			inventoryUi.TakeSelected();
@@ -82,6 +92,14 @@ public partial class InventoryUiValidation : Node
 			inventoryUi.UseSelected();
 			Require(playerInventory.GetQuantity("bandage") == 0,
 				"Use consumes one valid selected item");
+			Require(playerInventory.GetItemAt(1)?.ItemId == new StringName("food"),
+				"consuming a quick-slot item does not remap later quick slots");
+
+			inventoryUi.SelectPlayerItem(4);
+			Require(inventoryUi.AssignSelectedToQuickSlot(0) &&
+				playerInventory.GetItemAt(0)?.ItemId == new StringName("canned_food") &&
+				playerInventory.GetItemAt(4) is null,
+				"a pack item can be explicitly assigned to an empty stable quick slot");
 
 			inventoryUi._UnhandledInput(new InputEventKey
 			{
@@ -95,6 +113,21 @@ public partial class InventoryUiValidation : Node
 				Require(Input.MouseMode == Input.MouseModeEnum.Captured,
 					"closing the inventory restores captured gameplay input");
 			}
+
+			inventoryUi.OpenBackpack();
+			Require(inventoryUi.IsOpen && inventoryUi.CurrentContainer is null &&
+				player.IsInventoryUiOpen && playerItems.HasFocus(),
+				"the field inventory opens without requiring a world container");
+			PlayerNeeds needs = player.GetNode<PlayerNeeds>("Needs");
+			needs.RestoreState(needs.MaximumHunger, needs.MaximumThirst);
+			int waterSlot = playerInventory.FindItemStack("water");
+			inventoryUi.SelectPlayerItem(waterSlot);
+			Require(use.Disabled,
+				"water use is disabled while thirst is full");
+			needs.RestoreState(needs.MaximumHunger, 40.0f);
+			Require(!use.Disabled,
+				"ThirstChanged refreshes item usability while the inventory remains open");
+			inventoryUi.Close();
 
 			GD.Print("INVENTORY_UI_VALIDATION: PASS");
 			GetTree().Quit(0);

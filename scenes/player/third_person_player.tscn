@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3]
+[gd_scene load_steps=31 format=3]
 
 [ext_resource type="Script" path="res://scripts/player/ThirdPersonPlayer.cs" id="1_player"]
 [ext_resource type="Script" path="res://scripts/player/PlayerHealth.cs" id="2_health"]
@@ -15,6 +15,18 @@
 [ext_resource type="Resource" path="res://assets/weapons/wooden_axe.tres" id="13_axe"]
 [ext_resource type="Resource" path="res://assets/weapons/wooden_hammer.tres" id="14_hammer"]
 [ext_resource type="Resource" path="res://scripts/items/MeleeWeaponDefinition.cs" id="15_weapon_type"]
+[ext_resource type="Script" path="res://scripts/player/PlayerMeleeAudioFeedback.cs" id="16_melee_audio"]
+[ext_resource type="Script" path="res://scripts/player/PlayerFootstepFeedback.cs" id="17_footsteps"]
+[ext_resource type="AudioStream" path="res://assets/third_party/audio/kenney_rpg_audio/Audio/footstep00.ogg" id="18_step00"]
+[ext_resource type="AudioStream" path="res://assets/third_party/audio/kenney_rpg_audio/Audio/footstep01.ogg" id="19_step01"]
+[ext_resource type="AudioStream" path="res://assets/third_party/audio/kenney_rpg_audio/Audio/footstep02.ogg" id="20_step02"]
+[ext_resource type="AudioStream" path="res://assets/third_party/audio/kenney_rpg_audio/Audio/footstep03.ogg" id="21_step03"]
+[ext_resource type="AudioStream" path="res://assets/third_party/audio/kenney_rpg_audio/Audio/footstep04.ogg" id="22_step04"]
+[ext_resource type="AudioStream" path="res://assets/third_party/audio/kenney_rpg_audio/Audio/footstep05.ogg" id="23_step05"]
+[ext_resource type="AudioStream" path="res://assets/third_party/audio/kenney_rpg_audio/Audio/footstep06.ogg" id="24_step06"]
+[ext_resource type="AudioStream" path="res://assets/third_party/audio/kenney_rpg_audio/Audio/footstep07.ogg" id="25_step07"]
+[ext_resource type="AudioStream" path="res://assets/third_party/audio/kenney_rpg_audio/Audio/footstep08.ogg" id="26_step08"]
+[ext_resource type="AudioStream" path="res://assets/third_party/audio/kenney_rpg_audio/Audio/footstep09.ogg" id="27_step09"]
 
 [sub_resource type="CapsuleShape3D" id="PlayerShape"]
 radius = 0.45
@@ -34,6 +46,10 @@ script = ExtResource("2_health")
 
 [node name="Stamina" type="Node" parent="."]
 script = ExtResource("3_stamina")
+DrainRate = 22.0
+RegenerationRate = 18.0
+RegenerationDelay = 0.9
+RecoveryThreshold = 22.0
 
 [node name="Needs" type="Node" parent="."]
 script = ExtResource("4_needs")
@@ -48,7 +64,32 @@ script = ExtResource("6_inventory")
 script = ExtResource("7_melee")
 WeaponDefinition = ExtResource("12_bat")
 WeaponSlots = Array[ExtResource("15_weapon_type")]([ExtResource("12_bat"), ExtResource("13_axe"), ExtResource("14_hammer")])
-HitMoment = 0.4
+HitMoment = 0.23
+
+[node name="AudioFeedback" type="AudioStreamPlayer3D" parent="MeleeCombat"]
+position = Vector3(0, 1, 0)
+bus = &"Effects"
+max_distance = 16.0
+unit_size = 2.0
+script = ExtResource("16_melee_audio")
+
+[node name="FootstepFeedback" type="Node" parent="."]
+script = ExtResource("17_footsteps")
+FootstepSounds = Array[AudioStream]([ExtResource("18_step00"), ExtResource("19_step01"), ExtResource("20_step02"), ExtResource("21_step03"), ExtResource("22_step04"), ExtResource("23_step05"), ExtResource("24_step06"), ExtResource("25_step07"), ExtResource("26_step08"), ExtResource("27_step09")])
+
+[node name="StepA" type="AudioStreamPlayer3D" parent="FootstepFeedback"]
+position = Vector3(-0.12, -0.7, 0)
+volume_db = -13.0
+bus = &"Effects"
+unit_size = 2.4
+max_distance = 18.0
+
+[node name="StepB" type="AudioStreamPlayer3D" parent="FootstepFeedback"]
+position = Vector3(0.12, -0.7, 0)
+volume_db = -13.0
+bus = &"Effects"
+unit_size = 2.4
+max_distance = 18.0
 
 [node name="WeaponPivot" type="Node3D" parent="MeleeCombat"]
 transform = Transform3D(0.907437, 0.42018816, 0, -0.42018816, 0.907437, 0, 0, 0, 1, 0.48, 0.48, 0.22)

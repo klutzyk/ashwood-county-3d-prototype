@@ -28,6 +28,7 @@ public partial class ZombieAudioFeedback : AudioStreamPlayer3D
 	public override void _Ready()
 	{
 		_random.Randomize();
+		Bus = "Effects";
 		VolumeDb = CueVolumeDb;
 	}
 

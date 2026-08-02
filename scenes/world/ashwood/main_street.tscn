@@ -24,6 +24,8 @@
 [ext_resource type="PackedScene" path="res://scenes/world/ashwood/presentation/main_street_vista.tscn" id="22_vista"]
 [ext_resource type="Script" path="res://scripts/world/AtmosphereAudio.cs" id="23_atmosphere"]
 [ext_resource type="Script" path="res://scripts/world/BuildingVisibilityCuller.cs" id="24_building_culler"]
+[ext_resource type="PackedScene" path="res://scenes/world/ashwood/presentation/main_street_world_polish.tscn" id="25_world_polish"]
+[ext_resource type="PackedScene" path="res://scenes/environment/dynamic_weather.tscn" id="26_dynamic_weather"]
 
 [sub_resource type="BoxMesh" id="GroundMesh"]
 material = ExtResource("15_grass")
@@ -111,15 +113,21 @@ roughness = 0.92
 [sub_resource type="BoxMesh" id="PlotPaintedMesh"]
 material = SubResource("PlotPainted")
 
+[sub_resource type="BoxShape3D" id="PrototypeBoundaryEastWestShape"]
+size = Vector3(1, 12, 82)
+
+[sub_resource type="BoxShape3D" id="PrototypeBoundaryNorthSouthShape"]
+size = Vector3(222, 12, 1)
+
 [sub_resource type="ProceduralSkyMaterial" id="SkyMaterial"]
-sky_top_color = Color(0.25, 0.34, 0.47, 1)
-sky_horizon_color = Color(0.78, 0.56, 0.39, 1)
-sky_curve = 0.14
-sky_energy_multiplier = 1.0
+sky_top_color = Color(0.15, 0.255, 0.405, 1)
+sky_horizon_color = Color(0.86, 0.58, 0.36, 1)
+sky_curve = 0.2
+sky_energy_multiplier = 1.08
 sky_cover = ExtResource("20_cloud_cover")
-sky_cover_modulate = Color(0.82, 0.86, 0.94, 0.36)
-ground_bottom_color = Color(0.065, 0.075, 0.065, 1)
-ground_horizon_color = Color(0.34, 0.31, 0.27, 1)
+sky_cover_modulate = Color(0.94, 0.91, 0.85, 0.46)
+ground_bottom_color = Color(0.05, 0.065, 0.052, 1)
+ground_horizon_color = Color(0.32, 0.3, 0.25, 1)
 ground_curve = 0.12
 sun_angle_max = 4.0
 sun_curve = 0.18
@@ -131,29 +139,29 @@ process_mode = 1
 
 [sub_resource type="Environment" id="Environment"]
 background_mode = 2
-background_energy_multiplier = 0.82
+background_energy_multiplier = 0.96
 sky = SubResource("Sky")
 ambient_light_source = 3
-ambient_light_color = Color(0.42, 0.5, 0.62, 1)
-ambient_light_energy = 0.72
+ambient_light_color = Color(0.38, 0.445, 0.55, 1)
+ambient_light_energy = 0.82
 tonemap_mode = 2
-tonemap_exposure = 1.02
+tonemap_exposure = 1.08
 tonemap_white = 6.0
 fog_enabled = true
 fog_mode = 1
-fog_light_color = Color(0.5, 0.43, 0.36, 1)
-fog_light_energy = 0.8
-fog_sun_scatter = 0.16
-fog_density = 0.42
-fog_aerial_perspective = 0.58
-fog_sky_affect = 0.22
+fog_light_color = Color(0.55, 0.44, 0.34, 1)
+fog_light_energy = 0.72
+fog_sun_scatter = 0.28
+fog_density = 0.34
+fog_aerial_perspective = 0.66
+fog_sky_affect = 0.32
 fog_depth_curve = 1.25
-fog_depth_begin = 62.0
-fog_depth_end = 260.0
+fog_depth_begin = 58.0
+fog_depth_end = 275.0
 adjustment_enabled = true
-adjustment_brightness = 1.04
-adjustment_contrast = 0.99
-adjustment_saturation = 0.9
+adjustment_brightness = 1.0
+adjustment_contrast = 1.02
+adjustment_saturation = 1.0
 
 [node name="MainStreet" type="Node3D" unique_id=1127619697]
 
@@ -177,7 +185,10 @@ WorldEnvironmentPath = NodePath("../../WorldEnvironment")
 DayAmbientEnergy = 1.02
 DaySkyEnergy = 0.95
 DayDirectionalEnergy = 1.2
+GoldenHourDirectionalColor = Color(1, 0.78, 0.62, 1)
 GoldenHourColorStrength = 1.0
+
+[node name="DynamicWeather" parent="Gameplay" instance=ExtResource("26_dynamic_weather")]
 
 [node name="AtmosphereAudio" type="Node" parent="Gameplay"]
 script = ExtResource("23_atmosphere")
@@ -297,6 +308,27 @@ mesh = SubResource("GroundPoliceRearMesh")
 [node name="PoliceRearCollision" type="CollisionShape3D" parent="Environment/Ground"]
 position = Vector3(88, 0, 33.65)
 shape = SubResource("GroundPoliceRearShape")
+
+[node name="PrototypeSafetyBoundary" type="StaticBody3D" parent="Environment"]
+editor_description = "Temporary invisible containment at the current authored ground edge. Replace or move these shapes whenever the playable world expands."
+collision_layer = 1
+collision_mask = 1
+
+[node name="West" type="CollisionShape3D" parent="Environment/PrototypeSafetyBoundary"]
+position = Vector3(-110.5, 2, 0)
+shape = SubResource("PrototypeBoundaryEastWestShape")
+
+[node name="East" type="CollisionShape3D" parent="Environment/PrototypeSafetyBoundary"]
+position = Vector3(110.5, 2, 0)
+shape = SubResource("PrototypeBoundaryEastWestShape")
+
+[node name="North" type="CollisionShape3D" parent="Environment/PrototypeSafetyBoundary"]
+position = Vector3(0, 2, -40.5)
+shape = SubResource("PrototypeBoundaryNorthSouthShape")
+
+[node name="South" type="CollisionShape3D" parent="Environment/PrototypeSafetyBoundary"]
+position = Vector3(0, 2, 40.5)
+shape = SubResource("PrototypeBoundaryNorthSouthShape")
 
 [node name="RoadSurface" type="StaticBody3D" parent="Environment" unique_id=1259637871]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, 0)
@@ -595,6 +627,8 @@ position = Vector3(88.5, 0.2, -21.9)
 
 [node name="Vista" parent="Environment" instance=ExtResource("22_vista")]
 
+[node name="WorldPolish" parent="Environment" instance=ExtResource("25_world_polish")]
+
 [node name="ReliefSafePoint" parent="Environment" instance=ExtResource("21_safe_point")]
 position = Vector3(-95.2, 0.2, -5.25)
 rotation_degrees = Vector3(0, 92, 0)
@@ -610,10 +644,10 @@ rotation_degrees = Vector3(-168.75, -28, 0)
 light_color = Color(1, 0.57, 0.29, 1)
 light_energy = 0.66
 shadow_enabled = true
-shadow_opacity = 0.64
-shadow_blur = 1.4
+shadow_opacity = 0.48
+shadow_blur = 3.2
 directional_shadow_mode = 1
-directional_shadow_max_distance = 40.0
+directional_shadow_max_distance = 96.0
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=778193923]
 environment = SubResource("Environment")

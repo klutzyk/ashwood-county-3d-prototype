@@ -25,6 +25,7 @@ HoldDuration = 2.0
 
 [node name="Inventory" type="Node" parent="." unique_id=963283914]
 script = ExtResource("3_inventory")
+SlotCapacity = 16
 
 [node name="Visual" parent="." unique_id=202503369 instance=ExtResource("5_5cs0p")]
 

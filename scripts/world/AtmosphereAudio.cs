@@ -49,6 +49,10 @@ public partial class AtmosphereAudio : Node
 		_groanPlayer = GetNode<AudioStreamPlayer>("ZombieGroans");
 		_insectsPlayer = GetNode<AudioStreamPlayer>("DayInsects");
 		_cricketsPlayer = GetNode<AudioStreamPlayer>("NightCrickets");
+		_windPlayer.Bus = "Ambient";
+		_groanPlayer.Bus = "Ambient";
+		_insectsPlayer.Bus = "Ambient";
+		_cricketsPlayer.Bus = "Ambient";
 		_random.Randomize();
 		_groanWaitRemaining = RandomGroanInterval();
 

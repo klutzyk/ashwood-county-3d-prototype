@@ -20,6 +20,8 @@ public partial class ItemDefinition : Resource
 	[Export] public string DisplayName { get; set; } = string.Empty;
 	[Export(PropertyHint.MultilineText)] public string Description { get; set; } = string.Empty;
 	[Export] public int StackLimit { get; set; } = 1;
+	[Export(PropertyHint.Range, "0,25,0.01,or_greater")]
+	public float UnitWeightKg { get; set; } = 0.1f;
 	[Export] public ItemCategory Category { get; set; }
 	[Export] public Texture2D? Icon { get; set; }
 	[Export(PropertyHint.MultilineText)] public string UseMessage { get; set; } = string.Empty;
