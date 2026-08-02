@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/environment/buildings/MillerHardware/fixtures/miller_lumber_rack.glb" id="1_rack"]
+[ext_resource type="Material" path="res://assets/materials/miller_hardware_green_metal.tres" id="2_green"]
+
+[node name="MillerLumberRackProduction" type="Node3D"]
+
+[node name="Rack" parent="." instance=ExtResource("1_rack")]
+
+[node name="miller_lumber_rack_miller_safety_yellow_enamel_pbr" parent="Rack/Miller_Lumber_Rack" index="2"]
+material_override = ExtResource("2_green")
+
+[editable path="Rack"]

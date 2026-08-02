@@ -19,6 +19,9 @@ public partial class PlayerMeleeCombat : Node3D
 	[Signal]
 	public delegate void WeaponEquippedEventHandler(int slot, string displayName);
 
+	[Signal]
+	public delegate void HitConfirmedEventHandler(int targetCount);
+
 	[Export] public MeleeWeaponDefinition? WeaponDefinition { get; set; }
 	[Export] public Godot.Collections.Array<MeleeWeaponDefinition> WeaponSlots { get; set; } = new();
 	[Export] public float AttackDuration { get; set; } = 0.68f;
@@ -29,6 +32,10 @@ public partial class PlayerMeleeCombat : Node3D
 	[Export(PropertyHint.Range, "0.2,0.9,0.01")]
 	public float OneHandAttackCancelMoment { get; set; } = 0.45f;
 	[Export] public float ReadyPoseBlendSpeed { get; set; } = 10.0f;
+	[Export(PropertyHint.Layers3DPhysics)]
+	public uint HitCollisionMask { get; set; } = 1;
+	[Export(PropertyHint.Range, "0.3,1.8,0.05")]
+	public float StrikeHeight { get; set; } = 0.9f;
 	[Export] public NodePath WeaponAttachmentPath { get; set; } =
 		new("../Visual/Warrior/Skeleton3D/RightHandWeaponAttachment");
 
@@ -199,7 +206,7 @@ public partial class PlayerMeleeCombat : Node3D
 		float minimumDot = Mathf.Cos(Mathf.DegToRad(
 			Mathf.Clamp(Weapon.AttackArcDegrees, 1.0f, 180.0f) * 0.5f));
 		HashSet<PrototypeZombie> hitZombies = new();
-		bool hitAnything = false;
+		int hitCount = 0;
 
 		foreach (Node node in GetTree().GetNodesInGroup(PrototypeZombie.ZombieGroupName))
 		{
@@ -221,17 +228,40 @@ public partial class PlayerMeleeCombat : Node3D
 			{
 				continue;
 			}
+			if (IsMeleePathBlocked(zombie))
+			{
+				continue;
+			}
 
-			hitAnything |= zombie.ReceiveMeleeHit(
+			if (zombie.ReceiveMeleeHit(
 				Mathf.Max(Weapon.Damage, 0.0f),
-				direction * Mathf.Max(Weapon.Knockback, 0.0f));
+				direction * Mathf.Max(Weapon.Knockback, 0.0f)))
+			{
+				hitCount++;
+			}
 		}
 
-		if (hitAnything)
+		if (hitCount > 0)
 		{
 			_player.RequestMeleeImpactFeedback();
+			EmitSignal(SignalName.HitConfirmed, hitCount);
 		}
-		return hitAnything;
+		return hitCount > 0;
+	}
+
+	private bool IsMeleePathBlocked(PrototypeZombie zombie)
+	{
+		Vector3 heightOffset = Vector3.Up * Mathf.Max(StrikeHeight, 0.0f);
+		PhysicsRayQueryParameters3D query = PhysicsRayQueryParameters3D.Create(
+			_player.GlobalPosition + heightOffset,
+			zombie.GlobalPosition + heightOffset);
+		query.CollisionMask = HitCollisionMask;
+		query.CollideWithAreas = false;
+		query.Exclude = new Godot.Collections.Array<Rid> { _player.GetRid() };
+		Godot.Collections.Dictionary result =
+			_player.GetWorld3D().DirectSpaceState.IntersectRay(query);
+		return result.Count > 0 &&
+			result["collider"].AsGodotObject() != zombie;
 	}
 
 	private void FinishAttack()

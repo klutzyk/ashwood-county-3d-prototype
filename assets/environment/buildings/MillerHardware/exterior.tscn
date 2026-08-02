@@ -34,7 +34,7 @@ material = ExtResource("7_concrete")
 size = Vector3(0.26, 4.8, 18)
 
 [sub_resource type="BoxShape3D" id="SideWallShape"]
-size = Vector3(14, 4.8, 0.26)
+size = Vector3(20, 4.8, 0.26)
 
 [sub_resource type="BoxShape3D" id="FrontSillNorthShape"]
 size = Vector3(0.24, 0.68, 1.75)
@@ -49,7 +49,7 @@ size = Vector3(0.24, 1.35, 18)
 size = Vector3(0.24, 2.72, 0.16)
 
 [sub_resource type="BoxShape3D" id="RoofShape"]
-size = Vector3(14.5, 0.24, 18.5)
+size = Vector3(20.5, 0.24, 18.5)
 
 [sub_resource type="BoxShape3D" id="WindowNorthShape"]
 size = Vector3(0.08, 2.44, 1.56)
@@ -71,18 +71,18 @@ size = Vector3(1.2, 0.06, 1.45)
 [node name="Shell" type="Node3D" parent="."]
 
 [node name="RearWall" type="MeshInstance3D" parent="Shell"]
-position = Vector3(7, 2.4, 0)
+position = Vector3(13, 2.4, 0)
 scale = Vector3(0.26, 4.8, 18)
 mesh = SubResource("BrickMesh")
 
 [node name="NorthWall" type="MeshInstance3D" parent="Shell"]
-position = Vector3(0, 2.4, -9)
-scale = Vector3(14, 4.8, 0.26)
+position = Vector3(3, 2.4, -9)
+scale = Vector3(20, 4.8, 0.26)
 mesh = SubResource("BrickMesh")
 
 [node name="SouthWall" type="MeshInstance3D" parent="Shell"]
-position = Vector3(0, 2.4, 9)
-scale = Vector3(14, 4.8, 0.26)
+position = Vector3(3, 2.4, 9)
+scale = Vector3(20, 4.8, 0.26)
 mesh = SubResource("BrickMesh")
 
 [node name="FrontSillNorth" type="MeshInstance3D" parent="Shell"]
@@ -111,8 +111,8 @@ scale = Vector3(0.24, 2.72, 0.16)
 mesh = SubResource("WoodMesh")
 
 [node name="Roof" type="MeshInstance3D" parent="Shell"]
-position = Vector3(0, 4.94, 0)
-scale = Vector3(14.5, 0.24, 18.5)
+position = Vector3(3, 4.94, 0)
+scale = Vector3(20.5, 0.24, 18.5)
 mesh = SubResource("RoofMesh")
 
 [node name="FrontParapet" type="MeshInstance3D" parent="Shell"]
@@ -121,18 +121,18 @@ scale = Vector3(0.40, 1.18, 18.26)
 mesh = SubResource("BrickMesh")
 
 [node name="RearParapet" type="MeshInstance3D" parent="Shell"]
-position = Vector3(7, 5.27, 0)
+position = Vector3(13, 5.27, 0)
 scale = Vector3(0.3, 0.66, 18.28)
 mesh = SubResource("BrickMesh")
 
 [node name="NorthParapet" type="MeshInstance3D" parent="Shell"]
-position = Vector3(0, 5.27, -9)
-scale = Vector3(14.1, 0.66, 0.3)
+position = Vector3(3, 5.27, -9)
+scale = Vector3(20.1, 0.66, 0.3)
 mesh = SubResource("BrickMesh")
 
 [node name="SouthParapet" type="MeshInstance3D" parent="Shell"]
-position = Vector3(0, 5.27, 9)
-scale = Vector3(14.1, 0.66, 0.3)
+position = Vector3(3, 5.27, 9)
+scale = Vector3(20.1, 0.66, 0.3)
 mesh = SubResource("BrickMesh")
 
 [node name="FrontCorniceLower" type="MeshInstance3D" parent="Shell"]
@@ -151,15 +151,15 @@ scale = Vector3(0.06, 0.055, 18.54)
 mesh = SubResource("BrassMesh")
 
 [node name="RearWallCollision" type="CollisionShape3D" parent="."]
-position = Vector3(7, 2.4, 0)
+position = Vector3(13, 2.4, 0)
 shape = SubResource("RearWallShape")
 
 [node name="NorthWallCollision" type="CollisionShape3D" parent="."]
-position = Vector3(0, 2.4, -9)
+position = Vector3(3, 2.4, -9)
 shape = SubResource("SideWallShape")
 
 [node name="SouthWallCollision" type="CollisionShape3D" parent="."]
-position = Vector3(0, 2.4, 9)
+position = Vector3(3, 2.4, 9)
 shape = SubResource("SideWallShape")
 
 [node name="FrontSillNorthCollision" type="CollisionShape3D" parent="."]
@@ -183,7 +183,7 @@ position = Vector3(-7, 2.04, -6.04)
 shape = SubResource("DoorPierShape")
 
 [node name="RoofCollision" type="CollisionShape3D" parent="."]
-position = Vector3(0, 4.94, 0)
+position = Vector3(3, 4.94, 0)
 shape = SubResource("RoofShape")
 
 [node name="Storefront" type="Node3D" parent="."]
@@ -419,40 +419,40 @@ modulate = Color(0.84, 0.80, 0.63, 0.84)
 [node name="RearLoading" type="Node3D" parent="."]
 
 [node name="LoadingDoor" type="MeshInstance3D" parent="RearLoading"]
-position = Vector3(7.14, 1.59, 4.8)
+position = Vector3(13.14, 1.59, 4.8)
 scale = Vector3(0.18, 3.18, 3.62)
 mesh = SubResource("GreenMesh")
 
 [node name="LoadingDoorSlatA" type="MeshInstance3D" parent="RearLoading"]
-position = Vector3(7.25, 0.48, 4.8)
+position = Vector3(13.25, 0.48, 4.8)
 scale = Vector3(0.05, 0.055, 3.42)
 mesh = SubResource("BrassMesh")
 
 [node name="LoadingDoorSlatB" type="MeshInstance3D" parent="RearLoading"]
-position = Vector3(7.25, 1.00, 4.8)
+position = Vector3(13.25, 1.00, 4.8)
 scale = Vector3(0.05, 0.055, 3.42)
 mesh = SubResource("BrassMesh")
 
 [node name="LoadingDoorSlatC" type="MeshInstance3D" parent="RearLoading"]
-position = Vector3(7.25, 1.52, 4.8)
+position = Vector3(13.25, 1.52, 4.8)
 scale = Vector3(0.05, 0.055, 3.42)
 mesh = SubResource("BrassMesh")
 
 [node name="LoadingDoorSlatD" type="MeshInstance3D" parent="RearLoading"]
-position = Vector3(7.25, 2.04, 4.8)
+position = Vector3(13.25, 2.04, 4.8)
 scale = Vector3(0.05, 0.055, 3.42)
 mesh = SubResource("BrassMesh")
 
 [node name="LoadingDoorSlatE" type="MeshInstance3D" parent="RearLoading"]
-position = Vector3(7.25, 2.56, 4.8)
+position = Vector3(13.25, 2.56, 4.8)
 scale = Vector3(0.05, 0.055, 3.42)
 mesh = SubResource("BrassMesh")
 
 [node name="LoadingDoorCollision" type="CollisionShape3D" parent="."]
-position = Vector3(7.14, 1.59, 4.8)
+position = Vector3(13.14, 1.59, 4.8)
 shape = SubResource("LoadingDoorShape")
 
 [node name="RearLamp" parent="RearLoading" instance=ExtResource("8_lamp")]
-position = Vector3(7.35, 3.78, 4.8)
+position = Vector3(13.35, 3.78, 4.8)
 rotation = Vector3(0, 0, -1.5707964)
 scale = Vector3(0.55, 0.55, 0.55)

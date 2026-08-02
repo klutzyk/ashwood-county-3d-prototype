@@ -52,6 +52,8 @@ public partial class PrototypeZombie : CharacterBody3D
 	[Export] public float HitReactionDuration { get; set; } = 0.34f;
 	[Export] public float KnockbackDamping { get; set; } = 9.0f;
 	[Export] public float AnimationUpdateDistance { get; set; } = 28.0f;
+	[Export(PropertyHint.Range, "0,0.12,0.01")]
+	public float VisualScaleVariation { get; set; } = 0.055f;
 
 	private const string SourceAnimationName = "mixamo_com";
 	private const string IdleAnimationName = "Idle";
@@ -84,6 +86,7 @@ public partial class PrototypeZombie : CharacterBody3D
 	private PlayerHealth _playerHealth = null!;
 	private ZombieHealth _health = null!;
 	private ZombieAudioFeedback _audioFeedback = null!;
+	private ZombieImpactFeedback _impactFeedback = null!;
 	private Node3D _visual = null!;
 	private SearchableContainer _corpseLoot = null!;
 	private VisibleOnScreenNotifier3D _visibilityNotifier = null!;
@@ -118,6 +121,7 @@ public partial class PrototypeZombie : CharacterBody3D
 	private PhysicsRayQueryParameters3D _visionQuery = null!;
 	private bool _isOnScreen = true;
 	private bool _animationProcessingEnabled = true;
+	private Vector3 _baseVisualScale = Vector3.One;
 
 	public static readonly StringName ZombieGroupName = new("prototype_zombies");
 
@@ -137,6 +141,7 @@ public partial class PrototypeZombie : CharacterBody3D
 		_playerHealth = _player.GetNode<PlayerHealth>("Health");
 		_health = GetNode<ZombieHealth>("Health");
 		_audioFeedback = GetNode<ZombieAudioFeedback>("AudioFeedback");
+		_impactFeedback = GetNode<ZombieImpactFeedback>("ImpactFeedback");
 		_visual = GetNode<Node3D>("Visual");
 		_corpseLoot = GetNode<SearchableContainer>("CorpseLoot");
 		_visibilityNotifier = GetNode<VisibleOnScreenNotifier3D>("VisibilityNotifier");
@@ -145,6 +150,7 @@ public partial class PrototypeZombie : CharacterBody3D
 			?? throw new InvalidOperationException("Zombie model is missing an AnimationPlayer.");
 
 		ApplyVariantProfile();
+		ApplyVisualVariation();
 		ConfigureAnimations();
 		AddToGroup(ZombieGroupName);
 		_random.Seed = (ulong)Time.GetTicksUsec() ^ GetInstanceId();
@@ -368,6 +374,8 @@ public partial class PrototypeZombie : CharacterBody3D
 			return false;
 		}
 
+		_impactFeedback.PlayHit(knockbackVelocity, lethal: !IsAlive);
+
 		if (!IsAlive)
 		{
 			return true;
@@ -405,7 +413,7 @@ public partial class PrototypeZombie : CharacterBody3D
 		_navigationAgent.AvoidanceEnabled = false;
 		Velocity = Vector3.Zero;
 		_hitReactionRemaining = 0.0f;
-		_visual.Scale = Vector3.One;
+		_visual.Scale = _baseVisualScale;
 		SetCollisionDisabled(this, true);
 		_corpseLoot.SetInteractionEnabled(true);
 		SetPhysicsProcess(false);
@@ -912,6 +920,21 @@ public partial class PrototypeZombie : CharacterBody3D
 		PlayerSearchDuration = Mathf.Max(VariantProfile.SearchDuration, 0.0f);
 		_health.ConfigureMaximumHealth(VariantProfile.MaximumHealth);
 		ApplyMaterialTint(_visual, VariantProfile.MaterialTint);
+	}
+
+	private void ApplyVisualVariation()
+	{
+		ulong hash = CreateStableLootSeed(GetPath().ToString());
+		float heightSample = (hash & 0xffffUL) / 65535.0f;
+		float widthSample = ((hash >> 16) & 0xffffUL) / 65535.0f;
+		float variation = Mathf.Max(VisualScaleVariation, 0.0f);
+		float heightScale = 1.0f + Mathf.Lerp(-variation, variation, heightSample);
+		float widthScale = 1.0f + Mathf.Lerp(
+			-variation * 0.55f,
+			variation * 0.55f,
+			widthSample);
+		_baseVisualScale = new Vector3(widthScale, heightScale, widthScale);
+		_visual.Scale = _baseVisualScale;
 	}
 
 	private static void ApplyMaterialTint(Node node, Color tint)

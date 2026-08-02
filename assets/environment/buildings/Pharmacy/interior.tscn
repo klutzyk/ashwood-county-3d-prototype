@@ -37,15 +37,21 @@
 [ext_resource type="PackedScene" uid="uid://kyikdxv8lh5s" path="res://assets/third_party/interiors/shared/open_game_art/loafbrr_toilets/objects/toilet_round_a.tscn" id="35_toilet"]
 [ext_resource type="PackedScene" uid="uid://cnxthxgwv5xbs" path="res://assets/third_party/props/doors/white_door_1.glb" id="36_white_door"]
 [ext_resource type="Material" path="res://assets/materials/greenleaf_pharmacy_sign.tres" id="37_sign"]
+[ext_resource type="Material" path="res://assets/environment/buildings/Pharmacy/materials/greenleaf_wall_warm.tres" id="38_wall_warm"]
+[ext_resource type="Material" path="res://assets/environment/buildings/Pharmacy/materials/greenleaf_floor_worn.tres" id="39_floor_worn"]
+[ext_resource type="Material" path="res://assets/environment/buildings/Pharmacy/materials/greenleaf_wainscot.tres" id="40_wainscot"]
+[ext_resource type="Material" path="res://assets/environment/buildings/Pharmacy/materials/greenleaf_ceiling_dim.tres" id="41_ceiling_dim"]
+[ext_resource type="Material" path="res://assets/environment/buildings/Pharmacy/materials/greenleaf_entry_mat.tres" id="42_entry_mat"]
+[ext_resource type="PackedScene" path="res://assets/third_party/interiors/pharmacy/poly_haven/industrial_wall_lamp/industrial_wall_lamp_1k.gltf" id="43_wall_lamp"]
 
 [sub_resource type="BoxMesh" id="MeshFloor"]
-material = ExtResource("1_floor")
+material = ExtResource("39_floor_worn")
 
 [sub_resource type="BoxMesh" id="MeshCeiling"]
-material = ExtResource("4_ceiling")
+material = ExtResource("41_ceiling_dim")
 
 [sub_resource type="BoxMesh" id="MeshWall"]
-material = ExtResource("2_wall")
+material = ExtResource("38_wall_warm")
 
 [sub_resource type="BoxMesh" id="MeshGreenMetal"]
 material = ExtResource("5_green")
@@ -81,7 +87,7 @@ size = Vector3(1.6, 3.4, 0.1)
 size = Vector3(0.1, 3.4, 2.55)
 
 [sub_resource type="BoxShape3D" id="ShelfBankShape"]
-size = Vector3(3.7, 2.14, 0.58)
+size = Vector3(3.4, 2.14, 0.58)
 
 [sub_resource type="BoxShape3D" id="CheckoutShape"]
 size = Vector3(0.95, 0.8, 2)
@@ -109,6 +115,12 @@ size = Vector3(0.62, 0.75, 0.82)
 
 [sub_resource type="BoxMesh" id="MeshSign"]
 material = ExtResource("37_sign")
+
+[sub_resource type="BoxMesh" id="MeshWainscot"]
+material = ExtResource("40_wainscot")
+
+[sub_resource type="BoxMesh" id="MeshEntryMat"]
+material = ExtResource("42_entry_mat")
 
 [node name="PharmacyInterior" type="StaticBody3D" unique_id=1141056600]
 
@@ -234,6 +246,46 @@ mesh = SubResource("MeshGreenMetal")
 transform = Transform3D(0.05, 0, 0, 0, 0.8, 0, 0, 0, 0.04, -4.27, 1.82, 4.98)
 mesh = SubResource("MeshGreenMetal")
 
+[node name="RetailWainscotNorth" type="MeshInstance3D" parent="Architecture"]
+position = Vector3(-0.45, 0.64, -5.92)
+scale = Vector3(7.9, 1.16, 0.055)
+mesh = SubResource("MeshWainscot")
+
+[node name="RetailWainscotSouth" type="MeshInstance3D" parent="Architecture"]
+position = Vector3(-0.45, 0.64, 5.92)
+scale = Vector3(7.9, 1.16, 0.055)
+mesh = SubResource("MeshWainscot")
+
+[node name="RxWainscotNorth" type="MeshInstance3D" parent="Architecture"]
+position = Vector3(-4.145, 0.64, -1.825)
+scale = Vector3(0.055, 1.16, 2.55)
+mesh = SubResource("MeshWainscot")
+
+[node name="RxWainscotSouth" type="MeshInstance3D" parent="Architecture"]
+position = Vector3(-4.145, 0.64, 1.825)
+scale = Vector3(0.055, 1.16, 2.55)
+mesh = SubResource("MeshWainscot")
+
+[node name="RxHeaderBand" type="MeshInstance3D" parent="Architecture"]
+position = Vector3(-4.14, 2.64, 0)
+scale = Vector3(0.06, 0.3, 6.0)
+mesh = SubResource("MeshWainscot")
+
+[node name="NorthChairRail" type="MeshInstance3D" parent="Architecture"]
+position = Vector3(-0.45, 1.28, -5.88)
+scale = Vector3(7.9, 0.08, 0.1)
+mesh = SubResource("MeshGreenMetal")
+
+[node name="SouthChairRail" type="MeshInstance3D" parent="Architecture"]
+position = Vector3(-0.45, 1.28, 5.88)
+scale = Vector3(7.9, 0.08, 0.1)
+mesh = SubResource("MeshGreenMetal")
+
+[node name="EntryMat" type="MeshInstance3D" parent="Architecture"]
+position = Vector3(3.02, 0.095, 0)
+scale = Vector3(0.92, 0.025, 1.72)
+mesh = SubResource("MeshEntryMat")
+
 [node name="StorageDoor" parent="Architecture" unique_id=1291202485 instance=ExtResource("36_white_door")]
 position = Vector3(-6.4, 0.05, -3.07)
 scale = Vector3(0.235, 0.235, 0.235)
@@ -308,7 +360,7 @@ shape = SubResource("OfficePartitionSideShape")
 [node name="RetailFloor" type="Node3D" parent="." unique_id=865246354]
 
 [node name="NorthAisle" type="Node3D" parent="RetailFloor" unique_id=1986417403]
-position = Vector3(0, 0, -0.7)
+position = Vector3(0, 0, -1.0)
 
 [node name="ShelfFront" parent="RetailFloor/NorthAisle" unique_id=1161231465 instance=ExtResource("10_shelf_a")]
 transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 2.3, 0, -1.2)
@@ -317,10 +369,10 @@ transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 2.3, 0, -1.2)
 transform = Transform3D(1.55, 0, 0, 0, 1, 0, 0, 0, 1, 1.15, 0, -1.2)
 
 [node name="ShelfRear" parent="RetailFloor/NorthAisle" instance=ExtResource("11_shelf_b")]
-transform = Transform3D(1.45, 0, 0, 0, 1, 0, 0, 0, 1, -0.05, 0, -1.2)
+transform = Transform3D(1.15, 0, 0, 0, 1, 0, 0, 0, 1, 0.18, 0, -1.2)
 
 [node name="SouthAisle" type="Node3D" parent="RetailFloor" unique_id=1804311556]
-position = Vector3(0, 0, 0.7)
+position = Vector3(0, 0, 1.0)
 
 [node name="ShelfFront" parent="RetailFloor/SouthAisle" unique_id=1999867026 instance=ExtResource("11_shelf_b")]
 transform = Transform3D(-1.55, 0, -8.742278e-08, 0, 1, 0, 1.355053e-07, 0, -1, 2.35, 0, 1.2)
@@ -329,10 +381,10 @@ transform = Transform3D(-1.55, 0, -8.742278e-08, 0, 1, 0, 1.355053e-07, 0, -1, 2
 transform = Transform3D(-0.1, 0, -8.742278e-09, 0, 0.1, 0, 8.742278e-09, 0, -0.1, 1.2, 0, 1.2)
 
 [node name="ShelfRear" parent="RetailFloor/SouthAisle" instance=ExtResource("11_shelf_b")]
-transform = Transform3D(-1.45, 0, -6.338151e-08, 0, 1, 0, 1.2676302e-07, 0, -4.371139e-08, -0.05, 0, 1.2)
+transform = Transform3D(-1.15, 0, -5.0263132e-08, 0, 1, 0, 1.0052626e-07, 0, -4.371139e-08, 0.18, 0, 1.2)
 
 [node name="NorthStock" type="Node3D" parent="RetailFloor" unique_id=1615617517]
-position = Vector3(0, 0, -0.7)
+position = Vector3(0, 0, -1.0)
 
 [node name="FoodFrontLow" parent="RetailFloor/NorthStock" unique_id=1422294698 instance=ExtResource("13_food")]
 transform = Transform3D(0.9965545, 0.022331307, 0.07987873, -0.019989667, 0.9993502, -0.0299955, -0.08049666, 0.0282954, 0.9963532, 2.58, 0.42, -0.88)
@@ -361,8 +413,23 @@ transform = Transform3D(2.0266886, -0.0766781, 0.85244036, 0.174934, 2.1820083, 
 [node name="FoodRearHigh" parent="RetailFloor/NorthStock" unique_id=1029220594 instance=ExtResource("13_food")]
 transform = Transform3D(0.9800666, 0.007944654, -0.19851041, 0, 0.9992001, 0.039989334, 0.19866933, -0.03919221, 0.9792827, 0.3, 1.55, -0.88)
 
+[node name="CleanerRearMid" parent="RetailFloor/NorthStock" instance=ExtResource("14_cleaner")]
+position = Vector3(0.38, 0.98, -0.9)
+rotation = Vector3(0.02, -0.18, -0.01)
+scale = Vector3(0.88, 0.88, 0.88)
+
+[node name="MedicalBoxMiddleHigh" parent="RetailFloor/NorthStock" instance=ExtResource("16_medical_box")]
+position = Vector3(1.42, 1.52, -0.89)
+rotation = Vector3(-0.02, 0.2, 0.01)
+scale = Vector3(0.66, 0.66, 0.66)
+
+[node name="TapeFrontMid" parent="RetailFloor/NorthStock" instance=ExtResource("17_medical_tape")]
+position = Vector3(2.18, 1.02, -0.88)
+rotation = Vector3(0.08, -0.4, 0.02)
+scale = Vector3(1.72, 1.72, 1.72)
+
 [node name="SouthStock" type="Node3D" parent="RetailFloor" unique_id=302640937]
-position = Vector3(0, 0, 0.7)
+position = Vector3(0, 0, 1.0)
 
 [node name="BleachFrontLow" parent="RetailFloor/SouthStock" unique_id=727612471 instance=ExtResource("15_bleach")]
 transform = Transform3D(0.9887711, 0, -0.14943814, 0, 1, 0, 0.14943814, 0, 0.9887711, 2.55, 0.37, 0.89)
@@ -384,6 +451,21 @@ transform = Transform3D(1.7403785, -0.25468254, -0.9519557, 0.15867999, 1.979266
 
 [node name="FoodRearLow" parent="RetailFloor/SouthStock" unique_id=1760764731 instance=ExtResource("13_food")]
 transform = Transform3D(0.9950042, -0.0019965353, -0.099813454, 0, 0.9998, -0.019998666, 0.09983342, 0.019898755, 0.9948052, 1.2778881, 1.6194308, 1.1019242)
+
+[node name="CleanerRearMid" parent="RetailFloor/SouthStock" instance=ExtResource("14_cleaner")]
+position = Vector3(0.42, 0.96, 0.9)
+rotation = Vector3(-0.02, 0.24, 0.01)
+scale = Vector3(0.88, 0.88, 0.88)
+
+[node name="MedicalBoxFrontMid" parent="RetailFloor/SouthStock" instance=ExtResource("16_medical_box")]
+position = Vector3(2.16, 0.95, 0.89)
+rotation = Vector3(0.01, -0.16, -0.01)
+scale = Vector3(0.66, 0.66, 0.66)
+
+[node name="BleachRearHigh" parent="RetailFloor/SouthStock" instance=ExtResource("15_bleach")]
+position = Vector3(0.34, 1.5, 0.88)
+rotation = Vector3(0.01, 0.28, 0)
+scale = Vector3(0.9, 0.9, 0.9)
 
 [node name="NorthWindowDisplay" parent="RetailFloor" unique_id=1228077739 instance=ExtResource("12_display")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.98, 0, -2.5)
@@ -440,11 +522,11 @@ transform = Transform3D(0.28671524, 0, -0.95801586, 0, 1, 0, 0.95801586, 0, 0.28
 transform = Transform3D(0.984712, 0.1427992, 0.099753566, -0.13943149, 0.98942393, -0.039989334, -0.10440901, 0.025469188, 0.9942083, 3.2, 0.02, 3.92)
 
 [node name="NorthShelfCollision" type="CollisionShape3D" parent="." unique_id=1409235634]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.18, 1.07, -1.9)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.32, 1.07, -2.2)
 shape = SubResource("ShelfBankShape")
 
 [node name="SouthShelfCollision" type="CollisionShape3D" parent="." unique_id=542210548]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.18, 1.07, 1.9)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.32, 1.07, 2.2)
 shape = SubResource("ShelfBankShape")
 
 [node name="CheckoutCollision" type="CollisionShape3D" parent="." unique_id=314324468]
@@ -468,7 +550,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.24, 0.55, 4.35)
 shape = SubResource("WheelchairShape")
 
 [node name="PrescriptionCounter" type="Node3D" parent="." unique_id=1969161879]
-position = Vector3(-0.5, 0, 0)
+position = Vector3(-1.8, 0, 0)
 
 [node name="CabinetRun" type="MeshInstance3D" parent="PrescriptionCounter" unique_id=685317353]
 transform = Transform3D(0.68, 0, 0, 0, 1, 0, 0, 0, 4.25, -0.63, 0.5, -0.2)
@@ -487,7 +569,7 @@ transform = Transform3D(0.06, 0, 0, 0, 0.16, 0, 0, 0, 4.05, -0.265, 0.12, -0.2)
 mesh = SubResource("MeshGreenMetal")
 
 [node name="CounterCollision" type="CollisionShape3D" parent="." unique_id=1870173890]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.13, 0.54, -0.2)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.43, 0.54, -0.2)
 shape = SubResource("CounterShape")
 
 [node name="RxWorkspace" type="Node3D" parent="." unique_id=1722809374]
@@ -559,6 +641,11 @@ transform = Transform3D(-3.14722e-08, 0, 0.72, 0, 0.72, 0, -0.72, 0, -3.14722e-0
 [node name="WallClock" parent="StaffOffice" unique_id=1374343862 instance=ExtResource("29_clock")]
 transform = Transform3D(-5.1579438e-08, 0, 1.18, 0, 1.18, 0, -1.18, 0, -5.1579438e-08, -3.31, 2.38, 2.02)
 
+[node name="Chair" parent="StaffOffice" instance=ExtResource("21_chair")]
+position = Vector3(-2.2, 0, 2.16)
+rotation = Vector3(0, 3.08, 0)
+scale = Vector3(0.88, 0.88, 0.88)
+
 [node name="OfficeDeskCollision" type="CollisionShape3D" parent="." unique_id=1768879691]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.48, 0.4, 1.35)
 shape = SubResource("OfficeDeskShape")
@@ -586,6 +673,16 @@ transform = Transform3D(-0.089085385, 0, 0.996024, 0, 1, 0, -0.996024, 0, -0.089
 
 [node name="Bleach" parent="Storage" unique_id=1117167691 instance=ExtResource("15_bleach")]
 transform = Transform3D(0.18964083, 0, 0.98185354, 0, 1, 0, -0.98185354, 0, 0.18964083, -2.76, 0.4, -3.12)
+
+[node name="CardboardBoxC" parent="Storage" instance=ExtResource("32_cardboard")]
+position = Vector3(-2.0, 0.17, -5.25)
+rotation = Vector3(0.04, 0.31, -0.03)
+scale = Vector3(0.68, 0.68, 0.68)
+
+[node name="MedicalBoxHigh" parent="Storage" instance=ExtResource("16_medical_box")]
+position = Vector3(-2.74, 1.53, -3.76)
+rotation = Vector3(0.02, 1.52, -0.01)
+scale = Vector3(0.62, 0.62, 0.62)
 
 [node name="ShelfCollision" type="CollisionShape3D" parent="." unique_id=1664184972]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.72, 1.07, -3.48)
@@ -618,9 +715,61 @@ transform = Transform3D(0.8361563, -0.08208529, -0.37483954, 0.0734627, 0.916324
 [node name="DroppedNotepads" parent="Abandonment" unique_id=1427606638 instance=ExtResource("27_notepads")]
 transform = Transform3D(0.7613133, 0.0896443, 0.6421573, -0.04981932, 0.995556, -0.07991469, -0.64646745, 0.028848276, 0.76239604, -0.08, 0.065, 2.5)
 
+[node name="LootedColdPackBox" parent="Abandonment" instance=ExtResource("32_cardboard")]
+position = Vector3(-2.02, 0.18, 2.82)
+rotation = Vector3(0.16, -0.48, 0.24)
+scale = Vector3(0.74, 0.74, 0.74)
+
+[node name="ScatteredMedicalBoxA" parent="Abandonment" instance=ExtResource("16_medical_box")]
+position = Vector3(-1.55, 0.08, 2.62)
+rotation = Vector3(0.18, 0.62, -0.1)
+scale = Vector3(0.64, 0.64, 0.64)
+
+[node name="ScatteredMedicalBoxB" parent="Abandonment" instance=ExtResource("16_medical_box")]
+position = Vector3(-2.42, 0.09, 3.05)
+rotation = Vector3(-0.12, -0.36, 0.08)
+scale = Vector3(0.6, 0.6, 0.6)
+
+[node name="ScatteredMedicalTapeA" parent="Abandonment" instance=ExtResource("17_medical_tape")]
+position = Vector3(-1.28, 0.07, 2.95)
+rotation = Vector3(0.26, -0.74, 0.12)
+scale = Vector3(1.55, 1.55, 1.55)
+
+[node name="ScatteredMedicalTapeB" parent="Abandonment" instance=ExtResource("17_medical_tape")]
+position = Vector3(-2.7, 0.07, 2.6)
+rotation = Vector3(-0.2, 0.46, -0.08)
+scale = Vector3(1.45, 1.45, 1.45)
+
+[node name="OperationalStory" type="Node3D" parent="."]
+
+[node name="ColdChainBoard" type="MeshInstance3D" parent="OperationalStory"]
+position = Vector3(-4.08, 1.92, 2.02)
+scale = Vector3(0.055, 0.72, 1.28)
+mesh = SubResource("MeshSign")
+
+[node name="ColdChainNotice" type="Label3D" parent="OperationalStory"]
+position = Vector3(-4.015, 1.92, 2.02)
+rotation = Vector3(0, 1.5707964, 0)
+modulate = Color(0.91, 0.84, 0.64, 1)
+outline_modulate = Color(0.025, 0.045, 0.03, 1)
+text = "POWER OUTAGE\nKEEP COLD STOCK CLOSED"
+font_size = 19
+outline_size = 4
+
+[node name="QueueMarkerNorth" type="MeshInstance3D" parent="OperationalStory"]
+position = Vector3(-1.12, 0.11, -1.26)
+scale = Vector3(0.24, 0.018, 0.58)
+mesh = SubResource("MeshWainscot")
+
+[node name="QueueMarkerSouth" type="MeshInstance3D" parent="OperationalStory"]
+position = Vector3(-1.12, 0.11, 0.86)
+scale = Vector3(0.24, 0.018, 0.58)
+mesh = SubResource("MeshWainscot")
+
 [node name="PrescriptionsSign" type="Label3D" parent="." unique_id=550466392]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -3.29, 2.62, -0.1)
-modulate = Color(0.12, 0.38, 0.2, 1)
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -4.03, 2.64, -0.1)
+modulate = Color(0.88, 0.82, 0.63, 1)
+outline_modulate = Color(0.025, 0.055, 0.035, 1)
 text = "PRESCRIPTIONS"
 font_size = 54
 outline_size = 9
@@ -714,28 +863,43 @@ transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -6.4
 [node name="RestroomLight" parent="CeilingFixtures" unique_id=168200012 instance=ExtResource("30_fluorescent")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.35, 3.34, 4.55)
 
+[node name="RxWallLampNorth" parent="CeilingFixtures" instance=ExtResource("43_wall_lamp")]
+position = Vector3(-4.02, 2.35, -2.02)
+rotation = Vector3(0, 1.5707964, 0)
+scale = Vector3(0.72, 0.72, 0.72)
+
+[node name="RxWallLampSouth" parent="CeilingFixtures" instance=ExtResource("43_wall_lamp")]
+position = Vector3(-4.02, 2.35, 2.02)
+rotation = Vector3(0, 1.5707964, 0)
+scale = Vector3(0.72, 0.72, 0.72)
+
+[node name="StorageWallLamp" parent="CeilingFixtures" instance=ExtResource("43_wall_lamp")]
+position = Vector3(-8.34, 2.35, -4.45)
+rotation = Vector3(0, 1.5707964, 0)
+scale = Vector3(0.66, 0.66, 0.66)
+
 [node name="RetailLight" type="OmniLight3D" parent="." unique_id=619292960]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0, 3.08, 0)
-light_color = Color(0.8, 0.9, 1, 1)
-light_energy = 0.64
-omni_range = 6.2
+light_color = Color(0.84, 0.84, 0.72, 1)
+light_energy = 0.58
+omni_range = 5.9
 
 [node name="BackRoomLight" type="OmniLight3D" parent="." unique_id=731354372]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.3, 3.02, -0.2)
-light_color = Color(0.77, 0.86, 0.96, 1)
-light_energy = 0.44
+light_color = Color(0.78, 0.82, 0.72, 1)
+light_energy = 0.5
 omni_range = 4.5
 
 [node name="WaitingAreaLight" type="OmniLight3D" parent="." unique_id=519988952]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.8, 3, 4.2)
-light_color = Color(0.86, 0.9, 1, 1)
-light_energy = 0.28
+light_color = Color(0.92, 0.76, 0.56, 1)
+light_energy = 0.3
 omni_range = 3.2
 
 [node name="StorageRoomLight" type="OmniLight3D" parent="." unique_id=949585894]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.35, 3, -4.5)
-light_color = Color(0.7, 0.78, 0.88, 1)
-light_energy = 0.22
+light_color = Color(0.6, 0.7, 0.68, 1)
+light_energy = 0.2
 omni_range = 2.4
 
 [node name="RestroomFillLight" type="OmniLight3D" parent="." unique_id=801242038]

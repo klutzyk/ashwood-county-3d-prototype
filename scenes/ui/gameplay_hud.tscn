@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3]
+[gd_scene load_steps=24 format=3]
 
 [ext_resource type="Script" path="res://scripts/ui/PlayerStatusDisplay.cs" id="1_status"]
 [ext_resource type="Script" path="res://scripts/ui/PerformanceDisplay.cs" id="2_fps"]
@@ -9,6 +9,7 @@
 [ext_resource type="Script" path="res://scripts/ui/ContainerInventoryDisplay.cs" id="7_container"]
 [ext_resource type="Script" path="res://scripts/ui/ObjectiveDisplay.cs" id="8_objective"]
 [ext_resource type="Script" path="res://scripts/ui/GameplayNotificationDisplay.cs" id="9_notifications"]
+[ext_resource type="Script" path="res://scripts/ui/CombatFeedbackDisplay.cs" id="10_combat_feedback"]
 
 [sub_resource type="StyleBoxFlat" id="Panel"]
 bg_color = Color(0.02, 0.03, 0.04, 0.78)
@@ -40,6 +41,91 @@ border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
 border_color = Color(0.34, 0.36, 0.32, 0.9)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="VitalsPanel"]
+bg_color = Color(0.012, 0.019, 0.018, 0.82)
+border_width_left = 2
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.38, 0.34, 0.22, 0.78)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="HealthFill"]
+bg_color = Color(0.62, 0.12, 0.09, 0.98)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="InventoryPanel"]
+content_margin_left = 24.0
+content_margin_top = 18.0
+content_margin_right = 24.0
+content_margin_bottom = 18.0
+bg_color = Color(0.012, 0.017, 0.017, 0.97)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.48, 0.4, 0.24, 0.92)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+shadow_color = Color(0, 0, 0, 0.65)
+shadow_size = 18
+
+[sub_resource type="StyleBoxFlat" id="InventoryList"]
+bg_color = Color(0.025, 0.035, 0.032, 0.96)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.22, 0.25, 0.21, 0.9)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="ActionButton"]
+bg_color = Color(0.11, 0.13, 0.105, 0.98)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.36, 0.34, 0.22, 0.92)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="ActionButtonHover"]
+bg_color = Color(0.24, 0.22, 0.13, 0.98)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.72, 0.58, 0.28, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="ActionButtonPressed"]
+bg_color = Color(0.38, 0.3, 0.14, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.88, 0.68, 0.3, 1)
 corner_radius_top_left = 4
 corner_radius_top_right = 4
 corner_radius_bottom_right = 4
@@ -115,20 +201,36 @@ vertical_alignment = 1
 autowrap_mode = 2
 clip_text = true
 
-[node name="HealthLabel" type="Label" parent="."]
+[node name="VitalsBackdrop" type="Panel" parent="."]
 offset_left = 12.0
-offset_top = 52.0
-offset_right = 196.0
-offset_bottom = 84.0
+offset_top = 48.0
+offset_right = 404.0
+offset_bottom = 120.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("VitalsPanel")
+
+[node name="HealthLabel" type="Label" parent="."]
+offset_left = 24.0
+offset_top = 56.0
+offset_right = 104.0
+offset_bottom = 76.0
 theme_override_font_sizes/font_size = 16
-theme_override_styles/normal = SubResource("Panel")
 text = "Health: 100 / 100"
-horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="HealthBar" type="ProgressBar" parent="."]
+offset_left = 106.0
+offset_top = 58.0
+offset_right = 196.0
+offset_bottom = 74.0
+theme_override_styles/background = SubResource("BarBackground")
+theme_override_styles/fill = SubResource("HealthFill")
+value = 100.0
+show_percentage = false
+
 [node name="StaminaLabel" type="Label" parent="."]
-offset_left = 12.0
-offset_top = 92.0
+offset_left = 24.0
+offset_top = 88.0
 offset_right = 104.0
 offset_bottom = 112.0
 theme_override_font_sizes/font_size = 14
@@ -266,6 +368,61 @@ text = "4\nEmpty"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="CombatFeedback" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("10_combat_feedback")
+
+[node name="HitMarker" type="Label" parent="CombatFeedback"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -18.0
+offset_top = -24.0
+offset_right = 18.0
+offset_bottom = 24.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(18, 24)
+theme_override_colors/font_color = Color(1, 0.88, 0.72, 1)
+theme_override_colors/font_shadow_color = Color(0.12, 0.015, 0.008, 0.9)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 32
+text = "×"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="WeaponReadout" type="Label" parent="CombatFeedback"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -292.0
+offset_top = -67.0
+offset_right = -18.0
+offset_bottom = -35.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.72, 0.72, 0.63, 0.82)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.8)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 14
+text = "MELEE  1  BASEBALL BAT"
+horizontal_alignment = 2
+vertical_alignment = 1
+
 [node name="DamageFlash" type="ColorRect" parent="."]
 modulate = Color(1, 1, 1, 0)
 anchors_preset = 15
@@ -321,6 +478,16 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("7_container")
 
+[node name="Backdrop" type="ColorRect" parent="ContainerInventoryWindow"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.004, 0.006, 0.006, 0.62)
+
 [node name="Panel" type="PanelContainer" parent="ContainerInventoryWindow"]
 layout_mode = 1
 anchors_preset = 8
@@ -334,12 +501,15 @@ offset_right = 350.0
 offset_bottom = 260.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_styles/panel = SubResource("InventoryPanel")
 
 [node name="Layout" type="VBoxContainer" parent="ContainerInventoryWindow/Panel"]
 layout_mode = 2
 
 [node name="Title" type="Label" parent="ContainerInventoryWindow/Panel/Layout"]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.92, 0.82, 0.58, 1)
+theme_override_font_sizes/font_size = 25
 text = "Container"
 horizontal_alignment = 1
 
@@ -353,11 +523,15 @@ layout_mode = 2
 
 [node name="ContainerLabel" type="Label" parent="ContainerInventoryWindow/Panel/Layout/Columns/ContainerColumn"]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.78, 0.8, 0.7, 1)
+theme_override_font_sizes/font_size = 17
 text = "Container Items"
 
 [node name="ContainerItems" type="ItemList" parent="ContainerInventoryWindow/Panel/Layout/Columns/ContainerColumn"]
 custom_minimum_size = Vector2(270, 260)
 layout_mode = 2
+theme_override_font_sizes/font_size = 16
+theme_override_styles/panel = SubResource("InventoryList")
 
 [node name="Actions" type="VBoxContainer" parent="ContainerInventoryWindow/Panel/Layout/Columns"]
 custom_minimum_size = Vector2(110, 0)
@@ -365,27 +539,51 @@ layout_mode = 2
 alignment = 1
 
 [node name="Take" type="Button" parent="ContainerInventoryWindow/Panel/Layout/Columns/Actions"]
+custom_minimum_size = Vector2(0, 34)
 layout_mode = 2
+theme_override_styles/normal = SubResource("ActionButton")
+theme_override_styles/hover = SubResource("ActionButtonHover")
+theme_override_styles/pressed = SubResource("ActionButtonPressed")
 text = "Take >"
 
 [node name="Store" type="Button" parent="ContainerInventoryWindow/Panel/Layout/Columns/Actions"]
+custom_minimum_size = Vector2(0, 34)
 layout_mode = 2
+theme_override_styles/normal = SubResource("ActionButton")
+theme_override_styles/hover = SubResource("ActionButtonHover")
+theme_override_styles/pressed = SubResource("ActionButtonPressed")
 text = "< Store"
 
 [node name="TakeQuantity" type="Button" parent="ContainerInventoryWindow/Panel/Layout/Columns/Actions"]
+custom_minimum_size = Vector2(0, 34)
 layout_mode = 2
+theme_override_styles/normal = SubResource("ActionButton")
+theme_override_styles/hover = SubResource("ActionButtonHover")
+theme_override_styles/pressed = SubResource("ActionButtonPressed")
 text = "Take Qty >"
 
 [node name="StoreQuantity" type="Button" parent="ContainerInventoryWindow/Panel/Layout/Columns/Actions"]
+custom_minimum_size = Vector2(0, 34)
 layout_mode = 2
+theme_override_styles/normal = SubResource("ActionButton")
+theme_override_styles/hover = SubResource("ActionButtonHover")
+theme_override_styles/pressed = SubResource("ActionButtonPressed")
 text = "< Store Qty"
 
 [node name="Split" type="Button" parent="ContainerInventoryWindow/Panel/Layout/Columns/Actions"]
+custom_minimum_size = Vector2(0, 34)
 layout_mode = 2
+theme_override_styles/normal = SubResource("ActionButton")
+theme_override_styles/hover = SubResource("ActionButtonHover")
+theme_override_styles/pressed = SubResource("ActionButtonPressed")
 text = "Split"
 
 [node name="Use" type="Button" parent="ContainerInventoryWindow/Panel/Layout/Columns/Actions"]
+custom_minimum_size = Vector2(0, 34)
 layout_mode = 2
+theme_override_styles/normal = SubResource("ActionButton")
+theme_override_styles/hover = SubResource("ActionButtonHover")
+theme_override_styles/pressed = SubResource("ActionButtonPressed")
 text = "Use"
 
 [node name="PlayerColumn" type="VBoxContainer" parent="ContainerInventoryWindow/Panel/Layout/Columns"]
@@ -394,14 +592,20 @@ layout_mode = 2
 
 [node name="PlayerLabel" type="Label" parent="ContainerInventoryWindow/Panel/Layout/Columns/PlayerColumn"]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.78, 0.8, 0.7, 1)
+theme_override_font_sizes/font_size = 17
 text = "Player Inventory"
 
 [node name="PlayerItems" type="ItemList" parent="ContainerInventoryWindow/Panel/Layout/Columns/PlayerColumn"]
 custom_minimum_size = Vector2(270, 260)
 layout_mode = 2
+theme_override_font_sizes/font_size = 16
+theme_override_styles/panel = SubResource("InventoryList")
 
 [node name="Details" type="Label" parent="ContainerInventoryWindow/Panel/Layout"]
+custom_minimum_size = Vector2(0, 34)
 layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.74, 0.66, 1)
 text = "Select an item to view its details."
 horizontal_alignment = 1
 
@@ -411,7 +615,11 @@ layout_mode = 2
 horizontal_alignment = 1
 
 [node name="Close" type="Button" parent="ContainerInventoryWindow/Panel/Layout"]
+custom_minimum_size = Vector2(0, 38)
 layout_mode = 2
+theme_override_styles/normal = SubResource("ActionButton")
+theme_override_styles/hover = SubResource("ActionButtonHover")
+theme_override_styles/pressed = SubResource("ActionButtonPressed")
 text = "Close"
 
 [node name="QuantityDialog" type="ConfirmationDialog" parent="ContainerInventoryWindow"]

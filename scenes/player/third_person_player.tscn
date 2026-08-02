@@ -68,14 +68,15 @@ script = ExtResource("11_attachment")
 position = Vector3(0, 0.75, 0)
 
 [node name="SpringArm3D" type="SpringArm3D" parent="CameraRig"]
+position = Vector3(0.38, 0, 0)
 rotation = Vector3(-0.2, 0, 0)
 shape = SubResource("CameraCollisionShape")
-spring_length = 3.25
+spring_length = 3.1
 margin = 0.1
 
 [node name="Camera3D" type="Camera3D" parent="CameraRig/SpringArm3D"]
 current = true
-fov = 70.0
+fov = 68.0
 
 [node name="Flashlight" type="SpotLight3D" parent="CameraRig/SpringArm3D/Camera3D"]
 light_color = Color(1, 0.94, 0.82, 1)

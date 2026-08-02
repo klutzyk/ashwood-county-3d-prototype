@@ -21,6 +21,8 @@ public partial class ThirdPersonPlayer : CharacterBody3D
 	[Export] public float SprintNoiseInterval { get; set; } = 0.6f;
 	[Export] public float MeleeImpactShakeStrength { get; set; } = 0.035f;
 	[Export] public float MeleeImpactShakeDuration { get; set; } = 0.08f;
+	[Export(PropertyHint.Range, "0,4,0.1")]
+	public float MeleeImpactFovKick { get; set; } = 1.4f;
 	[Export] public float CameraHeight { get; set; } = 1.15f;
 
 	private const float MinimumPitch = -1.05f;
@@ -32,6 +34,7 @@ public partial class ThirdPersonPlayer : CharacterBody3D
 
 	private Node3D _cameraRig = null!;
 	private SpringArm3D _springArm = null!;
+	private Camera3D _camera = null!;
 	private CollisionShape3D _collisionShape = null!;
 	private CapsuleShape3D _collisionCapsule = null!;
 	private PlayerHealth _health = null!;
@@ -47,6 +50,7 @@ public partial class ThirdPersonPlayer : CharacterBody3D
 	private float _standingCollisionHeight;
 	private Vector3 _standingCollisionPosition;
 	private float _cameraStepVerticalOffset;
+	private float _baseCameraFov;
 	private readonly PhysicsTestMotionParameters3D _stepMotionParameters = new();
 	private readonly PhysicsTestMotionResult3D _stepMotionResult = new();
 
@@ -62,6 +66,8 @@ public partial class ThirdPersonPlayer : CharacterBody3D
 	{
 		_cameraRig = GetNode<Node3D>("CameraRig");
 		_springArm = GetNode<SpringArm3D>("CameraRig/SpringArm3D");
+		_camera = GetNode<Camera3D>("CameraRig/SpringArm3D/Camera3D");
+		_baseCameraFov = _camera.Fov;
 		_collisionShape = GetNode<CollisionShape3D>("CollisionShape3D");
 		_collisionCapsule =
 			(CapsuleShape3D)_collisionShape.Shape.Duplicate();
@@ -536,18 +542,22 @@ public partial class ThirdPersonPlayer : CharacterBody3D
 			0.0f,
 			CameraStepSmoothingSpeed * delta);
 		Vector3 shakeOffset = Vector3.Zero;
+		float impactFade = 0.0f;
 		if (_meleeImpactShakeRemaining > 0.0f)
 		{
 			_meleeImpactShakeRemaining = Mathf.Max(_meleeImpactShakeRemaining - delta, 0.0f);
 			_meleeImpactShakeElapsed += delta;
 			float duration = Mathf.Max(MeleeImpactShakeDuration, 0.001f);
 			float fade = _meleeImpactShakeRemaining / duration;
+			impactFade = fade;
 			float strength = Mathf.Max(MeleeImpactShakeStrength, 0.0f) * fade;
 			shakeOffset = new Vector3(
 				Mathf.Sin(_meleeImpactShakeElapsed * 115.0f),
 				Mathf.Sin(_meleeImpactShakeElapsed * 83.0f),
 				0.0f) * strength;
 		}
+		_camera.Fov = _baseCameraFov -
+			(Mathf.Max(MeleeImpactFovKick, 0.0f) * impactFade);
 
 		_cameraRig.GlobalPosition =
 			GlobalPosition +

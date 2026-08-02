@@ -6,18 +6,17 @@
 
 [resource]
 albedo_texture = ExtResource("1_diff")
-albedo_color = Color(0.58, 0.56, 0.44, 1)
+albedo_color = Color(0.69, 0.62, 0.48, 1)
 metallic_texture = ExtResource("2_arm")
 metallic_texture_channel = 2
+roughness = 0.92
 roughness_texture = ExtResource("2_arm")
 roughness_texture_channel = 1
 normal_enabled = true
 normal_texture = ExtResource("3_normal")
-normal_scale = 0.42
+normal_scale = 0.62
 ao_enabled = true
 ao_texture = ExtResource("2_arm")
 ao_texture_channel = 0
-uv1_scale = Vector3(2.8, 1, 3.6)
-uv1_triplanar = true
-uv1_world_triplanar = true
+uv1_scale = Vector3(1.6, 1, 2.0)
 texture_filter = 1

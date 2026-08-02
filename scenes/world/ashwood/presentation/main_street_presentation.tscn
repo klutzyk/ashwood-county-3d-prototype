@@ -34,17 +34,20 @@
 [ext_resource type="PackedScene" path="res://assets/environment/buildings/MillerHardware/miller_hardware.tscn" id="36_hardware"]
 [ext_resource type="PackedScene" path="res://assets/environment/buildings/AshwoodPoliceStation/ashwood_police_station.tscn" id="37_police"]
 [ext_resource type="PackedScene" path="res://scenes/world/ashwood/presentation/props/newspaper_box.tscn" id="38_newspaper"]
+[ext_resource type="Material" path="res://assets/materials/ashwood_main_street/red_brick_2k.tres" id="39_service_brick"]
+[ext_resource type="Material" path="res://assets/materials/ashwood_main_street/factory_brick_2k.tres" id="40_service_brick_alt"]
+[ext_resource type="Material" path="res://assets/materials/ashwood_main_street/facade_roof.tres" id="41_service_roof"]
 
 [sub_resource type="StandardMaterial3D" id="YellowPaint"]
-albedo_color = Color(0.67, 0.46, 0.08, 1)
-roughness = 0.92
+albedo_color = Color(0.43, 0.315, 0.085, 1)
+roughness = 0.98
 
 [sub_resource type="BoxMesh" id="CenterMarkingMesh"]
 material = SubResource("YellowPaint")
 
 [sub_resource type="StandardMaterial3D" id="WhitePaint"]
-albedo_color = Color(0.57, 0.55, 0.46, 1)
-roughness = 0.94
+albedo_color = Color(0.39, 0.38, 0.34, 1)
+roughness = 0.98
 
 [sub_resource type="BoxMesh" id="MarkingMesh"]
 material = SubResource("WhitePaint")
@@ -155,6 +158,27 @@ radial_segments = 12
 [sub_resource type="CylinderShape3D" id="HydrantShape"]
 height = 1.1
 radius = 0.33
+
+[sub_resource type="BoxMesh" id="ServiceBrickVolumeMesh"]
+material = ExtResource("39_service_brick")
+
+[sub_resource type="BoxMesh" id="ServiceBrickAltVolumeMesh"]
+material = ExtResource("40_service_brick_alt")
+
+[sub_resource type="BoxMesh" id="ServiceRoofCapMesh"]
+material = ExtResource("41_service_roof")
+
+[sub_resource type="StandardMaterial3D" id="ServiceGateMaterial"]
+albedo_color = Color(0.055, 0.075, 0.065, 1)
+metallic = 0.56
+roughness = 0.78
+
+[sub_resource type="BoxMesh" id="ServiceGateMesh"]
+material = SubResource("ServiceGateMaterial")
+
+[sub_resource type="BoxMesh" id="ServiceGateRailMesh"]
+material = SubResource("ServiceGateMaterial")
+size = Vector3(1, 0.08, 0.1)
 
 [node name="MainStreetPresentation" type="Node3D" unique_id=926575327]
 
@@ -485,9 +509,216 @@ position = Vector3(-69.6, 0.2, -8.75)
 transform = Transform3D(0, 0, -6, 0, 6, 0, 6, 0, 0, 0.0062, 0, -2.8907)
 
 [node name="WestTownEdge" parent="BackgroundBuildings" instance=ExtResource("33_old_building")]
-position = Vector3(-106.5, 0.2, -15)
+position = Vector3(-113, 0.2, -21)
 rotation_degrees = Vector3(0, 90, 0)
-scale = Vector3(0.02, 0.02, 0.02)
+scale = Vector3(0.0145, 0.0145, 0.0145)
+
+[node name="FacadeIntegration" type="Node3D" parent="."]
+metadata/environment_role = "service_edges_and_rear_massing"
+
+[node name="NorthRealtorRear" type="MeshInstance3D" parent="FacadeIntegration"]
+visible = false
+position = Vector3(-90, 2.35, -16.7)
+scale = Vector3(9, 4.3, 7.5)
+mesh = SubResource("ServiceBrickVolumeMesh")
+
+[node name="NorthRealtorRoofCap" type="MeshInstance3D" parent="FacadeIntegration"]
+visible = false
+position = Vector3(-90, 4.57, -16.7)
+scale = Vector3(9.35, 0.22, 7.8)
+mesh = SubResource("ServiceRoofCapMesh")
+
+[node name="NorthBarberRear" type="MeshInstance3D" parent="FacadeIntegration"]
+visible = false
+position = Vector3(-78.2, 2.5, -15.85)
+scale = Vector3(7.45, 4.6, 6)
+mesh = SubResource("ServiceBrickAltVolumeMesh")
+
+[node name="NorthBarberRoofCap" type="MeshInstance3D" parent="FacadeIntegration"]
+visible = false
+position = Vector3(-78.2, 4.87, -15.85)
+scale = Vector3(7.75, 0.2, 6.3)
+mesh = SubResource("ServiceRoofCapMesh")
+
+[node name="NorthFloristRear" type="MeshInstance3D" parent="FacadeIntegration"]
+visible = false
+position = Vector3(-69.6, 2.35, -15.25)
+scale = Vector3(5.55, 4.3, 5.1)
+mesh = SubResource("ServiceBrickVolumeMesh")
+
+[node name="NorthFloristRoofCap" type="MeshInstance3D" parent="FacadeIntegration"]
+visible = false
+position = Vector3(-69.6, 4.57, -15.25)
+scale = Vector3(5.85, 0.22, 5.4)
+mesh = SubResource("ServiceRoofCapMesh")
+
+[node name="NorthDentistRear" type="MeshInstance3D" parent="FacadeIntegration"]
+visible = false
+position = Vector3(-27, 2.5, -15.55)
+scale = Vector3(7.9, 4.6, 5.9)
+mesh = SubResource("ServiceBrickAltVolumeMesh")
+
+[node name="NorthDentistRoofCap" type="MeshInstance3D" parent="FacadeIntegration"]
+visible = false
+position = Vector3(-27, 4.86, -15.55)
+scale = Vector3(8.2, 0.2, 6.2)
+mesh = SubResource("ServiceRoofCapMesh")
+
+[node name="NorthAttorneyRear" type="MeshInstance3D" parent="FacadeIntegration"]
+visible = false
+position = Vector3(-11, 3.45, -16.05)
+scale = Vector3(9.4, 6.5, 5.3)
+mesh = SubResource("ServiceBrickVolumeMesh")
+
+[node name="NorthAttorneyRoofCap" type="MeshInstance3D" parent="FacadeIntegration"]
+visible = false
+position = Vector3(-11, 6.78, -16.05)
+scale = Vector3(9.7, 0.22, 5.6)
+mesh = SubResource("ServiceRoofCapMesh")
+
+[node name="NorthInsuranceRear" type="MeshInstance3D" parent="FacadeIntegration"]
+visible = false
+position = Vector3(6, 3.45, -15.4)
+scale = Vector3(14.6, 6.5, 4.7)
+mesh = SubResource("ServiceBrickAltVolumeMesh")
+
+[node name="NorthInsuranceRoofCap" type="MeshInstance3D" parent="FacadeIntegration"]
+visible = false
+position = Vector3(6, 6.78, -15.4)
+scale = Vector3(14.9, 0.22, 5)
+mesh = SubResource("ServiceRoofCapMesh")
+
+[node name="SouthFloristRear" type="MeshInstance3D" parent="FacadeIntegration"]
+visible = false
+position = Vector3(-90, 2.4, 15.25)
+scale = Vector3(5.55, 4.4, 5.1)
+mesh = SubResource("ServiceBrickAltVolumeMesh")
+
+[node name="SouthFloristRoofCap" type="MeshInstance3D" parent="FacadeIntegration"]
+visible = false
+position = Vector3(-90, 4.67, 15.25)
+scale = Vector3(5.85, 0.22, 5.4)
+mesh = SubResource("ServiceRoofCapMesh")
+
+[node name="SouthBarberRear" type="MeshInstance3D" parent="FacadeIntegration"]
+visible = false
+position = Vector3(-59, 2.5, 16)
+scale = Vector3(7.45, 4.6, 6.3)
+mesh = SubResource("ServiceBrickVolumeMesh")
+
+[node name="SouthBarberRoofCap" type="MeshInstance3D" parent="FacadeIntegration"]
+visible = false
+position = Vector3(-59, 4.87, 16)
+scale = Vector3(7.75, 0.2, 6.6)
+mesh = SubResource("ServiceRoofCapMesh")
+
+[node name="SouthAntiquesRear" type="MeshInstance3D" parent="FacadeIntegration"]
+visible = false
+position = Vector3(-44, 3.45, 15.55)
+scale = Vector3(7.55, 6.5, 5.4)
+mesh = SubResource("ServiceBrickAltVolumeMesh")
+
+[node name="SouthAntiquesRoofCap" type="MeshInstance3D" parent="FacadeIntegration"]
+visible = false
+position = Vector3(-44, 6.78, 15.55)
+scale = Vector3(7.85, 0.22, 5.7)
+mesh = SubResource("ServiceRoofCapMesh")
+
+[node name="SouthMusicRear" type="MeshInstance3D" parent="FacadeIntegration"]
+visible = false
+position = Vector3(-27, 2.55, 15.4)
+scale = Vector3(7.35, 4.7, 5.2)
+mesh = SubResource("ServiceBrickVolumeMesh")
+
+[node name="SouthMusicRoofCap" type="MeshInstance3D" parent="FacadeIntegration"]
+visible = false
+position = Vector3(-27, 4.97, 15.4)
+scale = Vector3(7.65, 0.2, 5.5)
+mesh = SubResource("ServiceRoofCapMesh")
+
+[node name="NorthWestAlleyBack" type="MeshInstance3D" parent="FacadeIntegration"]
+position = Vector3(-84, 1.7, -19.55)
+scale = Vector3(3.4, 3, 0.35)
+mesh = SubResource("ServiceBrickAltVolumeMesh")
+
+[node name="NorthWestAlleyGate" type="MeshInstance3D" parent="FacadeIntegration"]
+position = Vector3(-84, 1.4, -19.34)
+scale = Vector3(2.55, 2.15, 0.08)
+mesh = SubResource("ServiceGateMesh")
+
+[node name="NorthWestAlleyGateRail" type="MeshInstance3D" parent="FacadeIntegration"]
+position = Vector3(-84, 1.83, -19.23)
+scale = Vector3(2.65, 1, 1)
+mesh = SubResource("ServiceGateRailMesh")
+
+[node name="NorthCentralAlleyBack" type="MeshInstance3D" parent="FacadeIntegration"]
+position = Vector3(-34.25, 1.85, -18.35)
+scale = Vector3(6.2, 3.3, 0.35)
+mesh = SubResource("ServiceBrickVolumeMesh")
+
+[node name="NorthCentralAlleyGate" type="MeshInstance3D" parent="FacadeIntegration"]
+position = Vector3(-34.25, 1.42, -18.14)
+scale = Vector3(3.75, 2.2, 0.08)
+mesh = SubResource("ServiceGateMesh")
+
+[node name="NorthCentralAlleyGateRail" type="MeshInstance3D" parent="FacadeIntegration"]
+position = Vector3(-34.25, 1.86, -18.03)
+scale = Vector3(3.85, 1, 1)
+mesh = SubResource("ServiceGateRailMesh")
+
+[node name="SouthWestAlleyBack" type="MeshInstance3D" parent="FacadeIntegration"]
+position = Vector3(-51.5, 1.85, 19.2)
+scale = Vector3(6.8, 3.3, 0.35)
+mesh = SubResource("ServiceBrickAltVolumeMesh")
+
+[node name="SouthWestAlleyGate" type="MeshInstance3D" parent="FacadeIntegration"]
+position = Vector3(-51.5, 1.42, 18.99)
+scale = Vector3(3.9, 2.2, 0.08)
+mesh = SubResource("ServiceGateMesh")
+
+[node name="SouthWestAlleyGateRail" type="MeshInstance3D" parent="FacadeIntegration"]
+position = Vector3(-51.5, 1.86, 18.88)
+scale = Vector3(4, 1, 1)
+mesh = SubResource("ServiceGateRailMesh")
+
+[node name="SouthCentralAlleyBack" type="MeshInstance3D" parent="FacadeIntegration"]
+position = Vector3(-35.45, 1.8, 18.45)
+scale = Vector3(8.55, 3.2, 0.35)
+mesh = SubResource("ServiceBrickVolumeMesh")
+
+[node name="SouthCentralAlleyGate" type="MeshInstance3D" parent="FacadeIntegration"]
+position = Vector3(-35.45, 1.42, 18.24)
+scale = Vector3(4.4, 2.2, 0.08)
+mesh = SubResource("ServiceGateMesh")
+
+[node name="SouthCentralAlleyGateRail" type="MeshInstance3D" parent="FacadeIntegration"]
+position = Vector3(-35.45, 1.86, 18.13)
+scale = Vector3(4.5, 1, 1)
+mesh = SubResource("ServiceGateRailMesh")
+
+[node name="SouthServiceYardFenceWest" type="MeshInstance3D" parent="FacadeIntegration"]
+position = Vector3(-16.5, 1.08, 20.15)
+rotation_degrees = Vector3(0, -2, 0)
+scale = Vector3(6.2, 1.65, 0.055)
+mesh = SubResource("ServiceGateMesh")
+
+[node name="SouthServiceYardFenceWestTopRail" type="MeshInstance3D" parent="FacadeIntegration"]
+position = Vector3(-16.5, 1.94, 20.09)
+rotation_degrees = Vector3(0, -2, 0)
+scale = Vector3(6.35, 1, 1)
+mesh = SubResource("ServiceGateRailMesh")
+
+[node name="SouthServiceYardFenceEast" type="MeshInstance3D" parent="FacadeIntegration"]
+position = Vector3(-7.9, 1.02, 19.8)
+rotation_degrees = Vector3(0, 3, 0)
+scale = Vector3(5.2, 1.55, 0.055)
+mesh = SubResource("ServiceGateMesh")
+
+[node name="SouthServiceYardFenceEastTopRail" type="MeshInstance3D" parent="FacadeIntegration"]
+position = Vector3(-7.9, 1.83, 19.74)
+rotation_degrees = Vector3(0, 3, 0)
+scale = Vector3(5.35, 1, 1)
+mesh = SubResource("ServiceGateRailMesh")
 
 [node name="BusinessSigns" type="Node3D" parent="." unique_id=1778970311]
 
@@ -750,31 +981,31 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 75.5, 0.2, 8.45)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -78, 0.2, -6.3)
 
 [node name="BinNorth02" parent="Furniture" unique_id=1668569443 instance=ExtResource("5_bin")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -38, 0.2, -6.3)
+transform = Transform3D(0.988771, 0, -0.149438, 0, 1, 0, 0.149438, 0, 0.988771, -31.5, 0.2, -8.12)
 
 [node name="BinNorth03" parent="Furniture" unique_id=61112165 instance=ExtResource("5_bin")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0.2, -6.3)
 
 [node name="BinNorth04" parent="Furniture" unique_id=1965875113 instance=ExtResource("5_bin")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 46, 0.2, -6.3)
+transform = Transform3D(0.975897, 0, 0.21823, 0, 1, 0, -0.21823, 0, 0.975897, 52.5, 0.2, -6.22)
 
 [node name="BinNorth05" parent="Furniture" unique_id=1985308458 instance=ExtResource("5_bin")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 82, 0.2, -6.3)
 
 [node name="BinSouth01" parent="Furniture" unique_id=977126981 instance=ExtResource("5_bin")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -78, 0.2, 6.3)
+transform = Transform3D(0.982004, 0, 0.188859, 0, 1, 0, -0.188859, 0, 0.982004, -70, 0.2, 6.22)
 
 [node name="BinSouth02" parent="Furniture" unique_id=1635317811 instance=ExtResource("5_bin")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -38, 0.2, 6.3)
+transform = Transform3D(0.968912, 0, -0.247404, 0, 1, 0, 0.247404, 0, 0.968912, -25, 0.2, 8.08)
 
 [node name="BinSouth03" parent="Furniture" unique_id=1397594279 instance=ExtResource("5_bin")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0.2, 6.3)
+transform = Transform3D(0.993956, 0, 0.109778, 0, 1, 0, -0.109778, 0, 0.993956, 10, 0.2, 6.28)
 
 [node name="BinSouth04" parent="Furniture" unique_id=860823519 instance=ExtResource("5_bin")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 46, 0.2, 6.3)
+transform = Transform3D(0.978031, 0, -0.20846, 0, 1, 0, 0.20846, 0, 0.978031, 55, 0.2, 6.18)
 
 [node name="BinSouth05" parent="Furniture" unique_id=1429608935 instance=ExtResource("5_bin")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 82, 0.2, 6.3)
+transform = Transform3D(0.985585, 0, 0.169182, 0, 1, 0, -0.169182, 0, 0.985585, 91, 0.2, 8.05)
 
 [node name="Vehicles" type="Node3D" parent="." unique_id=586413779]
 

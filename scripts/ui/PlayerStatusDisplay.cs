@@ -20,6 +20,7 @@ public partial class PlayerStatusDisplay : CanvasLayer
 	private Label _staminaLabel = null!;
 	private Label _hungerLabel = null!;
 	private Label _thirstLabel = null!;
+	private ProgressBar? _healthBar;
 	private ProgressBar _staminaBar = null!;
 	private ProgressBar _hungerBar = null!;
 	private ProgressBar _thirstBar = null!;
@@ -36,6 +37,7 @@ public partial class PlayerStatusDisplay : CanvasLayer
 		_staminaLabel = GetNode<Label>("StaminaLabel");
 		_hungerLabel = GetNode<Label>("HungerLabel");
 		_thirstLabel = GetNode<Label>("ThirstLabel");
+		_healthBar = GetNodeOrNull<ProgressBar>("HealthBar");
 		_staminaBar = GetNode<ProgressBar>("StaminaBar");
 		_hungerBar = GetNode<ProgressBar>("HungerBar");
 		_thirstBar = GetNode<ProgressBar>("ThirstBar");
@@ -84,7 +86,15 @@ public partial class PlayerStatusDisplay : CanvasLayer
 
 	private void UpdateHealthLabel(float currentHealth, float maximumHealth)
 	{
-		_healthLabel.Text = $"Health: {Mathf.CeilToInt(currentHealth)} / {Mathf.CeilToInt(maximumHealth)}";
+		_healthLabel.Text = _healthBar is null
+			? $"Health: {Mathf.CeilToInt(currentHealth)} / {Mathf.CeilToInt(maximumHealth)}"
+			: $"Health {Mathf.CeilToInt(currentHealth)}";
+		if (_healthBar is not null)
+		{
+			_healthBar.MaxValue = maximumHealth;
+			_healthBar.Value = currentHealth;
+			_healthBar.Modulate = ConditionTint(GetRatio(currentHealth, maximumHealth));
+		}
 		_healthLabel.Modulate = ConditionTint(GetRatio(currentHealth, maximumHealth));
 		if (_deathOverlay is not null && currentHealth > 0.0f && _deathOverlay.Visible)
 		{

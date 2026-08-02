@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3]
+[gd_scene load_steps=34 format=3]
 
 [ext_resource type="Script" path="res://scripts/world/MainStreetDressingCuller.cs" id="1_culler"]
 [ext_resource type="PackedScene" path="res://assets/environment/nature/yughues_bush_01.tscn" id="2_bush_a"]
@@ -32,6 +32,9 @@
 [ext_resource type="PackedScene" path="res://assets/third_party/environment/main_street_dressing/poly_haven/wooden_broom/wooden_broom_1k.gltf" id="30_broom"]
 [ext_resource type="PackedScene" path="res://assets/third_party/environment/main_street_dressing/poly_haven/cement_bag/cement_bag_1k.gltf" id="31_cement"]
 [ext_resource type="PackedScene" path="res://assets/third_party/environment/main_street_dressing/poly_haven/industrial_storage_cart/industrial_storage_cart_1k.gltf" id="32_storage_cart"]
+[ext_resource type="PackedScene" path="res://scenes/world/ashwood/presentation/props/dumpster.tscn" id="33_dumpster"]
+[ext_resource type="PackedScene" path="res://assets/environment/props/user_supplied/paper_debris.tscn" id="34_paper_debris"]
+[ext_resource type="PackedScene" path="res://assets/environment/props/user_supplied/paper_stack.tscn" id="35_paper_stack"]
 
 [node name="MainStreetApocalypseDressing" type="Node3D"]
 script = ExtResource("1_culler")
@@ -370,10 +373,9 @@ scale = Vector3(0.5, 0.66, 0.48)
 metadata/dressing_category = "debris"
 
 [node name="NorthTrashBag001" parent="RefuseDebris" instance=ExtResource("5_bag")]
-position = Vector3(-95.4, 0.22, -5.68)
+position = Vector3(-83.15, 0.22, -14.7)
 rotation = Vector3(0.04, -0.44, -0.03)
 scale = Vector3(0.72, 0.78, 0.7)
-visible = false
 
 [node name="NorthTrashBag002" parent="RefuseDebris" instance=ExtResource("5_bag")]
 visible = false
@@ -478,12 +480,12 @@ scale = Vector3(1.05, 0.92, 1.08)
 
 [node name="NorthTyre002" parent="RefuseDebris" instance=ExtResource("9_tyre")]
 position = Vector3(-47.1, 0.29, -8.13)
-rotation = Vector3(1.5707964, -0.36, 0.08)
+rotation_degrees = Vector3(0, 0, 90)
 scale = Vector3(0.96, 1.04, 0.96)
 
 [node name="NorthTyre003" parent="RefuseDebris" instance=ExtResource("9_tyre")]
-position = Vector3(-37.2, 0.465, -5.53)
-rotation = Vector3(-0.04, 1.72, 0.02)
+position = Vector3(-37.2, 0.29, -5.82)
+rotation = Vector3(0, 0.2, 1.5707964)
 scale = Vector3(1.12, 0.88, 1.04)
 
 [node name="NorthTyre004" parent="RefuseDebris" instance=ExtResource("9_tyre")]
@@ -492,8 +494,8 @@ rotation = Vector3(1.5707964, 0.78, -0.06)
 scale = Vector3(0.92, 1.08, 0.92)
 
 [node name="NorthTyre005" parent="RefuseDebris" instance=ExtResource("9_tyre")]
-position = Vector3(66.4, 0.49, -6.14)
-rotation = Vector3(0.03, -2.2, 0.04)
+position = Vector3(66.4, 0.29, -5.9)
+rotation = Vector3(0, -0.35, 1.5707964)
 scale = Vector3(1.08, 0.94, 1.12)
 
 [node name="NorthTyre006" parent="RefuseDebris" instance=ExtResource("9_tyre")]
@@ -612,8 +614,8 @@ rotation = Vector3(1.5707964, 0.42, -0.06)
 scale = Vector3(0.96, 1.04, 0.96)
 
 [node name="SouthTyre003" parent="RefuseDebris" instance=ExtResource("9_tyre")]
-position = Vector3(10.8, 0.465, 5.52)
-rotation = Vector3(0.04, -1.78, -0.03)
+position = Vector3(10.8, 0.29, 5.83)
+rotation = Vector3(0, -0.25, 1.5707964)
 scale = Vector3(1.12, 0.88, 1.04)
 
 [node name="SouthTyre004" parent="RefuseDebris" instance=ExtResource("9_tyre")]
@@ -622,8 +624,8 @@ rotation = Vector3(1.5707964, -0.74, 0.07)
 scale = Vector3(0.92, 1.08, 0.92)
 
 [node name="SouthTyre005" parent="RefuseDebris" instance=ExtResource("9_tyre")]
-position = Vector3(46.7, 0.49, 6.16)
-rotation = Vector3(-0.02, 2.24, 0.04)
+position = Vector3(46.7, 0.29, 5.92)
+rotation = Vector3(0, 0.32, 1.5707964)
 scale = Vector3(1.08, 0.94, 1.12)
 
 [node name="SouthTyre006" parent="RefuseDebris" instance=ExtResource("9_tyre")]
@@ -635,10 +637,9 @@ scale = Vector3(0.98, 1.02, 0.98)
 metadata/dressing_category = "service"
 
 [node name="NorthJerrycan001" parent="ServiceClutter" instance=ExtResource("10_jerrycan")]
-position = Vector3(-92.4, 0.47, -8.29)
+position = Vector3(-82.85, 0.47, -15.25)
 rotation = Vector3(0.02, -0.34, -0.03)
 scale = Vector3(0.68, 0.7, 0.68)
-visible = false
 
 [node name="NorthJerrycan002" parent="ServiceClutter" instance=ExtResource("10_jerrycan")]
 visible = false
@@ -672,10 +673,9 @@ rotation = Vector3(0.03, 1.56, -0.04)
 scale = Vector3(0.76, 0.72, 0.74)
 
 [node name="NorthServiceCrate001" parent="ServiceClutter" instance=ExtResource("12_service_crate")]
-position = Vector3(-76.1, 0.2, -8.34)
+position = Vector3(-83.55, 0.2, -15.45)
 rotation = Vector3(0, -0.54, 0)
-scale = Vector3(0.92, 0.92, 0.92)
-visible = false
+scale = Vector3(0.82, 0.82, 0.82)
 
 [node name="NorthServiceCrate002" parent="ServiceClutter" instance=ExtResource("12_service_crate")]
 position = Vector3(-20.9, 0.2, -6.17)
@@ -965,8 +965,8 @@ rotation = Vector3(0.02, -1.38, -0.03)
 scale = Vector3(0.9, 0.9, 0.9)
 
 [node name="NorthAbandonedHandTruck" parent="StoryClusters" instance=ExtResource("28_hand_truck")]
-position = Vector3(-54.8, 0.2, -8.35)
-rotation_degrees = Vector3(1, 28, -4)
+position = Vector3(-49.35, 0.2, -8.78)
+rotation_degrees = Vector3(1, 18, -7)
 scale = Vector3(0.96, 0.96, 0.96)
 
 [node name="SouthAbandonedHandTruck" parent="StoryClusters" instance=ExtResource("28_hand_truck")]
@@ -975,17 +975,17 @@ rotation = Vector3(-0.015, -2.36, 0.03)
 scale = Vector3(0.9, 0.9, 0.9)
 
 [node name="NorthServiceBarrel" parent="StoryClusters" instance=ExtResource("29_barrel")]
-position = Vector3(13.2, 0.2, -8.53)
+position = Vector3(-82.95, 0.2, -13.75)
 rotation = Vector3(0.025, -0.34, -0.018)
 scale = Vector3(0.94, 0.94, 0.94)
 
 [node name="SouthServiceBarrel" parent="StoryClusters" instance=ExtResource("29_barrel")]
-position = Vector3(39, 0.2, 8.58)
+position = Vector3(-50.75, 0.2, 15.05)
 rotation = Vector3(-0.018, 2.54, 0.025)
 scale = Vector3(1.02, 1.02, 1.02)
 
 [node name="NorthFallenBroom" parent="StoryClusters" instance=ExtResource("30_broom")]
-position = Vector3(-73.4, 0.46, -8.83)
+position = Vector3(-48.72, 0.46, -8.83)
 rotation = Vector3(0.04, 0.28, 1.48)
 scale = Vector3(0.94, 0.94, 0.94)
 
@@ -1015,11 +1015,36 @@ rotation = Vector3(0.035, -2.52, -0.03)
 scale = Vector3(0.84, 0.84, 0.84)
 
 [node name="NorthLootedStorageCart" parent="StoryClusters" instance=ExtResource("32_storage_cart")]
-position = Vector3(-22.7, 0.2, -8.48)
+position = Vector3(-34.8, 0.2, -14.75)
 rotation = Vector3(0.012, 0.62, -0.02)
 scale = Vector3(0.88, 0.88, 0.88)
 
 [node name="SouthLootedStorageCart" parent="StoryClusters" instance=ExtResource("32_storage_cart")]
-position = Vector3(72, 0.2, 8.52)
+position = Vector3(-35.1, 0.2, 14.7)
 rotation = Vector3(-0.01, -2.34, 0.018)
 scale = Vector3(0.86, 0.86, 0.86)
+
+[node name="NorthWestAlleyDumpster" parent="StoryClusters" instance=ExtResource("33_dumpster")]
+position = Vector3(-84.05, 0.2, -17.15)
+rotation_degrees = Vector3(0, 3, 0)
+scale = Vector3(0.9, 0.9, 0.9)
+
+[node name="SouthWestAlleyDumpster" parent="StoryClusters" instance=ExtResource("33_dumpster")]
+position = Vector3(-51.45, 0.2, 16.45)
+rotation_degrees = Vector3(0, 178, 0)
+scale = Vector3(0.92, 0.92, 0.92)
+
+[node name="BakeryWindblownReceipts" parent="StoryClusters" instance=ExtResource("34_paper_debris")]
+position = Vector3(-57.55, 0.205, -6.55)
+rotation_degrees = Vector3(0, -38, 0)
+scale = Vector3(1.08, 1.08, 1.08)
+
+[node name="BakeryDiscardedOrderStack" parent="StoryClusters" instance=ExtResource("35_paper_stack")]
+position = Vector3(-55.45, 0.205, -8.38)
+rotation_degrees = Vector3(0, 64, 0)
+scale = Vector3(0.86, 0.86, 0.86)
+
+[node name="SouthAlleyWindblownNotices" parent="StoryClusters" instance=ExtResource("34_paper_debris")]
+position = Vector3(-50.6, 0.205, 14.35)
+rotation_degrees = Vector3(0, 27, 0)
+scale = Vector3(0.92, 0.92, 0.92)

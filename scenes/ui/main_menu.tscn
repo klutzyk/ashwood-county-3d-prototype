@@ -1,19 +1,26 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene load_steps=7 format=3]
 
 [ext_resource type="Script" path="res://scripts/ui/MainMenuController.cs" id="1_menu"]
 [ext_resource type="PackedScene" path="res://scenes/ui/settings_menu.tscn" id="2_settings"]
+[ext_resource type="Texture2D" path="res://assets/environment/sky/ashwood_golden_hour_cloud_cover.png" id="3_clouds"]
 
 [sub_resource type="StyleBoxFlat" id="PanelStyle"]
-bg_color = Color(0.055, 0.07, 0.064, 0.94)
+content_margin_left = 38.0
+content_margin_top = 34.0
+content_margin_right = 38.0
+content_margin_bottom = 34.0
+bg_color = Color(0.025, 0.034, 0.031, 0.94)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.3, 0.36, 0.29, 0.85)
+border_color = Color(0.46, 0.4, 0.25, 0.88)
 corner_radius_top_left = 7
 corner_radius_top_right = 7
 corner_radius_bottom_right = 7
 corner_radius_bottom_left = 7
+shadow_color = Color(0, 0, 0, 0.65)
+shadow_size = 24
 
 [sub_resource type="StyleBoxFlat" id="ButtonStyle"]
 bg_color = Color(0.12, 0.15, 0.13, 1)
@@ -56,6 +63,29 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.018, 0.026, 0.023, 1)
 
+[node name="CloudBackdrop" type="TextureRect" parent="."]
+modulate = Color(0.48, 0.36, 0.28, 0.46)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("3_clouds")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="AtmosphereOverlay" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.008, 0.014, 0.013, 0.72)
+
 [node name="Layout" type="CenterContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
@@ -65,7 +95,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="MenuPanel" type="PanelContainer" parent="Layout"]
-custom_minimum_size = Vector2(410, 470)
+custom_minimum_size = Vector2(460, 500)
 layout_mode = 2
 theme_override_styles/panel = SubResource("PanelStyle")
 
@@ -77,16 +107,20 @@ alignment = 1
 [node name="Title" type="Label" parent="Layout/MenuPanel/Menu"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.82, 0.86, 0.72, 1)
-theme_override_font_sizes/font_size = 36
+theme_override_font_sizes/font_size = 40
 text = "ASHWOOD COUNTY"
 horizontal_alignment = 1
 
 [node name="Subtitle" type="Label" parent="Layout/MenuPanel/Menu"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.56, 0.61, 0.54, 1)
-theme_override_font_sizes/font_size = 16
-text = "SURVIVAL PROTOTYPE"
+theme_override_colors/font_color = Color(0.68, 0.62, 0.46, 1)
+theme_override_font_sizes/font_size = 15
+text = "SURVIVE  •  SCAVENGE  •  REBUILD"
 horizontal_alignment = 1
+
+[node name="Divider" type="HSeparator" parent="Layout/MenuPanel/Menu"]
+custom_minimum_size = Vector2(0, 18)
+layout_mode = 2
 
 [node name="NewGame" type="Button" parent="Layout/MenuPanel/Menu"]
 custom_minimum_size = Vector2(0, 48)
@@ -95,7 +129,7 @@ theme_override_font_sizes/font_size = 18
 theme_override_styles/normal = SubResource("ButtonStyle")
 theme_override_styles/hover = SubResource("ButtonFocus")
 theme_override_styles/focus = SubResource("ButtonFocus")
-text = "New Game"
+text = "NEW GAME"
 
 [node name="Continue" type="Button" parent="Layout/MenuPanel/Menu"]
 custom_minimum_size = Vector2(0, 48)
@@ -104,7 +138,7 @@ theme_override_font_sizes/font_size = 18
 theme_override_styles/normal = SubResource("ButtonStyle")
 theme_override_styles/hover = SubResource("ButtonFocus")
 theme_override_styles/focus = SubResource("ButtonFocus")
-text = "Continue"
+text = "CONTINUE"
 
 [node name="Settings" type="Button" parent="Layout/MenuPanel/Menu"]
 custom_minimum_size = Vector2(0, 48)
@@ -113,7 +147,7 @@ theme_override_font_sizes/font_size = 18
 theme_override_styles/normal = SubResource("ButtonStyle")
 theme_override_styles/hover = SubResource("ButtonFocus")
 theme_override_styles/focus = SubResource("ButtonFocus")
-text = "Settings"
+text = "SETTINGS"
 
 [node name="Quit" type="Button" parent="Layout/MenuPanel/Menu"]
 custom_minimum_size = Vector2(0, 48)
@@ -122,7 +156,26 @@ theme_override_font_sizes/font_size = 18
 theme_override_styles/normal = SubResource("ButtonStyle")
 theme_override_styles/hover = SubResource("ButtonFocus")
 theme_override_styles/focus = SubResource("ButtonFocus")
-text = "Quit"
+text = "QUIT"
+
+[node name="BuildIdentity" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -330.0
+offset_top = -45.0
+offset_right = -22.0
+offset_bottom = -18.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.58, 0.58, 0.5, 0.72)
+theme_override_font_sizes/font_size = 12
+text = "ASHWOOD COUNTY  //  DEVELOPMENT BUILD"
+horizontal_alignment = 2
 
 [node name="SettingsPanel" parent="." instance=ExtResource("2_settings")]
 

@@ -76,29 +76,69 @@ public partial class ZombieAudioFeedback : AudioStreamPlayer3D
 			Mathf.CeilToInt(duration * MixRate),
 			playback.GetFramesAvailable());
 		float phase = 0.0f;
+		float throatPhase = 0.0f;
+		float raspState = 0.0f;
 		for (int frame = 0; frame < frameCount; frame++)
 		{
 			float progress = frame / Mathf.Max((float)frameCount - 1.0f, 1.0f);
-			float sample = CreateSample(cue, progress, ref phase);
+			float sample = CreateSample(
+				cue,
+				progress,
+				ref phase,
+				ref throatPhase,
+				ref raspState);
 			playback.PushFrame(new Vector2(sample, sample));
 		}
 	}
 
-	private float CreateSample(ZombieAudioCue cue, float progress, ref float phase)
+	private float CreateSample(
+		ZombieAudioCue cue,
+		float progress,
+		ref float phase,
+		ref float throatPhase,
+		ref float raspState)
 	{
 		(float startPitch, float endPitch, float amplitude) = cue switch
 		{
-			ZombieAudioCue.Alert => (72.0f, 48.0f, 0.18f),
-			ZombieAudioCue.Attack => (82.0f, 57.0f, 0.2f),
-			ZombieAudioCue.Hurt => (112.0f, 66.0f, 0.17f),
-			_ => (64.0f, 30.0f, 0.2f),
+			ZombieAudioCue.Alert => (68.0f, 43.0f, 0.17f),
+			ZombieAudioCue.Attack => (86.0f, 52.0f, 0.19f),
+			ZombieAudioCue.Hurt => (118.0f, 62.0f, 0.16f),
+			_ => (61.0f, 27.0f, 0.19f),
 		};
-		float pitch = Mathf.Lerp(startPitch, endPitch, Mathf.SmoothStep(0.0f, 1.0f, progress));
+		float pitchWobble = Mathf.Sin(progress * Mathf.Tau * 5.2f) *
+			Mathf.Lerp(3.2f, 0.7f, progress);
+		float pitch = Mathf.Lerp(
+			startPitch,
+			endPitch,
+			Mathf.SmoothStep(0.0f, 1.0f, progress)) + pitchWobble;
 		phase += Mathf.Tau * pitch / MixRate;
-		float attack = Mathf.Clamp(progress / 0.08f, 0.0f, 1.0f);
-		float release = Mathf.Pow(1.0f - progress, cue == ZombieAudioCue.Hurt ? 0.7f : 1.4f);
-		float voice = Mathf.Sin(phase) + (Mathf.Sin(phase * 1.47f) * 0.34f);
-		float rasp = _random.RandfRange(-1.0f, 1.0f) * 0.16f;
-		return Mathf.Clamp((voice + rasp) * attack * release * amplitude, -1.0f, 1.0f);
+		throatPhase += Mathf.Tau * (pitch * 2.37f) / MixRate;
+		float attackDuration = cue == ZombieAudioCue.Hurt ? 0.025f : 0.065f;
+		float attack = Mathf.SmoothStep(
+			0.0f,
+			1.0f,
+			Mathf.Clamp(progress / attackDuration, 0.0f, 1.0f));
+		float releasePower = cue switch
+		{
+			ZombieAudioCue.Hurt => 0.6f,
+			ZombieAudioCue.Death => 1.05f,
+			_ => 1.35f,
+		};
+		float release = Mathf.Pow(1.0f - progress, releasePower);
+		float glottal =
+			Mathf.Sin(phase) +
+			(Mathf.Sin(phase * 2.0f) * 0.38f) +
+			(Mathf.Sin(phase * 3.0f) * 0.16f);
+		float throat = Mathf.Sin(throatPhase) *
+			(0.2f + (Mathf.Sin(phase * 0.5f) * 0.08f));
+		float rawNoise = _random.RandfRange(-1.0f, 1.0f);
+		raspState = Mathf.Lerp(raspState, rawNoise, 0.075f);
+		float raspAmount = cue == ZombieAudioCue.Attack ? 0.42f : 0.3f;
+		float voice = Mathf.Clamp((glottal * 0.62f) + throat, -1.4f, 1.4f);
+		float pulse = 0.88f + (Mathf.Sin(progress * Mathf.Tau * 2.3f) * 0.12f);
+		return Mathf.Clamp(
+			(voice + (raspState * raspAmount)) * attack * release * pulse * amplitude,
+			-1.0f,
+			1.0f);
 	}
 }

@@ -24,8 +24,8 @@ OpenAngleDegrees = -105.0
 [node name="UserSuppliedEnrichment" type="Node3D" parent="."]
 
 [node name="ReceivingRustyCabinet" parent="UserSuppliedEnrichment" instance=ExtResource("4_user_rusty_cabinet")]
-position = Vector3(5.18, 0, -9.92)
-rotation = Vector3(0, -0.05, 0)
+position = Vector3(12.92, 0, -6.54)
+rotation = Vector3(0, -1.5707964, 0)
 
 [node name="ReceivingTrashCan" parent="UserSuppliedEnrichment" instance=ExtResource("5_user_trash_can")]
 position = Vector3(1.9, 0, -6.58)
@@ -52,5 +52,5 @@ position = Vector3(-6.02, 1.115, -2.2)
 rotation = Vector3(0, -0.12, 0)
 
 [node name="CheckoutTwoCoffeeMug" parent="UserSuppliedEnrichment" instance=ExtResource("8_user_mug")]
-position = Vector3(-6.02, 1.115, 2.2)
-rotation = Vector3(0, 0.24, 0)
+position = Vector3(-5.01, 1.115, 2.55)
+rotation = Vector3(0, 0.34, 0)

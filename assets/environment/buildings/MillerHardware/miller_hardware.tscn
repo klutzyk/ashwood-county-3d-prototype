@@ -23,8 +23,8 @@ position = Vector3(-7.11, 0.03, -7.19)
 [node name="UserSuppliedEnrichment" type="Node3D" parent="."]
 
 [node name="WarehouseFileCabinet" parent="UserSuppliedEnrichment" instance=ExtResource("4_user_file_cabinet")]
-position = Vector3(6.48, 0, -4.05)
-rotation = Vector3(0, 0.04, 0)
+position = Vector3(5.06, 0, -8.22)
+rotation = Vector3(0, 1.5707964, 0)
 
 [node name="WarehouseStaffCorkboard" parent="UserSuppliedEnrichment" instance=ExtResource("5_user_corkboard")]
 position = Vector3(3.72, 1.35, -1.2)

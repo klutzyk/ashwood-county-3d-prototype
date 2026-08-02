@@ -1,10 +1,10 @@
-[gd_scene load_steps=11 format=3]
+[gd_scene load_steps=17 format=3]
 
 [ext_resource type="PackedScene" path="res://assets/environment/nature/main_street_tree_1.tscn" id="1_tree_a"]
 [ext_resource type="PackedScene" path="res://assets/environment/nature/main_street_tree_2.tscn" id="2_tree_b"]
 
 [sub_resource type="StandardMaterial3D" id="FarRidgeMaterial"]
-albedo_color = Color(0.095, 0.13, 0.105, 1)
+albedo_color = Color(0.175, 0.19, 0.17, 1)
 roughness = 1.0
 
 [sub_resource type="SphereMesh" id="FarRidgeMesh"]
@@ -15,7 +15,7 @@ radial_segments = 32
 rings = 12
 
 [sub_resource type="StandardMaterial3D" id="NearRidgeMaterial"]
-albedo_color = Color(0.12, 0.17, 0.125, 1)
+albedo_color = Color(0.105, 0.145, 0.112, 1)
 roughness = 1.0
 
 [sub_resource type="SphereMesh" id="NearRidgeMesh"]
@@ -58,45 +58,220 @@ outer_radius = 4.15
 rings = 32
 ring_segments = 6
 
+[sub_resource type="StandardMaterial3D" id="LandmarkMaterial"]
+albedo_color = Color(0.16, 0.145, 0.125, 1)
+roughness = 0.96
+
+[sub_resource type="BoxMesh" id="ChurchBodyMesh"]
+material = SubResource("LandmarkMaterial")
+size = Vector3(12, 4.5, 8)
+
+[sub_resource type="BoxMesh" id="ChurchTowerMesh"]
+material = SubResource("LandmarkMaterial")
+size = Vector3(3.2, 9, 3.2)
+
+[sub_resource type="BoxMesh" id="ChurchRoofPlaneMesh"]
+material = SubResource("LandmarkMaterial")
+size = Vector3(12.6, 0.25, 4.9)
+
+[sub_resource type="CylinderMesh" id="ChurchSpireMesh"]
+material = SubResource("LandmarkMaterial")
+top_radius = 0.08
+bottom_radius = 1.75
+height = 6.2
+radial_segments = 8
+
+[sub_resource type="BoxMesh" id="ChurchCrossMesh"]
+material = SubResource("LandmarkMaterial")
+size = Vector3(0.18, 1.25, 0.18)
+
 [node name="MainStreetVista" type="Node3D"]
 
 [node name="Ridges" type="Node3D" parent="."]
 
 [node name="EastFar" type="MeshInstance3D" parent="Ridges"]
-position = Vector3(245, -8, 4)
-scale = Vector3(92, 20, 84)
+position = Vector3(258, -16, -28)
+scale = Vector3(108, 33, 92)
 cast_shadow = 0
 mesh = SubResource("FarRidgeMesh")
 
 [node name="EastNear" type="MeshInstance3D" parent="Ridges"]
-position = Vector3(190, -10, -24)
-scale = Vector3(62, 17, 54)
+position = Vector3(207, -12, 44)
+scale = Vector3(68, 24, 58)
+cast_shadow = 0
+mesh = SubResource("NearRidgeMesh")
+
+[node name="EastMiddle" type="MeshInstance3D" parent="Ridges"]
+position = Vector3(224, -15, -74)
+scale = Vector3(76, 28, 62)
 cast_shadow = 0
 mesh = SubResource("NearRidgeMesh")
 
 [node name="WestFar" type="MeshInstance3D" parent="Ridges"]
-position = Vector3(-245, -9, -6)
-scale = Vector3(96, 21, 88)
+position = Vector3(-258, -16, 30)
+scale = Vector3(112, 34, 94)
 cast_shadow = 0
 mesh = SubResource("FarRidgeMesh")
 
 [node name="WestNear" type="MeshInstance3D" parent="Ridges"]
-position = Vector3(-192, -11, 28)
-scale = Vector3(64, 18, 58)
+position = Vector3(-205, -13, -45)
+scale = Vector3(70, 25, 60)
+cast_shadow = 0
+mesh = SubResource("NearRidgeMesh")
+
+[node name="WestMiddle" type="MeshInstance3D" parent="Ridges"]
+position = Vector3(-226, -15, 76)
+scale = Vector3(78, 28, 64)
 cast_shadow = 0
 mesh = SubResource("NearRidgeMesh")
 
 [node name="NorthRidge" type="MeshInstance3D" parent="Ridges"]
-position = Vector3(5, -12, -125)
-scale = Vector3(210, 17, 62)
+position = Vector3(-103, -18, -132)
+scale = Vector3(70, 32, 60)
+cast_shadow = 0
+mesh = SubResource("FarRidgeMesh")
+
+[node name="NorthRidgeEast" type="MeshInstance3D" parent="Ridges"]
+position = Vector3(36, -14, -145)
+scale = Vector3(78, 28, 64)
+cast_shadow = 0
+mesh = SubResource("FarRidgeMesh")
+
+[node name="NorthRidgeFarEast" type="MeshInstance3D" parent="Ridges"]
+position = Vector3(160, -20, -136)
+scale = Vector3(82, 36, 62)
 cast_shadow = 0
 mesh = SubResource("FarRidgeMesh")
 
 [node name="SouthRidge" type="MeshInstance3D" parent="Ridges"]
-position = Vector3(-10, -12, 125)
-scale = Vector3(215, 18, 64)
+position = Vector3(110, -18, 133)
+scale = Vector3(72, 34, 60)
 cast_shadow = 0
 mesh = SubResource("FarRidgeMesh")
+
+[node name="SouthRidgeWest" type="MeshInstance3D" parent="Ridges"]
+position = Vector3(-35, -15, 147)
+scale = Vector3(78, 29, 64)
+cast_shadow = 0
+mesh = SubResource("FarRidgeMesh")
+
+[node name="SouthRidgeFarWest" type="MeshInstance3D" parent="Ridges"]
+position = Vector3(-160, -20, 136)
+scale = Vector3(84, 36, 64)
+cast_shadow = 0
+mesh = SubResource("FarRidgeMesh")
+
+[node name="TownCanopy" type="Node3D" parent="."]
+
+[node name="NorthWest01" parent="TownCanopy" instance=ExtResource("1_tree_a")]
+position = Vector3(-108, 0.2, -34)
+rotation_degrees = Vector3(0, 18, 0)
+scale = Vector3(1.45, 1.7, 1.45)
+
+[node name="NorthWest01B" parent="TownCanopy" instance=ExtResource("2_tree_b")]
+position = Vector3(-98, 0.2, -40)
+rotation_degrees = Vector3(0, -44, 0)
+scale = Vector3(1.22, 1.48, 1.22)
+
+[node name="NorthWest02" parent="TownCanopy" instance=ExtResource("2_tree_b")]
+position = Vector3(-73, 0.2, -31)
+rotation_degrees = Vector3(0, -31, 0)
+scale = Vector3(1.3, 1.52, 1.3)
+
+[node name="NorthWest02B" parent="TownCanopy" instance=ExtResource("1_tree_a")]
+position = Vector3(-61, 0.2, -39)
+rotation_degrees = Vector3(0, 57, 0)
+scale = Vector3(1.38, 1.64, 1.38)
+
+[node name="NorthCentre01" parent="TownCanopy" instance=ExtResource("1_tree_a")]
+position = Vector3(-32, 0.2, -36)
+rotation_degrees = Vector3(0, 47, 0)
+scale = Vector3(1.58, 1.85, 1.58)
+
+[node name="NorthCentre02" parent="TownCanopy" instance=ExtResource("2_tree_b")]
+position = Vector3(18, 0.2, -33)
+rotation_degrees = Vector3(0, -12, 0)
+scale = Vector3(1.36, 1.62, 1.36)
+
+[node name="NorthCentre02B" parent="TownCanopy" instance=ExtResource("1_tree_a")]
+position = Vector3(31, 0.2, -40)
+rotation_degrees = Vector3(0, 33, 0)
+scale = Vector3(1.3, 1.56, 1.3)
+
+[node name="NorthEast01" parent="TownCanopy" instance=ExtResource("1_tree_a")]
+position = Vector3(66, 0.2, -37)
+rotation_degrees = Vector3(0, 69, 0)
+scale = Vector3(1.52, 1.78, 1.52)
+
+[node name="NorthEast02" parent="TownCanopy" instance=ExtResource("2_tree_b")]
+position = Vector3(109, 0.2, -32)
+rotation_degrees = Vector3(0, 26, 0)
+scale = Vector3(1.42, 1.68, 1.42)
+
+[node name="NorthEast02B" parent="TownCanopy" instance=ExtResource("1_tree_a")]
+position = Vector3(121, 0.2, -41)
+rotation_degrees = Vector3(0, -61, 0)
+scale = Vector3(1.26, 1.5, 1.26)
+
+[node name="SouthWest01" parent="TownCanopy" instance=ExtResource("2_tree_b")]
+position = Vector3(-111, 0.2, 34)
+rotation_degrees = Vector3(0, -22, 0)
+scale = Vector3(1.38, 1.63, 1.38)
+
+[node name="SouthWest01B" parent="TownCanopy" instance=ExtResource("1_tree_a")]
+position = Vector3(-99, 0.2, 42)
+rotation_degrees = Vector3(0, 49, 0)
+scale = Vector3(1.25, 1.5, 1.25)
+
+[node name="SouthWest02" parent="TownCanopy" instance=ExtResource("1_tree_a")]
+position = Vector3(-67, 0.2, 38)
+rotation_degrees = Vector3(0, 38, 0)
+scale = Vector3(1.56, 1.82, 1.56)
+
+[node name="SouthWest02B" parent="TownCanopy" instance=ExtResource("2_tree_b")]
+position = Vector3(-54, 0.2, 32)
+rotation_degrees = Vector3(0, -17, 0)
+scale = Vector3(1.28, 1.54, 1.28)
+
+[node name="SouthCentre01" parent="TownCanopy" instance=ExtResource("2_tree_b")]
+position = Vector3(-20, 0.2, 32)
+rotation_degrees = Vector3(0, 11, 0)
+scale = Vector3(1.34, 1.58, 1.34)
+
+[node name="SouthCentre02" parent="TownCanopy" instance=ExtResource("1_tree_a")]
+position = Vector3(29, 0.2, 37)
+rotation_degrees = Vector3(0, -53, 0)
+scale = Vector3(1.6, 1.88, 1.6)
+
+[node name="SouthCentre02B" parent="TownCanopy" instance=ExtResource("2_tree_b")]
+position = Vector3(43, 0.2, 31)
+rotation_degrees = Vector3(0, 21, 0)
+scale = Vector3(1.26, 1.52, 1.26)
+
+[node name="SouthCentre03" parent="TownCanopy" instance=ExtResource("2_tree_b")]
+position = Vector3(18, 0.2, 29)
+rotation_degrees = Vector3(0, 71, 0)
+scale = Vector3(1.28, 1.54, 1.28)
+
+[node name="SouthCentre04" parent="TownCanopy" instance=ExtResource("1_tree_a")]
+position = Vector3(35, 0.2, 46)
+rotation_degrees = Vector3(0, -29, 0)
+scale = Vector3(1.18, 1.42, 1.18)
+
+[node name="SouthEast01" parent="TownCanopy" instance=ExtResource("2_tree_b")]
+position = Vector3(74, 0.2, 33)
+rotation_degrees = Vector3(0, 62, 0)
+scale = Vector3(1.4, 1.66, 1.4)
+
+[node name="SouthEast02" parent="TownCanopy" instance=ExtResource("1_tree_a")]
+position = Vector3(114, 0.2, 38)
+rotation_degrees = Vector3(0, -37, 0)
+scale = Vector3(1.54, 1.8, 1.54)
+
+[node name="SouthEast02B" parent="TownCanopy" instance=ExtResource("2_tree_b")]
+position = Vector3(126, 0.2, 31)
+rotation_degrees = Vector3(0, 58, 0)
+scale = Vector3(1.25, 1.5, 1.25)
 
 [node name="EastTreeline" type="Node3D" parent="."]
 
@@ -145,6 +320,48 @@ scale = Vector3(1.55, 1.75, 1.55)
 [node name="Tree05" parent="WestTreeline" instance=ExtResource("2_tree_b")]
 position = Vector3(-157, 0.2, 36)
 scale = Vector3(1.45, 1.65, 1.45)
+
+[node name="AshwoodChurch" type="Node3D" parent="."]
+position = Vector3(137, 0.2, -18)
+
+[node name="Nave" type="MeshInstance3D" parent="AshwoodChurch"]
+position = Vector3(2, 2.25, 0)
+cast_shadow = 0
+mesh = SubResource("ChurchBodyMesh")
+
+[node name="RoofNorth" type="MeshInstance3D" parent="AshwoodChurch"]
+position = Vector3(2, 5.02, -1.98)
+rotation_degrees = Vector3(-34, 0, 0)
+cast_shadow = 0
+mesh = SubResource("ChurchRoofPlaneMesh")
+
+[node name="RoofSouth" type="MeshInstance3D" parent="AshwoodChurch"]
+position = Vector3(2, 5.02, 1.98)
+rotation_degrees = Vector3(34, 0, 0)
+cast_shadow = 0
+mesh = SubResource("ChurchRoofPlaneMesh")
+
+[node name="BellTower" type="MeshInstance3D" parent="AshwoodChurch"]
+position = Vector3(-4, 4.5, 0)
+cast_shadow = 0
+mesh = SubResource("ChurchTowerMesh")
+
+[node name="Spire" type="MeshInstance3D" parent="AshwoodChurch"]
+position = Vector3(-4, 12.1, 0)
+cast_shadow = 0
+mesh = SubResource("ChurchSpireMesh")
+
+[node name="CrossVertical" type="MeshInstance3D" parent="AshwoodChurch"]
+position = Vector3(-4, 15.75, 0)
+cast_shadow = 0
+mesh = SubResource("ChurchCrossMesh")
+
+[node name="CrossHorizontal" type="MeshInstance3D" parent="AshwoodChurch"]
+position = Vector3(-4, 15.86, 0)
+rotation_degrees = Vector3(0, 0, 90)
+scale = Vector3(0.62, 1, 0.62)
+cast_shadow = 0
+mesh = SubResource("ChurchCrossMesh")
 
 [node name="WaterTower" type="Node3D" parent="."]
 position = Vector3(118, 0.2, 2)
