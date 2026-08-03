@@ -1,0 +1,21 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3]
+
+[ext_resource type="Shader" path="res://assets/materials/blackwater_river.gdshader" id="1_shader"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_shader")
+shader_parameter/shallow_color = Color(0.128, 0.171, 0.163, 1)
+shader_parameter/deep_color = Color(0.026, 0.045, 0.055, 1)
+shader_parameter/foam_color = Color(0.62, 0.645, 0.635, 1)
+shader_parameter/flow_speed = 0.16
+shader_parameter/wave_scale = 0.30
+shader_parameter/wave_strength = 0.22
+shader_parameter/water_roughness = 0.05
+shader_parameter/water_alpha = 0.94
+shader_parameter/fresnel_power = 4.0
+shader_parameter/channel_center_x = -176.0
+shader_parameter/meander_amplitude = 6.0
+shader_parameter/meander_period = 45.0
+shader_parameter/water_level = -8.5
+shader_parameter/foam_width = 1.5

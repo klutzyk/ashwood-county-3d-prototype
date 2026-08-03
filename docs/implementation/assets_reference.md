@@ -898,6 +898,57 @@ so they are not duplicated asset by asset here.
   storage feedback
 - **Status:** In use
 
+## Old Mill Bridge (Blackwater River crossing)
+
+**No new third-party assets were downloaded for this location.** Everything is
+either project-owned generated geometry or a new project-owned material built on
+texture sets already recorded elsewhere in this document.
+
+### Project-owned generated geometry
+
+- **Asset type:** Runtime-generated meshes (gorge terrain, steel through-truss,
+  deck, abutments, the Old Mill ruin, checkpoint dressing, road markings)
+- **Creator/provider:** Project-owned, produced by
+  `scripts/world/OldMillBridge.cs`
+- **License:** Project-owned; no third-party terms apply
+- **Prototype use:** The complete Old Mill Bridge landmark west of Main Street
+- **Local location:** Generated at load time; no mesh files are committed
+- **Status:** In use
+
+### Blackwater River water shader
+
+- **Asset type:** Hand-written GLSL spatial shader and its material
+- **Creator/provider:** Project-owned
+- **License:** Project-owned
+- **Asset details:** Fully procedural. Carries no texture dependencies at all -
+  ripples, shore foam, and depth tint are computed from noise and an analytic
+  copy of the terrain height function, so it works on the GL Compatibility
+  renderer without a depth or screen texture.
+- **Local location:** `assets/materials/blackwater_river.gdshader`,
+  `assets/materials/blackwater_river.tres`
+- **Status:** In use
+
+### Blackwater gorge rock material
+
+- **Asset type:** StandardMaterial3D
+- **Creator/provider:** Project-owned material over an existing Poly Haven
+  texture set (`plastered_stone_wall`), already recorded in this document
+- **License:** [CC0 1.0 Universal](https://polyhaven.com/license) for the
+  underlying textures
+- **Attribution requirement:** None (CC0); Poly Haven credited for provenance
+- **Prototype use:** Gorge cliff faces and riverbed
+- **Local location:** `assets/materials/blackwater_gorge_rock.tres`
+- **Status:** In use
+
+### Reused existing assets
+
+The location reuses, without modification, materials and models already recorded
+above: `ashwood_police_rusty_metal.tres` (green-painted rusted steel truss),
+`ashwood_main_street_concrete.tres`, `ashwood_main_street_asphalt.tres`,
+`ashwood_main_street_grass.tres`, `miller_hardware_brick.tres` (mill shell),
+`ashwood_police_dark_wood.tres` (mill timbers and water wheel), and the
+Quaternius/Yughues tree and bush scenes under `assets/environment/nature/`.
+
 ## Release Checklist
 
 - [x] Record source and license links for all listed assets.

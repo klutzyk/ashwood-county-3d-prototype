@@ -2271,3 +2271,62 @@ Validation:
   and functional passes for the route, threshold, cache, landmark, lighting,
   and HUD, while still rejecting AAA parity because hero assets, vegetation,
   animation, atmosphere, and final-art UI remain below that benchmark
+
+## Old Mill Bridge - Blackwater River crossing
+
+Built the Old Mill Bridge landmark west of Main Street, the first Ashwood County
+location outside Historic Downtown and the crossing named on the county planning
+map.
+
+Changes:
+
+- Added `scripts/world/OldMillBridge.cs`, a [Tool] Node3D that generates the
+  entire location procedurally: gorge terrain, river surface, steel truss, deck,
+  abutments, guardrails, the Old Mill ruin, checkpoint dressing and all collision
+- Generated the gorge as a heightfield with a meandering channel, terraced rock
+  bedding planes on the banks, and a rolling landform beyond the rim; the bank is
+  held under the character controller's 45 degree floor limit so a player who
+  slides in can climb back out
+- Authored `assets/materials/blackwater_river.gdshader`, a fully procedural
+  water shader. The Compatibility renderer exposes no depth texture, so the
+  shader carries an analytic copy of the terrain height function and derives true
+  water depth from it; depth drives the shore foam band and an alpha falloff that
+  terminates the surface exactly at the waterline
+- Built the bridge as a Parker through truss: 72 m single span in 8 panels, with
+  a polygonal top chord, inclined end posts, Pratt web, portal frames, top
+  lateral bracing, gusset plates, transverse floor beams and stringers
+- Batched all structural members into four MultiMesh instances, one per material,
+  so roughly 450 truss members and the rest of the built geometry cost four draw
+  calls rather than several hundred
+- Scattered the existing project tree and bush library across the rim and banks
+  via rejection sampling against slope, water level, the road corridor and the
+  built structures. Their materials are carried as surface_material_override
+  entries on the source MeshInstance3D, which MultiMeshInstance3D cannot express,
+  so the overrides are baked into duplicated meshes
+- Instanced the location into `scenes/world/ashwood/main_street.tscn`, moved the
+  PrototypeSafetyBoundary west wall from x = -110.5 out to x = -256.5, and added
+  corridor and connector walls so the expanded world stays sealed
+
+Validation:
+
+- C# build completed with no warnings or errors
+- `tests/old_mill_bridge_validation.tscn` passed against the integrated Main
+  Street scene. Checks are physics queries, not node-name inspections: a
+  continuous walkable lane is proven by raycasting 71 stations from x = -108 to
+  x = -248, parapets are proven at five points along the span on both sides, the
+  old containment wall is proven removed, and the new one proven present
+- `tests/old_mill_bridge_visual_review.tscn` produced ten 1920 by 1080 renders,
+  eight controlled framings plus two using Main Street's own lighting and fog
+- Density benchmark measured 31.58 FPS average against a recorded 31.35 FPS
+  baseline, so no regression on that view. The benchmark camera faces east, away
+  from the bridge, so this bounds the cost of the location being loaded rather
+  than the cost of looking at it
+
+Known gaps:
+
+- The navigation mesh is a baked resource covering Main Street only, so zombies
+  cannot path onto the crossing
+- The mill has no searchable container yet
+- Visual quality is a strong blockout with real materials, weathering and
+  vegetation, but hero-asset fidelity, decals, and water interaction remain
+  below the State of Decay reference

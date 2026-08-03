@@ -338,11 +338,30 @@ World
     stair traversal
   - [x] Full-height back-room and restroom enclosure with usable imported doors
   - [x] Dense hand-authored apocalypse dressing with licensed detailed props,
-    entrance clear zones, instancing, and distance culling
+    entrance clear 
+    zones, instancing, and distance culling
   - [x] Golden-hour Glen's Bakery supply-run slice with a persistent relief
     cache, five-zombie threat, explicit item transfer, delivery, and save/load
   - [x] Bakery loot
   - [ ] Rear service opening and door when the exterior mesh supports one
+- [x] Old Mill Bridge - Blackwater River crossing west of Main Street
+  - Procedurally generated rock gorge with terraced banks, meandering channel,
+    and rolling landform beyond the rim
+  - Green-painted steel Parker through-truss road bridge: 72 m single span,
+    8 panels, inclined end posts, portal and sway bracing, gusset plates,
+    floor beams and stringers
+  - Deck flush with Main Street at Y = 0.1 and matching the 11.6 m road width,
+    with raised walkways, parapets and continuous road markings
+  - Fully procedural water shader with analytic depth, shore foam and shoreline
+    alpha falloff, working on the GL Compatibility renderer
+  - Derelict Old Mill: brick shell with real openings, collapsed upper storey,
+    surviving rafters, overshot water wheel and head-race flume
+  - Abandoned county checkpoint dressing at the east portal
+  - Scattered tree and bush cover using the existing project nature library
+  - Containment boundary moved west and re-fenced around the new corridor
+  - [ ] Navigation mesh does not yet cover the crossing - zombies cannot path
+    onto the bridge deck
+  - [ ] No searchable loot container at the mill yet
 - [ ] Replace all placeholder buildings
 - [ ] Replace all placeholder props
 - [ ] High-quality terrain
