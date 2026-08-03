@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/environment/nature/polyhaven/ashwood_shrub_02_d.glb" id="1_src"]
+[ext_resource type="Material" path="res://assets/materials/vegetation_shrub_02.tres" id="2_mat"]
+
+[node name="AshwoodShrub02D" type="Node3D"]
+
+[node name="Visual" parent="." instance=ExtResource("1_src")]
+
+[node name="Plant" parent="Visual" index="0"]
+surface_material_override/0 = ExtResource("2_mat")
+
+[editable path="Visual"]

@@ -1,14 +1,16 @@
 [gd_scene load_steps=3 format=3]
 
-[ext_resource type="PackedScene" path="res://assets/third_party/nature/yughues_bushes/05/bush_05.FBX" id="1_bush"]
-[ext_resource type="Material" path="res://assets/materials/ashwood_main_street/yughues_bush_05.tres" id="2_material"]
+; Repointed from the procedural sphere-blob / stylised bush to a decimated Poly
+; Haven photoscan, scale-matched to the volume the original occupied.
+[ext_resource type="PackedScene" path="res://assets/environment/nature/polyhaven/ashwood_shrub_02_d.glb" id="1_src"]
+[ext_resource type="Material" path="res://assets/materials/vegetation_shrub_02.tres" id="2_mat"]
 
 [node name="YughuesBush05" type="Node3D"]
 
-[node name="Visual" parent="." instance=ExtResource("1_bush")]
-position = Vector3(-0.054, 0.076, 0.05)
+[node name="Visual" parent="." instance=ExtResource("1_src")]
+transform = Transform3D(0.91, 0, 0, 0, 0.91, 0, 0, 0, 0.91, 0, 0, 0)
 
-[node name="bush_05" parent="Visual" index="0"]
-surface_material_override/0 = ExtResource("2_material")
+[node name="Plant" parent="Visual" index="0"]
+surface_material_override/0 = ExtResource("2_mat")
 
 [editable path="Visual"]

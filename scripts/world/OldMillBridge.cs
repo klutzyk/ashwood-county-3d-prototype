@@ -1019,90 +1019,227 @@ public partial class OldMillBridge : Node3D
 	// ======================================================================
 
 	/// <summary>
-	/// Scatters the existing project tree and bush library across the gorge rim and
-	/// banks. Design canon puts Ashwood in a forested county, and without this the
-	/// terrain reads as an empty plane no matter how good the bridge is.
+	/// One scattered vegetation layer: a set of interchangeable source scenes plus
+	/// the placement rules that decide where its members are allowed to grow.
+	/// </summary>
+	private readonly record struct ScatterLayer(
+		string Name,
+		string[] Scenes,
+		int Count,
+		float MinScale,
+		float MaxScale,
+		float MaxSlopeDrop,
+		float MinY,
+		float MaxY,
+		float VisibilityRange,
+		bool CastShadow,
+		float ClusterRadius,
+		float SinkDepth);
+
+	/// <summary>
+	/// Scatters the decimated Poly Haven photoscans across the gorge rim and banks.
 	///
-	/// Every species becomes one MultiMesh, so the whole forest costs a handful of
-	/// draw calls. Placement is rejection-sampled against slope, water level, the
-	/// road corridor and the built structures.
+	/// The stylised lowpoly trees this replaced had salmon-pink trunks and flat
+	/// cartoon canopies, which destroyed the realism of every shot. The new set is
+	/// photoscanned, so the budget is spent very differently: a jacaranda is ~20k
+	/// triangles and 19 m tall, while a fern is 300 and a grass tuft 113. That
+	/// forces the composition real forests actually have - a modest number of hero
+	/// trees over a dense, cheap understorey - rather than a uniform field of
+	/// mid-sized props.
+	///
+	/// Each species becomes one MultiMesh, so the whole forest is a handful of draw
+	/// calls. Placement is rejection-sampled against slope, water level, the road
+	/// corridor and the built structures, then clustered: uniformly sprinkled
+	/// vegetation is one of the most reliable tells of amateur environment art.
 	/// </summary>
 	private void ScatterVegetation()
 	{
-		string[] treeScenes =
+		const string Root = "res://assets/environment/nature/polyhaven/";
+
+		ScatterLayer[] layers =
 		{
-			"res://assets/environment/nature/common_tree_1.tscn",
-			"res://assets/environment/nature/common_tree_2.tscn",
-			"res://assets/environment/nature/main_street_tree_1.tscn",
-			"res://assets/environment/nature/main_street_tree_2.tscn",
-		};
-		string[] bushScenes =
-		{
-			"res://assets/environment/nature/small_bush.tscn",
-			"res://assets/environment/nature/yughues_bush_01.tscn",
-			"res://assets/environment/nature/yughues_bush_02.tscn",
-			"res://assets/environment/nature/yughues_bush_05.tscn",
+			// Hero canopy. Deliberately sparse: these are 19 m trees at ~20k
+			// triangles each, so they are placed for silhouette, not for density.
+			new("Canopy",
+				new[] { Root + "ashwood_jacaranda_lod0.tscn" },
+				10, 0.9f, 1.4f, 1.15f, -5.0f, 999.0f, 165.0f, true, 30.0f, 0.35f),
+
+			// Second canopy rank at reduced detail, pushed further out so it fills
+			// the middle distance without the near-field triangle cost.
+			new("CanopyFar",
+				new[] { Root + "ashwood_jacaranda_lod1.tscn" },
+				16, 0.7f, 1.2f, 1.4f, -5.0f, 999.0f, 260.0f, false, 38.0f, 0.35f),
+
+			// Dead standing timber and fallen logs - the storytelling layer that
+			// makes a wood read as neglected rather than landscaped.
+			new("Deadwood",
+				new[]
+				{
+					Root + "ashwood_dead_tree_trunk.tscn",
+					Root + "ashwood_dead_log.tscn",
+				},
+				38, 0.8f, 1.6f, 1.6f, -6.5f, 999.0f, 190.0f, true, 18.0f, 0.18f),
+
+			// Mid understorey.
+			new("Shrubs",
+				new[]
+				{
+					Root + "ashwood_shrub_01.tscn",
+					Root + "ashwood_shrub_02_a.tscn",
+					Root + "ashwood_shrub_02_b.tscn",
+					Root + "ashwood_shrub_02_c.tscn",
+					Root + "ashwood_shrub_02_d.tscn",
+				},
+				360, 0.7f, 1.8f, 2.4f, WaterY + 0.4f, 999.0f, 170.0f, false, 12.0f, 0.12f),
+
+			// Ferns and nettles gather in damp ground, so they are allowed much
+			// further down the bank than anything else.
+			new("Ferns",
+				new[]
+				{
+					Root + "ashwood_fern_02_a.tscn",
+					Root + "ashwood_fern_02_b.tscn",
+					Root + "ashwood_fern_02_c.tscn",
+					Root + "ashwood_fern_02_d.tscn",
+					Root + "ashwood_nettle_tall.tscn",
+					Root + "ashwood_nettle_medium.tscn",
+				},
+				420, 0.8f, 2.4f, 3.0f, WaterY - 0.2f, 2.5f, 95.0f, false, 9.0f, 0.10f),
+
+			// Grass tufts are the cheapest way to kill the "bare terrain" read.
+			new("GrassTufts",
+				new[]
+				{
+					Root + "ashwood_grass_bermuda_medium.tscn",
+					Root + "ashwood_grass_bermuda_small.tscn",
+					Root + "ashwood_grass_bermuda_dry.tscn",
+					Root + "ashwood_shrub_03_a.tscn",
+					Root + "ashwood_shrub_03_b.tscn",
+					Root + "ashwood_shrub_03_c.tscn",
+				},
+				700, 1.2f, 3.4f, 2.8f, WaterY + 0.2f, 999.0f, 62.0f, false, 7.0f, 0.06f),
+
+			// Mossy rock. These sell the gorge as rock rather than as brown ground,
+			// so they are pushed hard onto the steep bank and down to the waterline.
+			// boulder_01 is excluded on purpose: it decimated to 26k triangles.
+			new("Rocks",
+				new[]
+				{
+					Root + "ashwood_rock_moss_01.tscn",
+					Root + "ashwood_rock_moss_02.tscn",
+					Root + "ashwood_rock_moss_03.tscn",
+					Root + "ashwood_rock_moss_04.tscn",
+					Root + "ashwood_rock_moss_05.tscn",
+					Root + "ashwood_rock_moss_06.tscn",
+				},
+				150, 0.5f, 1.9f, 4.5f, WaterY - 1.2f, 999.0f, 230.0f, true, 15.0f, 0.55f),
+
+			// Bark litter on the forest floor.
+			new("Litter",
+				new[]
+				{
+					Root + "ashwood_bark_debris_a.tscn",
+					Root + "ashwood_bark_debris_b.tscn",
+					Root + "ashwood_bark_debris_c.tscn",
+					Root + "ashwood_bark_debris_d.tscn",
+				},
+				200, 0.9f, 2.2f, 2.6f, WaterY + 0.3f, 999.0f, 70.0f, false, 8.0f, 0.05f),
 		};
 
 		var rng = new RandomNumberGenerator { Seed = 20260803 };
 
-		var treeBatches = new List<Transform3D>[treeScenes.Length];
-		var bushBatches = new List<Transform3D>[bushScenes.Length];
-		for (int i = 0; i < treeBatches.Length; i++)
+		foreach (ScatterLayer layer in layers)
 		{
-			treeBatches[i] = new List<Transform3D>();
+			ScatterOneLayer(layer, rng);
 		}
-		for (int i = 0; i < bushBatches.Length; i++)
+	}
+
+	private void ScatterOneLayer(ScatterLayer layer, RandomNumberGenerator rng)
+	{
+		var batches = new List<Transform3D>[layer.Scenes.Length];
+		for (int i = 0; i < batches.Length; i++)
 		{
-			bushBatches[i] = new List<Transform3D>();
+			batches[i] = new List<Transform3D>();
 		}
 
-		// Trees: need reasonably level, dry ground.
-		for (int attempt = 0; attempt < 5200 && CountAll(treeBatches) < 340; attempt++)
+		// Cluster seeds. Members are drawn around a seed rather than uniformly over
+		// the map, which is what makes a scatter read as growth instead of noise.
+		int seedCount = Mathf.Max(4, layer.Count / 9);
+		var seeds = new List<Vector2>(seedCount);
+		for (int attempt = 0; attempt < seedCount * 40 && seeds.Count < seedCount; attempt++)
 		{
-			float x = rng.RandfRange(TerrainMinX + 6.0f, TerrainMaxX - 6.0f);
-			float z = rng.RandfRange(-TerrainHalfZ + 6.0f, TerrainHalfZ - 6.0f);
-			if (!IsPlantable(x, z, 1.15f, -5.5f, out float y))
+			float sx = rng.RandfRange(TerrainMinX + 8.0f, TerrainMaxX - 8.0f);
+			float sz = rng.RandfRange(-TerrainHalfZ + 8.0f, TerrainHalfZ - 8.0f);
+			if (IsPlantable(sx, sz, layer.MaxSlopeDrop, layer.MinY, out _))
+			{
+				seeds.Add(new Vector2(sx, sz));
+			}
+		}
+		if (seeds.Count == 0)
+		{
+			return;
+		}
+
+		int placed = 0;
+		int budget = layer.Count * 60;
+		for (int attempt = 0; attempt < budget && placed < layer.Count; attempt++)
+		{
+			// Most members hug a seed; a minority are scattered loose so the edges
+			// of each clump stay soft.
+			float x;
+			float z;
+			if (rng.Randf() < 0.82f)
+			{
+				Vector2 seed = seeds[rng.RandiRange(0, seeds.Count - 1)];
+				float angle = rng.RandfRange(0.0f, Mathf.Tau);
+				// sqrt keeps the disc evenly filled instead of bunching at the centre.
+				float radius = layer.ClusterRadius * Mathf.Sqrt(rng.Randf());
+				x = seed.X + Mathf.Cos(angle) * radius;
+				z = seed.Y + Mathf.Sin(angle) * radius;
+			}
+			else
+			{
+				x = rng.RandfRange(TerrainMinX + 4.0f, TerrainMaxX - 4.0f);
+				z = rng.RandfRange(-TerrainHalfZ + 4.0f, TerrainHalfZ - 4.0f);
+			}
+
+			if (x < TerrainMinX + 3.0f || x > TerrainMaxX - 3.0f ||
+				Mathf.Abs(z) > TerrainHalfZ - 3.0f)
 			{
 				continue;
 			}
-			// Thin the canopy near the rim so the bridge silhouette stays readable.
-			if (Patchiness(x * 1.7f, z * 1.7f) < 0.30f)
+			if (!IsPlantable(x, z, layer.MaxSlopeDrop, layer.MinY, out float y))
+			{
+				continue;
+			}
+			if (y > layer.MaxY)
 			{
 				continue;
 			}
 
-			int species = rng.RandiRange(0, treeScenes.Length - 1);
-			float scale = rng.RandfRange(0.55f, 1.0f);
-			treeBatches[species].Add(new Transform3D(
-				new Basis(Vector3.Up, rng.RandfRange(0.0f, Mathf.Tau)).Scaled(Vector3.One * scale),
-				new Vector3(x, y - 0.15f, z)));
+			int species = rng.RandiRange(0, layer.Scenes.Length - 1);
+			float scale = rng.RandfRange(layer.MinScale, layer.MaxScale);
+
+			// Yaw plus a small random lean. Perfectly upright props read as stamped
+			// on; a couple of degrees of tilt is enough to break that.
+			var basis = new Basis(Vector3.Up, rng.RandfRange(0.0f, Mathf.Tau));
+			basis = new Basis(Vector3.Right, rng.RandfRange(-0.05f, 0.05f)) * basis;
+			basis = new Basis(Vector3.Forward, rng.RandfRange(-0.05f, 0.05f)) * basis;
+
+			batches[species].Add(new Transform3D(
+				basis.Scaled(Vector3.One * scale),
+				new Vector3(x, y - layer.SinkDepth * scale, z)));
+			placed++;
 		}
 
-		// Bushes: tolerate steeper ground and reach further down the bank.
-		for (int attempt = 0; attempt < 7000 && CountAll(bushBatches) < 560; attempt++)
+		for (int i = 0; i < layer.Scenes.Length; i++)
 		{
-			float x = rng.RandfRange(TerrainMinX + 4.0f, TerrainMaxX - 4.0f);
-			float z = rng.RandfRange(-TerrainHalfZ + 4.0f, TerrainHalfZ - 4.0f);
-			if (!IsPlantable(x, z, 2.4f, WaterY + 0.4f, out float y))
-			{
-				continue;
-			}
-
-			int species = rng.RandiRange(0, bushScenes.Length - 1);
-			float scale = rng.RandfRange(0.7f, 1.5f);
-			bushBatches[species].Add(new Transform3D(
-				new Basis(Vector3.Up, rng.RandfRange(0.0f, Mathf.Tau)).Scaled(Vector3.One * scale),
-				new Vector3(x, y - 0.1f, z)));
-		}
-
-		for (int i = 0; i < treeScenes.Length; i++)
-		{
-			ScatterFromScene(treeScenes[i], $"Trees{i:D2}", treeBatches[i], 460.0f, true);
-		}
-		for (int i = 0; i < bushScenes.Length; i++)
-		{
-			ScatterFromScene(bushScenes[i], $"Bushes{i:D2}", bushBatches[i], 190.0f, false);
+			ScatterFromScene(
+				layer.Scenes[i],
+				$"{layer.Name}{i:D2}",
+				batches[i],
+				layer.VisibilityRange,
+				layer.CastShadow);
 		}
 	}
 

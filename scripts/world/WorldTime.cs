@@ -18,20 +18,32 @@ public partial class WorldTime : Node
 
 	[Export] public NodePath DirectionalLightPath { get; set; } = new("../DirectionalLight3D");
 	[Export] public NodePath WorldEnvironmentPath { get; set; } = new("../WorldEnvironment");
-	[Export] public float NightAmbientEnergy { get; set; } = 0.24f;
-	[Export] public float DayAmbientEnergy { get; set; } = 0.8f;
-	[Export] public float NightSkyEnergy { get; set; } = 0.18f;
-	[Export] public float DaySkyEnergy { get; set; } = 0.7f;
-	[Export] public float NightDirectionalEnergy { get; set; } = 0.06f;
-	[Export] public float DayDirectionalEnergy { get; set; } = 0.65f;
+
+	// Ambient is deliberately far below the directional energy. The scene reads
+	// as photographed only when the sun clearly dominates the skylight fill; the
+	// previous near-parity values plus a 0.48 shadow opacity flattened every
+	// surface into the same tone.
+	[Export] public float NightAmbientEnergy { get; set; } = 0.10f;
+	[Export] public float DayAmbientEnergy { get; set; } = 0.46f;
+	[Export] public float NightSkyEnergy { get; set; } = 0.06f;
+	[Export] public float DaySkyEnergy { get; set; } = 1.0f;
+	[Export] public float NightDirectionalEnergy { get; set; } = 0.09f;
+	[Export] public float DayDirectionalEnergy { get; set; } = 1.7f;
 	[Export] public Color NightDirectionalColor { get; set; } =
 		new(0.5f, 0.58f, 0.78f);
 	[Export] public Color DayDirectionalColor { get; set; } =
-		new(0.83f, 0.85f, 0.88f);
+		new(1.0f, 0.96f, 0.90f);
 	[Export] public Color GoldenHourDirectionalColor { get; set; } =
-		new(1.0f, 0.68f, 0.43f);
+		new(1.0f, 0.72f, 0.48f);
 	[Export(PropertyHint.Range, "0,1,0.05")]
 	public float GoldenHourColorStrength { get; set; }
+
+	/// <summary>
+	/// Longest shadow range the scene may use, in metres. The graphics preset
+	/// scales this down; it is applied here rather than in the scene because the
+	/// settings pass previously overwrote the authored value on load.
+	/// </summary>
+	[Export] public float ShadowMaxDistance { get; set; } = 150.0f;
 
 	public float CurrentHour { get; private set; }
 	public float DaylightBlend { get; private set; }
@@ -51,7 +63,27 @@ public partial class WorldTime : Node
 		_environment = worldEnvironment.Environment
 			?? throw new System.InvalidOperationException("World time requires an Environment resource.");
 		SettingsManager.Instance?.ApplyGraphicsToScene(GetParent());
+		ApplyShadowRange();
 		SetTimeOfDay(StartingHour);
+	}
+
+	/// <summary>
+	/// Re-applies the authored shadow range after the graphics pass. The shared
+	/// settings pass clamps every DirectionalLight3D to 24-42 m, which was tuned
+	/// for the old Compatibility renderer; under Forward+ with four shadow
+	/// splits that range ends shadows in the middle of the street and is a
+	/// large part of why the town read as pasted-together.
+	/// </summary>
+	private void ApplyShadowRange()
+	{
+		float scale = SettingsManager.Instance?.Current.GraphicsPreset switch
+		{
+			GraphicsPreset.Low => 0.45f,
+			GraphicsPreset.Medium => 0.75f,
+			_ => 1.0f,
+		};
+		_directionalLight.DirectionalShadowMaxDistance =
+			Mathf.Max(ShadowMaxDistance * scale, 16.0f);
 	}
 
 	public override void _Process(double delta)

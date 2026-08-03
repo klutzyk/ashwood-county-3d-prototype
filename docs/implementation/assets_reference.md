@@ -949,6 +949,51 @@ above: `ashwood_police_rusty_metal.tres` (green-painted rusted steel truss),
 `ashwood_police_dark_wood.tres` (mill timbers and water wheel), and the
 Quaternius/Yughues tree and bush scenes under `assets/environment/nature/`.
 
+
+## Poly Haven photoreal set (August 2026 art overhaul)
+- **Source:** https://polyhaven.com
+- **License:** [CC0 1.0 Universal](https://polyhaven.com/license)
+- **Attribution requirement:** None. CC0 permits commercial use, modification and
+  redistribution with no credit required. Provenance is recorded here anyway.
+- **Acquisition:** `tools/download_polyhaven.py` (idempotent; writes
+  `assets/third_party/polyhaven_2026_08/MANIFEST.json` with per-file URLs and byte sizes)
+- **Modifications:** Models were decimated and rebuilt for real-time use by
+  `tools/blender/build_ashwood_vegetation.py`. Scanned leaf sprays were rebuilt as
+  single quads per UV island, and the separately published Alpha maps were
+  composited into RGBA albedos (the source glTF references only JPEG diffuse,
+  which cannot carry alpha). Source files are never modified in place.
+- **Total downloaded:** 499.3 MB across 129 files, 24 assets
+
+### Assets used
+| Slug | Downloaded | Role |
+| --- | ---: | --- |
+| `aerial_grass_rock` | 13.9 MB | verges and lawns |
+| `aerial_rocks_02` | 13.7 MB | gorge rock |
+| `asphalt_02` | 18.2 MB | Main Street road surface |
+| `asphalt_04` | 15.6 MB | road variant |
+| `bark_debris_01` | 16.7 MB | forest litter |
+| `bicolour_gravel` | 23.0 MB | shoulders |
+| `boulder_01` | 13.5 MB | boulder (excluded from scatter: decimated to 26k tris) |
+| `brown_mud_dry` | 13.2 MB | bare soil |
+| `brown_mud_leaves_01` | 20.2 MB | forest floor |
+| `clean_pebbles` | 17.2 MB | riverbed |
+| `cliff_side` | 12.1 MB | gorge strata |
+| `dead_tree_trunk` | 11.3 MB | standing deadwood |
+| `dead_tree_trunk_02` | 13.4 MB | fallen log |
+| `fern_02` | 3.6 MB | damp-ground ferns |
+| `forrest_ground_01` | 17.9 MB | forest ground |
+| `grass_bermuda_01` | 4.9 MB | grass tufts |
+| `jacaranda_tree` | 230.9 MB | hero broadleaf tree (LOD0/LOD1) |
+| `kloofendal_48d_partly_cloudy_puresky` | 5.5 MB | HDRI sky (in use) |
+| `nettle_plant` | 6.5 MB | undergrowth |
+| `rock_moss_set_01` | 3.3 MB | mossy gorge rock |
+| `shrub_01` | 11.1 MB | understorey |
+| `shrub_02` | 5.0 MB | understorey |
+| `shrub_03` | 4.7 MB | ground cover |
+| `syferfontein_18d_clear_puresky` | 4.2 MB | HDRI sky (alternate) |
+
+- **Status:** In use
+
 ## Release Checklist
 
 - [x] Record source and license links for all listed assets.

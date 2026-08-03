@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/environment/nature/polyhaven/ashwood_rock_moss_03.glb" id="1_src"]
+[ext_resource type="Material" path="res://assets/materials/vegetation_rock_moss_set_01.tres" id="2_mat"]
+
+[sub_resource type="ConvexPolygonShape3D" id="Hull"]
+points = PackedVector3Array(0.740, 2.044, -0.029, -0.489, 1.897, 0.052, 0.646, 2.048, -0.073, 1.030, 1.866, 0.195, 0.957, 1.929, 0.024, -0.434, 1.246, 0.742, -0.200, 1.931, -0.085, 1.281, 1.190, 0.734, -0.630, 1.001, 0.796, 0.920, 1.711, -0.101, 1.306, 0.968, 0.832, -0.642, 1.476, -0.089, 1.378, 0.298, 0.108, -0.689, 0.560, -0.144, -0.710, 0.125, 0.147, 1.321, 0.231, -0.033, -0.509, 0.770, 0.819, -0.677, 0.106, -0.041, 1.133, 0.159, -0.036, -0.656, 0.042, 0.060, -0.481, 0.000, 0.032)
+
+[node name="AshwoodRockMoss03" type="StaticBody3D"]
+
+[node name="Visual" parent="." instance=ExtResource("1_src")]
+
+[node name="Body" parent="Visual" index="0"]
+surface_material_override/0 = ExtResource("2_mat")
+
+[node name="HullCollision" type="CollisionShape3D" parent="."]
+shape = SubResource("Hull")
+
+[editable path="Visual"]

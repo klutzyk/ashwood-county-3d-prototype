@@ -1,0 +1,78 @@
+[gd_resource type="ShaderMaterial" load_steps=14 format=3]
+
+[ext_resource type="Shader" path="res://assets/materials/ashwood_terrain.gdshader" id="0_shader"]
+[ext_resource type="Texture2D" path="res://assets/third_party/polyhaven_2026_08/textures/aerial_grass_rock/aerial_grass_rock_diff_2k.jpg" id="1_grass_a"]
+[ext_resource type="Texture2D" path="res://assets/third_party/polyhaven_2026_08/textures/aerial_grass_rock/aerial_grass_rock_nor_gl_2k.jpg" id="2_grass_n"]
+[ext_resource type="Texture2D" path="res://assets/third_party/polyhaven_2026_08/textures/aerial_grass_rock/aerial_grass_rock_arm_2k.jpg" id="3_grass_m"]
+[ext_resource type="Texture2D" path="res://assets/third_party/polyhaven_2026_08/textures/brown_mud_leaves_01/brown_mud_leaves_01_diff_2k.jpg" id="4_forest_a"]
+[ext_resource type="Texture2D" path="res://assets/third_party/polyhaven_2026_08/textures/brown_mud_leaves_01/brown_mud_leaves_01_nor_gl_2k.jpg" id="5_forest_n"]
+[ext_resource type="Texture2D" path="res://assets/third_party/polyhaven_2026_08/textures/brown_mud_leaves_01/brown_mud_leaves_01_arm_2k.jpg" id="6_forest_m"]
+[ext_resource type="Texture2D" path="res://assets/third_party/polyhaven_2026_08/textures/bicolour_gravel/bicolour_gravel_diff_2k.jpg" id="7_dirt_a"]
+[ext_resource type="Texture2D" path="res://assets/third_party/polyhaven_2026_08/textures/bicolour_gravel/bicolour_gravel_nor_gl_2k.jpg" id="8_dirt_n"]
+[ext_resource type="Texture2D" path="res://assets/third_party/polyhaven_2026_08/textures/bicolour_gravel/bicolour_gravel_arm_2k.jpg" id="9_dirt_m"]
+[ext_resource type="Texture2D" path="res://assets/third_party/polyhaven_2026_08/textures/cliff_side/cliff_side_diff_2k.jpg" id="10_rock_a"]
+[ext_resource type="Texture2D" path="res://assets/third_party/polyhaven_2026_08/textures/cliff_side/cliff_side_nor_gl_2k.jpg" id="11_rock_n"]
+[ext_resource type="Texture2D" path="res://assets/third_party/polyhaven_2026_08/textures/cliff_side/cliff_side_arm_2k.jpg" id="12_rock_m"]
+
+[resource]
+resource_name = "AshwoodTerrainGorge"
+render_priority = 0
+shader = ExtResource("0_shader")
+shader_parameter/grass_albedo = ExtResource("1_grass_a")
+shader_parameter/grass_normal = ExtResource("2_grass_n")
+shader_parameter/grass_arm = ExtResource("3_grass_m")
+shader_parameter/forest_albedo = ExtResource("4_forest_a")
+shader_parameter/forest_normal = ExtResource("5_forest_n")
+shader_parameter/forest_arm = ExtResource("6_forest_m")
+shader_parameter/dirt_albedo = ExtResource("7_dirt_a")
+shader_parameter/dirt_normal = ExtResource("8_dirt_n")
+shader_parameter/dirt_arm = ExtResource("9_dirt_m")
+shader_parameter/rock_albedo = ExtResource("10_rock_a")
+shader_parameter/rock_normal = ExtResource("11_rock_n")
+shader_parameter/rock_arm = ExtResource("12_rock_m")
+shader_parameter/grass_tile_meters = 2.6
+shader_parameter/forest_tile_meters = 3.0
+shader_parameter/dirt_tile_meters = 1.8
+shader_parameter/rock_tile_meters = 6.0
+shader_parameter/detail_tile_ratio = 5.37
+shader_parameter/detail_blend = 0.45
+shader_parameter/detail_fade_begin = 18.0
+shader_parameter/detail_fade_end = 60.0
+shader_parameter/blend_noise_meters = 13.0
+shader_parameter/blend_noise_detail_meters = 2.9
+shader_parameter/height_blend_contrast = 0.24
+shader_parameter/forest_amount = 0.45
+shader_parameter/forest_noise_amount = 0.55
+shader_parameter/forest_edge_softness = 0.12
+shader_parameter/forest_max_slope = 0.3
+shader_parameter/forest_height_influence = 1.0
+shader_parameter/forest_height_low = -3.0
+shader_parameter/forest_height_high = 60.0
+shader_parameter/forest_height_feather = 3.5
+shader_parameter/dirt_slope_begin = 0.08
+shader_parameter/dirt_slope_end = 0.22
+shader_parameter/dirt_patch_amount = 0.26
+shader_parameter/dirt_noise_amount = 0.5
+shader_parameter/dirt_edge_softness = 0.1
+shader_parameter/rock_slope_begin = 0.24
+shader_parameter/rock_slope_end = 0.42
+shader_parameter/rock_noise_amount = 0.16
+shader_parameter/rock_height_amount = 0.0
+shader_parameter/rock_height_begin = 14.0
+shader_parameter/rock_height_blend = 10.0
+shader_parameter/triplanar_sharpness = 6.0
+shader_parameter/ground_normal_strength = 1.0
+shader_parameter/rock_normal_strength = 1.35
+shader_parameter/roughness_min = 0.52
+shader_parameter/roughness_max = 1.0
+shader_parameter/ao_strength = 0.9
+shader_parameter/ao_light_affect = 0.4
+shader_parameter/specular_amount = 0.28
+shader_parameter/flip_normal_green = false
+shader_parameter/terrain_tint = Color(1, 1, 1, 1)
+shader_parameter/terrain_brightness = 1.0
+shader_parameter/macro_variation_meters = 52.0
+shader_parameter/macro_variation_strength = 0.38
+shader_parameter/macro_dark_tint = Color(0.68, 0.7, 0.63, 1)
+shader_parameter/macro_light_tint = Color(1.22, 1.17, 1.05, 1)
+shader_parameter/use_vertex_color_mask = false

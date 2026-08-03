@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/environment/nature/polyhaven/ashwood_dead_log.glb" id="1_src"]
+[ext_resource type="Material" path="res://assets/materials/vegetation_dead_tree_trunk_02.tres" id="2_mat"]
+
+[sub_resource type="ConvexPolygonShape3D" id="Hull"]
+points = PackedVector3Array(3.444, 0.809, 0.157, 0.343, 0.867, -0.480, 0.068, 0.736, -0.741, 3.464, 0.686, 0.337, 3.674, 0.667, -0.091, -0.282, 0.304, 0.218, 3.663, 0.630, 0.011, 3.718, 0.487, -0.151, -0.283, 0.200, 0.223, 3.623, 0.505, 0.226, 0.053, 0.680, -0.700, 3.742, 0.384, -0.041, 3.668, 0.413, 0.147, -0.061, 0.000, -0.078, 3.672, 0.326, 0.028, -0.093, 0.021, -0.000)
+
+[node name="AshwoodDeadLog" type="StaticBody3D"]
+
+[node name="Visual" parent="." instance=ExtResource("1_src")]
+
+[node name="Body" parent="Visual" index="0"]
+surface_material_override/0 = ExtResource("2_mat")
+
+[node name="HullCollision" type="CollisionShape3D" parent="."]
+shape = SubResource("Hull")
+
+[editable path="Visual"]

@@ -1,23 +1,35 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=6 format=3]
 
-[ext_resource type="PackedScene" path="res://assets/third_party/nature/CommonTree_2.gltf" id="1_tree"]
-[ext_resource type="Material" path="res://assets/materials/tree_bark.tres" id="2_bark"]
-[ext_resource type="Material" path="res://assets/materials/ashwood_main_street/tree_leaves_muted_olive.tres" id="3_leaves"]
+; Repointed from the stylised lowpoly Quaternius tree to the decimated Poly Haven
+; photoscan. The salmon-pink trunks and flat cartoon canopies of the original read
+; as a different game to everything around them. Scale below normalises the 19.2 m
+; scan down to the ~7-9 m street/rural tree the original occupied, and the trunk
+; collision is kept at the original dimensions so traversal is unchanged.
+[ext_resource type="PackedScene" path="res://assets/environment/nature/polyhaven/ashwood_jacaranda_lod1.glb" id="1_src"]
+[ext_resource type="Material" path="res://assets/materials/vegetation_jacaranda_trunk.tres" id="2_trunk"]
+[ext_resource type="Material" path="res://assets/materials/vegetation_jacaranda_branches.tres" id="3_branches"]
+[ext_resource type="Material" path="res://assets/materials/vegetation_jacaranda_leaves.tres" id="4_leaves"]
 
 [sub_resource type="CylinderShape3D" id="TrunkShape"]
-radius = 0.44
-height = 3.6
+radius = 0.40
+height = 3.4
 
 [node name="MainStreetTree2" type="StaticBody3D"]
 
-[node name="Visual" parent="." instance=ExtResource("1_tree")]
+[node name="Visual" parent="." instance=ExtResource("1_src")]
+transform = Transform3D(0.448, 0, 0, 0, 0.448, 0, 0, 0, 0.448, 0, 0, 0)
 
-[node name="CommonTree_2" parent="Visual" index="0"]
-surface_material_override/0 = ExtResource("2_bark")
-surface_material_override/1 = ExtResource("3_leaves")
+[node name="Trunk" parent="Visual" index="0"]
+surface_material_override/0 = ExtResource("2_trunk")
+
+[node name="Branches" parent="Visual" index="1"]
+surface_material_override/0 = ExtResource("3_branches")
+
+[node name="Leaves" parent="Visual" index="2"]
+surface_material_override/0 = ExtResource("4_leaves")
 
 [node name="TrunkCollision" type="CollisionShape3D" parent="."]
-position = Vector3(0, 1.55, 0)
+position = Vector3(0, 1.45, 0)
 shape = SubResource("TrunkShape")
 
 [editable path="Visual"]

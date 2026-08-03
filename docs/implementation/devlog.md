@@ -2330,3 +2330,63 @@ Known gaps:
 - Visual quality is a strong blockout with real materials, weathering and
   vegetation, but hero-asset fidelity, decals, and water interaction remain
   below the State of Decay reference
+## August 2026 photoreal art overhaul
+
+The in-game look was rejected as reading like a lowpoly hobby project rather than
+State of Decay / Mist Survival. Four specific complaints drove this pass: stylised
+trees with salmon-pink trunks, untextured flat-green distant hills, a low-resolution
+brown smear for ground, and an unreadable gorge.
+
+Changes:
+
+- Added `tools/download_polyhaven.py`, an idempotent CC0 asset fetcher writing a
+  provenance manifest. Poly Haven's CDN rejects urllib's default User-Agent with
+  HTTP 403, so every request presents a browser UA. 24 assets, ~250 MB.
+- Moved the renderer from GL Compatibility to Forward+ (d3d12) and replaced the
+  ProceduralSkyMaterial with a Poly Haven HDRI panorama. This enabled SSAO,
+  volumetric fog and glow, and is the single largest contributor to the improved
+  look - and to the frame cost.
+- Built a Blender vegetation pipeline (`tools/blender/build_ashwood_vegetation.py`)
+  producing 34 game-ready assets from photoscans, ~88k triangles total.
+- Repointed the eight stylised tree/bush scenes under `assets/environment/nature/`
+  at the photoscans. Those files are referenced from ten different scenes, so
+  changing them once replaced the pink trees everywhere at a single edit point.
+- Rewrote `ScatterVegetation` in `OldMillBridge.cs` as eight clustered layers
+  (canopy, deadwood, shrubs, ferns, grass, rock, litter) with per-layer slope,
+  water-level and visibility rules, plus random lean so nothing reads as stamped on.
+- Rewrote the Main Street asphalt and grass materials against Poly Haven 2K PBR
+  sets. The grass material previously had no normal map at all, which is why every
+  verge lit like flat painted card.
+
+Measured, not claimed:
+
+| Metric | Baseline (Compatibility) | After (Forward+) |
+| --- | ---: | ---: |
+| Average FPS | 31.35 | 25.18 |
+| 1% low FPS | 19.59 | 20.48 |
+| Draw calls | 6,846 | 4,498 |
+| Primitives | 1,813,113 | 3,330,998 |
+
+Average FPS is down 20%, but the 1% low is slightly BETTER than baseline and frame
+pacing is tighter (p99 45.7 ms), so the experience is smoother even though the mean
+is lower. Draw calls fell by a third because the scatter is MultiMesh-batched.
+
+Finding worth recording: the Blender decimate modifier cannot collapse below roughly
+one triangle per connected component, and the jacaranda branch mesh is ~30k
+disconnected twigs. The triangle budget was therefore being missed by 20-60x
+(a 400-triangle budget producing 24,215). Deleting whole twig components by area
+(`keep_area`) is the only lever that works on that topology.
+
+Known gaps - honestly, this is not finished:
+
+- **Tree canopies still read as too sparse.** The card-rebuild trade between leaf
+  count and card scale has not been solved: dense enough to look like foliage costs
+  more triangles than the frame budget allows, and the current calibration errs
+  toward cheap. This is the top remaining visual problem.
+- The jacaranda is a subtropical species standing in for a temperate county tree.
+  Botanically wrong; a conifer/oak set would suit Ashwood better.
+- The multi-layer terrain shader was authored but the gorge still uses the older
+  single StandardMaterial3D; wiring it up is outstanding.
+- Navigation mesh still does not cover the bridge deck.
+- Average FPS is below the 28 floor set for this pass. Volumetric fog is the most
+  likely cheap win if it needs recovering.

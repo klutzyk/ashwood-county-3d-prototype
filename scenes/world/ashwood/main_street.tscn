@@ -19,7 +19,7 @@
 [ext_resource type="PackedScene" path="res://scenes/world/ashwood/presentation/main_street_apocalypse_dressing.tscn" id="17_apocalypse_dressing"]
 [ext_resource type="PackedScene" path="res://assets/environment/buildings/AshwoodSchool/ashwood_school.tscn" id="18_school"]
 [ext_resource type="PackedScene" path="res://scenes/world/ashwood/presentation/main_street_user_asset_enrichment.tscn" id="19_user_enrichment"]
-[ext_resource type="Texture2D" path="res://assets/environment/sky/ashwood_golden_hour_cloud_cover.png" id="20_cloud_cover"]
+[ext_resource type="Texture2D" uid="uid://b33dc4aj1ohw7" path="res://assets/environment/sky/ashwood_late_afternoon_sky.hdr" id="20_sky_panorama"]
 [ext_resource type="PackedScene" path="res://scenes/world/ashwood/gameplay/relief_safe_point.tscn" id="21_safe_point"]
 [ext_resource type="PackedScene" path="res://scenes/world/ashwood/presentation/main_street_vista.tscn" id="22_vista"]
 [ext_resource type="Script" path="res://scripts/world/AtmosphereAudio.cs" id="23_atmosphere"]
@@ -129,49 +129,76 @@ size = Vector3(147, 12, 1)
 [sub_resource type="BoxShape3D" id="BridgeCorridorConnectorShape"]
 size = Vector3(1, 12, 17)
 
-[sub_resource type="ProceduralSkyMaterial" id="SkyMaterial"]
-sky_top_color = Color(0.15, 0.255, 0.405, 1)
-sky_horizon_color = Color(0.86, 0.58, 0.36, 1)
-sky_curve = 0.2
-sky_energy_multiplier = 1.08
-sky_cover = ExtResource("20_cloud_cover")
-sky_cover_modulate = Color(0.94, 0.91, 0.85, 0.46)
-ground_bottom_color = Color(0.05, 0.065, 0.052, 1)
-ground_horizon_color = Color(0.32, 0.3, 0.25, 1)
-ground_curve = 0.12
-sun_angle_max = 4.0
-sun_curve = 0.18
-use_debanding = true
+[sub_resource type="PanoramaSkyMaterial" id="SkyMaterial"]
+panorama = ExtResource("20_sky_panorama")
+energy_multiplier = 1.0
+filter = true
 
 [sub_resource type="Sky" id="Sky"]
 sky_material = SubResource("SkyMaterial")
-process_mode = 1
+process_mode = 2
+radiance_size = 3
 
 [sub_resource type="Environment" id="Environment"]
 background_mode = 2
-background_energy_multiplier = 0.96
+background_energy_multiplier = 0.95
 sky = SubResource("Sky")
 ambient_light_source = 3
 ambient_light_color = Color(0.38, 0.445, 0.55, 1)
-ambient_light_energy = 0.82
-tonemap_mode = 2
-tonemap_exposure = 1.08
-tonemap_white = 6.0
+ambient_light_energy = 0.46
+ambient_light_sky_contribution = 1.0
+reflected_light_source = 2
+tonemap_mode = 3
+tonemap_exposure = 1.03
+tonemap_white = 2.0
+ssr_enabled = false
+ssao_enabled = true
+ssao_radius = 1.35
+ssao_intensity = 2.6
+ssao_power = 1.6
+ssao_detail = 0.55
+ssao_horizon = 0.08
+ssao_sharpness = 0.98
+ssao_light_affect = 0.12
+ssao_ao_channel_affect = 0.35
+ssil_enabled = false
+glow_enabled = true
+glow_levels/1 = 0.0
+glow_levels/2 = 0.25
+glow_levels/3 = 0.7
+glow_levels/4 = 0.55
+glow_levels/5 = 0.3
+glow_normalized = true
+glow_intensity = 0.55
+glow_strength = 1.0
+glow_bloom = 0.05
+glow_blend_mode = 1
+glow_hdr_threshold = 1.15
+glow_hdr_scale = 2.0
 fog_enabled = true
 fog_mode = 1
-fog_light_color = Color(0.55, 0.44, 0.34, 1)
-fog_light_energy = 0.72
-fog_sun_scatter = 0.28
-fog_density = 0.34
-fog_aerial_perspective = 0.66
-fog_sky_affect = 0.32
-fog_depth_curve = 1.25
-fog_depth_begin = 58.0
-fog_depth_end = 275.0
+fog_light_color = Color(0.62, 0.6, 0.6, 1)
+fog_light_energy = 1.0
+fog_sun_scatter = 0.5
+fog_density = 0.16
+fog_aerial_perspective = 0.34
+fog_sky_affect = 0.0
+fog_depth_curve = 0.85
+fog_depth_begin = 34.0
+fog_depth_end = 330.0
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.014
+volumetric_fog_albedo = Color(0.86, 0.82, 0.78, 1)
+volumetric_fog_emission_energy = 0.0
+volumetric_fog_gi_inject = 0.0
+volumetric_fog_anisotropy = 0.55
+volumetric_fog_length = 128.0
+volumetric_fog_detail_spread = 2.0
+volumetric_fog_ambient_inject = 0.35
 adjustment_enabled = true
 adjustment_brightness = 1.0
-adjustment_contrast = 1.02
-adjustment_saturation = 1.0
+adjustment_contrast = 1.06
+adjustment_saturation = 1.05
 
 [node name="MainStreet" type="Node3D" unique_id=1127619697]
 
@@ -192,11 +219,13 @@ FullDayDurationSeconds = 14400.0
 StartingHour = 16.75
 DirectionalLightPath = NodePath("../../DirectionalLight3D")
 WorldEnvironmentPath = NodePath("../../WorldEnvironment")
-DayAmbientEnergy = 1.02
-DaySkyEnergy = 0.95
-DayDirectionalEnergy = 1.2
-GoldenHourDirectionalColor = Color(1, 0.78, 0.62, 1)
+DayAmbientEnergy = 0.46
+DaySkyEnergy = 1.0
+DayDirectionalEnergy = 1.7
+DayDirectionalColor = Color(1, 0.96, 0.9, 1)
+GoldenHourDirectionalColor = Color(1, 0.72, 0.48, 1)
 GoldenHourColorStrength = 1.0
+ShadowMaxDistance = 150.0
 
 [node name="DynamicWeather" parent="Gameplay" instance=ExtResource("26_dynamic_weather")]
 
@@ -668,14 +697,23 @@ transform = Transform3D(3.1391647e-07, 0, -1, 0, 1, 0, 1, 0, 3.1391647e-07, -59.
 navigation_mesh = ExtResource("5_navmesh")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=351593155]
-rotation_degrees = Vector3(-168.75, -28, 0)
-light_color = Color(1, 0.57, 0.29, 1)
-light_energy = 0.66
+rotation_degrees = Vector3(-161.25, -28, 0)
+light_color = Color(0.979, 0.789, 0.613, 1)
+light_energy = 1.53
+light_angular_distance = 0.6
+light_specular = 0.85
 shadow_enabled = true
-shadow_opacity = 0.48
-shadow_blur = 3.2
-directional_shadow_mode = 1
-directional_shadow_max_distance = 96.0
+shadow_opacity = 1.0
+shadow_blur = 1.0
+shadow_bias = 0.04
+shadow_normal_bias = 1.4
+directional_shadow_mode = 2
+directional_shadow_split_1 = 0.06
+directional_shadow_split_2 = 0.16
+directional_shadow_split_3 = 0.4
+directional_shadow_blend_splits = true
+directional_shadow_fade_start = 0.9
+directional_shadow_max_distance = 150.0
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=778193923]
 environment = SubResource("Environment")
