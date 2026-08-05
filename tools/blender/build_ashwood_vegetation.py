@@ -521,24 +521,44 @@ def blender_main(preview_dir: Path | None) -> None:
         result.data.name = name + "Mesh"
         return result
 
-    def keep_only_material(obj, material_name):
-        """Delete every face whose material slot is not material_name."""
-        import bmesh
+    def keep_only_material(obj, material_names):
+        """Delete every face whose material slot is not in material_names.
+
+        The conifer scans pack three whole trees into one file and share the
+        bark, twig and dead-branch materials across all three, so a part is
+        identified by node AND by material - neither alone is enough. Takes a
+        tuple so a woody part can gather bark, trunk and dead branches in one
+        pass instead of being joined back together afterwards.
+        """
+        if isinstance(material_names, str):
+            material_names = (material_names,)
         slots = [i for i, s in enumerate(obj.material_slots)
-                 if s.material and s.material.name.startswith(material_name)]
+                 if s.material and any(s.material.name.startswith(n)
+                                       for n in material_names)]
         if not slots:
             raise RuntimeError(
-                f"{obj.name}: no material slot matching {material_name!r}; "
+                f"{obj.name}: no material slot matching {material_names!r}; "
                 f"have {[s.material.name if s.material else None for s in obj.material_slots]}"
             )
         keep = set(slots)
+
+        # Face-index arithmetic in numpy rather than bmesh: a 7M-triangle twig
+        # mesh costs several GB as a bmesh, and this only needs to delete faces.
+        me = obj.data
+        nf = len(me.polygons)
+        idx = np.empty(nf, np.int32)
+        me.polygons.foreach_get("material_index", idx)
+        doomed_mask = ~np.isin(idx, list(keep))
+        if not doomed_mask.any():
+            return
         bm = bmesh.new()
-        bm.from_mesh(obj.data)
-        doomed = [f for f in bm.faces if f.material_index not in keep]
+        bm.from_mesh(me)
+        bm.faces.ensure_lookup_table()
+        doomed = [bm.faces[i] for i in np.flatnonzero(doomed_mask).tolist()]
         bmesh.ops.delete(bm, geom=doomed, context="FACES")
-        bm.to_mesh(obj.data)
+        bm.to_mesh(me)
         bm.free()
-        obj.data.update()
+        me.update()
 
     # -- connected components, numpy only (Blender has no scipy) -----------
 
@@ -599,15 +619,14 @@ def blender_main(preview_dir: Path | None) -> None:
         uv = uv.reshape(nl, 2)
         return pos, loops.reshape(nt, 3), uv, lv
 
-    def uv_islands(obj):
-        """Label the mesh the way the source glTF stored it.
+    def islands_of_slice(pos, tris, uv, lv):
+        """Label one slice of a mesh the way the source glTF stored it.
 
         Blender's importer welds vertices that a glTF split along a UV seam, so
         raw mesh connectivity would merge neighbouring leaf cards. Rebuilding
         identity as (vertex, quantised uv) restores the original islands, which
         is what makes one-quad-per-card reconstruction valid.
         """
-        pos, tris, uv, lv = mesh_arrays(obj)
         corner_key = np.column_stack(
             [lv, np.round(uv * 4096.0).astype(np.int64)]
         )
@@ -624,10 +643,47 @@ def blender_main(preview_dir: Path | None) -> None:
         corner_uv = np.zeros((ncorner, 2))
         corner_pos[corner_id] = pos[lv]
         corner_uv[corner_id] = uv
-        return labels, corner_pos, corner_uv, tri_corners
+        return labels, corner_pos, corner_uv
+
+    def island_slices(obj, tiles):
+        """Yield (labels, corner_pos, corner_uv) for the mesh, tile by tile.
+
+        Island labelling is the memory peak of the whole build: it uniquifies a
+        (3 * triangles, 3) int64 key and then runs label propagation over three
+        directed edges per triangle. A conifer canopy is 7M triangles of needle
+        sprays, which is roughly 20M loops - several GB in one pass, enough to
+        kill the build outright.
+
+        Splitting the mesh into vertical slabs by triangle centroid drops the
+        peak by the tile count. Cards are ~10cm across and slabs are metres, so
+        only a handful straddle a boundary, and one that does simply becomes two
+        smaller cards rather than a hole.
+        """
+        pos, tris, uv, lv = mesh_arrays(obj)
+        if tiles <= 1:
+            yield islands_of_slice(pos, tris, uv, lv)
+            return
+
+        # Slice along the mesh's longest horizontal axis so the slabs are
+        # roughly equal in triangle count rather than in empty space.
+        centre = pos[lv][tris].mean(axis=1)
+        axis = 0 if (centre[:, 0].ptp() >= centre[:, 2].ptp()) else 2
+        edges = np.quantile(centre[:, axis], np.linspace(0.0, 1.0, tiles + 1))
+        edges[0] -= 1.0
+        edges[-1] += 1.0
+        for t in range(tiles):
+            mask = (centre[:, axis] > edges[t]) & (centre[:, axis] <= edges[t + 1])
+            if not mask.any():
+                continue
+            sub_tris = tris[mask]
+            # Reindex the loop range down to just this slab's corners.
+            used = np.unique(sub_tris)
+            remap = np.full(len(lv), -1, np.int64)
+            remap[used] = np.arange(len(used))
+            yield islands_of_slice(pos, remap[sub_tris], uv[used], lv[used])
 
     def grid_thin(centroids, target):
-        """Pick ~target島 evenly in space, never randomly.
+        """Pick ~target islands evenly in space, never randomly.
 
         Random subsampling of a canopy leaves clumps and holes and eats the
         silhouette; a spatial grid keeps one card per cell so the crown outline
@@ -656,26 +712,36 @@ def blender_main(preview_dir: Path | None) -> None:
             best = np.argsort(-np.linalg.norm(centroids - centroids.mean(0), axis=1))[:target]
         return np.sort(best)[:target]
 
-    def build_cards(obj, budget, card_scale, name):
+    def build_cards(obj, budget, card_scale, name, tiles=1):
         """Replace every UV island with one quad fitted through its own UVs."""
-        labels, cpos, cuv, tri_corners = uv_islands(obj)
-        n_isl = int(labels.max()) + 1
+        # Islands are labelled tile by tile to bound peak memory, but thinning
+        # has to see the whole crown at once or each tile keeps its own quota
+        # and the canopy ends up denser in whichever slab happened to be
+        # smallest. So: label per tile, pool the centroids, thin globally, then
+        # fit only the survivors.
+        slices = []
+        centroids = []
+        for labels, cpos, cuv in island_slices(obj, tiles):
+            n = int(labels.max()) + 1
+            counts = np.bincount(labels, minlength=n).astype(np.float64)
+            cen = np.zeros((n, 3))
+            for axis in range(3):
+                cen[:, axis] = np.bincount(labels, weights=cpos[:, axis],
+                                           minlength=n) / counts
+            order = np.argsort(labels, kind="stable")
+            sorted_lab = labels[order]
+            bounds = np.r_[0, np.flatnonzero(np.diff(sorted_lab)) + 1,
+                           len(sorted_lab)]
+            slices.append((cpos, cuv, order, bounds))
+            centroids.append(cen)
 
-        counts = np.bincount(labels, minlength=n_isl).astype(np.float64)
-        cen = np.zeros((n_isl, 3))
-        for axis in range(3):
-            cen[:, axis] = np.bincount(labels, weights=cpos[:, axis],
-                                       minlength=n_isl) / counts
+        counts_per_slice = [len(c) for c in centroids]
+        cen = np.concatenate(centroids)
+        n_isl = len(cen)
+        offsets = np.cumsum([0] + counts_per_slice)
 
         target = max(1, budget // 2)
         keep = grid_thin(cen, target)
-
-        # Sorting once turns per-island vertex gathering from O(n_islands * n)
-        # into a slice.
-        order = np.argsort(labels, kind="stable")
-        sorted_lab = labels[order]
-        bounds = np.r_[0, np.flatnonzero(np.diff(sorted_lab)) + 1,
-                       len(sorted_lab)]
 
         # Blend each card's own normal towards "outwards from the crown". Purely
         # planar normals make every card light as a flat chip, which is exactly
@@ -685,7 +751,10 @@ def blender_main(preview_dir: Path | None) -> None:
 
         verts, faces, uvs, normals = [], [], [], []
         skipped = 0
-        for isl in keep:
+        for global_isl in keep:
+            si = int(np.searchsorted(offsets, global_isl, side="right") - 1)
+            isl = int(global_isl - offsets[si])
+            cpos, cuv, order, bounds = slices[si]
             sl = order[bounds[isl]:bounds[isl + 1]]
             P = cpos[sl]
             U = cuv[sl]
@@ -974,11 +1043,11 @@ def blender_main(preview_dir: Path | None) -> None:
         built, stats_by_part = [], {}
         for spec in asset["parts"]:
             name = spec["name"]
-            if spec["material"]:
-                src = duplicate(list(sources.values())[0], name + "Src")
-                keep_only_material(src, spec["material"])
-                work = src
-            else:
+            # Node selection and material selection are independent filters and
+            # the conifers need both: one file holds three whole trees that all
+            # share the bark and twig materials, so the node picks the tree and
+            # the material picks the part of it.
+            if spec["nodes"]:
                 picked = [sources[n] for n in spec["nodes"] if n in sources]
                 missing = [n for n in spec["nodes"] if n not in sources]
                 if missing:
@@ -989,11 +1058,16 @@ def blender_main(preview_dir: Path | None) -> None:
                 if spec.get("cluster"):
                     cluster_parts(copies, spec["cluster"])
                 work = join(copies, name + "Src")
+            else:
+                work = duplicate(list(sources.values())[0], name + "Src")
+
+            if spec["material"]:
+                keep_only_material(work, spec["material"])
 
             source_tris = tri_count(work)
             if spec["method"] == CARD:
                 obj, cstats = build_cards(work, spec["budget"], spec["card_scale"],
-                                          name)
+                                          name, spec.get("tiles", 1))
                 bpy.data.objects.remove(work, do_unlink=True)
                 stats_by_part[name] = cstats
             elif spec["method"] == DECIMATE:

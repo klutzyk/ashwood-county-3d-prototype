@@ -84,9 +84,49 @@ VEGETATION_ALPHA_MAPS = [
     ("grass_bermuda_01", "2k"),
 ]
 
+# The conifers spell their opacity map "twig_alpha" / "twigs_alpha" and the
+# broadleaf spells it "leaves_alpha"; collect_model_alpha matches by substring
+# so all three shapes are picked up without listing map names here.
+CONIFER_ALPHA_MAPS = [
+    ("pine_tree_01", "2k"),
+    ("fir_tree_01", "2k"),
+    ("pine_sapling_medium", "2k"),
+    ("pine_sapling_small", "2k"),
+    ("fir_sapling_medium", "2k"),
+    ("fir_sapling", "2k"),
+    ("moss_01", "2k"),
+    ("grass_medium_01", "2k"),
+    ("grass_medium_02", "2k"),
+    ("tree_small_02", "2k"),
+]
+
+# Ashwood is cool-temperate conifer/oak country - the county seal shows
+# conifers - and the jacaranda that was standing in for every tree is a
+# subtropical broadleaf. Poly Haven's "pine_forest" collection is a matched set
+# scanned in one place under one light, so a stand built from it reads as a
+# single wood rather than as an asset-store pile. tree_small_02 comes from
+# "verdant_trail" and is the broadleaf that mixes into the lower valleys.
+CONIFER_MODELS = [
+    ("pine_tree_01", "2k"),          # hero pine, the northern forest canopy
+    ("fir_tree_01", "2k"),           # second hero conifer, denser and darker
+    ("pine_sapling_medium", "2k"),   # regrowth in clearings and along edges
+    ("pine_sapling_small", "2k"),
+    ("fir_sapling_medium", "2k"),
+    ("fir_sapling", "2k"),
+    ("tree_stump_01", "2k"),         # logged ground around the Logging Camp
+    ("tree_stump_02", "2k"),
+    ("pine_roots", "2k"),            # exposed roots on eroded banks
+    ("dry_branches_medium_01", "2k"),
+    ("moss_01", "2k"),               # forest floor under closed canopy
+    ("grass_medium_01", "2k"),       # meadow grass; taller than bermuda
+    ("grass_medium_02", "2k"),
+    ("tree_small_02", "2k"),         # broadleaf for the valley floor
+]
+
 ROCK_MODELS = [
     ("boulder_01", "2k"),
     ("rock_moss_set_01", "2k"),
+    ("rock_moss_set_02", "2k"),
 ]
 
 HDRIS = [
@@ -98,6 +138,8 @@ SETS = {
     "terrain": ("textures", TERRAIN_TEXTURES),
     "vegetation": ("models", VEGETATION_MODELS),
     "vegetation_alpha": ("model_alphas", VEGETATION_ALPHA_MAPS),
+    "conifers": ("models", CONIFER_MODELS),
+    "conifers_alpha": ("model_alphas", CONIFER_ALPHA_MAPS),
     "rocks": ("models", ROCK_MODELS),
     "hdri": ("hdris", HDRIS),
 }
@@ -106,6 +148,7 @@ SETS = {
 # opacity maps, so nobody can end up with leaf geometry and no cut-out.
 SET_COMPANIONS = {
     "vegetation": ("vegetation_alpha",),
+    "conifers": ("conifers_alpha",),
 }
 
 
