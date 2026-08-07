@@ -28,6 +28,26 @@ public partial class CountyWorld : Node3D
     /// <summary>Draws the streaming state to the console. Useful when tuning ring counts.</summary>
     [Export] public bool LogStreaming { get; set; }
 
+    /// <summary>
+    /// Allows streaming to run inside the editor so the county can be inspected
+    /// without entering play mode. Off by default: an editor session that streams
+    /// on every viewport move is far more disruptive than one that stays empty.
+    /// </summary>
+    public bool EditorPreview { get; set; }
+
+    /// <summary>
+    /// Caps every subsystem's streaming radius while in the editor. The editor
+    /// viewport carries more overhead per triangle than the running game does -
+    /// gizmos, selection outlines, no occlusion tuning - so streaming the same
+    /// ~2km-across working set that gameplay uses made the preview laggier than
+    /// just pressing Play. Two chunks is enough to see terrain, water, roads,
+    /// trees and a settlement together without asking the editor to hold the
+    /// whole county's worth of geometry live.
+    /// </summary>
+    public int EditorPreviewRadius { get; set; } = 2;
+
+    private bool Dormant => Engine.IsEditorHint() && !EditorPreview;
+
     private readonly List<ICountyChunkSource> _sources = new();
     private readonly Dictionary<ICountyChunkSource, Dictionary<Vector2I, int>> _resident = new();
 
@@ -51,7 +71,7 @@ public partial class CountyWorld : Node3D
 
     public override void _Ready()
     {
-        if (Engine.IsEditorHint())
+        if (Dormant)
         {
             return;
         }
@@ -129,7 +149,7 @@ public partial class CountyWorld : Node3D
 
     public override void _Process(double delta)
     {
-        if (Engine.IsEditorHint() || _sources.Count == 0)
+        if (Dormant || _sources.Count == 0)
         {
             return;
         }
@@ -173,8 +193,12 @@ public partial class CountyWorld : Node3D
 
     private void UpdateSource(ICountyChunkSource source, Vector2I center)
     {
+        int radius = Engine.IsEditorHint()
+            ? Mathf.Min(source.ChunkRadius, EditorPreviewRadius)
+            : source.ChunkRadius;
+
         Dictionary<Vector2I, int> resident = _resident[source];
-        List<Vector2I> wanted = CountyChunks.Around(center, source.ChunkRadius);
+        List<Vector2I> wanted = CountyChunks.Around(center, radius);
 
         // Release first. Freeing before allocating keeps the peak memory of a
         // streaming step down to roughly one ring rather than two full sets,
@@ -182,7 +206,7 @@ public partial class CountyWorld : Node3D
         var stale = new List<Vector2I>();
         foreach (Vector2I chunk in resident.Keys)
         {
-            if (CountyChunks.Ring(chunk, center) > source.ChunkRadius)
+            if (CountyChunks.Ring(chunk, center) > radius)
             {
                 stale.Add(chunk);
             }

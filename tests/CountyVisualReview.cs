@@ -128,10 +128,13 @@ public partial class CountyVisualReview : Node3D
             "The Blackwater valley and town from the eastern shoulder",
             new Vector2(1500.0f, -400.0f), new Vector2(-400.0f, 200.0f), 60.0f, 52.0f);
 
+        // From the western shore looking across the reservoir. The previous framing
+        // stood north of the dam looking south, which put the dam's own ridge
+        // between the camera and the water - the lake was never actually in shot.
         yield return new Shot(
             "03_lake_and_dam.png",
-            "Blackwater Lake with the dam in the outflow throat",
-            new Vector2(-140.0f, -1500.0f), new Vector2(-140.0f, -2500.0f), 90.0f, 55.0f);
+            "Blackwater Lake from the western shore",
+            new Vector2(-820.0f, -2400.0f), new Vector2(300.0f, -2400.0f), 55.0f, 58.0f);
 
         yield return new Shot(
             "04_fire_lookout_summit.png",

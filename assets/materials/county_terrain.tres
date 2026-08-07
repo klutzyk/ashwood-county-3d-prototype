@@ -60,7 +60,8 @@ shader_parameter/wet_tint = Color(0.46, 0.46, 0.44, 1)
 shader_parameter/wet_roughness = 0.22
 
 shader_parameter/macro_meters = 185.0
-shader_parameter/macro_strength = 0.42
+shader_parameter/macro_strength = 0.5
+shader_parameter/breakup_amount = 0.38
 
 shader_parameter/detail_tile_ratio = 3.2
 shader_parameter/detail_strength = 0.3

@@ -37,8 +37,8 @@ public partial class CountyTerrainSmoke : Node3D
             // A ridge east of town looking back across the Blackwater valley: it
             // takes in mountains, forest, the river and the town flat in one frame,
             // so a single image covers most of what can go wrong.
-            var eye = new Vector2(-980.0f, -1980.0f);
-            var focus = new Vector2(-420.0f, -2280.0f);
+            var eye = new Vector2(-1810.0f, 1480.0f);
+            var focus = new Vector2(-2104.0f, 1702.0f);
 
             var probe = new Node3D { Name = "StreamProbe" };
             viewport.AddChild(probe);
@@ -78,6 +78,19 @@ public partial class CountyTerrainSmoke : Node3D
                 Vector3.Up);
             GD.Print($"SMOKE: eye=({eye.X:F0}, {eyeY:F1}, {eye.Y:F0}) " +
                      $"ground={CountyMap.Height(eye.X, eye.Y):F1}");
+            for (int sample = 0; sample < 4; sample++)
+            {
+                float px = eye.X - sample * 220.0f;
+                float pz = eye.Y + sample * 30.0f;
+                float ph = CountyMap.Height(px, pz);
+                float pslope = CountyMap.Slope(px, pz, 3.0f);
+                GD.Print($"SMOKE: probe ({px:F0},{pz:F0}) h={ph:F1} " +
+                         $"biome={CountyMap.BiomeAt(px, pz, ph, pslope)} " +
+                         $"forest={CountyMap.ForestDensity(px, pz, ph, pslope):F3} " +
+                         $"field={CountyMap.FieldStrength(px, pz):F3} " +
+                         $"rim={CountyMap.RimFalloff(px, pz):F3} " +
+                         $"slope={Mathf.RadToDeg(pslope):F1}");
+            }
 
             // Let the streamer resolve. Reported so a slow build is visible as a
             // number rather than as an unexplained wait.
@@ -89,6 +102,19 @@ public partial class CountyTerrainSmoke : Node3D
             GD.Print($"SMOKE: settled in {stopwatch.ElapsedMilliseconds}ms");
             ReportCounts(built.Root);
             VerifyMeshMatchesHeightfield(built.Root);
+            foreach (Node n in built.World.GetChildren())
+            {
+                if (n is CountySettlements sites)
+                {
+                    GD.Print($"SMOKE: settlements structures={sites.StructureCount}");
+                }
+
+                if (n is CountyFarTerrain far)
+                {
+                    GD.Print($"SMOKE: far_terrain tiles={far.TileCount} " +
+                             $"visible={far.VisibleTileCount} complete={far.IsComplete}");
+                }
+            }
 
             await ToSignal(RenderingServer.Singleton, RenderingServer.SignalName.FramePostDraw);
 

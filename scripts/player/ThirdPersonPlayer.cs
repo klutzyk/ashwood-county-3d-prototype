@@ -65,6 +65,17 @@ public partial class ThirdPersonPlayer : CharacterBody3D
 	private Vector3 _standingCollisionPosition;
 	private float _cameraStepVerticalOffset;
 	private float _baseCameraFov;
+
+	// ---- dev-only noclip fly, N to toggle -----------------------------------
+	// Bound directly to a Key rather than an input action so this stays a
+	// single self-contained addition with nothing to wire into the project's
+	// input map. N was picked because nothing else in the game binds it.
+	private const float DevFlySpeed = 14.0f;
+	private const float DevFlySpeedFast = 40.0f;
+	private bool _devFlying;
+	private bool _devFlyKeyWasDown;
+	private uint _savedCollisionLayer;
+	private uint _savedCollisionMask;
 	private readonly PhysicsTestMotionParameters3D _stepMotionParameters = new();
 	private readonly PhysicsTestMotionResult3D _stepMotionResult = new();
 
@@ -161,6 +172,15 @@ public partial class ThirdPersonPlayer : CharacterBody3D
 	public override void _PhysicsProcess(double delta)
 	{
 		float deltaTime = (float)delta;
+
+		HandleDevFlyToggle();
+		if (_devFlying)
+		{
+			ApplyDevFlyMovement(deltaTime);
+			FollowPlayerWithCamera();
+			return;
+		}
+
 		_damageStaggerRemaining = Mathf.Max(_damageStaggerRemaining - deltaTime, 0.0f);
 		if (_health.IsDead)
 		{

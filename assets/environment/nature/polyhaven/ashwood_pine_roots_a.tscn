@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/environment/nature/polyhaven/ashwood_pine_roots_a.glb" id="1_src"]
+[ext_resource type="Material" path="res://assets/materials/vegetation_pine_roots_a.tres" id="2_mat"]
+
+[sub_resource type="ConvexPolygonShape3D" id="Hull"]
+points = PackedVector3Array(0.802, 0.838, -0.005, -0.328, 0.771, -0.014, 0.927, 0.802, -0.008, -0.436, 0.710, -0.009, 0.997, 0.747, -0.007, 1.029, 0.680, -0.002, -0.723, 0.265, -0.006, 0.965, 0.719, 0.017, -0.635, 0.324, 0.066, -0.673, 0.116, -0.007, -0.716, 0.190, -0.009, 0.923, 0.388, -0.001, -0.471, 0.147, 0.071, 0.361, 0.009, -0.016, 0.366, 0.000, -0.002, -0.595, 0.046, -0.006, -0.553, 0.026, -0.008)
+
+[node name="AshwoodPineRootsA" type="StaticBody3D"]
+
+[node name="Visual" parent="." instance=ExtResource("1_src")]
+
+[node name="Body" parent="Visual" index="0"]
+surface_material_override/0 = ExtResource("2_mat")
+
+[node name="HullCollision" type="CollisionShape3D" parent="."]
+shape = SubResource("Hull")
+
+[editable path="Visual"]

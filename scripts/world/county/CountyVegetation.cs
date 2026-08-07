@@ -29,7 +29,13 @@ public partial class CountyVegetation : Node3D, ICountyChunkSource
     /// is a handful of pixels, and paying full canopy geometry for it is the
     /// fastest way to lose the frame budget on an integrated GPU.
     /// </summary>
-    [Export] public int VegetationRadius { get; set; } = 3;
+    /// <summary>
+    /// Raised from 3 to 6 once distant trees became imposters. The old radius put
+    /// the last tree 768m away, which is nothing across a valley eight kilometres
+    /// wide - every ridge view ended in bare ground. Real geometry could not have
+    /// afforded the increase; two-triangle cards can.
+    /// </summary>
+    [Export] public int VegetationRadius { get; set; } = 6;
 
     /// <summary>Scales every layer's instance count. The single knob for the perf pass.</summary>
     [Export(PropertyHint.Range, "0.0,2.0,0.05")]
@@ -58,7 +64,26 @@ public partial class CountyVegetation : Node3D, ICountyChunkSource
         float MaxSlope,
         LayerRule Rule,
         /// <summary>How strongly instances clump rather than spreading evenly.</summary>
-        float Clustering = 0.8f);
+        float Clustering = 0.8f,
+        /// <summary>Billboard imposters rather than instanced scene geometry.</summary>
+        bool Imposter = false,
+        /// <summary>Nearest range an imposter appears at, so it never overlaps the real tree.</summary>
+        float VisibilityBegin = 0.0f);
+
+    /// <summary>
+    /// Imposter card geometry, taken from the bake report of
+    /// tools/BakeTreeImposters.cs:
+    ///   jacaranda width=24.25 height=19.42 base_offset=9.71
+    /// The baker frames the tree with an orthogonal camera whose size is twice the
+    /// bounding radius, so the card must be that same square for the tree to come
+    /// back out at the size it went in at.
+    /// </summary>
+    private const float ImposterCardSize = 24.25f;
+
+    /// <summary>Height of the baked frame's centre above the trunk base.</summary>
+    private const float ImposterCentreHeight = 9.71f;
+
+    private const string ImposterMaterialPath = "res://assets/materials/county_tree_imposter.tres";
 
     private enum LayerRule
     {
@@ -82,13 +107,33 @@ public partial class CountyVegetation : Node3D, ICountyChunkSource
             VisibilityRange: 110.0f, CastShadow: true, MaxRing: 1, MaxSlope: 0.62f,
             Rule: LayerRule.Forest, Clustering: 0.86f),
 
-        new("canopy_far", new[]
+        new("canopy_mid", new[]
             {
                 VegetationRoot + "ashwood_jacaranda_lod1.tscn",
             },
-            PerChunk: 120, MinScale: 0.34f, MaxScale: 0.56f,
-            VisibilityRange: 430.0f, CastShadow: false, MaxRing: 2, MaxSlope: 0.62f,
+            PerChunk: 90, MinScale: 0.34f, MaxScale: 0.56f,
+            VisibilityRange: 240.0f, CastShadow: false, MaxRing: 1, MaxSlope: 0.62f,
             Rule: LayerRule.Forest, Clustering: 0.86f),
+
+        // The forest proper. Everything above is detail applied to the nearest few
+        // hundred metres; this is the layer that actually makes the county read as
+        // wooded from a ridgeline, and at two triangles an instance it is by far
+        // the cheapest thing in the scene. It starts where canopy_mid fades out so
+        // a tree is never drawn as both card and geometry at once.
+        new("canopy_imposter", new[]
+            {
+                ImposterMaterialPath,
+            },
+            // Dense enough that crowns overlap. Anything sparser leaves ground
+            // visible between every tree, which reads as an orchard rather than
+            // forest - the canopy closing over is the whole difference. At two
+            // triangles an instance this is affordable where geometry never was:
+            // a full ring-6 set is around 300k triangles, less than a single one
+            // of the old LOD1 stands.
+            PerChunk: 780, MinScale: 0.34f, MaxScale: 0.78f,
+            VisibilityRange: 2400.0f, CastShadow: false, MaxRing: 6, MaxSlope: 0.62f,
+            Rule: LayerRule.Forest, Clustering: 0.86f,
+            Imposter: true, VisibilityBegin: 205.0f),
 
         new("shrubs", new[]
             {
@@ -397,6 +442,12 @@ public partial class CountyVegetation : Node3D, ICountyChunkSource
 
     private void EmitLayer(Node3D holder, in Layer layer, List<Transform3D> placements)
     {
+        if (layer.Imposter)
+        {
+            EmitImposterLayer(holder, layer, placements);
+            return;
+        }
+
         // Split placements across the layer's scene variants so a stand is mixed
         // species rather than one cloned plant.
         int variants = layer.Scenes.Length;
@@ -446,6 +497,152 @@ public partial class CountyVegetation : Node3D, ICountyChunkSource
                 });
             }
         }
+    }
+
+    /// <summary>
+    /// Emits a chunk's worth of billboard trees as a single MultiMesh of quads.
+    ///
+    /// The scatter's rotation and hillside lean are deliberately thrown away: the
+    /// shader rebuilds the card's basis every frame to face the camera, so any
+    /// rotation baked in here would be overwritten, and a leaning card would only
+    /// shrink the tree. Only position and a uniform scale survive.
+    /// </summary>
+    private void EmitImposterLayer(Node3D holder, in Layer layer, List<Transform3D> placements)
+    {
+        Material? material = LoadImposterMaterial();
+        if (material == null)
+        {
+            return;
+        }
+
+        var quad = new QuadMesh
+        {
+            Size = new Vector2(ImposterCardSize, ImposterCardSize),
+            Material = material,
+        };
+
+        var multiMesh = new MultiMesh
+        {
+            TransformFormat = MultiMesh.TransformFormatEnum.Transform3D,
+            Mesh = quad,
+
+            // One baked tree repeated across a hillside reads as an orchard. Since
+            // there is only one atlas, the variety has to come from somewhere else:
+            // a per-instance tint is the cheapest convincing source, and costs one
+            // extra vertex attribute rather than another bake.
+            UseColors = true,
+            InstanceCount = placements.Count,
+        };
+
+        var tintRng = new RandomNumberGenerator { Seed = (ulong)placements.Count * 2654435761UL };
+
+        for (int i = 0; i < placements.Count; i++)
+        {
+            Transform3D placement = placements[i];
+
+            // Scale is uniform, so any basis column recovers it.
+            float scale = placement.Basis.X.Length();
+
+            // The scatter puts the origin on the ground; the card is centred on the
+            // baked frame's centre, which sits ImposterCentreHeight above the trunk
+            // base. Without this every tree is buried to half its height.
+            var origin = new Vector3(
+                placement.Origin.X,
+                placement.Origin.Y + (ImposterCentreHeight * scale),
+                placement.Origin.Z);
+
+            multiMesh.SetInstanceTransform(i,
+                new Transform3D(Basis.Identity.Scaled(Vector3.One * scale), origin));
+
+            // Value varies more than hue: a stand of one species differs mostly in
+            // how much light each crown is catching, not in colour. The slight
+            // green/yellow drift on top keeps it from reading as pure brightness.
+            float value = tintRng.RandfRange(0.72f, 1.12f);
+            float warmth = tintRng.RandfRange(-0.06f, 0.06f);
+            multiMesh.SetInstanceColor(i, new Color(
+                value * (1.0f + warmth),
+                value,
+                value * (1.0f - warmth * 0.65f)));
+        }
+
+        // The instance transforms above are world-space and the holder sits at the
+        // origin, so without an explicit AABB Godot measures both frustum culling
+        // and visibility range from world zero. Every chunk of imposters in the
+        // county then draws every frame regardless of where the camera is, and the
+        // near/far ranges below silently do nothing. Giving the node the chunk's
+        // real bounds is what makes both work.
+        var multiMeshInstance = new MultiMeshInstance3D
+        {
+            Name = layer.Name,
+            Multimesh = multiMesh,
+            CastShadow = GeometryInstance3D.ShadowCastingSetting.Off,
+
+            // Begin, not just end: inside this range the real canopy geometry is
+            // drawn instead, and showing both would double every trunk. This is
+            // per-node rather than per-instance, so the handover happens a chunk at
+            // a time - hence the generous overlap with canopy_mid's fade.
+            VisibilityRangeBegin = layer.VisibilityBegin,
+            VisibilityRangeBeginMargin = layer.VisibilityBegin * 0.16f,
+            VisibilityRangeEnd = layer.VisibilityRange,
+            VisibilityRangeEndMargin = layer.VisibilityRange * 0.1f,
+            VisibilityRangeFadeMode = GeometryInstance3D.VisibilityRangeFadeModeEnum.Self,
+        };
+
+        multiMeshInstance.CustomAabb = ChunkCardBounds(placements);
+        holder.AddChild(multiMeshInstance);
+    }
+
+    /// <summary>
+    /// World-space bounds of a chunk's imposter cards, padded for the card's own
+    /// width and height. The shader billboards each card in vertex(), so the
+    /// bounds have to allow for it swinging a full card-width either side of its
+    /// instance origin as the camera moves around it.
+    /// </summary>
+    private static Aabb ChunkCardBounds(List<Transform3D> placements)
+    {
+        var min = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
+        var max = new Vector3(float.MinValue, float.MinValue, float.MinValue);
+
+        foreach (Transform3D placement in placements)
+        {
+            float scale = placement.Basis.X.Length();
+            float reach = ImposterCardSize * scale * 0.5f;
+            Vector3 origin = placement.Origin;
+
+            min.X = Mathf.Min(min.X, origin.X - reach);
+            min.Y = Mathf.Min(min.Y, origin.Y - reach);
+            min.Z = Mathf.Min(min.Z, origin.Z - reach);
+            max.X = Mathf.Max(max.X, origin.X + reach);
+            max.Y = Mathf.Max(max.Y, origin.Y + (ImposterCentreHeight * scale) + reach);
+            max.Z = Mathf.Max(max.Z, origin.Z + reach);
+        }
+
+        return new Aabb(min, max - min);
+    }
+
+    private Material? _imposterMaterial;
+    private bool _imposterMaterialTried;
+
+    private Material? LoadImposterMaterial()
+    {
+        if (_imposterMaterialTried)
+        {
+            return _imposterMaterial;
+        }
+
+        _imposterMaterialTried = true;
+        if (ResourceLoader.Exists(ImposterMaterialPath) &&
+            ResourceLoader.Load(ImposterMaterialPath) is Material loaded)
+        {
+            _imposterMaterial = loaded;
+        }
+        else
+        {
+            GD.PushWarning($"CountyVegetation: imposter material missing at {ImposterMaterialPath}; " +
+                           "distant forest will not render. Run tools/bake_tree_imposters.tscn.");
+        }
+
+        return _imposterMaterial;
     }
 
     private List<(Mesh Mesh, Transform3D Local)> GetParts(string scenePath)

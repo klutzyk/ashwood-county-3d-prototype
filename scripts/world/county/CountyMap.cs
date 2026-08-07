@@ -886,12 +886,17 @@ public static class CountyMap
         if (!MillCreekLine.IsFarFrom(here, 240.0f))
         {
             float creekDistance = MillCreekLine.Distance(here, out float creekAlong);
-            h -= CarveChannel(creekDistance, 210.0f, 34.0f, 26.0f, 16.0f);
-            float creekBed = 1.0f - Smooth((creekDistance - 6.0f) / 20.0f);
+            h -= CarveChannel(creekDistance, 210.0f, 34.0f, 15.0f, 21.0f);
+            float creekBed = 1.0f - Smooth((creekDistance - 7.0f) / 11.0f);
             if (creekBed > 0.0f)
             {
-                float creekY = Mathf.Lerp(56.0f, -46.0f, Smooth(creekAlong));
-                h = Mathf.Lerp(h, creekY - 1.6f, creekBed * 0.85f);
+                // Blends fully to the bed rather than to 85 percent of it. Stopping
+                // short meant that wherever the surrounding land stood well above
+                // the channel the bed never reached below the water surface, so the
+                // creek simply had no water for that stretch - the gaps between the
+                // floating rectangles were exactly these places.
+                float creekY = MillCreekSurfaceY(creekAlong);
+                h = Mathf.Lerp(h, creekY - 1.6f, creekBed);
             }
         }
 
@@ -1078,6 +1083,64 @@ public static class CountyMap
     // ------------------------------------------------------------------ water
 
     /// <summary>
+    /// Mill Creek's water surface, sampled along its own spine.
+    ///
+    /// This used to be a straight elevation ramp - Lerp(56, -46, along) - chosen
+    /// without reference to the land the creek runs through. Terrain does not
+    /// oblige a straight line: where the ground sat above the ramp the channel
+    /// never cut and the creek was dry; where it sat below, the ramp floated above
+    /// the surrounding plain and meshed as slabs of water lying on dry grass. At
+    /// Mill Creek village it did both within a few hundred metres, which is why
+    /// the creek rendered as a row of disconnected rectangles beside a cliff.
+    ///
+    /// Sampling the land and then forcing the result to run downhill gives a
+    /// profile that is always below its own banks and never flows uphill, which is
+    /// the only pair of properties the channel actually needs.
+    /// </summary>
+    private static readonly float[] MillCreekProfile = BuildMillCreekProfile();
+
+    /// <summary>How far the creek's surface sits below the surrounding ground.</summary>
+    private const float MillCreekIncision = 3.2f;
+
+    private static float[] BuildMillCreekProfile()
+    {
+        Vector2[] spine = MillCreekSpine;
+        var profile = new float[spine.Length];
+
+        for (int i = 0; i < spine.Length; i++)
+        {
+            Vector2 p = spine[i];
+
+            // The base landform only - not Height(), which would recurse straight
+            // back into the creek carve that depends on this profile.
+            profile[i] = ApplyPeaks(p, RegionalTrend(p.X, p.Y) + Relief(p.X, p.Y))
+                         - MillCreekIncision;
+        }
+
+        // Water does not flow uphill. A single downstream pass clamping each point
+        // to its predecessor turns a noisy terrain sample into a valid channel.
+        for (int i = 1; i < profile.Length; i++)
+        {
+            profile[i] = Mathf.Min(profile[i], profile[i - 1] - 0.35f);
+        }
+
+        return profile;
+    }
+
+    /// <summary>Creek surface at a normalised distance along the spine.</summary>
+    private static float MillCreekSurfaceY(float alongNormalised)
+    {
+        if (MillCreekProfile.Length == 1)
+        {
+            return MillCreekProfile[0];
+        }
+
+        float scaled = Mathf.Clamp(alongNormalised, 0.0f, 1.0f) * (MillCreekProfile.Length - 1);
+        int index = Mathf.Clamp((int)scaled, 0, MillCreekProfile.Length - 2);
+        return Mathf.Lerp(MillCreekProfile[index], MillCreekProfile[index + 1], scaled - index);
+    }
+
+    /// <summary>
     /// Water surface height at a point, or float.MinValue if the point is dry.
     /// Covers the reservoir, the river below the dam and the creek.
     /// </summary>
@@ -1102,12 +1165,12 @@ public static class CountyMap
             }
         }
 
-        if (!MillCreekLine.IsFarFrom(p, 14.0f))
+        if (!MillCreekLine.IsFarFrom(p, 7.0f))
         {
             float creekDistance = MillCreekLine.Distance(p, out float creekAlong);
-            if (creekDistance < 14.0f)
+            if (creekDistance < 7.0f)
             {
-                return Mathf.Lerp(56.0f, -46.0f, Smooth(creekAlong));
+                return MillCreekSurfaceY(creekAlong);
             }
         }
 

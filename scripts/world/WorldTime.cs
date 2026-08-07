@@ -52,17 +52,34 @@ public partial class WorldTime : Node
 	public float WeatherDirectionalMultiplier { get; private set; } = 1.0f;
 	public Color WeatherDirectionalTint { get; private set; } = Colors.White;
 
-	private DirectionalLight3D _directionalLight = null!;
-	private Environment _environment = null!;
+	private DirectionalLight3D? _directionalLight;
+	private Environment? _environment;
 	private int _lastDisplayedMinute = -1;
 
 	public override void _Ready()
 	{
-		_directionalLight = GetNode<DirectionalLight3D>(DirectionalLightPath);
-		WorldEnvironment worldEnvironment = GetNode<WorldEnvironment>(WorldEnvironmentPath);
-		_environment = worldEnvironment.Environment
-			?? throw new System.InvalidOperationException("World time requires an Environment resource.");
 		SettingsManager.Instance?.ApplyGraphicsToScene(GetParent());
+
+		// The old scene kept its sun and sky as fixed siblings, resolvable at
+		// _Ready. The county world builds its own sun and sky at runtime, later
+		// than this node's _Ready fires, so when they exist a caller wires them
+		// in with AttachToAtmosphere instead of relying on the path lookup here.
+		var light = GetNodeOrNull<DirectionalLight3D>(DirectionalLightPath);
+		WorldEnvironment? worldEnvironment = GetNodeOrNull<WorldEnvironment>(WorldEnvironmentPath);
+		if (light != null && worldEnvironment?.Environment != null)
+		{
+			AttachToAtmosphere(light, worldEnvironment.Environment);
+		}
+	}
+
+	/// <summary>
+	/// Points the day/night cycle at a sun and sky built after this node's own
+	/// _Ready already ran. Safe to call once the caller knows both exist.
+	/// </summary>
+	public void AttachToAtmosphere(DirectionalLight3D sun, Environment environment)
+	{
+		_directionalLight = sun;
+		_environment = environment;
 		ApplyShadowRange();
 		SetTimeOfDay(StartingHour);
 	}
@@ -76,6 +93,11 @@ public partial class WorldTime : Node
 	/// </summary>
 	private void ApplyShadowRange()
 	{
+		if (_directionalLight == null)
+		{
+			return;
+		}
+
 		float scale = SettingsManager.Instance?.Current.GraphicsPreset switch
 		{
 			GraphicsPreset.Low => 0.45f,
@@ -88,6 +110,11 @@ public partial class WorldTime : Node
 
 	public override void _Process(double delta)
 	{
+		if (_directionalLight == null || _environment == null)
+		{
+			return;
+		}
+
 		float duration = Mathf.Max(FullDayDurationSeconds, 1.0f);
 		SetTimeOfDay(CurrentHour + ((float)delta * 24.0f / duration));
 	}
@@ -95,6 +122,11 @@ public partial class WorldTime : Node
 	public void SetTimeOfDay(float hour)
 	{
 		CurrentHour = Mathf.PosMod(hour, 24.0f);
+		if (_directionalLight == null || _environment == null)
+		{
+			return;
+		}
+
 		UpdateLighting();
 		EmitTimeWhenMinuteChanges();
 	}
@@ -114,11 +146,19 @@ public partial class WorldTime : Node
 		WeatherSkyMultiplier = Mathf.Max(skyMultiplier, 0.0f);
 		WeatherDirectionalMultiplier = Mathf.Max(directionalMultiplier, 0.0f);
 		WeatherDirectionalTint = directionalTint;
-		UpdateLighting();
+		if (_directionalLight != null && _environment != null)
+		{
+			UpdateLighting();
+		}
 	}
 
 	private void UpdateLighting()
 	{
+		if (_directionalLight == null || _environment == null)
+		{
+			return;
+		}
+
 		float sunHeight = Mathf.Sin(((CurrentHour - 6.0f) / 24.0f) * Mathf.Tau);
 		float daylight = Mathf.Clamp((sunHeight + 0.12f) / 0.55f, 0.0f, 1.0f);
 		daylight = daylight * daylight * (3.0f - (2.0f * daylight));

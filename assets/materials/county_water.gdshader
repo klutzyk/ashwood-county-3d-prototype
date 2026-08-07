@@ -36,11 +36,11 @@
 //
 // GEOMETRY CONTRACT (see CountyWater.cs):
 //   NORMAL  - must be correct; the ripple perturbs it rather than replacing it.
-//   COLOR.r - flow direction X, packed as dir * 0.5 + 0.5
-//   COLOR.g - flow direction Z, packed the same way
-//   COLOR.b - flow speed 0..1 (0 still water, 1 rapids). Drives advection
+//   flow_data.r - flow direction X, packed as dir * 0.5 + 0.5
+//   flow_data.g - flow direction Z, packed the same way
+//   flow_data.b - flow speed 0..1 (0 still water, 1 rapids). Drives advection
 //             rate and whitewater.
-//   COLOR.a - openness 0..1 (0 at the waterline, 1 in open water). Damps the
+//   flow_data.a - openness 0..1 (0 at the waterline, 1 in open water). Damps the
 //             vertex swell so the mesh edge never lifts out of its bed, and
 //             adds the standing wash along the bank.
 //   The mesh is authored in world space, so the node holding it must sit at
@@ -94,6 +94,12 @@ uniform float rapid_threshold : hint_range(0.0, 1.0) = 0.34;
 uniform float foam_scale = 0.30;
 uniform float shore_alpha_fade = 0.45;
 
+// NOTE: the vertex colour is forwarded through an explicit varying rather than
+// read as COLOR inside fragment(). In a Godot 4 custom spatial shader, COLOR is
+// only the mesh's vertex colour inside vertex(); in fragment() it reads as opaque
+// white unless the shader passes it along itself. Reading it directly made every
+// splat weight 1.0, which silently blended all layers at once.
+varying vec4 flow_data;
 varying vec3 world_pos;
 varying vec3 world_normal;
 
@@ -104,15 +110,16 @@ float linear_view_depth(float raw, vec2 uv, mat4 inv_proj) {
 }
 
 void vertex() {
+	flow_data = COLOR;
 	world_pos = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
 	world_normal = normalize((MODEL_MATRIX * vec4(NORMAL, 0.0)).xyz);
 
 	// Swell. Three non-harmonic sines rather than one, so the crest pattern has
-	// no visible period from the air. Amplitude is gated by COLOR.a, which the
+	// no visible period from the air. Amplitude is gated by flow_data.a, which the
 	// mesher drives to zero at the waterline: a shoreline vertex that bobs
 	// lifts out of its own bed and produces a flickering gap against the bank.
 	float k = 6.2831853 / max(wave_length, 0.5);
-	float amp = wave_height * COLOR.a;
+	float amp = wave_height * flow_data.a;
 	float h =
 		  0.55 * sin(world_pos.x * k * 0.83 + TIME * 0.61)
 		+ 0.45 * sin(world_pos.z * k + TIME * 0.47)
@@ -130,7 +137,7 @@ void fragment() {
 	// The flow vector is metres per flow cycle, not metres per second: the
 	// two-phase cross-fade below resets the advection every cycle, which is
 	// what stops a flow map from shearing itself into mush.
-	vec2 flow = (COLOR.rg * 2.0 - 1.0) * COLOR.b;
+	vec2 flow = (flow_data.rg * 2.0 - 1.0) * flow_data.b;
 	// A constant slow drift keeps still water alive; without it a lake surface
 	// with zero flow freezes into a static bump map the moment you stop moving.
 	vec2 advect = flow + vec2(0.62, 0.78) * drift_speed;
@@ -214,13 +221,13 @@ void fragment() {
 	// right at the waterline so the band has an edge instead of a gradient.
 	float shallow = 1.0 - smoothstep(0.0, shore_foam_depth, path);
 	float lip = 1.0 - smoothstep(0.0, shore_foam_depth * 0.24, path);
-	float bank = 1.0 - COLOR.a;
+	float bank = 1.0 - flow_data.a;
 	float shore_foam = smoothstep(0.30, 0.80, max(shallow, bank * 0.85) * (0.42 + grain * 1.05));
 	shore_foam = clamp(shore_foam + lip * 0.5, 0.0, 1.0) * shore_foam_amount;
 
 	// Whitewater on gradient. Broken by two noise scales so rapids read as
 	// tumbling rather than as a painted stripe.
-	float speed = smoothstep(rapid_threshold, 1.0, COLOR.b);
+	float speed = smoothstep(rapid_threshold, 1.0, flow_data.b);
 	float rapids = smoothstep(0.26, 0.86, speed * (0.30 + grain_fine * 0.85 + grain * 0.45)) * rapid_foam;
 
 	float foam = clamp(shore_foam + rapids, 0.0, 1.0);

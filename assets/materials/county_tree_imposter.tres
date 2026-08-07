@@ -1,0 +1,13 @@
+[gd_resource type="ShaderMaterial" load_steps=3 format=3]
+
+[ext_resource type="Shader" path="res://assets/materials/county_tree_imposter.gdshader" id="1_shader"]
+[ext_resource type="Texture2D" path="res://assets/environment/nature/imposters/jacaranda_imposter.png" id="2_atlas"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_shader")
+shader_parameter/imposter_atlas = ExtResource("2_atlas")
+shader_parameter/atlas_cells = 8
+shader_parameter/alpha_threshold = 0.34
+shader_parameter/canopy_tint = Color(0.62, 0.68, 0.55, 1)
+shader_parameter/roundness = 0.5

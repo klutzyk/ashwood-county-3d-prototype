@@ -8,12 +8,12 @@
 [ext_resource type="PackedScene" path="res://assets/environment/nature/common_tree_1.tscn" id="6_tree_1"]
 [ext_resource type="PackedScene" path="res://assets/environment/nature/common_tree_2.tscn" id="7_tree_2"]
 [ext_resource type="Material" path="res://assets/materials/grass_ground.tres" id="8_grass"]
-[ext_resource type="Texture2D" uid="uid://di485lm54u55n" path="res://assets/third_party/materials/asphalt/asphalt_02_1k.gltf/textures/asphalt_02_diff_1k.jpg" id="9_craje"]
+[ext_resource type="Texture2D" uid="uid://di485lm54u55n" path="res://assets/third_party/materials/asphalt/broken_grayasphalt_02_1k.gltf/textures/asphalt_02_diff_1k.jpg" id="9_craje"]
 [ext_resource type="PackedScene" path="res://assets/environment/buildings/House/house.tscn" id="9_house"]
 [ext_resource type="PackedScene" path="res://assets/environment/vehicles/rusted_alfa_romeo.tscn" id="10_car"]
-[ext_resource type="Texture2D" uid="uid://brdyl6xp75sm" path="res://assets/third_party/materials/asphalt/asphalt_02_1k.gltf/textures/asphalt_02_nor_gl_1k.jpg" id="10_rl0qt"]
+[ext_resource type="Texture2D" uid="uid://brdyl6xp75sm" path="res://assets/third_party/materials/asphalt/broken_grayasphalt_02_1k.gltf/textures/asphalt_02_nor_gl_1k.jpg" id="10_rl0qt"]
 [ext_resource type="Material" path="res://assets/materials/dirt_shoulder.tres" id="11_dirt"]
-[ext_resource type="Texture2D" uid="uid://bmgs83acdqydv" path="res://assets/third_party/materials/asphalt/asphalt_02_1k.gltf/textures/asphalt_02_rough_1k.jpg" id="11_qdgl8"]
+[ext_resource type="Texture2D" uid="uid://bmgs83acdqydv" path="res://assets/third_party/materials/asphalt/broken_grayasphalt_02_1k.gltf/textures/asphalt_02_rough_1k.jpg" id="11_qdgl8"]
 [ext_resource type="PackedScene" path="res://assets/environment/vehicles/old_tyre.tscn" id="12_tyre"]
 [ext_resource type="PackedScene" path="res://assets/environment/roads/utility_pole.tscn" id="13_pole"]
 [ext_resource type="PackedScene" path="res://assets/environment/roads/weathered_roadsign.tscn" id="14_sign"]
@@ -60,6 +60,7 @@
 [ext_resource type="Resource" path="res://assets/weapons/wooden_hammer.tres" id="56_wooden_hammer"]
 [ext_resource type="Script" uid="uid://dbncjdqr4dl6c" path="res://scripts/items/MeleeWeaponDefinition.cs" id="57_melee_weapon"]
 [ext_resource type="PackedScene" uid="uid://psxne6hrxooh" path="res://assets/environment/buildings/ashwood/bakery_open.glb" id="60_klgig"]
+[ext_resource type="Script" uid="uid://3yxnpuibl6lm" path="res://scripts/world/CountyWorldIntegration.cs" id="61_county"]
 
 [sub_resource type="BoxMesh" id="GrassMesh"]
 material = ExtResource("8_grass")
@@ -93,29 +94,6 @@ roughness = 0.9
 [sub_resource type="BoxMesh" id="RoadLineMesh"]
 material = SubResource("RoadLineMaterial")
 size = Vector3(0.12, 0.015, 3.1)
-
-[sub_resource type="ProceduralSkyMaterial" id="AfternoonSkyMaterial"]
-sky_top_color = Color(0.19, 0.23, 0.29, 1)
-sky_horizon_color = Color(0.48, 0.44, 0.41, 1)
-sky_curve = 0.12
-ground_bottom_color = Color(0.1, 0.09, 0.085, 1)
-ground_horizon_color = Color(0.48, 0.44, 0.41, 1)
-ground_curve = 0.1
-sun_angle_max = 7.0
-sun_curve = 0.12
-
-[sub_resource type="Sky" id="AfternoonSky"]
-sky_material = SubResource("AfternoonSkyMaterial")
-process_mode = 1
-
-[sub_resource type="Environment" id="WorldEnvironment"]
-background_mode = 2
-background_energy_multiplier = 0.7
-sky = SubResource("AfternoonSky")
-ambient_light_source = 3
-ambient_light_energy = 0.8
-tonemap_mode = 2
-tonemap_exposure = 0.5
 
 [sub_resource type="CapsuleShape3D" id="PlayerShape"]
 radius = 0.45
@@ -377,19 +355,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, -8)
 [node name="PrototypeSafePoint" parent="." unique_id=838078603 instance=ExtResource("31_safe_point")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.1, 0.1, -8.7)
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1750895960]
-transform = Transform3D(0.88294756, 0.36994863, -0.2890356, 0, 0.6156615, 0.7880107, 0.46947157, -0.6957722, 0.5435968, 0, 0, 0)
-light_color = Color(0.83, 0.85, 0.88, 1)
-light_energy = 0.65
-shadow_enabled = true
-shadow_opacity = 0.6
-shadow_blur = 2.0
-directional_shadow_mode = 1
-directional_shadow_max_distance = 42.0
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=877615492]
-environment = SubResource("WorldEnvironment")
-
 [node name="Player" type="CharacterBody3D" parent="." unique_id=288953732]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 6)
 script = ExtResource("1_player")
@@ -445,6 +410,8 @@ margin = 0.1
 [node name="Camera3D" type="Camera3D" parent="Player/CameraRig/SpringArm3D" unique_id=1834467021]
 current = true
 fov = 70.0
+near = 0.25
+far = 9000.0
 
 [node name="Flashlight" type="SpotLight3D" parent="Player/CameraRig/SpringArm3D/Camera3D" unique_id=244755447]
 light_color = Color(1, 0.94, 0.82, 1)
@@ -1024,5 +991,9 @@ transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, -10.707914, 3.5184705, 19.425
 [node name="CollisionShape3D" type="CollisionShape3D" parent="bakery" unique_id=1692330301]
 transform = Transform3D(1.5111799, 0, 0, 0, 0.6838229, 0, 0, 0, 1.6816206, 0, -0.24745235, 0.10582805)
 shape = SubResource("BoxShape3D_kgutl")
+
+[node name="CountyWorld" type="Node3D" parent="." unique_id=190647955]
+script = ExtResource("61_county")
+PreviewInEditor = true
 
 [editable path="Player/Visual/Warrior"]

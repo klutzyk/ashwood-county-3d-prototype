@@ -47,6 +47,33 @@ Two facts about the source data drive the whole design.
 
 Woody geometry, ferns and rocks are solid or near-solid and are decimated
 conventionally with COLLAPSE, which is what quadric error metrics are good at.
+
+
+WHY THE CONIFERS NEEDED A THIRD METHOD
+--------------------------------------
+The fir and pine scans are built the same way as the jacaranda but three orders
+of magnitude finer. fir_tree_01_a's canopy is 812,468 islands and pine_tree_01_a's
+is 409,530, and a measured island is a 6mm x 72mm sliver sampling a 23 x 331 texel
+strip - a few needles, not a leaf spray. One quad per island is 1.6M triangles,
+and thinning that to a 12,000-triangle budget keeps 0.7% of the cards, so holding
+canopy coverage would need each survivor inflated about 11x. An 80cm needle
+sliver reads as pampas grass, not as a fir.
+
+So conifer foliage uses the CARDS method's successor, SPRAY. The atlas already
+contains complete branch-tip sprays - four large ones on fir, two on pine, sitting
+unused because the scan samples only the sliver strips. SPRAY voxelises the
+canopy, and emits one quad per occupied cell carrying a whole spray from the
+atlas, sized from the foliage actually in that cell. A 40cm quad showing a 40cm
+fir spray is both in budget and true to scale, which per-island quads cannot be
+at the same time.
+
+SPRAY also never labels islands, so it reads only triangle centroids and areas -
+which is what makes reading the source straight out of the glTF buffer viable.
+pine_tree_01 is a 948MB buffer holding 17M triangles across three whole trees;
+importing that into Blender to then throw away everything but one tree's canopy
+does not fit in memory beside the working copies. A glTF primitive is a
+contiguous slice of that buffer, so each part is read directly and only the
+wanted slice is ever resident. See gltf_primitive().
 """
 
 from __future__ import annotations
@@ -105,6 +132,49 @@ ALBEDO_SETS = {
     "grass_bermuda_01": (
         "grass_bermuda_01/textures/grass_bermuda_01_diff_2k.jpg",
         "grass_bermuda_01/textures/grass_bermuda_01_alpha_2k.png",
+    ),
+
+    # Conifer needles. These matter more than any other entry here: the pine twig
+    # diffuse is needles on pure black and the fir twig diffuse is needles on a
+    # dilated green bleed, so without the separate alpha map pine renders as black
+    # rectangles and fir as green ones. Nothing about the glTF hints that the map
+    # exists.
+    "fir_tree_01_twig": (
+        "fir_tree_01/textures/fir_tree_01_twig_diff_2k.jpg",
+        "fir_tree_01/textures/fir_tree_01_twig_alpha_2k.png",
+    ),
+    "pine_tree_01_twig": (
+        "pine_tree_01/textures/pine_tree_01_twig_diff_2k.jpg",
+        "pine_tree_01/textures/pine_tree_01_twig_alpha_2k.png",
+    ),
+    "fir_sapling_medium_twigs": (
+        "fir_sapling_medium/textures/fir_sapling_medium_twigs_diff_2k.jpg",
+        "fir_sapling_medium/textures/fir_sapling_medium_twigs_alpha_2k.png",
+    ),
+    "pine_sapling_medium_twig": (
+        "pine_sapling_medium/textures/pine_sapling_medium_twig_diff_2k.jpg",
+        "pine_sapling_medium/textures/pine_sapling_medium_twig_alpha_2k.png",
+    ),
+    "fir_sapling_twigs": (
+        "fir_sapling/textures/fir_sapling_twigs_diff_2k.jpg",
+        "fir_sapling/textures/fir_sapling_twigs_alpha_2k.png",
+    ),
+    "pine_sapling_small_twig": (
+        "pine_sapling_small/textures/pine_sapling_small_twig_diff_2k.jpg",
+        "pine_sapling_small/textures/pine_sapling_small_twig_alpha_2k.png",
+    ),
+
+    "moss_01": (
+        "moss_01/textures/moss_01_diff_2k.jpg",
+        "moss_01/textures/moss_01_alpha_2k.png",
+    ),
+    "grass_medium_01": (
+        "grass_medium_01/textures/grass_medium_01_diff_2k.jpg",
+        "grass_medium_01/textures/grass_medium_01_alpha_2k.png",
+    ),
+    "grass_medium_02": (
+        "grass_medium_02/textures/grass_medium_02_diff_2k.jpg",
+        "grass_medium_02/textures/grass_medium_02_alpha_2k.png",
     ),
 }
 
@@ -190,17 +260,142 @@ def ensure_textures() -> None:
 
 
 # ===========================================================================
+# Direct glTF primitive reader
+# ===========================================================================
+#
+# Only the conifers use this. Their buffers are 478MB (fir) and 948MB (pine) and
+# each holds three complete trees, so importing one to build one part of one
+# tree costs about 15x what the part is worth and does not fit in memory beside
+# the working copies. A glTF primitive is a contiguous, already material-split
+# slice of that buffer, which is exactly the granularity the asset table asks
+# for, so it is read straight out.
+
+GLTF_DTYPE = {5120: "i1", 5121: "u1", 5122: "i2", 5123: "u2", 5125: "u4",
+              5126: "f4"}
+GLTF_COMPONENTS = {"SCALAR": 1, "VEC2": 2, "VEC3": 3, "VEC4": 4}
+
+# slug -> (document, [memoryview per buffer]). Kept open for the whole run: the
+# same file is read up to eighteen times (three variants x two LODs x three
+# parts) and mapping it once lets the OS page cache do the sharing.
+_GLTF_OPEN = {}
+
+
+def gltf_document(slug: str):
+    import mmap
+
+    if slug in _GLTF_OPEN:
+        return _GLTF_OPEN[slug]
+    base = SOURCE_ROOT / slug
+    path = base / f"{slug}_2k.gltf"
+    if not path.is_file():
+        raise FileNotFoundError(
+            f"Missing source {path}. Run 'python tools/download_polyhaven.py'.")
+    doc = json.loads(path.read_text(encoding="utf-8"))
+    buffers = []
+    for buf in doc["buffers"]:
+        handle = open(base / buf["uri"], "rb")
+        # The handle is deliberately kept alive alongside the map: closing it
+        # invalidates the mapping on Windows and every later read fails with a
+        # bad file descriptor.
+        buffers.append((handle, mmap.mmap(handle.fileno(), 0,
+                                          access=mmap.ACCESS_READ)))
+    _GLTF_OPEN[slug] = (doc, buffers)
+    return _GLTF_OPEN[slug]
+
+
+def gltf_accessor(doc, buffers, index):
+    """One accessor as a numpy array, honouring interleaved byte strides."""
+    import numpy as np
+
+    spec = doc["accessors"][index]
+    view = doc["bufferViews"][spec["bufferView"]]
+    dtype = np.dtype(GLTF_DTYPE[spec["componentType"]])
+    ncomp = GLTF_COMPONENTS[spec["type"]]
+    count = spec["count"]
+    offset = view.get("byteOffset", 0) + spec.get("byteOffset", 0)
+    data = buffers[view.get("buffer", 0)][1]
+    stride = view.get("byteStride") or dtype.itemsize * ncomp
+    if stride == dtype.itemsize * ncomp:
+        return np.frombuffer(data, dtype=dtype, count=count * ncomp,
+                             offset=offset).reshape(count, ncomp)
+    raw = np.frombuffer(data, dtype=np.uint8, count=count * stride,
+                        offset=offset).reshape(count, stride)
+    return raw[:, :dtype.itemsize * ncomp].copy().view(dtype).reshape(count, ncomp)
+
+
+def gltf_primitive(slug: str, node_name: str, material_names):
+    """Positions, triangles and UVs for one node's primitives, in Blender space.
+
+    Returns float32 positions because a conifer canopy is up to 6.8M triangles
+    and float64 would double the peak for precision nothing here needs - the
+    scans are metres-scale and the cards built from them are centimetres.
+    """
+    import numpy as np
+
+    doc, buffers = gltf_document(slug)
+    names = [m.get("name") for m in doc.get("materials", [])]
+    node = next((n for n in doc["nodes"] if n.get("name") == node_name), None)
+    if node is None or node.get("mesh") is None:
+        have = [n.get("name") for n in doc["nodes"] if n.get("mesh") is not None]
+        raise RuntimeError(f"{slug}: no mesh node named {node_name!r}; have {have}")
+
+    wanted = set(material_names)
+    positions, uvs, triangles, base = [], [], [], 0
+    for prim in doc["meshes"][node["mesh"]]["primitives"]:
+        if names[prim.get("material", -1)] not in wanted:
+            continue
+        pos = gltf_accessor(doc, buffers, prim["attributes"]["POSITION"])
+        uv = gltf_accessor(doc, buffers, prim["attributes"]["TEXCOORD_0"])
+        idx = gltf_accessor(doc, buffers, prim["indices"]).reshape(-1)
+        positions.append(np.asarray(pos, np.float32))
+        uvs.append(np.asarray(uv, np.float32))
+        triangles.append(idx.reshape(-1, 3).astype(np.int32) + base)
+        base += len(pos)
+    if not positions:
+        raise RuntimeError(
+            f"{slug}/{node_name}: no primitive using {sorted(wanted)}; have "
+            f"{[names[p.get('material', -1)] for p in doc['meshes'][node['mesh']]['primitives']]}")
+
+    pos = np.concatenate(positions)
+    uv = np.concatenate(uvs)
+    tris = np.concatenate(triangles)
+
+    scale = np.asarray(node.get("scale", (1.0, 1.0, 1.0)), np.float32)
+    translation = np.asarray(node.get("translation", (0.0, 0.0, 0.0)), np.float32)
+    if node.get("rotation") or node.get("matrix"):
+        raise RuntimeError(
+            f"{slug}/{node_name}: node carries a rotation or matrix this reader "
+            "does not apply. Poly Haven's tree files use translation only.")
+    pos = pos * scale + translation
+
+    # glTF is Y-up; Blender is Z-up, and export_scene.gltf(export_yup=True)
+    # converts back on the way out, so skipping this would ship trees on their
+    # side. glTF UVs also start at the top left where Blender's start at the
+    # bottom left.
+    pos = np.column_stack([pos[:, 0], -pos[:, 2], pos[:, 1]])
+    uv = np.column_stack([uv[:, 0], 1.0 - uv[:, 1]])
+    return pos, tris, uv
+
+
+# ===========================================================================
 # Asset recipes
 # ===========================================================================
 #
 # method:
 #   "cards"    - rebuild each UV island as a single quad (scanned leaf cards)
+#   "spray"    - voxelise the canopy and emit one atlas branch-spray quad per
+#                occupied cell (conifer needles - see the module docstring)
 #   "decimate" - COLLAPSE decimate to the triangle budget (solid geometry)
 #   "keep"     - already inside budget, pass through untouched
 #
+# source: BLENDER (import the whole glTF) | GLTF (read one primitive from the
+#   .bin directly). GLTF exists for the conifers, whose buffers are 478MB and
+#   948MB and hold three complete trees each.
+#
 # collision: None | "cylinder" | "convex"
 
-CARD, DECIMATE, KEEP = "cards", "decimate", "keep"
+CARD, SPRAY, DECIMATE, KEEP = "cards", "spray", "decimate", "keep"
+BLENDER, GLTF = "blender", "gltf"
 
 
 def part(name, method, budget=0, nodes=(), material=None, **kw):
@@ -208,7 +403,129 @@ def part(name, method, budget=0, nodes=(), material=None, **kw):
                 material=material, **kw)
 
 
-ASSETS = [
+# ---------------------------------------------------------------------------
+# Branch-spray rectangles inside each conifer twig atlas.
+#
+# (x0, y0, x1, y1, stem) in texels of the 2k atlas with the image origin at the
+# top left, which is how the atlas was measured - converting to UV here rather
+# than in the table keeps the numbers checkable against the PNG in any viewer.
+# "stem" is the edge of the rectangle the spray grows out of, so a card can be
+# oriented with its cut end toward the branch instead of floating tip-first.
+#
+# These were read off the alpha map: threshold it, drop anything that is not
+# green (bark, cones, dead branch), and take the bounding box of each remaining
+# blob. build_sprays re-measures the alpha coverage of every rectangle at build
+# time and fails if one has drifted, because a rectangle that has slipped onto
+# background is invisible in the triangle count and obvious only in the render.
+SPRAY_ATLAS = {
+    "fir_tree_01_twig": (
+        (624, 816, 1312, 1584, "bottom"),
+        (1296, 928, 1952, 1696, "bottom"),
+        (1328, 80, 1920, 752, "bottom"),
+        (384, 96, 864, 640, "bottom"),
+        (1008, 528, 1296, 816, "bottom"),
+    ),
+    # Same atlas layout as the mature fir, different scan.
+    "fir_sapling_medium_twigs": (
+        (624, 816, 1312, 1584, "bottom"),
+        (1296, 928, 1952, 1696, "bottom"),
+        (1328, 80, 1920, 768, "bottom"),
+        (384, 96, 864, 640, "bottom"),
+        (1008, 528, 1296, 816, "bottom"),
+    ),
+    # Pine has only two usable sprays - an upright shoot and a horizontal branch
+    # tip. The rest of its atlas is cones, bark and loose needle litter, none of
+    # which reads as canopy. Two is thin, so build_sprays leans on per-card roll
+    # and mirroring for variety instead.
+    "pine_tree_01_twig": (
+        (64, 80, 384, 608, "bottom"),
+        (1520, 688, 1904, 960, "left"),
+    ),
+    "pine_sapling_medium_twig": (
+        (64, 80, 384, 608, "bottom"),
+        (1520, 688, 1904, 960, "left"),
+    ),
+}
+
+ATLAS_SIZE = 2048
+
+
+# ---------------------------------------------------------------------------
+# Conifers.
+#
+# slug, species key, variant letter, trunk material suffix, LOD0 needle budget.
+# The needle budget tracks how much canopy each variant actually has rather than
+# being uniform: fir_tree_01_c carries 446k source twig triangles against
+# variant a's 4.07M, and spending the same budget on both would hand the sparse
+# tree the dense tree's crown and throw away the variety that made three
+# variants worth shipping.
+#
+# A trunk suffix of None means the variant's trunk material points at the shared
+# bark maps (Poly Haven authored trunk_c that way), so its woody geometry ships
+# as one part and one material instead of two.
+CONIFERS = (
+    ("fir_tree_01", "fir", "a", "trunk_a", 12000, "tallest, 17.6 m"),
+    ("fir_tree_01", "fir", "b", "trunk_b", 9000, "broad, 12.5 m"),
+    ("fir_tree_01", "fir", "c", None, 5000, "sparse, 13.3 m"),
+    ("pine_tree_01", "pine", "a", "trunk_a", 13000, "tallest, 17.6 m"),
+    ("pine_tree_01", "pine", "b", "trunk_b", 10000, "broad, 12.5 m"),
+    ("pine_tree_01", "pine", "c", None, 12000, "columnar, 15.2 m"),
+)
+
+# LOD1 is what every tree past the first stand uses, so it is the count that
+# actually multiplies. A third of LOD0 is roughly where the spire stops thinning
+# out - measured, not guessed: below about 1,500 cards the crown starts showing
+# sky through it at silhouette range.
+LOD1_NEEDLE_FRACTION = 0.34
+
+
+def conifer_assets():
+    """Two LODs for each of the six mature conifer variants."""
+    out = []
+    for slug, species, letter, trunk_suffix, needles, note in CONIFERS:
+        node = f"{slug}_{letter}_LOD0"
+        twig_mat = f"{slug}_twig"
+        for lod, needle_budget, wood in (
+            (0, needles, 1.0),
+            (1, int(needles * LOD1_NEEDLE_FRACTION), 0.33),
+        ):
+            parts = []
+            if trunk_suffix:
+                parts.append(part(
+                    "Trunk", DECIMATE, max(120, int(480 * wood)), nodes=(node,),
+                    material=(f"{slug}_{trunk_suffix}",),
+                    mat_res=f"vegetation_{species}_{trunk_suffix}"))
+                parts.append(part(
+                    "Bark", DECIMATE, max(200, int(800 * wood)), nodes=(node,),
+                    material=(f"{slug}_bark", f"{slug}_dead_branches"),
+                    mat_res=f"vegetation_{species}_bark"))
+            else:
+                parts.append(part(
+                    "Wood", DECIMATE, max(280, int(1100 * wood)), nodes=(node,),
+                    material=(f"{slug}_bark", f"{slug}_trunk_c",
+                              f"{slug}_dead_branches"),
+                    mat_res=f"vegetation_{species}_bark"))
+            parts.append(part(
+                "Needles", SPRAY, needle_budget, nodes=(node,),
+                material=(twig_mat,), mat_res=f"vegetation_{species}_needles",
+                atlas=twig_mat,
+                # 1.35 rather than 1.0 so neighbouring cards overlap. A cell's
+                # diagonal is 1.73 times its side, so cards cut exactly to the
+                # cell size leave a diagonal gap in every direction and the
+                # canopy reads as a grid of floating leaves.
+                spray_scale=1.35))
+            # Both LODs get a trunk collider: the county scatters LOD0 and LOD1
+            # as two separate layers of real trees, so a player can walk into
+            # either one.
+            out.append(dict(
+                key=f"ashwood_{species}_{letter}_lod{lod}", slug=slug,
+                source=GLTF, collision="cylinder",
+                label=f"{species.capitalize()} {letter.upper()} ({note}, LOD{lod})",
+                root_type="StaticBody3D", parts=parts))
+    return out
+
+
+ASSETS = conifer_assets() + [
     # ---- hero tree -------------------------------------------------------
     dict(
         key="ashwood_jacaranda_lod0", slug="jacaranda_tree", collision="cylinder",
@@ -330,6 +647,105 @@ ASSETS = [
     )
     for v in ("a", "b", "c", "d")
 ] + [
+    # ---- young conifers --------------------------------------------------
+    # Same construction as the mature trees, and they share the mature trees'
+    # atlas layout, so they share the spray table too. One LOD each: at 5-11 m
+    # these are understorey, and the county fades them out well before the
+    # distance a second LOD would start paying for itself.
+    dict(
+        key=f"ashwood_{species}_sapling_{letter}", slug=slug, source=GLTF,
+        collision="cylinder", label=f"{species.capitalize()} sapling {letter.upper()}",
+        root_type="StaticBody3D",
+        parts=[
+            part("Wood", DECIMATE, 320, nodes=(f"{slug}_{letter}_LOD0",),
+                 material=(f"{slug}_{wood_mat}", f"{slug}_{dead_mat}"),
+                 mat_res=f"vegetation_{species}_sapling_wood"),
+            part("Needles", SPRAY, needles, nodes=(f"{slug}_{letter}_LOD0",),
+                 material=(f"{slug}_{twig_mat}",),
+                 mat_res=f"vegetation_{species}_sapling_needles",
+                 atlas=f"{slug}_{twig_mat}", spray_scale=1.35),
+        ],
+    )
+    for slug, species, wood_mat, dead_mat, twig_mat, variants in (
+        ("fir_sapling_medium", "fir", "branches", "branches_dead", "twigs",
+         (("a", 4000), ("b", 3000), ("c", 3000))),
+        ("pine_sapling_medium", "pine", "bark", "dead_branches", "twig",
+         (("a", 5000), ("b", 4000), ("c", 3500))),
+    )
+    for letter, needles in variants
+] + [
+    # ---- conifer forest floor -------------------------------------------
+    # Solid scans with no cut-out at all, so plain quadric collapse is exactly
+    # the right tool. Read through the glTF path only because it is cheaper than
+    # spinning up an import for a 40k-triangle stump.
+    dict(
+        key=f"ashwood_tree_stump_{i:02d}", slug=f"tree_stump_{i:02d}",
+        source=GLTF, collision="convex", label=f"Cut stump {i:02d}",
+        root_type="StaticBody3D",
+        parts=[part("Body", DECIMATE, 600, nodes=(f"tree_stump_{i:02d}",),
+                    material=(f"tree_stump_{i:02d}",),
+                    mat_res=f"vegetation_tree_stump_{i:02d}")],
+    )
+    for i in (1, 2)
+] + [
+    dict(
+        key=f"ashwood_pine_roots_{v}", slug="pine_roots", source=GLTF,
+        collision="convex", label=f"Upturned pine roots {v.upper()}",
+        root_type="StaticBody3D",
+        parts=[part("Body", DECIMATE, 700, nodes=(f"pine_roots_{v}",),
+                    material=(f"pine_roots_{v}",),
+                    mat_res=f"vegetation_pine_roots_{v}")],
+    )
+    for v in ("a", "b")
+] + [
+    dict(
+        key=f"ashwood_dry_branches_{v}", slug="dry_branches_medium_01",
+        source=GLTF, collision=None, label=f"Dry branch pile {v.upper()}",
+        root_type="Node3D",
+        parts=[part("Body", KEEP, 0, nodes=(f"dry_branches_medium_01_{v}",),
+                    material=("dry_branches_medium_01",),
+                    mat_res="vegetation_dry_branches_medium_01")],
+    )
+    for v in ("a", "b", "c")
+] + [
+    # Moss and the taller meadow grasses are already a few dozen triangles each
+    # and only need gathering into a plantable clump.
+    dict(
+        key=f"ashwood_moss_{label}", slug="moss_01", collision=None,
+        label=f"Moss patch ({label})", root_type="Node3D",
+        parts=[part("Plant", KEEP, 0, nodes=nodes,
+                    mat_res="vegetation_moss_01", cluster=0.14)],
+    )
+    for label, nodes in (
+        ("flat", tuple(f"moss_01_{v}_LOD0" for v in "abcde")),
+        ("clumped", tuple(f"moss_01_{v}_LOD0" for v in "fghij")),
+        ("tall", ("moss_01_tall_a_LOD0", "moss_01_tall_b_LOD0")),
+    )
+] + [
+    dict(
+        key=f"ashwood_grass_medium_01_{label}", slug="grass_medium_01",
+        collision=None, label=f"Meadow grass 01 ({label})", root_type="Node3D",
+        parts=[part("Plant", KEEP, 0, nodes=nodes,
+                    mat_res="vegetation_grass_medium_01", cluster=0.13)],
+    )
+    for label, nodes in (
+        ("tall", tuple(f"grass_medium_01_tall_{v}_LOD0" for v in "abc")),
+        ("mid", tuple(f"grass_medium_01_mid_{v}_LOD0" for v in "abc")),
+        ("small", ("grass_medium_01_small_a_LOD0", "grass_medium_01_small_b_LOD0",
+                   "grass_medium_01_tiny_a_LOD0", "grass_medium_01_tiny_c_LOD0")),
+    )
+] + [
+    dict(
+        key=f"ashwood_grass_medium_02_{label}", slug="grass_medium_02",
+        collision=None, label=f"Meadow grass 02 ({label})", root_type="Node3D",
+        parts=[part("Plant", KEEP, 0, nodes=nodes,
+                    mat_res="vegetation_grass_medium_02", cluster=0.13)],
+    )
+    for label, nodes in (
+        ("tuft", ("grass_medium_02_a", "grass_medium_02_c")),
+        ("clump", ("grass_medium_02_b", "grass_medium_02_d", "grass_medium_02_e")),
+    )
+] + [
     # ---- rock ------------------------------------------------------------
     dict(
         key="ashwood_boulder_01", slug="boulder_01", collision="convex",
@@ -375,7 +791,83 @@ def out_tex(stem):
 # translucent; without it a backlit canopy goes flat black and reads as plastic.
 LEAF_BACKLIGHT = (0.11, 0.15, 0.07)
 
-MATERIALS = [
+# Needles are far thicker and waxier than a broadleaf, and a conifer canopy is
+# self-shadowing enough that the light which does get through has already been
+# filtered by several layers. Reusing LEAF_BACKLIGHT here lit the crowns from
+# inside and undid the dark mass that is the whole point of the species.
+NEEDLE_BACKLIGHT = (0.05, 0.075, 0.04)
+
+
+def conifer_materials():
+    """Bark, trunk and needle materials for both mature species."""
+    out = []
+    for slug, species in (("fir_tree_01", "fir"), ("pine_tree_01", "pine")):
+        out.append(mat(f"vegetation_{species}_bark",
+                       f"{species.capitalize()} Bark", slug,
+                       src_tex(slug, f"{slug}_bark_diff_2k.jpg"),
+                       arm=src_tex(slug, f"{slug}_bark_arm_2k.jpg"),
+                       normal=src_tex(slug, f"{slug}_bark_nor_gl_2k.jpg")))
+        for suffix in ("trunk_a", "trunk_b"):
+            out.append(mat(f"vegetation_{species}_{suffix}",
+                           f"{species.capitalize()} {suffix.replace('_', ' ').title()}",
+                           slug, src_tex(slug, f"{slug}_{suffix}_diff_2k.jpg"),
+                           arm=src_tex(slug, f"{slug}_{suffix}_arm_2k.jpg"),
+                           normal=src_tex(slug, f"{slug}_{suffix}_nor_gl_2k.jpg")))
+        out.append(mat(f"vegetation_{species}_needles",
+                       f"{species.capitalize()} Needles", slug,
+                       out_tex(f"{slug}_twig"),
+                       arm=src_tex(slug, f"{slug}_twig_arm_2k.jpg"),
+                       normal=src_tex(slug, f"{slug}_twig_nor_gl_2k.jpg"),
+                       cutout=True, backlight=NEEDLE_BACKLIGHT))
+    for slug, species, wood, twig in (
+        ("fir_sapling_medium", "fir", "branches", "twigs"),
+        ("pine_sapling_medium", "pine", "bark", "twig"),
+    ):
+        out.append(mat(f"vegetation_{species}_sapling_wood",
+                       f"{species.capitalize()} Sapling Wood", slug,
+                       src_tex(slug, f"{slug}_{wood}_diff_2k.jpg"),
+                       arm=src_tex(slug, f"{slug}_{wood}_arm_2k.jpg"),
+                       normal=src_tex(slug, f"{slug}_{wood}_nor_gl_2k.jpg")))
+        out.append(mat(f"vegetation_{species}_sapling_needles",
+                       f"{species.capitalize()} Sapling Needles", slug,
+                       out_tex(f"{slug}_{twig}"),
+                       arm=src_tex(slug, f"{slug}_{twig}_arm_2k.jpg"),
+                       normal=src_tex(slug, f"{slug}_{twig}_nor_gl_2k.jpg"),
+                       cutout=True, backlight=NEEDLE_BACKLIGHT))
+    return out
+
+
+def simple_materials():
+    """One-map-set props: stumps, roots, deadfall, moss and meadow grass."""
+    out = []
+    for slug, res_name, label, cutout in (
+        ("tree_stump_01", "vegetation_tree_stump_01", "Cut Stump 01", False),
+        ("tree_stump_02", "vegetation_tree_stump_02", "Cut Stump 02", False),
+        ("dry_branches_medium_01", "vegetation_dry_branches_medium_01",
+         "Dry Branches", False),
+        ("moss_01", "vegetation_moss_01", "Moss", True),
+        ("grass_medium_01", "vegetation_grass_medium_01", "Meadow Grass 01", True),
+        ("grass_medium_02", "vegetation_grass_medium_02", "Meadow Grass 02", True),
+    ):
+        out.append(mat(res_name, label, slug,
+                       out_tex(slug) if cutout
+                       else src_tex(slug, f"{slug}_diff_2k.jpg"),
+                       arm=src_tex(slug, f"{slug}_arm_2k.jpg"),
+                       normal=src_tex(slug, f"{slug}_nor_gl_2k.jpg"),
+                       cutout=cutout,
+                       backlight=LEAF_BACKLIGHT if cutout else None))
+    # pine_roots ships one map set per variant rather than one for the pair.
+    for v in ("a", "b"):
+        out.append(mat(f"vegetation_pine_roots_{v}", f"Pine Roots {v.upper()}",
+                       "pine_roots",
+                       src_tex("pine_roots", f"pine_roots_{v}_diff_2k.jpg"),
+                       arm=src_tex("pine_roots", f"pine_roots_{v}_arm_2k.jpg"),
+                       normal=src_tex("pine_roots",
+                                      f"pine_roots_{v}_nor_gl_2k.jpg")))
+    return out
+
+
+MATERIALS = conifer_materials() + simple_materials() + [
     mat("vegetation_jacaranda_trunk", "Jacaranda Trunk", "jacaranda_tree",
         src_tex("jacaranda_tree", "jacaranda_tree_trunk_diff_2k.jpg"),
         arm=src_tex("jacaranda_tree", "jacaranda_tree_trunk_arm_2k.jpg"),
@@ -711,6 +1203,200 @@ def blender_main(preview_dir: Path | None) -> None:
         if best is None:
             best = np.argsort(-np.linalg.norm(centroids - centroids.mean(0), axis=1))[:target]
         return np.sort(best)[:target]
+
+    def build_sprays(obj, budget, spray_scale, name, atlas_key):
+        """Voxelise a needle canopy and emit one atlas branch-spray per cell.
+
+        The CARD method fits one quad per UV island, which works when an island
+        is a leaf. A conifer island is a few needles: fir_tree_01_a's canopy is
+        812k islands, so one quad each is 1.6M triangles before any thinning,
+        and thinning that far destroys the crown. The needles are also far below
+        the size a single texel can describe.
+
+        So the source geometry is used only as a density field. Triangle
+        centroids are voxelised, and each occupied cell emits one quad carrying a
+        photographed branch spray from the atlas - many needles per quad instead
+        of many quads per needle. Cell size is solved for the triangle budget, so
+        a sparse variant keeps its sparseness instead of being inflated to match
+        a dense one.
+        """
+        me = obj.data
+        me.calc_loop_triangles()
+        if not me.loop_triangles:
+            raise RuntimeError(f"{name}: no needle geometry to spray")
+
+        co = np.empty(len(me.vertices) * 3)
+        me.vertices.foreach_get("co", co)
+        co = co.reshape(-1, 3)
+
+        idx = np.empty(len(me.loop_triangles) * 3, np.int64)
+        me.loop_triangles.foreach_get("vertices", idx)
+        idx = idx.reshape(-1, 3)
+
+        tri = co[idx]
+        centroids = tri.mean(1)
+        areas = 0.5 * np.linalg.norm(
+            np.cross(tri[:, 1] - tri[:, 0], tri[:, 2] - tri[:, 0]), axis=1)
+
+        # Two triangles per quad, so the cell target is half the budget.
+        target_cells = max(1, budget // 2)
+
+        # Solve cell size for the target the same way grid_thin does. Occupancy
+        # is far too sparse and clustered to predict from bounding-box volume.
+        lo = centroids.min(0)
+        span = float(np.linalg.norm(centroids.max(0) - lo)) or 1.0
+        h_lo, h_hi = span * 1e-4, span
+        cells = keys = inverse = None
+        for _ in range(48):
+            h = math.sqrt(h_lo * h_hi)
+            grid = np.floor((centroids - lo) / h).astype(np.int64)
+            uniq, inv = np.unique(grid, axis=0, return_inverse=True)
+            if len(uniq) > target_cells:
+                h_lo = h
+            else:
+                h_hi = h
+                cells, keys, inverse = h, uniq, inv
+            if abs(len(uniq) - target_cells) <= max(2, target_cells // 50):
+                cells, keys, inverse = h, uniq, inv
+                break
+        if keys is None:
+            cells, keys, inverse = h, uniq, inv
+
+        n_cells = len(keys)
+        weight = np.maximum(areas, 1e-12)
+        wsum = np.bincount(inverse, weights=weight, minlength=n_cells)
+
+        # Area-weighted centre, so a cell clipped by the crown edge places its
+        # spray where the needles actually are rather than at the cell middle.
+        centre = np.zeros((n_cells, 3))
+        for axis in range(3):
+            centre[:, axis] = np.bincount(
+                inverse, weights=weight * centroids[:, axis],
+                minlength=n_cells) / np.maximum(wsum, 1e-12)
+
+        rects = SPRAY_ATLAS[atlas_key]
+        crown = centre.mean(0)
+
+        # The trunk axis, for deciding which way is "outward". Conifers are
+        # radially symmetric about it, so a per-height axis is unnecessary.
+        axis_xy = centre[:, :2].mean(0)
+
+        rng = np.random.default_rng(abs(hash(name)) % (2 ** 32))
+        pick = rng.integers(0, len(rects), n_cells)
+        mirror = rng.random(n_cells) < 0.5
+        droop = rng.uniform(0.25, 0.75, n_cells)
+
+        # Each cell's quad is sized from the needle area it stands for, so dense
+        # inner crown and thin outer tips do not get identical cards. The cube
+        # root of cell volume sets the base scale and the area ratio modulates it.
+        base = cells * spray_scale
+        density = wsum / max(float(wsum.mean()), 1e-12)
+        extent = base * np.clip(density ** (1.0 / 3.0), 0.55, 1.9)
+
+        verts, faces, uvs, normals = [], [], [], []
+        for i in range(n_cells):
+            x0, y0, x1, y1, stem = rects[int(pick[i])]
+
+            # Atlas is measured in texels from the top left; glTF UVs run from
+            # the bottom left, so V is flipped here rather than in the table.
+            u0, u1 = x0 / ATLAS_SIZE, x1 / ATLAS_SIZE
+            v0, v1 = 1.0 - y1 / ATLAS_SIZE, 1.0 - y0 / ATLAS_SIZE
+            if mirror[i]:
+                u0, u1 = u1, u0
+
+            aspect = (x1 - x0) / max(y1 - y0, 1e-6)
+
+            c = centre[i]
+            radial = np.array([c[0] - axis_xy[0], c[1] - axis_xy[1], 0.0])
+            rl = np.linalg.norm(radial)
+            radial = radial / rl if rl > 1e-6 else np.array([1.0, 0.0, 0.0])
+
+            up = np.array([0.0, 0.0, 1.0])
+            side = np.cross(up, radial)
+            sl = np.linalg.norm(side)
+            side = side / sl if sl > 1e-9 else np.array([0.0, 1.0, 0.0])
+
+            # Branches leave the trunk outward and sag. Mixing the outward and
+            # down vectors gives the drooping habit that reads as spruce or fir
+            # rather than a bottlebrush of horizontal spokes.
+            along = radial * (1.0 - droop[i] * 0.55) - up * droop[i] * 0.8
+            al = np.linalg.norm(along)
+            along = along / al if al > 1e-9 else radial
+
+            half_len = extent[i] * 0.5
+            half_wid = half_len / max(aspect, 1e-3) if aspect > 1.0 else half_len * aspect
+            if aspect > 1.0:
+                half_wid = half_len / aspect
+            else:
+                half_wid = half_len
+                half_len = half_wid * aspect
+
+            # "stem" is the edge the spray grows from, so the quad is built with
+            # that edge nearest the trunk and the tip pointing away. Without it
+            # half the canopy grows inwards and the crown looks turned inside out.
+            if stem == "left":
+                origin = c - along * half_len
+                a = origin - side * half_wid
+                b = origin + along * (half_len * 2.0) - side * half_wid
+                d = origin + side * half_wid
+                cpt = b + side * (half_wid * 2.0)
+                corners = np.array([a, b, cpt, d])
+                quad_uv = np.array([[u0, v0], [u1, v0], [u1, v1], [u0, v1]])
+            else:
+                origin = c - along * half_len
+                a = origin - side * half_wid
+                b = origin + side * half_wid
+                cpt = b + along * (half_len * 2.0)
+                d = a + along * (half_len * 2.0)
+                corners = np.array([a, b, cpt, d])
+                quad_uv = np.array([[u0, v0], [u1, v0], [u1, v1], [u0, v1]])
+
+            e0 = corners[1] - corners[0]
+            e1 = corners[3] - corners[0]
+            nrm = np.cross(e0, e1)
+            ln = np.linalg.norm(nrm)
+            if ln < 1e-12:
+                continue
+            nrm /= ln
+
+            # Same reasoning as build_cards: bias the shading normal outward from
+            # the crown so the canopy carries one rounded gradient instead of
+            # lighting as a pile of unrelated flat chips.
+            outward = c - crown
+            lo_n = np.linalg.norm(outward)
+            outward = outward / lo_n if lo_n > 1e-9 else nrm
+            if float(nrm @ outward) < 0.0:
+                nrm = -nrm
+            blended = nrm * 0.45 + outward * 0.55
+            bl = np.linalg.norm(blended)
+            blended = blended / bl if bl > 1e-9 else nrm
+
+            base_i = len(verts)
+            verts.extend(corners.tolist())
+            uvs.extend(quad_uv.tolist())
+            normals.extend([blended.tolist()] * 4)
+            faces.append((base_i, base_i + 1, base_i + 2))
+            faces.append((base_i, base_i + 2, base_i + 3))
+
+        if not faces:
+            raise RuntimeError(f"{name}: spray rebuild produced no geometry")
+
+        mesh = bpy.data.meshes.new(name + "Mesh")
+        mesh.from_pydata(verts, [], faces)
+        mesh.update()
+        layer = mesh.uv_layers.new(name="UVMap")
+        loop_uv = np.zeros((len(mesh.loops), 2))
+        lv = np.empty(len(mesh.loops), np.int64)
+        mesh.loops.foreach_get("vertex_index", lv)
+        loop_uv[:] = np.asarray(uvs)[lv]
+        layer.data.foreach_set("uv", loop_uv.reshape(-1))
+        mesh.normals_split_custom_set_from_vertices(normals)
+
+        spray = bpy.data.objects.new(name, mesh)
+        bpy.context.scene.collection.objects.link(spray)
+        stats = dict(cells=n_cells, cell_size=round(float(cells), 4),
+                     sprays=len(faces) // 2, spray_scale=spray_scale)
+        return spray, stats
 
     def build_cards(obj, budget, card_scale, name, tiles=1):
         """Replace every UV island with one quad fitted through its own UVs."""
@@ -1070,6 +1756,12 @@ def blender_main(preview_dir: Path | None) -> None:
                                           name, spec.get("tiles", 1))
                 bpy.data.objects.remove(work, do_unlink=True)
                 stats_by_part[name] = cstats
+            elif spec["method"] == SPRAY:
+                obj, sstats = build_sprays(work, spec["budget"],
+                                           spec.get("spray_scale", 1.35),
+                                           name, spec["atlas"])
+                bpy.data.objects.remove(work, do_unlink=True)
+                stats_by_part[name] = sstats
             elif spec["method"] == DECIMATE:
                 obj = decimate_to(work, spec["budget"], spec.get("keep_area"))
                 obj.name = name

@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/environment/nature/polyhaven/ashwood_dry_branches_a.glb" id="1_src"]
+[ext_resource type="Material" path="res://assets/materials/vegetation_dry_branches_medium_01.tres" id="2_mat"]
+
+[node name="AshwoodDryBranchesA" type="Node3D"]
+
+[node name="Visual" parent="." instance=ExtResource("1_src")]
+
+[node name="Body" parent="Visual" index="0"]
+surface_material_override/0 = ExtResource("2_mat")
+
+[editable path="Visual"]

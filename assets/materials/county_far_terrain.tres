@@ -1,0 +1,18 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3]
+
+; Material for the always-resident low-resolution county shell. Textureless by
+; design - see county_far_terrain.gdshader for why a 2K scan tiled every six
+; metres becomes sparkling moire at four kilometres.
+
+[ext_resource type="Shader" path="res://assets/materials/county_far_terrain.gdshader" id="0_shader"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("0_shader")
+
+shader_parameter/grass_color = Color(0.32, 0.38, 0.21, 1)
+shader_parameter/forest_color = Color(0.155, 0.209, 0.117, 1)
+shader_parameter/rock_color = Color(0.34, 0.33, 0.31, 1)
+shader_parameter/macro_meters = 420.0
+shader_parameter/macro_strength = 0.3
+shader_parameter/slope_shading = 0.35

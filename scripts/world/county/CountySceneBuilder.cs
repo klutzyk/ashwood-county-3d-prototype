@@ -20,16 +20,19 @@ namespace AshwoodCounty3DPrototype.World.County;
 public static class CountySceneBuilder
 {
     /// <summary>
-    /// Subsystem type names in the order they should be added. Terrain first so
-    /// anything that samples the ground finds it already present.
+    /// Subsystem type names in the order they should be added. The far field goes
+    /// in before the streamed terrain so it reads its sibling's streaming radius,
+    /// and terrain goes in before anything that samples the ground.
     /// </summary>
     private static readonly string[] SubsystemTypeNames =
     {
+        "CountyFarTerrain",
         "CountyTerrain",
         "CountyWater",
         "CountyRoads",
         "CountyVegetation",
         "CountySettlements",
+        "CountyPointsOfInterest",
     };
 
     public readonly record struct BuildResult(
@@ -44,14 +47,22 @@ public static class CountySceneBuilder
     /// tree; nothing here touches the scene tree so it is safe to call before
     /// entering it.
     /// </summary>
-    public static BuildResult Build(Node3D? target = null, bool logStreaming = false)
+    public static BuildResult Build(
+        Node3D? target = null,
+        bool logStreaming = false,
+        bool editorPreview = false)
     {
         var root = new Node3D { Name = "AshwoodCounty" };
 
         var atmosphere = new CountyAtmosphere { Name = "Atmosphere" };
         root.AddChild(atmosphere);
 
-        var world = new CountyWorld { Name = "World", LogStreaming = logStreaming };
+        var world = new CountyWorld
+        {
+            Name = "World",
+            LogStreaming = logStreaming,
+            EditorPreview = editorPreview,
+        };
         root.AddChild(world);
 
         var present = new List<string>();
@@ -59,6 +70,12 @@ public static class CountySceneBuilder
 
         foreach (string typeName in SubsystemTypeNames)
         {
+            if (Godot.OS.GetEnvironment("SKIP_SUBSYSTEM") == typeName)
+            {
+                missing.Add(typeName);
+                continue;
+            }
+
             Node3D? subsystem = Instantiate(typeName);
             if (subsystem == null)
             {
@@ -67,6 +84,11 @@ public static class CountySceneBuilder
             }
 
             subsystem.Name = typeName;
+            if (subsystem is CountyFarTerrain farTerrain)
+            {
+                farTerrain.EditorPreview = editorPreview;
+            }
+
             world.AddChild(subsystem);
             present.Add(typeName);
         }

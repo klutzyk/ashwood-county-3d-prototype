@@ -33,8 +33,12 @@ public partial class CountyWater : Node3D, ICountyChunkSource
     /// </summary>
     [Export] public int WaterRadius { get; set; } = 7;
 
-    /// <summary>Cells per chunk edge. 16 gives 16m cells, plenty for a water plane.</summary>
-    [Export] public int CellsPerChunk { get; set; } = 16;
+    /// <summary>
+    /// Cells per chunk edge. 32 gives 8m cells: Mill Creek's channel is only about
+    /// 28m across, and at 16m cells it was resolved as a scatter of isolated
+    /// squares rather than as a stream.
+    /// </summary>
+    [Export] public int CellsPerChunk { get; set; } = 32;
 
     public int ChunkRadius => WaterRadius;
 
@@ -119,6 +123,161 @@ public partial class CountyWater : Node3D, ICountyChunkSource
     }
 
     /// <summary>
+    /// <summary>
+    /// One grid point of the water surface: either genuinely submerged, or a dry
+    /// point pulled in to the waterline because it borders water.
+    /// </summary>
+    private readonly record struct ShorePoint(
+        bool Usable, float X, float Z, float Water, float Ground);
+
+    /// <summary>
+    /// Positions every usable grid point, moving shoreline points to where the
+    /// ground actually crosses the water surface.
+    ///
+    /// A dry point is dragged along each edge that leads to a wet neighbour, to the
+    /// fraction where the interpolated ground height equals the water height, and
+    /// the results are averaged. Averaging is an approximation - a corner shared by
+    /// cells on different stretches of bank gets one position rather than one per
+    /// edge - but it removes the staircase entirely and the residual error is well
+    /// under a metre, which the shader's shallow-water fade absorbs.
+    /// </summary>
+    private static ShorePoint[,] BuildShoreline(
+        bool[,] wet,
+        float[,] surfaceY,
+        float[,] terrainY,
+        int side,
+        Vector2 origin,
+        float step)
+    {
+        var shore = new ShorePoint[side, side];
+
+        for (int row = 0; row < side; row++)
+        {
+            for (int column = 0; column < side; column++)
+            {
+                float x = origin.X + column * step;
+                float z = origin.Y + row * step;
+
+                if (wet[column, row])
+                {
+                    shore[column, row] = new ShorePoint(
+                        true, x, z, surfaceY[column, row], terrainY[column, row]);
+                    continue;
+                }
+
+                float sumX = 0.0f;
+                float sumZ = 0.0f;
+                float sumWater = 0.0f;
+                int found = 0;
+
+                for (int edge = 0; edge < 4; edge++)
+                {
+                    int nx = column + (edge == 0 ? -1 : edge == 1 ? 1 : 0);
+                    int nz = row + (edge == 2 ? -1 : edge == 3 ? 1 : 0);
+
+                    if (nx < 0 || nz < 0 || nx >= side || nz >= side || !wet[nx, nz])
+                    {
+                        continue;
+                    }
+
+                    float water = surfaceY[nx, nz];
+                    float groundHere = terrainY[column, row];
+                    float groundThere = terrainY[nx, nz];
+
+                    // Fraction from the wet neighbour toward this dry point at which
+                    // the ground rises through the water surface.
+                    float span = groundHere - groundThere;
+                    float t = Mathf.Abs(span) > 0.0001f
+                        ? Mathf.Clamp((water - groundThere) / span, 0.0f, 1.0f)
+                        : 1.0f;
+
+                    sumX += Mathf.Lerp(origin.X + nx * step, x, t);
+                    sumZ += Mathf.Lerp(origin.Y + nz * step, z, t);
+                    sumWater += water;
+                    found++;
+                }
+
+                shore[column, row] = found == 0
+                    ? new ShorePoint(false, x, z, 0.0f, 0.0f)
+                    : new ShorePoint(
+                        true,
+                        sumX / found,
+                        sumZ / found,
+                        sumWater / found,
+
+                        // Ground equals water at the waterline, so depth reads zero.
+                        sumWater / found);
+            }
+        }
+
+        return shore;
+    }
+
+    /// <summary>
+    /// Drops wet vertices that have almost no wet neighbours.
+    ///
+    /// A real watercourse is continuous: every part of it touches more of it. A
+    /// lone wet vertex in a field of dry ones is always sampling noise near the
+    /// waterline, never a puddle worth meshing, and it renders as a single hard
+    /// rectangle of water sitting on dry grass. Requiring company removes the
+    /// speckle without touching the channel itself.
+    /// </summary>
+    private static void RemoveIsolatedCells(bool[,] wet, int side, ref bool any)
+    {
+        var kept = new bool[side, side];
+        any = false;
+
+        for (int row = 0; row < side; row++)
+        {
+            for (int column = 0; column < side; column++)
+            {
+                if (!wet[column, row])
+                {
+                    continue;
+                }
+
+                int neighbours = 0;
+                for (int dz = -1; dz <= 1; dz++)
+                {
+                    for (int dx = -1; dx <= 1; dx++)
+                    {
+                        if (dx == 0 && dz == 0)
+                        {
+                            continue;
+                        }
+
+                        int nx = column + dx;
+                        int nz = row + dz;
+
+                        // Vertices on the chunk border cannot see their neighbours
+                        // in the next chunk, so they are given the benefit of the
+                        // doubt - otherwise every channel would be nibbled at each
+                        // seam and the water would come apart into strips.
+                        if (nx < 0 || nz < 0 || nx >= side || nz >= side)
+                        {
+                            neighbours++;
+                            continue;
+                        }
+
+                        if (wet[nx, nz])
+                        {
+                            neighbours++;
+                        }
+                    }
+                }
+
+                if (neighbours >= 4)
+                {
+                    kept[column, row] = true;
+                    any = true;
+                }
+            }
+        }
+
+        Array.Copy(kept, wet, kept.Length);
+    }
+
+    /// <summary>
     /// Marches the chunk's cells and emits a quad for each one that is wet.
     /// Returns null when the chunk has no water at all, which is most of them.
     /// </summary>
@@ -145,14 +304,35 @@ public partial class CountyWater : Node3D, ICountyChunkSource
                 surfaceY[column, row] = water;
                 terrainY[column, row] = ground;
 
-                // A vertex counts as wet if there is a water surface here at all.
-                // Testing against the terrain as well would clip the surface back
-                // to the exact waterline and leave a hard edge with no shallows.
-                wet[column, row] = water > float.MinValue;
+                // A vertex is wet only where there is a water surface AND the ground
+                // is genuinely beneath it. Testing the surface alone put rectangles
+                // of water on dry hillsides wherever a point fell inside a
+                // watercourse's influence radius.
+                //
+                // The tolerance used to be +0.6m, which was meant to keep the
+                // shallows but instead meant any ground within 0.6m *above* the
+                // water still counted. Across the flat plain at Mill Creek, where
+                // the surface runs close to ground level over a wide area, terrain
+                // noise pushed scattered individual cells under that threshold and
+                // they meshed as isolated squares of water lying on dry grass.
+                // A real depth, not merely "below the surface". Away from the
+                // carved channels the reported surface runs within centimetres of
+                // the ground over wide flat areas, so a zero threshold still let
+                // whole patches out on the Mill Creek plain qualify - they meshed
+                // as slabs of water lying on dry grass, disconnected from any
+                // watercourse. Nothing shallower than this is worth drawing, and
+                // the real channels and the reservoir are metres deep.
+                wet[column, row] = water > float.MinValue && ground < water - 0.45f;
                 any |= wet[column, row];
             }
         }
 
+        if (!any)
+        {
+            return null;
+        }
+
+        RemoveIsolatedCells(wet, side, ref any);
         if (!any)
         {
             return null;
@@ -164,7 +344,8 @@ public partial class CountyWater : Node3D, ICountyChunkSource
         var uvs = new List<Vector2>();
         var indices = new List<int>();
 
-        // Vertex indices into the emitted arrays, or -1 where the grid point is dry.
+        // Vertex indices into the emitted arrays, or -1 where the grid point is
+        // neither wet nor on the shoreline.
         var mapped = new int[side, side];
         for (int row = 0; row < side; row++)
         {
@@ -174,24 +355,36 @@ public partial class CountyWater : Node3D, ICountyChunkSource
             }
         }
 
+        // Dry grid points that touch water get pulled in to the actual waterline
+        // rather than being dropped.
+        //
+        // Emitting only whole wet cells left the lake with a hard 8m staircase all
+        // the way round its shore - the cell size was simply legible from the bank.
+        // The old comment here claimed the shader's depth fade covered it, which is
+        // true for a creek a couple of cells wide and plainly false for a
+        // reservoir. Interpolating each shore point to where the ground crosses the
+        // water surface costs nothing and follows the real bank instead.
+        ShorePoint[,] shore = BuildShoreline(wet, surfaceY, terrainY, side, origin, step);
+
         for (int row = 0; row < side; row++)
         {
-            float z = origin.Y + row * step;
             for (int column = 0; column < side; column++)
             {
-                if (!wet[column, row])
+                ShorePoint point = shore[column, row];
+                if (!point.Usable)
                 {
                     continue;
                 }
 
-                float x = origin.X + column * step;
-                float water = surfaceY[column, row];
-
                 mapped[column, row] = vertices.Count;
-                vertices.Add(new Vector3(x, water, z));
+                vertices.Add(new Vector3(point.X, point.Water, point.Z));
                 normals.Add(Vector3.Up);
-                uvs.Add(new Vector2(x, z));
-                colors.Add(FlowColor(x, z, water, terrainY[column, row]));
+                uvs.Add(new Vector2(point.X, point.Z));
+
+                // A shore vertex sits exactly at the waterline, so its ground height
+                // is its water height and the shader reads zero depth there. That is
+                // what makes the edge fade out instead of ending in a wall.
+                colors.Add(FlowColor(point.X, point.Z, point.Water, point.Ground));
             }
         }
 
@@ -204,11 +397,16 @@ public partial class CountyWater : Node3D, ICountyChunkSource
                 int c = mapped[column, row + 1];
                 int d = mapped[column + 1, row + 1];
 
-                // Only whole wet cells are emitted. A partially wet cell sits at the
-                // shoreline where the terrain is above water anyway, and the
-                // shader's depth fade covers the last metre far more convincingly
-                // than a ragged triangulated edge would.
                 if (a < 0 || b < 0 || c < 0 || d < 0)
+                {
+                    continue;
+                }
+
+                // At least one corner must be genuinely submerged. Without this a
+                // ring of shore points around a dry hollow would close over and mesh
+                // a puddle that is not there.
+                if (!wet[column, row] && !wet[column + 1, row] &&
+                    !wet[column, row + 1] && !wet[column + 1, row + 1])
                 {
                     continue;
                 }

@@ -34,7 +34,7 @@ public partial class CountyAtmosphere : Node3D
     [Export] public Color SunColor { get; set; } = new(1.0f, 0.947f, 0.878f);
 
     [Export(PropertyHint.Range, "0,4,0.05")]
-    public float SunEnergy { get; set; } = 1.42f;
+    public float SunEnergy { get; set; } = 1.15f;
 
     /// <summary>
     /// How thick the air reads over distance. Aerial perspective is the main cue
@@ -42,13 +42,24 @@ public partial class CountyAtmosphere : Node3D
     /// kilometres away rather than like a painted backdrop.
     ///
     /// Exponential fog reaches about 63 percent opacity at 1/density metres, so
-    /// this puts the half-way point near 4.5km and leaves the far rim of the county
-    /// hazy but still legible. Anything above roughly 0.0005 erases the landscape.
+    /// this puts the half-way point near 9km - beyond the far corner of the county.
+    /// The whole landmass stays legible from the ridges while still gaining depth.
+    /// Anything above roughly 0.0005 erases the landscape entirely.
     /// </summary>
     [Export(PropertyHint.Range, "0.0,0.01,0.0001")]
-    public float HazeDensity { get; set; } = 0.00022f;
+    public float HazeDensity { get; set; } = 0.00006f;
 
-    [Export] public Color HazeColor { get; set; } = new(0.60f, 0.68f, 0.80f);
+    /// <summary>
+    /// Haze colour. Deliberately darker than it looks like it should be.
+    ///
+    /// Fog blends the landscape toward this colour, so a pale haze does not read as
+    /// distance - it reads as the world being erased. At the previous
+    /// (0.60, 0.68, 0.80) even 28 percent fog over three kilometres turned forested
+    /// ridges into flat grey-green, because the haze was several times brighter
+    /// than the terrain underneath it. Keeping it dark and blue preserves the
+    /// depth cue while leaving the far ridgelines legible as landform.
+    /// </summary>
+    [Export] public Color HazeColor { get; set; } = new(0.42f, 0.52f, 0.66f);
 
     /// <summary>Far plane. Also the distance the fog is tuned to saturate at.</summary>
     [Export] public float ViewDistance { get; set; } = 9000.0f;
@@ -106,7 +117,7 @@ public partial class CountyAtmosphere : Node3D
         _sun.LightColor = SunColor;
         _sun.LightEnergy = SunEnergy;
         _sun.LightAngularDistance = 0.55f;
-        _sun.ShadowEnabled = true;
+        _sun.ShadowEnabled = OS.GetEnvironment("NO_SHADOW") != "1";
 
         // Four cascades over 1.2km. Everything past that is lit but unshadowed,
         // which nobody notices at distance and saves the whole far field.
@@ -145,16 +156,22 @@ public partial class CountyAtmosphere : Node3D
 
         environment.AmbientLightSource = Godot.Environment.AmbientSource.Sky;
         environment.AmbientLightSkyContribution = 1.0f;
-        environment.AmbientLightEnergy = 1.0f;
+        environment.AmbientLightEnergy = 0.85f;
         environment.ReflectedLightSource = Godot.Environment.ReflectionSource.Sky;
 
         environment.TonemapMode = Godot.Environment.ToneMapper.Aces;
-        environment.TonemapExposure = 1.0f;
-        environment.TonemapWhite = 4.0f;
+        environment.TonemapExposure = 0.95f;
+        environment.TonemapWhite = 6.0f;
+
+        // The editor viewport already carries more per-frame overhead than the
+        // running game (gizmos, selection outlines, no occlusion tuning), so the
+        // heaviest post effects are skipped there rather than doubling up on cost
+        // for a viewport that is for inspection, not for judging final lighting.
+        bool cheap = Engine.IsEditorHint();
 
         // SSAO at county scale wants a wider radius than a room interior, or it
         // only darkens the grass blades and leaves the landforms flat.
-        environment.SsaoEnabled = true;
+        environment.SsaoEnabled = !cheap && OS.GetEnvironment("NO_SSAO") != "1";
         environment.SsaoRadius = 2.4f;
         environment.SsaoIntensity = 1.9f;
         environment.SsaoPower = 1.5f;
@@ -166,7 +183,7 @@ public partial class CountyAtmosphere : Node3D
         environment.SsrEnabled = false;
         environment.SsilEnabled = false;
 
-        environment.GlowEnabled = true;
+        environment.GlowEnabled = !cheap;
         environment.GlowNormalized = true;
         environment.GlowIntensity = 0.4f;
         environment.GlowStrength = 1.0f;
@@ -182,14 +199,14 @@ public partial class CountyAtmosphere : Node3D
         // Exponential depth fog, not the street slice's dense linear fog. At this
         // density the far rim of the county sits at roughly 90 percent haze, which
         // reads as distance rather than as a wall of grey.
-        environment.FogEnabled = true;
+        environment.FogEnabled = OS.GetEnvironment("NO_FOG") != "1";
         environment.FogMode = Godot.Environment.FogModeEnum.Exponential;
         environment.FogLightColor = HazeColor;
-        environment.FogLightEnergy = 1.0f;
-        environment.FogSunScatter = 0.28f;
+        environment.FogLightEnergy = 0.7f;
+        environment.FogSunScatter = 0.16f;
         environment.FogDensity = HazeDensity;
-        environment.FogAerialPerspective = 0.55f;
-        environment.FogSkyAffect = 0.35f;
+        environment.FogAerialPerspective = 0.22f;
+        environment.FogSkyAffect = 0.06f;
 
         // Height fog: cold air pools in the river valley and the lake basin at
         // dawn, which is free atmosphere and reads beautifully from the ridges.

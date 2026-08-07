@@ -104,9 +104,19 @@ public partial class CountyTerrain : Node3D, ICountyChunkSource
 
     private Material LoadMaterial()
     {
-        if (ResourceLoader.Exists(TerrainMaterialPath) &&
+        if (OS.GetEnvironment("NO_SPLAT") != "1" &&
+            ResourceLoader.Exists(TerrainMaterialPath) &&
             ResourceLoader.Load(TerrainMaterialPath) is Material loaded)
         {
+            // Set in place rather than on a duplicate: Resource.Duplicate does not
+            // reliably carry shader parameters across, which made the first
+            // diagnostic pass report every texture as unbound.
+            if (loaded is ShaderMaterial shaderMaterial &&
+                OS.GetEnvironment("TERRAIN_DEBUG") is string debug && debug.Length > 0)
+            {
+                shaderMaterial.SetShaderParameter("debug_mode", debug.ToInt());
+            }
+
             return loaded;
         }
 
@@ -167,6 +177,7 @@ public partial class CountyTerrain : Node3D, ICountyChunkSource
         arrays.Resize((int)Mesh.ArrayType.Max);
         arrays[(int)Mesh.ArrayType.Vertex] = data.Vertices;
         arrays[(int)Mesh.ArrayType.Normal] = data.Normals;
+        arrays[(int)Mesh.ArrayType.Tangent] = data.Tangents;
         arrays[(int)Mesh.ArrayType.Color] = data.Colors;
         arrays[(int)Mesh.ArrayType.TexUV] = data.Uvs;
         arrays[(int)Mesh.ArrayType.Index] = data.Indices;
@@ -246,6 +257,7 @@ public partial class CountyTerrain : Node3D, ICountyChunkSource
     {
         public Vector3[] Vertices = Array.Empty<Vector3>();
         public Vector3[] Normals = Array.Empty<Vector3>();
+        public float[] Tangents = Array.Empty<float>();
         public Color[] Colors = Array.Empty<Color>();
         public Vector2[] Uvs = Array.Empty<Vector2>();
         public int[] Indices = Array.Empty<int>();
@@ -275,6 +287,12 @@ public partial class CountyTerrain : Node3D, ICountyChunkSource
 
         var vertices = new List<Vector3>(side * side + side * 4 * 2);
         var normals = new List<Vector3>(vertices.Capacity);
+
+        // Tangents are required, not optional. A spatial shader that writes
+        // NORMAL_MAP needs a tangent basis, and a mesh without a tangent array
+        // silently supplies garbage - the terrain rendered unlit black while its
+        // albedo, AO and roughness were all provably correct.
+        var tangents = new List<float>(vertices.Capacity * 4);
         var colors = new List<Color>(vertices.Capacity);
         var uvs = new List<Vector2>(vertices.Capacity);
         var indices = new List<int>(quads * quads * 6 + quads * 4 * 6);
@@ -301,6 +319,16 @@ public partial class CountyTerrain : Node3D, ICountyChunkSource
 
                 vertices.Add(new Vector3(x, height, z));
                 normals.Add(normal);
+
+                // UV is world XZ, so the U axis runs along world +X across the
+                // surface. The -1 handedness makes the bitangent run along world
+                // +Z, matching V.
+                var tangent = new Vector3(2.0f * step, right - left, 0.0f).Normalized();
+                tangents.Add(tangent.X);
+                tangents.Add(tangent.Y);
+                tangents.Add(tangent.Z);
+                tangents.Add(-1.0f);
+
                 colors.Add(SurfaceWeights(x, z, height, slope));
 
                 // World-space UVs so the material tiles continuously across chunk
@@ -334,7 +362,7 @@ public partial class CountyTerrain : Node3D, ICountyChunkSource
 
         if (SkirtsEnabled)
         {
-            AppendSkirt(vertices, normals, colors, uvs, indices, side, step);
+            AppendSkirt(vertices, normals, tangents, colors, uvs, indices, side, step);
         }
 
         Vector3[]? collisionFaces = null;
@@ -355,6 +383,7 @@ public partial class CountyTerrain : Node3D, ICountyChunkSource
         {
             Vertices = vertices.ToArray(),
             Normals = normals.ToArray(),
+            Tangents = tangents.ToArray(),
             Colors = colors.ToArray(),
             Uvs = uvs.ToArray(),
             Indices = indices.ToArray(),
@@ -376,6 +405,7 @@ public partial class CountyTerrain : Node3D, ICountyChunkSource
     private static void AppendSkirt(
         List<Vector3> vertices,
         List<Vector3> normals,
+        List<float> tangents,
         List<Color> colors,
         List<Vector2> uvs,
         List<int> indices,
@@ -401,6 +431,10 @@ public partial class CountyTerrain : Node3D, ICountyChunkSource
                 Vector3 top = vertices[source];
                 vertices.Add(new Vector3(top.X, top.Y - depth, top.Z));
                 normals.Add(normals[source]);
+                tangents.Add(tangents[source * 4]);
+                tangents.Add(tangents[source * 4 + 1]);
+                tangents.Add(tangents[source * 4 + 2]);
+                tangents.Add(tangents[source * 4 + 3]);
                 colors.Add(colors[source]);
                 uvs.Add(uvs[source]);
             }
