@@ -341,6 +341,75 @@ public partial class ThirdPersonPlayer : CharacterBody3D
 		Velocity = velocity;
 	}
 
+	/// <summary>
+	/// Dev-only free camera for scouting the open county without gravity or
+	/// collision getting in the way. Edge-detected by hand since this is not
+	/// wired to the input map: IsActionJustPressed needs an action to exist.
+	/// </summary>
+	private void HandleDevFlyToggle()
+	{
+		bool down = Input.IsKeyPressed(Key.N);
+		if (down && !_devFlyKeyWasDown)
+		{
+			SetDevFlying(!_devFlying);
+		}
+
+		_devFlyKeyWasDown = down;
+	}
+
+	private void SetDevFlying(bool flying)
+	{
+		_devFlying = flying;
+		Velocity = Vector3.Zero;
+
+		if (flying)
+		{
+			// Noclip: fly mode is for scouting past terrain and walls, not just
+			// hovering above them, so collision is switched off rather than
+			// merely zeroing gravity.
+			_savedCollisionLayer = CollisionLayer;
+			_savedCollisionMask = CollisionMask;
+			CollisionLayer = 0;
+			CollisionMask = 0;
+		}
+		else
+		{
+			CollisionLayer = _savedCollisionLayer;
+			CollisionMask = _savedCollisionMask;
+		}
+	}
+
+	private void ApplyDevFlyMovement(float delta)
+	{
+		Vector2 input = Input.GetVector("move_left", "move_right", "move_forward", "move_back");
+		Vector3 forward = -_cameraRig.GlobalBasis.Z;
+		Vector3 right = _cameraRig.GlobalBasis.X;
+
+		// Full 3D forward, not flattened to the XZ plane: looking down and
+		// holding forward should dive, which is what makes this useful for
+		// checking terrain and roofs from odd angles rather than just a fast
+		// walk.
+		Vector3 direction = (forward * input.Y * -1.0f) + (right * input.X);
+
+		if (Input.IsKeyPressed(Key.Space))
+		{
+			direction += Vector3.Up;
+		}
+
+		if (Input.IsKeyPressed(Key.Ctrl))
+		{
+			direction += Vector3.Down;
+		}
+
+		if (direction.LengthSquared() > 0.0001f)
+		{
+			direction = direction.Normalized();
+		}
+
+		float speed = Input.IsKeyPressed(Key.Shift) ? DevFlySpeedFast : DevFlySpeed;
+		GlobalPosition += direction * speed * delta;
+	}
+
 	private Vector3 GetMovementDirection()
 	{
 		Vector2 input = Input.GetVector("move_left", "move_right", "move_forward", "move_back");
