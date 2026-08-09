@@ -2,6 +2,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
+using System.Threading;
+using System.Threading.Tasks;
 using Godot;
 using AshwoodCounty3DPrototype.Settings;
 
@@ -284,6 +287,9 @@ public partial class CountyVegetation : Node3D, ICountyChunkSource
     };
 
     private readonly Dictionary<Vector2I, Node3D> _chunks = new();
+    private readonly Dictionary<Vector2I, int> _generations = new();
+    private readonly ConcurrentQueue<ScatterResult> _completed = new();
+    private SemaphoreSlim _scatterGate = new(1, 1);
 
     /// <summary>
     /// Meshes are loaded from their scenes once and shared by every chunk. Loading
@@ -292,10 +298,38 @@ public partial class CountyVegetation : Node3D, ICountyChunkSource
     /// </summary>
     private readonly Dictionary<string, List<(Mesh Mesh, Transform3D Local)>> _meshCache = new();
 
+    private sealed record ScatterResult(
+        Vector2I Chunk,
+        int Generation,
+        Layer Layer,
+        List<Transform3D> Placements);
+
     public override void _Ready()
     {
         ApplyGraphicsPreset();
+        GraphicsPreset preset = SettingsManager.Instance?.Current.GraphicsPreset
+                                ?? GraphicsPreset.Low;
+        int concurrency = preset == GraphicsPreset.Low ? 1 : 2;
+        _scatterGate = new SemaphoreSlim(concurrency, concurrency);
+        PrimeMeshCache();
         ReadyInternal();
+    }
+
+    private void PrimeMeshCache()
+    {
+        foreach (Layer layer in Layers)
+        {
+            if (layer.Imposter)
+            {
+                LoadConiferImposterMaterial();
+                continue;
+            }
+
+            foreach (string scenePath in layer.Scenes)
+            {
+                GetParts(scenePath);
+            }
+        }
     }
 
     /// <summary>
@@ -311,7 +345,7 @@ public partial class CountyVegetation : Node3D, ICountyChunkSource
     private void ApplyGraphicsPreset()
     {
         GraphicsPreset preset = SettingsManager.Instance?.Current.GraphicsPreset
-                                ?? GraphicsPreset.High;
+                                ?? GraphicsPreset.Low;
 
         DensityScale *= GraphicsQuality.VegetationDensity(preset);
         _rangeScale = GraphicsQuality.VegetationRange(preset);
@@ -340,25 +374,58 @@ public partial class CountyVegetation : Node3D, ICountyChunkSource
         AddChild(holder);
         _chunks[chunk] = holder;
 
-        foreach (Layer layer in Layers)
+        int generation = _generations.TryGetValue(chunk, out int previousGeneration)
+            ? previousGeneration + 1
+            : 1;
+        _generations[chunk] = generation;
+
+        Layer[] layers = Array.FindAll(Layers, layer => ring <= layer.MaxRing);
+        Task.Run(async () =>
         {
-            if (ring > layer.MaxRing)
+            await _scatterGate.WaitAsync();
+            try
             {
-                continue;
+                foreach (Layer layer in layers)
+                {
+                    _completed.Enqueue(new ScatterResult(
+                        chunk,
+                        generation,
+                        layer,
+                        ScatterLayer(chunk, layer)));
+                }
             }
-
-            List<Transform3D> placements = ScatterLayer(chunk, layer);
-            if (placements.Count == 0)
+            catch (Exception error)
             {
-                continue;
+                GD.PushError($"CountyVegetation: chunk {chunk} failed to scatter: {error}");
             }
+            finally
+            {
+                _scatterGate.Release();
+            }
+        });
+    }
 
-            EmitLayer(holder, layer, placements);
+    public override void _Process(double delta)
+    {
+        if (!_completed.TryDequeue(out ScatterResult? result) ||
+            !_generations.TryGetValue(result.Chunk, out int generation) ||
+            generation != result.Generation ||
+            !_chunks.TryGetValue(result.Chunk, out Node3D? holder))
+        {
+            return;
+        }
+
+        if (result.Placements.Count > 0)
+        {
+            EmitLayer(holder, result.Layer, result.Placements);
         }
     }
 
     public void ReleaseChunk(Vector2I chunk)
     {
+        _generations[chunk] = _generations.TryGetValue(chunk, out int generation)
+            ? generation + 1
+            : 1;
         if (_chunks.Remove(chunk, out Node3D? holder))
         {
             holder.QueueFree();

@@ -1,6 +1,6 @@
 [CmdletBinding()]
 param(
-	[ValidateSet("Game", "Benchmark", "FullBenchmark")]
+	[ValidateSet("Game", "Benchmark", "FullBenchmark", "StreamingBenchmark")]
 	[string]$Target = "Game",
 
 	[ValidatePattern("^[1-9][0-9]*x[1-9][0-9]*$")]
@@ -69,6 +69,11 @@ if ($Target -eq "Benchmark") {
 	$godotArguments += @(
 		"--scene",
 		"res://tests/full_game_performance_benchmark.tscn"
+	)
+} elseif ($Target -eq "StreamingBenchmark") {
+	$godotArguments += @(
+		"--scene",
+		"res://tests/county_streaming_performance_benchmark.tscn"
 	)
 }
 

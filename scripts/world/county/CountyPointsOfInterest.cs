@@ -125,6 +125,22 @@ public partial class CountyPointsOfInterest : Node3D, ICountyChunkSource
 
     public override void _Ready()
     {
+        Settings.GraphicsPreset preset =
+            Settings.SettingsManager.Instance?.Current.GraphicsPreset
+            ?? Settings.GraphicsPreset.Low;
+        PoiRadius = Mathf.Min(
+            PoiRadius, Settings.GraphicsQuality.PoiRadius(preset));
+        foreach (string scenePath in Vehicles)
+        {
+            LoadScene(scenePath);
+        }
+        foreach (string scenePath in new[]
+                 {
+                     UtilityPole, RoadSign, BarrelCrate, Mailbox, OldTyre,
+                 })
+        {
+            LoadScene(scenePath);
+        }
         if (GetParent() is CountyWorld world)
         {
             world.RegisterSource(this);

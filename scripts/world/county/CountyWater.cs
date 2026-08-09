@@ -2,6 +2,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
+using System.Threading;
+using System.Threading.Tasks;
 using Godot;
 
 namespace AshwoodCounty3DPrototype.World.County;
@@ -54,10 +57,31 @@ public partial class CountyWater : Node3D, ICountyChunkSource
     private static readonly Rect2 BridgeReach = new(-232.0f, -46.0f, 116.0f, 92.0f);
 
     private readonly Dictionary<Vector2I, Node3D> _chunks = new();
+    private readonly HashSet<Vector2I> _pending = new();
+    private readonly Dictionary<Vector2I, int> _generations = new();
+    private readonly ConcurrentQueue<WaterBuildResult> _completed = new();
+    private SemaphoreSlim _buildGate = new(1, 1);
     private Material? _material;
+
+    private sealed record WaterMeshData(
+        Vector3[] Vertices,
+        Vector3[] Normals,
+        Color[] Colors,
+        Vector2[] Uvs,
+        int[] Indices);
+
+    private sealed record WaterBuildResult(
+        Vector2I Chunk,
+        int Generation,
+        WaterMeshData? MeshData);
 
     public override void _Ready()
     {
+        Settings.GraphicsPreset preset =
+            Settings.SettingsManager.Instance?.Current.GraphicsPreset
+            ?? Settings.GraphicsPreset.Low;
+        WaterRadius = Mathf.Min(
+            WaterRadius, Settings.GraphicsQuality.WaterRadius(preset));
         _material = LoadMaterial();
 
         if (GetParent() is CountyWorld world)
@@ -86,21 +110,58 @@ public partial class CountyWater : Node3D, ICountyChunkSource
 
     public void BuildChunk(Vector2I chunk, int ring)
     {
-        if (_chunks.ContainsKey(chunk))
+        if (_chunks.ContainsKey(chunk) || !_pending.Add(chunk))
         {
             return;
         }
 
-        ArrayMesh? mesh = BuildWaterMesh(chunk);
-        if (mesh == null)
+        int generation = _generations.TryGetValue(chunk, out int previousGeneration)
+            ? previousGeneration + 1
+            : 1;
+        _generations[chunk] = generation;
+
+        Task.Run(async () =>
         {
-            // Dry chunk. Recorded as resident anyway so the streamer does not retry
-            // it every tick.
-            _chunks[chunk] = new Node3D { Name = $"Water_{chunk.X}_{chunk.Y}_dry" };
-            AddChild(_chunks[chunk]);
+            await _buildGate.WaitAsync();
+            try
+            {
+                _completed.Enqueue(new WaterBuildResult(
+                    chunk,
+                    generation,
+                    BuildWaterMeshData(chunk)));
+            }
+            catch (Exception error)
+            {
+                GD.PushError($"CountyWater: chunk {chunk} failed to build: {error}");
+                CallDeferred(nameof(ClearPending), chunk, generation);
+            }
+            finally
+            {
+                _buildGate.Release();
+            }
+        });
+    }
+
+    public override void _Process(double delta)
+    {
+        if (!_completed.TryDequeue(out WaterBuildResult? result) ||
+            !_generations.TryGetValue(result.Chunk, out int generation) ||
+            generation != result.Generation ||
+            !_pending.Remove(result.Chunk))
+        {
             return;
         }
 
+        Vector2I chunk = result.Chunk;
+        if (result.MeshData is null)
+        {
+            Node3D dry = new() { Name = $"Water_{chunk.X}_{chunk.Y}_dry" };
+            AddChild(dry);
+            _chunks[chunk] = dry;
+            return;
+        }
+
+        ArrayMesh mesh = CreateMesh(result.MeshData);
         var holder = new Node3D { Name = $"Water_{chunk.X}_{chunk.Y}" };
         holder.AddChild(new MeshInstance3D
         {
@@ -114,8 +175,20 @@ public partial class CountyWater : Node3D, ICountyChunkSource
         _chunks[chunk] = holder;
     }
 
+    private void ClearPending(Vector2I chunk, int generation)
+    {
+        if (_generations.TryGetValue(chunk, out int current) && current == generation)
+        {
+            _pending.Remove(chunk);
+        }
+    }
+
     public void ReleaseChunk(Vector2I chunk)
     {
+        _pending.Remove(chunk);
+        _generations[chunk] = _generations.TryGetValue(chunk, out int generation)
+            ? generation + 1
+            : 1;
         if (_chunks.Remove(chunk, out Node3D? holder))
         {
             holder.QueueFree();
@@ -281,7 +354,7 @@ public partial class CountyWater : Node3D, ICountyChunkSource
     /// Marches the chunk's cells and emits a quad for each one that is wet.
     /// Returns null when the chunk has no water at all, which is most of them.
     /// </summary>
-    private ArrayMesh? BuildWaterMesh(Vector2I chunk)
+    private WaterMeshData? BuildWaterMeshData(Vector2I chunk)
     {
         int side = CellsPerChunk + 1;
         Vector2 origin = CountyChunks.Origin(chunk);
@@ -432,13 +505,23 @@ public partial class CountyWater : Node3D, ICountyChunkSource
             return null;
         }
 
+        return new WaterMeshData(
+            vertices.ToArray(),
+            normals.ToArray(),
+            colors.ToArray(),
+            uvs.ToArray(),
+            indices.ToArray());
+    }
+
+    private static ArrayMesh CreateMesh(WaterMeshData data)
+    {
         var arrays = new Godot.Collections.Array();
         arrays.Resize((int)Mesh.ArrayType.Max);
-        arrays[(int)Mesh.ArrayType.Vertex] = vertices.ToArray();
-        arrays[(int)Mesh.ArrayType.Normal] = normals.ToArray();
-        arrays[(int)Mesh.ArrayType.Color] = colors.ToArray();
-        arrays[(int)Mesh.ArrayType.TexUV] = uvs.ToArray();
-        arrays[(int)Mesh.ArrayType.Index] = indices.ToArray();
+        arrays[(int)Mesh.ArrayType.Vertex] = data.Vertices;
+        arrays[(int)Mesh.ArrayType.Normal] = data.Normals;
+        arrays[(int)Mesh.ArrayType.Color] = data.Colors;
+        arrays[(int)Mesh.ArrayType.TexUV] = data.Uvs;
+        arrays[(int)Mesh.ArrayType.Index] = data.Indices;
 
         var mesh = new ArrayMesh();
         mesh.AddSurfaceFromArrays(Mesh.PrimitiveType.Triangles, arrays);

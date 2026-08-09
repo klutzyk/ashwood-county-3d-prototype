@@ -136,21 +136,18 @@ public partial class WorldTime : Node
 			return;
 		}
 
-		float scale = SettingsManager.Instance?.Current.GraphicsPreset switch
-		{
-			GraphicsPreset.Low => 0.45f,
-			GraphicsPreset.Medium => 0.75f,
-			_ => 1.0f,
-		};
+		GraphicsPreset preset = SettingsManager.Instance?.Current.GraphicsPreset
+			?? GraphicsPreset.Low;
 
-		// Scale whatever range the rig asked for. Substituting this node's own
-		// ShadowMaxDistance was what cut the county's 1200m cascade set down to
-		// tens of metres; the settings pass then clamps every DirectionalLight3D
-		// again on top, so this has to run after it and has to start from the
-		// rig's number rather than a constant authored for a single street.
+		// Respect the authored range for compact scenes while clamping county-scale
+		// rigs to the active preset. This also covers atmosphere lights created after
+		// SettingsManager's initial scene traversal.
 		float reference = _attached ? _shadowReference : ShadowMaxDistance;
 		_directionalLight.DirectionalShadowMaxDistance =
-			Mathf.Max(reference * scale, 16.0f);
+			Mathf.Max(Mathf.Min(reference, GraphicsQuality.ShadowDistance(preset)), 16.0f);
+		_directionalLight.DirectionalShadowMode = preset == GraphicsPreset.Low
+			? DirectionalLight3D.ShadowMode.Parallel2Splits
+			: DirectionalLight3D.ShadowMode.Parallel4Splits;
 	}
 
 	public override void _Process(double delta)

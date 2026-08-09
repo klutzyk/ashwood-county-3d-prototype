@@ -86,9 +86,14 @@ public partial class SettingsValidation : Node
 			AddChild(world);
 			await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
 			ThirdPersonPlayer player = world.GetNode<ThirdPersonPlayer>("Player");
-			DirectionalLight3D light = world.GetNode<DirectionalLight3D>("DirectionalLight3D");
+			DirectionalLight3D light = world.GetNode<DirectionalLight3D>(
+				"CountyWorld/AshwoodCounty/Atmosphere/Sun");
 			Require(Mathf.IsEqualApprox(player.MouseSensitivity, 0.0033f) &&
-				Mathf.IsEqualApprox(light.DirectionalShadowMaxDistance, 24.0f),
+				Mathf.IsEqualApprox(
+					light.DirectionalShadowMaxDistance,
+					GraphicsQuality.ShadowDistance(GraphicsPreset.Low)) &&
+				light.DirectionalShadowMode ==
+					DirectionalLight3D.ShadowMode.Parallel2Splits,
 				"mouse sensitivity and Low graphics preset apply to gameplay");
 			foreach (string playerName in new[] { "Wind", "ZombieGroans", "DayInsects", "NightCrickets" })
 			{

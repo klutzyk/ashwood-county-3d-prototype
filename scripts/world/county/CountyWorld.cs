@@ -72,12 +72,18 @@ public partial class CountyWorld : Node3D
     /// Chunks waiting to be built, nearest first. Kept per source so a cheap
     /// subsystem is not starved behind an expensive one.
     /// </summary>
-    private readonly Dictionary<ICountyChunkSource, List<(Vector2I Chunk, int Ring)>> _queued = new();
+    private readonly record struct ChunkOperation(
+        Vector2I Chunk,
+        int Ring,
+        bool IsRingUpdate);
+
+    private readonly Dictionary<ICountyChunkSource, List<ChunkOperation>> _queued = new();
 
     private Node3D? _target;
     private Vector2I _lastChunk = new(int.MinValue, int.MinValue);
     private float _sinceUpdate;
     private bool _primed;
+    private int _sourceCursor;
 
     public Vector2I CurrentChunk => _lastChunk;
 
@@ -101,6 +107,13 @@ public partial class CountyWorld : Node3D
 
         ResolveTarget();
         CollectSources();
+
+        Settings.GraphicsPreset preset =
+            Settings.SettingsManager.Instance?.Current.GraphicsPreset
+            ?? Settings.GraphicsPreset.Low;
+        ChunkBuildsPerFrame = Mathf.Min(
+            ChunkBuildsPerFrame,
+            Settings.GraphicsQuality.ChunkBuildsPerFrame(preset));
     }
 
     /// <summary>
@@ -117,7 +130,7 @@ public partial class CountyWorld : Node3D
 
         _sources.Add(source);
         _resident[source] = new Dictionary<Vector2I, int>();
-        _queued[source] = new List<(Vector2I, int)>();
+        _queued[source] = new List<ChunkOperation>();
 
         // A source that registers after the world has already primed still needs
         // its first load, otherwise it stays empty until the player walks.
@@ -248,7 +261,7 @@ public partial class CountyWorld : Node3D
             resident.Remove(chunk);
         }
 
-        List<(Vector2I Chunk, int Ring)> queue = _queued[source];
+        List<ChunkOperation> queue = _queued[source];
         queue.Clear();
 
         foreach (Vector2I chunk in wanted)
@@ -258,8 +271,7 @@ public partial class CountyWorld : Node3D
             {
                 if (previousRing != ring)
                 {
-                    source.UpdateChunkRing(chunk, ring);
-                    resident[chunk] = ring;
+                    queue.Add(new ChunkOperation(chunk, ring, IsRingUpdate: true));
                 }
 
                 continue;
@@ -268,7 +280,7 @@ public partial class CountyWorld : Node3D
             // Queued rather than built. CountyChunks.Around returns nearest first,
             // so draining in order fills the ground under the player before the
             // far ring, which is what makes the delay tolerable.
-            queue.Add((chunk, ring));
+            queue.Add(new ChunkOperation(chunk, ring, IsRingUpdate: false));
         }
     }
 
@@ -278,65 +290,64 @@ public partial class CountyWorld : Node3D
     /// </summary>
     private void DrainBuildQueue()
     {
-        // The chunk the player is standing in is never deferred.
-        //
-        // Budgeting every build meant the ground under the spawn point did not
-        // exist for the first second, and a CharacterBody3D with gravity does not
-        // wait politely - it falls, accelerating, and by the time terrain arrives
-        // it is hundreds of metres below the world. Ground first, detail after.
-        foreach (ICountyChunkSource source in _sources)
-        {
-            List<(Vector2I Chunk, int Ring)> queue = _queued[source];
-            for (int i = queue.Count - 1; i >= 0; i--)
-            {
-                if (queue[i].Ring > 0)
-                {
-                    continue;
-                }
-
-                (Vector2I chunk, int ring) = queue[i];
-                queue.RemoveAt(i);
-                if (!_resident[source].ContainsKey(chunk))
-                {
-                    source.BuildChunk(chunk, ring);
-                    _resident[source][chunk] = ring;
-                }
-            }
-        }
-
         int budget = Mathf.Max(ChunkBuildsPerFrame, 1);
 
-        // Round-robin across sources so terrain, water and vegetation for the same
-        // area arrive together. Draining one source to exhaustion first would show
-        // the player bare ground with trees standing on nothing.
-        bool builtAny = true;
-        while (budget > 0 && builtAny)
+        // Keep the cursor across frames. With a one-operation Low preset budget,
+        // restarting at source zero every frame would drain all terrain before
+        // water, roads, or vegetation received a turn.
+        while (budget > 0 && _sources.Count > 0)
         {
-            builtAny = false;
-            foreach (ICountyChunkSource source in _sources)
+            ICountyChunkSource? source = null;
+            for (int checkedSources = 0; checkedSources < _sources.Count; checkedSources++)
             {
-                if (budget <= 0)
+                int index = _sourceCursor % _sources.Count;
+                _sourceCursor = (index + 1) % _sources.Count;
+                ICountyChunkSource candidate = _sources[index];
+                if (_queued[candidate].Count > 0)
                 {
+                    source = candidate;
                     break;
                 }
+            }
 
-                List<(Vector2I Chunk, int Ring)> queue = _queued[source];
-                if (queue.Count == 0)
+            if (source is null)
+            {
+                break;
+            }
+
+            List<ChunkOperation> queue = _queued[source];
+            ChunkOperation operation = queue[0];
+            queue.RemoveAt(0);
+            budget--;
+            ulong operationStart = Time.GetTicksUsec();
+
+            Dictionary<Vector2I, int> resident = _resident[source];
+            if (operation.IsRingUpdate)
+            {
+                if (resident.ContainsKey(operation.Chunk))
                 {
-                    continue;
+                    source.UpdateChunkRing(operation.Chunk, operation.Ring);
+                    resident[operation.Chunk] = operation.Ring;
                 }
+            }
+            else if (!resident.ContainsKey(operation.Chunk))
+            {
+                source.BuildChunk(operation.Chunk, operation.Ring);
+                resident[operation.Chunk] = operation.Ring;
+            }
 
-                (Vector2I chunk, int ring) = queue[0];
-                queue.RemoveAt(0);
-
-                if (!_resident[source].ContainsKey(chunk))
+            if (OS.GetEnvironment("COUNTY_STREAM_PROFILE") == "1")
+            {
+                double elapsedMilliseconds =
+                    (Time.GetTicksUsec() - operationStart) / 1000.0;
+                if (elapsedMilliseconds >= 4.0)
                 {
-                    source.BuildChunk(chunk, ring);
-                    _resident[source][chunk] = ring;
-                    budget--;
+                    GD.Print(
+                        $"COUNTY_STREAM_OP: source={source.GetType().Name}, " +
+                        $"kind={(operation.IsRingUpdate ? "lod" : "build")}, " +
+                        $"chunk={operation.Chunk}, ring={operation.Ring}, " +
+                        $"elapsed_ms={elapsedMilliseconds:F2}");
                 }
-
-                builtAny = true;
             }
         }
     }
@@ -346,7 +357,7 @@ public partial class CountyWorld : Node3D
     {
         get
         {
-            foreach (List<(Vector2I, int)> queue in _queued.Values)
+            foreach (List<ChunkOperation> queue in _queued.Values)
             {
                 if (queue.Count > 0)
                 {

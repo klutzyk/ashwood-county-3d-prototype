@@ -105,6 +105,44 @@ definitive CPU-versus-GPU split. It rules out physics and navigation as the
 bottleneck; the normal-run discrepancy is dominated by VSync/presentation
 pacing and can be compounded by the camera's visible render workload.
 
+## August 2026 Integrated-GPU Frame-Pacing Pass
+
+The shipped Low preset now treats 60 FPS as its performance target. County
+terrain, water, road, and vegetation sampling runs on bounded background workers;
+completed Godot resources are installed incrementally on the main thread. Chunk
+LOD changes use the same one-operation-per-frame queue as new chunks, preventing a
+border crossing from rebuilding complete resident rings in one frame. Low also
+uses shorter county streaming radii, a 4.5 km gameplay camera, two directional
+shadow cascades, and no unsupported Mobile-renderer screen-space effects.
+
+Captured on 2026-08-09 using the AMD Radeon integrated adapter, Mobile renderer,
+debug C# build, Low preset, VSync disabled and 1280 x 720:
+
+| Metric | Before | Optimized fixed view | Optimized streaming traversal |
+| --- | ---: | ---: | ---: |
+| Average FPS | 87.00 | 147.10 | 148.18 |
+| Median frame time | 8.44 ms | 6.46 ms | 6.92 ms |
+| p95 frame time | 30.51 ms | 9.14 ms | 9.14 ms |
+| p99 frame time | 69.53 ms | 10.55 ms | 10.46 ms |
+| 1% low FPS | 9.79 | 75.76 | 62.99 |
+| Minimum instantaneous FPS | 5.85 | 34.55 | 28.81 |
+
+The traversal run moves the real player at 10 m/s from `(-600, 600)` across a
+256 m county chunk boundary for 18 seconds. Player, camera, UI, zombies, AI,
+navigation, audio, world geometry, and streaming remain active. Run both retained
+benchmarks with:
+
+```powershell
+.\tools\launch-runtime.ps1 -Target FullBenchmark
+.\tools\launch-runtime.ps1 -Target StreamingBenchmark
+```
+
+The 1% lows clear 60 FPS in both measured debug runs. Single isolated frames from
+background completion or runtime warmup still fall below 60, so these results
+establish sustained playability on the tested laptop rather than a universal
+hardware guarantee. Release exports should be checked separately before setting
+final minimum specifications.
+
 Use `-GodotPath` or `ASHWOOD_GODOT_PATH` when Godot is not on `PATH`. Close
 other GPU-heavy applications and repeat anomalous results.
 

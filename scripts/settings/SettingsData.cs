@@ -20,7 +20,9 @@ public sealed class SettingsData
 	public bool Fullscreen { get; set; }
 	public bool VSync { get; set; } = true;
 	public Vector2I Resolution { get; set; } = new(1280, 720);
-	public GraphicsPreset GraphicsPreset { get; set; } = GraphicsPreset.High;
+	// Start conservatively. Integrated graphics are the baseline hardware for the
+	// project; players with headroom can opt into the denser presets.
+	public GraphicsPreset GraphicsPreset { get; set; } = GraphicsPreset.Low;
 
 	public SettingsData Copy()
 	{

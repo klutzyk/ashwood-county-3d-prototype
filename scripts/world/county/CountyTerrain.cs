@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
+using System.Threading;
 using System.Threading.Tasks;
 using Godot;
 
@@ -98,7 +99,9 @@ public partial class CountyTerrain : Node3D, ICountyChunkSource
     /// arrays, and <see cref="InstallChunk"/> builds the ArrayMesh and collision
     /// shape once it is back on the main thread.
     /// </summary>
-    private readonly ConcurrentDictionary<Vector2I, ChunkData> _built = new();
+    private readonly ConcurrentQueue<ChunkData> _completed = new();
+    private readonly Dictionary<Vector2I, int> _generations = new();
+    private SemaphoreSlim _buildGate = new(1, 1);
 
     private Material? _material;
 
@@ -124,9 +127,11 @@ public partial class CountyTerrain : Node3D, ICountyChunkSource
         // dropping from 8 to 4 is not half the chunks but a quarter of them.
         Settings.GraphicsPreset preset =
             Settings.SettingsManager.Instance?.Current.GraphicsPreset
-            ?? Settings.GraphicsPreset.High;
+            ?? Settings.GraphicsPreset.Low;
         TerrainRadius = Mathf.Min(
             TerrainRadius, Settings.GraphicsQuality.TerrainRadius(preset));
+        int concurrency = Settings.GraphicsQuality.TerrainBuildConcurrency(preset);
+        _buildGate = new SemaphoreSlim(concurrency, concurrency);
 
         // Registering with the parent world rather than being wired by hand means
         // the scene can be assembled in any order.
@@ -172,6 +177,8 @@ public partial class CountyTerrain : Node3D, ICountyChunkSource
     /// </summary>
     public static long TotalChunkBuilds { get; private set; }
 
+    public bool IsChunkReady(Vector2I chunk) => _chunks.ContainsKey(chunk);
+
     public void BuildChunk(Vector2I chunk, int ring)
     {
         if (_chunks.ContainsKey(chunk) || !_pending.Add(chunk))
@@ -181,30 +188,61 @@ public partial class CountyTerrain : Node3D, ICountyChunkSource
 
         int quads = QuadsForRing(ring);
         bool wantsCollision = BuildCollision && ring <= CollisionRadius;
+        int generation = _generations.TryGetValue(chunk, out int previousGeneration)
+            ? previousGeneration + 1
+            : 1;
+        _generations[chunk] = generation;
         TotalChunkBuilds++;
 
-        Task.Run(() =>
+        Task.Run(async () =>
         {
+            await _buildGate.WaitAsync();
             try
             {
-                _built[chunk] = BuildChunkData(chunk, quads, wantsCollision);
-                CallDeferred(nameof(InstallChunk), chunk, ring);
+                ChunkData data = BuildChunkData(chunk, quads, wantsCollision);
+                data.Chunk = chunk;
+                data.Ring = ring;
+                data.Generation = generation;
+                _completed.Enqueue(data);
             }
             catch (Exception error)
             {
                 GD.PushError($"CountyTerrain: chunk {chunk} failed to build: {error}");
-                CallDeferred(nameof(ClearPending), chunk);
+                CallDeferred(nameof(ClearPending), chunk, generation);
+            }
+            finally
+            {
+                _buildGate.Release();
             }
         });
     }
 
-    private void ClearPending(Vector2I chunk) => _pending.Remove(chunk);
-
-    private void InstallChunk(Vector2I chunk, int ring)
+    private void ClearPending(Vector2I chunk, int generation)
     {
-        _pending.Remove(chunk);
+        if (_generations.TryGetValue(chunk, out int current) && current == generation)
+        {
+            _pending.Remove(chunk);
+        }
+    }
 
-        if (!_built.TryRemove(chunk, out ChunkData? data))
+    public override void _Process(double delta)
+    {
+        // Resource creation and collision upload must happen on the main thread.
+        // Installing one completed job per frame prevents several background jobs
+        // finishing together from turning into a single long render-thread stall.
+        if (_completed.TryDequeue(out ChunkData? data))
+        {
+            InstallChunk(data);
+        }
+    }
+
+    private void InstallChunk(ChunkData data)
+    {
+        Vector2I chunk = data.Chunk;
+        int ring = data.Ring;
+        if (!_generations.TryGetValue(chunk, out int generation) ||
+            generation != data.Generation ||
+            !_pending.Remove(chunk))
         {
             return;
         }
@@ -265,7 +303,9 @@ public partial class CountyTerrain : Node3D, ICountyChunkSource
     public void ReleaseChunk(Vector2I chunk)
     {
         _pending.Remove(chunk);
-        _built.TryRemove(chunk, out _);
+        _generations[chunk] = _generations.TryGetValue(chunk, out int generation)
+            ? generation + 1
+            : 1;
         if (!_chunks.Remove(chunk, out Node3D? holder))
         {
             return;
@@ -297,6 +337,9 @@ public partial class CountyTerrain : Node3D, ICountyChunkSource
     /// <summary>Plain vertex data - no Godot resources, so it is safe to build off-thread.</summary>
     private sealed class ChunkData
     {
+        public Vector2I Chunk;
+        public int Ring;
+        public int Generation;
         public Vector3[] Vertices = Array.Empty<Vector3>();
         public Vector3[] Normals = Array.Empty<Vector3>();
         public float[] Tangents = Array.Empty<float>();

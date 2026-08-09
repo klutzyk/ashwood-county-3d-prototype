@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Godot;
 
@@ -44,12 +45,14 @@ public partial class CountyFarTerrain : Node3D
     private const string FarMaterialPath = "res://assets/materials/county_far_terrain.tres";
 
     private readonly Dictionary<Vector2I, MeshInstance3D> _tiles = new();
-    private readonly ConcurrentDictionary<Vector2I, TileData> _built = new();
+    private readonly ConcurrentQueue<(Vector2I Tile, TileData Data)> _completed = new();
+    private SemaphoreSlim _buildGate = new(1, 1);
 
     private Material? _material;
     private CountyTerrain? _streamed;
     private Vector2I _lastCenter = new(int.MinValue, int.MinValue);
     private int _pending;
+    private double _visibilityElapsed;
 
     /// <summary>Mirrors <see cref="CountyWorld.EditorPreview"/>; set by the parent world.</summary>
     public bool EditorPreview { get; set; }
@@ -64,6 +67,12 @@ public partial class CountyFarTerrain : Node3D
         }
 
         _material = LoadMaterial();
+
+        Settings.GraphicsPreset preset =
+            Settings.SettingsManager.Instance?.Current.GraphicsPreset
+            ?? Settings.GraphicsPreset.Low;
+        int concurrency = Settings.GraphicsQuality.TerrainBuildConcurrency(preset);
+        _buildGate = new SemaphoreSlim(concurrency, concurrency);
 
         foreach (Node sibling in GetParent()?.GetChildren() ?? new Godot.Collections.Array<Node>())
         {
@@ -107,17 +116,23 @@ public partial class CountyFarTerrain : Node3D
             {
                 var tile = new Vector2I(tx, tz);
                 _pending++;
-                Task.Run(() =>
+                Task.Run(async () =>
                 {
+                    await _buildGate.WaitAsync();
                     try
                     {
-                        _built[tile] = BuildTileData(tile, ChunksPerTile, QuadsPerTile);
-                        CallDeferred(nameof(InstallTile), tile);
+                        _completed.Enqueue((
+                            tile,
+                            BuildTileData(tile, ChunksPerTile, QuadsPerTile)));
                     }
                     catch (Exception error)
                     {
                         GD.PushError($"CountyFarTerrain: tile {tile} failed: {error}");
                         CallDeferred(nameof(DecrementPending));
+                    }
+                    finally
+                    {
+                        _buildGate.Release();
                     }
                 });
             }
@@ -126,11 +141,11 @@ public partial class CountyFarTerrain : Node3D
 
     private void DecrementPending() => _pending = Mathf.Max(_pending - 1, 0);
 
-    private void InstallTile(Vector2I tile)
+    private void InstallTile(Vector2I tile, TileData data)
     {
         _pending = Mathf.Max(_pending - 1, 0);
 
-        if (!_built.TryRemove(tile, out TileData? data) || !IsInsideTree())
+        if (!IsInsideTree())
         {
             return;
         }
@@ -174,7 +189,17 @@ public partial class CountyFarTerrain : Node3D
             return;
         }
 
-        UpdateVisibility(force: false);
+        if (_completed.TryDequeue(out (Vector2I Tile, TileData Data) completed))
+        {
+            InstallTile(completed.Tile, completed.Data);
+        }
+
+        _visibilityElapsed += delta;
+        if (_visibilityElapsed >= 0.25)
+        {
+            _visibilityElapsed = 0.0;
+            UpdateVisibility(force: true);
+        }
     }
 
     /// <summary>
@@ -228,8 +253,33 @@ public partial class CountyFarTerrain : Node3D
                 Mathf.Max(Mathf.Abs(minChunkX - center.X), Mathf.Abs(maxChunkX - center.X)),
                 Mathf.Max(Mathf.Abs(minChunkZ - center.Y), Mathf.Abs(maxChunkZ - center.Y)));
 
-            instance.Visible = worstRing > StreamedRadius;
+            bool coveredByDetailedTerrain = worstRing <= StreamedRadius &&
+                IsTileReady(tile);
+            instance.Visible = !coveredByDetailedTerrain;
         }
+    }
+
+    private bool IsTileReady(Vector2I tile)
+    {
+        if (_streamed == null)
+        {
+            return false;
+        }
+
+        int minChunkX = tile.X * ChunksPerTile;
+        int minChunkZ = tile.Y * ChunksPerTile;
+        for (int z = minChunkZ; z < minChunkZ + ChunksPerTile; z++)
+        {
+            for (int x = minChunkX; x < minChunkX + ChunksPerTile; x++)
+            {
+                if (!_streamed.IsChunkReady(new Vector2I(x, z)))
+                {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
     private sealed class TileData

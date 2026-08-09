@@ -74,6 +74,11 @@ public partial class CountySettlements : Node3D, ICountyChunkSource
 
     public override void _Ready()
     {
+        Settings.GraphicsPreset preset =
+            Settings.SettingsManager.Instance?.Current.GraphicsPreset
+            ?? Settings.GraphicsPreset.Low;
+        SettlementRadius = Mathf.Min(
+            SettlementRadius, Settings.GraphicsQuality.SettlementRadius(preset));
         LoadPalette();
         PlanCounty();
 

@@ -2,6 +2,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
+using System.Threading;
+using System.Threading.Tasks;
 using Godot;
 
 namespace AshwoodCounty3DPrototype.World.County;
@@ -68,12 +71,41 @@ public partial class CountyRoads : Node3D, ICountyChunkSource
 
     private readonly List<RoadPath> _paths = new();
     private readonly Dictionary<Vector2I, Node3D> _chunks = new();
+    private readonly HashSet<Vector2I> _pending = new();
+    private readonly Dictionary<Vector2I, int> _generations = new();
+    private readonly ConcurrentQueue<RoadBuildResult> _completed = new();
+    private SemaphoreSlim _buildGate = new(1, 1);
     private readonly Dictionary<CountyMap.RoadClass, Material> _materials = new();
     private Material? _railMaterial;
     private Material? _bridgeMaterial;
 
+    private sealed record RibbonData(
+        Vector3[] Vertices,
+        Vector3[] Normals,
+        Vector2[] Uvs,
+        int[] Indices,
+        List<Transform3D> SleeperFrames,
+        List<(Vector3 Deck, float Drop)> Piers);
+
+    private sealed record RoadRunData(
+        string Name,
+        CountyMap.RoadClass Class,
+        int Index,
+        int Ring,
+        RibbonData Ribbon);
+
+    private sealed record RoadBuildResult(
+        Vector2I Chunk,
+        int Generation,
+        List<RoadRunData> Runs);
+
     public override void _Ready()
     {
+        Settings.GraphicsPreset preset =
+            Settings.SettingsManager.Instance?.Current.GraphicsPreset
+            ?? Settings.GraphicsPreset.Low;
+        RoadRadius = Mathf.Min(
+            RoadRadius, Settings.GraphicsQuality.RoadRadius(preset));
         LoadMaterials();
         BuildPaths();
 
@@ -211,16 +243,92 @@ public partial class CountyRoads : Node3D, ICountyChunkSource
 
     public void BuildChunk(Vector2I chunk, int ring)
     {
-        if (_chunks.ContainsKey(chunk))
+        if (_chunks.ContainsKey(chunk) || !_pending.Add(chunk))
         {
             return;
         }
 
+        int generation = _generations.TryGetValue(chunk, out int previousGeneration)
+            ? previousGeneration + 1
+            : 1;
+        _generations[chunk] = generation;
+
+        Task.Run(async () =>
+        {
+            await _buildGate.WaitAsync();
+            try
+            {
+                _completed.Enqueue(new RoadBuildResult(
+                    chunk,
+                    generation,
+                    BuildRoadChunkData(chunk, ring)));
+            }
+            catch (Exception error)
+            {
+                GD.PushError($"CountyRoads: chunk {chunk} failed to build: {error}");
+                CallDeferred(nameof(ClearPending), chunk, generation);
+            }
+            finally
+            {
+                _buildGate.Release();
+            }
+        });
+    }
+
+    public override void _Process(double delta)
+    {
+        if (!_completed.TryDequeue(out RoadBuildResult? result) ||
+            !_generations.TryGetValue(result.Chunk, out int generation) ||
+            generation != result.Generation ||
+            !_pending.Remove(result.Chunk))
+        {
+            return;
+        }
+
+        Vector2I chunk = result.Chunk;
         var holder = new Node3D { Name = $"Roads_{chunk.X}_{chunk.Y}" };
+        foreach (RoadRunData run in result.Runs)
+        {
+            ArrayMesh mesh = CreateRibbonMesh(run.Ribbon);
+            string name = $"{Sanitise(run.Name)}_{run.Index}";
+            holder.AddChild(new MeshInstance3D
+            {
+                Name = name,
+                Mesh = mesh,
+                MaterialOverride = _materials.GetValueOrDefault(run.Class),
+                CastShadow = run.Ring <= 2
+                    ? GeometryInstance3D.ShadowCastingSetting.On
+                    : GeometryInstance3D.ShadowCastingSetting.Off,
+            });
+
+            if (run.Class == CountyMap.RoadClass.Railway &&
+                run.Ribbon.SleeperFrames.Count > 0)
+            {
+                EmitRail(holder, name, run.Ribbon.SleeperFrames);
+            }
+            if (run.Ribbon.Piers.Count > 0)
+            {
+                EmitPiers(holder, name, run.Ribbon.Piers);
+            }
+        }
+
+        AddChild(holder);
+        _chunks[chunk] = holder;
+    }
+
+    private void ClearPending(Vector2I chunk, int generation)
+    {
+        if (_generations.TryGetValue(chunk, out int current) && current == generation)
+        {
+            _pending.Remove(chunk);
+        }
+    }
+
+    private List<RoadRunData> BuildRoadChunkData(Vector2I chunk, int ring)
+    {
         Vector2 min = CountyChunks.Origin(chunk);
         Vector2 max = min + new Vector2(CountyChunks.Size, CountyChunks.Size);
-
-        bool anything = false;
+        var result = new List<RoadRunData>();
 
         foreach (RoadPath path in _paths)
         {
@@ -229,24 +337,18 @@ public partial class CountyRoads : Node3D, ICountyChunkSource
                 continue;
             }
 
-            anything |= EmitRoad(holder, path, min, max, ring);
+            CollectRoadRuns(result, path, min, max, ring);
         }
 
-        if (anything)
-        {
-            AddChild(holder);
-            _chunks[chunk] = holder;
-        }
-        else
-        {
-            holder.QueueFree();
-            _chunks[chunk] = new Node3D { Name = $"Roads_{chunk.X}_{chunk.Y}_empty" };
-            AddChild(_chunks[chunk]);
-        }
+        return result;
     }
 
     public void ReleaseChunk(Vector2I chunk)
     {
+        _pending.Remove(chunk);
+        _generations[chunk] = _generations.TryGetValue(chunk, out int generation)
+            ? generation + 1
+            : 1;
         if (_chunks.Remove(chunk, out Node3D? holder))
         {
             holder.QueueFree();
@@ -260,7 +362,12 @@ public partial class CountyRoads : Node3D, ICountyChunkSource
     /// the chunk, plus one either side so adjacent chunks' ribbons overlap by a
     /// segment and leave no gap at the border.
     /// </summary>
-    private bool EmitRoad(Node3D holder, RoadPath path, Vector2 min, Vector2 max, int ring)
+    private void CollectRoadRuns(
+        List<RoadRunData> result,
+        RoadPath path,
+        Vector2 min,
+        Vector2 max,
+        int ring)
     {
         float halfWidth = CountyMap.RoadHalfWidth(path.Class);
         float shoulder = CountyMap.RoadShoulder(path.Class);
@@ -290,7 +397,6 @@ public partial class CountyRoads : Node3D, ICountyChunkSource
             runs.Add((runStart, path.Points.Length - 1));
         }
 
-        bool emitted = false;
         int index = 0;
 
         foreach ((int start, int end) in runs)
@@ -300,38 +406,16 @@ public partial class CountyRoads : Node3D, ICountyChunkSource
                 continue;
             }
 
-            ArrayMesh? mesh = BuildRibbon(path, start, end, halfWidth, shoulder,
-                out List<Transform3D> sleeperFrames, out List<(Vector3 Deck, float Drop)> piers);
-            if (mesh == null)
+            RibbonData? ribbon = BuildRibbonData(
+                path, start, end, halfWidth, shoulder);
+            if (ribbon == null)
             {
                 continue;
             }
 
-            holder.AddChild(new MeshInstance3D
-            {
-                Name = $"{Sanitise(path.Name)}_{index}",
-                Mesh = mesh,
-                MaterialOverride = _materials.GetValueOrDefault(path.Class),
-                CastShadow = ring <= 2
-                    ? GeometryInstance3D.ShadowCastingSetting.On
-                    : GeometryInstance3D.ShadowCastingSetting.Off,
-            });
-
-            if (path.Class == CountyMap.RoadClass.Railway && sleeperFrames.Count > 0)
-            {
-                EmitRail(holder, $"{Sanitise(path.Name)}_{index}", sleeperFrames);
-            }
-
-            if (piers.Count > 0)
-            {
-                EmitPiers(holder, $"{Sanitise(path.Name)}_{index}", piers);
-            }
-
-            emitted = true;
+            result.Add(new RoadRunData(path.Name, path.Class, index, ring, ribbon));
             index++;
         }
-
-        return emitted;
     }
 
     private static string Sanitise(string name) => name.Replace(" ", "").Replace("'", "");
@@ -344,17 +428,15 @@ public partial class CountyRoads : Node3D, ICountyChunkSource
     /// ribbon reads as a decal laid on the ground, where a cambered one catches the
     /// light along its length the way a real road does.
     /// </summary>
-    private ArrayMesh? BuildRibbon(
+    private RibbonData? BuildRibbonData(
         RoadPath path,
         int start,
         int end,
         float halfWidth,
-        float shoulder,
-        out List<Transform3D> sleeperFrames,
-        out List<(Vector3 Deck, float Drop)> piers)
+        float shoulder)
     {
-        sleeperFrames = new List<Transform3D>();
-        piers = new List<(Vector3, float)>();
+        var sleeperFrames = new List<Transform3D>();
+        var piers = new List<(Vector3, float)>();
 
         int count = end - start + 1;
         if (count < 2)
@@ -484,12 +566,23 @@ public partial class CountyRoads : Node3D, ICountyChunkSource
             return null;
         }
 
+        return new RibbonData(
+            vertices.ToArray(),
+            normals.ToArray(),
+            uvs.ToArray(),
+            indices.ToArray(),
+            sleeperFrames,
+            piers);
+    }
+
+    private static ArrayMesh CreateRibbonMesh(RibbonData data)
+    {
         var arrays = new Godot.Collections.Array();
         arrays.Resize((int)Mesh.ArrayType.Max);
-        arrays[(int)Mesh.ArrayType.Vertex] = vertices.ToArray();
-        arrays[(int)Mesh.ArrayType.Normal] = normals.ToArray();
-        arrays[(int)Mesh.ArrayType.TexUV] = uvs.ToArray();
-        arrays[(int)Mesh.ArrayType.Index] = indices.ToArray();
+        arrays[(int)Mesh.ArrayType.Vertex] = data.Vertices;
+        arrays[(int)Mesh.ArrayType.Normal] = data.Normals;
+        arrays[(int)Mesh.ArrayType.TexUV] = data.Uvs;
+        arrays[(int)Mesh.ArrayType.Index] = data.Indices;
 
         var mesh = new ArrayMesh();
         mesh.AddSurfaceFromArrays(Mesh.PrimitiveType.Triangles, arrays);

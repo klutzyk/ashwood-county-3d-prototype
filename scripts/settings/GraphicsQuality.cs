@@ -108,6 +108,59 @@ public static class GraphicsQuality
         _ => 6,
     };
 
+    public static int WaterRadius(GraphicsPreset preset) => preset switch
+    {
+        GraphicsPreset.Low => 4,
+        GraphicsPreset.Medium => 6,
+        _ => 7,
+    };
+
+    public static int RoadRadius(GraphicsPreset preset) => preset switch
+    {
+        GraphicsPreset.Low => 4,
+        GraphicsPreset.Medium => 5,
+        _ => 6,
+    };
+
+    public static int SettlementRadius(GraphicsPreset preset) => preset switch
+    {
+        GraphicsPreset.Low => 3,
+        GraphicsPreset.Medium => 4,
+        _ => 5,
+    };
+
+    public static int PoiRadius(GraphicsPreset preset) => preset switch
+    {
+        GraphicsPreset.Low => 3,
+        _ => 4,
+    };
+
+    /// <summary>
+    /// The always-resident far field supplies the horizon, so weak hardware does
+    /// not need the gameplay camera to submit the entire eight-kilometre county.
+    /// </summary>
+    public static float CameraFarDistance(GraphicsPreset preset) => preset switch
+    {
+        GraphicsPreset.Low => 4500.0f,
+        GraphicsPreset.Medium => 6500.0f,
+        _ => 9000.0f,
+    };
+
+    /// <summary>Chunk operations admitted to the main thread each frame.</summary>
+    public static int ChunkBuildsPerFrame(GraphicsPreset preset) => preset switch
+    {
+        GraphicsPreset.Low => 1,
+        GraphicsPreset.Medium => 2,
+        _ => 3,
+    };
+
+    /// <summary>Terrain mesh jobs allowed to compete with the render thread.</summary>
+    public static int TerrainBuildConcurrency(GraphicsPreset preset) => preset switch
+    {
+        GraphicsPreset.Low => 1,
+        _ => 2,
+    };
+
     /// <summary>
     /// Shadow distance in metres. Shadow map resolution measured as noise, but
     /// distance decides how much geometry is re-submitted per cascade, which does

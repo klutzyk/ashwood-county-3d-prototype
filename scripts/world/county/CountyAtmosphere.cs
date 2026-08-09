@@ -160,10 +160,16 @@ public partial class CountyAtmosphere : Node3D
         _sun.LightAngularDistance = 0.55f;
         _sun.ShadowEnabled = OS.GetEnvironment("NO_SHADOW") != "1";
 
-        // Four cascades over 1.2km. Everything past that is lit but unshadowed,
-        // which nobody notices at distance and saves the whole far field.
-        _sun.DirectionalShadowMode = DirectionalLight3D.ShadowMode.Parallel4Splits;
-        _sun.DirectionalShadowMaxDistance = 1200.0f;
+        Settings.GraphicsPreset preset =
+            Settings.SettingsManager.Instance?.Current.GraphicsPreset
+            ?? Settings.GraphicsPreset.Low;
+        _sun.SetMeta("_ashwood_authored_shadow_distance", 1200.0f);
+        _sun.DirectionalShadowMode = preset == Settings.GraphicsPreset.Low
+            ? DirectionalLight3D.ShadowMode.Parallel2Splits
+            : DirectionalLight3D.ShadowMode.Parallel4Splits;
+        _sun.DirectionalShadowMaxDistance = Mathf.Min(
+            1200.0f,
+            Settings.GraphicsQuality.ShadowDistance(preset));
         _sun.DirectionalShadowSplit1 = 0.045f;   // ~54m: the ground around the player
         _sun.DirectionalShadowSplit2 = 0.14f;    // ~168m: nearby buildings and trees
         _sun.DirectionalShadowSplit3 = 0.42f;    // ~504m: the local valley
@@ -208,11 +214,17 @@ public partial class CountyAtmosphere : Node3D
         // running game (gizmos, selection outlines, no occlusion tuning), so the
         // heaviest post effects are skipped there rather than doubling up on cost
         // for a viewport that is for inspection, not for judging final lighting.
-        bool cheap = Engine.IsEditorHint();
+        Settings.GraphicsPreset preset =
+            Settings.SettingsManager.Instance?.Current.GraphicsPreset
+            ?? Settings.GraphicsPreset.Low;
+        bool mobileRenderer = ProjectSettings.GetSetting(
+            "rendering/renderer/rendering_method", "mobile").AsString() == "mobile";
+        bool cheap = Engine.IsEditorHint() || preset == Settings.GraphicsPreset.Low;
 
         // SSAO at county scale wants a wider radius than a room interior, or it
         // only darkens the grass blades and leaves the landforms flat.
-        environment.SsaoEnabled = !cheap && OS.GetEnvironment("NO_SSAO") != "1";
+        environment.SsaoEnabled = !cheap && !mobileRenderer &&
+            OS.GetEnvironment("NO_SSAO") != "1";
         environment.SsaoRadius = 2.4f;
         environment.SsaoIntensity = 1.9f;
         environment.SsaoPower = 1.5f;
@@ -224,7 +236,8 @@ public partial class CountyAtmosphere : Node3D
         environment.SsrEnabled = false;
         environment.SsilEnabled = false;
 
-        environment.GlowEnabled = !cheap;
+        environment.GlowEnabled = !cheap && !mobileRenderer &&
+            Settings.GraphicsQuality.Glow(preset);
         environment.GlowNormalized = true;
         environment.GlowIntensity = 0.4f;
         environment.GlowStrength = 1.0f;
@@ -343,7 +356,13 @@ public partial class CountyAtmosphere : Node3D
             return;
         }
 
-        camera.Far = ViewDistance;
+        Settings.GraphicsPreset preset =
+            Settings.SettingsManager.Instance?.Current.GraphicsPreset
+            ?? Settings.GraphicsPreset.Low;
+        camera.SetMeta("_ashwood_authored_camera_far", ViewDistance);
+        camera.Far = Mathf.Min(
+            ViewDistance,
+            Settings.GraphicsQuality.CameraFarDistance(preset));
 
         // 0.25m near plane. Closer buys nothing at third person and costs depth
         // precision that the far ridgelines need.

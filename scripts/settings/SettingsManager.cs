@@ -145,16 +145,50 @@ public partial class SettingsManager : Node
 		{
 			if (node is DirectionalLight3D directional)
 			{
+				const string authoredShadowMeta = "_ashwood_authored_shadow_distance";
+				if (!directional.HasMeta(authoredShadowMeta))
+				{
+					directional.SetMeta(
+						authoredShadowMeta,
+						directional.DirectionalShadowMaxDistance);
+				}
+				float authoredShadowDistance = (float)directional
+					.GetMeta(authoredShadowMeta).AsDouble();
 				directional.ShadowEnabled = true;
+				directional.DirectionalShadowMode = preset == GraphicsPreset.Low
+					? DirectionalLight3D.ShadowMode.Parallel2Splits
+					: DirectionalLight3D.ShadowMode.Parallel4Splits;
 
 				// Only ever shorten a range, never extend one. These numbers used
 				// to be 24-42m, chosen for the Main Street slice, and applying
 				// them blindly cut the county sun's 1200m cascade set down to 42m
 				// so nothing past the nearest field cast a shadow at all.
-				if (directional.DirectionalShadowMaxDistance > shadowDistance)
+				directional.DirectionalShadowMaxDistance = Mathf.Min(
+					authoredShadowDistance,
+					shadowDistance);
+			}
+			else if (node is Camera3D camera)
+			{
+				const string authoredFarMeta = "_ashwood_authored_camera_far";
+				if (!camera.HasMeta(authoredFarMeta))
 				{
-					directional.DirectionalShadowMaxDistance = shadowDistance;
+					camera.SetMeta(authoredFarMeta, camera.Far);
 				}
+				float authoredFar = (float)camera.GetMeta(authoredFarMeta).AsDouble();
+				camera.Far = Mathf.Min(
+					authoredFar,
+					GraphicsQuality.CameraFarDistance(preset));
+			}
+			else if (node is WorldEnvironment worldEnvironment &&
+				worldEnvironment.Environment is not null)
+			{
+				bool mobileRenderer = ProjectSettings.GetSetting(
+					"rendering/renderer/rendering_method", "mobile").AsString() == "mobile";
+				worldEnvironment.Environment.SsaoEnabled =
+					!mobileRenderer && GraphicsQuality.Ssao(preset);
+				worldEnvironment.Environment.SsilEnabled = false;
+				worldEnvironment.Environment.GlowEnabled =
+					!mobileRenderer && GraphicsQuality.Glow(preset);
 			}
 		}
 
