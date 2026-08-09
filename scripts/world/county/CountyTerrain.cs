@@ -120,6 +120,14 @@ public partial class CountyTerrain : Node3D, ICountyChunkSource
             BuildCollision = false;
         }
 
+        // Streaming radius follows the graphics preset. Radius is a squared cost:
+        // dropping from 8 to 4 is not half the chunks but a quarter of them.
+        Settings.GraphicsPreset preset =
+            Settings.SettingsManager.Instance?.Current.GraphicsPreset
+            ?? Settings.GraphicsPreset.High;
+        TerrainRadius = Mathf.Min(
+            TerrainRadius, Settings.GraphicsQuality.TerrainRadius(preset));
+
         // Registering with the parent world rather than being wired by hand means
         // the scene can be assembled in any order.
         if (GetParent() is CountyWorld world)

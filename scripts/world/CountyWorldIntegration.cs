@@ -389,7 +389,21 @@ public partial class CountyWorldIntegration : Node3D
         // prove the CPU is busy, and this is what tells the two apart.
         double renderCpu = Performance.GetMonitor(Performance.Monitor.RenderTotalObjectsInFrame);
         double videoMem = Performance.GetMonitor(Performance.Monitor.RenderVideoMemUsed) / (1024.0 * 1024.0);
-        GD.Print($"PERF render: visibleObjects={renderCpu:N0} videoMem={videoMem:F0}MB");
+        // The actual 3D render target size, not the window size.
+        //
+        // Every conclusion about whether this world is fill-rate bound rests on
+        // comparing frame rates at different resolutions, and that comparison is
+        // worthless if the render target was not actually resized - which is
+        // exactly the sort of assumption that has produced three false results
+        // here already.
+        Viewport? vp = GetViewport();
+        Vector2 renderSize = vp?.GetTexture()?.GetSize() ?? Vector2.Zero;
+        GD.Print($"PERF render: visibleObjects={renderCpu:N0} videoMem={videoMem:F0}MB " +
+                 $"renderTarget={renderSize.X:F0}x{renderSize.Y:F0} " +
+                 $"msaa={ProjectSettings.GetSetting("rendering/anti_aliasing/quality/msaa_3d", 0)} " +
+                 $"method={ProjectSettings.GetSetting("rendering/renderer/rendering_method", "forward_plus")} " +
+                 $"scale3d={vp?.Scaling3DScale ?? 0.0f:F2} " +
+                 $"preset={AshwoodCounty3DPrototype.Settings.SettingsManager.Instance?.Current.GraphicsPreset}");
 
         GD.Print($"PERF fps={1000.0 / System.Math.Max(averageMs, 0.001):F1} " +
                  $"frame={averageMs:F1}ms worst={_worstFrame * 1000.0:F1}ms");

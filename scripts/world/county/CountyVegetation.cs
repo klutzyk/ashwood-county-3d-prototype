@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using Godot;
+using AshwoodCounty3DPrototype.Settings;
 
 namespace AshwoodCounty3DPrototype.World.County;
 
@@ -293,6 +294,35 @@ public partial class CountyVegetation : Node3D, ICountyChunkSource
 
     public override void _Ready()
     {
+        ApplyGraphicsPreset();
+        ReadyInternal();
+    }
+
+    /// <summary>
+    /// Takes density and range from the graphics preset.
+    ///
+    /// Foliage measured as roughly 26ms of the frame - removing it entirely took
+    /// 21.5 to 50 FPS - and almost all of that is overdraw from alpha-tested
+    /// quads, which shade every pixel they cover before discarding most of them.
+    /// Both density and range therefore scale close to linearly with cost, and
+    /// range is worth slightly more per unit of visual loss because it removes
+    /// whole layers of overlap rather than thinning them evenly.
+    /// </summary>
+    private void ApplyGraphicsPreset()
+    {
+        GraphicsPreset preset = SettingsManager.Instance?.Current.GraphicsPreset
+                                ?? GraphicsPreset.High;
+
+        DensityScale *= GraphicsQuality.VegetationDensity(preset);
+        _rangeScale = GraphicsQuality.VegetationRange(preset);
+        VegetationRadius = Mathf.Min(
+            VegetationRadius, GraphicsQuality.VegetationRadius(preset));
+    }
+
+    private float _rangeScale = 1.0f;
+
+    private void ReadyInternal()
+    {
         if (GetParent() is CountyWorld world)
         {
             world.RegisterSource(this);
@@ -561,8 +591,8 @@ public partial class CountyVegetation : Node3D, ICountyChunkSource
                     CastShadow = layer.CastShadow
                         ? GeometryInstance3D.ShadowCastingSetting.On
                         : GeometryInstance3D.ShadowCastingSetting.Off,
-                    VisibilityRangeEnd = layer.VisibilityRange,
-                    VisibilityRangeEndMargin = layer.VisibilityRange * 0.14f,
+                    VisibilityRangeEnd = layer.VisibilityRange * _rangeScale,
+                    VisibilityRangeEndMargin = layer.VisibilityRange * _rangeScale * 0.14f,
                     VisibilityRangeFadeMode = GeometryInstance3D.VisibilityRangeFadeModeEnum.Self,
                 };
 

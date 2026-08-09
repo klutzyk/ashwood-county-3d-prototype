@@ -115,6 +115,15 @@ public partial class SettingsManager : Node
 		ApplyGraphicsToScene(GetTree().CurrentScene);
 	}
 
+	/// <summary>
+	/// Pushes the current graphics preset onto everything in the scene that can
+	/// act on it: the viewport's 3D render scale, the sun's shadow range, the
+	/// terrain material's sample count, and the county's streaming radii.
+	///
+	/// Called on load and whenever settings change, so a preset switch takes
+	/// effect without a restart for everything except the renderer itself, which
+	/// Godot can only pick at startup.
+	/// </summary>
 	public void ApplyGraphicsToScene(Node? scene)
 	{
 		if (scene is null)
@@ -122,34 +131,60 @@ public partial class SettingsManager : Node
 			return;
 		}
 
-		float shadowDistance = Current.GraphicsPreset switch
+		GraphicsPreset preset = Current.GraphicsPreset;
+
+		Viewport? viewport = scene.GetViewport();
+		if (viewport != null)
 		{
-			GraphicsPreset.Low => 24.0f,
-			GraphicsPreset.Medium => 34.0f,
-			_ => 42.0f,
-		};
+			GraphicsQuality.ApplyToViewport(viewport, preset);
+		}
+
+		float shadowDistance = GraphicsQuality.ShadowDistance(preset);
+
 		foreach (Node node in Enumerate(scene))
 		{
 			if (node is DirectionalLight3D directional)
 			{
 				directional.ShadowEnabled = true;
 
-				// Only ever shorten a range, never extend one, and never touch a
-				// light that already asks for more than this preset allows.
-				//
-				// These numbers (24-42m) were chosen for the Main Street slice.
-				// Applied blindly they also hit the county's sun, whose cascades
-				// are set up to cover 1200m, and cut it to 42m - so nothing past
-				// the nearest field cast a shadow and the whole landscape went
-				// flat. An open world legitimately needs a longer range than a
-				// street does, and the rig that built the light knows that better
-				// than a global preset does.
-				if (directional.DirectionalShadowMaxDistance <= shadowDistance)
+				// Only ever shorten a range, never extend one. These numbers used
+				// to be 24-42m, chosen for the Main Street slice, and applying
+				// them blindly cut the county sun's 1200m cascade set down to 42m
+				// so nothing past the nearest field cast a shadow at all.
+				if (directional.DirectionalShadowMaxDistance > shadowDistance)
 				{
 					directional.DirectionalShadowMaxDistance = shadowDistance;
 				}
 			}
 		}
+
+		ApplyTerrainQuality(preset);
+	}
+
+	/// <summary>
+	/// Sets the terrain material's quality uniforms.
+	///
+	/// This is the largest single cost in the frame - swapping the splat material
+	/// for a plain one measured 21.5 to 43.5 FPS - and almost all of it is texture
+	/// fetches, so the two uniforms that control how many are taken are the most
+	/// valuable quality knobs in the game.
+	///
+	/// The material is a shared resource rather than per-instance, so setting it
+	/// once reaches every terrain chunk.
+	/// </summary>
+	private static void ApplyTerrainQuality(GraphicsPreset preset)
+	{
+		const string path = "res://assets/materials/county_terrain.tres";
+		if (!ResourceLoader.Exists(path) ||
+			ResourceLoader.Load(path) is not ShaderMaterial material)
+		{
+			return;
+		}
+
+		material.SetShaderParameter(
+			"anti_tiling", GraphicsQuality.TerrainSamples(preset) > 1 ? 1.0f : 0.0f);
+		material.SetShaderParameter(
+			"enable_triplanar", GraphicsQuality.TerrainTriplanar(preset) ? 1.0f : 0.0f);
 	}
 
 	private static SettingsData Sanitize(SettingsData source)

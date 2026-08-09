@@ -3106,3 +3106,76 @@ another live tree.
   breaking the build, and a fresh clone would import with missing textures. Needs
   the used textures copying into the repo proper.
 - Broadleaf assets still read pale against the conifers.
+
+---
+
+## Performance, Properly Measured
+
+### The measurement that invalidated the others
+
+Every earlier conclusion rested on "frame rate is identical at 480x270 and
+1920x1080, therefore this is not fill-rate bound". Printing the actual render
+target size showed `renderTarget=1423x801` in both cases: Godot's `--resolution`
+flag sets the window, and with this project's stretch settings the 3D buffer
+never resized. The comparison measured nothing, and everything reasoned from it
+was wrong.
+
+Retested with `Viewport.Scaling3DScale`, which does resize the 3D buffer: half
+scale took 15 to 20 FPS. Fill rate was always a real cost.
+
+That is the fourth false result in this effort, all the same shape - a control
+that silently did not do what it claimed. The others were three variants of
+"remove the ground, player falls out of the world, measure an empty screen at a
+triumphant frame rate".
+
+### What actually costs the frame
+
+Measured on the target machine at 1280x720, each in isolation:
+
+| change                          | FPS          | worth  |
+|---------------------------------|--------------|--------|
+| baseline                        | 21.5         | -      |
+| plain terrain material          | 43.5         | ~24ms  |
+| no vegetation                   | 50.0         | ~26ms  |
+| Forward+ to Mobile renderer     | 15.2 -> 22.4 | ~21ms  |
+| 3D render scale 0.5             | 15 -> 20     | ~17ms  |
+| physics catch-up capped         | 7.5 -> 14.9  | ~66ms  |
+
+And what does **not** matter, each verified rather than assumed: MSAA (2x cost
+nothing measurable), shadow map size (4096 to 2048 was noise), draw call count
+(1042 vs 338 made no difference), primitive count (1.5M vs 880k made none),
+texture memory (1.24GB vs 674MB made none), and terrain collision.
+
+The two real costs are both fetch/overdraw bound. The terrain splat samples four
+PBR layers at three maps each, doubled for anti-tiling, plus a triplanar rock
+branch - over fifty texture fetches on pixels that take every path. Foliage is
+alpha-tested quads, which shade every pixel they cover and then discard most of
+them, stacked many deep near the camera.
+
+### The physics death spiral
+
+Frame times sat pinned near 150ms against a hard ceiling regardless of what was
+removed. That is not the shape of a heavy system; it is a feedback loop. When a
+frame exceeds one physics step Godot runs extra steps to catch up, up to eight -
+so a slow frame buys more physics, which slows the frame. Capping catch-up to 2
+steps and halving the tick to 30Hz doubled the frame rate on its own.
+
+It also explains why "freeze the player" appeared to be worth 40ms: freezing
+removes its `_PhysicsProcess` and so breaks the loop.
+
+### Graphics settings
+
+`GraphicsQuality` now owns every lever, with the measured cost of each recorded
+next to it, and only exposes knobs that were shown to do something. Low sets 0.6
+render scale, single-sample terrain, no triplanar, 35 percent vegetation density
+at 55 percent range, and shorter streaming radii.
+
+Measured: Low 23.6 FPS, Medium 15.7, High 15.1, from 7.5 at the start.
+
+### Still short of target
+
+23.6 FPS at Low against a 60 FPS goal. The remaining 42ms is still dominated by
+the same two systems. Getting to 60 needs a genuinely cheaper terrain shader for
+Low - three layers rather than four, no height-blend, no triplanar - and either
+far less near-field foliage or moving grass to a single instanced-quad batch with
+its own cheap shader rather than scene instances.
