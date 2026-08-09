@@ -34,7 +34,8 @@ public partial class CountyVisualReview : Node3D
     /// background tasks, so the world needs several frames to catch up before a
     /// capture is representative.
     /// </summary>
-    private const int SettleFrames = 90;
+    private const int MinimumSettleFrames = 90;
+    private const int MaximumSettleFrames = 900;
 
     public override async void _Ready()
     {
@@ -54,6 +55,7 @@ public partial class CountyVisualReview : Node3D
 
             CountySceneBuilder.BuildResult built = CountySceneBuilder.Build(probe);
             viewport.AddChild(built.Root);
+            CountyFarTerrain? farTerrain = built.World.GetNodeOrNull<CountyFarTerrain>("CountyFarTerrain");
 
             GD.Print($"COUNTY_REVIEW: subsystems present [{string.Join(", ", built.Present)}]");
             if (built.Missing.Count > 0)
@@ -73,21 +75,59 @@ public partial class CountyVisualReview : Node3D
             string outputDirectory = ProjectSettings.GlobalizePath("res://.godot/county_review");
             DirAccess.MakeDirRecursiveAbsolute(outputDirectory);
 
+            string requestedShot = OS.GetEnvironment("COUNTY_REVIEW_SHOT");
             foreach (Shot shot in BuildShots())
             {
+                if (requestedShot.Length > 0 &&
+                    !shot.FileName.StartsWith(requestedShot, StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
                 // Move the streaming probe first so the world starts resolving the
                 // region while the camera is still being placed.
                 probe.GlobalPosition = new Vector3(
                     shot.From.X, CountyMap.Height(shot.From.X, shot.From.Y), shot.From.Y);
 
+                bool wholeCountyOverview = shot.FileName.StartsWith("12_", StringComparison.Ordinal);
+                if (farTerrain != null)
+                {
+                    farTerrain.ForceAllVisible = wholeCountyOverview;
+                }
+
+                foreach (Node child in built.World.GetChildren())
+                {
+                    if (child is Node3D layer && child is not CountyFarTerrain)
+                    {
+                        layer.Visible = !wholeCountyOverview;
+                    }
+                }
+
                 Transform3D view = CountySceneBuilder.LookAt(shot.From, shot.To, shot.EyeHeight);
                 camera.GlobalTransform = view;
                 camera.Fov = shot.Fov;
 
-                for (int frame = 0; frame < SettleFrames; frame++)
+                int frame = 0;
+                bool settled = false;
+                for (; frame < MaximumSettleFrames; frame++)
                 {
                     await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
+                    bool detailedLayersComplete = wholeCountyOverview || built.World.IsStreamingComplete;
+                    if (frame >= MinimumSettleFrames && detailedLayersComplete &&
+                        (farTerrain == null || farTerrain.IsComplete))
+                    {
+                        settled = true;
+                        break;
+                    }
                 }
+
+                if (!settled)
+                {
+                    throw new InvalidOperationException(
+                        $"Streaming did not settle for {shot.FileName} within {MaximumSettleFrames} frames.");
+                }
+
+                GD.Print($"COUNTY_REVIEW: settled {shot.FileName} in {frame + 1} frames");
 
                 await ToSignal(RenderingServer.Singleton, RenderingServer.SignalName.FramePostDraw);
 
@@ -179,7 +219,8 @@ public partial class CountyVisualReview : Node3D
         yield return new Shot(
             "12_county_panorama.png",
             "The county from altitude, matching the aerial concept",
-            new Vector2(-300.0f, 3200.0f), new Vector2(-300.0f, -2200.0f), 900.0f, 62.0f);
+            new Vector2(CountyMap.CenterX, CountyMap.CenterZ + 1200.0f),
+            new Vector2(CountyMap.CenterX, CountyMap.CenterZ - 400.0f), 4800.0f, 54.0f);
 
         yield return new Shot(
             "13_logging_camp.png",

@@ -132,7 +132,10 @@ public static class CountySceneBuilder
     public static Transform3D LookAt(Vector2 from, Vector2 to, float eyeHeight = 12.0f)
     {
         var eye = new Vector3(from.X, CountyMap.Height(from.X, from.Y) + eyeHeight, from.Y);
-        var focus = new Vector3(to.X, CountyMap.Height(to.X, to.Y) + eyeHeight * 0.35f, to.Y);
+        // Local views look slightly above the ground, while aerial views must look
+        // at the county rather than a point thousands of metres in the sky.
+        float focusLift = Mathf.Min(eyeHeight * 0.35f, 60.0f);
+        var focus = new Vector3(to.X, CountyMap.Height(to.X, to.Y) + focusLift, to.Y);
 
         // Basis.LookingAt orients -Z along the given direction for models, which is
         // the opposite of what a camera wants; building the basis by hand here put

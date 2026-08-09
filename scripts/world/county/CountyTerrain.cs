@@ -613,4 +613,6 @@ public partial class CountyTerrain : Node3D, ICountyChunkSource
 
     /// <summary>Chunks currently resident, for tests and diagnostics.</summary>
     public int ResidentChunkCount => _chunks.Count;
+
+    public bool IsBuildComplete => _pending.Count == 0 && _completed.IsEmpty;
 }

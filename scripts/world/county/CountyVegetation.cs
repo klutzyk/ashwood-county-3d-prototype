@@ -289,6 +289,7 @@ public partial class CountyVegetation : Node3D, ICountyChunkSource
     private readonly Dictionary<Vector2I, Node3D> _chunks = new();
     private readonly Dictionary<Vector2I, int> _generations = new();
     private readonly ConcurrentQueue<ScatterResult> _completed = new();
+    private int _activeScatterJobs;
     private SemaphoreSlim _scatterGate = new(1, 1);
 
     /// <summary>
@@ -380,6 +381,7 @@ public partial class CountyVegetation : Node3D, ICountyChunkSource
         _generations[chunk] = generation;
 
         Layer[] layers = Array.FindAll(Layers, layer => ring <= layer.MaxRing);
+        System.Threading.Interlocked.Increment(ref _activeScatterJobs);
         Task.Run(async () =>
         {
             await _scatterGate.WaitAsync();
@@ -401,6 +403,7 @@ public partial class CountyVegetation : Node3D, ICountyChunkSource
             finally
             {
                 _scatterGate.Release();
+                System.Threading.Interlocked.Decrement(ref _activeScatterJobs);
             }
         });
     }
@@ -453,10 +456,10 @@ public partial class CountyVegetation : Node3D, ICountyChunkSource
 
         // Seeding from the chunk coordinate and the layer name makes the result
         // stable across streaming and independent between layers.
-        var rng = new RandomNumberGenerator
-        {
-            Seed = (ulong)(chunk.X * 73856093 ^ chunk.Y * 19349663 ^ layer.Name.GetHashCode()),
-        };
+        // GodotObject-derived RNGs may only be constructed on the main thread.
+        // Scatter runs on a worker, so use a local managed RNG with a stable seed.
+        var rng = new Random(
+            chunk.X * 73856093 ^ chunk.Y * 19349663 ^ StableHash(layer.Name));
 
         Vector2 origin = CountyChunks.Origin(chunk);
         int candidates = Mathf.RoundToInt(layer.PerChunk * DensityScale);
@@ -470,8 +473,8 @@ public partial class CountyVegetation : Node3D, ICountyChunkSource
         for (int i = 0; i < clusterCount; i++)
         {
             clusters[i] = origin + new Vector2(
-                rng.RandfRange(0.0f, CountyChunks.Size),
-                rng.RandfRange(0.0f, CountyChunks.Size));
+                NextRange(rng, 0.0f, CountyChunks.Size),
+                NextRange(rng, 0.0f, CountyChunks.Size));
         }
 
         float clusterRadius = CountyChunks.Size / Mathf.Sqrt(clusterCount) * 0.55f;
@@ -479,20 +482,20 @@ public partial class CountyVegetation : Node3D, ICountyChunkSource
         for (int i = 0; i < candidates; i++)
         {
             Vector2 point;
-            if (rng.Randf() < layer.Clustering)
+            if (NextFloat(rng) < layer.Clustering)
             {
-                Vector2 seed = clusters[rng.RandiRange(0, clusterCount - 1)];
+                Vector2 seed = clusters[rng.Next(0, clusterCount)];
                 // Square-rooting the radius fills the disc evenly instead of
                 // piling every instance onto the seed point.
-                float radius = Mathf.Sqrt(rng.Randf()) * clusterRadius;
-                float angle = rng.RandfRange(0.0f, Mathf.Tau);
+                float radius = Mathf.Sqrt(NextFloat(rng)) * clusterRadius;
+                float angle = NextRange(rng, 0.0f, Mathf.Tau);
                 point = seed + new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * radius;
             }
             else
             {
                 point = origin + new Vector2(
-                    rng.RandfRange(0.0f, CountyChunks.Size),
-                    rng.RandfRange(0.0f, CountyChunks.Size));
+                    NextRange(rng, 0.0f, CountyChunks.Size),
+                    NextRange(rng, 0.0f, CountyChunks.Size));
             }
 
             // Clusters can spill past the chunk edge; clamping rather than
@@ -510,7 +513,7 @@ public partial class CountyVegetation : Node3D, ICountyChunkSource
     }
 
     private static bool TryPlace(
-        Vector2 point, in Layer layer, RandomNumberGenerator rng, out Transform3D transform)
+        Vector2 point, in Layer layer, Random rng, out Transform3D transform)
     {
         transform = Transform3D.Identity;
 
@@ -580,13 +583,13 @@ public partial class CountyVegetation : Node3D, ICountyChunkSource
             _ => 0.0f,
         };
 
-        if (chance <= 0.001f || rng.Randf() > chance)
+        if (chance <= 0.001f || NextFloat(rng) > chance)
         {
             return false;
         }
 
-        float scale = rng.RandfRange(layer.MinScale, layer.MaxScale);
-        var basis = new Basis(Vector3.Up, rng.RandfRange(0.0f, Mathf.Tau));
+        float scale = NextRange(rng, layer.MinScale, layer.MaxScale);
+        var basis = new Basis(Vector3.Up, NextRange(rng, 0.0f, Mathf.Tau));
 
         // Plants grow toward vertical, not perpendicular to the hillside. Leaning
         // only part of the way to the surface normal is what keeps a wooded slope
@@ -606,6 +609,28 @@ public partial class CountyVegetation : Node3D, ICountyChunkSource
             new Vector3(point.X, height - 0.08f * scale, point.Y));
         return true;
     }
+
+    private static float NextFloat(Random rng) => (float)rng.NextDouble();
+
+    private static float NextRange(Random rng, float minimum, float maximum) =>
+        Mathf.Lerp(minimum, maximum, NextFloat(rng));
+
+    private static int StableHash(string value)
+    {
+        unchecked
+        {
+            int hash = 17;
+            foreach (char character in value)
+            {
+                hash = hash * 31 + character;
+            }
+
+            return hash;
+        }
+    }
+
+    public bool IsBuildComplete =>
+        System.Threading.Volatile.Read(ref _activeScatterJobs) == 0 && _completed.IsEmpty;
 
     private void EmitLayer(Node3D holder, in Layer layer, List<Transform3D> placements)
     {

@@ -111,4 +111,7 @@ public interface ICountyChunkSource
     void UpdateChunkRing(Vector2I chunk, int ring)
     {
     }
+
+    /// <summary>False while worker results are still outstanding or awaiting install.</summary>
+    bool IsBuildComplete => true;
 }

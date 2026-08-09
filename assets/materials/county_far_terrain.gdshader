@@ -18,6 +18,7 @@ render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_d
 // are meaningless at this range:
 //   splat.r  forest
 //   splat.g  rock
+//   splat.b  distant water
 //   grass is the base coat
 
 uniform vec3 grass_color : source_color = vec3(0.32, 0.38, 0.21);
@@ -26,6 +27,7 @@ uniform vec3 grass_color : source_color = vec3(0.32, 0.38, 0.21);
 // mismatch here would draw a visible ring around the player.
 uniform vec3 forest_color : source_color = vec3(0.155, 0.209, 0.117);
 uniform vec3 rock_color : source_color = vec3(0.34, 0.33, 0.31);
+uniform vec3 water_color : source_color = vec3(0.08, 0.22, 0.31);
 
 uniform float macro_meters : hint_range(50.0, 2000.0) = 420.0;
 uniform float macro_strength : hint_range(0.0, 1.0) = 0.30;
@@ -66,10 +68,12 @@ void vertex() {
 void fragment() {
     float w_forest = splat.r;
     float w_rock = splat.g;
+    float w_water = splat.b;
     float w_grass = clamp(1.0 - max(w_forest, w_rock), 0.0, 1.0);
 
     float total = max(w_forest + w_rock + w_grass, 0.0001);
     vec3 albedo = (forest_color * w_forest + rock_color * w_rock + grass_color * w_grass) / total;
+    albedo = mix(albedo, water_color, w_water);
 
     // Two scales of variation so ridges do not read as one flat wash of green.
     vec2 p = world_position.xz / macro_meters;
@@ -93,6 +97,6 @@ void fragment() {
     albedo = mix(albedo, albedo * 0.72 + rock_color * 0.18, steepness * slope_shading);
 
     ALBEDO = clamp(albedo, vec3(0.0), vec3(1.0));
-    ROUGHNESS = 1.0;
+    ROUGHNESS = mix(1.0, 0.48, w_water);
     METALLIC = 0.0;
 }

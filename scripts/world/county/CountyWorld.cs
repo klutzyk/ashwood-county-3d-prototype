@@ -365,6 +365,14 @@ public partial class CountyWorld : Node3D
                 }
             }
 
+            foreach (ICountyChunkSource source in _sources)
+            {
+                if (!source.IsBuildComplete)
+                {
+                    return false;
+                }
+            }
+
             return _primed;
         }
     }

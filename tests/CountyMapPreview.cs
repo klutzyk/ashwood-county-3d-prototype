@@ -110,16 +110,25 @@ public partial class CountyMapPreview : Node
 
         GD.Print($"COUNTY_PREVIEW: shaded in {Time.GetTicksMsec() - started}ms total");
 
+        Image regional = shaded.Duplicate() as Image
+            ?? throw new InvalidOperationException("Could not duplicate county preview image.");
+
         DrawRoads(shaded);
         DrawPlaces(shaded);
+        DrawRegionBoundaries(regional);
+        DrawRoads(regional);
+        DrawPlaces(regional);
 
         string shadedPath = ProjectSettings.GlobalizePath($"{directory}/ashwood_county_map.png");
         string elevationPath = ProjectSettings.GlobalizePath($"{directory}/ashwood_county_elevation.png");
+        string regionalPath = ProjectSettings.GlobalizePath($"{directory}/ashwood_county_regions.png");
         shaded.SavePng(shadedPath);
         elevation.SavePng(elevationPath);
+        regional.SavePng(regionalPath);
 
         GD.Print($"COUNTY_PREVIEW: wrote {shadedPath}");
         GD.Print($"COUNTY_PREVIEW: wrote {elevationPath}");
+        GD.Print($"COUNTY_PREVIEW: wrote {regionalPath}");
 
         ReportPlaces();
 
@@ -207,6 +216,36 @@ public partial class CountyMapPreview : Node
                     int py = Mathf.Clamp(p.Y + dy, 0, Size - 1);
                     image.SetPixel(px, py, dx * dx + dy * dy > 9 ? Colors.Black : colour);
                 }
+            }
+        }
+    }
+
+    private static void DrawRegionBoundaries(Image image)
+    {
+        var boundary = new Color(0.90f, 0.76f, 0.30f);
+        for (int py = 1; py < Size - 1; py++)
+        {
+            float z = Mathf.Lerp(CountyMap.NorthZ, CountyMap.SouthZ, py / (float)(Size - 1));
+            for (int px = 1; px < Size - 1; px++)
+            {
+                float x = Mathf.Lerp(CountyMap.WestX, CountyMap.EastX, px / (float)(Size - 1));
+                CountyMap.RegionId here = CountyMap.RegionAt(x, z).Id;
+                CountyMap.RegionId east = CountyMap.RegionAt(x + CountyMap.SpanX / Size, z).Id;
+                CountyMap.RegionId south = CountyMap.RegionAt(x, z + CountyMap.SpanZ / Size).Id;
+                if (here != east || here != south)
+                {
+                    image.SetPixel(px, py, boundary);
+                }
+            }
+        }
+
+        foreach (CountyMap.Region region in CountyMap.Regions)
+        {
+            Vector2I center = ToPixel(region.Center);
+            for (int offset = -6; offset <= 6; offset++)
+            {
+                image.SetPixel(Mathf.Clamp(center.X + offset, 0, Size - 1), center.Y, Colors.White);
+                image.SetPixel(center.X, Mathf.Clamp(center.Y + offset, 0, Size - 1), Colors.White);
             }
         }
     }

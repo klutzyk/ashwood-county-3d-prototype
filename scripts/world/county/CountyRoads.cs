@@ -778,4 +778,6 @@ public partial class CountyRoads : Node3D, ICountyChunkSource
     }
 
     public int ResidentChunkCount => _chunks.Count;
+
+    public bool IsBuildComplete => _pending.Count == 0 && _completed.IsEmpty;
 }

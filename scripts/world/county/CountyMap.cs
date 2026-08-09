@@ -155,6 +155,73 @@ public static class CountyMap
         new("South Farmland", new Vector2(-206.0f, 3204.0f), PoiKind.Farm, 900.0f, 0.85f),
     };
 
+    // --------------------------------------------------------------- regions
+
+    public enum RegionId
+    {
+        PineRidge,
+        BlackwaterBasin,
+        WesternFarms,
+        Ashwood,
+        EasternWoodlands,
+        MillCreek,
+        FairgroundsAndTrailerPark,
+        SouthFarmland,
+    }
+
+    /// <summary>
+    /// Stable authoring regions for building the county in passes. Scale is the
+    /// approximate half-size of each region, not a hard gameplay boundary; the
+    /// normalised nearest-anchor lookup below makes the regions meet without gaps.
+    /// </summary>
+    public readonly record struct Region(
+        RegionId Id,
+        string Name,
+        Vector2 Center,
+        Vector2 Scale,
+        string PrimaryConnection);
+
+    public static readonly Region[] Regions =
+    {
+        new(RegionId.PineRidge, "Pine Ridge Highlands",
+            new Vector2(-360.0f, -3400.0f), new Vector2(2400.0f, 1050.0f), "County Road North"),
+        new(RegionId.BlackwaterBasin, "Blackwater Lake and Dam",
+            new Vector2(-120.0f, -2250.0f), new Vector2(1450.0f, 950.0f), "County Road North"),
+        new(RegionId.WesternFarms, "Western Farm District",
+            new Vector2(-1900.0f, -450.0f), new Vector2(1750.0f, 1450.0f), "Mill Road"),
+        new(RegionId.Ashwood, "Ashwood and Old Mill Bridge",
+            new Vector2(180.0f, 180.0f), new Vector2(1250.0f, 1200.0f), "State Highway 16"),
+        new(RegionId.EasternWoodlands, "Eastern Woodlands",
+            new Vector2(2200.0f, -900.0f), new Vector2(1750.0f, 2100.0f), "East County Road"),
+        new(RegionId.MillCreek, "Mill Creek and Railway",
+            new Vector2(-1900.0f, 1850.0f), new Vector2(1550.0f, 1300.0f), "Mill Creek Road"),
+        new(RegionId.FairgroundsAndTrailerPark, "Fairgrounds and Trailer Park",
+            new Vector2(700.0f, 1900.0f), new Vector2(1750.0f, 1250.0f), "Fairgrounds Road"),
+        new(RegionId.SouthFarmland, "South Farmland",
+            new Vector2(-100.0f, 3300.0f), new Vector2(2500.0f, 900.0f), "Southern Ridge Road"),
+    };
+
+    public static Region RegionAt(float x, float z)
+    {
+        var point = new Vector2(x, z);
+        Region nearest = Regions[0];
+        float nearestScore = float.MaxValue;
+
+        foreach (Region region in Regions)
+        {
+            Vector2 offset = point - region.Center;
+            float score = offset.X * offset.X / (region.Scale.X * region.Scale.X) +
+                          offset.Y * offset.Y / (region.Scale.Y * region.Scale.Y);
+            if (score < nearestScore)
+            {
+                nearest = region;
+                nearestScore = score;
+            }
+        }
+
+        return nearest;
+    }
+
     // ------------------------------------------------------------ road network
 
     public enum RoadClass
@@ -238,28 +305,27 @@ public static class CountyMap
             new Vector2(64.0f, -720.0f),
             new Vector2(120.0f, -1120.0f),
             new Vector2(96.0f, -1520.0f),
-            new Vector2(40.0f, -1830.0f),
-            new Vector2(-40.0f, -1975.0f),
-            new Vector2(-160.0f, -2130.0f),
-            new Vector2(-330.0f, -2360.0f),
-            new Vector2(-402.0f, -2680.0f),
-            new Vector2(-350.0f, -3040.0f),
+            new Vector2(-340.0f, -1640.0f),
+            new Vector2(-650.0f, -1810.0f),
+            new Vector2(-760.0f, -1950.0f),
+            new Vector2(-930.0f, -2160.0f),
+            new Vector2(-960.0f, -2500.0f),
+            new Vector2(-800.0f, -2800.0f),
+            new Vector2(-430.0f, -3070.0f),
             new Vector2(-262.0f, -3402.0f),
         }),
         new("Fire Lookout Road", RoadClass.Dirt, new[]
         {
-            new Vector2(-330.0f, -2382.0f),
-            new Vector2(-40.0f, -2520.0f),
-            new Vector2(320.0f, -2600.0f),
-            new Vector2(640.0f, -2740.0f),
-            new Vector2(852.0f, -2920.0f),
+            new Vector2(220.0f, -2910.0f),
+            new Vector2(520.0f, -2940.0f),
+            new Vector2(780.0f, -3000.0f),
             new Vector2(958.0f, -3048.0f),
         }),
         new("Logging Road", RoadClass.Gravel, new[]
         {
-            new Vector2(-402.0f, -2680.0f),
-            new Vector2(-760.0f, -2620.0f),
-            new Vector2(-1140.0f, -2530.0f),
+            new Vector2(-960.0f, -2500.0f),
+            new Vector2(-1020.0f, -2500.0f),
+            new Vector2(-1280.0f, -2480.0f),
             new Vector2(-1520.0f, -2470.0f),
             new Vector2(-1902.0f, -2448.0f),
             new Vector2(-2280.0f, -2360.0f),
@@ -347,11 +413,14 @@ public static class CountyMap
         }),
         new("Dam Service Road", RoadClass.Gravel, new[]
         {
+            new Vector2(-400.0f, -1880.0f),
+            new Vector2(-210.0f, -1870.0f),
             new Vector2(-40.0f, -1975.0f),
             new Vector2(240.0f, -2060.0f),
             new Vector2(480.0f, -2280.0f),
-            new Vector2(560.0f, -2560.0f),
-            new Vector2(320.0f, -2600.0f),
+            new Vector2(610.0f, -2540.0f),
+            new Vector2(520.0f, -2780.0f),
+            new Vector2(220.0f, -2910.0f),
         }),
         new("West Farm Lane", RoadClass.Dirt, new[]
         {
@@ -396,6 +465,69 @@ public static class CountyMap
             new Vector2(760.0f, 2160.0f),
             new Vector2(1180.0f, 2020.0f),
             new Vector2(1504.0f, 1598.0f),
+        }),
+        // Ashwood's street grid is a navigation structure, not town dressing. It
+        // exists now so later building plots inherit real blocks and intersections.
+        new("Ashwood Oak Avenue", RoadClass.Paved, new[]
+        {
+            new Vector2(-18.0f, -510.0f),
+            new Vector2(-8.0f, -250.0f),
+            new Vector2(0.0f, 0.0f),
+            new Vector2(24.0f, 300.0f),
+            new Vector2(30.0f, 742.0f),
+        }),
+        new("Ashwood Cedar Avenue", RoadClass.Paved, new[]
+        {
+            new Vector2(190.0f, -470.0f),
+            new Vector2(184.0f, -220.0f),
+            new Vector2(176.0f, 0.0f),
+            new Vector2(168.0f, 260.0f),
+            new Vector2(180.0f, 590.0f),
+        }),
+        new("Ashwood Franklin Avenue", RoadClass.Paved, new[]
+        {
+            new Vector2(390.0f, -390.0f),
+            new Vector2(382.0f, -210.0f),
+            new Vector2(372.0f, 14.0f),
+            new Vector2(360.0f, 260.0f),
+            new Vector2(410.0f, 520.0f),
+        }),
+        new("Ashwood North Street", RoadClass.Paved, new[]
+        {
+            new Vector2(-70.0f, -250.0f),
+            new Vector2(190.0f, -220.0f),
+            new Vector2(382.0f, -210.0f),
+            new Vector2(620.0f, -165.0f),
+        }),
+        new("Ashwood Market Street", RoadClass.Paved, new[]
+        {
+            new Vector2(-78.0f, 245.0f),
+            new Vector2(168.0f, 260.0f),
+            new Vector2(360.0f, 260.0f),
+            new Vector2(610.0f, 220.0f),
+        }),
+        new("Ashwood Hospital Street", RoadClass.Paved, new[]
+        {
+            new Vector2(-20.0f, 520.0f),
+            new Vector2(96.0f, 540.0f),
+            new Vector2(180.0f, 590.0f),
+            new Vector2(410.0f, 520.0f),
+            new Vector2(690.0f, 455.0f),
+        }),
+        new("Mill Creek Main Street", RoadClass.Paved, new[]
+        {
+            new Vector2(-2390.0f, 1560.0f),
+            new Vector2(-2200.0f, 1630.0f),
+            new Vector2(-2104.0f, 1702.0f),
+            new Vector2(-1910.0f, 1790.0f),
+            new Vector2(-1710.0f, 1870.0f),
+        }),
+        new("Mill Creek Depot Road", RoadClass.Gravel, new[]
+        {
+            new Vector2(-2200.0f, 1630.0f),
+            new Vector2(-2020.0f, 1890.0f),
+            new Vector2(-1710.0f, 2060.0f),
+            new Vector2(-1180.0f, 2470.0f),
         }),
         new("Railway", RoadClass.Railway, new[]
         {
@@ -636,6 +768,16 @@ public static class CountyMap
     public static readonly Polyline RiverLine = new(RiverSpine);
     public static readonly Polyline MillCreekLine = new(MillCreekSpine);
 
+    private static readonly float LakeCenterRiverAlong = AlongRiverAt(LakeCenter);
+    private static readonly float DamRiverAlong = AlongRiverAt(DamCenter);
+    private static readonly float BridgeRiverAlong = AlongRiverAt(new Vector2(-176.0f, 0.0f));
+
+    private static float AlongRiverAt(Vector2 point)
+    {
+        RiverLine.Distance(point, out float along);
+        return along;
+    }
+
     /// <summary>Road centrelines, index-matched to <see cref="Roads"/>.</summary>
     public static readonly Polyline[] RoadLines = BuildRoadLines();
 
@@ -736,11 +878,12 @@ public static class CountyMap
                 continue;
             }
 
-            // A smooth dome that only ever raises the land, so the peak sits on top
-            // of the existing ridgeline rather than replacing it.
+            // Pin the summit to its mapped elevation while feathering back into the
+            // surrounding ridgeline. Noise may shape the shoulders, but it must not
+            // make Pine Ridge higher than the elevation printed on the map.
             float t = 1.0f - distance / peak.Radius;
             float dome = t * t * (3.0f - 2.0f * t);
-            h = Mathf.Max(h, Mathf.Lerp(h, peak.Elevation, dome));
+            h = Mathf.Lerp(h, peak.Elevation, dome);
         }
 
         return h;
@@ -832,15 +975,30 @@ public static class CountyMap
     /// </summary>
     public static float RiverSurfaceY(float alongNormalised)
     {
-        // Above the bridge the river is a shallow town-level stream; below it the
-        // land falls away and the river drops into the southern canyon.
+        // Mountain inflow descends into the level reservoir. The dam then creates
+        // a discrete drop before the river continues through Ashwood and the
+        // southern canyon.
+        const float atHeadwater = 700.0f;
         const float atDam = 168.0f;
         const float atBridge = -8.5f; // matches OldMillBridge.WaterY exactly
-        float bridgeAlong = 0.52f;
+        float lakeEntryAlong = Mathf.Max(LakeCenterRiverAlong - 0.02f, 0.01f);
+        float damAlong = DamRiverAlong;
+        float bridgeAlong = BridgeRiverAlong;
+
+        if (alongNormalised < lakeEntryAlong)
+        {
+            return Mathf.Lerp(atHeadwater, LakeSurfaceY,
+                Smooth(alongNormalised / lakeEntryAlong));
+        }
+
+        if (alongNormalised <= damAlong)
+        {
+            return LakeSurfaceY;
+        }
 
         if (alongNormalised <= bridgeAlong)
         {
-            float t = Smooth(alongNormalised / bridgeAlong);
+            float t = Smooth((alongNormalised - damAlong) / (bridgeAlong - damAlong));
             return Mathf.Lerp(atDam, atBridge, t);
         }
 
@@ -848,8 +1006,12 @@ public static class CountyMap
         return Mathf.Lerp(atBridge, RiverMouthY, u);
     }
 
-    /// <summary>Terrain elevation in game-space metres. The single source of truth.</summary>
-    public static float Height(float x, float z)
+    /// <summary>
+    /// Natural and settled terrain before road grading, rim falloff, and the dam.
+    /// Road grade sampling uses this directly so a road follows an already-carved
+    /// valley instead of averaging toward the mountain that existed before it.
+    /// </summary>
+    private static float NaturalHeight(float x, float z)
     {
         var here = new Vector2(x, z);
 
@@ -905,8 +1067,12 @@ public static class CountyMap
         float lakeDz = (z - LakeCenter.Y) / LakeRadiusZ;
         float lakeRadial = Mathf.Sqrt(lakeDx * lakeDx + lakeDz * lakeDz);
         float lakeShape = lakeRadial + LakeShoreWarp(x, z);
-        float inLake = 1.0f - Smooth((lakeShape - 0.86f) / 0.30f);
-        if (inLake > 0.0f)
+        // A broad transition shelf is essential here: the surrounding mountains
+        // can stand hundreds of metres above the reservoir. Blending that change
+        // over only 180m produced a quarry wall around an otherwise natural lake.
+        float inLake = 1.0f - Smooth((lakeShape - 0.86f) / 0.80f);
+        bool separateRiverChannel = lakeShape > 1.04f && riverDistance < halfWidth * 2.4f;
+        if (inLake > 0.0f && !separateRiverChannel)
         {
             // A dished basin, deepest in the middle, so the shoreline reads as a
             // beach rather than as a wall.
@@ -914,23 +1080,76 @@ public static class CountyMap
             h = Mathf.Lerp(h, basin, inLake);
         }
 
-        // ---- Dam wall ----------------------------------------------------------
-        // The dam plugs the outflow throat. Without it the reservoir would simply
-        // drain down the carved channel and there would be no lake at all.
-        float damDistance = Mathf.Abs(
-            (x - DamCenter.X) * 0.94f + (z - DamCenter.Y) * 0.34f);
-        float damLateral = Mathf.Abs(
-            (x - DamCenter.X) * -0.34f + (z - DamCenter.Y) * 0.94f);
-        if (damDistance < 34.0f && damLateral < DamHalfWidth)
-        {
-            float wall = (1.0f - Smooth((damDistance - 16.0f) / 18.0f))
-                         * (1.0f - Smooth((damLateral - DamHalfWidth * 0.72f) / (DamHalfWidth * 0.28f)));
-            h = Mathf.Lerp(h, DamCrestY, wall);
-        }
-
         // ---- Human levelling ---------------------------------------------------
         h = ApplyPlaces(here, h);
+
+        return h;
+    }
+
+    private static float PinSummitCores(Vector2 p, float h)
+    {
+        foreach (Peak peak in Peaks)
+        {
+            float distance = p.DistanceTo(peak.Position);
+            const float coreRadius = 120.0f;
+            if (distance >= coreRadius)
+            {
+                continue;
+            }
+
+            float weight = 1.0f - Smooth(distance / coreRadius);
+            h = Mathf.Lerp(h, peak.Elevation, weight);
+        }
+
+        return h;
+    }
+
+    private static float ApplyDam(Vector2 p, float h)
+    {
+        float damDistance = Mathf.Abs(
+            (p.X - DamCenter.X) * 0.94f + (p.Y - DamCenter.Y) * 0.34f);
+        float damLateral = Mathf.Abs(
+            (p.X - DamCenter.X) * -0.34f + (p.Y - DamCenter.Y) * 0.94f);
+        if (damDistance >= 34.0f || damLateral >= DamHalfWidth)
+        {
+            return h;
+        }
+
+        float wall = (1.0f - Smooth((damDistance - 16.0f) / 18.0f))
+                     * (1.0f - Smooth((damLateral - DamHalfWidth * 0.72f) / (DamHalfWidth * 0.28f)));
+        return Mathf.Lerp(h, DamCrestY, wall);
+    }
+
+    private static float LimitHighElevation(float h)
+    {
+        // The planning map gives 1420m as the county maximum. Preserve the mapped
+        // 1380m lookout exactly, then smoothly compress only the final 40m so noise
+        // cannot create a taller unnamed mountain or a visibly flat hard clamp.
+        const float start = 1380.0f - TownElevation;
+        const float ceiling = 1420.0f - TownElevation;
+        if (h <= start)
+        {
+            return h;
+        }
+
+        return start + (ceiling - start) *
+            (1.0f - Mathf.Exp(-(h - start) / (ceiling - start)));
+    }
+
+    /// <summary>Terrain elevation in game-space metres. The single source of truth.</summary>
+    public static float Height(float x, float z)
+    {
+        var here = new Vector2(x, z);
+        float h = NaturalHeight(x, z);
+
         h = ApplyRoads(here, h);
+        h = ApplyPlaces(here, h);
+        h = PinSummitCores(here, h);
+
+        // The dam is infrastructure, not a natural ridge. Apply it after road
+        // grading so its own service roads cannot plane the crest out of existence.
+        h = ApplyDam(here, h);
+        h = LimitHighElevation(h);
 
         // ---- Plateau rim -------------------------------------------------------
         // Outside the county the land falls into cliff and then void. The transition
@@ -963,6 +1182,12 @@ public static class CountyMap
 
     private static float ApplyPlaces(Vector2 p, float h)
     {
+        float water = WaterSurfaceY(p.X, p.Y);
+        if (water > float.MinValue && h < water + 0.5f)
+        {
+            return h;
+        }
+
         foreach (Poi place in Places)
         {
             if (place.Flatten <= 0.0f)
@@ -1022,8 +1247,17 @@ public static class CountyMap
                 continue;
             }
 
-            float distance = line.Distance(p);
+            float distance = line.Distance(p, out float along);
             if (distance > grade)
+            {
+                continue;
+            }
+
+            // Water crossings are bridged by CountyRoads. Grading the terrain at
+            // those pixels fills the channel first, turning a bridge into an
+            // embankment and, on the lake, an accidental causeway.
+            float water = WaterSurfaceY(p.X, p.Y);
+            if (water > float.MinValue && h < water + 0.5f)
             {
                 continue;
             }
@@ -1032,36 +1266,12 @@ public static class CountyMap
             // tunnelling, so instead the terrain is smoothed toward a local average
             // sampled along the carriageway. That produces a graded cutting that
             // still climbs with the land.
-            float smoothed = LocalAverageHeight(p, line, shoulder * 3.0f);
+            float smoothed = RoadHeightAt(i, along);
             float weight = 1.0f - Smooth((distance - shoulder) / (grade - shoulder));
             h = Mathf.Lerp(h, smoothed, weight * 0.92f);
         }
 
         return h;
-    }
-
-    /// <summary>
-    /// Average of the raw terrain sampled along the road direction, which gives a
-    /// road-following grade without recursing back into <see cref="Height"/>.
-    /// </summary>
-    private static float LocalAverageHeight(Vector2 p, Polyline line, float span)
-    {
-        Vector2 direction = line.DirectionNear(p);
-
-        float sum = 0.0f;
-        const int samples = 5;
-        for (int i = 0; i < samples; i++)
-        {
-            float t = (i / (float)(samples - 1) - 0.5f) * 2.0f * span;
-            Vector2 s = p + direction * t;
-
-            // Peaks have to be included here. Without them the road grading averages
-            // toward the un-peaked trend and quietly planes the named summits back
-            // off - Fire Lookout lost 120m of mountain to its own access track.
-            sum += ApplyPeaks(s, RegionalTrend(s.X, s.Y) + Relief(s.X, s.Y));
-        }
-
-        return sum / samples;
     }
 
     // ---------------------------------------------------------------- surface
@@ -1125,6 +1335,56 @@ public static class CountyMap
         }
 
         return profile;
+    }
+
+    // Road elevations are derived from the carved natural terrain once. Sampling
+    // five complete terrain evaluations per road vertex made streaming workers
+    // contend with the render thread for the entire traversal benchmark.
+    private const float RoadProfileSpacing = 24.0f;
+    private static readonly float[][] RoadHeightProfiles = BuildRoadHeightProfiles();
+
+    private static float[][] BuildRoadHeightProfiles()
+    {
+        var profiles = new float[RoadLines.Length][];
+        for (int roadIndex = 0; roadIndex < RoadLines.Length; roadIndex++)
+        {
+            Polyline line = RoadLines[roadIndex];
+            int count = Mathf.Max(2, Mathf.CeilToInt(line.TotalLength / RoadProfileSpacing) + 1);
+            var raw = new float[count];
+            for (int sample = 0; sample < count; sample++)
+            {
+                Vector2 point = line.PointAt(sample / (float)(count - 1));
+                raw[sample] = NaturalHeight(point.X, point.Y);
+            }
+
+            var smoothed = new float[count];
+            for (int sample = 0; sample < count; sample++)
+            {
+                float sum = 0.0f;
+                int samples = 0;
+                for (int offset = -2; offset <= 2; offset++)
+                {
+                    int source = Mathf.Clamp(sample + offset, 0, count - 1);
+                    sum += raw[source];
+                    samples++;
+                }
+
+                smoothed[sample] = sum / samples;
+            }
+
+            profiles[roadIndex] = smoothed;
+        }
+
+        return profiles;
+    }
+
+    private static float RoadHeightAt(int roadIndex, float alongNormalised)
+    {
+        float[] profile = RoadHeightProfiles[roadIndex];
+        float position = Mathf.Clamp(alongNormalised, 0.0f, 1.0f) * (profile.Length - 1);
+        int lower = Mathf.FloorToInt(position);
+        int upper = Mathf.Min(lower + 1, profile.Length - 1);
+        return Mathf.Lerp(profile[lower], profile[upper], position - lower);
     }
 
     /// <summary>Creek surface at a normalised distance along the spine.</summary>

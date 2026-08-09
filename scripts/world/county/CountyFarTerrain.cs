@@ -42,6 +42,9 @@ public partial class CountyFarTerrain : Node3D
     /// </summary>
     [Export] public int StreamedRadius { get; set; } = 8;
 
+    /// <summary>Review-only switch for an uninterrupted whole-county overview.</summary>
+    public bool ForceAllVisible { get; set; }
+
     private const string FarMaterialPath = "res://assets/materials/county_far_terrain.tres";
 
     private readonly Dictionary<Vector2I, MeshInstance3D> _tiles = new();
@@ -244,6 +247,12 @@ public partial class CountyFarTerrain : Node3D
 
         foreach ((Vector2I tile, MeshInstance3D instance) in _tiles)
         {
+            if (ForceAllVisible)
+            {
+                instance.Visible = true;
+                continue;
+            }
+
             int minChunkX = tile.X * ChunksPerTile;
             int minChunkZ = tile.Y * ChunksPerTile;
             int maxChunkX = minChunkX + ChunksPerTile - 1;
@@ -303,6 +312,7 @@ public partial class CountyFarTerrain : Node3D
         // it at random and the far mesh grew a row of spikes down the river.
         // Averaging a 2x2 kernel is a proper box filter and removes them.
         var heights = new float[side, side];
+        var waterMask = new bool[side, side];
         float quarter = step * 0.25f;
         for (int row = 0; row < side; row++)
         {
@@ -315,6 +325,13 @@ public partial class CountyFarTerrain : Node3D
                     CountyMap.Height(x + quarter, z - quarter) +
                     CountyMap.Height(x - quarter, z + quarter) +
                     CountyMap.Height(x + quarter, z + quarter));
+
+                float water = FarWaterSurface(x, z, step);
+                if (water > float.MinValue && heights[column, row] < water)
+                {
+                    heights[column, row] = water + 0.04f;
+                    waterMask[column, row] = true;
+                }
             }
         }
 
@@ -343,7 +360,7 @@ public partial class CountyFarTerrain : Node3D
                 vertices[index] = new Vector3(x, height, z);
                 normals[index] = normal;
                 uvs[index] = new Vector2(x, z);
-                colors[index] = FarSurfaceWeights(x, z, height, slope);
+                colors[index] = FarSurfaceWeights(x, z, height, slope, waterMask[column, row]);
             }
         }
 
@@ -386,7 +403,28 @@ public partial class CountyFarTerrain : Node3D
     /// them for every vertex of 64 tiles would dominate startup for detail nobody
     /// can see. Forest and rock are what actually read at this distance.
     /// </summary>
-    private static Color FarSurfaceWeights(float x, float z, float height, float slope)
+    private static float FarWaterSurface(float x, float z, float sampleSpacing)
+    {
+        float water = CountyMap.WaterSurfaceY(x, z);
+        if (water > float.MinValue)
+        {
+            return water;
+        }
+
+        var point = new Vector2(x, z);
+        if (!CountyMap.RiverLine.IsFarFrom(point, 48.0f))
+        {
+            float distance = CountyMap.RiverLine.Distance(point, out float along);
+            if (distance < CountyMap.RiverHalfWidth(along) + sampleSpacing * 0.55f)
+            {
+                return CountyMap.RiverSurfaceY(along);
+            }
+        }
+
+        return float.MinValue;
+    }
+
+    private static Color FarSurfaceWeights(float x, float z, float height, float slope, bool water)
     {
         float forest = CountyMap.ForestDensity(x, z, height, slope);
 
@@ -398,11 +436,16 @@ public partial class CountyFarTerrain : Node3D
         }
 
         forest *= 1.0f - rock;
+        if (water)
+        {
+            forest = 0.0f;
+            rock = 0.0f;
+        }
 
         return new Color(
             Mathf.Clamp(forest, 0.0f, 1.0f),
             Mathf.Clamp(rock, 0.0f, 1.0f),
-            0.0f,
+            water ? 1.0f : 0.0f,
             0.0f);
     }
 
