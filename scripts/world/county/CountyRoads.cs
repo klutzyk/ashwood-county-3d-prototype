@@ -517,7 +517,7 @@ public partial class CountyRoads : Node3D, ICountyChunkSource
             sleeperMulti.SetInstanceTransform(i, frames[i]);
         }
 
-        holder.AddChild(new MultiMeshInstance3D
+        var sleeperInstance = new MultiMeshInstance3D
         {
             Name = $"{name}_sleepers",
             Multimesh = sleeperMulti,
@@ -525,7 +525,9 @@ public partial class CountyRoads : Node3D, ICountyChunkSource
             CastShadow = GeometryInstance3D.ShadowCastingSetting.Off,
             VisibilityRangeEnd = 260.0f,
             VisibilityRangeFadeMode = GeometryInstance3D.VisibilityRangeFadeModeEnum.Self,
-        });
+        };
+        sleeperInstance.CustomAabb = FrameBounds(frames, 3.0f);
+        holder.AddChild(sleeperInstance);
 
         // Two rails, offset to standard gauge either side of the centreline.
         var rail = new BoxMesh { Size = new Vector3(0.09f, 0.14f, 1.0f) };
@@ -563,7 +565,7 @@ public partial class CountyRoads : Node3D, ICountyChunkSource
 
         railMulti.VisibleInstanceCount = cursor;
 
-        holder.AddChild(new MultiMeshInstance3D
+        var railInstance = new MultiMeshInstance3D
         {
             Name = $"{name}_rails",
             Multimesh = railMulti,
@@ -571,7 +573,41 @@ public partial class CountyRoads : Node3D, ICountyChunkSource
             CastShadow = GeometryInstance3D.ShadowCastingSetting.Off,
             VisibilityRangeEnd = 300.0f,
             VisibilityRangeFadeMode = GeometryInstance3D.VisibilityRangeFadeModeEnum.Self,
-        });
+        };
+        railInstance.CustomAabb = FrameBounds(frames, 3.0f);
+        holder.AddChild(railInstance);
+    }
+
+    /// <summary>
+    /// World-space bounds of a set of instance frames.
+    ///
+    /// Instance transforms here are world-space while the holder sits at the
+    /// origin, so without an explicit box Godot measures culling and visibility
+    /// range from world zero - every batch then counts as adjacent to the camera
+    /// and draws regardless of the range set on it.
+    /// </summary>
+    private static Aabb FrameBounds(List<Transform3D> frames, float padding)
+    {
+        if (frames.Count == 0)
+        {
+            return new Aabb();
+        }
+
+        var min = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
+        var max = new Vector3(float.MinValue, float.MinValue, float.MinValue);
+
+        foreach (Transform3D frame in frames)
+        {
+            Vector3 o = frame.Origin;
+            min.X = Mathf.Min(min.X, o.X - padding);
+            min.Y = Mathf.Min(min.Y, o.Y - padding);
+            min.Z = Mathf.Min(min.Z, o.Z - padding);
+            max.X = Mathf.Max(max.X, o.X + padding);
+            max.Y = Mathf.Max(max.Y, o.Y + padding);
+            max.Z = Mathf.Max(max.Z, o.Z + padding);
+        }
+
+        return new Aabb(min, max - min);
     }
 
     /// <summary>Drops support piers from a bridge deck to the bed beneath it.</summary>
@@ -615,7 +651,13 @@ public partial class CountyRoads : Node3D, ICountyChunkSource
 
         multi.VisibleInstanceCount = cursor;
 
-        holder.AddChild(new MultiMeshInstance3D
+        var pierFrames = new List<Transform3D>(cursor);
+        for (int i = 0; i < cursor; i++)
+        {
+            pierFrames.Add(multi.GetInstanceTransform(i));
+        }
+
+        var pierInstance = new MultiMeshInstance3D
         {
             Name = $"{name}_piers",
             Multimesh = multi,
@@ -623,7 +665,12 @@ public partial class CountyRoads : Node3D, ICountyChunkSource
             CastShadow = GeometryInstance3D.ShadowCastingSetting.On,
             VisibilityRangeEnd = 400.0f,
             VisibilityRangeFadeMode = GeometryInstance3D.VisibilityRangeFadeModeEnum.Self,
-        });
+        };
+
+        // Piers are scaled tall, so the box has to allow for their full drop
+        // rather than the mesh's unscaled height.
+        pierInstance.CustomAabb = FrameBounds(pierFrames, 40.0f);
+        holder.AddChild(pierInstance);
     }
 
     public void Rebuild()

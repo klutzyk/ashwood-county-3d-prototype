@@ -20,6 +20,11 @@ uniform sampler2D imposter_atlas : source_color, filter_linear_mipmap, repeat_di
 // Must match AngleCount in the baker.
 uniform int atlas_cells = 8;
 
+// Species stacked one per row. Each instance picks its row from the MultiMesh's
+// custom data, which is what lets every conifer share a single batch instead of
+// needing one draw call per species.
+uniform int atlas_rows = 1;
+
 // Cutout rather than blending: alpha-blended foliage needs back-to-front sorting,
 // which for tens of thousands of scattered instances is both expensive and still
 // wrong. A scissor is order-independent and costs nothing.
@@ -71,8 +76,16 @@ void vertex() {
     float cell = floor(fract(angle) * cells + 0.5);
     cell = mod(cell, cells);
 
+    // INSTANCE_CUSTOM.r carries the species row, normalised. Rounding rather than
+    // flooring keeps an instance off the seam between two rows when the value is
+    // reconstructed from the 8-bit custom data channel.
+    float rows = float(atlas_rows);
+    float row = clamp(floor(INSTANCE_CUSTOM.r * rows + 0.5), 0.0, rows - 1.0);
+
     vec2 quad_uv = vec2(UV.x, UV.y);
-    atlas_uv = vec2((cell + quad_uv.x) / cells, quad_uv.y);
+    atlas_uv = vec2(
+        (cell + quad_uv.x) / cells,
+        (row + quad_uv.y) / rows);
 
     // Canopy is lit from above far more than from the side. Weighting the shading
     // normal toward vertical rather than toward the camera stops every card facing

@@ -5,8 +5,8 @@
 [ext_resource type="Material" path="res://assets/materials/vegetation_fir_sapling_needles.tres" id="3_mat"]
 
 [sub_resource type="CylinderShape3D" id="Trunk"]
-radius = 1.318
-height = 4.009
+radius = 1.309
+height = 4.010
 
 [node name="AshwoodFirSaplingC" type="StaticBody3D"]
 
@@ -19,7 +19,7 @@ surface_material_override/0 = ExtResource("2_mat")
 surface_material_override/0 = ExtResource("3_mat")
 
 [node name="TrunkCollision" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.004, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.005, 0)
 shape = SubResource("Trunk")
 
 [editable path="Visual"]

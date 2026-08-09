@@ -43,9 +43,20 @@ public partial class BakeTreeImposters : Node3D
 
     private readonly record struct Subject(string Name, string ScenePath);
 
+    /// <summary>
+    /// Baked from the LOD1 mesh, not LOD0: the atlas cell is 256px and the extra
+    /// detail in LOD0 is below a texel at that size, so it would cost bake time
+    /// and memory for a result no different.
+    /// </summary>
     private static readonly Subject[] Subjects =
     {
         new("jacaranda", "res://assets/environment/nature/polyhaven/ashwood_jacaranda_lod1.tscn"),
+        new("fir_a", "res://assets/environment/nature/polyhaven/ashwood_fir_a_lod1.tscn"),
+        new("fir_b", "res://assets/environment/nature/polyhaven/ashwood_fir_b_lod1.tscn"),
+        new("fir_c", "res://assets/environment/nature/polyhaven/ashwood_fir_c_lod1.tscn"),
+        new("pine_a", "res://assets/environment/nature/polyhaven/ashwood_pine_a_lod1.tscn"),
+        new("pine_b", "res://assets/environment/nature/polyhaven/ashwood_pine_b_lod1.tscn"),
+        new("pine_c", "res://assets/environment/nature/polyhaven/ashwood_pine_c_lod1.tscn"),
     };
 
     public override async void _Ready()
@@ -55,10 +66,17 @@ public partial class BakeTreeImposters : Node3D
             string outputDirectory = ProjectSettings.GlobalizePath("res://assets/environment/nature/imposters");
             DirAccess.MakeDirRecursiveAbsolute(outputDirectory);
 
+            var baked = new System.Collections.Generic.List<string>();
             foreach (Subject subject in Subjects)
             {
                 await BakeSubject(subject, outputDirectory);
+                if (subject.Name != "jacaranda")
+                {
+                    baked.Add(subject.Name);
+                }
             }
+
+            ComposeConiferAtlas(baked, outputDirectory);
 
             GD.Print("IMPOSTER_BAKE: PASS");
             GetTree().Quit(0);
@@ -184,6 +202,59 @@ public partial class BakeTreeImposters : Node3D
                  $"base_offset={centre.Y - bounds.Position.Y:F2} cells={AngleCount} -> {atlasPath}");
 
         viewport.QueueFree();
+    }
+
+    /// <summary>
+    /// Stacks every conifer atlas into one texture, one species per row.
+    ///
+    /// Six species meant six materials, six meshes and therefore six MultiMesh
+    /// batches per chunk. Across a ring-6 imposter set that is over a thousand
+    /// draw calls for the trees alone, and this world is draw-call bound - it runs
+    /// at the same speed at 480x270 as at 1920x1080, so submission cost, not
+    /// shading, is what is spending the frame.
+    ///
+    /// One atlas collapses that back to a single batch per chunk. It works because
+    /// every conifer bake is a square of side equal to the tree's height, centred
+    /// at half its height, so one normalised card fits all of them and the species
+    /// difference is purely which row to sample.
+    /// </summary>
+    private static void ComposeConiferAtlas(
+        System.Collections.Generic.List<string> names, string outputDirectory)
+    {
+        if (names.Count == 0)
+        {
+            return;
+        }
+
+        var combined = Image.CreateEmpty(
+            CellSize * AngleCount, CellSize * names.Count, false, Image.Format.Rgba8);
+        combined.Fill(new Color(0, 0, 0, 0));
+
+        for (int row = 0; row < names.Count; row++)
+        {
+            string path = Path.Combine(outputDirectory, names[row] + "_imposter.png");
+            Image? strip = Image.LoadFromFile(path);
+            if (strip == null)
+            {
+                throw new InvalidOperationException($"Missing baked strip {path}");
+            }
+
+            strip.Convert(Image.Format.Rgba8);
+            combined.BlitRect(
+                strip,
+                new Rect2I(0, 0, CellSize * AngleCount, CellSize),
+                new Vector2I(0, row * CellSize));
+        }
+
+        string combinedPath = Path.Combine(outputDirectory, "conifer_atlas.png");
+        Error saved = combined.SavePng(combinedPath);
+        if (saved != Error.Ok)
+        {
+            throw new InvalidOperationException($"Could not save {combinedPath}: {saved}");
+        }
+
+        GD.Print($"IMPOSTER_BAKE: conifer_atlas rows=[{string.Join(", ", names)}] " +
+                 $"cells={AngleCount} -> {combinedPath}");
     }
 
     private static void DisablePhysics(Node node)

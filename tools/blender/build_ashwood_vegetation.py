@@ -1297,8 +1297,14 @@ def blender_main(preview_dir: Path | None) -> None:
         for i in range(n_cells):
             x0, y0, x1, y1, stem = rects[int(pick[i])]
 
-            # Atlas is measured in texels from the top left; glTF UVs run from
-            # the bottom left, so V is flipped here rather than in the table.
+            # Atlas rectangles are measured in texels from the image top left,
+            # but these UVs are authored in Blender, whose V origin is bottom
+            # left and which flips V again on glTF export. So V is flipped here.
+            #
+            # Verified rather than reasoned: build_sprays re-measures each card's
+            # alpha coverage, and removing this flip dropped fir_a from 0.383 to
+            # 0.048 - the cards landing on transparent background instead of on
+            # needle sprays.
             u0, u1 = x0 / ATLAS_SIZE, x1 / ATLAS_SIZE
             v0, v1 = 1.0 - y1 / ATLAS_SIZE, 1.0 - y0 / ATLAS_SIZE
             if mirror[i]:

@@ -61,13 +61,26 @@ public partial class CountyTerrain : Node3D, ICountyChunkSource
     /// seam became visible walls across the landscape. A 16m floor keeps the
     /// silhouette intact for a few hundred extra triangles per chunk.
     /// </summary>
+    /// <summary>
+    /// Quads per chunk edge by ring.
+    ///
+    /// Measured, not guessed: the county turns out to be geometry bound. Frame
+    /// rate tracks primitive count and is identical at 480x270 and 1920x1080,
+    /// which is the signature of vertex cost rather than shading. The old ladder
+    /// put roughly 557k triangles into the streamed terrain alone, more than a
+    /// third of everything in frame.
+    ///
+    /// Near rings keep enough resolution to stand on; the outer rings drop hard,
+    /// because past a few hundred metres a chunk is a few pixels tall and the
+    /// always-resident far field is already covering that ground.
+    /// </summary>
     private static int QuadsForRing(int ring) => ring switch
     {
-        0 or 1 => 64,
-        2 or 3 => 48,
-        4 or 5 => 32,
-        6 or 7 => 24,
-        _ => 16,
+        0 or 1 => 48,
+        2 or 3 => 32,
+        4 or 5 => 20,
+        6 or 7 => 12,
+        _ => 8,
     };
 
     /// <summary>Mirrors EnableSkirts for the static mesher, which has no instance.</summary>
@@ -93,6 +106,19 @@ public partial class CountyTerrain : Node3D, ICountyChunkSource
     {
         _material = LoadMaterial();
         SkirtsEnabled = EnableSkirts;
+
+        // Tuning override, so the streaming radius can be swept from the command
+        // line without a rebuild while chasing a frame cost.
+        string radiusOverride = OS.GetEnvironment("TERRAIN_RADIUS");
+        if (radiusOverride.Length > 0 && int.TryParse(radiusOverride, out int overridden))
+        {
+            TerrainRadius = Mathf.Clamp(overridden, 1, 16);
+        }
+
+        if (OS.GetEnvironment("NO_TERRAIN_COLLISION") == "1")
+        {
+            BuildCollision = false;
+        }
 
         // Registering with the parent world rather than being wired by hand means
         // the scene can be assembled in any order.
@@ -131,6 +157,13 @@ public partial class CountyTerrain : Node3D, ICountyChunkSource
         };
     }
 
+    /// <summary>
+    /// Count of chunk builds started, for performance diagnosis. A steadily
+    /// climbing figure while the player stands still means the streamer is
+    /// thrashing rather than the frame being genuinely heavy.
+    /// </summary>
+    public static long TotalChunkBuilds { get; private set; }
+
     public void BuildChunk(Vector2I chunk, int ring)
     {
         if (_chunks.ContainsKey(chunk) || !_pending.Add(chunk))
@@ -140,6 +173,7 @@ public partial class CountyTerrain : Node3D, ICountyChunkSource
 
         int quads = QuadsForRing(ring);
         bool wantsCollision = BuildCollision && ring <= CollisionRadius;
+        TotalChunkBuilds++;
 
         Task.Run(() =>
         {

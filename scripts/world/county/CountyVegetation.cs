@@ -84,6 +84,30 @@ public partial class CountyVegetation : Node3D, ICountyChunkSource
     private const float ImposterCentreHeight = 9.71f;
 
     private const string ImposterMaterialPath = "res://assets/materials/county_tree_imposter.tres";
+    private const string ImposterAtlasRoot = "res://assets/environment/nature/imposters/";
+
+    /// <summary>
+    /// One baked tree, with the card geometry its atlas was rendered against.
+    ///
+    /// These numbers come straight from the bake report of BakeTreeImposters. The
+    /// baker frames each tree with an orthogonal camera sized to twice its
+    /// bounding radius, so a card must be that same square or the tree comes back
+    /// out at the wrong size. They cannot be shared across species: a jacaranda is
+    /// 24m wide and 19m tall while a fir is 6m wide and 19m tall, and using one
+    /// set of numbers for both either squashes the conifers or floats them.
+    /// </summary>
+    private readonly record struct ImposterSpecies(
+        string Atlas, float CardSize, float CentreHeight);
+
+    private static readonly ImposterSpecies[] ConiferImposters =
+    {
+        new("fir_a_imposter.png", 18.89f, 9.44f),
+        new("fir_b_imposter.png", 13.94f, 6.97f),
+        new("fir_c_imposter.png", 12.59f, 6.30f),
+        new("pine_a_imposter.png", 20.36f, 10.18f),
+        new("pine_b_imposter.png", 14.98f, 7.49f),
+        new("pine_c_imposter.png", 17.45f, 8.72f),
+    };
 
     private enum LayerRule
     {
@@ -99,21 +123,53 @@ public partial class CountyVegetation : Node3D, ICountyChunkSource
 
     private static readonly Layer[] Layers =
     {
+        // Conifers, not the jacaranda.
+        //
+        // Ashwood is a cool-temperate county and the reference photography for the
+        // genre is wall-to-wall spruce and fir; a tropical broadleaf was simply the
+        // wrong tree, and it was only ever there because it happened to be the one
+        // asset that had been through the Blender pipeline. Six mature variants now
+        // exist - three fir, three pine, 12.5m to 20.4m - and mixing all six is what
+        // stops a stand reading as one tree stamped repeatedly.
+        //
+        // Scales stay near 1.0 because these are photoscans at their real size,
+        // unlike the jacaranda which had to be shrunk to pass for a temperate tree.
         new("canopy", new[]
             {
-                VegetationRoot + "ashwood_jacaranda_lod0.tscn",
+                VegetationRoot + "ashwood_fir_a_lod0.tscn",
+                VegetationRoot + "ashwood_fir_b_lod0.tscn",
+                VegetationRoot + "ashwood_pine_a_lod0.tscn",
+                VegetationRoot + "ashwood_pine_c_lod0.tscn",
             },
-            PerChunk: 60, MinScale: 0.34f, MaxScale: 0.56f,
-            VisibilityRange: 110.0f, CastShadow: true, MaxRing: 1, MaxSlope: 0.62f,
+            PerChunk: 46, MinScale: 0.78f, MaxScale: 1.18f,
+            VisibilityRange: 120.0f, CastShadow: true, MaxRing: 1, MaxSlope: 0.66f,
             Rule: LayerRule.Forest, Clustering: 0.86f),
 
         new("canopy_mid", new[]
             {
-                VegetationRoot + "ashwood_jacaranda_lod1.tscn",
+                VegetationRoot + "ashwood_fir_a_lod1.tscn",
+                VegetationRoot + "ashwood_fir_b_lod1.tscn",
+                VegetationRoot + "ashwood_fir_c_lod1.tscn",
+                VegetationRoot + "ashwood_pine_a_lod1.tscn",
+                VegetationRoot + "ashwood_pine_b_lod1.tscn",
+                VegetationRoot + "ashwood_pine_c_lod1.tscn",
             },
-            PerChunk: 90, MinScale: 0.34f, MaxScale: 0.56f,
-            VisibilityRange: 240.0f, CastShadow: false, MaxRing: 1, MaxSlope: 0.62f,
+            PerChunk: 80, MinScale: 0.78f, MaxScale: 1.18f,
+            VisibilityRange: 250.0f, CastShadow: false, MaxRing: 1, MaxSlope: 0.66f,
             Rule: LayerRule.Forest, Clustering: 0.86f),
+
+        // Saplings and young growth under the canopy, so the forest floor is not
+        // bare ground between mature trunks.
+        new("understorey_conifer", new[]
+            {
+                VegetationRoot + "ashwood_fir_sapling_a.tscn",
+                VegetationRoot + "ashwood_fir_sapling_b.tscn",
+                VegetationRoot + "ashwood_pine_sapling_a.tscn",
+                VegetationRoot + "ashwood_pine_sapling_c.tscn",
+            },
+            PerChunk: 110, MinScale: 0.7f, MaxScale: 1.5f,
+            VisibilityRange: 90.0f, CastShadow: false, MaxRing: 1, MaxSlope: 0.7f,
+            Rule: LayerRule.Forest, Clustering: 0.9f),
 
         // The forest proper. Everything above is detail applied to the nearest few
         // hundred metres; this is the layer that actually makes the county read as
@@ -143,8 +199,8 @@ public partial class CountyVegetation : Node3D, ICountyChunkSource
                 VegetationRoot + "ashwood_shrub_03_a.tscn",
                 VegetationRoot + "ashwood_shrub_03_c.tscn",
             },
-            PerChunk: 95, MinScale: 0.7f, MaxScale: 1.5f,
-            VisibilityRange: 72.0f, CastShadow: false, MaxRing: 0, MaxSlope: 0.66f,
+            PerChunk: 260, MinScale: 0.7f, MaxScale: 1.6f,
+            VisibilityRange: 78.0f, CastShadow: false, MaxRing: 0, MaxSlope: 0.66f,
             Rule: LayerRule.Forest, Clustering: 0.7f),
 
         new("ferns", new[]
@@ -154,9 +210,12 @@ public partial class CountyVegetation : Node3D, ICountyChunkSource
                 VegetationRoot + "ashwood_nettle_medium.tscn",
                 VegetationRoot + "ashwood_nettle_tall.tscn",
             },
-            PerChunk: 130, MinScale: 0.7f, MaxScale: 1.4f,
-            VisibilityRange: 52.0f, CastShadow: false, MaxRing: 0, MaxSlope: 0.62f,
-            Rule: LayerRule.Forest, Clustering: 0.75f),
+            // Broad-leaved ground plants carpeting the forest floor is the single
+            // most characteristic thing in the reference photography, and the one
+            // the county had least of. These are the closest match available.
+            PerChunk: 520, MinScale: 0.75f, MaxScale: 1.6f,
+            VisibilityRange: 72.0f, CastShadow: false, MaxRing: 1, MaxSlope: 0.62f,
+            Rule: LayerRule.Forest, Clustering: 0.72f),
 
         new("grass", new[]
             {
@@ -164,9 +223,16 @@ public partial class CountyVegetation : Node3D, ICountyChunkSource
                 VegetationRoot + "ashwood_grass_bermuda_medium.tscn",
                 VegetationRoot + "ashwood_grass_bermuda_dry.tscn",
             },
-            PerChunk: 300, MinScale: 0.8f, MaxScale: 1.8f,
-            VisibilityRange: 42.0f, CastShadow: false, MaxRing: 0, MaxSlope: 0.55f,
-            Rule: LayerRule.Open, Clustering: 0.55f),
+            // Waist-high grass across open ground, as in the reference shots where
+            // vehicles and buildings sit half-swallowed by it. Short visibility
+            // range keeps the cost to the near field where it actually reads.
+            // MaxRing 1 rather than 0. At ring 0 the grass existed only in the
+            // chunk the player stood in, so open country read as bare texture the
+            // moment you looked more than a hundred metres ahead - which is most
+            // of the time in a county this size.
+            PerChunk: 900, MinScale: 0.9f, MaxScale: 2.2f,
+            VisibilityRange: 74.0f, CastShadow: false, MaxRing: 1, MaxSlope: 0.55f,
+            Rule: LayerRule.Open, Clustering: 0.5f),
 
         new("meadow_scrub", new[]
             {
@@ -174,8 +240,8 @@ public partial class CountyVegetation : Node3D, ICountyChunkSource
                 VegetationRoot + "ashwood_shrub_03_b.tscn",
                 VegetationRoot + "ashwood_nettle_small.tscn",
             },
-            PerChunk: 62, MinScale: 0.6f, MaxScale: 1.3f,
-            VisibilityRange: 88.0f, CastShadow: false, MaxRing: 1, MaxSlope: 0.6f,
+            PerChunk: 150, MinScale: 0.6f, MaxScale: 1.4f,
+            VisibilityRange: 92.0f, CastShadow: false, MaxRing: 1, MaxSlope: 0.6f,
             Rule: LayerRule.Open, Clustering: 0.6f),
 
         new("deadwood", new[]
@@ -184,9 +250,13 @@ public partial class CountyVegetation : Node3D, ICountyChunkSource
                 VegetationRoot + "ashwood_dead_log.tscn",
                 VegetationRoot + "ashwood_bark_debris_a.tscn",
                 VegetationRoot + "ashwood_bark_debris_c.tscn",
+                VegetationRoot + "ashwood_tree_stump_01.tscn",
+                VegetationRoot + "ashwood_pine_roots_a.tscn",
             },
-            PerChunk: 22, MinScale: 0.8f, MaxScale: 1.5f,
-            VisibilityRange: 96.0f, CastShadow: true, MaxRing: 0, MaxSlope: 0.5f,
+            // Forests are messy. Fallen trunks, stumps, root plates and bark
+            // litter do more for "this is real woodland" than another live tree.
+            PerChunk: 70, MinScale: 0.8f, MaxScale: 1.6f,
+            VisibilityRange: 104.0f, CastShadow: true, MaxRing: 0, MaxSlope: 0.5f,
             Rule: LayerRule.Forest, Clustering: 0.5f),
 
         new("rocks", new[]
@@ -196,8 +266,8 @@ public partial class CountyVegetation : Node3D, ICountyChunkSource
                 VegetationRoot + "ashwood_rock_moss_04.tscn",
                 VegetationRoot + "ashwood_rock_moss_06.tscn",
             },
-            PerChunk: 48, MinScale: 0.7f, MaxScale: 2.6f,
-            VisibilityRange: 150.0f, CastShadow: true, MaxRing: 1, MaxSlope: 1.1f,
+            PerChunk: 110, MinScale: 0.7f, MaxScale: 3.1f,
+            VisibilityRange: 168.0f, CastShadow: true, MaxRing: 1, MaxSlope: 1.1f,
             Rule: LayerRule.Rock, Clustering: 0.65f),
 
         new("riverbank", new[]
@@ -484,7 +554,7 @@ public partial class CountyVegetation : Node3D, ICountyChunkSource
                     multiMesh.SetInstanceTransform(i, buckets[variant][i] * parts[part].Local);
                 }
 
-                holder.AddChild(new MultiMeshInstance3D
+                var instance = new MultiMeshInstance3D
                 {
                     Name = $"{layer.Name}_{variant:D2}_{part:D2}",
                     Multimesh = multiMesh,
@@ -494,7 +564,19 @@ public partial class CountyVegetation : Node3D, ICountyChunkSource
                     VisibilityRangeEnd = layer.VisibilityRange,
                     VisibilityRangeEndMargin = layer.VisibilityRange * 0.14f,
                     VisibilityRangeFadeMode = GeometryInstance3D.VisibilityRangeFadeModeEnum.Self,
-                });
+                };
+
+                // Without this the node sits at the world origin while its
+                // instances are placed in world space, so Godot measures both
+                // frustum culling and VisibilityRangeEnd from world zero. Every
+                // vegetation batch in every resident chunk then counts as being
+                // right next to the camera and draws every frame, whatever the
+                // range says - which put full-detail tree geometry from the whole
+                // streamed radius into the frame at once and cost roughly an
+                // order of magnitude of frame rate.
+                instance.CustomAabb = InstanceBounds(
+                    buckets[variant], parts[part].Mesh, parts[part].Local);
+                holder.AddChild(instance);
             }
         }
     }
@@ -507,9 +589,23 @@ public partial class CountyVegetation : Node3D, ICountyChunkSource
     /// rotation baked in here would be overwritten, and a leaning card would only
     /// shrink the tree. Only position and a uniform scale survive.
     /// </summary>
+    /// <summary>
+    /// Emits a chunk's trees as a single MultiMesh of billboard cards.
+    ///
+    /// One batch, not one per species. Splitting by species cost six draw calls a
+    /// chunk, and across a ring-6 imposter set that was over a thousand for the
+    /// trees alone in a world that measures as draw-call bound - identical frame
+    /// rate at 480x270 and at 1920x1080, so submission cost is what is being spent.
+    ///
+    /// It collapses cleanly because every conifer bake is a square of side equal
+    /// to the tree's height, centred at half that height. So the card can be a
+    /// unit quad scaled by the tree's height, and the only per-species difference
+    /// left is which atlas row to sample - which rides along in the instance's
+    /// custom data.
+    /// </summary>
     private void EmitImposterLayer(Node3D holder, in Layer layer, List<Transform3D> placements)
     {
-        Material? material = LoadImposterMaterial();
+        Material? material = LoadConiferImposterMaterial();
         if (material == null)
         {
             return;
@@ -517,7 +613,7 @@ public partial class CountyVegetation : Node3D, ICountyChunkSource
 
         var quad = new QuadMesh
         {
-            Size = new Vector2(ImposterCardSize, ImposterCardSize),
+            Size = new Vector2(1.0f, 1.0f),
             Material = material,
         };
 
@@ -526,61 +622,62 @@ public partial class CountyVegetation : Node3D, ICountyChunkSource
             TransformFormat = MultiMesh.TransformFormatEnum.Transform3D,
             Mesh = quad,
 
-            // One baked tree repeated across a hillside reads as an orchard. Since
-            // there is only one atlas, the variety has to come from somewhere else:
-            // a per-instance tint is the cheapest convincing source, and costs one
-            // extra vertex attribute rather than another bake.
+            // Colour carries per-tree tint, custom data carries the species row.
             UseColors = true,
+            UseCustomData = true,
             InstanceCount = placements.Count,
         };
 
-        var tintRng = new RandomNumberGenerator { Seed = (ulong)placements.Count * 2654435761UL };
+        int speciesCount = ConiferImposters.Length;
+        var rng = new RandomNumberGenerator { Seed = (ulong)placements.Count * 2654435761UL };
+
+        var min = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
+        var max = new Vector3(float.MinValue, float.MinValue, float.MinValue);
 
         for (int i = 0; i < placements.Count; i++)
         {
             Transform3D placement = placements[i];
+            int species = i % speciesCount;
+            ImposterSpecies chosen = ConiferImposters[species];
 
-            // Scale is uniform, so any basis column recovers it.
-            float scale = placement.Basis.X.Length();
+            // The scatter's own scale varies tree size within a species; the card
+            // side is the species height, so the two multiply.
+            float scatter = placement.Basis.X.Length();
+            float side = chosen.CardSize * scatter;
 
-            // The scatter puts the origin on the ground; the card is centred on the
-            // baked frame's centre, which sits ImposterCentreHeight above the trunk
-            // base. Without this every tree is buried to half its height.
             var origin = new Vector3(
                 placement.Origin.X,
-                placement.Origin.Y + (ImposterCentreHeight * scale),
+                placement.Origin.Y + (side * 0.5f),
                 placement.Origin.Z);
 
             multiMesh.SetInstanceTransform(i,
-                new Transform3D(Basis.Identity.Scaled(Vector3.One * scale), origin));
+                new Transform3D(Basis.Identity.Scaled(Vector3.One * side), origin));
 
-            // Value varies more than hue: a stand of one species differs mostly in
-            // how much light each crown is catching, not in colour. The slight
-            // green/yellow drift on top keeps it from reading as pure brightness.
-            float value = tintRng.RandfRange(0.72f, 1.12f);
-            float warmth = tintRng.RandfRange(-0.06f, 0.06f);
+            float value = rng.RandfRange(0.72f, 1.12f);
+            float warmth = rng.RandfRange(-0.06f, 0.06f);
             multiMesh.SetInstanceColor(i, new Color(
                 value * (1.0f + warmth),
                 value,
                 value * (1.0f - warmth * 0.65f)));
+
+            // Normalised so the shader can recover the row by multiplying back up.
+            multiMesh.SetInstanceCustomData(i,
+                new Color(species / (float)speciesCount, 0.0f, 0.0f, 0.0f));
+
+            float reach = side * 0.75f;
+            min.X = Mathf.Min(min.X, origin.X - reach);
+            min.Y = Mathf.Min(min.Y, origin.Y - reach);
+            min.Z = Mathf.Min(min.Z, origin.Z - reach);
+            max.X = Mathf.Max(max.X, origin.X + reach);
+            max.Y = Mathf.Max(max.Y, origin.Y + reach);
+            max.Z = Mathf.Max(max.Z, origin.Z + reach);
         }
 
-        // The instance transforms above are world-space and the holder sits at the
-        // origin, so without an explicit AABB Godot measures both frustum culling
-        // and visibility range from world zero. Every chunk of imposters in the
-        // county then draws every frame regardless of where the camera is, and the
-        // near/far ranges below silently do nothing. Giving the node the chunk's
-        // real bounds is what makes both work.
-        var multiMeshInstance = new MultiMeshInstance3D
+        var instance = new MultiMeshInstance3D
         {
             Name = layer.Name,
             Multimesh = multiMesh,
             CastShadow = GeometryInstance3D.ShadowCastingSetting.Off,
-
-            // Begin, not just end: inside this range the real canopy geometry is
-            // drawn instead, and showing both would double every trunk. This is
-            // per-node rather than per-instance, so the handover happens a chunk at
-            // a time - hence the generous overlap with canopy_mid's fade.
             VisibilityRangeBegin = layer.VisibilityBegin,
             VisibilityRangeBeginMargin = layer.VisibilityBegin * 0.16f,
             VisibilityRangeEnd = layer.VisibilityRange,
@@ -588,8 +685,45 @@ public partial class CountyVegetation : Node3D, ICountyChunkSource
             VisibilityRangeFadeMode = GeometryInstance3D.VisibilityRangeFadeModeEnum.Self,
         };
 
-        multiMeshInstance.CustomAabb = ChunkCardBounds(placements);
-        holder.AddChild(multiMeshInstance);
+        // World-space instance transforms under a node at the origin: without an
+        // explicit box Godot culls and range-tests from world zero, so nothing
+        // culls and every chunk draws.
+        instance.CustomAabb = new Aabb(min, max - min);
+        holder.AddChild(instance);
+    }
+
+    /// <summary>
+    /// World-space bounds of one batch of scattered scene geometry.
+    ///
+    /// Each instance contributes its mesh's own extent, scaled by that instance,
+    /// so a batch of large trees gets a correspondingly larger box than a batch
+    /// of grass tufts and neither is clipped early at a glancing angle.
+    /// </summary>
+    private static Aabb InstanceBounds(
+        List<Transform3D> placements, Mesh mesh, Transform3D local)
+    {
+        Aabb meshBounds = mesh.GetAabb();
+        float reach = Mathf.Max(
+            meshBounds.Size.Length(),
+            meshBounds.Position.Length() + meshBounds.Size.Length());
+
+        var min = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
+        var max = new Vector3(float.MinValue, float.MinValue, float.MinValue);
+
+        foreach (Transform3D placement in placements)
+        {
+            Vector3 origin = (placement * local).Origin;
+            float scaled = reach * Mathf.Max(placement.Basis.X.Length(), 0.001f);
+
+            min.X = Mathf.Min(min.X, origin.X - scaled);
+            min.Y = Mathf.Min(min.Y, origin.Y - scaled);
+            min.Z = Mathf.Min(min.Z, origin.Z - scaled);
+            max.X = Mathf.Max(max.X, origin.X + scaled);
+            max.Y = Mathf.Max(max.Y, origin.Y + scaled);
+            max.Z = Mathf.Max(max.Z, origin.Z + scaled);
+        }
+
+        return new Aabb(min, max - min);
     }
 
     /// <summary>
@@ -598,7 +732,8 @@ public partial class CountyVegetation : Node3D, ICountyChunkSource
     /// bounds have to allow for it swinging a full card-width either side of its
     /// instance origin as the camera moves around it.
     /// </summary>
-    private static Aabb ChunkCardBounds(List<Transform3D> placements)
+    private static Aabb ChunkCardBounds(
+        List<Transform3D> placements, float cardSize, float centreHeight)
     {
         var min = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
         var max = new Vector3(float.MinValue, float.MinValue, float.MinValue);
@@ -606,43 +741,68 @@ public partial class CountyVegetation : Node3D, ICountyChunkSource
         foreach (Transform3D placement in placements)
         {
             float scale = placement.Basis.X.Length();
-            float reach = ImposterCardSize * scale * 0.5f;
+            float reach = cardSize * scale * 0.5f;
             Vector3 origin = placement.Origin;
 
             min.X = Mathf.Min(min.X, origin.X - reach);
             min.Y = Mathf.Min(min.Y, origin.Y - reach);
             min.Z = Mathf.Min(min.Z, origin.Z - reach);
             max.X = Mathf.Max(max.X, origin.X + reach);
-            max.Y = Mathf.Max(max.Y, origin.Y + (ImposterCentreHeight * scale) + reach);
+            max.Y = Mathf.Max(max.Y, origin.Y + (centreHeight * scale) + reach);
             max.Z = Mathf.Max(max.Z, origin.Z + reach);
         }
 
         return new Aabb(min, max - min);
     }
 
-    private Material? _imposterMaterial;
-    private bool _imposterMaterialTried;
+    private Material? _coniferMaterial;
+    private bool _coniferMaterialTried;
 
-    private Material? LoadImposterMaterial()
+    /// <summary>
+    /// The single conifer imposter material, built from the combined atlas.
+    /// </summary>
+    private Material? LoadConiferImposterMaterial()
     {
-        if (_imposterMaterialTried)
+        if (_coniferMaterialTried)
         {
-            return _imposterMaterial;
+            return _coniferMaterial;
         }
 
-        _imposterMaterialTried = true;
-        if (ResourceLoader.Exists(ImposterMaterialPath) &&
-            ResourceLoader.Load(ImposterMaterialPath) is Material loaded)
+        _coniferMaterialTried = true;
+
+        if (!ResourceLoader.Exists(ImposterMaterialPath) ||
+            ResourceLoader.Load(ImposterMaterialPath) is not ShaderMaterial baseMaterial)
         {
-            _imposterMaterial = loaded;
-        }
-        else
-        {
-            GD.PushWarning($"CountyVegetation: imposter material missing at {ImposterMaterialPath}; " +
-                           "distant forest will not render. Run tools/bake_tree_imposters.tscn.");
+            GD.PushWarning(
+                $"CountyVegetation: imposter material missing at {ImposterMaterialPath}; " +
+                "distant forest will not render. Run tools/bake_tree_imposters.tscn.");
+            return null;
         }
 
-        return _imposterMaterial;
+        string atlasPath = ImposterAtlasRoot + "conifer_atlas.png";
+        if (!ResourceLoader.Exists(atlasPath))
+        {
+            GD.PushWarning($"CountyVegetation: combined conifer atlas missing at {atlasPath}. " +
+                           "Run tools/bake_tree_imposters.tscn.");
+            return null;
+        }
+
+        var material = new ShaderMaterial { Shader = baseMaterial.Shader };
+        foreach (string uniform in new[]
+                 { "atlas_cells", "alpha_threshold", "canopy_tint", "roundness" })
+        {
+            Variant value = baseMaterial.GetShaderParameter(uniform);
+            if (value.VariantType != Variant.Type.Nil)
+            {
+                material.SetShaderParameter(uniform, value);
+            }
+        }
+
+        material.SetShaderParameter("imposter_atlas", ResourceLoader.Load<Texture2D>(atlasPath));
+        material.SetShaderParameter("atlas_rows", ConiferImposters.Length);
+
+        _coniferMaterial = material;
+        return _coniferMaterial;
     }
 
     private List<(Mesh Mesh, Transform3D Local)> GetParts(string scenePath)

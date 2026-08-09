@@ -66,6 +66,47 @@ public partial class CountyAtmosphere : Node3D
 
     [Export] public bool EnableVolumetricFog { get; set; }
 
+    /// <summary>
+    /// World Y at which the valley mist is thickest. The county floor sits near
+    /// zero and Ashwood's real elevation is 430m, so this is a little above the
+    /// river and well below the ridges.
+    /// </summary>
+    /// <summary>
+    /// World Y at which the mist is thickest. Godot clamps to full density at and
+    /// below this line, so it must sit at or under the valley floor - putting it
+    /// above ground level means the player is permanently inside the densest part.
+    /// </summary>
+    [Export(PropertyHint.Range, "-200,400,5")]
+    public float MistHeight { get; set; } = -10.0f;
+
+    /// <summary>
+    /// Mist density at and below <see cref="MistHeight"/>.
+    ///
+    /// This has to be read on the same scale as the distance fog, which is
+    /// 0.00006. It was set to 0.010 - a hundred and sixty times stronger - which
+    /// put roughly 63 percent opacity at a hundred metres and buried the whole
+    /// county in brown murk at head height. It looked correct in the review
+    /// renders only because those cameras sit sixty to ninety metres up, above the
+    /// mist, while the player stands in it. Any atmosphere change has to be
+    /// checked from a ground-level camera in the shipped scene.
+    /// </summary>
+    [Export(PropertyHint.Range, "0.0,0.005,0.00005")]
+    public float MistDensity { get; set; } = 0.00016f;
+
+    /// <summary>
+    /// Post-grade. Real blacks and cool, slightly desaturated midtones are most of
+    /// what separates a photographed-looking frame from a rendered-looking one,
+    /// and the county was reading flat and washed at default values.
+    /// </summary>
+    [Export(PropertyHint.Range, "0.5,2.0,0.01")]
+    public float Contrast { get; set; } = 1.14f;
+
+    [Export(PropertyHint.Range, "0.0,2.0,0.01")]
+    public float Saturation { get; set; } = 0.92f;
+
+    [Export(PropertyHint.Range, "0.5,2.0,0.01")]
+    public float Brightness { get; set; } = 0.98f;
+
     private const string SkyPanoramaPath = "res://assets/environment/sky/ashwood_late_afternoon_sky.hdr";
 
     private WorldEnvironment? _worldEnvironment;
@@ -208,10 +249,21 @@ public partial class CountyAtmosphere : Node3D
         environment.FogAerialPerspective = 0.22f;
         environment.FogSkyAffect = 0.06f;
 
-        // Height fog: cold air pools in the river valley and the lake basin at
-        // dawn, which is free atmosphere and reads beautifully from the ridges.
-        environment.FogHeightDensity = 0.28f;
-        environment.FogHeight = -90.0f;
+        // Valley mist, and the reason it is worth more than distance fog.
+        //
+        // Every reference image for this genre separates the scene into depth
+        // planes with air, not with haze applied evenly: near trunks read dark and
+        // sharp, the middle stand lighter, the far treeline a pale silhouette. A
+        // uniform exponential fog cannot do that - it greys everything at a given
+        // distance regardless of where it sits - which is why the county kept
+        // looking flat however the density was tuned.
+        //
+        // Height fog can, because it pools. The previous values put the densest
+        // point at Y = -90 with a falloff of 0.28, and since the county floor sits
+        // near Y = 0 and rises to 900, that placed the entire playable world above
+        // the mist where it contributed nothing at all.
+        environment.FogHeight = MistHeight;
+        environment.FogHeightDensity = MistDensity;
 
         // Volumetric fog is genuinely expensive on the integrated GPU this targets,
         // so it stays opt-in rather than on by default.
@@ -224,6 +276,11 @@ public partial class CountyAtmosphere : Node3D
             environment.VolumetricFogDetailSpread = 1.8f;
             environment.VolumetricFogAmbientInject = 0.25f;
         }
+
+        environment.AdjustmentEnabled = true;
+        environment.AdjustmentContrast = Contrast;
+        environment.AdjustmentSaturation = Saturation;
+        environment.AdjustmentBrightness = Brightness;
 
         _worldEnvironment.Environment = environment;
     }
@@ -261,8 +318,18 @@ public partial class CountyAtmosphere : Node3D
             };
         }
 
-        sky.RadianceSize = Sky.RadianceSizeEnum.Size256;
-        sky.ProcessMode = Sky.ProcessModeEnum.Realtime;
+        // Radiance regeneration is a fixed cost per frame, independent of screen
+        // resolution - which is exactly the signature this project measured when
+        // the frame rate refused to change between 480x270 and 1920x1080.
+        //
+        // REALTIME rebuilds the cubemap and its mips every single frame. That is
+        // meant for skies that visibly change every frame; a day/night cycle
+        // running over minutes does not need it, and on an integrated GPU it
+        // dominates the frame. INCREMENTAL spreads the same work across several
+        // frames and updates only when the sky is actually dirty, which for a slow
+        // sun is indistinguishable in motion.
+        sky.RadianceSize = Sky.RadianceSizeEnum.Size128;
+        sky.ProcessMode = Sky.ProcessModeEnum.Incremental;
         return sky;
     }
 

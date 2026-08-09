@@ -52,9 +52,27 @@ public partial class WorldTime : Node
 	public float WeatherDirectionalMultiplier { get; private set; } = 1.0f;
 	public Color WeatherDirectionalTint { get; private set; } = Colors.White;
 
+	/// <summary>
+	/// Highest the sun is allowed to climb, in degrees. A sun near the zenith
+	/// flattens terrain completely - every slope receives light at the same angle,
+	/// so ridges and valleys shade identically and the landscape reads as a
+	/// painted plane. Real midsummer noon at this latitude is around 70 degrees;
+	/// keeping the peak lower than that trades a little accuracy for relief that
+	/// is legible all day.
+	/// </summary>
+	[Export(PropertyHint.Range, "20,80,1")]
+	public float MaximumSunElevation { get; set; } = 56.0f;
+
 	private DirectionalLight3D? _directionalLight;
 	private Environment? _environment;
 	private int _lastDisplayedMinute = -1;
+	private bool _attached;
+	private float _dayAmbientReference = 0.46f;
+	private float _daySkyReference = 1.0f;
+	private float _dayDirectionalReference = 1.7f;
+	private float _shadowReference = 150.0f;
+	private float _baseAzimuth = -28.0f;
+	private float _lastAppliedHour = float.MinValue;
 
 	public override void _Ready()
 	{
@@ -80,6 +98,26 @@ public partial class WorldTime : Node
 	{
 		_directionalLight = sun;
 		_environment = environment;
+
+		// Adopt whatever the rig was tuned to as the full-daylight reference,
+		// instead of overwriting it with this node's own constants.
+		//
+		// Those constants were authored for the Main Street slice - a two hundred
+		// metre stretch of road. Applied unchanged to the county they were wrong in
+		// three ways at once, all measured from a running build: ambient dropped
+		// from 0.85 to 0.46, shadows were cut from 1200m to 68m so nothing beyond
+		// the next field cast one at all, and the sun was driven to 84 degrees of
+		// elevation - within six degrees of straight overhead - which erases the
+		// relief that makes a landscape read as three-dimensional. The result was a
+		// flat brown wash that looked nothing like the same world in the review
+		// renders, because those build the county without this node running.
+		_dayAmbientReference = environment.AmbientLightEnergy;
+		_daySkyReference = environment.BackgroundEnergyMultiplier;
+		_dayDirectionalReference = sun.LightEnergy;
+		_shadowReference = sun.DirectionalShadowMaxDistance;
+		_baseAzimuth = sun.RotationDegrees.Y;
+		_attached = true;
+
 		ApplyShadowRange();
 		SetTimeOfDay(StartingHour);
 	}
@@ -104,8 +142,15 @@ public partial class WorldTime : Node
 			GraphicsPreset.Medium => 0.75f,
 			_ => 1.0f,
 		};
+
+		// Scale whatever range the rig asked for. Substituting this node's own
+		// ShadowMaxDistance was what cut the county's 1200m cascade set down to
+		// tens of metres; the settings pass then clamps every DirectionalLight3D
+		// again on top, so this has to run after it and has to start from the
+		// rig's number rather than a constant authored for a single street.
+		float reference = _attached ? _shadowReference : ShadowMaxDistance;
 		_directionalLight.DirectionalShadowMaxDistance =
-			Mathf.Max(ShadowMaxDistance * scale, 16.0f);
+			Mathf.Max(reference * scale, 16.0f);
 	}
 
 	public override void _Process(double delta)
@@ -127,7 +172,19 @@ public partial class WorldTime : Node
 			return;
 		}
 
-		UpdateLighting();
+		// Only touch the environment when the sun has actually moved enough to
+		// see. Writing AmbientLightEnergy and BackgroundEnergyMultiplier every
+		// frame marks the sky dirty every frame, which forces its radiance cubemap
+		// and mip chain to be rebuilt continuously - a fixed cost that does not
+		// scale with resolution and was a large part of an unexplained 80ms frame.
+		// A full day passes in minutes, so a hundredth of an hour is far below the
+		// threshold of visible change.
+		if (Mathf.Abs(CurrentHour - _lastAppliedHour) >= 0.01f)
+		{
+			_lastAppliedHour = CurrentHour;
+			UpdateLighting();
+		}
+
 		EmitTimeWhenMinuteChanges();
 	}
 
@@ -168,13 +225,31 @@ public partial class WorldTime : Node
 			0.0f,
 			1.0f) * daylight * GoldenHourColorStrength;
 
+		// A sine arc rather than a linear sweep. The old formula was
+		// -(hour - 6) * 15, which is the sun moving at a constant 15 degrees an
+		// hour through a full circle - so it passed through vertical at midday and
+		// kept going to 180 degrees by evening, pointing straight up through the
+		// ground. Tracking a bounded arc keeps noon at MaximumSunElevation and
+		// dawn and dusk near the horizon, which is both correct and the only way
+		// long raking shadows ever appear.
+		float dayFraction = Mathf.Clamp((CurrentHour - 6.0f) / 12.0f, 0.0f, 1.0f);
+		float elevation = Mathf.Sin(dayFraction * Mathf.Pi) * MaximumSunElevation;
+
+		// Below the horizon at night, and swung through the sky east to west so
+		// shadows track across the county rather than pivoting on the spot.
+		if (CurrentHour < 6.0f || CurrentHour > 18.0f)
+		{
+			elevation = -12.0f;
+		}
+
 		_directionalLight.RotationDegrees = new Vector3(
-			-(CurrentHour - 6.0f) * 15.0f,
-			-28.0f,
+			-elevation,
+			_baseAzimuth + (dayFraction - 0.5f) * 90.0f,
 			0.0f);
+
 		_directionalLight.LightEnergy = Mathf.Lerp(
 			NightDirectionalEnergy,
-			DayDirectionalEnergy,
+			_attached ? _dayDirectionalReference : DayDirectionalEnergy,
 			daylight) * WeatherDirectionalMultiplier;
 		Color daylightColor = NightDirectionalColor.Lerp(
 			DayDirectionalColor,
@@ -189,11 +264,11 @@ public partial class WorldTime : Node
 			1.0f);
 		_environment.AmbientLightEnergy = Mathf.Lerp(
 			NightAmbientEnergy,
-			DayAmbientEnergy,
+			_attached ? _dayAmbientReference : DayAmbientEnergy,
 			daylight) * WeatherAmbientMultiplier;
 		_environment.BackgroundEnergyMultiplier = Mathf.Lerp(
 			NightSkyEnergy,
-			DaySkyEnergy,
+			_attached ? _daySkyReference : DaySkyEnergy,
 			daylight) * WeatherSkyMultiplier;
 	}
 

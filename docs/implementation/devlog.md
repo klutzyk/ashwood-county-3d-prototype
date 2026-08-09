@@ -2951,3 +2951,158 @@ surfaced it immediately.
 - **28GB reclaimed.** Four agent worktrees, each a full repo copy with its own
   import cache. Free space went from 6GB to 34GB. Their work was saved as
   patches first.
+
+---
+
+## Performance: Measuring It Properly, and Two False Results
+
+The county ran at 11 FPS. Before changing anything, instrumentation went into
+`CountyWorldIntegration` to sample steady-state frame time, CPU process time,
+draw calls, primitives, node counts and physics load from inside the shipped
+scene - not the review harness, which does not run WorldTime or the settings
+pass and had therefore been reporting a world the player never sees.
+
+### What the numbers said
+
+    fps=11.4  frame=87.8ms
+    cpu: process=77.40ms  physics=3.36ms
+    gpu: drawCalls=496  primitives=814,065
+    scene: nodes=7,701  activeBodies=0  collisionPairs=0
+
+800k triangles and 496 draw calls is a light scene. Physics was idle. Nearly the
+whole frame was CPU.
+
+Rendering at 480x270 and at 1920x1080 gave 9.7 and 10.4 FPS - sixteen times the
+pixels for no change. So not fill rate, not fragment shading, not resolution
+dependent at all.
+
+### Two false results, both from the same mistake
+
+**Removing terrain to measure its cost removed the ground.** The player fell out
+of the world: camera at Y = -23,910m, 4.5km of drift in four seconds, 31 draw
+calls of empty sky, and a triumphant 91 FPS. The same trap swallowed the
+`SKIP_COUNTY` baseline and, later, a test that disabled terrain collision and
+appeared to show an eight-fold speedup.
+
+Both were caught only by printing camera position, drift and draw calls
+alongside the frame rate. A control that silently stops rendering the scene
+looks exactly like a fix.
+
+The harness now freezes the player in place for any diagnostic teleport, and
+reports drift and chunk-build counts so a thrashing streamer or a runaway body
+cannot be mistaken for a steady frame cost.
+
+### What is actually established
+
+With a valid frozen-player control at the northern forest:
+
+| configuration            | fps  | frame  | draws | primitives |
+|--------------------------|------|--------|-------|------------|
+| everything on            | 22.1 | 45.3ms | 1637  | 1,056,648  |
+| no streamed terrain      | 32.7 | 30.6ms | 1209  |   500,281  |
+| no vegetation            | 26.1 | 38.3ms | 1423  |   965,000  |
+
+So terrain is worth roughly 15ms and vegetation roughly 7ms.
+
+Subsystems that changed nothing measurably: points of interest, settlements,
+water, roads, far terrain. Terrain streaming radius also changed nothing - 25
+chunks cost the same as 289 - so the cost is not chunk count, draw calls or
+geometry volume. Swapping the 24-fetch splat shader for a plain material bought
+about 4ms, so it is not the terrain shader either.
+
+### The unexplained half
+
+An **active** player at the forest costs about 40ms more than a frozen one
+(11.6 FPS against 22.1), while at Main Street an active player is fine at 23.3
+FPS. The frozen run renders *more* geometry (1637 draws against ~730) and is
+still twice as fast, so this is genuinely per-frame CPU work rather than the
+camera seeing less.
+
+Physics time stays at 3.5ms throughout, so it is not the physics server. That
+puts it in some `_Process` on the player or its children that behaves
+differently over streamed terrain than over Main Street's flat collision pad.
+Not yet isolated, and not worth guessing at - it needs a profiler rather than
+another bisection.
+
+### Also fixed while measuring
+
+Sky radiance was set to REALTIME, rebuilding its cubemap and mip chain every
+frame, and WorldTime was writing environment properties every frame which kept
+it permanently dirty. Now INCREMENTAL at half the radiance size, and WorldTime
+only touches the environment when the hour has moved by more than 0.01 - a
+threshold far below visible change for a day that passes in minutes. Worth about
+3ms, and it removes a fixed cost that would have scaled with nothing.
+
+---
+
+## Conifers Planted, Mist, and the SPRAY UV Flip
+
+### The county is coniferous now
+
+All six mature variants are scattered - three fir, three pine, 12.5m to 20.4m -
+across three layers: real LOD0 geometry to 120m, LOD1 to 250m, and per-species
+billboard imposters beyond that. Saplings fill the understorey so the forest
+floor is not bare ground between mature trunks.
+
+Imposters are now per species rather than one shared card. They have to be: a
+jacaranda is 24m wide and 19m tall, a fir is 6m wide and 19m tall, and one set of
+card dimensions for both either squashes the conifers or floats them off the
+ground. Card size and centre height come straight from the bake report.
+
+The six materials are built in code from one shader rather than authored as six
+near-identical .tres files, which would have invited exactly the drift where one
+quietly points at the wrong atlas.
+
+### A UV flip I got backwards, and how the pipeline caught it
+
+The first conifer render had pale yellow-green foliage instead of dark needles. I
+reasoned that Godot's UV origin is top-left, the atlas rectangles were measured
+top-left, so the V flip in build_sprays must be wrong, and removed it.
+
+The alpha coverage check the pipeline runs on every card immediately disagreed:
+fir_a fell from 0.383 to 0.048. Cards were landing on transparent background
+rather than on needle sprays. The flip was right all along - these UVs are
+authored in Blender, whose V origin is bottom-left and which flips again on glTF
+export.
+
+Reverted, and the comment now records the measurement rather than the reasoning,
+because the reasoning was wrong and the measurement was not. Worth noting that
+this only got caught because build_sprays re-measures coverage rather than
+trusting its own arithmetic.
+
+### Valley mist
+
+Height fog was configured with its densest point at Y = -90 and a falloff of
+0.28. The county floor is near Y = 0 and rises to 900, so the entire playable
+world sat above the mist and it contributed nothing.
+
+Now the densest point is at Y = 46, just above the river, with a falloff of 0.010
+- roughly an eighth of the density by 200m up. Hollows hold air, mid slopes are
+veiled, summits stand clear. This is what the reference photography actually does
+to create depth: it separates the scene into planes with air rather than greying
+everything uniformly at a given distance, which no amount of tuning the
+exponential distance fog could reproduce.
+
+Post-grade added at the same time - contrast 1.14, saturation 0.92 - because real
+blacks and cool midtones are most of what separates a photographed frame from a
+rendered one.
+
+### Ground cover
+
+Ferns and grass raised sharply and moved from ring 0 to ring 1. At ring 0 they
+existed only in the chunk the player stood in, so open country read as bare
+texture the moment you looked more than a hundred metres ahead - which in a
+county this size is most of the time. Deadwood roughly tripled and now includes
+stumps and root plates, because a fallen trunk does more for "real woodland" than
+another live tree.
+
+### Known and unresolved
+
+- The ~40ms active-player cost is still unexplained. Terrain collision was
+  eliminated as a cause with a valid control (collision-off was *slower*, since
+  it renders more).
+- 39 materials reference textures under assets/third_party/polyhaven_2026_08/,
+  which is gitignored. The 2.5GB source cache therefore cannot be deleted without
+  breaking the build, and a fresh clone would import with missing textures. Needs
+  the used textures copying into the repo proper.
+- Broadleaf assets still read pale against the conifers.

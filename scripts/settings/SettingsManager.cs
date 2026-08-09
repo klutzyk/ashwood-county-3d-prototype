@@ -133,7 +133,21 @@ public partial class SettingsManager : Node
 			if (node is DirectionalLight3D directional)
 			{
 				directional.ShadowEnabled = true;
-				directional.DirectionalShadowMaxDistance = shadowDistance;
+
+				// Only ever shorten a range, never extend one, and never touch a
+				// light that already asks for more than this preset allows.
+				//
+				// These numbers (24-42m) were chosen for the Main Street slice.
+				// Applied blindly they also hit the county's sun, whose cascades
+				// are set up to cover 1200m, and cut it to 42m - so nothing past
+				// the nearest field cast a shadow and the whole landscape went
+				// flat. An open world legitimately needs a longer range than a
+				// street does, and the rig that built the light knows that better
+				// than a global preset does.
+				if (directional.DirectionalShadowMaxDistance <= shadowDistance)
+				{
+					directional.DirectionalShadowMaxDistance = shadowDistance;
+				}
 			}
 		}
 	}
