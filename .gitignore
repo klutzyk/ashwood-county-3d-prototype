@@ -16,6 +16,9 @@
 bin/
 obj/
 
+# Local Claude agent worktrees must never be committed as project content.
+.claude/worktrees/
+
 # Poly Haven raw download cache (source material for tools/blender pipeline,
 # not a game asset - re-fetch with tools/download_polyhaven.py). The
 # jacaranda_tree.bin source alone is 200MB+; only the decimated .glb outputs
