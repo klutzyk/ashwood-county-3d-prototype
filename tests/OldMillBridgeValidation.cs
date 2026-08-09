@@ -3,6 +3,8 @@
 using System;
 using System.Collections.Generic;
 using Godot;
+using AshwoodCounty3DPrototype.World;
+using AshwoodCounty3DPrototype.World.County;
 
 namespace AshwoodCounty3DPrototype.Tests;
 
@@ -172,15 +174,19 @@ public partial class OldMillBridgeValidation : Node3D
 
 	private void CheckWaterBelowDeck(Node3D world)
 	{
-		var water = world.GetNodeOrNull<Node3D>(
-			"Environment/OldMillBridge/BlackwaterSurface");
-		if (water == null)
+		var bridge = world.GetNodeOrNull<OldMillBridge>(
+			"Environment/OldMillBridge");
+		if (bridge == null)
 		{
-			_failures.Add("river surface node BlackwaterSurface is missing");
+			_failures.Add("Old Mill Bridge is missing while checking river height");
 			return;
 		}
 
-		float waterY = water.GlobalPosition.Y;
+		float waterY = bridge.CountyIntegrationMode
+			? CountyMap.WaterSurfaceY(
+				OldMillBridge.ChannelCenterX, bridge.GlobalPosition.Z)
+			: bridge.GetNodeOrNull<Node3D>("BlackwaterSurface")?.GlobalPosition.Y
+				?? float.MaxValue;
 		if (waterY > -3.0f)
 		{
 			_failures.Add(

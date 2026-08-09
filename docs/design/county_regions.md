@@ -38,3 +38,19 @@ Ashwood Main Street at world origin. Godot coordinates use +X east and -Z north.
 Detailed buildings, props, loot, encounters, and final vegetation are separate
 regional passes. Roads, water, terrain, and region anchors remain shared county
 data so later work cannot drift away from the concept layout.
+
+## Authored Location Scenes
+
+The world now uses one scene per named location. Ashwood Main Street and Old Mill
+Bridge retain their existing detailed scenes. The other thirteen locations live
+under `scenes/world/county/locations/` and provide a distinct, mapped layout for:
+
+- Sheriff's Office, Hospital, and Service Station
+- Pine Ridge, Fire Lookout, Blackwater Dam, and Logging Camp
+- Farm District, Mill Creek, and Railway Crossing
+- County Fairgrounds, Trailer Park, and South Farmland
+
+`CountyLocations` is the only placement authority for these scenes. It streams
+them by chunk in gameplay and keeps every location loaded in the editor overview.
+These are layout assemblies, not final art passes; each can be upgraded in place
+without changing its county coordinate or the shared terrain and road network.

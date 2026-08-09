@@ -25,6 +25,12 @@ namespace AshwoodCounty3DPrototype.World;
 [Tool]
 public partial class OldMillBridge : Node3D
 {
+	/// <summary>
+	/// Uses the streamed county's terrain, river and vegetation instead of the
+	/// self-contained backdrop used by the standalone bridge review scene.
+	/// </summary>
+	[Export] public bool CountyIntegrationMode { get; set; }
+
 	// ---- Channel / gorge -------------------------------------------------
 	public const float ChannelCenterX = -176.0f;
 	public const float MeanderAmplitude = 6.0f;
@@ -74,8 +80,11 @@ public partial class OldMillBridge : Node3D
 
 		LoadMaterials();
 
-		BuildTerrain();
-		BuildWater();
+		if (!CountyIntegrationMode)
+		{
+			BuildTerrain();
+			BuildWater();
+		}
 		BuildRoadway();
 		BuildAbutments();
 		BuildTruss();
@@ -90,7 +99,10 @@ public partial class OldMillBridge : Node3D
 		EmitBatch("StoneMasses", _stone, _stoneMaterial);
 		EmitBatch("TimberMembers", _timber, _timberMaterial);
 
-		ScatterVegetation();
+		if (!CountyIntegrationMode)
+		{
+			ScatterVegetation();
+		}
 		BuildCollision();
 	}
 
@@ -952,8 +964,8 @@ public partial class OldMillBridge : Node3D
 	private void BuildCollision()
 	{
 		// Terrain: trimesh over the generated gorge shell.
-		var terrainMesh = GetNode<MeshInstance3D>("GorgeRock").Mesh as ArrayMesh;
-		if (terrainMesh != null)
+		var terrainMesh = GetNodeOrNull<MeshInstance3D>("GorgeRock")?.Mesh as ArrayMesh;
+		if (!CountyIntegrationMode && terrainMesh != null)
 		{
 			var terrainBody = new StaticBody3D { Name = "GorgeCollision" };
 			terrainBody.AddChild(new CollisionShape3D

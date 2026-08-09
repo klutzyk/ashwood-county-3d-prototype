@@ -1,32 +1,7 @@
-[gd_scene load_steps=23 format=3]
+[gd_scene load_steps=19 format=3]
 
 [ext_resource type="PackedScene" path="res://assets/environment/nature/main_street_tree_1.tscn" id="1_tree_a"]
 [ext_resource type="PackedScene" path="res://assets/environment/nature/main_street_tree_2.tscn" id="2_tree_b"]
-
-[sub_resource type="Shader" id="RidgeSilhouetteShader"]
-code = "shader_type spatial;\nrender_mode unshaded;\n\nuniform vec4 ridge_color : source_color = vec4(0.3, 0.34, 0.3, 1.0);\nvarying float ridge_tone;\n\nvoid vertex() {\n    float crown = smoothstep(-0.46, 0.78, VERTEX.y);\n    float broad = sin((VERTEX.x * 7.0) + (VERTEX.z * 5.0)) * 0.07;\n    float medium = sin((VERTEX.x * 15.0) - (VERTEX.z * 11.0) + 0.7) * 0.032;\n    float fine = sin((VERTEX.x * 29.0) + (VERTEX.z * 17.0) - 0.3) * 0.012;\n    ridge_tone = (broad + medium + fine) * crown;\n    VERTEX.y += ridge_tone;\n}\n\nvoid fragment() {\n    float variation = clamp(0.98 + (ridge_tone * 1.25), 0.9, 1.08);\n    ALBEDO = ridge_color.rgb * variation;\n    ROUGHNESS = 1.0;\n}\n"
-
-[sub_resource type="ShaderMaterial" id="FarRidgeMaterial"]
-shader = SubResource("RidgeSilhouetteShader")
-shader_parameter/ridge_color = Color(0.32, 0.35, 0.325, 1)
-
-[sub_resource type="SphereMesh" id="FarRidgeMesh"]
-material = SubResource("FarRidgeMaterial")
-radius = 1.0
-height = 2.0
-radial_segments = 32
-rings = 12
-
-[sub_resource type="ShaderMaterial" id="NearRidgeMaterial"]
-shader = SubResource("RidgeSilhouetteShader")
-shader_parameter/ridge_color = Color(0.245, 0.315, 0.255, 1)
-
-[sub_resource type="SphereMesh" id="NearRidgeMesh"]
-material = SubResource("NearRidgeMaterial")
-radius = 1.0
-height = 2.0
-radial_segments = 32
-rings = 12
 
 [sub_resource type="StandardMaterial3D" id="TowerMaterial"]
 albedo_color = Color(0.34, 0.39, 0.4, 1)
@@ -122,80 +97,6 @@ material = SubResource("LandmarkMaterial")
 size = Vector3(0.18, 1.25, 0.18)
 
 [node name="MainStreetVista" type="Node3D"]
-
-[node name="Ridges" type="Node3D" parent="."]
-
-[node name="EastFar" type="MeshInstance3D" parent="Ridges"]
-position = Vector3(258, -16, -28)
-scale = Vector3(108, 33, 92)
-cast_shadow = 0
-mesh = SubResource("FarRidgeMesh")
-
-[node name="EastNear" type="MeshInstance3D" parent="Ridges"]
-position = Vector3(207, -12, 44)
-scale = Vector3(68, 24, 58)
-cast_shadow = 0
-mesh = SubResource("NearRidgeMesh")
-
-[node name="EastMiddle" type="MeshInstance3D" parent="Ridges"]
-position = Vector3(224, -15, -74)
-scale = Vector3(76, 28, 62)
-cast_shadow = 0
-mesh = SubResource("NearRidgeMesh")
-
-[node name="WestFar" type="MeshInstance3D" parent="Ridges"]
-position = Vector3(-258, -16, 30)
-scale = Vector3(112, 34, 94)
-cast_shadow = 0
-mesh = SubResource("FarRidgeMesh")
-
-[node name="WestNear" type="MeshInstance3D" parent="Ridges"]
-position = Vector3(-205, -13, -45)
-scale = Vector3(70, 25, 60)
-cast_shadow = 0
-mesh = SubResource("NearRidgeMesh")
-
-[node name="WestMiddle" type="MeshInstance3D" parent="Ridges"]
-position = Vector3(-226, -15, 76)
-scale = Vector3(78, 28, 64)
-cast_shadow = 0
-mesh = SubResource("NearRidgeMesh")
-
-[node name="NorthRidge" type="MeshInstance3D" parent="Ridges"]
-position = Vector3(-103, -18, -132)
-scale = Vector3(70, 32, 60)
-cast_shadow = 0
-mesh = SubResource("FarRidgeMesh")
-
-[node name="NorthRidgeEast" type="MeshInstance3D" parent="Ridges"]
-position = Vector3(36, -14, -145)
-scale = Vector3(78, 28, 64)
-cast_shadow = 0
-mesh = SubResource("FarRidgeMesh")
-
-[node name="NorthRidgeFarEast" type="MeshInstance3D" parent="Ridges"]
-position = Vector3(160, -20, -136)
-scale = Vector3(82, 36, 62)
-cast_shadow = 0
-mesh = SubResource("FarRidgeMesh")
-
-[node name="SouthRidge" type="MeshInstance3D" parent="Ridges"]
-position = Vector3(110, -18, 133)
-scale = Vector3(72, 34, 60)
-cast_shadow = 0
-mesh = SubResource("FarRidgeMesh")
-
-[node name="SouthRidgeWest" type="MeshInstance3D" parent="Ridges"]
-position = Vector3(-35, -15, 147)
-scale = Vector3(78, 29, 64)
-cast_shadow = 0
-mesh = SubResource("FarRidgeMesh")
-
-[node name="SouthRidgeFarWest" type="MeshInstance3D" parent="Ridges"]
-position = Vector3(-160, -20, 136)
-scale = Vector3(84, 36, 64)
-cast_shadow = 0
-mesh = SubResource("FarRidgeMesh")
 
 [node name="TownCanopy" type="Node3D" parent="."]
 

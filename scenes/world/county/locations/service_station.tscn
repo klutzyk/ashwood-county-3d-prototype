@@ -1,0 +1,8 @@
+[gd_scene load_steps=3 format=3]
+[ext_resource type="Script" path="res://scripts/world/county/CountyLocationScene.cs" id="1"]
+[ext_resource type="PackedScene" path="res://assets/environment/buildings/ServiceStation/service_station.tscn" id="2_station"]
+[node name="ServiceStation" type="Node3D"]
+script = ExtResource("1")
+LocationName = "Service Station"
+Kind = 2
+[node name="AuthoredServiceStation" parent="." instance=ExtResource("2_station")]

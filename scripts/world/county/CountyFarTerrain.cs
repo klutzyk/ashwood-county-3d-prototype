@@ -33,7 +33,7 @@ public partial class CountyFarTerrain : Node3D
     /// </summary>
     [Export] public int ChunksPerTile { get; set; } = 4;
 
-    /// <summary>Quads per tile edge. 32 over 1024m is 32m per vertex.</summary>
+    /// <summary>Quads per runtime tile edge. Editor overview raises this to 64.</summary>
     [Export] public int QuadsPerTile { get; set; } = 32;
 
     /// <summary>

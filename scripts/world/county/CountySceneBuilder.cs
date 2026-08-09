@@ -31,7 +31,7 @@ public static class CountySceneBuilder
         "CountyWater",
         "CountyRoads",
         "CountyVegetation",
-        "CountySettlements",
+        "CountyLocations",
         "CountyPointsOfInterest",
     };
 

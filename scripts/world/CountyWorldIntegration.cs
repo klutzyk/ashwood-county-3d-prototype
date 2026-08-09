@@ -9,9 +9,8 @@ namespace AshwoodCounty3DPrototype.World;
 /// Wires the full streamed county onto the shipped game scene so Main Street is
 /// a walkable part of the open county rather than an isolated block.
 ///
-/// Main Street sits at the county origin, and CountySettlements already keeps
-/// procedural structures out of a radius around it, so the hand-authored town
-/// and the generated terrain are meant to meet exactly here.
+/// Main Street sits at the county origin, while CountyLocations owns every other
+/// authored site, so the hand-built town and mapped county share one world space.
 ///
 /// Marked [Tool] so the county can also be built inside the editor viewport for
 /// inspection. Nothing it generates is ever given an Owner, so none of it is
@@ -21,6 +20,12 @@ namespace AshwoodCounty3DPrototype.World;
 [Tool]
 public partial class CountyWorldIntegration : Node3D
 {
+    /// <summary>The authored scene's player that drives county streaming.</summary>
+    [Export] public NodePath PlayerPath { get; set; } = new("../Player");
+
+    /// <summary>The authored scene's day/night controller, when one is present.</summary>
+    [Export] public NodePath WorldTimePath { get; set; } = new("../WorldTime");
+
     /// <summary>
     /// Builds the county in the editor viewport. Off by default because streaming
     /// an eight-kilometre world makes editing anything else in the scene slow.
@@ -93,7 +98,7 @@ public partial class CountyWorldIntegration : Node3D
             return;
         }
 
-        var player = GetNode<Node3D>("../Player");
+        var player = GetNode<Node3D>(PlayerPath);
 
         // Bisection guard: run the shipped scene with no county at all, to split a
         // frame cost between the open world and everything that was already here.
@@ -115,7 +120,7 @@ public partial class CountyWorldIntegration : Node3D
         // WorldTime's own _Ready runs earlier in the scene's tree order, before
         // this builds the county's sun and sky, so it could not find them by
         // path. Hand them over directly now that both exist.
-        var worldTime = GetNodeOrNull<WorldTime>("../WorldTime");
+        var worldTime = GetNodeOrNull<WorldTime>(WorldTimePath);
         var sun = built.Atmosphere.GetNodeOrNull<DirectionalLight3D>("Sun");
         var worldEnvironment = built.Atmosphere.GetNodeOrNull<WorldEnvironment>("WorldEnvironment");
         if (worldTime != null && sun != null && worldEnvironment?.Environment != null)
@@ -343,7 +348,7 @@ public partial class CountyWorldIntegration : Node3D
         // makes the streamer rebuild meshes on the main thread every few frames.
         // That looks exactly like a steady per-frame cost from the outside, so the
         // sampler records movement to tell the two apart.
-        _samplerStartPosition = GetNodeOrNull<Node3D>("../Player")?.GlobalPosition
+        _samplerStartPosition = GetNodeOrNull<Node3D>(PlayerPath)?.GlobalPosition
                                 ?? Vector3.Zero;
         _chunkBuildsAtStart = CountyTerrain.TotalChunkBuilds;
         SetProcess(true);
@@ -430,7 +435,7 @@ public partial class CountyWorldIntegration : Node3D
             GD.Print($"PERF county subtree: nodes={countyNodes:N0}");
         }
 
-        Vector3 now = GetNodeOrNull<Node3D>("../Player")?.GlobalPosition ?? Vector3.Zero;
+        Vector3 now = GetNodeOrNull<Node3D>(PlayerPath)?.GlobalPosition ?? Vector3.Zero;
         long builds = CountyTerrain.TotalChunkBuilds - _chunkBuildsAtStart;
         GD.Print($"PERF motion: drift={_samplerStartPosition.DistanceTo(now):F2}m " +
                  $"over {_sampleElapsed:F1}s, terrainChunkBuilds={builds}");

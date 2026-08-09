@@ -158,10 +158,8 @@ public partial class GlensBakerySupplyRunValidation : Node
 			"cloud cover remains restrained enough to preserve the sunset gradient");
 
 		Node vista = world.GetNode("Environment/Vista");
-		Require(vista.HasNode("Ridges") &&
-			vista.GetNode("Ridges").GetChildCount() >= 6 &&
-			vista.HasNode("WaterTower/Tank"),
-			"the production street has ridge silhouettes and its water-tower landmark");
+		Require(!vista.HasNode("Ridges") && vista.HasNode("WaterTower/Tank"),
+			"the obsolete fake ridges are removed while the water-tower landmark remains");
 	}
 
 	private static void ValidateSupplyRunAndPersistence(

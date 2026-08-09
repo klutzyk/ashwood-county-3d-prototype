@@ -1048,8 +1048,11 @@ public static class CountyMap
         if (!MillCreekLine.IsFarFrom(here, 240.0f))
         {
             float creekDistance = MillCreekLine.Distance(here, out float creekAlong);
-            h -= CarveChannel(creekDistance, 210.0f, 34.0f, 15.0f, 21.0f);
-            float creekBed = 1.0f - Smooth((creekDistance - 7.0f) / 11.0f);
+            // The former 15m gorge was narrower than two vertices in the medium
+            // terrain rings, so its banks rendered as repeating triangular teeth.
+            h -= CarveChannel(creekDistance, 210.0f, 34.0f, 52.0f, 17.0f);
+            float creekBed = 1.0f - Smooth(
+                (creekDistance - MillCreekHalfWidth) / 30.0f);
             if (creekBed > 0.0f)
             {
                 // Blends fully to the bed rather than to 85 percent of it. Stopping
@@ -1311,6 +1314,7 @@ public static class CountyMap
 
     /// <summary>How far the creek's surface sits below the surrounding ground.</summary>
     private const float MillCreekIncision = 3.2f;
+    public const float MillCreekHalfWidth = 12.0f;
 
     private static float[] BuildMillCreekProfile()
     {
@@ -1425,10 +1429,10 @@ public static class CountyMap
             }
         }
 
-        if (!MillCreekLine.IsFarFrom(p, 7.0f))
+        if (!MillCreekLine.IsFarFrom(p, MillCreekHalfWidth))
         {
             float creekDistance = MillCreekLine.Distance(p, out float creekAlong);
-            if (creekDistance < 7.0f)
+            if (creekDistance < MillCreekHalfWidth)
             {
                 return MillCreekSurfaceY(creekAlong);
             }
