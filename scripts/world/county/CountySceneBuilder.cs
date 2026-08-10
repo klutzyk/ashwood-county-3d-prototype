@@ -31,6 +31,7 @@ public static class CountySceneBuilder
         "CountyWater",
         "CountyRoads",
         "CountyVegetation",
+        "CountyNaturalFeatures",
         "CountyLocations",
         "CountyPointsOfInterest",
     };
@@ -50,7 +51,8 @@ public static class CountySceneBuilder
     public static BuildResult Build(
         Node3D? target = null,
         bool logStreaming = false,
-        bool editorPreview = false)
+        bool editorPreview = false,
+        IReadOnlySet<string>? excludedSubsystems = null)
     {
         var root = new Node3D { Name = "AshwoodCounty" };
 
@@ -70,7 +72,8 @@ public static class CountySceneBuilder
 
         foreach (string typeName in SubsystemTypeNames)
         {
-            if (Godot.OS.GetEnvironment("SKIP_SUBSYSTEM") == typeName)
+            if (Godot.OS.GetEnvironment("SKIP_SUBSYSTEM") == typeName ||
+                excludedSubsystems?.Contains(typeName) == true)
             {
                 missing.Add(typeName);
                 continue;

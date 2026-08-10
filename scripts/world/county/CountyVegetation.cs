@@ -72,7 +72,12 @@ public partial class CountyVegetation : Node3D, ICountyChunkSource
         /// <summary>Billboard imposters rather than instanced scene geometry.</summary>
         bool Imposter = false,
         /// <summary>Nearest range an imposter appears at, so it never overlaps the real tree.</summary>
-        float VisibilityBegin = 0.0f);
+        float VisibilityBegin = 0.0f,
+        /// <summary>
+        /// Density floor for cheap opaque detail. Low can thin alpha foliage heavily,
+        /// but stripping rocks and fallen timber makes every forest floor look empty.
+        /// </summary>
+        float MinQualityDensity = 0.0f);
 
     /// <summary>
     /// Imposter card geometry, taken from the bake report of
@@ -123,6 +128,14 @@ public partial class CountyVegetation : Node3D, ICountyChunkSource
         Riverbank,
         /// <summary>Rocky and steep ground.</summary>
         Rock,
+        /// <summary>Scattered natural objects across forest, meadow and exposed slopes.</summary>
+        Wildland,
+        /// <summary>Young growth where closed forest feathers into open ground.</summary>
+        ForestEdge,
+        /// <summary>Dry scrub, loose stone and storm debris on exposed uplands.</summary>
+        Upland,
+        /// <summary>Hedgerow growth along the boundaries of worked parcels.</summary>
+        FieldMargin,
     }
 
     private static readonly Layer[] Layers =
@@ -234,9 +247,9 @@ public partial class CountyVegetation : Node3D, ICountyChunkSource
             // chunk the player stood in, so open country read as bare texture the
             // moment you looked more than a hundred metres ahead - which is most
             // of the time in a county this size.
-            PerChunk: 900, MinScale: 0.9f, MaxScale: 2.2f,
-            VisibilityRange: 74.0f, CastShadow: false, MaxRing: 1, MaxSlope: 0.55f,
-            Rule: LayerRule.Open, Clustering: 0.5f),
+            PerChunk: 4200, MinScale: 1.15f, MaxScale: 2.6f,
+            VisibilityRange: 62.0f, CastShadow: false, MaxRing: 1, MaxSlope: 0.55f,
+            Rule: LayerRule.Open, Clustering: 0.5f, MinQualityDensity: 0.50f),
 
         new("meadow_scrub", new[]
             {
@@ -247,6 +260,33 @@ public partial class CountyVegetation : Node3D, ICountyChunkSource
             PerChunk: 150, MinScale: 0.6f, MaxScale: 1.4f,
             VisibilityRange: 92.0f, CastShadow: false, MaxRing: 1, MaxSlope: 0.6f,
             Rule: LayerRule.Open, Clustering: 0.6f),
+
+        new("edge_regrowth", new[]
+            {
+                VegetationRoot + "ashwood_fir_sapling_a.tscn",
+                VegetationRoot + "ashwood_fir_sapling_c.tscn",
+                VegetationRoot + "ashwood_pine_sapling_a.tscn",
+                VegetationRoot + "ashwood_pine_sapling_c.tscn",
+                VegetationRoot + "ashwood_shrub_02_d.tscn",
+                VegetationRoot + "ashwood_shrub_03_d.tscn",
+            },
+            PerChunk: 180, MinScale: 0.72f, MaxScale: 1.55f,
+            VisibilityRange: 112.0f, CastShadow: false, MaxRing: 1, MaxSlope: 0.67f,
+            Rule: LayerRule.ForestEdge, Clustering: 0.86f),
+
+        new("field_margin", new[]
+            {
+                VegetationRoot + "ashwood_shrub_01.tscn",
+                VegetationRoot + "ashwood_shrub_02_b.tscn",
+                VegetationRoot + "ashwood_shrub_03_b.tscn",
+                VegetationRoot + "ashwood_grass_medium_02_tuft.tscn",
+                VegetationRoot + "ashwood_grass_bermuda_dry.tscn",
+                VegetationRoot + "ashwood_tree_stump_02.tscn",
+                VegetationRoot + "ashwood_dry_branches_c.tscn",
+            },
+            PerChunk: 1600, MinScale: 0.75f, MaxScale: 1.5f,
+            VisibilityRange: 112.0f, CastShadow: false, MaxRing: 1, MaxSlope: 0.48f,
+            Rule: LayerRule.FieldMargin, Clustering: 0.42f, MinQualityDensity: 0.50f),
 
         new("deadwood", new[]
             {
@@ -261,7 +301,52 @@ public partial class CountyVegetation : Node3D, ICountyChunkSource
             // litter do more for "this is real woodland" than another live tree.
             PerChunk: 70, MinScale: 0.8f, MaxScale: 1.6f,
             VisibilityRange: 104.0f, CastShadow: true, MaxRing: 0, MaxSlope: 0.5f,
-            Rule: LayerRule.Forest, Clustering: 0.5f),
+            Rule: LayerRule.Forest, Clustering: 0.5f, MinQualityDensity: 0.60f),
+
+        // Small opaque forest-floor pieces. These are dramatically cheaper than
+        // grass cards and supply the twigs, bark, roots and moss that make the
+        // ground between trunks read as an ecosystem rather than a texture plane.
+        new("forest_floor_litter", new[]
+            {
+                VegetationRoot + "ashwood_bark_debris_a.tscn",
+                VegetationRoot + "ashwood_bark_debris_b.tscn",
+                VegetationRoot + "ashwood_bark_debris_c.tscn",
+                VegetationRoot + "ashwood_bark_debris_d.tscn",
+                VegetationRoot + "ashwood_dry_branches_a.tscn",
+                VegetationRoot + "ashwood_dry_branches_b.tscn",
+                VegetationRoot + "ashwood_pine_roots_b.tscn",
+                VegetationRoot + "ashwood_moss_clumped.tscn",
+                VegetationRoot + "ashwood_moss_tall.tscn",
+            },
+            PerChunk: 220, MinScale: 0.65f, MaxScale: 1.7f,
+            VisibilityRange: 82.0f, CastShadow: false, MaxRing: 0, MaxSlope: 0.58f,
+            Rule: LayerRule.Forest, Clustering: 0.76f, MinQualityDensity: 0.55f),
+
+        // Larger stones occur inside woodland and meadow too, not only on slopes
+        // steep enough for the terrain biome to classify as exposed rock.
+        new("wild_boulders", new[]
+            {
+                VegetationRoot + "ashwood_boulder_01.tscn",
+                VegetationRoot + "ashwood_rock_moss_01.tscn",
+                VegetationRoot + "ashwood_rock_moss_03.tscn",
+                VegetationRoot + "ashwood_rock_moss_06.tscn",
+            },
+            PerChunk: 20, MinScale: 1.1f, MaxScale: 3.8f,
+            VisibilityRange: 210.0f, CastShadow: false, MaxRing: 1, MaxSlope: 0.92f,
+            Rule: LayerRule.Wildland, Clustering: 0.58f, MinQualityDensity: 0.55f),
+
+        new("upland_debris", new[]
+            {
+                VegetationRoot + "ashwood_rock_moss_02.tscn",
+                VegetationRoot + "ashwood_rock_moss_05.tscn",
+                VegetationRoot + "ashwood_dry_branches_a.tscn",
+                VegetationRoot + "ashwood_dry_branches_c.tscn",
+                VegetationRoot + "ashwood_moss_flat.tscn",
+                VegetationRoot + "ashwood_dead_tree_trunk.tscn",
+            },
+            PerChunk: 105, MinScale: 0.65f, MaxScale: 2.2f,
+            VisibilityRange: 118.0f, CastShadow: false, MaxRing: 1, MaxSlope: 0.98f,
+            Rule: LayerRule.Upland, Clustering: 0.72f, MinQualityDensity: 0.44f),
 
         new("rocks", new[]
             {
@@ -272,7 +357,7 @@ public partial class CountyVegetation : Node3D, ICountyChunkSource
             },
             PerChunk: 110, MinScale: 0.7f, MaxScale: 3.1f,
             VisibilityRange: 168.0f, CastShadow: true, MaxRing: 1, MaxSlope: 1.1f,
-            Rule: LayerRule.Rock, Clustering: 0.65f),
+            Rule: LayerRule.Rock, Clustering: 0.65f, MinQualityDensity: 0.72f),
 
         new("riverbank", new[]
             {
@@ -283,14 +368,30 @@ public partial class CountyVegetation : Node3D, ICountyChunkSource
             },
             PerChunk: 72, MinScale: 0.7f, MaxScale: 1.6f,
             VisibilityRange: 80.0f, CastShadow: false, MaxRing: 0, MaxSlope: 0.7f,
-            Rule: LayerRule.Riverbank, Clustering: 0.7f),
+            Rule: LayerRule.Riverbank, Clustering: 0.7f, MinQualityDensity: 0.52f),
+
+        new("wet_ground", new[]
+            {
+                VegetationRoot + "ashwood_fern_02_b.tscn",
+                VegetationRoot + "ashwood_fern_02_d.tscn",
+                VegetationRoot + "ashwood_nettle_medium.tscn",
+                VegetationRoot + "ashwood_nettle_tall.tscn",
+                VegetationRoot + "ashwood_grass_medium_02_clump.tscn",
+                VegetationRoot + "ashwood_moss_clumped.tscn",
+            },
+            PerChunk: 700, MinScale: 0.9f, MaxScale: 1.9f,
+            VisibilityRange: 62.0f, CastShadow: false, MaxRing: 0, MaxSlope: 0.58f,
+            Rule: LayerRule.Riverbank, Clustering: 0.88f, MinQualityDensity: 0.60f),
     };
 
     private readonly Dictionary<Vector2I, Node3D> _chunks = new();
     private readonly Dictionary<Vector2I, int> _generations = new();
     private readonly ConcurrentQueue<ScatterResult> _completed = new();
+    private readonly ConcurrentQueue<List<Transform3D>> _editorOverviewCompleted = new();
     private int _activeScatterJobs;
+    private int _editorOverviewPending;
     private SemaphoreSlim _scatterGate = new(1, 1);
+    private Node3D? _editorOverview;
 
     /// <summary>
     /// Meshes are loaded from their scenes once and shared by every chunk. Loading
@@ -310,10 +411,111 @@ public partial class CountyVegetation : Node3D, ICountyChunkSource
         ApplyGraphicsPreset();
         GraphicsPreset preset = SettingsManager.Instance?.Current.GraphicsPreset
                                 ?? GraphicsPreset.Low;
-        int concurrency = preset == GraphicsPreset.Low ? 1 : 2;
+        // Scatter is pure CPU work and installs results later on the main thread.
+        // One worker left half the low-preset county queue unfinished after 30s;
+        // two workers still leave ample headroom on the target 12-thread laptop
+        // while terrain and node installation remain independently throttled.
+        int concurrency = preset == GraphicsPreset.Low ? 2 : 3;
         _scatterGate = new SemaphoreSlim(concurrency, concurrency);
         PrimeMeshCache();
+        if (GetParent() is CountyWorld { EditorPreview: true } world &&
+            (Engine.IsEditorHint() || OS.GetEnvironment("COUNTY_FORCE_EDITOR_OVERVIEW") == "1"))
+        {
+            StartEditorOverview(world);
+        }
         ReadyInternal();
+    }
+
+    private void StartEditorOverview(CountyWorld world)
+    {
+        if (System.Threading.Interlocked.Exchange(ref _editorOverviewPending, 1) != 0) return;
+
+        Vector3 target = world.Target?.GlobalPosition ?? Vector3.Zero;
+        Vector2 exclusionCenter = new(target.X, target.Z);
+        float exclusionRadius = (world.EditorPreviewRadius + 0.65f) * CountyChunks.Size;
+
+        Task.Run(() =>
+        {
+            try
+            {
+                _editorOverviewCompleted.Enqueue(
+                    BuildEditorOverviewPlacements(exclusionCenter, exclusionRadius));
+            }
+            catch (Exception error)
+            {
+                GD.PushError($"CountyVegetation: editor overview failed: {error}");
+                System.Threading.Interlocked.Exchange(ref _editorOverviewPending, 0);
+            }
+        });
+    }
+
+    private static List<Transform3D> BuildEditorOverviewPlacements(
+        Vector2 exclusionCenter, float exclusionRadius)
+    {
+        Layer canopy = Array.Find(Layers, layer => layer.Name == "canopy_imposter");
+        var overview = canopy with
+        {
+            MinScale = 0.78f,
+            MaxScale = 1.25f,
+            VisibilityBegin = 0.0f,
+            VisibilityRange = 16000.0f,
+        };
+        var placements = new List<Transform3D>(28000);
+        var rng = new Random(unchecked((int)0xA57D2026));
+        const float spacing = 28.0f;
+        const float jitter = 11.0f;
+
+        for (float z = CountyMap.NorthZ + spacing * 0.5f;
+             z <= CountyMap.SouthZ;
+             z += spacing)
+        {
+            for (float x = CountyMap.WestX + spacing * 0.5f;
+                 x <= CountyMap.EastX;
+                 x += spacing)
+            {
+                Vector2 point = new(
+                    x + NextRange(rng, -jitter, jitter),
+                    z + NextRange(rng, -jitter, jitter));
+                if (point.DistanceTo(exclusionCenter) < exclusionRadius) continue;
+
+                if (TryPlaceEditorCanopy(point, overview, rng, out Transform3D transform))
+                {
+                    placements.Add(transform);
+                }
+            }
+        }
+
+        return placements;
+    }
+
+    /// <summary>
+    /// Overview-only canopy placement. ForestDensity already clears every road,
+    /// field and occupied site, so running TryPlace's 29-road rejection loop a
+    /// second time only delayed editor startup without changing the result.
+    /// </summary>
+    private static bool TryPlaceEditorCanopy(
+        Vector2 point, in Layer layer, Random rng, out Transform3D transform)
+    {
+        transform = Transform3D.Identity;
+        if (!CountyMap.IsPlayable(point.X, point.Y)) return false;
+
+        float height = CountyMap.Height(point.X, point.Y);
+        float water = CountyMap.WaterSurfaceY(point.X, point.Y);
+        if (water > float.MinValue && height < water + 0.35f) return false;
+
+        Vector3 normal = CountyMap.Normal(point.X, point.Y, 2.0f);
+        float slope = Mathf.Acos(Mathf.Clamp(normal.Y, -1.0f, 1.0f));
+        if (slope > layer.MaxSlope) return false;
+
+        float forestDensity = CountyMap.ForestDensity(point.X, point.Y, height, slope);
+        if (forestDensity <= 0.001f || NextFloat(rng) > forestDensity) return false;
+
+        float scale = NextRange(rng, layer.MinScale, layer.MaxScale);
+        var basis = new Basis(Vector3.Up, NextRange(rng, 0.0f, Mathf.Tau));
+        transform = new Transform3D(
+            basis.Scaled(Vector3.One * scale),
+            new Vector3(point.X, height - 0.08f * scale, point.Y));
+        return true;
     }
 
     private void PrimeMeshCache()
@@ -410,6 +612,22 @@ public partial class CountyVegetation : Node3D, ICountyChunkSource
 
     public override void _Process(double delta)
     {
+        if (_editorOverviewCompleted.TryDequeue(out List<Transform3D>? overviewPlacements))
+        {
+            System.Threading.Interlocked.Exchange(ref _editorOverviewPending, 0);
+            _editorOverview?.QueueFree();
+            _editorOverview = new Node3D { Name = "CountyWideCanopyPreview" };
+            _editorOverview.SetMeta("tree_count", overviewPlacements.Count);
+            AddChild(_editorOverview);
+
+            Layer canopy = Array.Find(Layers, layer => layer.Name == "canopy_imposter") with
+            {
+                VisibilityBegin = 0.0f,
+                VisibilityRange = 16000.0f,
+            };
+            EmitImposterLayer(_editorOverview, canopy, overviewPlacements);
+        }
+
         if (!_completed.TryDequeue(out ScatterResult? result) ||
             !_generations.TryGetValue(result.Chunk, out int generation) ||
             generation != result.Generation ||
@@ -462,7 +680,8 @@ public partial class CountyVegetation : Node3D, ICountyChunkSource
             chunk.X * 73856093 ^ chunk.Y * 19349663 ^ StableHash(layer.Name));
 
         Vector2 origin = CountyChunks.Origin(chunk);
-        int candidates = Mathf.RoundToInt(layer.PerChunk * DensityScale);
+        int candidates = Mathf.RoundToInt(
+            layer.PerChunk * Mathf.Max(DensityScale, layer.MinQualityDensity));
         if (candidates <= 0)
         {
             return placements;
@@ -522,6 +741,15 @@ public partial class CountyVegetation : Node3D, ICountyChunkSource
             return false;
         }
 
+        // Field edges occupy a narrow fraction of a farm chunk. Reject the broad
+        // parcel interiors before evaluating terrain height, normal, water and 29
+        // road clearances for candidates that can never become hedgerow plants.
+        if (layer.Rule == LayerRule.FieldMargin)
+        {
+            float margin = FieldMarginChance(point);
+            if (margin <= 0.001f || NextFloat(rng) > margin) return false;
+        }
+
         float height = CountyMap.Height(point.X, point.Y);
 
         // Nothing grows under water, and the waterline itself is gravel.
@@ -539,7 +767,20 @@ public partial class CountyVegetation : Node3D, ICountyChunkSource
             return false;
         }
 
-        CountyMap.Biome biome = CountyMap.BiomeAt(point.X, point.Y, height, slope);
+        bool needsForestDensity = layer.Rule is LayerRule.Forest or LayerRule.Open or
+            LayerRule.ForestEdge or LayerRule.Upland;
+        float forestDensity = needsForestDensity
+            ? CountyMap.ForestDensity(point.X, point.Y, height, slope)
+            : 0.0f;
+        bool needsBiome = layer.Rule is not LayerRule.Forest and not LayerRule.FieldMargin;
+        CountyMap.Biome biome = needsBiome
+            ? needsForestDensity
+                ? CountyMap.BiomeAt(point.X, point.Y, height, slope, forestDensity)
+                : CountyMap.BiomeAt(point.X, point.Y, height, slope)
+            : default;
+        CountyMap.Habitat habitat = layer.Rule is LayerRule.ForestEdge or LayerRule.Upland
+            ? CountyMap.HabitatAt(point.X, point.Y, height, slope, biome, forestDensity)
+            : default;
 
         // Roads and their shoulders stay clear, or the county grows a forest
         // through its own carriageways.
@@ -559,7 +800,7 @@ public partial class CountyVegetation : Node3D, ICountyChunkSource
 
         float chance = layer.Rule switch
         {
-            LayerRule.Forest => CountyMap.ForestDensity(point.X, point.Y, height, slope),
+            LayerRule.Forest => forestDensity,
 
             // Open ground thins out where the canopy closes over, so meadow layers
             // are the complement of forest rather than a separate mask that could
@@ -567,18 +808,50 @@ public partial class CountyVegetation : Node3D, ICountyChunkSource
             LayerRule.Open => biome switch
             {
                 CountyMap.Biome.Meadow => 1.0f,
-                CountyMap.Biome.Farmland => 0.28f,
+                CountyMap.Biome.Farmland => 0.70f,
                 CountyMap.Biome.Forest => 0.30f,
                 CountyMap.Biome.Settled => 0.35f,
                 CountyMap.Biome.Riverbank => 0.4f,
                 _ => 0.05f,
-            } * (1.0f - CountyMap.ForestDensity(point.X, point.Y, height, slope) * 0.6f),
+            } * (1.0f - forestDensity * 0.6f),
 
             LayerRule.Riverbank => biome == CountyMap.Biome.Riverbank ? 1.0f : 0.0f,
 
             LayerRule.Rock => biome == CountyMap.Biome.Rock
                 ? 1.0f
                 : Mathf.Clamp((slope - 0.35f) / 0.4f, 0.0f, 1.0f) * 0.7f,
+
+            LayerRule.Wildland => biome switch
+            {
+                CountyMap.Biome.Rock => 0.92f,
+                CountyMap.Biome.Forest => 0.48f,
+                CountyMap.Biome.Meadow => 0.22f,
+                CountyMap.Biome.Riverbank => 0.28f,
+                _ => 0.0f,
+            } * (0.72f + Mathf.Clamp(slope / 0.8f, 0.0f, 1.0f) * 0.28f),
+
+            LayerRule.ForestEdge => habitat switch
+            {
+                CountyMap.Habitat.ForestEdge => 1.0f,
+                CountyMap.Habitat.MixedWoodland => 0.34f,
+                CountyMap.Habitat.ConiferInterior => 0.18f,
+                CountyMap.Habitat.Meadow => 0.22f,
+                CountyMap.Habitat.UplandScrub => 0.16f,
+                CountyMap.Habitat.Riparian => 0.28f,
+                _ => 0.0f,
+            },
+
+            LayerRule.Upland => habitat switch
+            {
+                CountyMap.Habitat.UplandScrub => 1.0f,
+                CountyMap.Habitat.Scree => 0.86f,
+                CountyMap.Habitat.Alpine => 0.62f,
+                CountyMap.Habitat.Meadow => 0.14f,
+                CountyMap.Habitat.ForestEdge => 0.12f,
+                _ => 0.0f,
+            },
+
+            LayerRule.FieldMargin => 1.0f,
 
             _ => 0.0f,
         };
@@ -610,6 +883,11 @@ public partial class CountyVegetation : Node3D, ICountyChunkSource
         return true;
     }
 
+    private static float FieldMarginChance(Vector2 point)
+    {
+        return CountyMap.FieldMarginStrength(point.X, point.Y);
+    }
+
     private static float NextFloat(Random rng) => (float)rng.NextDouble();
 
     private static float NextRange(Random rng, float minimum, float maximum) =>
@@ -630,7 +908,19 @@ public partial class CountyVegetation : Node3D, ICountyChunkSource
     }
 
     public bool IsBuildComplete =>
-        System.Threading.Volatile.Read(ref _activeScatterJobs) == 0 && _completed.IsEmpty;
+        System.Threading.Volatile.Read(ref _activeScatterJobs) == 0 &&
+        System.Threading.Volatile.Read(ref _editorOverviewPending) == 0 &&
+        _completed.IsEmpty && _editorOverviewCompleted.IsEmpty;
+
+    public bool EditorOverviewReady => _editorOverview != null &&
+                                       System.Threading.Volatile.Read(ref _editorOverviewPending) == 0;
+
+    public int ActiveScatterJobs => System.Threading.Volatile.Read(ref _activeScatterJobs);
+    public int PendingScatterResults => _completed.Count;
+
+    public int EditorOverviewTreeCount => _editorOverview != null
+        ? _editorOverview.GetMeta("tree_count", 0).AsInt32()
+        : 0;
 
     private void EmitLayer(Node3D holder, in Layer layer, List<Transform3D> placements)
     {

@@ -155,6 +155,38 @@ public static class CountyMap
         new("South Farmland", new Vector2(-206.0f, 3204.0f), PoiKind.Farm, 900.0f, 0.85f),
     };
 
+    public enum NaturalFeatureKind
+    {
+        Cave,
+        Grotto,
+        RockFormation,
+        Overlook,
+        Escarpment,
+        OldGrowth,
+    }
+
+    public readonly record struct NaturalFeature(
+        string Name,
+        Vector2 Position,
+        NaturalFeatureKind Kind,
+        float Radius,
+        float YawDegrees);
+
+    /// <summary>
+    /// Authored wilderness destinations between the mapped settlements. They are
+    /// intentionally separate from POIs: these do not flatten terrain or clear a
+    /// construction pad and are meant to feel discovered rather than signposted.
+    /// </summary>
+    public static readonly NaturalFeature[] NaturalFeatures =
+    {
+        new("Blackwater Cavern", new Vector2(2380.0f, -1310.0f), NaturalFeatureKind.Cave, 78.0f, 0.0f),
+        new("Mill Creek Grotto", new Vector2(-2660.0f, 1020.0f), NaturalFeatureKind.Grotto, 64.0f, 62.0f),
+        new("Granite Narrows", new Vector2(2390.0f, -2310.0f), NaturalFeatureKind.RockFormation, 110.0f, 46.0f),
+        new("Pine Ridge Overlook", new Vector2(-1330.0f, -3600.0f), NaturalFeatureKind.Overlook, 92.0f, -98.0f),
+        new("South Ridge Escarpment", new Vector2(1080.0f, 2890.0f), NaturalFeatureKind.Escarpment, 130.0f, -8.0f),
+        new("Old Growth Hollow", new Vector2(2700.0f, -270.0f), NaturalFeatureKind.OldGrowth, 125.0f, -81.0f),
+    };
+
     // --------------------------------------------------------------- regions
 
     public enum RegionId
@@ -768,6 +800,39 @@ public static class CountyMap
     public static readonly Polyline RiverLine = new(RiverSpine);
     public static readonly Polyline MillCreekLine = new(MillCreekSpine);
 
+    // Authored secondary drainage. These are dry cuts and seasonal gullies that
+    // break up broad stretches of procedural terrain into natural corridors.
+    private readonly record struct Ravine(Polyline Line, float ValleyWidth, float GorgeWidth, float Depth);
+
+    private static readonly Ravine[] Ravines =
+    {
+        new(new Polyline(new[]
+        {
+            new Vector2(1710.0f, -2560.0f), new Vector2(1910.0f, -2180.0f),
+            new Vector2(2200.0f, -1790.0f), new Vector2(2410.0f, -1300.0f),
+        }), 170.0f, 42.0f, 38.0f),
+        new(new Polyline(new[]
+        {
+            new Vector2(-3260.0f, -1970.0f), new Vector2(-3040.0f, -1550.0f),
+            new Vector2(-2790.0f, -1160.0f), new Vector2(-2630.0f, -760.0f),
+        }), 145.0f, 36.0f, 29.0f),
+        new(new Polyline(new[]
+        {
+            new Vector2(1430.0f, 2370.0f), new Vector2(1600.0f, 2730.0f),
+            new Vector2(1870.0f, 3060.0f), new Vector2(2110.0f, 3410.0f),
+        }), 190.0f, 48.0f, 24.0f),
+    };
+
+    private readonly record struct Ridge(Vector2 Center, Vector2 Axis, float HalfLength, float HalfWidth, float Height);
+
+    private static readonly Ridge[] SecondaryRidges =
+    {
+        new(new Vector2(2780.0f, -2360.0f), new Vector2(0.38f, 0.92f), 760.0f, 250.0f, 68.0f),
+        new(new Vector2(-2590.0f, -2770.0f), new Vector2(0.93f, 0.37f), 650.0f, 220.0f, 82.0f),
+        new(new Vector2(2570.0f, 560.0f), new Vector2(0.24f, 0.97f), 620.0f, 230.0f, 48.0f),
+        new(new Vector2(1110.0f, 3030.0f), new Vector2(0.90f, 0.44f), 720.0f, 280.0f, 31.0f),
+    };
+
     private static readonly float LakeCenterRiverAlong = AlongRiverAt(LakeCenter);
     private static readonly float DamRiverAlong = AlongRiverAt(DamCenter);
     private static readonly float BridgeRiverAlong = AlongRiverAt(new Vector2(-176.0f, 0.0f));
@@ -884,6 +949,41 @@ public static class CountyMap
             float t = 1.0f - distance / peak.Radius;
             float dome = t * t * (3.0f - 2.0f * t);
             h = Mathf.Lerp(h, peak.Elevation, dome);
+        }
+
+        return h;
+    }
+
+    private static float ApplySecondaryLandforms(Vector2 p, float h)
+    {
+        foreach (Ridge ridge in SecondaryRidges)
+        {
+            Vector2 axis = ridge.Axis.Normalized();
+            Vector2 side = new(-axis.Y, axis.X);
+            Vector2 offset = p - ridge.Center;
+            float along = Mathf.Abs(offset.Dot(axis)) / ridge.HalfLength;
+            float across = Mathf.Abs(offset.Dot(side)) / ridge.HalfWidth;
+            if (along >= 1.0f || across >= 1.0f) continue;
+
+            float endFalloff = 1.0f - Smooth(along);
+            float sideFalloff = 1.0f - Smooth(across);
+            float shoulderNoise = Mathf.Lerp(0.82f, 1.13f,
+                Fbm(p.X * 0.0032f + 18.0f, p.Y * 0.0032f - 42.0f, 3));
+            h += ridge.Height * Mathf.Pow(endFalloff * sideFalloff, 1.35f) * shoulderNoise;
+        }
+
+        foreach (Ravine ravine in Ravines)
+        {
+            if (ravine.Line.IsFarFrom(p, ravine.ValleyWidth)) continue;
+            float distance = ravine.Line.Distance(p, out float along);
+            float endFalloff = Mathf.Pow(Mathf.Max(0.0f, Mathf.Sin(along * Mathf.Pi)), 0.42f);
+            float carve = CarveChannel(
+                distance,
+                ravine.ValleyWidth,
+                ravine.Depth * 0.42f,
+                ravine.GorgeWidth,
+                ravine.Depth * 0.58f);
+            h -= carve * endFalloff;
         }
 
         return h;
@@ -1017,6 +1117,7 @@ public static class CountyMap
 
         float h = RegionalTrend(x, z) + Relief(x, z);
         h = ApplyPeaks(here, h);
+        h = ApplySecondaryLandforms(here, h);
 
         // ---- Blackwater valley -------------------------------------------------
         float riverDistance = RiverLine.Distance(here, out float along);
@@ -1033,15 +1134,26 @@ public static class CountyMap
         float carve = CarveChannel(riverDistance, valleyWidth, valleyDepth, gorgeWidth, gorgeDepth);
         h -= carve;
 
-        // Force the immediate channel to sit just under its water surface so the
-        // river is always actually in its bed rather than perched on a shelf.
+        // Force the wetted channel under the surface, then ease through a broad
+        // low bank before returning to the valley. The previous blend completed
+        // the full elevation change in roughly 40m downstream, producing a near
+        // vertical texture wall and leaving no traversable riparian habitat.
         float halfWidth = RiverHalfWidth(along);
-        float bedBlend = 1.0f - Smooth((riverDistance - halfWidth) / (halfWidth * 2.4f));
+        float bankReach = Mathf.Lerp(38.0f, 96.0f, southness);
+        float bankT = Mathf.Clamp((riverDistance - halfWidth) / bankReach, 0.0f, 1.0f);
+        // Hold the inner bank at its intended shelf height. Only the outer 45%
+        // transitions back into the regional terrain; blending over the complete
+        // width still inherited too much height halfway across the bank.
+        float bedBlend = 1.0f - Smooth((bankT - 0.55f) / 0.45f);
         if (bedBlend > 0.0f)
         {
             float bedY = riverY - Mathf.Lerp(2.4f, 9.5f, southness)
                          - (Fbm(x * 0.02f, z * 0.02f, 3) - 0.5f) * 2.2f;
-            h = Mathf.Lerp(h, bedY, bedBlend);
+            float bankY = riverY + Mathf.Lerp(2.2f, 11.0f, southness) * Smooth(bankT);
+            float channelT = Smooth(
+                (riverDistance - halfWidth * 0.72f) / Mathf.Max(halfWidth * 0.55f, 1.0f));
+            float channelAndBankY = Mathf.Lerp(bedY, bankY, channelT);
+            h = Mathf.Lerp(h, channelAndBankY, bedBlend);
         }
 
         // ---- Mill Creek tributary ---------------------------------------------
@@ -1465,6 +1577,20 @@ public static class CountyMap
         Settled,
     }
 
+    public enum Habitat
+    {
+        Settled,
+        Field,
+        Meadow,
+        UplandScrub,
+        ForestEdge,
+        MixedWoodland,
+        ConiferInterior,
+        Riparian,
+        Scree,
+        Alpine,
+    }
+
     /// <summary>
     /// Which surface a point belongs to. Terrain splatting, vegetation scatter and
     /// footstep audio all key off this, so they cannot disagree with each other.
@@ -1481,7 +1607,15 @@ public static class CountyMap
     /// 65x65 chunk grid that is twenty thousand redundant evaluations per chunk,
     /// which was the whole cost of meshing in the first place.
     /// </summary>
-    public static Biome BiomeAt(float x, float z, float height, float slope)
+    public static Biome BiomeAt(float x, float z, float height, float slope) =>
+        BiomeAtCore(x, z, height, slope, null);
+
+    public static Biome BiomeAt(
+        float x, float z, float height, float slope, float forestDensity) =>
+        BiomeAtCore(x, z, height, slope, forestDensity);
+
+    private static Biome BiomeAtCore(
+        float x, float z, float height, float slope, float? knownForestDensity)
     {
         if (slope > 0.86f || RimFalloff(x, z) > 0.12f)
         {
@@ -1536,8 +1670,48 @@ public static class CountyMap
             return Biome.Rock;
         }
 
-        return ForestDensity(x, z, height, slope) > 0.34f ? Biome.Forest : Biome.Meadow;
+        float forest = knownForestDensity ?? ForestDensity(x, z, height, slope);
+        return forest > 0.34f ? Biome.Forest : Biome.Meadow;
     }
+
+    /// <summary>
+    /// More specific ecological identity used for prop and vegetation variety.
+    /// Biome controls the terrain material; habitat controls what grows on top of
+    /// it, allowing two green forest pixels to become visibly different places.
+    /// </summary>
+    public static Habitat HabitatAt(float x, float z, float height, float slope)
+    {
+        Biome biome = BiomeAt(x, z, height, slope);
+        float forest = ForestDensity(x, z, height, slope);
+        return HabitatAt(x, z, height, slope, biome, forest);
+    }
+
+    public static Habitat HabitatAt(
+        float x, float z, float height, float slope, Biome biome, float forest)
+    {
+        if (biome == Biome.Settled) return Habitat.Settled;
+        if (biome == Biome.Farmland) return Habitat.Field;
+        if (biome == Biome.Riverbank) return Habitat.Riparian;
+
+        if (biome == Biome.Rock)
+        {
+            return height > 700.0f ? Habitat.Alpine : Habitat.Scree;
+        }
+
+        if (forest > 0.68f)
+        {
+            RegionId region = RegionAt(x, z).Id;
+            return region is RegionId.PineRidge or RegionId.BlackwaterBasin
+                ? Habitat.ConiferInterior
+                : Habitat.MixedWoodland;
+        }
+
+        if (forest > 0.25f) return Habitat.ForestEdge;
+        return slope > 0.26f ? Habitat.UplandScrub : Habitat.Meadow;
+    }
+
+    public static Habitat HabitatAt(float x, float z) =>
+        HabitatAt(x, z, Height(x, z), Slope(x, z, 3.0f));
 
     /// <summary>
     /// Worked-field strength 0..1 inside the farming districts.
@@ -1606,6 +1780,47 @@ public static class CountyMap
     }
 
     /// <summary>
+    /// Strength of hedgerow and verge habitat along worked parcel boundaries.
+    /// This evaluates the parcel grid directly instead of sampling FieldStrength
+    /// in several directions, keeping dense hedge scatter cheap to generate.
+    /// </summary>
+    public static float FieldMarginStrength(float x, float z)
+    {
+        var p = new Vector2(x, z);
+        float best = 0.0f;
+        foreach (Poi place in Places)
+        {
+            if (place.Kind != PoiKind.Farm) continue;
+
+            float radius = WarpedRadius(p, place);
+            float distance = p.DistanceTo(place.Position);
+            if (distance > radius) continue;
+
+            float bearing = place.Position.X * 0.0009f + place.Position.Y * 0.0013f;
+            float cos = Mathf.Cos(bearing);
+            float sin = Mathf.Sin(bearing);
+            Vector2 local = p - place.Position;
+            float u = local.X * cos - local.Y * sin;
+            float v = local.X * sin + local.Y * cos;
+
+            const float cellU = 168.0f;
+            const float cellV = 122.0f;
+            float fu = u / cellU - Mathf.Floor(u / cellU);
+            float fv = v / cellV - Mathf.Floor(v / cellV);
+            float edgeMetres = Mathf.Min(
+                Mathf.Min(fu, 1.0f - fu) * cellU,
+                Mathf.Min(fv, 1.0f - fv) * cellV);
+
+            float hedge = 1.0f - Smooth((edgeMetres - 3.0f) / 10.0f);
+            float districtFalloff = 1.0f - Smooth(
+                (distance - radius * 0.72f) / Mathf.Max(radius * 0.28f, 1.0f));
+            best = Mathf.Max(best, hedge * districtFalloff);
+        }
+
+        return best;
+    }
+
+    /// <summary>
     /// Continuous forest density 0..1, for scatter weighting. Kept separate from
     /// <see cref="BiomeAt"/> so tree placement can feather at the treeline instead
     /// of stopping on a hard edge.
@@ -1634,14 +1849,27 @@ public static class CountyMap
         // Cleared and worked ground carries no trees.
         density *= 1.0f - FieldStrength(x, z);
 
-        // Clearings: fields, roads, settlements and water all push trees back.
+        // Clear only the occupied core, then feather quickly into unmanaged land.
+        // The old 0.6..1.25 radius blanket turned Ashwood and every farm district
+        // into kilometre-wide lawns even where no building or field existed.
         var p = new Vector2(x, z);
         foreach (Poi place in Places)
         {
             float distance = p.DistanceTo(place.Position);
-            if (distance < place.Radius * 1.25f)
+            (float innerFactor, float outerFactor) = place.Kind switch
             {
-                density *= Smooth((distance - place.Radius * 0.6f) / (place.Radius * 0.65f));
+                PoiKind.Town => (0.32f, 0.78f),
+                PoiKind.Farm => (0.18f, 0.86f),
+                PoiKind.Settlement => (0.30f, 0.88f),
+                PoiKind.Infrastructure => (0.42f, 0.92f),
+                PoiKind.Industrial => (0.34f, 0.92f),
+                _ => (0.24f, 0.76f),
+            };
+            float inner = place.Radius * innerFactor;
+            float outer = place.Radius * outerFactor;
+            if (distance < outer)
+            {
+                density *= Smooth((distance - inner) / Mathf.Max(outer - inner, 1.0f));
             }
         }
 

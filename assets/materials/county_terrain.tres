@@ -53,11 +53,15 @@ shader_parameter/soil_tile_meters = 5.4
 
 shader_parameter/grass_tint = Color(0.72, 0.84, 0.56, 1)
 shader_parameter/forest_tint = Color(0.66, 0.7, 0.54, 1)
-shader_parameter/rock_tint = Color(0.74, 0.74, 0.76, 1)
+shader_parameter/rock_tint = Color(0.62, 0.64, 0.60, 1)
 shader_parameter/soil_tint = Color(0.92, 0.86, 0.74, 1)
 
 shader_parameter/wet_tint = Color(0.46, 0.46, 0.44, 1)
 shader_parameter/wet_roughness = 0.22
+
+shader_parameter/snow_begin = 1120.0
+shader_parameter/snow_full = 1450.0
+shader_parameter/snow_tint = Color(0.74, 0.80, 0.84, 1)
 
 shader_parameter/macro_meters = 185.0
 shader_parameter/macro_strength = 0.5

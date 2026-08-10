@@ -123,6 +123,16 @@ public partial class CountyVisualReview : Node3D
 
                 if (!settled)
                 {
+                    foreach (Node child in built.World.GetChildren())
+                    {
+                        if (child is ICountyChunkSource source && !source.IsBuildComplete)
+                        {
+                            string detail = child is CountyVegetation vegetation
+                                ? $" active={vegetation.ActiveScatterJobs} results={vegetation.PendingScatterResults}"
+                                : string.Empty;
+                            GD.Print($"COUNTY_REVIEW_PENDING: {child.Name}{detail}");
+                        }
+                    }
                     throw new InvalidOperationException(
                         $"Streaming did not settle for {shot.FileName} within {MaximumSettleFrames} frames.");
                 }
@@ -231,5 +241,25 @@ public partial class CountyVisualReview : Node3D
             "14_pine_ridge.png",
             "Pine Ridge mountain village at 1210m",
             new Vector2(0.0f, -3300.0f), new Vector2(-262.0f, -3402.0f), 20.0f, 55.0f);
+
+        yield return new Shot(
+            "15_eastern_woodland_floor.png",
+            "Eastern woodland interior, edge regrowth and forest-floor debris",
+            new Vector2(2660.0f, -220.0f), new Vector2(2380.0f, -620.0f), 8.0f, 62.0f);
+
+        yield return new Shot(
+            "16_western_field_margin.png",
+            "Farm District hedgerow transition into unmanaged woodland",
+            new Vector2(-1850.0f, -320.0f), new Vector2(-2050.0f, -455.0f), 5.0f, 64.0f);
+
+        yield return new Shot(
+            "17_south_ridge_wildland.png",
+            "Southern upland scrub, scree and escarpment habitat",
+            new Vector2(880.0f, 2740.0f), new Vector2(1080.0f, 2890.0f), 10.0f, 60.0f);
+
+        yield return new Shot(
+            "18_blackwater_riparian.png",
+            "Blackwater riverbank wet-ground habitat below Ashwood",
+            new Vector2(-345.0f, 900.0f), new Vector2(-298.0f, 852.0f), 3.2f, 68.0f);
     }
 }

@@ -347,13 +347,13 @@ void fragment() {
 
         // Snow is smoother than anything under it, and bright enough that its own
         // bounce fills the ambient occlusion the ground below was carrying.
-        roughness = mix(roughness, 0.62, snow);
+        roughness = mix(roughness, 0.78, snow);
         occlusion = mix(occlusion, 1.0, snow * 0.7);
 
         // Flatten the normal toward vertical: settled snow buries surface detail
         // rather than draping over it, and keeping the rock's normal under white
         // albedo is what makes fake snow read as grey paint.
-        normal_map = normalize(mix(normal_map, vec3(0.0, 0.0, 1.0), snow * 0.85));
+        normal_map = normalize(mix(normal_map, vec3(0.0, 0.0, 1.0), snow * 0.55));
     }
 
     // ---- near detail ----------------------------------------------------------
