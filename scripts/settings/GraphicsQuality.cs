@@ -95,7 +95,7 @@ public static class GraphicsQuality
     /// <summary>Chunks of terrain streamed around the player.</summary>
     public static int TerrainRadius(GraphicsPreset preset) => preset switch
     {
-        GraphicsPreset.Low => 4,
+        GraphicsPreset.Low => 3,
         GraphicsPreset.Medium => 6,
         _ => 8,
     };
@@ -110,7 +110,7 @@ public static class GraphicsQuality
 
     public static int WaterRadius(GraphicsPreset preset) => preset switch
     {
-        GraphicsPreset.Low => 4,
+        GraphicsPreset.Low => 3,
         GraphicsPreset.Medium => 6,
         _ => 7,
     };

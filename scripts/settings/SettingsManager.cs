@@ -75,6 +75,14 @@ public partial class SettingsManager : Node
 				"preset",
 				(int)loaded.GraphicsPreset);
 		}
+		// Non-persistent automation override. Benchmarks need to compare the same
+		// preset regardless of the player's saved menu choice; this never writes the
+		// override back to the settings file.
+		string presetOverride = OS.GetEnvironment("ASHWOOD_GRAPHICS_PRESET");
+		if (System.Enum.TryParse(presetOverride, true, out GraphicsPreset overridden))
+		{
+			loaded.GraphicsPreset = overridden;
+		}
 		Current = Sanitize(loaded);
 	}
 

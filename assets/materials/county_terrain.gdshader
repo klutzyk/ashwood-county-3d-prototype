@@ -187,6 +187,7 @@ uniform float anti_tiling : hint_range(0.0, 1.0) = 1.0;
 // stretched planar layers - visibly worse, but only on steep ground.
 uniform float enable_triplanar : hint_range(0.0, 1.0) = 1.0;
 
+
 vec4 sample_broken(sampler2D map, vec2 uv, float blend) {
     float mixed = blend * anti_tiling;
     if (mixed < 0.004) {
@@ -292,8 +293,9 @@ void fragment() {
             unpack_normal(sample_broken(rock_normal, uv_top, breakup)) * top_weight +
             unpack_normal(sample_broken(rock_normal, uv_side, breakup)) * side_weight);
     } else {
-        rock_c = vec4(0.0);
-        rock_a = vec4(1.0);
+        vec2 uv_rock = world_uv / rock_tile_meters;
+        rock_c = sample_broken(rock_albedo, uv_rock, breakup);
+        rock_a = sample_broken(rock_arm, uv_rock, breakup);
         rock_n = vec3(0.0, 0.0, 1.0);
     }
 

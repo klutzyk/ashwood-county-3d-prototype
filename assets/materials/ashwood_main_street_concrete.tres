@@ -17,4 +17,4 @@ ao_enabled = true
 ao_texture = ExtResource("3_arm")
 uv1_scale = Vector3(0.28, 0.28, 0.28)
 uv1_triplanar = true
-texture_filter = 1
+texture_filter = 5

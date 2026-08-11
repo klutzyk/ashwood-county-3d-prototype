@@ -576,6 +576,18 @@ public partial class CountyTerrain : Node3D, ICountyChunkSource
             dirt = Mathf.Max(dirt, 0.45f);
         }
 
+        // Walking routes are part of the ground rather than opaque ribbons laid
+        // over it. Noise breaks up the margins into worn centre tread, encroaching
+        // grass, and damp pockets while retaining a readable route at eye level.
+        float trailDistance = CountyMap.DistanceToTrail(new Vector2(x, z));
+        if (trailDistance < 3.4f)
+        {
+            float edge = 1.0f - Mathf.SmoothStep(1.25f, 3.4f, trailDistance);
+            float wear = 0.74f + 0.18f * Mathf.Sin(x * 0.19f + z * 0.13f);
+            dirt = Mathf.Max(dirt, edge * wear);
+            forest *= 1.0f - edge * 0.88f;
+        }
+
         float wet = 0.0f;
         if (biome == CountyMap.Biome.Riverbank)
         {

@@ -156,11 +156,11 @@ public partial class CountyNaturalFeatures : Node3D, ICountyChunkSource
         };
         for (int i = 0; i < frame.Length; i++)
         {
-            float lift = i < 2 ? 1.0f : (i == 4 ? 6.4f : 4.8f);
+            float lift = i < 2 ? 0.25f : (i == 4 ? 1.6f : 1.0f);
             PlaceGrounded(root, Pick(BoulderScenes, random), ToWorld(feature, frame[i]),
                 feature.YawDegrees + (i % 2 == 0 ? 78.0f : -78.0f),
                 random.RandfRange(3.4f, 4.4f), random, yOffset: lift,
-                tilt: i >= 2 ? new Vector3(0, 0, i % 2 == 0 ? 67 : -67) : default);
+                tilt: i >= 2 ? new Vector3(0, 0, i % 2 == 0 ? 18 : -18) : default);
         }
 
         for (int i = 0; i < 11; i++)
@@ -169,7 +169,7 @@ public partial class CountyNaturalFeatures : Node3D, ICountyChunkSource
             Vector2 local = new(Mathf.Sin(angle) * 11.0f, Mathf.Cos(angle) * 13.5f + 7.0f);
             PlaceGrounded(root, Pick(BoulderScenes, random), ToWorld(feature, local),
                 feature.YawDegrees + Mathf.RadToDeg(angle), random.RandfRange(3.4f, 5.2f), random,
-                yOffset: 1.15f);
+                yOffset: 0.18f);
         }
 
         for (int i = -1; i <= 1; i++)
@@ -177,8 +177,8 @@ public partial class CountyNaturalFeatures : Node3D, ICountyChunkSource
             Vector2 local = new(i * 5.2f, 7.5f + Mathf.Abs(i));
             PlaceGrounded(root, Pick(BoulderScenes, random), ToWorld(feature, local),
                 feature.YawDegrees + 90.0f, random.RandfRange(3.8f, 4.8f), random,
-                yOffset: 5.4f + (1 - Mathf.Abs(i)) * 0.8f,
-                tilt: new Vector3(random.RandfRange(-8, 8), 0, random.RandfRange(68, 78)));
+                yOffset: 1.2f + (1 - Mathf.Abs(i)) * 0.45f,
+                tilt: new Vector3(random.RandfRange(-8, 8), 0, random.RandfRange(10, 20)));
         }
 
         PlaceForestFloor(root, feature, random, 14, 20.0f, 37.0f);
@@ -290,8 +290,9 @@ void fragment() {
         for (int i = 0; i < 14; i++)
         {
             Vector2 position = RandomDisc(feature, random, 18.0f, 88.0f);
+            if (CountyMap.DistanceToTrail(position) < 6.0f) continue;
             PlaceGrounded(root, Pick(BoulderScenes, random), position,
-                random.RandfRange(0, 360), random.RandfRange(1.2f, 3.1f), random);
+                random.RandfRange(0, 360), random.RandfRange(0.75f, 1.55f), random);
         }
 
         // Fallen trunks across the clearing create cover, traversal decisions and
@@ -310,7 +311,9 @@ void fragment() {
     {
         for (int i = 0; i < count; i++)
         {
-            PlaceGrounded(root, Pick(TreeScenes, random), RandomDisc(feature, random, inner, outer),
+            Vector2 position = RandomDisc(feature, random, inner, outer);
+            if (CountyMap.DistanceToTrail(position) < 5.5f) continue;
+            PlaceGrounded(root, Pick(TreeScenes, random), position,
                 random.RandfRange(0, 360), random.RandfRange(0.88f, 1.28f), random, visibility: 620.0f);
         }
     }
@@ -320,7 +323,9 @@ void fragment() {
     {
         for (int i = 0; i < count; i++)
         {
-            PlaceGrounded(root, Pick(ForestFloorScenes, random), RandomDisc(feature, random, inner, outer),
+            Vector2 position = RandomDisc(feature, random, inner, outer);
+            if (CountyMap.DistanceToTrail(position) < 2.3f) continue;
+            PlaceGrounded(root, Pick(ForestFloorScenes, random), position,
                 random.RandfRange(0, 360), random.RandfRange(0.9f, 2.0f), random, visibility: 240.0f);
         }
     }
@@ -330,7 +335,9 @@ void fragment() {
     {
         for (int i = 0; i < count; i++)
         {
-            PlaceGrounded(root, Pick(UnderstoryScenes, random), RandomDisc(feature, random, inner, outer),
+            Vector2 position = RandomDisc(feature, random, inner, outer);
+            if (CountyMap.DistanceToTrail(position) < 2.0f) continue;
+            PlaceGrounded(root, Pick(UnderstoryScenes, random), position,
                 random.RandfRange(0, 360), random.RandfRange(0.75f, 1.55f), random, visibility: 115.0f,
                 shadows: false);
         }

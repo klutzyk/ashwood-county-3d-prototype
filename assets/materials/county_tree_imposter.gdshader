@@ -72,9 +72,9 @@ void vertex() {
     // Which baked view to show. The baker placed its camera at
     // centre + (sin a, 0, cos a) * distance, so the same atan recovers a.
     float cells = float(atlas_cells);
-    float angle = atan(facing.x, facing.z) / 6.2831853 + 0.5;
-    float cell = floor(fract(angle) * cells + 0.5);
-    cell = mod(cell, cells);
+    float angle = fract(atan(facing.x, facing.z) / 6.2831853 + 0.5);
+    float view_position = angle * cells;
+    float cell = floor(view_position);
 
     // INSTANCE_CUSTOM.r carries the species row, normalised. Rounding rather than
     // flooring keeps an instance off the seam between two rows when the value is
@@ -98,6 +98,10 @@ void vertex() {
 }
 
 void fragment() {
+    // Keep a single coherent silhouette. Cross-fading neighbouring cutout views
+    // mixes incompatible alpha masks and visibly shreds branches into stripes.
+    // Mipmapped anisotropic sampling handles motion stability without corrupting
+    // the canopy shape.
     vec4 texel = texture(imposter_atlas, atlas_uv);
 
     // Discard before anything else so cut-out pixels cost nothing further.
@@ -106,6 +110,10 @@ void fragment() {
     }
 
     ALBEDO = texel.rgb * canopy_tint * instance_tint;
+    // A small canopy bounce term keeps whole distant hillsides from collapsing
+    // into black cards when the sun is behind them. It is intentionally weak so
+    // the forest still carries directional shape and time-of-day lighting.
+    EMISSION = ALBEDO * 0.10;
     NORMAL = normalize((VIEW_MATRIX * vec4(shade_normal, 0.0)).xyz);
     ROUGHNESS = 0.92;
     METALLIC = 0.0;

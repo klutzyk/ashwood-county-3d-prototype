@@ -187,6 +187,52 @@ public static class CountyMap
         new("Old Growth Hollow", new Vector2(2700.0f, -270.0f), NaturalFeatureKind.OldGrowth, 125.0f, -81.0f),
     };
 
+    public readonly record struct Trail(string Name, Vector2[] Points);
+
+    /// <summary>
+    /// Walkable spurs from the maintained road network to every wilderness
+    /// destination. These are authored routes, not straight lines between map
+    /// icons: intermediate points keep them on shoulders and contour benches so
+    /// the player gets a readable trailhead, a reveal sequence, and a practical
+    /// return route.
+    /// </summary>
+    public static readonly Trail[] Trails =
+    {
+        new("Blackwater Cavern Trail", new[]
+        {
+            new Vector2(2100.0f, -1180.0f), new Vector2(2180.0f, -1215.0f),
+            new Vector2(2270.0f, -1250.0f), new Vector2(2340.0f, -1280.0f),
+            new Vector2(2380.0f, -1310.0f),
+        }),
+        new("Mill Creek Grotto Trail", new[]
+        {
+            new Vector2(-2740.0f, 1180.0f), new Vector2(-2750.0f, 1120.0f),
+            new Vector2(-2720.0f, 1080.0f), new Vector2(-2685.0f, 1045.0f),
+        }),
+        new("Granite Narrows Trail", new[]
+        {
+            new Vector2(1080.0f, -2540.0f), new Vector2(1280.0f, -2480.0f),
+            new Vector2(1560.0f, -2440.0f), new Vector2(1850.0f, -2400.0f),
+            new Vector2(2140.0f, -2350.0f), new Vector2(2390.0f, -2310.0f),
+        }),
+        new("Pine Ridge Overlook Trail", new[]
+        {
+            new Vector2(-660.0f, -3260.0f), new Vector2(-830.0f, -3360.0f),
+            new Vector2(-1010.0f, -3460.0f), new Vector2(-1180.0f, -3540.0f),
+            new Vector2(-1330.0f, -3600.0f),
+        }),
+        new("South Ridge Escarpment Trail", new[]
+        {
+            new Vector2(1280.0f, 2880.0f), new Vector2(1205.0f, 2860.0f),
+            new Vector2(1135.0f, 2875.0f), new Vector2(1080.0f, 2890.0f),
+        }),
+        new("Old Growth Hollow Trail", new[]
+        {
+            new Vector2(2940.0f, -300.0f), new Vector2(2865.0f, -285.0f),
+            new Vector2(2785.0f, -278.0f), new Vector2(2700.0f, -270.0f),
+        }),
+    };
+
     // --------------------------------------------------------------- regions
 
     public enum RegionId
@@ -349,8 +395,12 @@ public static class CountyMap
         new("Fire Lookout Road", RoadClass.Dirt, new[]
         {
             new Vector2(220.0f, -2910.0f),
-            new Vector2(520.0f, -2940.0f),
-            new Vector2(780.0f, -3000.0f),
+            new Vector2(80.0f, -3150.0f),
+            new Vector2(180.0f, -3450.0f),
+            new Vector2(500.0f, -3600.0f),
+            new Vector2(850.0f, -3500.0f),
+            new Vector2(1120.0f, -3300.0f),
+            new Vector2(1120.0f, -3050.0f),
             new Vector2(958.0f, -3048.0f),
         }),
         new("Logging Road", RoadClass.Gravel, new[]
@@ -424,7 +474,8 @@ public static class CountyMap
             new Vector2(1700.0f, -1940.0f),
             new Vector2(1420.0f, -2280.0f),
             new Vector2(1080.0f, -2540.0f),
-            new Vector2(958.0f, -3048.0f),
+            new Vector2(720.0f, -2760.0f),
+            new Vector2(220.0f, -2910.0f),
         }),
         new("Eastern Forest Track", RoadClass.Dirt, new[]
         {
@@ -845,6 +896,7 @@ public static class CountyMap
 
     /// <summary>Road centrelines, index-matched to <see cref="Roads"/>.</summary>
     public static readonly Polyline[] RoadLines = BuildRoadLines();
+    public static readonly Polyline[] TrailLines = BuildTrailLines();
 
     private static Polyline[] BuildRoadLines()
     {
@@ -952,6 +1004,26 @@ public static class CountyMap
         }
 
         return h;
+    }
+
+    private static Polyline[] BuildTrailLines()
+    {
+        var result = new Polyline[Trails.Length];
+        for (int i = 0; i < Trails.Length; i++) result[i] = new Polyline(Trails[i].Points);
+        return result;
+    }
+
+    public static float DistanceToTrail(Vector2 point)
+    {
+        float nearest = float.MaxValue;
+        for (int i = 0; i < TrailLines.Length; i++)
+        {
+            if (!TrailLines[i].IsFarFrom(point, nearest))
+            {
+                nearest = Mathf.Min(nearest, TrailLines[i].Distance(point));
+            }
+        }
+        return nearest;
     }
 
     private static float ApplySecondaryLandforms(Vector2 p, float h)
@@ -1257,9 +1329,13 @@ public static class CountyMap
         var here = new Vector2(x, z);
         float h = NaturalHeight(x, z);
 
-        h = ApplyRoads(here, h);
         h = ApplyPlaces(here, h);
         h = PinSummitCores(here, h);
+        // Roads are the final human grading operation. Applying settlement pads
+        // after them buckled Highway 16 at the service station and side-road
+        // junctions even though its own profile was valid.
+        h = ApplyRoads(here, h);
+        h = ApplyTrails(here, h);
 
         // The dam is infrastructure, not a natural ridge. Apply it after road
         // grading so its own service roads cannot plane the crest out of existence.
@@ -1270,6 +1346,42 @@ public static class CountyMap
         // Outside the county the land falls into cliff and then void. The transition
         // is sharpened so it reads as a rock face, not a slope you could walk off.
         float land = LandMask(x, z);
+        // Highway 16 is the county's mapped east-west entrance. The irregular
+        // plateau rim used to win after road grading and cut a near-vertical cliff
+        // straight through the asphalt at both county limits. Open a broad,
+        // readable mountain pass only where the highway reaches those limits.
+        if ((x < WestX + 420.0f || x > EastX - 420.0f) && RoadLines.Length > 0)
+        {
+            float highwayDistance = RoadLines[0].Distance(here);
+            float pass = 1.0f - Smooth((highwayDistance - 16.0f) / 52.0f);
+            land = Mathf.Max(land, pass);
+        }
+        // The lobed silhouette may form bays, but it may not sever authored
+        // infrastructure inside the playable county. Preserve a narrower shelf
+        // around every mapped road; only Highway 16 receives the broad exit pass.
+        for (int roadIndex = 0; roadIndex < Roads.Length; roadIndex++)
+        {
+            if (Roads[roadIndex].Class == RoadClass.Railway) continue;
+            // Mapped infrastructure must sit on land, not on a narrow finger over
+            // the abyss. A broad pass also gives roads room for drainage, trees,
+            // and believable approach slopes at the irregular county rim.
+            float outer = Mathf.Max(RoadShoulder(Roads[roadIndex].Class) * 3.2f, 260.0f);
+            if (RoadLines[roadIndex].IsFarFrom(here, outer)) continue;
+            float distance = RoadLines[roadIndex].Distance(here);
+            if (distance >= outer) continue;
+            float inner = Mathf.Max(RoadShoulder(Roads[roadIndex].Class) * 1.25f, 42.0f);
+            float corridor = 1.0f - Smooth((distance - inner) / (outer - inner));
+            land = Mathf.Max(land, corridor);
+        }
+        for (int trailIndex = 0; trailIndex < TrailLines.Length; trailIndex++)
+        {
+            const float outer = 150.0f;
+            if (TrailLines[trailIndex].IsFarFrom(here, outer)) continue;
+            float distance = TrailLines[trailIndex].Distance(here);
+            if (distance >= outer) continue;
+            float corridor = 1.0f - Smooth((distance - 18.0f) / 132.0f);
+            land = Mathf.Max(land, corridor);
+        }
         if (land < 1.0f)
         {
             float cliff = Mathf.Pow(land, 0.42f);
@@ -1351,19 +1463,25 @@ public static class CountyMap
 
     private static float ApplyRoads(Vector2 p, float h)
     {
+        const float maximumEarthworkReach = 280.0f;
+        int selected = -1;
+        float selectedDistance = float.MaxValue;
+        float selectedAlong = 0.0f;
+        float selectedShoulder = 0.0f;
+        float selectedOuter = 0.0f;
+
         for (int i = 0; i < Roads.Length; i++)
         {
             float shoulder = RoadShoulder(Roads[i].Class);
-            float grade = shoulder * 4.2f;
 
             Polyline line = RoadLines[i];
-            if (line.IsFarFrom(p, grade))
+            if (line.IsFarFrom(p, maximumEarthworkReach))
             {
                 continue;
             }
 
             float distance = line.Distance(p, out float along);
-            if (distance > grade)
+            if (distance > maximumEarthworkReach)
             {
                 continue;
             }
@@ -1377,16 +1495,88 @@ public static class CountyMap
                 continue;
             }
 
-            // Roads cannot be levelled to a constant height without either flying or
-            // tunnelling, so instead the terrain is smoothed toward a local average
-            // sampled along the carriageway. That produces a graded cutting that
-            // still climbs with the land.
-            float smoothed = RoadHeightAt(i, along);
-            float weight = 1.0f - Smooth((distance - shoulder) / (grade - shoulder));
-            h = Mathf.Lerp(h, smoothed, weight * 0.92f);
+            // The nearest centreline owns the ground. Class only breaks a true
+            // junction tie: prioritising class across the whole shoulder made the
+            // paved lookout approach overwrite a parallel dirt spur 24m away.
+            bool farther = distance > selectedDistance + 0.25f;
+            bool tiedButLowerPriority = Mathf.Abs(distance - selectedDistance) <= 0.25f &&
+                                        selected >= 0 &&
+                                        (int)Roads[i].Class >= (int)Roads[selected].Class;
+            if (selected >= 0 && (farther || tiedButLowerPriority))
+            {
+                continue;
+            }
+
+            float target = RoadHeightAt(i, along);
+            float correction = Mathf.Abs(target - h);
+            // Real cut and fill slopes consume space. A fixed 25-40m feather made
+            // a grade-correct centreline into a vertical slot canyon whenever a
+            // route crossed substantial relief. Scale the earthwork reach with the
+            // actual correction, while retaining a compact footprint on plains.
+            float outer = Mathf.Clamp(
+                shoulder + 24.0f + correction * 2.4f,
+                shoulder * 4.2f,
+                maximumEarthworkReach);
+            if (distance >= outer)
+            {
+                continue;
+            }
+
+            selected = i;
+            selectedDistance = distance;
+            selectedAlong = along;
+            selectedShoulder = shoulder;
+            selectedOuter = outer;
+        }
+
+        if (selected >= 0)
+        {
+            // Roads cannot be levelled to a constant height without either flying
+            // or tunnelling, so terrain follows a class-limited elevation profile.
+            float smoothed = RoadHeightAt(selected, selectedAlong);
+            float weight = 1.0f - Smooth(
+                (selectedDistance - selectedShoulder) /
+                (selectedOuter - selectedShoulder));
+            h = Mathf.Lerp(h, smoothed, weight);
         }
 
         return h;
+    }
+
+    private static float ApplyTrails(Vector2 point, float height)
+    {
+        float trailAuthority = 1.0f;
+        for (int roadIndex = 0; roadIndex < RoadLines.Length; roadIndex++)
+        {
+            float shoulder = RoadShoulder(Roads[roadIndex].Class);
+            float releaseEnd = shoulder * 1.2f + 12.0f;
+            if (RoadLines[roadIndex].IsFarFrom(point, releaseEnd)) continue;
+            float distance = RoadLines[roadIndex].Distance(point);
+            if (distance >= releaseEnd) continue;
+            float release = Smooth((distance - shoulder) / (releaseEnd - shoulder));
+            trailAuthority = Mathf.Min(trailAuthority, release);
+        }
+
+        for (int i = 0; i < TrailLines.Length; i++)
+        {
+            const float maximumOuter = 72.0f;
+            const float tread = 1.9f;
+            Polyline line = TrailLines[i];
+            if (line.IsFarFrom(point, maximumOuter)) continue;
+            float distance = line.Distance(point, out float along);
+
+            float water = WaterSurfaceY(point.X, point.Y);
+            if (water > float.MinValue && height < water + 0.5f) continue;
+
+            float target = TrailHeightAt(i, along);
+            float correction = Mathf.Abs(target - height);
+            float outer = Mathf.Clamp(7.0f + correction * 2.2f, 7.0f, maximumOuter);
+            if (distance >= outer) continue;
+            float edgeWeight = 1.0f - Smooth((distance - tread) / (outer - tread));
+            float weight = edgeWeight * (distance <= tread ? 1.0f : trailAuthority);
+            height = Mathf.Lerp(height, target, weight);
+        }
+        return height;
     }
 
     // ---------------------------------------------------------------- surface
@@ -1456,8 +1646,9 @@ public static class CountyMap
     // Road elevations are derived from the carved natural terrain once. Sampling
     // five complete terrain evaluations per road vertex made streaming workers
     // contend with the render thread for the entire traversal benchmark.
-    private const float RoadProfileSpacing = 24.0f;
+    private const float RoadProfileSpacing = 8.0f;
     private static readonly float[][] RoadHeightProfiles = BuildRoadHeightProfiles();
+    private readonly record struct RoadProfileAnchor(int Index, float Height);
 
     private static float[][] BuildRoadHeightProfiles()
     {
@@ -1470,7 +1661,7 @@ public static class CountyMap
             for (int sample = 0; sample < count; sample++)
             {
                 Vector2 point = line.PointAt(sample / (float)(count - 1));
-                raw[sample] = NaturalHeight(point.X, point.Y);
+                raw[sample] = RoadProfileBaseHeight(point);
             }
 
             var smoothed = new float[count];
@@ -1488,13 +1679,234 @@ public static class CountyMap
                 smoothed[sample] = sum / samples;
             }
 
+            // A smoothed profile can still contain a sharp regional transition.
+            // Constrain each pass by the operating class, then run the constraint
+            // backwards so a steep drop cannot simply be displaced to the other
+            // side of the segment.
+            float maxGrade = RoadProfileGrade(Roads[roadIndex].Class);
+            float spacing = line.TotalLength / Mathf.Max(count - 1, 1);
+            float maximumStep = spacing * maxGrade;
+            float startHeight = raw[0];
+            float endHeight = raw[^1];
+            for (int sample = 0; sample < count; sample++)
+            {
+                float fromStart = maximumStep * sample;
+                float fromEnd = maximumStep * (count - 1 - sample);
+                float lower = Mathf.Max(startHeight - fromStart, endHeight - fromEnd);
+                float upper = Mathf.Min(startHeight + fromStart, endHeight + fromEnd);
+                smoothed[sample] = lower <= upper
+                    ? Mathf.Clamp(smoothed[sample], lower, upper)
+                    : Mathf.Lerp(lower, upper, 0.5f);
+            }
+
+            smoothed[0] = startHeight;
+            smoothed[^1] = endHeight;
+            // Alternating projections converge the whole profile while retaining
+            // both fixed endpoints. Corrections can travel only so far through a
+            // sampled road per pass, so iteration count follows profile length.
+            for (int pass = 0; pass < count + 2; pass++)
+            {
+                for (int sample = 1; sample < count - 1; sample++)
+                {
+                    smoothed[sample] = Mathf.Clamp(smoothed[sample],
+                        smoothed[sample - 1] - maximumStep,
+                        smoothed[sample - 1] + maximumStep);
+                }
+                for (int sample = count - 2; sample > 0; sample--)
+                {
+                    smoothed[sample] = Mathf.Clamp(smoothed[sample],
+                        smoothed[sample + 1] - maximumStep,
+                        smoothed[sample + 1] + maximumStep);
+                }
+            }
+
             profiles[roadIndex] = smoothed;
         }
 
+        BakeRoadJunctions(profiles);
         return profiles;
     }
 
+    private static float RoadProfileGrade(RoadClass roadClass) => roadClass switch
+    {
+        RoadClass.Highway => 0.12f,
+        RoadClass.Paved => 0.20f,
+        RoadClass.Gravel => 0.26f,
+        RoadClass.Dirt => 0.34f,
+        RoadClass.Railway => 0.10f,
+        _ => 0.18f,
+    };
+
+    private static void BakeRoadJunctions(float[][] profiles)
+    {
+        var anchors = new System.Collections.Generic.List<RoadProfileAnchor>[Roads.Length];
+        for (int i = 0; i < anchors.Length; i++) anchors[i] = new();
+
+        for (int a = 0; a < Roads.Length; a++)
+        {
+            for (int b = a + 1; b < Roads.Length; b++)
+            {
+                foreach (Vector2 pointA in Roads[a].Points)
+                {
+                    foreach (Vector2 pointB in Roads[b].Points)
+                    {
+                        if (pointA.DistanceSquaredTo(pointB) > 0.25f) continue;
+                        RoadLines[a].Distance(pointA, out float alongA);
+                        RoadLines[b].Distance(pointA, out float alongB);
+                        int owner = (int)Roads[a].Class < (int)Roads[b].Class ? a :
+                                    (int)Roads[b].Class < (int)Roads[a].Class ? b : a;
+                        int subordinate = owner == a ? b : a;
+                        float ownerAlong = owner == a ? alongA : alongB;
+                        if (ownerAlong <= 0.001f || ownerAlong >= 0.999f) continue;
+
+                        float subordinateAlong = subordinate == a ? alongA : alongB;
+                        float ownerPosition = ownerAlong * (profiles[owner].Length - 1);
+                        int ownerLow = Mathf.FloorToInt(ownerPosition);
+                        int ownerHigh = Mathf.Min(ownerLow + 1, profiles[owner].Length - 1);
+                        float junctionHeight = Mathf.Lerp(
+                            profiles[owner][ownerLow], profiles[owner][ownerHigh],
+                            ownerPosition - ownerLow);
+                        int subordinateIndex = Mathf.RoundToInt(
+                            subordinateAlong * (profiles[subordinate].Length - 1));
+                        AddRoadProfileAnchor(anchors[subordinate],
+                            new RoadProfileAnchor(subordinateIndex, junctionHeight));
+                    }
+                }
+            }
+        }
+
+        for (int roadIndex = 0; roadIndex < profiles.Length; roadIndex++)
+        {
+            float[] profile = profiles[roadIndex];
+            if (!HasRoadProfileAnchor(anchors[roadIndex], 0))
+            {
+                AddRoadProfileAnchor(anchors[roadIndex], new RoadProfileAnchor(0, profile[0]));
+            }
+            if (!HasRoadProfileAnchor(anchors[roadIndex], profile.Length - 1))
+            {
+                AddRoadProfileAnchor(anchors[roadIndex],
+                    new RoadProfileAnchor(profile.Length - 1, profile[^1]));
+            }
+            anchors[roadIndex].Sort((left, right) => left.Index.CompareTo(right.Index));
+
+            float spacing = RoadLines[roadIndex].TotalLength / Mathf.Max(profile.Length - 1, 1);
+            float maximumStep = spacing * RoadProfileGrade(Roads[roadIndex].Class);
+            for (int anchor = 0; anchor < anchors[roadIndex].Count - 1; anchor++)
+            {
+                ConstrainRoadProfileSegment(profile,
+                    anchors[roadIndex][anchor], anchors[roadIndex][anchor + 1], maximumStep);
+            }
+        }
+    }
+
+    private static void ConstrainRoadProfileSegment(
+        float[] profile, RoadProfileAnchor start, RoadProfileAnchor end, float maximumStep)
+    {
+        int span = end.Index - start.Index;
+        if (span <= 0) return;
+        float requiredStep = Mathf.Abs(end.Height - start.Height) / span;
+        float step = Mathf.Max(maximumStep, requiredStep);
+        profile[start.Index] = start.Height;
+        profile[end.Index] = end.Height;
+        for (int pass = 0; pass < span + 2; pass++)
+        {
+            for (int i = start.Index + 1; i < end.Index; i++)
+            {
+                profile[i] = Mathf.Clamp(profile[i], profile[i - 1] - step, profile[i - 1] + step);
+            }
+            for (int i = end.Index - 1; i > start.Index; i--)
+            {
+                profile[i] = Mathf.Clamp(profile[i], profile[i + 1] - step, profile[i + 1] + step);
+            }
+        }
+    }
+
+    private static void AddRoadProfileAnchor(
+        System.Collections.Generic.List<RoadProfileAnchor> anchors, RoadProfileAnchor candidate)
+    {
+        for (int i = 0; i < anchors.Count; i++)
+        {
+            if (anchors[i].Index != candidate.Index) continue;
+            anchors[i] = candidate;
+            return;
+        }
+        anchors.Add(candidate);
+    }
+
+    private static bool HasRoadProfileAnchor(
+        System.Collections.Generic.List<RoadProfileAnchor> anchors, int index)
+    {
+        foreach (RoadProfileAnchor anchor in anchors)
+        {
+            if (anchor.Index == index) return true;
+        }
+        return false;
+    }
+
+    private static float RoadProfileBaseHeight(Vector2 point)
+    {
+        float height = NaturalHeight(point.X, point.Y);
+        height = ApplyPlaces(point, height);
+        height = PinSummitCores(point, height);
+        height = ApplyDam(point, height);
+        return height;
+    }
+
+    private static readonly float[][] TrailHeightProfiles = BuildTrailHeightProfiles();
+
+    private static float[][] BuildTrailHeightProfiles()
+    {
+        var profiles = new float[TrailLines.Length][];
+        for (int trailIndex = 0; trailIndex < TrailLines.Length; trailIndex++)
+        {
+            Polyline line = TrailLines[trailIndex];
+            int count = Mathf.Max(2, Mathf.CeilToInt(line.TotalLength / 3.0f) + 1);
+            var raw = new float[count];
+            for (int sample = 0; sample < count; sample++)
+            {
+                Vector2 point = line.PointAt(sample / (float)(count - 1));
+                float height = RoadProfileBaseHeight(point);
+                raw[sample] = ApplyRoads(point, height);
+            }
+
+            var profile = new float[count];
+            for (int sample = 0; sample < count; sample++)
+            {
+                float sum = 0.0f;
+                int samples = 0;
+                for (int offset = -2; offset <= 2; offset++)
+                {
+                    sum += raw[Mathf.Clamp(sample + offset, 0, count - 1)];
+                    samples++;
+                }
+                profile[sample] = sum / samples;
+            }
+
+            float spacing = line.TotalLength / Mathf.Max(count - 1, 1);
+            ConstrainRoadProfileSegment(profile,
+                new RoadProfileAnchor(0, raw[0]),
+                new RoadProfileAnchor(count - 1, raw[^1]),
+                spacing * 0.38f);
+            profiles[trailIndex] = profile;
+        }
+        return profiles;
+    }
+
+    private static float TrailHeightAt(int trailIndex, float alongNormalised)
+    {
+        float[] profile = TrailHeightProfiles[trailIndex];
+        float position = Mathf.Clamp(alongNormalised, 0.0f, 1.0f) * (profile.Length - 1);
+        int lower = Mathf.FloorToInt(position);
+        int upper = Mathf.Min(lower + 1, profile.Length - 1);
+        return Mathf.Lerp(profile[lower], profile[upper], position - lower);
+    }
+
     private static float RoadHeightAt(int roadIndex, float alongNormalised)
+    {
+        return RawRoadProfileHeight(roadIndex, alongNormalised);
+    }
+
+    private static float RawRoadProfileHeight(int roadIndex, float alongNormalised)
     {
         float[] profile = RoadHeightProfiles[roadIndex];
         float position = Mathf.Clamp(alongNormalised, 0.0f, 1.0f) * (profile.Length - 1);
@@ -1844,7 +2256,10 @@ public static class CountyMap
 
         // Thin out on steep ground and fade out toward the treeline.
         density *= 1.0f - Smooth((slope - 0.52f) / 0.30f);
-        density *= 1.0f - Smooth((height - 700.0f) / 180.0f);
+        // Town is the 320m datum, so a 1250m treeline is roughly +930m in game
+        // space. The former +700m cutoff stripped the entire lookout approach and
+        // upper logging country into barren rock well below the mapped treeline.
+        density *= 1.0f - Smooth((height - 930.0f) / 170.0f);
 
         // Cleared and worked ground carries no trees.
         density *= 1.0f - FieldStrength(x, z);

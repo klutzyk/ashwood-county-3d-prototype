@@ -26,4 +26,4 @@ ao_light_affect = 0.4
 uv1_scale = Vector3(0.22, 0.22, 0.22)
 uv1_triplanar = true
 uv1_world_triplanar = true
-texture_filter = 1
+texture_filter = 5

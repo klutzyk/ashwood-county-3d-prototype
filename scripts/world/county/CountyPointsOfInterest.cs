@@ -35,6 +35,7 @@ public partial class CountyPointsOfInterest : Node3D, ICountyChunkSource
     private const string VehicleRoot = "res://assets/environment/vehicles/";
     private const string PropRoot = "res://assets/environment/props/";
     private const string RoadRoot = "res://assets/environment/roads/";
+    private const string NatureRoot = "res://assets/environment/nature/polyhaven/";
 
     private static readonly string[] Vehicles =
     {
@@ -49,6 +50,12 @@ public partial class CountyPointsOfInterest : Node3D, ICountyChunkSource
     private const string BarrelCrate = PropRoot + "barrel_crate.tscn";
     private const string Mailbox = PropRoot + "home_us_mailbox.tscn";
     private const string OldTyre = VehicleRoot + "old_tyre.tscn";
+    private const string PicnicTable = PropRoot + "user_supplied/picnic_table.tscn";
+    private const string MetalTable = PropRoot + "user_supplied/old_metal_table.tscn";
+    private const string DeadLog = NatureRoot + "ashwood_dead_log.tscn";
+    private const string DeadTrunk = NatureRoot + "ashwood_dead_tree_trunk.tscn";
+    private const string Stump = NatureRoot + "ashwood_tree_stump_01.tscn";
+    private const string MossRock = NatureRoot + "ashwood_rock_moss_03.tscn";
 
     /// <summary>
     /// A hand-placed set piece. These are the county's landmarks-of-catastrophe and
@@ -74,6 +81,12 @@ public partial class CountyPointsOfInterest : Node3D, ICountyChunkSource
 
         /// <summary>A single vehicle off the road, nose into the verge.</summary>
         CrashSite,
+
+        /// <summary>A small off-path stash with a memorable natural silhouette.</summary>
+        TrailCache,
+
+        /// <summary>A former day-use clearing now reclaimed by the forest.</summary>
+        PicnicSite,
     }
 
     /// <summary>
@@ -118,6 +131,26 @@ public partial class CountyPointsOfInterest : Node3D, ICountyChunkSource
             SetPieceKind.AbandonedCamp, 1.40f),
         new("Service station forecourt", new Vector2(430.0f, 250.0f),
             SetPieceKind.StalledConvoy, 0.20f),
+
+        // Wilderness discoveries sit beside, rather than on, the walking line.
+        // Their spacing creates a steady cadence of human evidence between the
+        // mapped settlements without turning the backcountry into another town.
+        new("Granite survey cache", new Vector2(1590.0f, -2428.0f),
+            SetPieceKind.TrailCache, 0.34f),
+        new("Granite forestry picnic site", new Vector2(2070.0f, -2328.0f),
+            SetPieceKind.PicnicSite, 0.72f),
+        new("Blackwater hunter cache", new Vector2(2260.0f, -1266.0f),
+            SetPieceKind.TrailCache, 1.18f),
+        new("Mill Creek poacher camp", new Vector2(-2702.0f, 1062.0f),
+            SetPieceKind.TrailCache, 2.32f),
+        new("Pine Ridge survey camp", new Vector2(-1030.0f, -3438.0f),
+            SetPieceKind.PicnicSite, 2.68f),
+        new("Old Growth ranger cache", new Vector2(2780.0f, -320.0f),
+            SetPieceKind.TrailCache, 1.48f),
+        new("South Ridge memorial clearing", new Vector2(1150.0f, 2902.0f),
+            SetPieceKind.PicnicSite, 0.08f),
+        new("Lookout switchback maintenance cache", new Vector2(540.0f, -3548.0f),
+            SetPieceKind.TrailCache, 2.84f),
     };
 
     private readonly Dictionary<Vector2I, Node3D> _chunks = new();
@@ -137,6 +170,7 @@ public partial class CountyPointsOfInterest : Node3D, ICountyChunkSource
         foreach (string scenePath in new[]
                  {
                      UtilityPole, RoadSign, BarrelCrate, Mailbox, OldTyre,
+                     PicnicTable, MetalTable, DeadLog, DeadTrunk, Stump, MossRock,
                  })
         {
             LoadScene(scenePath);
@@ -207,6 +241,12 @@ public partial class CountyPointsOfInterest : Node3D, ICountyChunkSource
                 break;
             case SetPieceKind.CrashSite:
                 BuildCrashSite(holder, piece, rng);
+                break;
+            case SetPieceKind.TrailCache:
+                BuildTrailCache(holder, piece, rng);
+                break;
+            case SetPieceKind.PicnicSite:
+                BuildPicnicSite(holder, piece, rng);
                 break;
         }
     }
@@ -304,6 +344,37 @@ public partial class CountyPointsOfInterest : Node3D, ICountyChunkSource
                 rng.RandfRange(-4.5f, 4.5f), rng.RandfRange(-4.5f, 4.5f));
             Place(holder, i == 0 ? OldTyre : BarrelCrate, spot, rng.RandfRange(0.0f, Mathf.Tau));
         }
+    }
+
+    private void BuildTrailCache(Node3D holder, in SetPiece piece, RandomNumberGenerator rng)
+    {
+        Vector2 forward = new(Mathf.Cos(piece.Yaw), Mathf.Sin(piece.Yaw));
+        Vector2 side = new(-forward.Y, forward.X);
+
+        Place(holder, MetalTable, piece.Position, piece.Yaw);
+        Place(holder, BarrelCrate, piece.Position + side * 2.1f, rng.RandfRange(0, Mathf.Tau));
+        Place(holder, BarrelCrate, piece.Position - side * 1.7f + forward * 0.7f,
+            rng.RandfRange(0, Mathf.Tau));
+        Place(holder, Stump, piece.Position - forward * 3.2f, rng.RandfRange(0, Mathf.Tau));
+        Place(holder, DeadLog, piece.Position + forward * 4.8f + side * 2.8f,
+            piece.Yaw + Mathf.Pi * 0.5f);
+        Place(holder, MossRock, piece.Position - forward * 4.0f - side * 3.4f,
+            rng.RandfRange(0, Mathf.Tau));
+    }
+
+    private void BuildPicnicSite(Node3D holder, in SetPiece piece, RandomNumberGenerator rng)
+    {
+        Vector2 forward = new(Mathf.Cos(piece.Yaw), Mathf.Sin(piece.Yaw));
+        Vector2 side = new(-forward.Y, forward.X);
+
+        Place(holder, PicnicTable, piece.Position, piece.Yaw);
+        Place(holder, Stump, piece.Position + side * 4.6f, rng.RandfRange(0, Mathf.Tau));
+        Place(holder, DeadTrunk, piece.Position - side * 6.5f + forward * 2.0f,
+            piece.Yaw + rng.RandfRange(-0.35f, 0.35f));
+        Place(holder, MossRock, piece.Position + forward * 6.2f + side * 3.0f,
+            rng.RandfRange(0, Mathf.Tau));
+        Place(holder, BarrelCrate, piece.Position - forward * 3.8f,
+            rng.RandfRange(0, Mathf.Tau));
     }
 
     /// <summary>

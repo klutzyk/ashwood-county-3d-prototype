@@ -30,6 +30,7 @@ public static class CountySceneBuilder
         "CountyTerrain",
         "CountyWater",
         "CountyRoads",
+        "CountyTrails",
         "CountyVegetation",
         "CountyNaturalFeatures",
         "CountyLocations",

@@ -173,7 +173,7 @@ public partial class CountyVegetation : Node3D, ICountyChunkSource
             },
             PerChunk: 80, MinScale: 0.78f, MaxScale: 1.18f,
             VisibilityRange: 250.0f, CastShadow: false, MaxRing: 1, MaxSlope: 0.66f,
-            Rule: LayerRule.Forest, Clustering: 0.86f),
+            Rule: LayerRule.Forest, Clustering: 0.86f, VisibilityBegin: 88.0f),
 
         // Saplings and young growth under the canopy, so the forest floor is not
         // bare ground between mature trunks.
@@ -249,7 +249,7 @@ public partial class CountyVegetation : Node3D, ICountyChunkSource
             // of the time in a county this size.
             PerChunk: 4200, MinScale: 1.15f, MaxScale: 2.6f,
             VisibilityRange: 62.0f, CastShadow: false, MaxRing: 1, MaxSlope: 0.55f,
-            Rule: LayerRule.Open, Clustering: 0.5f, MinQualityDensity: 0.50f),
+            Rule: LayerRule.Open, Clustering: 0.5f, MinQualityDensity: 0.35f),
 
         new("meadow_scrub", new[]
             {
@@ -286,7 +286,7 @@ public partial class CountyVegetation : Node3D, ICountyChunkSource
             },
             PerChunk: 1600, MinScale: 0.75f, MaxScale: 1.5f,
             VisibilityRange: 112.0f, CastShadow: false, MaxRing: 1, MaxSlope: 0.48f,
-            Rule: LayerRule.FieldMargin, Clustering: 0.42f, MinQualityDensity: 0.50f),
+            Rule: LayerRule.FieldMargin, Clustering: 0.42f, MinQualityDensity: 0.35f),
 
         new("deadwood", new[]
             {
@@ -301,7 +301,7 @@ public partial class CountyVegetation : Node3D, ICountyChunkSource
             // litter do more for "this is real woodland" than another live tree.
             PerChunk: 70, MinScale: 0.8f, MaxScale: 1.6f,
             VisibilityRange: 104.0f, CastShadow: true, MaxRing: 0, MaxSlope: 0.5f,
-            Rule: LayerRule.Forest, Clustering: 0.5f, MinQualityDensity: 0.60f),
+            Rule: LayerRule.Forest, Clustering: 0.5f, MinQualityDensity: 0.35f),
 
         // Small opaque forest-floor pieces. These are dramatically cheaper than
         // grass cards and supply the twigs, bark, roots and moss that make the
@@ -320,7 +320,7 @@ public partial class CountyVegetation : Node3D, ICountyChunkSource
             },
             PerChunk: 220, MinScale: 0.65f, MaxScale: 1.7f,
             VisibilityRange: 82.0f, CastShadow: false, MaxRing: 0, MaxSlope: 0.58f,
-            Rule: LayerRule.Forest, Clustering: 0.76f, MinQualityDensity: 0.55f),
+            Rule: LayerRule.Forest, Clustering: 0.76f, MinQualityDensity: 0.35f),
 
         // Larger stones occur inside woodland and meadow too, not only on slopes
         // steep enough for the terrain biome to classify as exposed rock.
@@ -333,7 +333,7 @@ public partial class CountyVegetation : Node3D, ICountyChunkSource
             },
             PerChunk: 20, MinScale: 1.1f, MaxScale: 3.8f,
             VisibilityRange: 210.0f, CastShadow: false, MaxRing: 1, MaxSlope: 0.92f,
-            Rule: LayerRule.Wildland, Clustering: 0.58f, MinQualityDensity: 0.55f),
+            Rule: LayerRule.Wildland, Clustering: 0.58f, MinQualityDensity: 0.35f),
 
         new("upland_debris", new[]
             {
@@ -346,7 +346,7 @@ public partial class CountyVegetation : Node3D, ICountyChunkSource
             },
             PerChunk: 105, MinScale: 0.65f, MaxScale: 2.2f,
             VisibilityRange: 118.0f, CastShadow: false, MaxRing: 1, MaxSlope: 0.98f,
-            Rule: LayerRule.Upland, Clustering: 0.72f, MinQualityDensity: 0.44f),
+            Rule: LayerRule.Upland, Clustering: 0.72f, MinQualityDensity: 0.35f),
 
         new("rocks", new[]
             {
@@ -357,7 +357,7 @@ public partial class CountyVegetation : Node3D, ICountyChunkSource
             },
             PerChunk: 110, MinScale: 0.7f, MaxScale: 3.1f,
             VisibilityRange: 168.0f, CastShadow: true, MaxRing: 1, MaxSlope: 1.1f,
-            Rule: LayerRule.Rock, Clustering: 0.65f, MinQualityDensity: 0.72f),
+            Rule: LayerRule.Rock, Clustering: 0.65f, MinQualityDensity: 0.35f),
 
         new("riverbank", new[]
             {
@@ -368,7 +368,7 @@ public partial class CountyVegetation : Node3D, ICountyChunkSource
             },
             PerChunk: 72, MinScale: 0.7f, MaxScale: 1.6f,
             VisibilityRange: 80.0f, CastShadow: false, MaxRing: 0, MaxSlope: 0.7f,
-            Rule: LayerRule.Riverbank, Clustering: 0.7f, MinQualityDensity: 0.52f),
+            Rule: LayerRule.Riverbank, Clustering: 0.7f, MinQualityDensity: 0.35f),
 
         new("wet_ground", new[]
             {
@@ -381,7 +381,7 @@ public partial class CountyVegetation : Node3D, ICountyChunkSource
             },
             PerChunk: 700, MinScale: 0.9f, MaxScale: 1.9f,
             VisibilityRange: 62.0f, CastShadow: false, MaxRing: 0, MaxSlope: 0.58f,
-            Rule: LayerRule.Riverbank, Clustering: 0.88f, MinQualityDensity: 0.60f),
+            Rule: LayerRule.Riverbank, Clustering: 0.88f, MinQualityDensity: 0.35f),
     };
 
     private readonly Dictionary<Vector2I, Node3D> _chunks = new();
@@ -798,6 +798,21 @@ public partial class CountyVegetation : Node3D, ICountyChunkSource
             }
         }
 
+        // Authored foot trails must remain readable at player height. This is
+        // wider than the visible tread so branches frame the route without trunks,
+        // boulders or grass cards growing through its centre.
+        float trailClearance = layer.Name switch
+        {
+            "canopy" => 7.5f,
+            "canopy_mid" => 7.0f,
+            "canopy_imposter" => 5.0f,
+            _ => 3.2f,
+        };
+        if (CountyMap.DistanceToTrail(point) < trailClearance)
+        {
+            return false;
+        }
+
         float chance = layer.Rule switch
         {
             LayerRule.Forest => forestDensity,
@@ -973,6 +988,8 @@ public partial class CountyVegetation : Node3D, ICountyChunkSource
                     CastShadow = layer.CastShadow
                         ? GeometryInstance3D.ShadowCastingSetting.On
                         : GeometryInstance3D.ShadowCastingSetting.Off,
+                    VisibilityRangeBegin = layer.VisibilityBegin * _rangeScale,
+                    VisibilityRangeBeginMargin = layer.VisibilityBegin * _rangeScale * 0.16f,
                     VisibilityRangeEnd = layer.VisibilityRange * _rangeScale,
                     VisibilityRangeEndMargin = layer.VisibilityRange * _rangeScale * 0.14f,
                     VisibilityRangeFadeMode = GeometryInstance3D.VisibilityRangeFadeModeEnum.Self,
